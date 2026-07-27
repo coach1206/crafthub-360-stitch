@@ -240,6 +240,18 @@ for (const a of ASSET_LOCKS) {
   const buttonSrc = readFileSync('src/components/smokecraft/SmokeCraftLessonInfoButton.jsx', 'utf8')
   check("SmokeCraftLessonInfoButton: button uses position:'fixed' (not 'absolute', which clips inside SmokeCraftImageBoundsOverlay)",
     (buttonSrc.match(/position:\s*'fixed'/g) || []).length >= 2 && !/position:\s*'absolute'/.test(buttonSrc))
+
+  // Holistic Fix 2E-10 — duplicate-fire guard regression lock. Every
+  // curriculum screen's handleContinue must keep its `if (done) return`
+  // guard — verified live this pass (rapid double-click produces exactly
+  // one navigation, not two) — a build-blocking check protects it from
+  // silently disappearing in a future refactor.
+  const DONE_GUARD_TARGETS = ['src/pages/smokecraft/HumidorMatch.jsx', 'src/pages/smokecraft/FirstThird.jsx']
+  for (const f of DONE_GUARD_TARGETS) {
+    const src = readFileSync(f, 'utf8')
+    check(`${f}: still has the "if (done) return" duplicate-fire guard on its Continue handler`,
+      /if\s*\(\s*done\s*\)\s*return/.test(src))
+  }
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

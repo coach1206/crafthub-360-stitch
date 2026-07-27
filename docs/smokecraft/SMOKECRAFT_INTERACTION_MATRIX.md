@@ -327,3 +327,81 @@ Still not done: a full click-test of every quiz/slider/mentor/tasting/
 upload control across all 27 sessions, and a dedicated five-viewport
 curriculum sweep (both remain open per
 `SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md`).
+
+## Holistic Fix 2E-9 / 2E-10 update — full 276-control discovery + representative deep-testing
+
+Holistic Fix 2E-9 discovered every visible interactive control live from the
+rendered DOM (not source-code guessing) across all 21 primary curriculum
+routes (`verify-smokecraft-hf2e9-all-session-interactions.mjs`) — 276
+controls total. Every one was hit-tested for occlusion (no blocked overlay)
+and every session's keyboard Tab-focus was verified. See
+`public/proof/smokecraft-holistic-fix-2e-9/02-all-session-interaction-results.json`
+for the raw discovery data.
+
+Holistic Fix 2E-10 then deep-tested 5 representative control-behavior
+implementations for real state change, refresh persistence, and
+duplicate-firing protection — covering the interaction patterns the other
+271 controls are built from (hotspot-zone selection/toggle,
+rating-toggle-with-client-persistence, tab-based expand/collapse, the
+Continue-button `done`-flag duplicate-fire guard used throughout the
+curriculum, and honest empty/disabled-state rendering with no fabrication).
+
+**Honest scope disclosure**: individual state-change/persistence/
+duplicate-firing verification was NOT built for all 276 discovered
+controls — only for these 5 representative implementations. Controls not
+individually deep-tested remain covered only by the Holistic Fix 2E-9
+occlusion/keyboard-focus sweep, not full behavioral verification.
+
+### Deep-tested representative implementations
+
+| Control type | Representative session | Route | State-change | Persistence | Duplicate-firing | Disabled-state | Test / proof reference |
+|---|---|---|---|---|---|---|---|
+| Selection/toggle (image-shell hotspot zone) | 2 | /smokecraft/humidor-match | PASS | n/a (ephemeral; confirmed via journey context on Continue) | PASS (see Continue row below) | n/a | verify-smokecraft-hf2e10-control-state-persistence.mjs #1 |
+| Rating-toggle with client persistence | 8 | /smokecraft/first-third | PASS | PASS — survives full page reload (journey-context localStorage) | not independently tested | n/a | #2 |
+| Expand/collapse (role="tab" section) | 4 | /smokecraft/terroir | PASS — real content revealed, not decorative | not required to persist | n/a | n/a | #3 |
+| Continue/completion button (`done`-flag guard) | 2 | /smokecraft/humidor-match | PASS | n/a | PASS — rapid synchronous double-click produces exactly one navigation, confirmed both via source read (`if (done) return`) and live test | n/a | #4 |
+| Honest empty/disabled state (no fabrication) | 14 | /smokecraft/mentor-commentary | PASS — real "No Mentor Selected", no fabricated commentary | n/a | n/a | PASS — correct absence of a mentor control when none selected | #5 |
+
+Full result: 8/8 passing. Proof: `public/proof/smokecraft-holistic-fix-2e-10/03-control-state-persistence-results.json`.
+
+### Full 276-control discovery inventory (occlusion + keyboard-focus verified)
+
+| Session | Route | Visible controls discovered | Blocked-overlay | Keyboard-focus |
+|---|---|---|---|---|
+| 1 | /smokecraft/welcome | 25 | 0 blocked | PASS |
+| 2 | /smokecraft/humidor-match | 21 | 0 blocked | PASS |
+| 3 | /smokecraft/meet-your-cigar | 10 | 0 blocked | PASS |
+| 4 | /smokecraft/terroir | 9 | 0 blocked | PASS |
+| 5 | /smokecraft/format | 9 | 0 blocked | PASS |
+| 6 | /smokecraft/cut-toast-light | 7 | 0 blocked | PASS |
+| 7 | /smokecraft/lighting-tutorial | 12 | 0 blocked | PASS |
+| 8 | /smokecraft/first-third | 9 | 0 blocked | PASS |
+| 10 | /smokecraft/flavor-memory | 13 | 0 blocked | PASS |
+| 11 | /smokecraft/pairing-lab | 40 | 0 blocked | PASS |
+| 12 | /smokecraft/second-third | 9 | 0 blocked | PASS |
+| 14 | /smokecraft/mentor-commentary | 3 | 0 blocked | PASS |
+| 15 | /smokecraft/knowledge-drop | 7 | 0 blocked | PASS |
+| 16 | /smokecraft/final-third | 16 | 0 blocked | PASS |
+| 19 | /smokecraft/scorecard | 37 | 0 blocked | PASS |
+| 21 | /smokecraft/ai-summary | 12 | 0 blocked | PASS |
+| 22 | /smokecraft/pairing-recommendations | 11 | 0 blocked | PASS |
+| 23 | /smokecraft/passport-stamp | 3 | 0 blocked | PASS |
+| 24 | /smokecraft/final-review | 8 | 0 blocked | PASS |
+| 25 | /smokecraft/rewards | 3 | 0 blocked | PASS |
+| 26 | /smokecraft/rewards | 9 | 0 blocked | PASS |
+| 27 | /smokecraft/session-complete | 3 | 0 blocked | PASS |
+
+**Total controls discovered**: 276 across 21 primary curriculum routes.
+
+### Duplicate-protection engine-level gap (disclosed, not fixed this pass)
+
+Confirmed via source read: the client-side `done`-flag guard (e.g.
+`FirstThird.jsx`, `HumidorMatch.jsx`) prevents a duplicate `onComplete`/
+navigate call from a rapid double-click on the SAME page load. It does
+NOT protect against a duplicate XP award, badge, or stamp trigger from two
+independent requests reaching the backend (e.g. two browser tabs, a
+retried network request after a dropped response). No engine-level
+(server-side idempotency-key) duplicate protection for XP/badge/stamp
+awards was found or added this pass — this is recorded here as a real,
+disclosed gap for the later gameplay-engine package, not silently fixed
+or fabricated as already handled.

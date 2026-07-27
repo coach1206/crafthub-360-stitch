@@ -1,0 +1,36 @@
+{
+  "commit": "ce5d5ba766e40770e1d463657fe37124aac6b323",
+  "pass": 8,
+  "fail": 0,
+  "failures": [],
+  "results": [
+    {
+      "implementation": "selection-toggle (hotspot zone, image-shell)",
+      "representativeSession": 2,
+      "stateChange": true,
+      "toggleOff": true
+    },
+    {
+      "implementation": "rating-toggle with journey-context persistence",
+      "representativeSession": 8,
+      "stateChange": true,
+      "reloadPersistence": true
+    },
+    {
+      "implementation": "expand/collapse section tabs",
+      "representativeSession": 4,
+      "stateChange": true
+    },
+    {
+      "implementation": "Continue button done-flag duplicate-fire guard",
+      "representativeSession": 2,
+      "duplicateFiring": true
+    },
+    {
+      "implementation": "honest empty/disabled state (no fabrication)",
+      "representativeSession": 14,
+      "honestEmptyState": true,
+      "noFabrication": true
+    }
+  ]
+}

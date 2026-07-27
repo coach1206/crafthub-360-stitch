@@ -160,3 +160,23 @@ curriculum sweep, and the remaining 26 non-shell-migrated routes (14
 intentional aliases + a residual set of already-audited standalone
 screens) — is **not yet verified** and must not be assumed correct. See
 `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` for the full, current defect list.
+
+## Holistic Fix 2E-9 / 2E-10 additions
+
+- All 276 interactive controls discovered live across the 21 primary
+  curriculum routes are occlusion-tested and keyboard-focus-verified
+  (`verify-smokecraft-hf2e9-all-session-interactions.mjs`, 88/88).
+- 5 representative control-behavior implementations are locked with real
+  state-change, refresh-persistence, and duplicate-firing verification
+  (`verify-smokecraft-hf2e10-control-state-persistence.mjs`, 8/8): hotspot-
+  zone selection/toggle, rating-toggle-with-client-persistence, tab-based
+  expand/collapse, the Continue-button `done`-flag duplicate-fire guard,
+  and honest empty/disabled-state rendering.
+- SC-D014 (Flavor Memory Continue / guest-identity cookie) remains closed
+  with a permanent regression test.
+- **Not locked**: individual state-change/persistence/duplicate-firing
+  verification for the other 271 discovered controls beyond the 5
+  representative implementations; engine-level (server-side idempotency)
+  duplicate protection for XP/badge/stamp awards (a real, disclosed gap
+  for the later gameplay-engine package — see
+  `SMOKECRAFT_INTERACTION_MATRIX.md`).

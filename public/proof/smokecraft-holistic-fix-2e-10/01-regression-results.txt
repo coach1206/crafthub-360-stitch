@@ -1,0 +1,25 @@
+Holistic Fix 2E-10 regression suite results
+
+npm run build: PASS (5m 39s — includes prebuild: manifest generation,
+validateSmokecraftManifest.mjs, validateSmokecraftShellAdoption.mjs — now
+181 total shell-adoption checks, up from 178, with 3 new checks: 1
+duplicate-fire-guard check per targeted file (HumidorMatch.jsx,
+FirstThird.jsx) plus the existing clip-prevention lock)
+
+validateSmokecraftManifest.mjs: PASS, 0 failing checks
+validateSmokecraftShellAdoption.mjs: PASS, 0 failing checks
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total) — clean on first attempt
+verify-smokecraft-hf2e9-all-session-interactions.mjs: 88 passed, 0 failed (of 88 total; 276 controls)
+verify-smokecraft-hf2e10-control-state-persistence.mjs (NEW): 8 passed, 0 failed (of 8 total) — after fixing 2 test bugs found during initial development (see proof index)
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs (incl. SC-D014): 10 passed, 0 failed (of 10 total)
+
+Environment note: the dedicated forward/backward+SC-D014 test hit the
+same recurring guest-session rate-limiter 429 artifact seen in every prior
+pass this session under heavy cumulative test volume against that
+endpoint — resolved by a backend restart, re-ran clean with no code
+changes in between, confirmed environmental not a regression (consistent
+with every prior occurrence this session).
