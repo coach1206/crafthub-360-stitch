@@ -10,7 +10,8 @@
  * Migration: stateVersion lets future code migrate old keys safely.
  */
 
-import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
+import * as stateAdapter from '../services/smokecraft/stateAdapter.js'
 
 const LS_KEY = 'sc_journey_v1'
 const STATE_VERSION = 3
@@ -295,10 +296,40 @@ const SmokeCraftJourneyContext = createContext(null)
 
 export function SmokeCraftJourneyProvider({ children }) {
   const [journey, setJourney] = useState(loadFromStorage)
+  const [syncStatus, setSyncStatus] = useState('idle')
+  const hasLoadedServerSnapshot = useRef(false)
 
   // Persist on every change
   useEffect(() => {
     saveToStorage(journey)
+  }, [journey])
+
+  // Holistic Fix 4B: on first mount, adopt the server's journey snapshot
+  // if it has real data (version > 0) — this is what makes cross-device
+  // resume of journey CONTENT (not just awards) actually work: a second
+  // device's localStorage starts empty, but the server snapshot (synced
+  // from device 1) is not. Per the merge policy, server-authoritative
+  // value wins when it exists. If the server has no snapshot yet
+  // (version 0 — brand-new guest/account, or pre-4B data), the local
+  // cache is left as-is and will become the seed for the first save.
+  useEffect(() => {
+    if (hasLoadedServerSnapshot.current) return
+    hasLoadedServerSnapshot.current = true
+    stateAdapter.subscribe(setSyncStatus)
+    stateAdapter.load().then(result => {
+      if (result.ok && result.version > 0 && result.snapshot && Object.keys(result.snapshot).length > 0) {
+        setJourney(prev => ({ ...prev, ...result.snapshot, stateVersion: STATE_VERSION, spineVersion: SPINE_VERSION }))
+      }
+    })
+  }, [])
+
+  // Debounced background sync to the server on every journey change
+  // (after the initial server-snapshot load has had a chance to run,
+  // so we don't immediately overwrite a fresh server snapshot with the
+  // stale pre-load local cache).
+  useEffect(() => {
+    if (!hasLoadedServerSnapshot.current) return
+    stateAdapter.save(journey)
   }, [journey])
 
   const updateJourney = useCallback((patch) => {
@@ -527,6 +558,7 @@ export function SmokeCraftJourneyProvider({ children }) {
 
   const value = {
     journey,
+    syncStatus,
     setIdentity,
     setGoldenBox,
     setMentor,

@@ -31,6 +31,7 @@
 import { getDb } from '../../db/connection.js'
 
 const UNIQUE_VIOLATION = '23505'
+const STALE_VERSION = 'stale_version'
 
 async function recordAudit(client, { guestReference, mutationType, idempotencyKey, outcome, rejectReason, requestId, deviceId }) {
   await client.query(
@@ -206,6 +207,188 @@ export async function grantAward({ guestReference, venueId, awardType, awardKey,
     return { ok: true, alreadyAwarded: false, award }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Loads the journey content snapshot for a guest/account reference.
+ */
+export async function getJourneySnapshot(guestReference) {
+  const db = dbOrThrow()
+  const result = await db.query(
+    `SELECT journey_snapshot, journey_version, journey_updated_at FROM smokecraft_player_state WHERE guest_reference = $1`,
+    [guestReference]
+  )
+  const row = result.rows[0]
+  return {
+    snapshot: row?.journey_snapshot ?? {},
+    version: row?.journey_version ?? 0,
+    updatedAt: row?.journey_updated_at ?? null,
+  }
+}
+
+/**
+ * Saves the journey content snapshot with real optimistic-concurrency
+ * control: the caller must supply the version it last read
+ * (`expectedVersion`). If the server's current version has moved on
+ * (another device/tab saved in the meantime), this returns
+ * `{ ok: false, conflict: true, current }` with the latest server state
+ * — it NEVER silently overwrites a newer write with a stale one.
+ */
+export async function saveJourneySnapshot({ guestReference, venueId, snapshot, expectedVersion }) {
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await ensurePlayerStateRow(client, guestReference, venueId)
+    const current = await client.query(
+      `SELECT journey_snapshot, journey_version, journey_updated_at FROM smokecraft_player_state WHERE guest_reference = $1 FOR UPDATE`,
+      [guestReference]
+    )
+    const currentVersion = current.rows[0]?.journey_version ?? 0
+    if (currentVersion !== expectedVersion) {
+      await client.query('ROLLBACK')
+      return {
+        ok: false, conflict: true,
+        current: { snapshot: current.rows[0]?.journey_snapshot ?? {}, version: currentVersion, updatedAt: current.rows[0]?.journey_updated_at ?? null },
+      }
+    }
+    const updated = await client.query(
+      `UPDATE smokecraft_player_state
+          SET journey_snapshot = $2, journey_version = journey_version + 1, journey_updated_at = now(), last_synced_at = now(), updated_at = now()
+        WHERE guest_reference = $1
+        RETURNING journey_snapshot, journey_version, journey_updated_at`,
+      [guestReference, JSON.stringify(snapshot)]
+    )
+    await client.query('COMMIT')
+    return { ok: true, conflict: false, current: { snapshot: updated.rows[0].journey_snapshot, version: updated.rows[0].journey_version, updatedAt: updated.rows[0].journey_updated_at } }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Atomic guest-to-account conversion, implementing
+ * SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md exactly:
+ *   - session completions: set union, keep-earliest on conflict
+ *   - XP: recomputed from the merged completions+awards, never summed
+ *   - badges/stamps: set union by (type, key)
+ *   - journey snapshot: account's own wins if it has one (version > 0),
+ *     else the guest's is adopted
+ * Idempotent: smokecraft_guest_conversions.guest_reference UNIQUE means
+ * a given guest identity can be converted at most once, ever — a repeat
+ * request (any idempotency key) returns the original result.
+ */
+export async function convertGuestToAccount({ guestReference, userReference, venueId, idempotencyKey, requestId, deviceId }) {
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+
+    const existingConversion = await client.query(
+      `SELECT * FROM smokecraft_guest_conversions WHERE guest_reference = $1`,
+      [guestReference]
+    )
+    if (existingConversion.rows.length > 0) {
+      await client.query('COMMIT')
+      return { ok: true, alreadyConverted: true, conversion: existingConversion.rows[0] }
+    }
+
+    await ensurePlayerStateRow(client, guestReference, venueId)
+    await ensurePlayerStateRow(client, userReference, venueId)
+
+    // ── Session completions: set union, keep-earliest on conflict ──
+    const guestCompletions = await client.query(`SELECT * FROM smokecraft_session_completions WHERE guest_reference = $1`, [guestReference])
+    let sessionsTransferred = 0, sessionsMergedDuplicate = 0
+    for (const gc of guestCompletions.rows) {
+      const existing = await client.query(`SELECT * FROM smokecraft_session_completions WHERE guest_reference = $1 AND session_id = $2`, [userReference, gc.session_id])
+      if (existing.rows.length > 0) {
+        // Account already completed this session — keep whichever is
+        // earlier (real first-completion time), never fabricate a merge.
+        if (new Date(gc.completed_at) < new Date(existing.rows[0].completed_at)) {
+          await client.query(
+            `UPDATE smokecraft_session_completions SET completed_at = $3, xp_awarded = $4, source_route = $5 WHERE guest_reference = $1 AND session_id = $2`,
+            [userReference, gc.session_id, gc.completed_at, gc.xp_awarded, gc.source_route]
+          )
+        }
+        sessionsMergedDuplicate++
+      } else {
+        await client.query(
+          `INSERT INTO smokecraft_session_completions (guest_reference, session_id, idempotency_key, xp_awarded, completed_at, source_route, request_id, device_id)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+          [userReference, gc.session_id, `converted:${gc.idempotency_key}`, gc.xp_awarded, gc.completed_at, gc.source_route, requestId || null, deviceId || null]
+        )
+        sessionsTransferred++
+      }
+    }
+
+    // ── Awards: set union by (type, key) ──
+    const guestAwards = await client.query(`SELECT * FROM smokecraft_awards WHERE guest_reference = $1`, [guestReference])
+    let awardsTransferred = 0, awardsMergedDuplicate = 0
+    for (const ga of guestAwards.rows) {
+      const existing = await client.query(`SELECT * FROM smokecraft_awards WHERE guest_reference = $1 AND award_type = $2 AND award_key = $3`, [userReference, ga.award_type, ga.award_key])
+      if (existing.rows.length > 0) {
+        awardsMergedDuplicate++
+      } else {
+        await client.query(
+          `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+          [userReference, ga.award_type, ga.award_key, ga.amount, `converted:${ga.idempotency_key}`, ga.source_route, requestId || null, deviceId || null]
+        )
+        awardsTransferred++
+      }
+    }
+
+    // ── XP: recomputed from the merged source of truth, never summed ──
+    const xpFromCompletions = await client.query(`SELECT COALESCE(SUM(xp_awarded), 0) AS total FROM smokecraft_session_completions WHERE guest_reference = $1`, [userReference])
+    const xpFromAwards = await client.query(`SELECT COALESCE(SUM(amount), 0) AS total FROM smokecraft_awards WHERE guest_reference = $1 AND award_type = 'xp'`, [userReference])
+    const recomputedXp = Number(xpFromCompletions.rows[0].total) + Number(xpFromAwards.rows[0].total)
+    await client.query(`UPDATE smokecraft_player_state SET xp_total = $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`, [userReference, recomputedXp])
+
+    // ── Journey snapshot: account's own wins if it has one ──
+    const guestState = await client.query(`SELECT journey_snapshot, journey_version FROM smokecraft_player_state WHERE guest_reference = $1`, [guestReference])
+    const userState = await client.query(`SELECT journey_version FROM smokecraft_player_state WHERE guest_reference = $1`, [userReference])
+    let journeyMergeOutcome
+    const guestHasSnapshot = (guestState.rows[0]?.journey_version ?? 0) > 0
+    const userHasSnapshot = (userState.rows[0]?.journey_version ?? 0) > 0
+    if (userHasSnapshot) {
+      journeyMergeOutcome = 'account_snapshot_used'
+    } else if (guestHasSnapshot) {
+      await client.query(
+        `UPDATE smokecraft_player_state SET journey_snapshot = $2, journey_version = $3, journey_updated_at = now(), updated_at = now() WHERE guest_reference = $1`,
+        [userReference, guestState.rows[0].journey_snapshot, guestState.rows[0].journey_version]
+      )
+      journeyMergeOutcome = 'guest_snapshot_used'
+    } else {
+      journeyMergeOutcome = 'no_guest_snapshot'
+    }
+
+    const conversion = await client.query(
+      `INSERT INTO smokecraft_guest_conversions
+         (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       RETURNING *`,
+      [guestReference, userReference, idempotencyKey, sessionsTransferred, sessionsMergedDuplicate, awardsTransferred, awardsMergedDuplicate, journeyMergeOutcome, requestId || null, deviceId || null]
+    )
+
+    await recordAudit(client, { guestReference: userReference, mutationType: 'guest_conversion', idempotencyKey, outcome: 'applied', requestId, deviceId })
+
+    await client.query('COMMIT')
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0] }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    if (err.code === UNIQUE_VIOLATION) {
+      // Concurrent conversion request for the same guest raced us —
+      // Postgres aborts the transaction; look up the winner fresh.
+      const dup = await db.query(`SELECT * FROM smokecraft_guest_conversions WHERE guest_reference = $1`, [guestReference])
+      return { ok: true, alreadyConverted: true, conversion: dup.rows[0] }
+    }
     throw err
   } finally {
     client.release()

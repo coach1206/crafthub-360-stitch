@@ -137,6 +137,7 @@ import Identity         from './pages/smokecraft/Identity.jsx'
 import ResumeJourney    from './pages/smokecraft/ResumeJourney.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import RewardsCenter    from './pages/smokecraft/RewardsCenter.jsx'
+import Account          from './pages/smokecraft/Account.jsx'
 import SmokeCraftPassport from './pages/smokecraft/SmokeCraftPassport.jsx'
 import SmokeCraftCraftHub from './pages/smokecraft/SmokeCraftCraftHub.jsx'
 import SmokeCraftScreenRenderer from './components/smokecraft/SmokeCraftScreenRenderer.jsx'
@@ -550,6 +551,7 @@ export default function App() {
                     journey S25 Rewards flow at /smokecraft/rewards. Unguarded so
                     the approved visual is actually reachable from Landing. */}
                 <Route path="rewards-center"   element={<RewardsCenter />} />
+                <Route path="account"          element={<Account />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />
                 <Route path="demo-reset"       element={<SmokeCraftDemoReset />} />

@@ -33,4 +33,13 @@ router.post('/awards/xp', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAw
 router.post('/awards/badge', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardBadge)
 router.post('/awards/passport-stamp', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardPassportStamp)
 
+// ── Holistic Fix 4B: journey-content snapshot + guest-to-account conversion ──
+router.get('/journey-snapshot', readLimiter, requireSmokeCraftIdentity, ctrl.handleGetJourneySnapshot)
+router.put('/journey-snapshot', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSaveJourneySnapshot)
+// req.user (real account) is resolved by optionalAuth above; req.smokecraftGuestCookieIdentity
+// (verified guest cookie) is resolved by attachSmokeCraftIdentity above — the controller itself
+// enforces both are present, since conversion is a distinct authorization requirement from the
+// rest of this router's plain guest-identity routes.
+router.post('/convert-guest', writeLimiter, ctrl.handleConvertGuest)
+
 export default router

@@ -5,7 +5,7 @@
  * trusted from the request body — matches the existing Management Sync
  * convention (managementSyncController.js).
  */
-import { getPlayerState, completeSession, grantAward } from '../services/smokecraft/playerStateService.js'
+import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount } from '../services/smokecraft/playerStateService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -128,4 +128,70 @@ export async function handleAwardBadge(req, res) {
 
 export async function handleAwardPassportStamp(req, res) {
   return handleAward(req, res, 'passport_stamp', 0)
+}
+
+export async function handleGetJourneySnapshot(req, res) {
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await getJourneySnapshot(guestReference)
+    res.json({ success: true, snapshot: result.snapshot, version: result.version, updatedAt: result.updatedAt })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+export async function handleSaveJourneySnapshot(req, res) {
+  const { snapshot, expectedVersion } = req.body || {}
+  if (typeof snapshot !== 'object' || snapshot === null) {
+    return res.status(400).json({ success: false, error: 'snapshot_object_required' })
+  }
+  if (typeof expectedVersion !== 'number' || expectedVersion < 0) {
+    return res.status(400).json({ success: false, error: 'expected_version_required', message: 'Optimistic-concurrency save requires the version you last read (0 for a brand-new record).' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await saveJourneySnapshot({ guestReference, venueId: req.smokecraftIdentity.venueId || null, snapshot, expectedVersion })
+    if (result.conflict) {
+      return res.status(409).json({ success: false, error: 'stale_version', current: result.current })
+    }
+    res.json({ success: true, current: result.current })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * POST /api/smokecraft/player-state/convert-guest
+ *
+ * Requires BOTH a real authenticated account (req.user, via requireAuth
+ * — a completely separate cookie/JWT from the guest identity) AND a
+ * verified guest cookie (req.smokecraftGuestCookieIdentity, set by
+ * attachSmokeCraftIdentity only when a valid smokecraft_guest_session
+ * JWT was independently verified on THIS SAME request) — never a
+ * client-submitted guest reference. This structurally proves the caller
+ * actually controls both identities simultaneously, not merely claims
+ * to.
+ */
+export async function handleConvertGuest(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  if (!req.user || req.user.mode === 'prototype' || req.user.role !== 'passport_member') {
+    return res.status(401).json({ success: false, error: 'account_required', message: 'Sign in to an account before converting guest progress.' })
+  }
+  if (!req.smokecraftGuestCookieIdentity) {
+    return res.status(400).json({ success: false, error: 'no_guest_session', message: 'No verified guest session on this browser to convert.' })
+  }
+  try {
+    const result = await convertGuestToAccount({
+      guestReference: req.smokecraftGuestCookieIdentity,
+      userReference: `user:${req.user.id}`,
+      venueId: null,
+      idempotencyKey,
+      requestId: req.id || null,
+      deviceId: req.body?.deviceId || null,
+    })
+    res.status(result.alreadyConverted ? 200 : 201).json({ success: true, alreadyConverted: result.alreadyConverted, conversion: result.conversion })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
 }
