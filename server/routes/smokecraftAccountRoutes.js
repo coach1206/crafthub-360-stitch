@@ -9,8 +9,13 @@ import * as ctrl from '../controllers/smokecraftAccountController.js'
 
 const router = Router()
 
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 })
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
+const IS_PROD = process.env.NODE_ENV === 'production'
+// Matches the existing convention in server/index.js's global authLimiter
+// (skip: () => !IS_PROD) — rate limiting is a real production security
+// control, but must not throttle dev/test suites that legitimately make
+// many auth requests in quick succession.
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, skip: () => !IS_PROD })
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
 
 router.post('/create', authLimiter, ctrl.handleCreateAccount)
 router.post('/login/request-pin', authLimiter, ctrl.handleRequestLoginPin)

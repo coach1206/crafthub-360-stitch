@@ -495,3 +495,18 @@ UI cache; the server's `(guest_reference, session_id)` /
 the actual duplicate-award guard, not the client-side `if (done) return`
 alone. See `SMOKECRAFT_STATE_OWNERSHIP_MAP.md` for the full state audit
 and `public/proof/smokecraft-holistic-fix-4/` for proof.
+
+## Holistic Fix 4B — account identity and journey-content sync
+
+New screen: `/smokecraft/account` (Create Account / Sign In / Sign Out /
+conversion success/conflict / error states), using the existing
+`SmokeCraftScreenShell` visual system. The `completion` control group's
+underlying data now also syncs the full journey-content snapshot
+(mentor pick, tasting notes, quiz answers, pairing selections, etc.) to
+the server via the shared `stateAdapter.js`, with real optimistic-
+concurrency version protection — verified via
+`verify-smokecraft-hf4b-account-and-conversion.mjs` (31/31 passing,
+including a real stale-write 409 rejection and true cross-device resume
+via a second real login). No existing control's visible behavior
+changed. See `SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md` and
+`public/proof/smokecraft-holistic-fix-4b/`.

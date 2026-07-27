@@ -226,3 +226,21 @@ in source. Not yet locked: XP/badge award paths beyond session
 completion, and the ~30 non-award `SmokeCraftJourneyContext` fields
 (tasting notes, selections) remain client-cache-only by deliberate scope
 decision — see `SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s Known Gaps section.
+
+## Holistic Fix 4B additions
+
+Account identity and guest-to-account conversion are now locked: real
+email+PIN accounts (reusing the existing proven `passport_member`/
+`auth_sessions` infrastructure), atomic idempotent guest conversion
+(migration 094, `UNIQUE(guest_reference)` — a guest converts at most
+once, ever), a deterministic merge policy
+(`SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md`), and journey-content sync
+with real optimistic-concurrency versioning — all enforced by the new
+build-blocking `scripts/validateSmokecraftAccountIntegrity.mjs`
+(24/24 checks). Verified live: true same-identity cross-device resume
+(a real second login on a fresh cookie jar sees content written by the
+first device), a genuine stale-write 409 rejection, and a guest-to-
+existing-account conversion where both sides had independent prior
+state (merge policy applied correctly, nothing silently lost). Not
+locked: per-field (rather than whole-blob) conflict resolution for
+journey content — disclosed trade-off, see the merge policy doc.

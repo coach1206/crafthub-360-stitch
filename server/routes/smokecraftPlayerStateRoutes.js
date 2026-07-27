@@ -19,8 +19,16 @@ import * as ctrl from '../controllers/playerStateController.js'
 
 const router = Router()
 
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
+const IS_PROD = process.env.NODE_ENV === 'production'
+// Matches the existing convention in server/index.js's global rate
+// limiters (skip: () => !IS_PROD) — real production protection, but
+// must not throttle dev/test suites (found live during Holistic Fix 4B:
+// the account router's un-skipped limiter caused a cascading false
+// failure in the automated test suite after ~10 auth calls, correctly
+// root-caused as a rate-limit/test-harness interaction, not a product
+// defect, and fixed here for both routers).
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
 
 // Health check does not require/issue an identity — pure infra observability.
 router.get('/health', readLimiter, ctrl.handleHealth)

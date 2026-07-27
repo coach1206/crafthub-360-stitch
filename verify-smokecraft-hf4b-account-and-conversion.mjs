@@ -18,36 +18,47 @@ function assert(name, cond, detail = '') {
 function section(t) { console.log(`\n── ${t}`) }
 
 function makeClient() {
-  let cookie = null
+  // A real cookie jar keyed by cookie name — the app sets MULTIPLE
+  // independent cookies on the same client (smokecraft_guest_session +
+  // novee_auth coexist once a guest signs into an account). A naive
+  // "keep only the latest Set-Cookie" jar silently drops the earlier
+  // cookie, which is exactly the class of test-harness bug this
+  // operation has repeatedly found and fixed rather than mistaking for
+  // a product defect — same lesson here.
+  const jar = new Map()
+  function applySetCookies(res) {
+    const getAll = res.headers.getSetCookie ? res.headers.getSetCookie() : null
+    const raw = getAll && getAll.length ? getAll : (res.headers.get('set-cookie') ? [res.headers.get('set-cookie')] : [])
+    for (const sc of raw) {
+      const [pair] = sc.split(';')
+      const eq = pair.indexOf('=')
+      if (eq > 0) jar.set(pair.slice(0, eq).trim(), pair.slice(eq + 1).trim())
+    }
+  }
+  function cookieHeader() {
+    return [...jar.entries()].map(([k, v]) => `${k}=${v}`).join('; ') || null
+  }
   return {
     async get(path) {
-      const res = await fetch(`${API}${path}`, { headers: cookie ? { Cookie: cookie } : {} })
-      const sc = res.headers.get('set-cookie')
-      if (sc) cookie = sc.split(';')[0]
+      const res = await fetch(`${API}${path}`, { headers: cookieHeader() ? { Cookie: cookieHeader() } : {} })
+      applySetCookies(res)
       return { status: res.status, body: await res.json().catch(() => null) }
     },
     async post(path, body) {
       const res = await fetch(`${API}${path}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', ...(cookie ? { Cookie: cookie } : {}) }, body: JSON.stringify(body || {}),
+        method: 'POST', headers: { 'Content-Type': 'application/json', ...(cookieHeader() ? { Cookie: cookieHeader() } : {}) }, body: JSON.stringify(body || {}),
       })
-      const sc = res.headers.get('set-cookie')
-      if (sc) cookie = sc.split(';')[0]
+      applySetCookies(res)
       return { status: res.status, body: await res.json().catch(() => null) }
     },
     async put(path, body) {
       const res = await fetch(`${API}${path}`, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json', ...(cookie ? { Cookie: cookie } : {}) }, body: JSON.stringify(body || {}),
+        method: 'PUT', headers: { 'Content-Type': 'application/json', ...(cookieHeader() ? { Cookie: cookieHeader() } : {}) }, body: JSON.stringify(body || {}),
       })
-      const sc = res.headers.get('set-cookie')
-      if (sc) cookie = sc.split(';')[0]
+      applySetCookies(res)
       return { status: res.status, body: await res.json().catch(() => null) }
     },
-    setCookie(v) { cookie = v },
-    getCookie() { return cookie },
-    clearCookieOfName(name) {
-      if (!cookie) return
-      cookie = cookie.split(';').filter(c => !c.trim().startsWith(name)).join(';')
-    },
+    getCookie() { return cookieHeader() },
   }
 }
 
@@ -100,7 +111,7 @@ const createB = await guestClient.post('/api/smokecraft/account/create', { email
 assert('Account created on the SAME cookie jar as the guest (both identities coexist)', createB.status === 201)
 
 const convert1 = await guestClient.post('/api/smokecraft/player-state/convert-guest', { idempotencyKey: 'hf4b-convert-1' })
-assert('First conversion request succeeds (201, alreadyConverted:false)', convert1.status === 201 && convert1.body.conversion.alreadyConverted !== true)
+assert('First conversion request succeeds (201, alreadyConverted:false)', convert1.status === 201 && convert1.body.alreadyConverted !== true)
 assert('Conversion transferred both sessions, no merged duplicates (fresh account)', convert1.body.conversion.sessions_transferred === 2 && convert1.body.conversion.sessions_merged_duplicate === 0)
 assert('Conversion transferred the badge', convert1.body.conversion.awards_transferred === 1)
 
@@ -153,20 +164,13 @@ assert('Per the merge policy, the ACCOUNT\'s own journey snapshot wins over the 
 
 // ── 7. Same-identity cross-device resume ──────────────────────────────
 section('7. Same-identity cross-device resume (real second login, not just a separate guest cookie)')
-const deviceX = makeClient()
-await deviceX.get('/api/smokecraft/player-state')
-await deviceX.put('/api/smokecraft/player-state/journey-snapshot', { snapshot: { note: 'written on device X' }, expectedVersion: 0 })
-const emailE = uniqueEmail('e')
-await deviceX.post('/api/smokecraft/account/create', { email: emailE, displayName: 'Learner E' })
-const pinE = (await deviceX.get('/api/auth/me'), null) // pin already captured below
-const createEResp = await (async () => { const r = await deviceX.get('/api/auth/me'); return r })()
-// Retrieve the actual pin from the create response captured earlier is cleaner:
 const emailE2 = uniqueEmail('e2')
 const deviceX2 = makeClient()
 await deviceX2.get('/api/smokecraft/player-state')
 const createE2 = await deviceX2.post('/api/smokecraft/account/create', { email: emailE2, displayName: 'Learner E2' })
 await deviceX2.post('/api/smokecraft/player-state/convert-guest', { idempotencyKey: 'hf4b-deviceX2-convert' })
-await deviceX2.put('/api/smokecraft/player-state/journey-snapshot', { snapshot: { note: 'written on device X2' }, expectedVersion: 1 }).catch(() => {})
+const snapshotWriteX2 = await deviceX2.put('/api/smokecraft/player-state/journey-snapshot', { snapshot: { note: 'written on device X2' }, expectedVersion: 0 })
+assert('Device X2\'s snapshot write succeeds (real version tracking, not a guessed constant)', snapshotWriteX2.status === 200 && snapshotWriteX2.body.success === true)
 const deviceY = makeClient() // genuinely different device: fresh cookie jar, real login (not a shared guest cookie)
 const loginY = await deviceY.post('/api/smokecraft/account/login', { email: emailE2, pin: createE2.body.devDeliveryPin })
 assert('Device Y logs into the SAME account as Device X2', loginY.status === 200)
@@ -175,7 +179,10 @@ assert('Device Y (real second login) sees the content Device X2 wrote — true c
 
 // ── 8. Stale write (two-device conflict) ──────────────────────────────
 section('8. Stale write on a mutable versioned record')
-const staleWrite = await deviceX2.put('/api/smokecraft/player-state/journey-snapshot', { snapshot: { note: 'stale attempt' }, expectedVersion: 1 })
+// Device X2 tries to write again using its ORIGINAL (now stale) version 0,
+// simulating a device that cached the version before Device Y's read —
+// this is a genuine stale-write attempt, not a guessed number.
+const staleWrite = await deviceX2.put('/api/smokecraft/player-state/journey-snapshot', { snapshot: { note: 'stale attempt' }, expectedVersion: 0 })
 assert('A write with an outdated expectedVersion is rejected with 409, not silently applied', staleWrite.status === 409 && staleWrite.body.error === 'stale_version')
 assert('The 409 response includes the server\'s current state (so the client can reconcile)', !!staleWrite.body.current)
 

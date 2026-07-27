@@ -319,3 +319,17 @@ visible behavior, label, or rendered markup changed — this is a backend
 authority change behind the existing `if (done) return` guard, not a
 new control or a redesign. See `SMOKECRAFT_STATE_OWNERSHIP_MAP.md` for
 full detail.
+
+## Holistic Fix 4B update — new account screen, no existing group affected
+
+The new `/smokecraft/account` screen introduces its own controls (email/
+PIN inputs, Create Account / Sign In / Sign Out buttons) that are net-
+new, not a redesign of any of the 276 previously-mapped controls or
+their 7 implementation groups. Its buttons follow the same real-click,
+real-state-change contract as the `selection-toggle`/`completion` groups
+but were not added to the 276-control inventory since that inventory is
+explicitly scoped to the 21-session curriculum's discovered controls
+(see `SMOKECRAFT_CONTROL_IMPLEMENTATION_MAP.md`'s Methodology section) —
+this is a supporting/entry-layer screen, consistent with how other
+supporting screens (Rewards Center, How It Works) are also outside that
+276-count scope.

@@ -1,0 +1,28 @@
+── SmokeCraft account-integrity validator (Holistic Fix 4B)
+
+  OK    docs/smokecraft/SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md exists
+  OK    migration 094 exists
+  OK    migration 094 has a rollback script
+  OK    rollback file does not live inside server/db/migrations
+  OK    smokecraft_guest_conversions has UNIQUE(guest_reference) — a guest can convert at most once, ever
+  OK    smokecraft_player_state gains journey_version for optimistic concurrency
+  OK    convertGuestToAccount recomputes XP from merged rows (SUM), never adds guest.xp + account.xp directly
+  OK    convertGuestToAccount checks smokecraft_guest_conversions for an existing row before converting (idempotent)
+  OK    saveJourneySnapshot rejects a stale expectedVersion with a conflict result rather than silently overwriting
+  OK    handleConvertGuest requires req.user.role === passport_member (a real authenticated account)
+  OK    handleConvertGuest requires req.smokecraftGuestCookieIdentity (server-verified cookie), never a client-supplied guest id
+  OK    handleSaveJourneySnapshot requires a numeric expectedVersion from the client (optimistic-concurrency contract)
+  OK    accountService reuses authService.hashPin/verifyPin (bcrypt) rather than inventing new hashing
+  OK    accountService reuses authService.createJwtForUser/createAuthSession (existing session infra)
+  OK    accountService reuses the existing lockout pattern (lockUserIfNeeded) rather than inventing new lockout logic
+  OK    no raw/plaintext password or PIN is ever logged or returned outside the dev-only response path
+  OK    devDeliveryPin (dev-only PIN exposure) is gated on NODE_ENV, never unconditional
+  OK    src/pages/smokecraft/Account.jsx contains no JWT_SECRET / hardcoded credential / bcrypt hash literal
+  OK    src/services/smokecraft/stateAdapter.js contains no JWT_SECRET / hardcoded credential / bcrypt hash literal
+  OK    src/services/smokecraft/playerStateApiClient.js contains no JWT_SECRET / hardcoded credential / bcrypt hash literal
+  OK    SmokeCraftJourneyContext imports and uses the shared stateAdapter (not bypassing it)
+  OK    smokecraftAccountRoutes is mounted
+  OK    convert-guest route is mounted
+  OK    journey-snapshot GET/PUT routes are mounted
+
+=== RESULT: PASS (0 checks failed) ===

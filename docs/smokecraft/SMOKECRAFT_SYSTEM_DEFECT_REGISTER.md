@@ -963,3 +963,52 @@ and are tested — but no screen currently calls them directly, since
 `awardSessionRewards` already grants session-tied badges atomically with
 the session-completion mutation). See
 `SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s Known Gaps for full detail.
+
+## Holistic Fix 4B — account identity and conversion findings
+
+**Two real defects found and fixed during this pass's own testing:**
+
+- **SC-D020 (new, CLOSED)**: no passport_member login endpoint existed
+  anywhere in the codebase before this pass — `promoteGuestToMember`
+  could only ever create a new member once; there was no way for an
+  existing member to sign back in on a second device. Fixed by adding
+  `POST /api/smokecraft/account/login` (email+PIN, reusing the existing
+  bcrypt/JWT/lockout infrastructure). Verified live: a real second
+  cookie jar successfully logs into the same account and resumes its
+  state.
+- **SC-D021 (new, CLOSED)**: the new account router's rate limiter
+  (`server/routes/smokecraftAccountRoutes.js`) did not follow this
+  codebase's existing convention (`skip: () => !IS_PROD` on
+  `server/index.js`'s global auth limiter — dev/test suites must not be
+  throttled by production-grade rate limiting). Found live: the
+  automated test suite (31 scenarios, many making auth calls) began
+  failing with cascading 429s around scenario 7 after ~10 cumulative
+  auth requests. Root-caused by direct inspection, confirmed as a real
+  inconsistency (not a rate-limiter false positive, since a real user
+  would rarely exceed 10 auth actions in 15 minutes — but automated
+  testing legitimately does), and fixed by adding the same `skip`
+  pattern to both the new account router and the Holistic Fix 4 player-
+  state router (which had the identical gap). Re-tested clean: 31/31.
+
+**Investigated, confirmed NOT a defect**: `SMOKECRAFT_GAME_MANIFEST.json`
+briefly reported a stale route count (108 instead of 109) after adding
+the `/smokecraft/account` route in an earlier commit within this same
+pass, before the manifest generator was re-run. Root-caused to a commit-
+ordering artifact (the generator runs correctly in `npm run build`'s
+prebuild chain; this was caught between two separate manual commits
+within the same working session, not a build-time defect) — fixed by
+regenerating the manifest and hardening
+`scripts/validateSmokecraftResponsive.mjs`'s previously-hardcoded "108
+routes" check to compare against the live route count instead, so this
+exact class of staleness can't silently recur.
+
+**Known, disclosed, NOT closed this pass** (see
+`SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md`'s Known Trade-offs and
+`SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s Known Gaps): the journey-content
+snapshot is versioned as one whole blob, not per-field — a guest's
+independent journey content is discarded (not silently, it's disclosed
+in the conversion's `journey_merge_outcome` audit field) in favor of an
+account's own pre-existing snapshot on conversion, rather than being
+field-by-field merged; `selected mentor`'s two-independent-owners issue
+(`SmokeCraftJourneyContext.mentor` vs `GuestSessionContext.selectedMentor`)
+remains documented, not fixed.

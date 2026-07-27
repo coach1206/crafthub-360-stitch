@@ -194,3 +194,11 @@ screens that call the shared `awardSessionRewards`/`awardStamp`
 functions; XP/badge award paths beyond that remain queued for a future
 pass to wire per-screen where a real award-granting UI action exists
 independent of session completion.
+
+## Holistic Fix 4B status note
+
+Two new migrations this pass (094: guest-conversion records +
+journey-snapshot columns). Route count is now 109 (was 108) — the new
+`/smokecraft/account` screen. Shell-adoption floor and classification
+counts otherwise unchanged. See `SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s
+Holistic Fix 4B section for the full state-migration accounting.

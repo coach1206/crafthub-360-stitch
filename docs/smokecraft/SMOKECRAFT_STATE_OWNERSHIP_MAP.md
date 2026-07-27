@@ -162,3 +162,55 @@ written from two different code paths without reconciliation.
   content-selection fields (mentor pick, tasting notes, quiz answers)
   to server authority as well was not achievable in this pass and is
   handed off explicitly (see the final report's Holistic Fix 5 handoff).
+
+## Holistic Fix 4B update — account identity, guest conversion, journey-content migration
+
+**Identity layer closed the real blocker from Holistic Fix 4**: reused
+the existing, proven `passport_member` role / `system_users` +
+`auth_credentials` + `passport_member_profiles` + `auth_sessions`
+infrastructure (bcrypt PIN hashing, JWT, revocable sessions — the same
+system already used for staff/founder/passport_member auth). Added the
+one thing genuinely missing: a real login endpoint for an existing
+member (`POST /api/smokecraft/account/login`) — before this pass, an
+account (via `promoteGuestToMember`) could only ever be created once,
+with no way to sign back in on a second device anywhere in the
+codebase.
+
+**Guest ID / Account ID / Authenticated session** are now real,
+distinct, and connected: `guest_reference` (raw cookie-issued guest
+UUID) → `smokecraft_guest_conversions` (one-time, idempotent) →
+`user:<userId>` (the account's `guest_reference` going forward). Both
+identities can coexist on one browser (guest cookie + account cookie,
+independently verified) — this is exactly how the conversion endpoint
+proves the caller controls both without trusting a client-submitted
+guest reference.
+
+**Journey content fields — migrated this pass** (previously listed as
+"Not migrated" in the Holistic Fix 4 table above): identity, selected
+venue/mentor, meetYourCigar, mentorCommentary, format, seedSoil,
+terroir, knowledgeDrop, pairing, selectedCigar, requestPurchase,
+cutToastLight, firstThird/secondThird/flavorMemory/finalThird,
+scorecard, aiSummary, pairingRecommendations, rewards/achievements
+view-state, welcomeExperience fields, finalReview, connections,
+resumeRoute/resumeScreenId. All of these now round-trip through
+`smokecraft_player_state.journey_snapshot` (migration 094), synced via
+the shared client `stateAdapter.js`, with real optimistic-concurrency
+version protection (`journey_version`). **Authoritative owner is now
+the server** for the whole snapshot as a unit; **DB storage**: yes
+(JSONB). **API endpoint**: `GET`/`PUT /api/smokecraft/player-state/journey-snapshot`.
+**Client cache**: `sc_journey_v1` (unchanged key, now a cache/offline-
+queue/pre-login-recovery store per the mandate, not the sole authority).
+**Cross-device requirement**: met (verified live — Device Y, a real
+second login, sees Device X2's written content). **Duplicate-risk**:
+low (single JSONB blob per identity, guarded by version, not
+per-sub-mutation — see Known Gaps below for the coarseness trade-off).
+
+**Still NOT migrated / remaining client-only**: none of the journey
+fields — all are now covered by the snapshot mechanism. What remains
+genuinely out of scope: per-field granular conflict resolution (the
+snapshot is whole-blob versioned, not per-field — see
+`SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md`'s disclosed trade-off);
+Golden Box Packaging Studio's own separate, pre-existing, already-
+server-authoritative state (untouched, out of scope); the narrower
+mini-features (Skill Tree, Collections, Blend Fault, Challenge Hub) that
+already had their own real persistence before this operation began.
