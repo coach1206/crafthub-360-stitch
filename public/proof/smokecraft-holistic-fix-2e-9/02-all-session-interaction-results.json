@@ -1,5 +1,5 @@
 {
-  "commit": "519fef4850c28ca05b00a7c37d115072cadf9f0a",
+  "commit": "b0fa85aa81db7ca7ff52f10e44d6c67827f1c0e1",
   "pass": 88,
   "fail": 0,
   "failures": [],
@@ -13,7 +13,7 @@
       "sampledClicked": 15,
       "blockedOverlay": 0,
       "keyboardOk": true,
-      "consoleErrors": 1,
+      "consoleErrors": 2,
       "controlLabels": [
         "BUTTON[button]:Back to Journey",
         "BUTTON[button]:Notifications",

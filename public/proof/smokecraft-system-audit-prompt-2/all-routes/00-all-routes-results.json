@@ -9,8 +9,8 @@
     "title": "NOVEE OS | CraftHub 360",
     "bodyEmpty": false,
     "crashed": false,
-    "consoleErrorCount": 0,
-    "firstConsoleError": null,
+    "consoleErrorCount": 1,
+    "firstConsoleError": "Failed to load resource: the server responded with a status of 404 (Not Found)",
     "screenshot": "001-(smokecraft index).png",
     "isRedirectElement": false
   },
@@ -69,8 +69,8 @@
     "title": "NOVEE OS | CraftHub 360",
     "bodyEmpty": false,
     "crashed": false,
-    "consoleErrorCount": 1,
-    "firstConsoleError": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "consoleErrorCount": 0,
+    "firstConsoleError": null,
     "screenshot": "005-intake.png",
     "isRedirectElement": true
   },
