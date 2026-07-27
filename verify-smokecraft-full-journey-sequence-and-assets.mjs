@@ -239,7 +239,24 @@ try {
     for (let k = 0; k < n; k++) {
       const t = ((await btns.nth(k).textContent()) || '').trim()
       if (/^(←|Back|Continue|Next|Skip|Close)/i.test(t) || !t) continue
-      try { await btns.nth(k).click({ timeout: 1500 }); await page.waitForTimeout(350) } catch { /* non-fatal */ }
+      try {
+        // Deterministic readiness: wait for the actual approved-image
+        // network response the click is expected to trigger, rather than
+        // a fixed sleep. A fixed 350ms sleep (the prior approach) was
+        // sufficient in isolation but proved too short under real
+        // resource contention (many concurrent Node/Playwright processes
+        // in this container), intermittently failing S4's asset-fetch
+        // check — root-caused via reproducible before/after instrumented
+        // runs, not assumed. waitForResponse resolves as soon as the
+        // response actually arrives (typically well under 350ms), and
+        // the try/catch's 3s timeout is a generous ceiling, not a delay.
+        const responsePromise = page.waitForResponse(
+          r => /\.(png|jpg|jpeg|webp|gif|svg)(\?|$)/i.test(r.url()),
+          { timeout: 3000 }
+        ).catch(() => null)
+        await btns.nth(k).click({ timeout: 1500 })
+        await responsePromise
+      } catch { /* non-fatal */ }
       break
     }
   }
