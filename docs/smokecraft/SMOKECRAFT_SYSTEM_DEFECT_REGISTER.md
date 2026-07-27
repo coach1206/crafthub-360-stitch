@@ -1012,3 +1012,27 @@ account's own pre-existing snapshot on conversion, rather than being
 field-by-field merged; `selected mentor`'s two-independent-owners issue
 (`SmokeCraftJourneyContext.mentor` vs `GuestSessionContext.selectedMentor`)
 remains documented, not fixed.
+
+## Holistic Fix 4B — journey-snapshot staleness regression (found via own regression suite)
+
+**SC-D022 (new, CLOSED)**: `SmokeCraftJourneyContext`'s mount effect
+adopted the server journey snapshot whenever one existed (version > 0),
+with no check for whether the LOCAL cache was itself fresher. Found via
+the full-journey regression suite: sessions 17-27 all incorrectly
+redirected to `/smokecraft/venue-select` instead of their real routes.
+Root cause confirmed by direct code trace: `SmokeCraftSessionGuard`
+reads `journey` (via `getSmokeCraftEntryReadiness(session, journey)`) to
+decide entry-readiness redirects — an unconditionally-adopted stale
+server snapshot silently overwrote fields that guard depends on. This
+is a real product defect, not merely a test artifact: a real guest who
+runs `startNewJourney()` (resets local journey fields to null) on a
+browser where the server still holds an older synced snapshot would hit
+the same bug on their next page load, silently resurrecting old data
+over the freshly-reset "new journey" state. Fixed by comparing
+`journey_updated_at` (server) against `journeyUpdatedAt` (local) and
+only adopting when the server is strictly newer or local has none at
+all. Also fixed the full-journey test's `seed()` helper, which had been
+giving every re-seeded iteration a timestampless local cache (something
+no real client write ever produces, since `updateJourney()` always
+stamps `journeyUpdatedAt`) — both fixes were required together.
+Re-verified: full journey 107/107.
