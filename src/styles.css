@@ -1958,3 +1958,25 @@
     color: #9cc2e8;
   }
 }
+
+/* ─── Holistic Fix 3 — shared SmokeCraft responsive contract ─────────── */
+/* Commerce two-column layout (menu + sticky order sidebar): fixed 280px
+   second column caused real horizontal overflow on handheld-portrait
+   viewports (measured via verify-smokecraft-hf3-responsive-inventory.mjs
+   on /smokecraft/venue-commerce, /order, /ticket-tapper/staff-specials —
+   all three render SmokeCraftVenueCommerce.jsx). Collapses to a single
+   stacked column below tablet width instead of overflowing horizontally. */
+.sc-commerce-two-col {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .sc-commerce-two-col {
+    grid-template-columns: 1fr;
+  }
+  .sc-commerce-two-col > *:last-child {
+    position: static !important;
+  }
+}

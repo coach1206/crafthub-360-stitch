@@ -85,12 +85,19 @@ for (const r of routes) {
         const viewportW = window.innerWidth
         const horizontalOverflow = Math.max(doc.scrollWidth, body.scrollWidth) > viewportW + 2
         // Is there a scroll container? Either the shell's own overflow:auto
-        // fixed container, or a fixed body page taller than viewport.
+        // fixed container, a fixed body page taller than viewport, OR
+        // (the common case) native document/body scroll, which works by
+        // default unless html/body/#root sets overflow:hidden. Verified
+        // directly by attempting a real scroll and checking it moved.
         const scrollableEls = [...document.querySelectorAll('*')].filter(el => {
           const cs = getComputedStyle(el)
           return (cs.overflowY === 'auto' || cs.overflowY === 'scroll') && el.scrollHeight > el.clientHeight + 4
         })
-        const canScrollIfNeeded = scrollableHeight <= viewportH + 4 || scrollableEls.length > 0
+        const beforeScrollY = window.scrollY
+        window.scrollTo(0, 100)
+        const nativeScrollWorks = window.scrollY > beforeScrollY
+        window.scrollTo(0, beforeScrollY)
+        const canScrollIfNeeded = scrollableHeight <= viewportH + 4 || scrollableEls.length > 0 || nativeScrollWorks
         // Bottom-nav clearance: find a fixed bottom nav-like element and
         // check nothing meaningful is obscured beneath it.
         const fixedBottomEls = [...document.querySelectorAll('*')].filter(el => {
@@ -102,17 +109,30 @@ for (const r of routes) {
         for (const el of fixedBottomEls) { const r = el.getBoundingClientRect(); bottomNavHeight = Math.max(bottomNavHeight, r.height) }
         // Content obscured behind bottom nav: any interactive control whose
         // rect bottom exceeds (viewportH - bottomNavHeight) but is still
-        // "on-screen" per naive layout (i.e. would be visually covered).
+        // "on-screen" per naive layout (i.e. would be visually covered) —
+        // EXCLUDING controls that are themselves inside the fixed nav bar
+        // (its own buttons legitimately sit in that band; that is not an
+        // obscuring defect).
         let obscuredControls = 0
         if (bottomNavHeight > 0) {
           const controls = [...document.querySelectorAll('button, a[href], input, [role="button"]')]
+            .filter(el => !fixedBottomEls.some(nav => nav.contains(el)))
           for (const el of controls) {
             const r = el.getBoundingClientRect()
             if (r.width > 0 && r.height > 0 && r.bottom > viewportH - bottomNavHeight && r.top < viewportH - bottomNavHeight) obscuredControls++
           }
         }
-        // Image orientation (image-shell screens): find the largest visible <img>
-        const imgs = [...document.querySelectorAll('img')].filter(i => i.naturalWidth > 0)
+        // Image orientation (image-shell screens): find the largest visible
+        // <img> that is actually rendered at hero scale (>= 40% of the
+        // viewport's smaller dimension) — excludes small avatar/decorative
+        // thumbnails that would otherwise be misidentified as the screen's
+        // backdrop image by a naive "largest natural-pixel-count" heuristic.
+        const heroThreshold = Math.min(viewportW, viewportH) * 0.4
+        const imgs = [...document.querySelectorAll('img')].filter(i => {
+          if (i.naturalWidth <= 0) return false
+          const r = i.getBoundingClientRect()
+          return Math.max(r.width, r.height) >= heroThreshold
+        })
         let heroImage = null
         if (imgs.length) {
           const largest = imgs.reduce((a, b) => (a.naturalWidth * a.naturalHeight > b.naturalWidth * b.naturalHeight ? a : b))

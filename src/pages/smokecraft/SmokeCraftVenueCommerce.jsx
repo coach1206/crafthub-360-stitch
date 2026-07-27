@@ -615,7 +615,7 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
         />
 
         {/* Two-column layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 20, alignItems: 'start' }}>
+        <div className="sc-commerce-two-col">
           {/* Menu area */}
           <div>{renderTabContent()}</div>
 
