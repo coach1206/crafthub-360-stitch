@@ -30,7 +30,13 @@ if (!fs.existsSync(INVENTORY)) {
 }
 
 const inventory = JSON.parse(fs.readFileSync(INVENTORY, 'utf8'))
-check(`inventory covers all 108 routes`, inventory.length === 108, `${inventory.length} routes`)
+// Compares against the live route count (not a hardcoded number) so
+// this check never silently goes stale again as routes are added —
+// this exact staleness bug was found during Holistic Fix 4B (adding
+// /smokecraft/account raised the real route count from 108 to 109
+// without the inventory being re-swept immediately).
+const liveRouteCount = JSON.parse(fs.readFileSync('docs/smokecraft/smokecraft-routes-raw.json', 'utf8')).length
+check(`inventory covers all live routes (${liveRouteCount})`, inventory.length === liveRouteCount, `inventory has ${inventory.length}, live route count is ${liveRouteCount}`)
 
 let overflowCount = 0, scrollBlockedCount = 0, obscuredCount = 0, errorCount = 0
 const overflowRoutes = [], scrollBlockedRoutes = [], obscuredRoutes = [], errorRoutes = []
