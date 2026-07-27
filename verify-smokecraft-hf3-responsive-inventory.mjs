@@ -98,9 +98,12 @@ for (const r of routes) {
         const nativeScrollWorks = window.scrollY > beforeScrollY
         window.scrollTo(0, beforeScrollY)
         const canScrollIfNeeded = scrollableHeight <= viewportH + 4 || scrollableEls.length > 0 || nativeScrollWorks
-        // Bottom-nav clearance: find a fixed bottom nav-like element and
-        // check nothing meaningful is obscured beneath it.
-        const fixedBottomEls = [...document.querySelectorAll('*')].filter(el => {
+        // Bottom-nav clearance: find the real fixed bottom navigation bar
+        // (role="navigation", matching SmokeCraftNavBar.jsx's own markup)
+        // rather than any incidental small fixed element near the bottom
+        // (a toast, a decorative watermark, an image-shell hotspot band) —
+        // those are not "navigation covering content" defects.
+        const fixedBottomEls = [...document.querySelectorAll('[role="navigation"]')].filter(el => {
           const cs = getComputedStyle(el)
           const r = el.getBoundingClientRect()
           return cs.position === 'fixed' && r.bottom >= viewportH - 4 && r.height > 20 && r.height < 140
