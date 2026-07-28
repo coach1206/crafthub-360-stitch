@@ -2,6 +2,7 @@ node_modules
 server/_local_media_storage/
 dist
 .claude/
+.env
 
 # Phase proof scripts (session artifacts)
 e2e-2d.mjs
