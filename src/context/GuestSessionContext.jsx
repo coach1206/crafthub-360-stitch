@@ -37,6 +37,7 @@ import {
   completeSessionOnServer, awardPassportStampOnServer, awardNamedXpOnServer,
   awardBadgeOnServer, submitKnowledgeCheckOnServer, submitLeafChallengeOnServer,
   submitBlendSelectionOnServer,
+  fetchTastingDraft, saveTastingDraftOnServer, submitTastingCompletionOnServer,
 } from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
@@ -179,6 +180,27 @@ export function GuestSessionProvider({ children }) {
       sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
       deviceId: sessionRef.current.deviceId,
     }).catch(() => {})
+  }, [])
+
+  // ── Holistic Fix 5A-3D: server-authoritative tasting draft/completion ──────
+  /** Loads a tasting draft from the server (real cross-device resume). */
+  const loadTastingDraft = useCallback((activityKey) => fetchTastingDraft(activityKey), [])
+
+  /** Saves a tasting draft (learner observations only — server owns completion/reward). */
+  const saveTastingDraft = useCallback((activityKey, draftData, expectedVersion) =>
+    saveTastingDraftOnServer(activityKey, draftData, expectedVersion), [])
+
+  /**
+   * Submits the raw selection as evidence — the server independently
+   * verifies selectedCigarId is real (from its own copy of the venue
+   * flight inventory) and is the sole authority for the XP grant.
+   */
+  const completeTasting = useCallback((activityKey, selectedCigarId, compareIds) => {
+    const guestId = sessionRef.current.guestId
+    return submitTastingCompletionOnServer(guestId, activityKey, selectedCigarId, compareIds, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
   }, [])
 
   // ── SmokeCraft: idempotent session reward award ───────────────────────────
@@ -1066,6 +1088,9 @@ export function GuestSessionProvider({ children }) {
       submitKnowledgeCheck,
       submitLeafChallenge,
       submitBlendSelection,
+      loadTastingDraft,
+      saveTastingDraft,
+      completeTasting,
       awardSessionRewards,
       // Scoring + loyalty engine
       awardLoyaltyPoints:       awardLoyaltyPointsCb,

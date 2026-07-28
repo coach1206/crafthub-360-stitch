@@ -116,3 +116,43 @@ export async function submitBlendSelectionOnServer(guestId, wrapperIndex, binder
   const idempotencyKey = makeIdempotencyKey(guestId, 'blend-submit')
   return postJson('/blend/submit', { idempotencyKey, wrapperIndex, binderIndex, fillerIndices, sourceRoute, deviceId })
 }
+
+/**
+ * Holistic Fix 5A-3D: server-authoritative tasting draft read/write +
+ * completion. Draft save uses the same optimistic-concurrency pattern as
+ * the journey-snapshot sync (expectedVersion, 409 on stale write —
+ * server value always wins, never silently overwritten).
+ */
+export async function fetchTastingDraft(activityKey) {
+  try {
+    const res = await fetch(`${BASE}/tasting/${encodeURIComponent(activityKey)}/draft`, { credentials: 'include' })
+    const data = await res.json().catch(() => null)
+    if (!res.ok || !data || data.success !== true) return { ok: false, status: res.status }
+    return { ok: true, draftData: data.draftData, version: data.version, updatedAt: data.updatedAt }
+  } catch (err) {
+    return { ok: false, status: 0, error: 'network_unavailable' }
+  }
+}
+
+export async function saveTastingDraftOnServer(activityKey, draftData, expectedVersion) {
+  try {
+    const res = await fetch(`${BASE}/tasting/${encodeURIComponent(activityKey)}/draft`, {
+      method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ draftData, expectedVersion }),
+    })
+    if (res.status === 409) {
+      const data = await res.json()
+      return { ok: false, conflict: true, current: data.current }
+    }
+    const data = await res.json().catch(() => null)
+    if (!res.ok || !data || data.success !== true) return { ok: false, status: res.status }
+    return { ok: true, current: data.current }
+  } catch (err) {
+    return { ok: false, status: 0, error: 'network_unavailable' }
+  }
+}
+
+export async function submitTastingCompletionOnServer(guestId, activityKey, selectedCigarId, compareIds, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, `tasting:${activityKey}`)
+  return postJson(`/tasting/${encodeURIComponent(activityKey)}/complete`, { idempotencyKey, selectedCigarId, compareIds, sourceRoute, deviceId })
+}

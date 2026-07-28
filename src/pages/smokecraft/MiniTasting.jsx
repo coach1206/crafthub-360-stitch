@@ -61,17 +61,23 @@ function categorizePairings(flight) {
   return result
 }
 
+const ACTIVITY_KEY = 'mini-tasting'
+
 export default function MiniTasting() {
-  const { session, update, addXP } = useGuestSession()
+  const { loadTastingDraft, saveTastingDraft, completeTasting } = useGuestSession()
   const navigate = useNavigate()
 
-  const state = session?.smokeCraft?.miniTasting || {}
-
-  const [phase, setPhase] = useState('loading') // loading | error | ready
+  // 'loading' | 'error' | 'ready' — draft-load phase. Holistic Fix
+  // 5A-3D: the draft (selectedCigarId/compareIds) is now server-
+  // authoritative (smokecraft_tasting_drafts), loaded on mount for real
+  // cross-device resume — local session state is no longer the owner.
+  const [phase, setPhase] = useState('loading')
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
-  const [selectedId, setSelectedId] = useState(state.selectedCigarId || null)
-  const [compareIds, setCompareIds] = useState(state.compareIds || [])
-  const [started, setStarted] = useState(Boolean(state.startedAt))
+  const [selectedId, setSelectedId] = useState(null)
+  const [compareIds, setCompareIds] = useState([])
+  const [draftVersion, setDraftVersion] = useState(0)
+  const [saveStatus, setSaveStatus] = useState('idle') // idle | saving | saved | error | conflict
+  const [completionStatus, setCompletionStatus] = useState('idle') // idle | completing | completed | already-completed | error
 
   useEffect(() => {
     const on = () => setIsOffline(false)
@@ -82,13 +88,18 @@ export default function MiniTasting() {
   }, [])
 
   useEffect(() => {
-    try {
-      const t = setTimeout(() => setPhase('ready'), 200)
-      return () => clearTimeout(t)
-    } catch {
-      setPhase('error')
-    }
-  }, [])
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      setSelectedId(d.selectedCigarId || null)
+      setCompareIds(d.compareIds || [])
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+  }, [loadTastingDraft])
 
   const flight = useMemo(() => buildFlight(), [])
   const pairingCategories = useMemo(() => categorizePairings(flight), [flight])
@@ -96,26 +107,41 @@ export default function MiniTasting() {
 
   const xpRule = SESSION_REWARDS['mini-tasting-module'] || null
 
-  // Persist selection/comparison/completion into the existing canonical
-  // session record — no new storage key, same smokeCraft bucket pattern
-  // used by Packages O and P.
+  // Debounced server-authoritative draft save — learner observations only
+  // (which cigar was selected/compared), never completion validity or
+  // reward. Optimistic concurrency: a 409 (another tab/device saved
+  // first) adopts the server's current draft rather than overwriting it.
   useEffect(() => {
     if (phase !== 'ready') return
-    const cur = session?.smokeCraft?.miniTasting || {}
-    if (cur.selectedCigarId === selectedId && JSON.stringify(cur.compareIds || []) === JSON.stringify(compareIds)) return
-    update(prev => ({
-      ...prev,
-      smokeCraft: {
-        ...prev.smokeCraft,
-        miniTasting: { ...(prev.smokeCraft?.miniTasting || {}), selectedCigarId: selectedId, compareIds },
-      },
-    }))
+    const t = setTimeout(() => {
+      setSaveStatus('saving')
+      saveTastingDraft(ACTIVITY_KEY, { selectedCigarId: selectedId, compareIds }, draftVersion).then(result => {
+        if (result.conflict) {
+          setSelectedId(result.current.draftData?.selectedCigarId || null)
+          setCompareIds(result.current.draftData?.compareIds || [])
+          setDraftVersion(result.current.version)
+          setSaveStatus('conflict')
+          return
+        }
+        if (!result.ok) { setSaveStatus('error'); return }
+        setDraftVersion(result.current.version)
+        setSaveStatus('saved')
+      })
+    }, 1200)
+    return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, selectedId, compareIds])
 
   function handleRetry() {
     setPhase('loading')
-    setTimeout(() => setPhase('ready'), 200)
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      setSelectedId(d.selectedCigarId || null)
+      setCompareIds(d.compareIds || [])
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
   }
 
   function handleSelect(id) {
@@ -128,21 +154,19 @@ export default function MiniTasting() {
     setCompareIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
   }
 
-  function handleBegin() {
+  // Holistic Fix 5A-3D: completion now requires a real selection (server-
+  // enforced — selectedCigarId must be a genuine id from the server's own
+  // flight inventory) and is submitted as evidence, never a client
+  // completion claim. The server is the sole authority for the XP grant;
+  // this button is disabled until a real selection exists.
+  function handleComplete() {
+    if (!selectedId || completionStatus === 'completing' || completionStatus === 'completed' || completionStatus === 'already-completed') return
     triggerHaptic('medium')
-    setStarted(true)
-    const now = Date.now()
-    update(prev => {
-      const already = prev.smokeCraft?.miniTasting?.completedAt
-      return {
-        ...prev,
-        smokeCraft: {
-          ...prev.smokeCraft,
-          miniTasting: { ...(prev.smokeCraft?.miniTasting || {}), startedAt: now, completedAt: already || now },
-        },
-      }
+    setCompletionStatus('completing')
+    completeTasting(ACTIVITY_KEY, selectedId, compareIds).then(result => {
+      if (!result.ok) { setCompletionStatus('error'); return }
+      setCompletionStatus(result.data.alreadyCompleted ? 'already-completed' : 'completed')
     })
-    if (xpRule?.xp) addXP(xpRule.xp, 'mini-tasting-begin')
   }
 
   const compareCigars = compareIds.map(id => flight.find(c => c.id === id)).filter(Boolean)
@@ -173,6 +197,14 @@ export default function MiniTasting() {
           Mini Tasting
         </h1>
         {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
+        {!isOffline && phase === 'ready' && (
+          <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.45)', marginTop: 4 }}>
+            {saveStatus === 'saving' && 'Saving your selection…'}
+            {saveStatus === 'saved' && 'Saved'}
+            {saveStatus === 'error' && 'Could not save — will retry on your next change'}
+            {saveStatus === 'conflict' && 'Synced from another device'}
+          </div>
+        )}
       </header>
 
       <main
@@ -334,7 +366,12 @@ export default function MiniTasting() {
 
               {/* XP disclosure */}
               <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', textAlign: 'center' }}>
-                {xpRule?.xp ? `Completing this tasting awards ${xpRule.xp} XP.` : 'No XP configured'}
+                {completionStatus === 'completed' || completionStatus === 'already-completed'
+                  ? (xpRule?.xp ? `${xpRule.xp} XP awarded.` : 'Tasting complete.')
+                  : selectedId
+                    ? (xpRule?.xp ? `Completing this tasting awards ${xpRule.xp} XP.` : 'No XP configured')
+                    : 'Select a cigar above to complete this tasting.'}
+                {completionStatus === 'error' && ' — could not complete, try again.'}
               </div>
             </>
           )}
@@ -342,9 +379,15 @@ export default function MiniTasting() {
       </main>
 
       <SmokeCraftNavBar
-        primary={started ? 'Tasting Started ✓' : 'Begin Mini Tasting'}
-        primaryDisabled={started}
-        onPrimary={handleBegin}
+        primary={
+          completionStatus === 'completed' ? 'Tasting Complete ✓'
+          : completionStatus === 'already-completed' ? 'Already Completed ✓'
+          : completionStatus === 'completing' ? 'Completing…'
+          : selectedId ? 'Complete Tasting'
+          : 'Select a Cigar First'
+        }
+        primaryDisabled={!selectedId || completionStatus === 'completing' || completionStatus === 'completed' || completionStatus === 'already-completed'}
+        onPrimary={handleComplete}
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
