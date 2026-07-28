@@ -221,7 +221,10 @@ export async function handleConvertGuest(req, res) {
       requestId: req.id || null,
       deviceId: req.body?.deviceId || null,
     })
-    res.status(result.alreadyConverted ? 200 : 201).json({ success: true, alreadyConverted: result.alreadyConverted, conversion: result.conversion })
+    res.status(result.alreadyConverted ? 200 : 201).json({
+      success: true, alreadyConverted: result.alreadyConverted, conversion: result.conversion,
+      collectionsTransferred: result.collectionsTransferred || 0, collectionsMergedDuplicate: result.collectionsMergedDuplicate || 0,
+    })
   } catch (err) {
     dbErrorResponse(res, err)
   }
@@ -307,7 +310,7 @@ export async function handleSubmitLeafChallenge(req, res) {
 export async function handleCorrectReward(req, res) {
   const idempotencyKey = requireIdempotencyKey(req, res)
   if (!idempotencyKey) return
-  const { guestReference, correctionType, targetTable, targetId, targetAwardKey, deltaXp, reason } = req.body || {}
+  const { guestReference, correctionType, targetTable, targetId, targetAwardKey, deltaXp, reversed, reason } = req.body || {}
   if (!guestReference || typeof guestReference !== 'string') {
     return res.status(400).json({ success: false, error: 'guest_reference_required' })
   }
@@ -317,7 +320,7 @@ export async function handleCorrectReward(req, res) {
   try {
     const result = await correctReward({
       guestReference, correctionType, targetTable, targetId: targetId || null, targetAwardKey: targetAwardKey || null,
-      deltaXp: Number.isFinite(deltaXp) ? deltaXp : 0, reason, authorizedBy: req.user?.id || 'unknown-staff',
+      deltaXp: Number.isFinite(deltaXp) ? deltaXp : 0, reversed: reversed === true, reason, authorizedBy: req.user?.id || 'unknown-staff',
       idempotencyKey,
     })
     if (!result.ok) return res.status(400).json({ success: false, error: result.error })

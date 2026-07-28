@@ -468,7 +468,7 @@ export async function submitLeafChallenge({ guestReference, venueId, answers, id
  * player-state totals transactionally from the full history (the
  * original row + this correction), so nothing is silently rewritten.
  */
-export async function correctReward({ guestReference, correctionType, targetTable, targetId, targetAwardKey, deltaXp = 0, reason, authorizedBy, idempotencyKey }) {
+export async function correctReward({ guestReference, correctionType, targetTable, targetId, targetAwardKey, deltaXp = 0, reversed = false, reason, authorizedBy, idempotencyKey }) {
   if (!reason || !authorizedBy) return { ok: false, error: 'reason_and_authorizedBy_required' }
   const db = dbOrThrow()
   const client = await db.connect()
@@ -478,10 +478,10 @@ export async function correctReward({ guestReference, correctionType, targetTabl
     try {
       const inserted = await client.query(
         `INSERT INTO smokecraft_reward_corrections
-           (guest_reference, correction_type, target_table, target_id, target_award_key, delta_xp, reason, authorized_by, idempotency_key)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           (guest_reference, correction_type, target_table, target_id, target_award_key, delta_xp, reversed, reason, authorized_by, idempotency_key)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
          RETURNING *`,
-        [guestReference, correctionType, targetTable, targetId || null, targetAwardKey || null, deltaXp, reason, authorizedBy, idempotencyKey]
+        [guestReference, correctionType, targetTable, targetId || null, targetAwardKey || null, deltaXp, reversed, reason, authorizedBy, idempotencyKey]
       )
       correction = inserted.rows[0]
     } catch (err) {
@@ -954,6 +954,28 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       journeyMergeOutcome = 'no_guest_snapshot'
     }
 
+    // ── Collections ownership: set union by collection_item_key ──
+    // Holistic Fix 5A-3F: was previously never transferred at all — a
+    // real gap (Collections used an unprefixed guest_reference for
+    // accounts, so conversion had nothing matching `userReference` to
+    // find). Same keep-both-sides-idempotent pattern as awards above.
+    let collectionsTransferred = 0, collectionsMergedDuplicate = 0
+    const guestCollections = await client.query(`SELECT * FROM smokecraft_collection_ownership WHERE guest_reference = $1`, [guestReference])
+    for (const gc of guestCollections.rows) {
+      const existing = await client.query(`SELECT id FROM smokecraft_collection_ownership WHERE guest_reference = $1 AND collection_item_key = $2`, [userReference, gc.collection_item_key])
+      if (existing.rows.length > 0) {
+        collectionsMergedDuplicate++
+      } else {
+        await client.query(
+          `INSERT INTO smokecraft_collection_ownership
+             (guest_reference, collection_item_key, ownership_status, earned_at, earn_source, source_progression_event_id, source_record_id, idempotency_key, metadata)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          [userReference, gc.collection_item_key, gc.ownership_status, gc.earned_at, gc.earn_source, gc.source_progression_event_id, gc.source_record_id, `converted:${gc.idempotency_key}`, gc.metadata]
+        )
+        collectionsTransferred++
+      }
+    }
+
     const conversion = await client.query(
       `INSERT INTO smokecraft_guest_conversions
          (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
@@ -965,7 +987,7 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
     await recordAudit(client, { guestReference: userReference, mutationType: 'guest_conversion', idempotencyKey, outcome: 'applied', requestId, deviceId })
 
     await client.query('COMMIT')
-    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0] }
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     if (err.code === UNIQUE_VIOLATION) {
