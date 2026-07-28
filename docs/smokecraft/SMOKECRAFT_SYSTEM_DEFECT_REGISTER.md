@@ -1341,3 +1341,31 @@ All three closed via `server/services/smokecraft/playerStateService.js`,
 All three closed via `src/utils/pairingEngine.js` and
 `server/services/smokecraft/pairingEngineService.js`. See
 `public/proof/smokecraft-holistic-fix-5b-1/00-proof-index.md`.
+
+## Holistic Fix 5B-1A update (pairing screen visual and interaction closure)
+
+Real Playwright browser verification of PairingLab (S11) and
+PairingRecommendations (S22) — the only disclosed gap from Holistic Fix
+5B-1 — found and fixed 3 real defects:
+
+- **SC-D047**: PairingLab.jsx was missing the single accessible `<h1>`
+  page title present on every other SmokeCraft screen — closed.
+- **SC-D048**: PairingLab.jsx's journey-sync `useEffect` depended on a
+  freshly-created object (`rec`) instead of stable primitive values,
+  causing `setPairing` to fire on every render indefinitely — a real
+  infinite-render loop, invisible to any API-level test, found live via
+  Playwright (chip buttons constantly detaching from the DOM). Closed
+  by depending on real primitive values instead.
+- **SC-D049**: PairingLab.jsx's Pairing Choices panel and the
+  pairing-type hotspot row genuinely overlap (both independently
+  measured against the approved image); with no explicit stacking
+  order, the invisible hotspot buttons silently intercepted clicks
+  meant for the visible flavor-note chips underneath — a real,
+  silent blocked-overlay defect found live via Playwright ("element
+  intercepts pointer events"). Closed with an explicit `zIndex: 3`, no
+  visual change.
+
+All three closed via `src/pages/smokecraft/PairingLab.jsx`. Encoded as
+permanent regression checks in
+`scripts/validateSmokecraftPairingEngineAuthority.mjs`. See
+`public/proof/smokecraft-holistic-fix-5b-1a/00-proof-index.md`.

@@ -105,6 +105,16 @@ export default function PairingLab({ onBack, onComplete } = {}) {
     flavorHarmony: engineResult.matchedFlavorNotes,
   } : null
 
+  // Holistic Fix 5B-1A: `rec` is a brand-new object literal every render
+  // (derived from the async engineResult) — using it directly as a
+  // useEffect dependency previously caused setPairing to fire on every
+  // single render (a real, found infinite-update loop: setPairing wrote
+  // to journey context -> re-render -> new `rec` identity -> effect
+  // fires again), which visibly manifested as constantly re-mounting
+  // chip buttons in the browser (Playwright: "element was detached from
+  // the DOM, retrying"). Depending on the real underlying primitive
+  // values instead (compatScore) makes this fire only when the
+  // recommendation actually changes.
   useEffect(() => {
     if (rec) {
       setPairing({
@@ -121,7 +131,8 @@ export default function PairingLab({ onBack, onComplete } = {}) {
         pairingGoal: sel.pairingGoal,
       })
     }
-  }, [sel, rec]) // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel.cigarShape, sel.wrapper, sel.origin, sel.strength, JSON.stringify(sel.pairingTypes), JSON.stringify(sel.flavorNotes), sel.pairingGoal, engineResult?.compatScore])
 
   function setOne(field, val) {
     triggerHaptic('light')
@@ -202,6 +213,13 @@ export default function PairingLab({ onBack, onComplete } = {}) {
         naturalH={NAT_H}
         alt="SmokeCraft Pairing Lab — Build Your Pairing Profile"
       >
+        {/* Holistic Fix 5B-1A: single accessible page title — every other
+            SmokeCraft screen has one, this screen was found missing it. */}
+        <h1 style={{
+          position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+          overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+        }}>SmokeCraft 360 — Pairing Lab</h1>
+
         {/* Nav mask */}
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
           background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
@@ -233,6 +251,18 @@ export default function PairingLab({ onBack, onComplete } = {}) {
           position: 'absolute',
           left: '7.66%', top: '71.52%', // exact-measured bounds of approved "Flavor Notes & Pairing Goal" box (stacked below Cigar Profile in the approved left column, not beside it), source x:128-822 y:673-825
           width: '41.51%', height: '16.15%', overflow: 'hidden', overflowY: 'auto',
+          // Holistic Fix 5B-1A: this panel's measured bounds vertically
+          // overlap the Pairing-type icon hotspots below (also
+          // measured against the same approved image). Both were
+          // unset-z-index (DOM-order stacking), so the icon buttons
+          // — rendered later in JSX, transparent, but still hit-
+          // testable — silently intercepted clicks meant for the
+          // flavor-note/pairing-goal chips underneath (found live via
+          // Playwright: "element intercepts pointer events"). A real
+          // blocked-overlay defect, fixed with an explicit stacking
+          // order; no visual change (the panel's own solid background
+          // already painted over this area).
+          zIndex: 3,
           ...glassStyle({ padding: '6px 10px', pointerEvents: 'auto' }),
         }}>
           <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 3 }}>

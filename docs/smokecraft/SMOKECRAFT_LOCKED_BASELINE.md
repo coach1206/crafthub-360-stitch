@@ -336,3 +336,12 @@ non-baked "Calculating…" / offline-retry indicator in the existing
 Match-badge free space (top-right corner) for the brief period while
 the real server request is in flight — no layout, spacing, or artwork
 changes otherwise.
+
+## Holistic Fix 5B-1A update (pairing screen visual and interaction closure)
+
+No approved visuals were redesigned. PairingLab.jsx gained one
+invisible accessibility fix (a visually-hidden `<h1>`, same pattern used
+elsewhere) and one invisible stacking-order fix (`zIndex: 3` on the
+Pairing Choices panel — its own solid background already painted over
+the affected area, so nothing changed on screen). No layout, spacing,
+color, or artwork changed on either pairing screen.

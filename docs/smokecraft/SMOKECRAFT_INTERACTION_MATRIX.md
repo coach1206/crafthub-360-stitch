@@ -542,3 +542,27 @@ clicks on controls underneath it. Interaction sweep re-verified: 88/88
 +22 discrepancy during this session was the alert's own Refresh button
 being counted while the mismatch happened to be active — not a real
 control-count drift).
+
+## Holistic Fix 5B-1A update (pairing screen visual and interaction closure)
+
+No visible control was added, removed, or relaid out. Real browser
+verification of PairingLab (S11) and PairingRecommendations (S22)
+found and fixed 3 real interaction defects:
+
+- SC-D047: PairingLab.jsx was missing its single accessible `<h1>` page
+  title (every other SmokeCraft screen has one).
+- SC-D048: PairingLab.jsx's journey-sync effect looped indefinitely on
+  every render (a stale useEffect dependency on a freshly-created
+  object), manifesting as flavor-note/pairing-goal chip buttons
+  constantly detaching from the DOM under real interaction.
+- SC-D049: once the render loop was fixed, PairingLab.jsx's Pairing
+  Choices panel and the pairing-type hotspot row were found to
+  genuinely overlap (both measured against the approved image),
+  with the invisible hotspot buttons silently intercepting clicks
+  meant for the visible flavor-note chips underneath — closed with an
+  explicit stacking order, no visual change.
+
+All controls remain reachable by keyboard (Tab) with a visible focus
+style, and by pointer/click at their real (now correctly stacked)
+hit-test area. See `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` and
+`public/proof/smokecraft-holistic-fix-5b-1a/00-proof-index.md`.

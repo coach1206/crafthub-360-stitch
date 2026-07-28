@@ -39,6 +39,11 @@ check('smokecraft_pairing_save_revisions has no UPDATE-style column at all — a
 const labClient = fs.readFileSync('src/pages/smokecraft/PairingLab.jsx', 'utf8')
 check('PairingLab.jsx no longer imports the client-only scoring engine (buildRecommendation)', !/import\s*\{[^}]*buildRecommendation/.test(labClient))
 check('PairingLab.jsx uses the one shared pairing adapter (useSmokeCraftPairingEngine)', /useSmokeCraftPairingEngine/.test(labClient))
+check('PairingLab.jsx has a single accessible page title (real found-and-fixed gap — Holistic Fix 5B-1A, found live via Playwright)', /<h1 style=\{\{/.test(labClient))
+check('PairingLab.jsx\'s journey-sync effect depends on real primitive values, not a freshly-created object each render (real found-and-fixed infinite-render-loop defect — Holistic Fix 5B-1A, found live via Playwright: chip buttons constantly detaching from the DOM)',
+  !/\}, \[sel, rec\]\)/.test(labClient) && /engineResult\?\.compatScore\]\)/.test(labClient))
+check('PairingLab.jsx\'s Pairing Choices panel has an explicit stacking order above the underlying pairing-type hotspots it measurably overlaps (real found-and-fixed blocked-overlay defect — Holistic Fix 5B-1A, found live via Playwright: "element intercepts pointer events")',
+  /zIndex: 3,/.test(labClient))
 
 const recsClient = fs.readFileSync('src/pages/smokecraft/PairingRecommendations.jsx', 'utf8')
 check('PairingRecommendations.jsx no longer imports the client-only scoring engine (rankAllCategories)', !/import\s*\{[^}]*rankAllCategories/.test(recsClient))

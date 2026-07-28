@@ -1,0 +1,107 @@
+{
+  "pass": 25,
+  "fail": 0,
+  "total": 25,
+  "results": [
+    {
+      "name": "PairingLab route resolves (h1 present)",
+      "ok": true
+    },
+    {
+      "name": "Cigar-profile selection (Strength=Full) registers as active",
+      "ok": true
+    },
+    {
+      "name": "Compatibility score renders from the real server response (100)",
+      "ok": true
+    },
+    {
+      "name": "Explanation text renders (real server explanation, not fabricated)",
+      "ok": true
+    },
+    {
+      "name": "Conflict warning renders for clashing flavor notes (real server conflicts array)",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus (active element: BUTTON)",
+      "ok": true
+    },
+    {
+      "name": "Pointer/click activation exercised successfully on all selector chips above",
+      "ok": true
+    },
+    {
+      "name": "Back control is present and visible",
+      "ok": true
+    },
+    {
+      "name": "Continue control is present and visible",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff/overflow on PairingLab",
+      "ok": true
+    },
+    {
+      "name": "Continue control is not blocked by an invisible overlay",
+      "ok": true
+    },
+    {
+      "name": "PairingRecommendations route resolves (h1 present)",
+      "ok": true
+    },
+    {
+      "name": "A primary recommendation renders after the real server round-trip completes",
+      "ok": true
+    },
+    {
+      "name": "Compatibility score renders in the score donut (100%)",
+      "ok": true
+    },
+    {
+      "name": "Explanation/serving detail renders when expanded (Learn More)",
+      "ok": true
+    },
+    {
+      "name": "At least one alternate recommendation renders",
+      "ok": true
+    },
+    {
+      "name": "Save produces a real \"saved\" confirmation",
+      "ok": true
+    },
+    {
+      "name": "Duplicate save does not error — still shows a real confirmation (server-side no-op)",
+      "ok": true
+    },
+    {
+      "name": "Reload produces the identical deterministic score (same input, same rule version)",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on PairingRecommendations (active element: BUTTON)",
+      "ok": true
+    },
+    {
+      "name": "Continue Journey control is present on PairingRecommendations",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff/overflow on PairingRecommendations",
+      "ok": true
+    },
+    {
+      "name": "A failed API request shows an honest error/offline state, never a fabricated success",
+      "ok": true
+    },
+    {
+      "name": "No fabricated compatibility score is shown when the request failed",
+      "ok": true
+    },
+    {
+      "name": "No console errors observed across both screens",
+      "ok": true
+    }
+  ]
+}

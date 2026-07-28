@@ -1,0 +1,73 @@
+
+── 1. Valid cigar and beverage ──
+  PASS  A valid cigar+beverage request succeeds
+  PASS  A recommendation has an explanation (never unexplained)
+  PASS  A recommendation has a rule set version
+  PASS  A recommendation has a serving sequence
+  PASS  A recommendation has an alternative recommendation
+
+── 2. Intensity match ──
+  PASS  A Full cigar against Whiskey (both intensity 4) reports an even intensity match
+
+── 3. Intentional contrast (mismatched intensity is reported honestly, not hidden) ──
+  PASS  A Mild cigar against Whiskey (intensity 1 vs 4) reports a mismatched intensity, not falsely "even"
+  PASS  The mismatch produces a real conflict explanation
+
+── 4. Incompatible pairing (flavor clash) ──
+  PASS  Selected notes that clash with the pairing type are flagged as a real conflict
+  PASS  A clashing pairing scores lower than a harmonious one
+
+── 5. Missing input ──
+  PASS  A request with no pairing type is rejected (400), never silently scored
+
+── 6. Low-confidence result ──
+  PASS  A request with almost no real signal reports a real, non-fabricated confidence value below 1.0
+
+── 7. Deterministic repeated result ──
+  PASS  Identical input produces an identical score on repeated requests (deterministic, not random)
+  PASS  Identical input produces an identical rule set version on repeated requests
+
+── 8. Rule-version stability + no client-controlled score ──
+  PASS  A client-submitted compatScore/ruleSetVersion is silently ignored — the server always recomputes its own
+
+── 9. Save and reload ──
+  PASS  A save request succeeds (201)
+  PASS  The saved score matches the server-computed score, never a client value
+  PASS  The save is visible in the caller's own saved-pairings list on reload
+  PASS  Fetching a single saved pairing returns its revision history
+
+── 10. Duplicate save ──
+  PASS  Re-saving with the same idempotency key does not duplicate — reports alreadySaved
+  PASS  The saved-pairings list still has exactly one row for this exact cigar+beverage combination
+
+── 11. Stale write ──
+  PASS  A rating update with the correct expectedVersion succeeds
+  PASS  Re-using the now-stale expectedVersion is rejected with a real 409 conflict, not silently overwritten
+  PASS  The rejected stale write never actually changed the rating
+
+── 12. Revision history (append-only) ──
+  PASS  Each successful rating update appended a new revision row (real history, not overwritten in place)
+
+── 13. Cross-user denial ──
+  PASS  A completely separate guest cannot read another guest's saved pairing (404, not 403 — existence is not leaked either)
+  PASS  A completely separate guest cannot rate another guest's saved pairing
+  PASS  A completely separate guest's own saved-pairings list never includes another guest's row
+
+── 14. Guest-to-account preservation ──
+  PASS  Guest-to-account conversion succeeds
+  PASS  Conversion reports the saved pairing was transferred (real found-and-verified requirement)
+  PASS  The saved pairing is visible under the new account identity
+
+── 15. Cross-device result (same identity, two independent fetches) ──
+  PASS  Two independent live fetches under the same identity return identical saved-pairing data (no per-device drift)
+
+── 16. Rank-all (Personalized Pairing Recommendations) ──
+  PASS  Rank returns every real pairing category
+  PASS  Rank results are sorted descending by score
+  PASS  Every ranked result has an explanation and rule version
+
+── 17. Live-screen route smoke (fresh identity, no prior navigation) ──
+  PASS  A genuinely first-ever request from a fresh browser does not 401 (guest identity auto-issued)
+
+=== RESULT: 36 passed, 0 failed (of 36 total) ===
+
