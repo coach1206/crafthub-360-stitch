@@ -5,7 +5,7 @@
  * trusted from the request body — matches the existing Management Sync
  * convention (managementSyncController.js).
  */
-import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection } from '../services/smokecraft/playerStateService.js'
+import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection, getTastingDraft, saveTastingDraft, submitTastingCompletion } from '../services/smokecraft/playerStateService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -352,6 +352,55 @@ export async function handleSubmitBlend(req, res) {
     res.status(result.alreadyScored ? 200 : 201).json({
       success: true, alreadyScored: result.alreadyScored, xpAwarded: result.xpAwarded || 0,
       passportStampGranted: result.passportStampGranted || null, rankPromotion: result.rankPromotion || null,
+    })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/** Holistic Fix 5A-3D: server-authoritative tasting draft read/write + completion. */
+export async function handleGetTastingDraft(req, res) {
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await getTastingDraft({ guestReference, activityKey: req.params.activityKey })
+    res.json({ success: true, draftData: result.draftData, version: result.version, updatedAt: result.updatedAt })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+export async function handleSaveTastingDraft(req, res) {
+  const { draftData, expectedVersion } = req.body || {}
+  if (typeof draftData !== 'object' || draftData === null) {
+    return res.status(400).json({ success: false, error: 'draft_data_object_required' })
+  }
+  if (typeof expectedVersion !== 'number' || expectedVersion < 0) {
+    return res.status(400).json({ success: false, error: 'expected_version_required' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await saveTastingDraft({ guestReference, activityKey: req.params.activityKey, draftData, expectedVersion })
+    if (result.conflict) return res.status(409).json({ success: false, error: 'stale_version', current: result.current })
+    res.json({ success: true, current: result.current })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+export async function handleSubmitTasting(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const { selectedCigarId, compareIds } = req.body || {}
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitTastingCompletion({
+      guestReference, venueId: req.smokecraftIdentity.venueId || null, activityKey: req.params.activityKey,
+      selectedCigarId, compareIds,
+      idempotencyKey, sourceRoute: req.body?.sourceRoute || null, requestId: req.id || null, deviceId: req.body?.deviceId || null,
+    })
+    if (!result.ok) return res.status(400).json({ success: false, error: result.error })
+    res.status(result.alreadyCompleted ? 200 : 201).json({
+      success: true, alreadyCompleted: result.alreadyCompleted, xpAwarded: result.xpAwarded || 0, rankPromotion: result.rankPromotion || null,
     })
   } catch (err) {
     dbErrorResponse(res, err)

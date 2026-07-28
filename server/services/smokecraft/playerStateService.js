@@ -33,6 +33,7 @@ import { getSessionBadgeIds, getRankForXp } from './sessionRewardTable.js'
 import { KNOWLEDGE_CHECK_SETS } from '../../../src/data/knowledgeCheckQuestions.js'
 import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
 import { scoreLeafChallenge } from '../../../src/data/leafChallengeRounds.js'
+import { getSampleInventory, VENUE_ID as DEFAULT_TASTING_VENUE_ID } from '../../../src/data/venueInventoryData.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -580,6 +581,139 @@ export async function submitBlendSelection({ guestReference, venueId, wrapperInd
     await recordAudit(client, { guestReference, mutationType: 'blend_submit', idempotencyKey, outcome: 'applied', requestId, deviceId })
     await client.query('COMMIT')
     return { ok: true, alreadyScored: false, attempt, xpAwarded: xpAmount, passportStampGranted: stampResult.rows[0] || null, rankPromotion }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+const STALE_DRAFT_VERSION = 'stale_version'
+
+/**
+ * Holistic Fix 5A-3D — server-authoritative tasting draft persistence.
+ * Learner observations only (which cigar was selected/compared) —
+ * never completion validity, score, or XP. Same optimistic-concurrency
+ * pattern as saveJourneySnapshot: caller supplies expectedVersion, a
+ * stale write is rejected with the server's current state rather than
+ * silently overwritten (real cross-device/two-tab safety).
+ */
+export async function getTastingDraft({ guestReference, activityKey }) {
+  const db = dbOrThrow()
+  const result = await db.query(
+    `SELECT draft_data, version, updated_at FROM smokecraft_tasting_drafts WHERE guest_reference = $1 AND activity_key = $2`,
+    [guestReference, activityKey]
+  )
+  const row = result.rows[0]
+  return { draftData: row?.draft_data || {}, version: row?.version ?? 0, updatedAt: row?.updated_at || null }
+}
+
+export async function saveTastingDraft({ guestReference, activityKey, draftData, expectedVersion }) {
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const existing = await client.query(
+      `SELECT version FROM smokecraft_tasting_drafts WHERE guest_reference = $1 AND activity_key = $2 FOR UPDATE`,
+      [guestReference, activityKey]
+    )
+    const currentVersion = existing.rows[0]?.version ?? 0
+    if (currentVersion !== expectedVersion) {
+      await client.query('ROLLBACK')
+      return { conflict: true, current: { draftData: existing.rows[0] ? (await db.query(`SELECT draft_data FROM smokecraft_tasting_drafts WHERE guest_reference=$1 AND activity_key=$2`, [guestReference, activityKey])).rows[0].draft_data : {}, version: currentVersion } }
+    }
+    const upserted = await client.query(
+      `INSERT INTO smokecraft_tasting_drafts (guest_reference, activity_key, draft_data, version, updated_at)
+       VALUES ($1, $2, $3, 1, now())
+       ON CONFLICT (guest_reference, activity_key)
+       DO UPDATE SET draft_data = $3, version = smokecraft_tasting_drafts.version + 1, updated_at = now()
+       RETURNING draft_data, version, updated_at`,
+      [guestReference, activityKey, JSON.stringify(draftData)]
+    )
+    await client.query('COMMIT')
+    const row = upserted.rows[0]
+    return { conflict: false, current: { draftData: row.draft_data, version: row.version, updatedAt: row.updated_at } }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Holistic Fix 5A-3D — server-authoritative Mini Tasting completion. The
+ * client submits its raw selection (selectedCigarId + compareIds) as
+ * evidence, never a completion claim — the server independently
+ * verifies selectedCigarId is a real id from the server's own copy of
+ * the venue's flight inventory (never trusting an arbitrary client id)
+ * before granting XP. Idempotent: at most one completion per guest,
+ * ever, via smokecraft_activity_attempts' existing UNIQUE constraint.
+ */
+export async function submitTastingCompletion({ guestReference, venueId, activityKey, selectedCigarId, compareIds, idempotencyKey, sourceRoute, requestId, deviceId }) {
+  if (!selectedCigarId || typeof selectedCigarId !== 'string') {
+    return { ok: false, error: 'selected_cigar_required' }
+  }
+  const house = getSampleInventory(DEFAULT_TASTING_VENUE_ID, 'house_cigar')
+  const featured = getSampleInventory(DEFAULT_TASTING_VENUE_ID, 'featured_cigar')
+  const flight = [...house, ...featured].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)).slice(0, 3)
+  const validIds = new Set(flight.map(c => c.item_id))
+  if (!validIds.has(selectedCigarId)) {
+    return { ok: false, error: 'invalid_cigar_selection' }
+  }
+
+  const { getNamedXpAmount } = await import('./sessionRewardTable.js')
+  const xpAmount = getNamedXpAmount('mini-tasting-begin') || 0
+
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await ensurePlayerStateRow(client, guestReference, venueId)
+
+    const existing = await client.query(
+      `SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'tasting' AND activity_key = $2`,
+      [guestReference, activityKey]
+    )
+    if (existing.rows.length > 0) {
+      await recordAudit(client, { guestReference, mutationType: 'tasting_complete', idempotencyKey, outcome: 'duplicate_replay', requestId, deviceId })
+      await client.query('COMMIT')
+      return { ok: true, alreadyCompleted: true, xpAwarded: 0 }
+    }
+
+    let attempt
+    try {
+      const inserted = await client.query(
+        `INSERT INTO smokecraft_activity_attempts
+           (guest_reference, activity_type, activity_key, evidence, xp_awarded, idempotency_key, source_route, request_id, device_id)
+         VALUES ($1, 'tasting', $2, $3, $4, $5, $6, $7, $8)
+         RETURNING *`,
+        [guestReference, activityKey, JSON.stringify({ selectedCigarId, compareIds: Array.isArray(compareIds) ? compareIds : [] }), xpAmount, idempotencyKey, sourceRoute || null, requestId || null, deviceId || null]
+      )
+      attempt = inserted.rows[0]
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION) {
+        await client.query('ROLLBACK').catch(() => {})
+        await db.query(
+          `INSERT INTO smokecraft_award_audit (guest_reference, mutation_type, idempotency_key, outcome, request_id, device_id) VALUES ($1, 'tasting_complete', $2, 'duplicate_replay', $3, $4)`,
+          [guestReference, idempotencyKey, requestId || null, deviceId || null]
+        )
+        return { ok: true, alreadyCompleted: true, xpAwarded: 0 }
+      }
+      throw err
+    }
+
+    if (xpAmount > 0) {
+      await client.query(
+        `UPDATE smokecraft_player_state SET xp_total = xp_total + $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+        [guestReference, xpAmount]
+      )
+    }
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+    await recordAudit(client, { guestReference, mutationType: 'tasting_complete', idempotencyKey, outcome: 'applied', requestId, deviceId })
+    await client.query('COMMIT')
+    return { ok: true, alreadyCompleted: false, attempt, xpAwarded: xpAmount, rankPromotion }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     throw err

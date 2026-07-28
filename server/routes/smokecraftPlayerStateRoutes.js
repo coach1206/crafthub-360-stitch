@@ -64,4 +64,9 @@ router.post('/blend/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handl
 // already resolved from a real, server-verified session by this point.
 router.post('/corrections', writeLimiter, requireStaff, ctrl.handleCorrectReward)
 
+// ── Holistic Fix 5A-3D: server-authoritative tasting draft/completion ──
+router.get('/tasting/:activityKey/draft', readLimiter, requireSmokeCraftIdentity, ctrl.handleGetTastingDraft)
+router.put('/tasting/:activityKey/draft', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSaveTastingDraft)
+router.post('/tasting/:activityKey/complete', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitTasting)
+
 export default router
