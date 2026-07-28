@@ -282,3 +282,11 @@ approved `smokecraft-terroir.png` asset unchanged on disk. This pass
 fixes only the full-journey test harness's readiness-wait logic
 (`revealSections()`) — zero product code change, zero visual change.
 Full journey now reliably reports 107/107.
+
+## Holistic Fix 5A-3D update
+
+Baseline unchanged: 109 routes, 27 sessions, 6 phases. Mini Tasting's
+approved visuals and existing controls (flight cards, Select/Compare
+buttons) are unchanged; only the primary nav-bar action's label/enabled
+state and underlying data-ownership changed (real completion gating,
+server-authoritative draft instead of local-only).

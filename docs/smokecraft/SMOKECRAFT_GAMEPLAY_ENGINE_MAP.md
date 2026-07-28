@@ -184,3 +184,34 @@ Fix 5A-2's disclosure:
   session/quiz/leaf-challenge/named-xp/blend/badge/stamp/rank/correction;
   it does not yet cover tasting/skill-checkpoint (unbuilt)/mentor-
   selected/score-awarded as distinct types.
+
+## Holistic Fix 5A-3D update — server-authoritative tasting flow
+
+**Tasting screens audited:** `MiniTastingRound.jsx` (`/smokecraft/mini-tasting`,
+session id `mini-tasting`) was already server-authoritative via the
+existing `awardSessionRewards`/`completeSession` path since Holistic Fix
+4/5A — no change needed. `MiniTasting.jsx`
+(`/smokecraft/mini-tasting-module`, Origins-module supporting screen)
+was the real gap: clicking "Begin" granted XP immediately, with no
+actual completion criteria (no requirement to select a cigar) and no
+server-side draft persistence (selection/comparison lived only in
+local `GuestSessionContext` state — no cross-device resume). The
+`FirstThird.jsx`/`SecondThird.jsx`/`FinalThird.jsx` "Third Tasting"
+curriculum sessions were also audited: their `personalNotes` free-text
+fields already persist via the existing, already-server-authoritative
+journey-snapshot sync (Holistic Fix 4B, real optimistic concurrency,
+never entering the public award/audit ledger — confirmed by inspection,
+`completeSessionOnServer` only ever sends `sourceRoute`/`deviceId`
+metadata, never journey content) and their XP already flows through the
+existing closed `awardSessionRewards` path — no gap found there.
+
+**Closed this pass:** `MiniTasting.jsx` now has a real server-
+authoritative draft/completion flow —
+`smokecraft_tasting_drafts` (migration 097, optimistic concurrency,
+same pattern as journey-snapshot) for draft save/reload/cross-device
+resume, and `submitTastingCompletion` (reuses the `smokecraft_
+activity_attempts` ledger, `activity_type='tasting'`) for completion —
+the server independently verifies `selectedCigarId` is a real id from
+its own copy of the venue flight inventory before granting XP; a draft
+save alone never grants anything. The "Begin Mini Tasting" nav button
+is now "Complete Tasting" — disabled until a real selection exists.

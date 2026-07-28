@@ -121,3 +121,13 @@ already-approved constants this document's original table already cited
 as a new version row (the seed script never overwrites an existing
 `(rule_key, version)`), and `rule_version` is recorded on the resulting
 `smokecraft_activity_attempts`/`smokecraft_awards` rows going forward.
+
+## Holistic Fix 5A-3D update — mini-tasting completion rule
+
+`named-xp:mini-tasting-begin` (seeded in Holistic Fix 5A-2, unchanged
+value) is now the completion-XP rule for `MiniTasting.jsx`'s server-
+verified tasting completion — the rule row's XP amount is unchanged; the
+ELIGIBILITY requirement changed (server now requires a genuine
+`selectedCigarId` from its own flight-inventory data, not merely "the
+Begin button was clicked"). No new rule row was needed since the amount
+itself did not change.

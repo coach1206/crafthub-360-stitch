@@ -18,7 +18,6 @@ const CLIENT_ADDXP_FILES = [
   'src/pages/smokecraft/Available.jsx',
   'src/pages/smokecraft/Cultivation.jsx',
   'src/pages/smokecraft/Leaves.jsx',
-  'src/pages/smokecraft/MiniTasting.jsx',
 ]
 
 console.log('\n── SmokeCraft gameplay-reward-authority validator (Holistic Fix 5A-2)\n')

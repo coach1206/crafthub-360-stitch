@@ -1203,3 +1203,17 @@ first-visit, refresh, back-and-return, repeated-visit, cached response,
 and a real slow-response (800ms, artificially throttled) scenario — all
 7 passing, confirming the fix is both correct and not merely "wait
 longer."
+
+## Holistic Fix 5A-3D update
+
+**SC-D029 — CLOSED.** `MiniTasting.jsx` granted XP immediately on
+clicking "Begin", with no real completion criteria (no requirement to
+actually select a cigar) and no server-side draft persistence (a real
+cross-device-resume gap — selection/comparison lived only in local
+browser state). Fixed: server-authoritative draft save/reload
+(`smokecraft_tasting_drafts`, migration 097, optimistic concurrency) and
+completion (`submitTastingCompletion`, reusing the existing
+`smokecraft_activity_attempts` ledger) — the server independently
+verifies the submitted `selectedCigarId` is real (from its own copy of
+the flight inventory) before granting XP; draft saves never grant
+anything; a two-tab completion race grants XP exactly once (verified).

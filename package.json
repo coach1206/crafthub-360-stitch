@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/validateSmokecraftAssets.mjs && node scripts/generateBuildManifest.mjs && node scripts/generateSmokecraftGameManifest.mjs && node scripts/validateSmokecraftManifest.mjs && node scripts/validateSmokecraftShellAdoption.mjs && node scripts/validateSmokecraftControlCoverage.mjs && node scripts/validateSmokecraftResponsive.mjs && node scripts/validateSmokecraftPlayerStateIntegrity.mjs && node scripts/validateSmokecraftAccountIntegrity.mjs && node scripts/validateSmokecraftGameplayIntegrity.mjs && node scripts/validateSmokecraftGameplayAuthority.mjs && node scripts/validateSmokecraftAlertPointerSafety.mjs",
+    "prebuild": "node scripts/validateSmokecraftAssets.mjs && node scripts/generateBuildManifest.mjs && node scripts/generateSmokecraftGameManifest.mjs && node scripts/validateSmokecraftManifest.mjs && node scripts/validateSmokecraftShellAdoption.mjs && node scripts/validateSmokecraftControlCoverage.mjs && node scripts/validateSmokecraftResponsive.mjs && node scripts/validateSmokecraftPlayerStateIntegrity.mjs && node scripts/validateSmokecraftAccountIntegrity.mjs && node scripts/validateSmokecraftGameplayIntegrity.mjs && node scripts/validateSmokecraftGameplayAuthority.mjs && node scripts/validateSmokecraftAlertPointerSafety.mjs && node scripts/validateSmokecraftTastingAuthority.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "start": "npm run build && node server/index.js",

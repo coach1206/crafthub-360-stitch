@@ -1,0 +1,59 @@
+{
+  "pass": 13,
+  "fail": 0,
+  "total": 13,
+  "results": [
+    {
+      "name": "A guest with no draft yet gets an honest empty draft (version 0)",
+      "ok": true
+    },
+    {
+      "name": "First draft save succeeds and returns version 1",
+      "ok": true
+    },
+    {
+      "name": "Draft update (version 1 -> 2) succeeds",
+      "ok": true
+    },
+    {
+      "name": "Reloading the draft returns the exact last-saved data",
+      "ok": true
+    },
+    {
+      "name": "A stale-version write (version 1, server is at 2) is rejected 409, not silently applied",
+      "ok": true
+    },
+    {
+      "name": "Completion with no selection is rejected 400, not silently accepted",
+      "ok": true
+    },
+    {
+      "name": "Completion with a fabricated (non-existent) cigar id is rejected 400, never trusted",
+      "ok": true
+    },
+    {
+      "name": "A real, valid selection completes successfully and grants server-decided XP",
+      "ok": true
+    },
+    {
+      "name": "A second completion attempt (even with a different selection) is honestly rejected as already-completed, no double XP",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent completion requests return well-formed success (no 500)",
+      "ok": true
+    },
+    {
+      "name": "A two-tab completion race grants XP exactly once, not twice",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest never sees another guest's draft (honest empty state, not c1's data)",
+      "ok": true
+    },
+    {
+      "name": "Saving a draft alone (never calling /complete) awards zero XP",
+      "ok": true
+    }
+  ]
+}

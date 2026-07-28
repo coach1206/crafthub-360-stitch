@@ -1,0 +1,21 @@
+
+── SmokeCraft tasting-authority validator (Holistic Fix 5A-3D)
+
+  OK    MiniTasting.jsx no longer calls addXP() directly (server-verified completion only)
+  OK    MiniTasting.jsx uses the shared server adapter for draft load/save (loadTastingDraft/saveTastingDraft)
+  OK    MiniTasting.jsx submits completion via the shared adapter (completeTasting), not a local claim
+  OK    Completion is gated on a real selection (primaryDisabled tied to !selectedId)
+  OK    submitTastingCompletion validates selectedCigarId against the server's own flight inventory (validIds), never trusting the client id blindly
+  OK    submitTastingCompletion is idempotent via the existing smokecraft_activity_attempts UNIQUE constraint (activity_type='tasting')
+  OK    saveTastingDraft never grants XP or completion (draft save is reward-free — search confirms no xp_total UPDATE inside saveTastingDraft)
+  OK    saveTastingDraft enforces optimistic concurrency (expectedVersion check before write)
+  OK    Tasting draft/completion routes all require a verified SmokeCraft identity
+  OK    handleSaveTastingDraft requires an explicit expectedVersion (no default that would silently skip stale-write protection)
+  OK    Draft/completion controllers never log or forward request bodies to a public audit/console path beyond the DB row itself (no console.log of req.body in these handlers)
+  OK    Migration 097 (tasting drafts) exists
+  OK    Migration 097 has a rollback script outside server/db/migrations
+  OK    smokecraft_tasting_drafts has UNIQUE(guest_reference, activity_key) — one draft row per guest per activity
+  OK    smokecraft_tasting_drafts has a version column for optimistic concurrency
+
+=== RESULT: PASS (0 checks failed) ===
+

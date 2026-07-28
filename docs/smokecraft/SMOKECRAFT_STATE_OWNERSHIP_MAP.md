@@ -245,3 +245,13 @@ they submit raw evidence via new `submitKnowledgeCheck`/
 of the resulting score/XP/badge/stamp. See
 `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`'s Holistic Fix 5A-2 section for the
 full list of closed call sites and the still-disclosed remaining gaps.
+
+## Holistic Fix 5A-3D update — tasting draft ownership
+
+`MiniTasting.jsx`'s `selectedCigarId`/`compareIds` are no longer owned
+by local `GuestSessionContext` state — they are now server-authoritative
+(`smokecraft_tasting_drafts`, migration 097), loaded on mount and saved
+via a debounced, optimistic-concurrency PUT (same "server value wins on
+conflict" rule as the journey-snapshot sync). Completion validity, score,
+and XP are exclusively server-decided (`submitTastingCompletion`) — the
+client only ever submits the raw selection as evidence.
