@@ -7,6 +7,7 @@ import {
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { CULTIVATION_STAGE_IDS } from '../../data/cultivationStages.js'
 
 const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
@@ -105,24 +106,35 @@ const STAGES = [
 
 export default function Cultivation() {
   const navigate  = useNavigate()
-  const { addXP, completeStep, awardStamp, session } = useGuestSession()
+  const { completeStep, submitCultivatorEvidence, session } = useGuestSession()
 
   const [active,    setActive]    = useState(null)
-  const [saved,     setSaved]     = useState(false)
+  const [viewedStages, setViewedStages] = useState(() => new Set())
   const [stampShown, setStampShown] = useState(false)
+  // Holistic Fix 5A-3E: honest submission states — the "Save to Passport"
+  // action now requires real, server-verified evidence (all 7 stages
+  // viewed), not a bare click.
+  // 'idle' | 'submitting' | 'verified' | 'rejected' | 'already-awarded' | 'offline'
+  const [submitStatus, setSubmitStatus] = useState('idle')
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
+  const allStagesViewed = CULTIVATION_STAGE_IDS.every(id => viewedStages.has(id))
 
   function handleSave() {
-    if (saved) return
-    setSaved(true)
-    if (!session?.completedSteps?.includes('cultivation')) {
-      addXP(50, 'cultivation-seed')
-      completeStep('cultivation')
-      awardStamp('cultivator', 'cultivation')
+    if (submitStatus === 'submitting' || submitStatus === 'verified' || submitStatus === 'already-awarded') return
+    if (!allStagesViewed) return
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+      setSubmitStatus('offline')
+      return
     }
-    setStampShown(true)
-    setTimeout(() => setStampShown(false), 4000)
+    setSubmitStatus('submitting')
+    submitCultivatorEvidence([...viewedStages]).then(result => {
+      if (!result.ok) { setSubmitStatus('rejected'); return }
+      completeStep('cultivation')
+      setSubmitStatus(result.data.alreadyScored ? 'already-awarded' : 'verified')
+      setStampShown(true)
+      setTimeout(() => setStampShown(false), 4000)
+    })
   }
 
   function handleContinue() {
@@ -178,6 +190,10 @@ export default function Cultivation() {
           <p style={{ fontSize: 15, color: '#7A6A50', maxWidth: 560, margin: '0 auto', lineHeight: 1.75 }}>
             Every great cigar carries the story of its land. Seed genetics, soil minerals, sun intensity, and the patient hands of master growers — cultivation shapes everything you taste.
           </p>
+          <p style={{ fontSize: 11, color: 'rgba(212,175,55,0.6)', marginTop: 10, fontFamily: '"JetBrains Mono",monospace', letterSpacing: '0.06em' }}>
+            {viewedStages.size} of {CULTIVATION_STAGE_IDS.length} stages viewed
+            {submitStatus === 'rejected' && ' — could not verify, try again'}
+          </p>
         </div>
 
         {/* ── Stage Cards Grid ───────────────────────────────── */}
@@ -187,7 +203,10 @@ export default function Cultivation() {
             return (
               <div
                 key={stage.id}
-                onClick={() => setActive(isOpen ? null : stage.id)}
+                onClick={() => {
+                  setActive(isOpen ? null : stage.id)
+                  setViewedStages(prev => prev.has(stage.id) ? prev : new Set(prev).add(stage.id))
+                }}
                 style={{
                   borderRadius: 16,
                   border: `1px solid ${isOpen ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.15)'}`,
@@ -283,11 +302,24 @@ export default function Cultivation() {
 
           <button
             onClick={handleSave}
-            disabled={saved}
-            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 28px', height: 68, borderRadius: 12, border: '1px solid rgba(212,175,55,0.4)', background: saved ? 'rgba(212,175,55,0.12)' : 'rgba(14,10,4,0.8)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: saved ? 'default' : 'pointer', transition: 'all 0.2s', opacity: saved ? 0.7 : 1, whiteSpace: 'nowrap' }}
+            disabled={!allStagesViewed || submitStatus === 'submitting' || submitStatus === 'verified' || submitStatus === 'already-awarded'}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '0 28px', height: 68, borderRadius: 12,
+              border: '1px solid rgba(212,175,55,0.4)',
+              background: (submitStatus === 'verified' || submitStatus === 'already-awarded') ? 'rgba(212,175,55,0.12)' : 'rgba(14,10,4,0.8)',
+              color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+              cursor: (!allStagesViewed || submitStatus === 'submitting' || submitStatus === 'verified' || submitStatus === 'already-awarded') ? 'default' : 'pointer',
+              transition: 'all 0.2s', opacity: (!allStagesViewed || submitStatus === 'verified' || submitStatus === 'already-awarded') ? 0.7 : 1, whiteSpace: 'nowrap',
+            }}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: saved ? "'FILL' 1" : "'FILL' 0" }}>approval</span>
-            {saved ? 'Saved to Passport' : 'Save to Passport'}
+            <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: (submitStatus === 'verified' || submitStatus === 'already-awarded') ? "'FILL' 1" : "'FILL' 0" }}>approval</span>
+            {submitStatus === 'submitting' ? 'Verifying…'
+              : submitStatus === 'verified' ? 'Saved to Passport'
+              : submitStatus === 'already-awarded' ? 'Already Saved ✓'
+              : submitStatus === 'rejected' ? 'Retry Save'
+              : submitStatus === 'offline' ? 'Offline — Retry'
+              : allStagesViewed ? 'Save to Passport'
+              : `View All ${CULTIVATION_STAGE_IDS.length} Stages First`}
           </button>
 
           <button

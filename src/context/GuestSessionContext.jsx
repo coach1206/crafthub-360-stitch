@@ -38,6 +38,7 @@ import {
   awardBadgeOnServer, submitKnowledgeCheckOnServer, submitLeafChallengeOnServer,
   submitBlendSelectionOnServer,
   fetchTastingDraft, saveTastingDraftOnServer, submitTastingCompletionOnServer,
+  submitCultivatorEvidenceOnServer,
 } from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
@@ -198,6 +199,19 @@ export function GuestSessionProvider({ children }) {
   const completeTasting = useCallback((activityKey, selectedCigarId, compareIds) => {
     const guestId = sessionRef.current.guestId
     return submitTastingCompletionOnServer(guestId, activityKey, selectedCigarId, compareIds, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Holistic Fix 5A-3E: submits the raw set of viewed cultivation-stage
+   * ids — the server verifies it covers all 7 real stages and is the
+   * sole authority for the cultivator Passport stamp + XP grant.
+   */
+  const submitCultivatorEvidence = useCallback((viewedStageIds) => {
+    const guestId = sessionRef.current.guestId
+    return submitCultivatorEvidenceOnServer(guestId, viewedStageIds, {
       sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
       deviceId: sessionRef.current.deviceId,
     })
@@ -1091,6 +1105,7 @@ export function GuestSessionProvider({ children }) {
       loadTastingDraft,
       saveTastingDraft,
       completeTasting,
+      submitCultivatorEvidence,
       awardSessionRewards,
       // Scoring + loyalty engine
       awardLoyaltyPoints:       awardLoyaltyPointsCb,

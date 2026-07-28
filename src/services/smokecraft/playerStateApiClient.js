@@ -156,3 +156,13 @@ export async function submitTastingCompletionOnServer(guestId, activityKey, sele
   const idempotencyKey = makeIdempotencyKey(guestId, `tasting:${activityKey}`)
   return postJson(`/tasting/${encodeURIComponent(activityKey)}/complete`, { idempotencyKey, selectedCigarId, compareIds, sourceRoute, deviceId })
 }
+
+/**
+ * Holistic Fix 5A-3E: submits the raw set of viewed cultivation-stage
+ * ids as evidence — the server verifies it covers all real required
+ * stages before granting XP/the cultivator Passport stamp.
+ */
+export async function submitCultivatorEvidenceOnServer(guestId, viewedStageIds, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, 'cultivator-submit')
+  return postJson('/cultivator/submit', { idempotencyKey, viewedStageIds, sourceRoute, deviceId })
+}
