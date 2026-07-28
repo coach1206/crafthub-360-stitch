@@ -1271,3 +1271,32 @@ never deletes/edits the original `smokecraft_collection_ownership` row;
 `recalculate()` now reads the corrections ledger to report an honest
 `'corrected'` state. Staff-only (`requireStaff`), verified live:
 non-staff rejected 403, staff succeeds 201.
+
+## Holistic Fix 5A-3G update (Skill Tree ledger integration)
+
+- **SC-D034**: `skillTreeRoutes.js` rate limiters lacked
+  `skip: () => !IS_PROD` (same class as SC-D021/SC-D031) — closed.
+- **SC-D035**: `bridgeIdentity` in `skillTreeRoutes.js` used
+  `req.smokecraftIdentity.id` for BOTH guest and authenticated-account
+  identities (missing the `user:` prefix for accounts), inconsistent
+  with the rest of player-state — closed.
+- **SC-D036**: `skillTreeRoutes.js` was missing
+  `ensureSmokeCraftGuestIdentity` — a genuinely first-ever visit to
+  `/smokecraft/skill-tree` would have 401'd instead of getting a real
+  guest identity (same class as SC-D033) — closed, verified live via a
+  fresh-cookie-jar request.
+- **SC-D037**: `convertGuestToAccount` never transferred any of the 6
+  evidence tables that back Skill Tree node evaluation (Seed & Soil,
+  Filler Arrangement, Rolling Progress, Flavor Stage Observations,
+  Pairing Drafts, Golden Box Entries). Since node state is always
+  re-derived live from evidence and never cached-trusted, this meant
+  100% of Skill Tree progress was silently lost on every guest-to-
+  account conversion — closed by transferring the underlying evidence
+  (plus the learner-state cache) and re-running `recalculate()` for the
+  new identity after commit. Verified live end-to-end.
+
+All four closed via `server/routes/skillTreeRoutes.js`,
+`server/services/smokecraft/playerStateService.js`, and
+`server/services/smokecraft/skillTreeService.js` (new
+`getReversedNodeKeys` correction overlay). See
+`public/proof/smokecraft-holistic-fix-5a-3g/00-proof-index.md`.

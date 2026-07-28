@@ -224,6 +224,7 @@ export async function handleConvertGuest(req, res) {
     res.status(result.alreadyConverted ? 200 : 201).json({
       success: true, alreadyConverted: result.alreadyConverted, conversion: result.conversion,
       collectionsTransferred: result.collectionsTransferred || 0, collectionsMergedDuplicate: result.collectionsMergedDuplicate || 0,
+      skillTreeEvidenceRowsTransferred: result.skillTreeEvidenceRowsTransferred || 0, skillTreeCompletedNodes: result.skillTreeCompletedNodes || 0,
     })
   } catch (err) {
     dbErrorResponse(res, err)

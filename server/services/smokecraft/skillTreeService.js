@@ -49,6 +49,21 @@ const EVIDENCE_CHECKS = {
   },
 }
 
+// Holistic Fix 5A-3G: staff-only correction/reversal, same append-only
+// overlay pattern as Collections' getReversedItemKeys — the original
+// smokecraft_skill_tree_learner_state row (and its supporting evidence)
+// is never deleted or edited; a reversed node is reported as a distinct
+// 'corrected' state at read-time while the underlying completed_at is
+// preserved for history.
+async function getReversedNodeKeys(db, guestReference) {
+  const { rows } = await db.query(
+    `SELECT DISTINCT target_award_key FROM smokecraft_reward_corrections
+     WHERE guest_reference = $1 AND correction_type = 'skill_tree' AND reversed = true`,
+    [guestReference]
+  )
+  return new Set(rows.map(r => r.target_award_key))
+}
+
 export async function getNodeDefinitions() {
   const db = getDb()
   const { rows } = await db.query(
@@ -63,10 +78,15 @@ export async function getNodeDefinitions() {
 export async function recalculate(guestReference) {
   const db = getDb()
   const nodes = await getNodeDefinitions()
+  const reversedNodeKeys = await getReversedNodeKeys(db, guestReference)
   const results = []
   const stateByKey = {}
 
   for (const node of nodes) {
+    // A reversed node is treated as not-completed for prerequisite-chain
+    // purposes (a downstream node cannot stay unlocked on evidence that
+    // staff has explicitly corrected away), matching "node totals
+    // recalculated" from the mandate.
     const prereqsMet = node.prerequisite_node_keys.every(k => stateByKey[k] === 'completed')
     const evidenceCheck = EVIDENCE_CHECKS[node.completion_rule]
     if (!evidenceCheck) throw new SkillTreeError(`unknown_completion_rule:${node.completion_rule}`)
@@ -95,7 +115,24 @@ export async function recalculate(guestReference) {
       }
     }
 
-    stateByKey[node.node_key] = state
+    // The 'corrected' state is a read-time overlay only, never persisted
+    // to the DB (smokecraft_skill_tree_learner_state.state has a real
+    // CHECK constraint of locked/available/in_progress/completed — the
+    // append-only correction ledger, not this column, is the source of
+    // truth for a reversal). The persisted row keeps the real
+    // evidence-derived state so a future staff un-reversal instantly
+    // reflects genuine history, never fabricated data.
+    const dbState = state
+    const isReversed = state === 'completed' && reversedNodeKeys.has(node.node_key)
+    const reportedState = isReversed ? 'corrected' : state
+    if (isReversed) {
+      reason = `Reversed by staff correction. Original evidence: ${reason}`
+      missingRequirements = []
+    }
+
+    // Downstream prerequisite chaining must treat a reversed node as NOT
+    // completed (a corrected node cannot keep unlocking later nodes).
+    stateByKey[node.node_key] = reportedState
 
     const { rows } = await db.query(
       `INSERT INTO smokecraft_skill_tree_learner_state
@@ -119,9 +156,14 @@ export async function recalculate(guestReference) {
 
     results.push({
       node,
-      learnerState: rows[0],
+      // learnerState.state is the reported (overlay) state — 'corrected'
+      // when a staff reversal exists — while the raw persisted DB row
+      // (dbState) still reflects genuine unmodified evidence, per the
+      // "no direct deletion" / "original evidence retained" mandate.
+      learnerState: { ...rows[0], state: reportedState, rawDbState: dbState },
       reason,
       missingRequirements,
+      isReversed,
     })
   }
 

@@ -306,3 +306,12 @@ approved visuals, controls, and 5 real seeded items are unchanged —
 this pass fixed identity/conversion/first-visit correctness defects
 around an already-real backend and added correction/reversal, with zero
 visual/layout change.
+
+## Holistic Fix 5A-3G update (Skill Tree ledger integration)
+
+Skill Tree screen visuals and responsive behavior are unchanged except
+for one addition: a new `'corrected'` state color/label
+(`rgba(229,170,100,0.85)` / "Corrected") in `SkillTree.jsx`'s existing
+`STATE_COLOR`/`STATE_LABEL` maps, following the same visual language as
+the existing locked/available/in_progress/completed states. No layout,
+spacing, or artwork changes.

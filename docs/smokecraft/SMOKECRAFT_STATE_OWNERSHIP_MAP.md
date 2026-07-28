@@ -274,3 +274,18 @@ to write/read it: an authenticated account's guest_reference is now
 player-state table), and guest-to-account conversion
 (`convertGuestToAccount`) now transfers Collections ownership rows,
 which it previously never did at all.
+
+## Holistic Fix 5A-3G update (Skill Tree ledger integration)
+
+`smokecraft_skill_tree_learner_state` (migration 086) remains the sole
+owner of cached node state, always re-derived from 6 real evidence
+tables (`smokecraft_seed_soil_progress`,
+`smokecraft_filler_arrangement_completion`, `smokecraft_rolling_progress`,
+`smokecraft_flavor_stage_observations`, `smokecraft_pairing_drafts`,
+`golden_box_entries`) plus `smokecraft_progression_events` breadth for
+the final node. This pass fixed `convertGuestToAccount`
+(`playerStateService.js`) to transfer all 6 evidence tables (previously
+transferred none — SC-D037), and added a read-time-only `'corrected'`
+overlay sourced from `smokecraft_reward_corrections` (never persisted to
+the `state` column's CHECK-constrained enum, never a second competing
+source of truth).

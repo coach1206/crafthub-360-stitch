@@ -29,6 +29,7 @@
  * ensureSmokeCraftGuestIdentity middleware without modification.
  */
 import { getDb } from '../../db/connection.js'
+import { recalculate as recalculateSkillTree } from './skillTreeService.js'
 import { getSessionBadgeIds, getRankForXp } from './sessionRewardTable.js'
 import { KNOWLEDGE_CHECK_SETS } from '../../../src/data/knowledgeCheckQuestions.js'
 import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
@@ -976,6 +977,42 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       }
     }
 
+    // ── Skill Tree evidence: transfer the underlying evidence tables so
+    // recalculate() (which always re-derives node state from evidence,
+    // never trusts a cached flag) reports the same node states under the
+    // new account identity. Holistic Fix 5A-3G: previously NONE of these
+    // were transferred at all, so all Skill Tree progress was silently
+    // lost on every guest-to-account conversion — a real found gap.
+    const skillTreeEvidenceCopies = [
+      { table: 'smokecraft_seed_soil_progress', cols: 'component_id, viewed_at', conflict: '(guest_reference, component_id)' },
+      { table: 'smokecraft_filler_arrangement_completion', cols: 'completed_at, xp_awarded', conflict: '(guest_reference)' },
+      { table: 'smokecraft_rolling_progress', cols: 'step_key, status, updated_at', conflict: '(guest_reference, step_key)' },
+      { table: 'smokecraft_flavor_stage_observations', cols: 'stage, flavor_notes, intensity, strength_perception, body, balance, complexity, burn, draw, temperature, personal_notes, updated_at', conflict: '(guest_reference, stage)' },
+      { table: 'smokecraft_pairing_drafts', cols: 'cigar_reference, pairing_category, pairing_item, intensity, sweetness, acidity, bitterness, texture, temperature, strategy, reasoning, status, created_at, updated_at', conflict: null },
+      { table: 'golden_box_entries', cols: 'competition_id, round_id, cigar_name, status, current_version, submitted_at, locked_at, created_at, updated_at', conflict: '(competition_id, guest_reference)' },
+    ]
+    let skillTreeEvidenceRowsTransferred = 0
+    for (const spec of skillTreeEvidenceCopies) {
+      const conflictClause = spec.conflict ? `ON CONFLICT ${spec.conflict} DO NOTHING` : ''
+      const result = await client.query(
+        `INSERT INTO ${spec.table} (guest_reference, ${spec.cols})
+         SELECT $2, ${spec.cols} FROM ${spec.table} WHERE guest_reference = $1
+         ${conflictClause}`,
+        [guestReference, userReference]
+      )
+      skillTreeEvidenceRowsTransferred += result.rowCount
+    }
+    // Also copy the learner-state cache rows themselves (history/completedAt
+    // preservation) — harmless even though the next GET re-derives them
+    // from the evidence just transferred above (deterministic recalculation).
+    await client.query(
+      `INSERT INTO smokecraft_skill_tree_learner_state
+         (guest_reference, node_key, state, unlock_source, completion_source, completed_at, progress_percent, last_calculated_at)
+       SELECT $2, node_key, state, unlock_source, completion_source, completed_at, progress_percent, last_calculated_at
+       FROM smokecraft_skill_tree_learner_state WHERE guest_reference = $1
+       ON CONFLICT (guest_reference, node_key) DO NOTHING`,
+      [guestReference, userReference]
+    )
     const conversion = await client.query(
       `INSERT INTO smokecraft_guest_conversions
          (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
@@ -987,7 +1024,20 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
     await recordAudit(client, { guestReference: userReference, mutationType: 'guest_conversion', idempotencyKey, outcome: 'applied', requestId, deviceId })
 
     await client.query('COMMIT')
-    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate }
+
+    // Recalculate AFTER commit, on a fresh connection — recalculateSkillTree
+    // uses its own db handle (via getDb()), which inside the transaction
+    // above would not yet see the just-transferred, uncommitted evidence
+    // rows (transaction isolation), and touching the same
+    // smokecraft_skill_tree_learner_state rows from two connections at once
+    // risked a row-lock stall against this same transaction.
+    let skillTreeCompletedNodes = 0
+    try {
+      const recalculated = await recalculateSkillTree(userReference)
+      skillTreeCompletedNodes = recalculated.filter(r => r.learnerState.state === 'completed').length
+    } catch { /* non-fatal — conversion itself already succeeded */ }
+
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     if (err.code === UNIQUE_VIOLATION) {

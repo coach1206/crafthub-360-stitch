@@ -17,12 +17,14 @@ const STATE_COLOR = {
   available: GOLD,
   in_progress: '#e2c07f',
   completed: '#7fd0a3',
+  corrected: 'rgba(229,170,100,0.85)',
 }
 const STATE_LABEL = {
   locked: 'Locked',
   available: 'Available',
   in_progress: 'In Progress',
   completed: 'Completed',
+  corrected: 'Corrected',
 }
 
 export default function SkillTree() {

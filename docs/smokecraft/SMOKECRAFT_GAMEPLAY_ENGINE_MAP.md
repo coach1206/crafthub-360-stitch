@@ -284,3 +284,19 @@ pass) each map to a real source event:
 | master-roller-badge | Complete ≥1 rolling-process step | smokecraft_rolling_progress |
 | skill-tree-starter-badge | Complete Skill Tree Foundation node | smokecraft_skill_tree_learner_state |
 | progression-pioneer-badge | ≥2 distinct progression event types | smokecraft_progression_events |
+
+## Holistic Fix 5A-3G update (Skill Tree ledger integration)
+
+Skill Tree (migration 086, `skillTreeService.js`) was already a real,
+evidence-derived, server-authoritative rule engine before this pass — no
+client-authority path ever existed. This pass closed 4 real integration
+gaps found during audit (identity-prefix, rate-limiter dev-skip,
+first-visit identity issuance, guest-to-account evidence transfer — see
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` SC-D034 through SC-D037) and
+added staff-only correction/reversal support
+(`correctionType='skill_tree'`, reusing the existing
+`smokecraft_reward_corrections` ledger — same pattern as Collections).
+No new nodes, progression rules, or migrations were added; the existing
+7-node evidence map (Foundation → Community & Legacy) is unchanged. See
+`public/proof/smokecraft-holistic-fix-5a-3g/00-proof-index.md` for the
+full node-to-evidence table.

@@ -1,0 +1,95 @@
+{
+  "pass": 22,
+  "fail": 0,
+  "total": 22,
+  "results": [
+    {
+      "name": "Foundation node starts available (not fabricated as completed)",
+      "ok": true
+    },
+    {
+      "name": "Foundation completes from real Seed & Soil evidence (server re-derived, not client-set)",
+      "ok": true
+    },
+    {
+      "name": "Leaf & Process (next node in the chain) unlocks and completes from real Filler Arrangement evidence",
+      "ok": true
+    },
+    {
+      "name": "Construction (next node) is now available, not still locked (prerequisite chain advanced)",
+      "ok": true
+    },
+    {
+      "name": "A guest who never engaged Construction never has it marked completed",
+      "ok": true
+    },
+    {
+      "name": "Re-triggering the same qualifying activity does not change the node's original completedAt",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent recalculate requests return well-formed success (no 500)",
+      "ok": true
+    },
+    {
+      "name": "A two-tab recalculate race still results in a single consistent completedAt (DB UNIQUE constraint enforced)",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest never sees another guest's completed node",
+      "ok": true
+    },
+    {
+      "name": "A second live fetch under the same identity sees identical server-computed state (no client cache divergence)",
+      "ok": true
+    },
+    {
+      "name": "An ordinary (non-staff) identity cannot invoke a correction",
+      "ok": true
+    },
+    {
+      "name": "A staff-authorized correction/reversal succeeds",
+      "ok": true
+    },
+    {
+      "name": "The node now honestly reports a corrected state (not silently re-locked, not still counted as completed)",
+      "ok": true
+    },
+    {
+      "name": "A corrected node no longer counts toward the completion summary total",
+      "ok": true
+    },
+    {
+      "name": "Downstream nodes re-lock when their prerequisite is reversed (node totals genuinely recalculated)",
+      "ok": true
+    },
+    {
+      "name": "A fresh guest completes Foundation before conversion",
+      "ok": true
+    },
+    {
+      "name": "A real account is created on the same cookie jar as the guest",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports Skill Tree evidence rows transferred (real found-and-fixed gap — was previously 0/never transferred)",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports at least 1 Skill Tree node completed under the new identity",
+      "ok": true
+    },
+    {
+      "name": "After conversion, the SAME account identity (now authenticated) still sees the completed node",
+      "ok": true
+    },
+    {
+      "name": "A genuinely first-ever visit to the Skill Tree route (no prior SmokeCraft navigation) does not 401",
+      "ok": true
+    }
+  ]
+}

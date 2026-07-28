@@ -153,3 +153,15 @@ to `smokecraft_gameplay_rules`' `rule_version` scheme — disclosed as a
 future integration, not fabricated as done). No values changed this
 pass — only the identity/conversion/first-visit defects around it were
 fixed, plus the new correction/reversal capability.
+
+## Holistic Fix 5A-3G update (Skill Tree ledger integration)
+
+No new rules added. Skill Tree's 7 `completion_rule` values (seeded in
+migration 086) each already map to a real `EVIDENCE_CHECKS` entry in
+`skillTreeService.js`; this pass added a build-blocking validator check
+(`validateSmokecraftSkillTreeAuthority.mjs`) enforcing that every node's
+`completion_rule` has a real evidence check and that the evaluator
+throws rather than silently passing on an unmapped rule. Staff
+correction of a Skill Tree node reuses the existing generic
+`correctionType` field on `smokecraft_reward_corrections` (no new rule
+type needed) with the value `'skill_tree'`.

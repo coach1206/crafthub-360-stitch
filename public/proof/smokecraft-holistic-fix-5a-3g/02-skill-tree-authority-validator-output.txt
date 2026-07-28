@@ -1,0 +1,26 @@
+
+── SmokeCraft Skill-Tree-authority validator (Holistic Fix 5A-3G)
+
+  OK    The Skill Tree client only exposes read (getSkillTree/getNode) and server-recalculate (recalculate) calls — no client-set-progress function exists
+  OK    SkillTree.jsx fetches live data via the shared skillTreeApiClient (no local mirror)
+  OK    SkillTree.jsx has real loading/error/offline states (not a static mock)
+  OK    SkillTree.jsx renders a distinct visual state for a corrected/reversed node (not silently hidden)
+  OK    recalculate() checks real evidence tables per node (EVIDENCE_CHECKS), never trusts a client-submitted completion flag
+  OK    Every node has a completion_rule mapped to a real EVIDENCE_CHECKS entry (no node lacks verified evidence)
+  OK    Node progression is duplicate-protected via ON CONFLICT on the real DB constraint
+  OK    A staff-authorized reversal is read from the append-only corrections ledger, never by deleting/editing the original learner-state row
+  OK    The persisted DB state column is never set to the non-enum "corrected" value (real CHECK constraint honored — correction is a read-time overlay only)
+  OK    A reversed node breaks the downstream prerequisite chain (node totals are genuinely recalculated, not just relabeled)
+  OK    smokecraft_skill_tree_learner_state has a real UNIQUE(guest_reference, node_key) constraint (duplicate progression impossible at the DB level)
+  OK    smokecraft_skill_tree_learner_state links a real supporting_event_id (source event, not a bare flag)
+  OK    Every node definition carries a completion_rule (the rule version/reference used for evidence evaluation)
+  OK    Skill Tree routes have the dev/test rate-limiter skip (matches the established convention, closes a real found gap)
+  OK    An authenticated account's Skill Tree identity is prefixed with user: (consistent with the rest of player-state, real found-and-fixed defect)
+  OK    Skill Tree routes issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity) — real found-and-fixed defect: a first-ever visit directly to /smokecraft/skill-tree previously 401'd instead of getting a real guest identity
+  OK    convertGuestToAccount transfers the Skill Tree evidence tables on guest-to-account conversion (real found-and-fixed gap — was previously never transferred)
+  OK    The evidence transfer is a deterministic recalculation performed AFTER commit, on a fresh connection (never reads its own uncommitted transaction)
+  OK    The /corrections route remains staff-gated (never a learner path) — unchanged from Holistic Fix 5A-2
+  OK    convert-guest response surfaces skillTreeEvidenceRowsTransferred/skillTreeCompletedNodes (auditable, not silently dropped)
+
+=== RESULT: PASS (0 checks failed) ===
+
