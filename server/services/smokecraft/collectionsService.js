@@ -44,6 +44,24 @@ export async function getCatalog() {
   return rows
 }
 
+/**
+ * Holistic Fix 5A-3F: reversed collection items (staff-authorized, via
+ * the existing POST /api/smokecraft/player-state/corrections endpoint,
+ * correctionType='collection') — the ORIGINAL smokecraft_collection_ownership
+ * row is never deleted or edited; this reads the append-only
+ * smokecraft_reward_corrections ledger to find which items have an
+ * active reversal, so recalculate() can honestly report a 'corrected'
+ * state without touching the historical earn record.
+ */
+async function getReversedItemKeys(db, guestReference) {
+  const { rows } = await db.query(
+    `SELECT DISTINCT target_award_key FROM smokecraft_reward_corrections
+     WHERE guest_reference = $1 AND correction_type = 'collection' AND reversed = true`,
+    [guestReference]
+  )
+  return new Set(rows.map(r => r.target_award_key))
+}
+
 // Deterministic, explainable evaluation — every item's evidence is
 // checked fresh, never trusted from the client. Awarding is idempotent
 // via the (guest_reference, collection_item_key) unique constraint and
@@ -56,6 +74,7 @@ export async function recalculate(guestReference) {
     [guestReference]
   )
   const ownedByKey = Object.fromEntries(ownedRows.map(r => [r.collection_item_key, r]))
+  const reversedKeys = await getReversedItemKeys(db, guestReference)
 
   const newlyEarned = []
   const alreadyOwned = []
@@ -63,7 +82,10 @@ export async function recalculate(guestReference) {
 
   for (const item of items) {
     if (ownedByKey[item.item_key]) {
-      alreadyOwned.push({ item, ownedAt: ownedByKey[item.item_key].earned_at })
+      // Never deletes/edits the original earn row — a staff-authorized
+      // reversal is reported as its own honest state alongside the
+      // preserved history, not a silent re-lock.
+      alreadyOwned.push({ item, ownedAt: ownedByKey[item.item_key].earned_at, reversed: reversedKeys.has(item.item_key) })
       continue
     }
     const evidenceCheck = EVIDENCE_CHECKS[item.source_record_type]
@@ -118,7 +140,7 @@ export async function recalculate(guestReference) {
 export async function getItemDetail(guestReference, itemKey) {
   const result = await recalculate(guestReference)
   const owned = [...result.newlyEarned, ...result.alreadyOwned].find(r => r.item.item_key === itemKey)
-  if (owned) return { item: owned.item, owned: true, ownedAt: owned.ownedAt, evidence: owned.evidence || null }
+  if (owned) return { item: owned.item, owned: true, ownedAt: owned.ownedAt, evidence: owned.evidence || null, reversed: !!owned.reversed }
   const locked = result.stillLocked.find(r => r.item.item_key === itemKey)
   if (locked) return { item: locked.item, owned: false, reason: locked.reason }
   throw new CollectionsError('item_not_found')

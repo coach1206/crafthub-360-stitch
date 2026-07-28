@@ -25,10 +25,13 @@ export async function handleGetCollections(req, res) {
     if (!ref) return res.status(400).json({ success: false, error: 'identity_required' })
     const { newlyEarned, alreadyOwned, stillLocked, totalActive } = await svc.recalculate(ref)
     const owned = [...newlyEarned, ...alreadyOwned]
-    const ownedTotal = owned.length
+    // A staff-reversed item keeps its historical earn record (never
+    // deleted) but no longer counts toward the guest's current ownership
+    // total/percent — the summary reflects effective current ownership.
+    const ownedTotal = owned.filter(o => !o.reversed).length
 
     const categories = {}
-    for (const r of [...owned.map(o => ({ ...o, isOwned: true })), ...stillLocked.map(l => ({ ...l, isOwned: false }))]) {
+    for (const r of [...owned.map(o => ({ ...o, isOwned: !o.reversed })), ...stillLocked.map(l => ({ ...l, isOwned: false }))]) {
       const cat = r.item.collection_category
       categories[cat] = categories[cat] || { category: cat, total: 0, owned: 0 }
       categories[cat].total += 1
@@ -38,7 +41,7 @@ export async function handleGetCollections(req, res) {
     res.json({
       success: true,
       items: [
-        ...owned.map(o => ({ ...serializeItem(o.item), state: 'earned', earnedAt: o.ownedAt })),
+        ...owned.map(o => ({ ...serializeItem(o.item), state: o.reversed ? 'corrected' : 'earned', earnedAt: o.ownedAt })),
         ...stillLocked.map(l => ({ ...serializeItem(l.item), state: 'locked', reason: l.reason })),
       ].sort((a, b) => a.displayOrder - b.displayOrder),
       summary: {
@@ -59,7 +62,7 @@ export async function handleGetItem(req, res) {
     const result = await svc.getItemDetail(ref, req.params.itemKey)
     res.json({
       success: true,
-      item: { ...serializeItem(result.item), state: result.owned ? 'earned' : 'locked', earnedAt: result.ownedAt || null, evidence: result.evidence || null, reason: result.reason || null },
+      item: { ...serializeItem(result.item), state: result.owned ? (result.reversed ? 'corrected' : 'earned') : 'locked', earnedAt: result.ownedAt || null, evidence: result.evidence || null, reason: result.reason || null },
     })
   } catch (err) { sendError(res, err, 500) }
 }
