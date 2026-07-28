@@ -99,3 +99,33 @@ mismatched table over the approved artwork. The boundary message now
 reflects the real leaderboard status (ready with a real count / loading
 / error / offline) instead of always saying "unavailable" — a real,
 scoped improvement without touching the approved visual.
+
+## Holistic Fix 5A-3H update
+
+- **Venue scoping is now a real, writable preference.**
+  `PUT /api/smokecraft/player-state/leaderboard/preference` now accepts
+  an optional `venueId` string and persists it to
+  `smokecraft_leaderboard_eligibility.venue_id` (previously accepted by
+  the schema and read by `getLeaderboard`'s filter, but never actually
+  writable — a dead feature).
+- **Account conversion now preserves the leaderboard preference.**
+  `convertGuestToAccount` transfers the eligibility row (opt-out flag +
+  display name + venue) to the new account identity — previously never
+  transferred at all.
+- **The response never includes the raw `guest_reference`.** Each entry
+  instead carries a server-computed `isCurrentUser: boolean`, derived by
+  comparing the row's internal identity to the requester's own
+  server-verified identity — the client never receives another guest's
+  identity string, and never has to submit its own for this comparison
+  to work.
+- **The client screen (`Leaderboard.jsx`) now actually renders the real
+  fetched entries.** Before this pass, `getLeaderboardSnapshot` fetched
+  the real server list but the screen discarded it except for a summary
+  message, rendering only a synthetic single "You" row built from a
+  local client-side mirror. The screen now renders
+  `snapshot.communityEntries` directly and prefers
+  `snapshot.currentPlayer` (sourced from the real `fetchPlayerState()`
+  endpoint) for the current guest's own totals.
+- **Real pagination controls** (Prev/Next) were added over the existing
+  `limit`/`offset` query parameters — no new endpoint, no client-side
+  slicing.

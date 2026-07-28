@@ -1,0 +1,30 @@
+
+── SmokeCraft Leaderboard-authority validator (Holistic Fix 5A-3H)
+
+  OK    getLeaderboard never accepts a client-submitted xpTotal/score — it SELECTs xp_total from the real player-state table
+  OK    The eligibility WHERE clause enforces the real server-side opt-out (COALESCE(le.eligible, true) = true), not a client-supplied flag
+  OK    A guest with zero real XP is honestly excluded, never shown as a fabricated zero-score row
+  OK    Tie-breaking is deterministic: xp_total DESC, then completed_session_count DESC, then guest_reference ASC
+  OK    displayName defaults to an honest "Guest ####" pattern, never the real email/account id, when unset
+  OK    The public leaderboard payload never returns the raw guest_reference — only isCurrentUser is derived from it server-side
+  OK    Venue scoping is a real, settable, persisted preference (venue_id column actually written), not a dead column
+  OK    Pagination is real SQL LIMIT/OFFSET, not a client-side array slice
+  OK    convertGuestToAccount transfers the leaderboard eligibility/opt-out/venue preference (real found-and-fixed gap — was previously never transferred)
+  OK    XP corrections recompute smokecraft_player_state.xp_total directly (the same column the leaderboard reads), so placement is genuinely recalculated, never a separate cached leaderboard total
+  OK    The leaderboard limit is server-side clamped to a real max (100), never trusting an arbitrarily large client-requested page size
+  OK    The leaderboard offset is server-side clamped to a non-negative value
+  OK    setLeaderboardPreference derives guestReference from the server-verified identity only (self-service, own identity only — never trusts a client-submitted guestReference for writes)
+  OK    getLeaderboardSnapshot fetches the real authoritative player-state (fetchPlayerState) rather than trusting only the local GuestSessionContext mirror for the numbers it returns
+  OK    A failed/offline fetch returns an honest error/offline status, never a fabricated empty-looking success
+  OK    The Leaderboard screen renders the real fetched community entries (snapshot.communityEntries via filteredEntries), not only a synthetic single local entry
+  OK    The screen prefers server-authoritative XP (authoritativeXp) for the displayed totals, not the local session mirror alone
+  OK    The "You" indicator on a leaderboard row is driven by the server-computed isCurrentUser flag, never assumed for every row
+  OK    The screen has real loading/error/offline states (not a static mock)
+  OK    The screen supports real pagination controls (Prev/Next) over the server LIMIT/OFFSET
+  OK    The "Refresh Rankings" control re-fetches real server data, not just a local timestamp bump
+  OK    smokecraft_leaderboard_eligibility has a real UNIQUE guest_reference constraint (one preference row per identity)
+  OK    smokecraft_leaderboard_eligibility carries a real venue_id column for venue-boundary enforcement
+  OK    The documented tie-breaking rule matches the implementation exactly (xp_total DESC, completed_session_count DESC, guest_reference ASC)
+
+=== RESULT: PASS (0 checks failed) ===
+

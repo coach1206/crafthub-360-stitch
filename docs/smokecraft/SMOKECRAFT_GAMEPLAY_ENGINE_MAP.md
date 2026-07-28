@@ -300,3 +300,16 @@ No new nodes, progression rules, or migrations were added; the existing
 7-node evidence map (Foundation → Community & Legacy) is unchanged. See
 `public/proof/smokecraft-holistic-fix-5a-3g/00-proof-index.md` for the
 full node-to-evidence table.
+
+## Holistic Fix 5A-3H update (Leaderboard ledger integration and integrity closure)
+
+The Leaderboard backend (migration 095, `getLeaderboard`/
+`setLeaderboardPreference` in `playerStateService.js`) was already a
+real, evidence-derived, server-authoritative ranking query before this
+pass — no client-submitted score path ever existed. This pass closed 3
+real integration gaps (dead venue-scope column, missing account-
+conversion preference transfer, and the screen never rendering the real
+fetched entries — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` SC-D041
+through SC-D043) and added real pagination controls + a genuine
+live-refresh action. See
+`public/proof/smokecraft-holistic-fix-5a-3h/00-proof-index.md`.

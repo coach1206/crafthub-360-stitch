@@ -179,7 +179,12 @@ export async function handleGetLeaderboard(req, res) {
   const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 50, 1), 100)
   const offset = Math.max(parseInt(req.query.offset, 10) || 0, 0)
   try {
-    const entries = await getLeaderboard({ limit, offset, venueId: req.query.venueId || null })
+    // Holistic Fix 5A-3H: the viewer's own identity (when present — this
+    // route is public/no-login-required, so an identity may be absent) is
+    // used only to mark isCurrentUser on a matching row server-side; it is
+    // never itself included in the response payload.
+    const viewerGuestReference = req.smokecraftIdentity ? ownerGuestReference(req.smokecraftIdentity) : null
+    const entries = await getLeaderboard({ limit, offset, venueId: req.query.venueId || null, viewerGuestReference })
     res.json({ success: true, entries, limit, offset })
   } catch (err) {
     dbErrorResponse(res, err)
@@ -187,16 +192,19 @@ export async function handleGetLeaderboard(req, res) {
 }
 
 export async function handleSetLeaderboardPreference(req, res) {
-  const { displayName, eligible } = req.body || {}
+  const { displayName, eligible, venueId } = req.body || {}
   if (displayName !== undefined && (typeof displayName !== 'string' || displayName.length > 40)) {
     return res.status(400).json({ success: false, error: 'invalid_display_name' })
   }
   if (eligible !== undefined && typeof eligible !== 'boolean') {
     return res.status(400).json({ success: false, error: 'invalid_eligible_flag' })
   }
+  if (venueId !== undefined && venueId !== null && (typeof venueId !== 'string' || venueId.length > 100)) {
+    return res.status(400).json({ success: false, error: 'invalid_venue_id' })
+  }
   try {
     const guestReference = ownerGuestReference(req.smokecraftIdentity)
-    await setLeaderboardPreference({ guestReference, displayName, eligible })
+    await setLeaderboardPreference({ guestReference, displayName, eligible, venueId })
     res.json({ success: true })
   } catch (err) {
     dbErrorResponse(res, err)
@@ -225,6 +233,7 @@ export async function handleConvertGuest(req, res) {
       success: true, alreadyConverted: result.alreadyConverted, conversion: result.conversion,
       collectionsTransferred: result.collectionsTransferred || 0, collectionsMergedDuplicate: result.collectionsMergedDuplicate || 0,
       skillTreeEvidenceRowsTransferred: result.skillTreeEvidenceRowsTransferred || 0, skillTreeCompletedNodes: result.skillTreeCompletedNodes || 0,
+      leaderboardPreferenceTransferred: result.leaderboardPreferenceTransferred || false,
     })
   } catch (err) {
     dbErrorResponse(res, err)

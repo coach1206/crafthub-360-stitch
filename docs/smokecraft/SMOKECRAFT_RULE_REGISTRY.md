@@ -165,3 +165,13 @@ throws rather than silently passing on an unmapped rule. Staff
 correction of a Skill Tree node reuses the existing generic
 `correctionType` field on `smokecraft_reward_corrections` (no new rule
 type needed) with the value `'skill_tree'`.
+
+## Holistic Fix 5A-3H update (Leaderboard ledger integration and integrity closure)
+
+No new rules added. The existing tie-breaking rule
+(`xp_total DESC, completed_session_count DESC, guest_reference ASC`) is
+unchanged; this pass added a build-blocking validator check
+(`validateSmokecraftLeaderboardAuthority.mjs`) that ties the documented
+rule text in `SMOKECRAFT_LEADERBOARD_RULES.md` to the live SQL `ORDER
+BY` clause, so any future drift between the two now fails the build
+instead of silently diverging.

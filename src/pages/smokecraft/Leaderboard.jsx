@@ -124,6 +124,8 @@ const TIME_RANGES = [
   { id: 'all-time', label: 'All Time',   ms: null },
 ]
 
+const PAGE_SIZE = 20
+
 function initials(name) {
   if (!name) return '?'
   return name.trim().split(/\s+/).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('')
@@ -261,37 +263,42 @@ export default function Leaderboard() {
   }, [phase, scope, timeRange, tierFilter])
 
   // Holistic Fix 5A: getLeaderboardSnapshot is now async (fetches the
-  // real server leaderboard) — was previously a synchronous useMemo
-  // that always returned an honest-empty communityEntries: [] because
-  // no shared backend existed. Default state below matches that same
-  // honest 'empty' shape until the real fetch resolves, so there is no
-  // behavior change for a guest on a slow/offline connection.
+  // real server leaderboard). Holistic Fix 5A-3H: it now ALSO fetches
+  // real player-state for the current guest — this screen previously
+  // rendered its "You" row and rank strip from the local
+  // GuestSessionContext mirror only, and never rendered the fetched
+  // community entries at all (a real, found "screen bypasses
+  // authoritative data" defect). Default state below matches the honest
+  // 'loading' shape until the real fetch resolves.
   const [snapshot, setSnapshot] = useState({
-    currentPlayer: null, communityEntries: [], communityStatus: 'loading', communityMessage: 'Loading shared rankings…',
+    currentPlayer: null, communityEntries: [], communityStatus: 'loading', communityMessage: 'Loading shared rankings…', limit: PAGE_SIZE, offset: 0,
   })
+  const [pageOffset, setPageOffset] = useState(0)
+  const venueId = scope === 'venue' ? (journey.selectedVenue?.id || null) : null
+
   useEffect(() => {
     let cancelled = false
-    getLeaderboardSnapshot(session).then(result => { if (!cancelled) setSnapshot(result) })
+    setSnapshot(prev => ({ ...prev, communityStatus: 'loading', communityMessage: 'Loading shared rankings…' }))
+    getLeaderboardSnapshot(session, { venueId, offset: pageOffset, limit: PAGE_SIZE }).then(result => { if (!cancelled) setSnapshot(result) })
     return () => { cancelled = true }
-  }, [session])
+  }, [session, venueId, pageOffset])
+
+  // Reset to page 1 whenever the venue scope changes — an offset carried
+  // over from a different scope would silently show the wrong page.
+  useEffect(() => { setPageOffset(0) }, [venueId])
+
   const currentEntry = useMemo(() => buildCurrentUserEntry(session, journey), [session, journey])
 
-  // The only real entries available are the current guest's own — the
-  // community board is honestly empty until a shared backend exists
-  // (smokeLeaderboardService.js). Filters are applied for real against this
-  // one real entry, so a filter can genuinely include or exclude it.
+  // The real community entries returned by the server (never fabricated,
+  // never a client-computed total) — a tier filter is the only
+  // client-side narrowing applied, since rankLabel is the one per-entry
+  // field the public payload actually carries; time-range filtering has
+  // no honest effect on this real list (the server does not return a
+  // per-entry timestamp) and is intentionally not applied here.
   const filteredEntries = useMemo(() => {
-    return [currentEntry].filter(e => {
-      if (scope === 'venue' && !e.venue) return false
-      if (tierFilter && e.tier !== tierFilter) return false
-      const range = TIME_RANGES.find(r => r.id === timeRange)
-      if (range?.ms && e.lastActivityAt) {
-        if (Date.now() - e.lastActivityAt > range.ms) return false
-      }
-      return true
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scope, tierFilter, timeRange, currentEntry])
+    if (!tierFilter) return snapshot.communityEntries
+    return snapshot.communityEntries.filter(e => e.rankLabel === tierFilter)
+  }, [snapshot.communityEntries, tierFilter])
 
   function handleRefresh() {
     triggerHaptic('light')
@@ -304,7 +311,11 @@ export default function Leaderboard() {
         leaderboardPrefs: { ...(prev.smokeCraft?.leaderboardPrefs || {}), lastRefreshedAt: now },
       },
     }))
-    setTimeout(() => setRefreshing(false), 400)
+    // Holistic Fix 5A-3H: a real live-screen refresh — re-fetches the
+    // authoritative server leaderboard + player-state (previously this
+    // button only updated a local "last refreshed" timestamp and never
+    // actually re-fetched anything).
+    getLeaderboardSnapshot(session, { venueId, offset: pageOffset, limit: PAGE_SIZE }).then(setSnapshot).finally(() => setRefreshing(false))
   }
 
   function handleRetry() {
@@ -316,8 +327,15 @@ export default function Leaderboard() {
   const lastRefreshedAt = session?.smokeCraft?.leaderboardPrefs?.lastRefreshedAt || null
   const isStale = lastRefreshedAt ? (Date.now() - lastRefreshedAt) > (24 * 60 * 60 * 1000) : false
 
-  const rank = getRankFromXP(currentEntry.xp)
-  const nextTier = RANKS.find(r => r.minXP > currentEntry.xp) || null
+  // Holistic Fix 5A-3H: prefer the real server-authoritative XP/rank
+  // (snapshot.currentPlayer, sourced from fetchPlayerState()) — the local
+  // currentEntry mirror is used only as a fallback before the first real
+  // fetch resolves, never as the value actually displayed once real data
+  // is available.
+  const authoritativeXp = snapshot.currentPlayer?.isServerAuthoritative ? snapshot.currentPlayer.xp : currentEntry.xp
+  const rank = getRankFromXP(authoritativeXp)
+  const nextTier = RANKS.find(r => r.minXP > authoritativeXp) || null
+  const myLeaderboardEntry = snapshot.communityEntries.find(e => e.isCurrentUser) || null
 
   return (
     <SmokeCraftScreenShell
@@ -350,7 +368,7 @@ export default function Leaderboard() {
       </Occlude>
       <Occlude zone={ZONES.xp} style={{ justifyContent: 'center' }}>
         <span data-testid="lb-xp" style={{ fontSize: 'clamp(11px,1.45vw,21px)', color: GOLD }}>
-          {currentEntry.xp.toLocaleString()} XP
+          {authoritativeXp.toLocaleString()} XP
         </span>
       </Occlude>
 
@@ -443,9 +461,9 @@ export default function Leaderboard() {
               </div>
             ) : (
               <div role="list" aria-label="Leaderboard rankings" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {filteredEntries.map((e, i) => (
+                {filteredEntries.map(e => (
                   <div
-                    key={e.id} role="listitem" data-testid="lb-row"
+                    key={e.position} role="listitem" data-testid="lb-row"
                     aria-current={e.isCurrentUser ? 'true' : undefined}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 'clamp(6px,1vw,14px)',
@@ -454,7 +472,7 @@ export default function Leaderboard() {
                       border: `1.5px solid ${GOLD}`, borderRadius: 8,
                     }}
                   >
-                    <span style={{ fontSize: 'clamp(11px,1.3vw,19px)', fontWeight: 700, color: GOLD, width: '6%' }}>{i + 1}</span>
+                    <span style={{ fontSize: 'clamp(11px,1.3vw,19px)', fontWeight: 700, color: GOLD, width: '6%' }}>{e.position}</span>
                     <span aria-hidden="true" style={{
                       width: 'clamp(22px,2.6vw,40px)', height: 'clamp(22px,2.6vw,40px)', borderRadius: '50%',
                       background: 'rgba(233,193,118,0.15)', border: `1.5px solid ${GOLD}`,
@@ -462,26 +480,45 @@ export default function Leaderboard() {
                       fontSize: 'clamp(9px,1vw,14px)', fontWeight: 700, color: GOLD, flexShrink: 0,
                     }}>{initials(e.displayName)}</span>
                     <span style={{ flex: 1, minWidth: 0, fontSize: 'clamp(10px,1.15vw,17px)', fontWeight: 700, color: CREAM }}>
-                      {e.displayName} <span style={{ fontSize: 'clamp(8px,0.8vw,11px)', color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 8, padding: '0 5px' }}>You</span>
+                      {e.displayName}
+                      {e.isCurrentUser && (
+                        <span style={{ marginLeft: 6, fontSize: 'clamp(8px,0.8vw,11px)', color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 8, padding: '0 5px' }}>You</span>
+                      )}
                     </span>
-                    <span style={{ fontSize: 'clamp(9px,1vw,14px)', color: 'rgba(229,226,225,0.7)', width: '18%' }}>{e.tier}</span>
-                    <span style={{ fontSize: 'clamp(10px,1.2vw,18px)', color: GOLD, width: '16%', textAlign: 'right' }}>{e.xp.toLocaleString()} XP</span>
+                    <span style={{ fontSize: 'clamp(9px,1vw,14px)', color: 'rgba(229,226,225,0.7)', width: '18%' }}>{e.rankLabel}</span>
+                    <span style={{ fontSize: 'clamp(10px,1.2vw,18px)', color: GOLD, width: '16%', textAlign: 'right' }}>{e.xpTotal.toLocaleString()} XP</span>
                     <span style={{ fontSize: 'clamp(8px,0.85vw,12px)', color: 'rgba(229,226,225,0.5)', width: '16%', textAlign: 'right' }}>
-                      {e.achievements} badges
+                      {e.badgeCount} badges
                     </span>
                   </div>
                 ))}
               </div>
             )}
 
+            {/* Holistic Fix 5A-3H: pagination over the real server list
+                (real LIMIT/OFFSET, not a client-side slice of an
+                over-fetched array). */}
+            {snapshot.communityStatus === 'ready' && (snapshot.offset > 0 || snapshot.communityEntries.length === PAGE_SIZE) && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 'clamp(8px,0.85vw,12px)' }}>
+                <button type="button" data-testid="lb-page-prev" disabled={pageOffset === 0}
+                  onClick={() => { triggerHaptic('light'); setPageOffset(o => Math.max(0, o - PAGE_SIZE)) }}
+                  style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 14, color: GOLD, opacity: pageOffset === 0 ? 0.4 : 1, cursor: pageOffset === 0 ? 'default' : 'pointer', padding: '4px 10px', fontFamily: 'inherit' }}>
+                  ← Prev
+                </button>
+                <button type="button" data-testid="lb-page-next" disabled={snapshot.communityEntries.length < PAGE_SIZE}
+                  onClick={() => { triggerHaptic('light'); setPageOffset(o => o + PAGE_SIZE) }}
+                  style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 14, color: GOLD, opacity: snapshot.communityEntries.length < PAGE_SIZE ? 0.4 : 1, cursor: snapshot.communityEntries.length < PAGE_SIZE ? 'default' : 'pointer', padding: '4px 10px', fontFamily: 'inherit' }}>
+                  Next →
+                </button>
+              </div>
+            )}
+
             {/* Holistic Fix 5A: a real server-authoritative leaderboard
                 now exists (see smokeLeaderboardService.js). This
                 boundary message reflects its real status honestly
-                (loading/ready/empty/error/offline) — it still does not
-                render the occluded fabricated table rows with invented
-                competitors; a full pixel-positioned table integration
-                against the approved image is out of scope for this
-                pass (see SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md). */}
+                (loading/ready/empty/error/offline). Holistic Fix 5A-3H:
+                the table above now renders the real fetched entries
+                directly (previously fetched but never rendered). */}
             <div data-testid="lb-shared-unavailable" style={{
               marginTop: 'auto', fontSize: 'clamp(8px,0.88vw,13px)',
               color: 'rgba(229,226,225,0.55)', lineHeight: 1.4,
@@ -497,7 +534,11 @@ export default function Leaderboard() {
       {/* ── Baked "YOUR RANK" strip values ───────────────────────────────── */}
       <Occlude zone={ZONES.rankNum} style={{ justifyContent: 'center' }}>
         <span data-testid="lb-your-rank" style={{ fontSize: 'clamp(13px,1.8vw,26px)', color: GOLD }}>
-          {filteredEntries.length > 0 ? 1 : '—'}
+          {/* Holistic Fix 5A-3H: the real leaderboard position for this
+              page, from the server response — honestly '—' (not
+              fabricated as "1") when the guest isn't ranked yet or isn't
+              on the currently-loaded page. */}
+          {myLeaderboardEntry ? myLeaderboardEntry.position : '—'}
         </span>
       </Occlude>
       <Occlude zone={ZONES.rankAvatar} style={{ borderRadius: '50%', justifyContent: 'center', border: `1.5px solid ${GOLD}` }}>
@@ -507,7 +548,7 @@ export default function Leaderboard() {
       </Occlude>
       <Occlude zone={ZONES.points} style={{ justifyContent: 'center' }}>
         <span data-testid="lb-your-points" style={{ fontSize: 'clamp(11px,1.4vw,20px)', color: GOLD }}>
-          {currentEntry.xp.toLocaleString()} XP
+          {authoritativeXp.toLocaleString()} XP
         </span>
       </Occlude>
       <Occlude zone={ZONES.nextRank} style={{ justifyContent: 'center' }}>
@@ -522,7 +563,7 @@ export default function Leaderboard() {
       </Occlude>
       <Occlude zone={ZONES.toNext} style={{ justifyContent: 'center' }}>
         <span data-testid="lb-to-next" style={{ fontSize: 'clamp(9px,1.1vw,16px)', color: GOLD }}>
-          {nextTier ? `${(nextTier.minXP - currentEntry.xp).toLocaleString()} XP` : '—'}
+          {nextTier ? `${(nextTier.minXP - authoritativeXp).toLocaleString()} XP` : '—'}
         </span>
       </Occlude>
 

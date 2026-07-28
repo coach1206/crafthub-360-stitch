@@ -48,7 +48,7 @@ check('rank ladder is read from SC_RANKS (existing, already-approved, already-al
 check('leaderboard query selects from smokecraft_player_state (real data)', /FROM smokecraft_player_state ps/.test(service))
 check('leaderboard query has no hardcoded/mock guest names or scores', !/JAMES CARTER|SOFIA MARTINEZ|MICHAEL TORRES|mockEntries|MOCK_LEADERBOARD/.test(service))
 const leaderboardServiceFile = fs.readFileSync('src/services/smokecraft/smokeLeaderboardService.js', 'utf8')
-check('client leaderboard service fetches the real API, never returns a hardcoded communityEntries array', /fetch\('\/api\/smokecraft\/player-state\/leaderboard/.test(leaderboardServiceFile) && !/communityEntries:\s*\[\s*\]\s*,\s*communityStatus:\s*'empty'\s*,\s*communityMessage:\s*'A shared/.test(leaderboardServiceFile))
+check('client leaderboard service fetches the real API, never returns a hardcoded communityEntries array', /fetch\(`\/api\/smokecraft\/player-state\/leaderboard/.test(leaderboardServiceFile) && !/communityEntries:\s*\[\s*\]\s*,\s*communityStatus:\s*'empty'\s*,\s*communityMessage:\s*'A shared/.test(leaderboardServiceFile))
 
 // 6. Controller: no client-controlled score/XP/badge/rank/stamp.
 const controller = fs.readFileSync('server/controllers/playerStateController.js', 'utf8')

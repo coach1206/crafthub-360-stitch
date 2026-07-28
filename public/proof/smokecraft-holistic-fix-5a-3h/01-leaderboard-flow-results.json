@@ -1,0 +1,107 @@
+{
+  "pass": 25,
+  "fail": 0,
+  "total": 25,
+  "results": [
+    {
+      "name": "A guest with 0 XP does not appear on the leaderboard (honestly excluded, not a zero-score entry)",
+      "ok": true
+    },
+    {
+      "name": "After earning real XP, the guest appears with the correct server-side xpTotal (not client-submitted)",
+      "ok": true
+    },
+    {
+      "name": "isCurrentUser is computed server-side by matching the verified identity cookie, never client-supplied",
+      "ok": true
+    },
+    {
+      "name": "Both tied learners appear on the board with the same xpTotal",
+      "ok": true
+    },
+    {
+      "name": "An exact tie (same XP, same completed-session count) breaks deterministically by guest_reference ASC",
+      "ok": true
+    },
+    {
+      "name": "Re-earning the same named XP source a second time does not inflate the total (server-side one-time enforcement)",
+      "ok": true
+    },
+    {
+      "name": "An ordinary (non-staff) identity cannot invoke a correction",
+      "ok": true
+    },
+    {
+      "name": "A staff-authorized XP correction succeeds",
+      "ok": true
+    },
+    {
+      "name": "The corrected xpTotal is applied immediately (server-authoritative recalculation, not a cached snapshot)",
+      "ok": true
+    },
+    {
+      "name": "The corrected guest no longer appears on the leaderboard (0 XP is honestly excluded — placement genuinely recalculated, not just relabeled)",
+      "ok": true
+    },
+    {
+      "name": "Before opting out, the guest is visible on the leaderboard",
+      "ok": true
+    },
+    {
+      "name": "A guest can set their own eligible:false preference",
+      "ok": true
+    },
+    {
+      "name": "After opting out, the guest no longer appears on the leaderboard (server-enforced, not a UI-only toggle)",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest never has isCurrentUser incorrectly true for another guest's row",
+      "ok": true
+    },
+    {
+      "name": "A guest can set their own venue scope",
+      "ok": true
+    },
+    {
+      "name": "A venue-scoped query does not include a guest explicitly scoped to a different venue",
+      "ok": true
+    },
+    {
+      "name": "The same venue-scoped query DOES include a guest explicitly scoped to that venue",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports the leaderboard preference (opt-out + venue) was transferred (real found-and-fixed gap — was previously never transferred)",
+      "ok": true
+    },
+    {
+      "name": "The opt-out preference carried over — the now-authenticated account still does not appear on the global leaderboard",
+      "ok": true
+    },
+    {
+      "name": "Two independent live fetches under the same identity return identical server-authoritative xpTotal (no local mirror to desync)",
+      "ok": true
+    },
+    {
+      "name": "Pagination returns real, non-overlapping pages via LIMIT/OFFSET",
+      "ok": true
+    },
+    {
+      "name": "Page 2 entries do not duplicate page 1 entries (real SQL OFFSET, not a client-side re-slice of the same data)",
+      "ok": true
+    },
+    {
+      "name": "A limit above the max (100) is server-side clamped, never trusting an arbitrarily large client-requested page size",
+      "ok": true
+    },
+    {
+      "name": "A negative offset is server-side clamped to 0",
+      "ok": true
+    }
+  ]
+}

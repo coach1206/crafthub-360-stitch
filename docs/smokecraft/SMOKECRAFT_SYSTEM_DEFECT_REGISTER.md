@@ -1300,3 +1300,26 @@ All four closed via `server/routes/skillTreeRoutes.js`,
 `server/services/smokecraft/skillTreeService.js` (new
 `getReversedNodeKeys` correction overlay). See
 `public/proof/smokecraft-holistic-fix-5a-3g/00-proof-index.md`.
+
+## Holistic Fix 5A-3H update (Leaderboard ledger integration and integrity closure)
+
+- **SC-D041**: `smokecraft_leaderboard_eligibility.venue_id` existed in
+  the schema and was already read by `getLeaderboard`'s venue filter,
+  but was never accepted/written by `setLeaderboardPreference` — venue
+  scoping was a dead feature. Closed.
+- **SC-D042**: `convertGuestToAccount` never transferred the leaderboard
+  eligibility/opt-out/venue preference row on guest-to-account
+  conversion — a guest who explicitly opted out would silently revert
+  to default-visible under their new account identity. Closed.
+- **SC-D043**: `Leaderboard.jsx` rendered its "You" row and rank strip
+  entirely from the local `GuestSessionContext`/`SmokeCraftJourneyContext`
+  mirror and never rendered the real fetched community leaderboard at
+  all (the fetch happened, but its result was discarded except for a
+  summary string). Closed by wiring the screen through `fetchPlayerState()`
+  and the real `snapshot.communityEntries`.
+
+All three closed via `server/services/smokecraft/playerStateService.js`,
+`server/controllers/playerStateController.js`,
+`src/services/smokecraft/smokeLeaderboardService.js`, and
+`src/pages/smokecraft/Leaderboard.jsx`. See
+`public/proof/smokecraft-holistic-fix-5a-3h/00-proof-index.md`.

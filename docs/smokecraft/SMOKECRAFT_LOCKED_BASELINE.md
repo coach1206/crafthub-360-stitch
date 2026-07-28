@@ -315,3 +315,13 @@ for one addition: a new `'corrected'` state color/label
 `STATE_COLOR`/`STATE_LABEL` maps, following the same visual language as
 the existing locked/available/in_progress/completed states. No layout,
 spacing, or artwork changes.
+
+## Holistic Fix 5A-3H update (Leaderboard ledger integration and integrity closure)
+
+Leaderboard screen visuals and pixel zones are unchanged. Two small
+additions live in previously-empty free space below the existing
+boundary-message row: real Prev/Next pagination buttons (only rendered
+when there is more than one page of real results) and a genuinely
+functional "Refresh Rankings" action (same existing button, now
+re-fetches real data instead of only bumping a local timestamp). No
+layout, spacing, or artwork changes.

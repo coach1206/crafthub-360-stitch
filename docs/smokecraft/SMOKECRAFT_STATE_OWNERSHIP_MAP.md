@@ -289,3 +289,18 @@ transferred none — SC-D037), and added a read-time-only `'corrected'`
 overlay sourced from `smokecraft_reward_corrections` (never persisted to
 the `state` column's CHECK-constrained enum, never a second competing
 source of truth).
+
+## Holistic Fix 5A-3H update (Leaderboard ledger integration and integrity closure)
+
+`smokecraft_leaderboard_eligibility` (migration 095) remains the sole
+owner of a guest's leaderboard preference (opt-out, display name, venue
+scope). This pass fixed `convertGuestToAccount`
+(`playerStateService.js`) to transfer this row on conversion (previously
+transferred none — SC-D042), and fixed `setLeaderboardPreference` to
+actually persist the pre-existing `venue_id` column (previously
+SC-D041, a dead write path). The Leaderboard screen's own displayed
+"current player" data now sources from the real
+`smokecraft_player_state` table via `fetchPlayerState()` rather than the
+local `GuestSessionContext` mirror (SC-D043) — the mirror remains the
+fast offline-safe UI cache elsewhere in the app but is no longer the
+value actually rendered on this screen once real data is available.

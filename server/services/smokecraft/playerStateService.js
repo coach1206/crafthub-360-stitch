@@ -1013,6 +1013,26 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
        ON CONFLICT (guest_reference, node_key) DO NOTHING`,
       [guestReference, userReference]
     )
+    // ── Leaderboard preference: transfer opt-out/display-name/venue-scope
+    // choice. Holistic Fix 5A-3H: previously never transferred at all — a
+    // real found gap. Without this, a guest who explicitly opted OUT of
+    // the leaderboard would revert to the default-visible state under
+    // their new account identity (a genuine privacy-preference loss, not
+    // merely a cosmetic gap), and any venue scope they set would be lost.
+    // The account's own existing preference (if it already set one) wins.
+    const guestPref = await client.query(`SELECT * FROM smokecraft_leaderboard_eligibility WHERE guest_reference = $1`, [guestReference])
+    let leaderboardPreferenceTransferred = false
+    if (guestPref.rows.length > 0) {
+      const gp = guestPref.rows[0]
+      await client.query(
+        `INSERT INTO smokecraft_leaderboard_eligibility (guest_reference, eligible, display_name, venue_id)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (guest_reference) DO NOTHING`,
+        [userReference, gp.eligible, gp.display_name, gp.venue_id]
+      )
+      leaderboardPreferenceTransferred = true
+    }
+
     const conversion = await client.query(
       `INSERT INTO smokecraft_guest_conversions
          (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
@@ -1037,7 +1057,7 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       skillTreeCompletedNodes = recalculated.filter(r => r.learnerState.state === 'completed').length
     } catch { /* non-fatal — conversion itself already succeeded */ }
 
-    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes }
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     if (err.code === UNIQUE_VIOLATION) {
@@ -1065,7 +1085,7 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
  * tie), then guest_reference ASC (fully deterministic, never
  * order-unstable across repeated identical queries).
  */
-export async function getLeaderboard({ limit = 50, offset = 0, venueId = null } = {}) {
+export async function getLeaderboard({ limit = 50, offset = 0, venueId = null, viewerGuestReference = null } = {}) {
   const db = dbOrThrow()
   const params = [limit, offset]
   let venueFilter = ''
@@ -1087,6 +1107,9 @@ export async function getLeaderboard({ limit = 50, offset = 0, venueId = null } 
      LIMIT $1 OFFSET $2`,
     params
   )
+  // guest_reference is used only for the viewer-match comparison below and
+  // is never included in the returned payload — the public leaderboard
+  // response exposes no raw identity, only the opt-in display_name.
   return result.rows.map((r, i) => ({
     position: offset + i + 1,
     displayName: r.display_name,
@@ -1094,19 +1117,21 @@ export async function getLeaderboard({ limit = 50, offset = 0, venueId = null } 
     rankLabel: r.rank_label,
     completedSessionCount: Number(r.completed_session_count),
     badgeCount: Number(r.badge_count),
+    isCurrentUser: viewerGuestReference != null && r.guest_reference === viewerGuestReference,
   }))
 }
 
-/** Sets a guest's leaderboard display name and/or eligibility (self-service, own identity only — enforced by the caller passing only their own guestReference). */
-export async function setLeaderboardPreference({ guestReference, displayName, eligible }) {
+/** Sets a guest's leaderboard display name, eligibility, and/or venue scope (self-service, own identity only — enforced by the caller passing only their own guestReference). */
+export async function setLeaderboardPreference({ guestReference, displayName, eligible, venueId }) {
   const db = dbOrThrow()
   await db.query(
-    `INSERT INTO smokecraft_leaderboard_eligibility (guest_reference, display_name, eligible)
-     VALUES ($1, $2, COALESCE($3, true))
+    `INSERT INTO smokecraft_leaderboard_eligibility (guest_reference, display_name, eligible, venue_id)
+     VALUES ($1, $2, COALESCE($3, true), $4)
      ON CONFLICT (guest_reference) DO UPDATE SET
        display_name = COALESCE(EXCLUDED.display_name, smokecraft_leaderboard_eligibility.display_name),
        eligible = COALESCE(EXCLUDED.eligible, smokecraft_leaderboard_eligibility.eligible),
+       venue_id = COALESCE(EXCLUDED.venue_id, smokecraft_leaderboard_eligibility.venue_id),
        updated_at = now()`,
-    [guestReference, displayName || null, eligible === undefined ? null : eligible]
+    [guestReference, displayName || null, eligible === undefined ? null : eligible, venueId || null]
   )
 }
