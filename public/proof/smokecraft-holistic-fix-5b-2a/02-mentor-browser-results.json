@@ -1,0 +1,87 @@
+{
+  "pass": 20,
+  "fail": 0,
+  "total": 20,
+  "results": [
+    {
+      "name": "Mentor Selection screen renders real mentor cards from the roster",
+      "ok": true
+    },
+    {
+      "name": "Selecting a mentor registers as active (aria-pressed=true)",
+      "ok": true
+    },
+    {
+      "name": "Selection persists to the canonical journey state (real write, not a UI-only toggle)",
+      "ok": true
+    },
+    {
+      "name": "Mentor selection survives a real page refresh",
+      "ok": true
+    },
+    {
+      "name": "Skill Tree honestly shows \"no mentor selected\" when none is chosen (never defaults to a mentor)",
+      "ok": true
+    },
+    {
+      "name": "Skill Tree's mentor panel renders the real selected mentor's name",
+      "ok": true
+    },
+    {
+      "name": "Skill Tree renders real server-computed guidance text (\"Rafael suggests focusing on Foundation next — 0 Seed & Soil …\")",
+      "ok": true
+    },
+    {
+      "name": "Guidance text changes after real Skill Tree progress advances (not static)",
+      "ok": true
+    },
+    {
+      "name": "MentorCommentary renders the real selected mentor's name as the page heading",
+      "ok": true
+    },
+    {
+      "name": "MentorCommentary renders the real mentor country field (fixes the undefined mentor.origin defect)",
+      "ok": true
+    },
+    {
+      "name": "MentorCommentary renders the real mentor bio field (fixes the undefined mentor.expertise defect)",
+      "ok": true
+    },
+    {
+      "name": "MentorCommentary shows the honest \"based on your real progress\" guidance label (no longer the broken hardcoded per-mentor map)",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on MentorCommentary (active element: BUTTON)",
+      "ok": true
+    },
+    {
+      "name": "Pointer/click activation exercised successfully on mentor selection cards above",
+      "ok": true
+    },
+    {
+      "name": "Back control is present and visible",
+      "ok": true
+    },
+    {
+      "name": "Continue control is present and visible",
+      "ok": true
+    },
+    {
+      "name": "Continue control is not blocked by an invisible overlay",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff/overflow on MentorCommentary",
+      "ok": true
+    },
+    {
+      "name": "A failed guidance request shows an honest unavailable state with general fallback text, never a fabricated success",
+      "ok": true
+    },
+    {
+      "name": "No console errors observed across all mentor screens",
+      "ok": true
+    }
+  ]
+}

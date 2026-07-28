@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useSmokeCraftMentorGuidance } from '../../hooks/useSmokeCraftMentorGuidance.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
@@ -22,20 +23,17 @@ const CREAM     = '#e5e2e1'
 const BORDER    = 'rgba(233,193,118,0.22)'
 const GLASS     = 'rgba(8,10,16,0.86)'
 
-// Curated (rule-based, human-authored) commentary notes — not AI-generated. Keyed
-// by mentor id so different mentors surface genuinely different content, honestly
-// labeled "Curated Mentor Notes" throughout rather than presented as live AI.
-const COMMENTARY = {
-  alejandro:  { construction: 'A well-aged blend like this should show a firm, tight burn line with minimal touch-ups needed.', flavor: 'Expect deeper, rounder notes to emerge now — aging softens sharp edges into something more layered.', action: 'Slow your pace here. Let the aged tobacco show its full depth before your next draw.' },
-  javier:     { construction: 'Bold ligero-heavy blends can burn hot — watch for the burn line racing ahead on one side.', flavor: 'This is where volcanic-soil intensity peaks — look for pepper and mineral notes sharpening.', action: 'If the burn feels hot, set it down for a full minute before continuing.' },
-  jamastrán:  { construction: 'Jamastrán-valley leaf tends to hold a clean, even ash — a good sign of proper curing.', flavor: 'Notice the earthy, valley-grown character settling in as the smoke opens up.', action: 'Rotate gently every few draws to keep that even burn intact.' },
-  mateo:      { construction: 'San Andrés maduro wrappers are oilier and can run a slightly slower burn — that is normal.', flavor: 'Cocoa and dark-fruit notes typical of maduro wrappers should be building now.', action: 'Give it an extra beat between draws to let the maduro sweetness fully develop.' },
-  rafael:     { construction: 'Classic Vuelta Abajo construction is built for consistency — the burn line should stay level with little intervention.', flavor: 'This stage is where traditional, balanced Cuban-seed character really speaks for itself.', action: 'Resist over-correcting the burn — classic blends usually self-correct on their own.' },
-  carlos:     { construction: 'Emerging-origin leaf can be less predictable structurally — keep an eye on the burn for the first few minutes of this stage.', flavor: 'Watch for unexpected, less conventional notes — that is the point of an emerging-origin blend.', action: 'Take mental notes on anything unusual you taste; it is part of what makes this profile distinct.' },
-  blackwell:  { construction: 'Boutique blends are often built with a specific burn behavior in mind — check the roller\'s intent against what you\'re seeing.', flavor: 'Boutique blending usually front-loads complexity — this stage should show real evolution.', action: 'Compare this stage directly against the first third; the contrast is the blender\'s signature.' },
-  paulo:      { construction: 'Arapiraca wrapper leaf can be delicate — a gentle touch-up is better than a heavy relight.', flavor: 'Fermentation-forward character should be prominent here — look for tang alongside sweetness.', action: 'Keep the flame distance generous if a touch-up is needed; this wrapper scorches easily.' },
-}
-
+// Holistic Fix 5B-2A: this screen previously kept a hand-authored
+// COMMENTARY object keyed by short first-name-derived ids
+// ('alejandro', 'javier', 'jamastrán', ...) that never matched the real
+// MENTORS roster ids ('dominican', 'nicaragua', 'honduras', ...) — a
+// real, found defect (SC-D050): `COMMENTARY[mentor.id]` always fell
+// through to DEFAULT_COMMENTARY, so every learner saw identical
+// "generic" commentary regardless of which mentor they actually chose.
+// Real per-mentor, context-aware guidance now comes from the shared
+// server-authoritative mentor-guidance service instead. DEFAULT below
+// is kept only as the last-resort offline/unavailable fallback text
+// (never presented as mentor-specific).
 const DEFAULT_COMMENTARY = {
   construction: 'General construction guidance: the burn line should stay level and the ash should hold its shape without excessive touch-ups.',
   flavor: 'General flavor guidance: this stage of the smoke typically shows the blend\'s core character most clearly.',
@@ -71,7 +69,16 @@ export default function MentorCommentary({ onBack, onComplete } = {}) {
 
   const mentorList = journey.mentor
   const mentor = Array.isArray(mentorList) ? mentorList[0] : mentorList
-  const notes = mentor ? (COMMENTARY[mentor.id] || DEFAULT_COMMENTARY) : null
+
+  // Holistic Fix 5B-2A: real, server-computed, context-aware guidance
+  // replaces the previous static per-mentor COMMENTARY map (which never
+  // actually matched a real mentor id — see the comment above).
+  const { status: guidanceStatus, guidance, retry: retryGuidance } = useSmokeCraftMentorGuidance('mentor-commentary')
+  const notes = mentor ? {
+    construction: guidance?.message || DEFAULT_COMMENTARY.construction,
+    flavor: guidance?.reason || DEFAULT_COMMENTARY.flavor,
+    action: guidance?.nextAction || DEFAULT_COMMENTARY.action,
+  } : null
 
   const savedViewed = journey.mentorCommentary?.viewedSections || []
   const [viewedSections, setViewedSections] = useState(() => new Set(savedViewed))
@@ -192,7 +199,11 @@ export default function MentorCommentary({ onBack, onComplete } = {}) {
           {mentor?.name || 'No Mentor Selected'}
         </h1>
         <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 6 }}>
-          {allViewed ? 'Commentary reviewed' : 'Loading commentary…'} · Stage: Flavor Evolution (Second Third)
+          {!mentor ? 'No mentor selected'
+            : guidanceStatus === 'loading' ? 'Loading real guidance…'
+            : guidanceStatus === 'offline' ? "Offline — showing general guidance"
+            : guidanceStatus === 'unavailable' ? 'Guidance temporarily unavailable — showing general guidance'
+            : allViewed ? 'Commentary reviewed' : 'Loading commentary…'} · Stage: Flavor Evolution (Second Third)
         </div>
       </header>
 
@@ -239,8 +250,12 @@ export default function MentorCommentary({ onBack, onComplete } = {}) {
                 </div>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: CREAM }}>{mentor.name}</div>
-                  <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.6)', marginTop: 2 }}>{mentor.origin}</div>
-                  <div style={{ fontSize: 12, color: GOLD_DIM, marginTop: 4 }}>{mentor.expertise}</div>
+                  {/* Holistic Fix 5B-2A (SC-D050): mentor.origin/mentor.expertise
+                      do not exist on the real MENTORS roster (only
+                      country/bio) — previously rendered as literally
+                      undefined. Real fields used instead. */}
+                  <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.6)', marginTop: 2 }}>{mentor.flag ? `${mentor.flag} ` : ''}{mentor.country}</div>
+                  <div style={{ fontSize: 12, color: GOLD_DIM, marginTop: 4 }}>{mentor.bio}</div>
                   <div style={{ fontSize: 10, color: 'rgba(229,226,225,0.35)', marginTop: 6, letterSpacing: '0.06em' }}>
                     No individual portrait photography available — neutral avatar shown
                   </div>
@@ -255,8 +270,14 @@ export default function MentorCommentary({ onBack, onComplete } = {}) {
                 padding: 'clamp(16px,2.4vw,24px)',
               }}>
                 <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 10 }}>
-                  Curated Mentor Notes — Not AI-Generated
+                  Mentor Guidance — Based On Your Real Progress
                 </div>
+                {(guidanceStatus === 'unavailable' || guidanceStatus === 'offline') && (
+                  <div style={{ fontSize: 11, color: 'rgba(229,170,100,0.85)', marginBottom: 10 }}>
+                    {guidanceStatus === 'offline' ? "You're offline" : 'Guidance is temporarily unavailable'} — showing general guidance below.{' '}
+                    <button type="button" onClick={retryGuidance} style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 10, color: GOLD, fontSize: 10, padding: '1px 8px', cursor: 'pointer' }}>Retry</button>
+                  </div>
+                )}
 
                 {[
                   ['construction', 'Construction Observation', 'construction'],

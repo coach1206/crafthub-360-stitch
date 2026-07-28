@@ -1,4 +1,5 @@
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useSmokeCraftMentorGuidance } from '../../hooks/useSmokeCraftMentorGuidance.js'
 import MediaSlot from './goldenBox/MediaSlot.jsx'
 
 const GOLD = '#E9C176'
@@ -11,9 +12,27 @@ const GLASS = 'rgba(8,10,16,0.86)'
 // (the same source EntryWorkspace/MentorGuidancePanel already trust), never
 // a fixed/baked mentor. Shows an honest "no mentor selected" state instead
 // of defaulting to any specific mentor.
-export default function DynamicMentorPanel({ guidance }) {
+//
+// Holistic Fix 5B-2A: `context` is the new, preferred way to get real,
+// server-computed, context-aware guidance via the shared
+// useSmokeCraftMentorGuidance adapter — pass a screen identifier
+// (e.g. "skill-tree") instead of a hardcoded `guidance` string. The
+// `guidance` string prop remains supported (Challenge Hub / Golden-Box-
+// adjacent callers, explicitly out of this pass's scope, still pass it
+// directly) and always takes precedence when both are supplied.
+export default function DynamicMentorPanel({ guidance, context }) {
   const { journey } = useSmokeCraftJourney()
   const mentor = Array.isArray(journey?.mentor) ? journey.mentor[0] : null
+  const dynamic = useSmokeCraftMentorGuidance(guidance ? null : context)
+
+  const displayText = guidance
+    ? guidance
+    : dynamic.status === 'loading' ? 'Loading guidance…'
+    : dynamic.status === 'ready' ? dynamic.guidance?.message
+    : dynamic.status === 'offline' ? "You're offline — guidance can't be loaded right now."
+    : dynamic.status === 'unavailable' ? 'Guidance is temporarily unavailable.'
+    : mentor ? `${mentor.name.split(' ')[0]} hasn't left specific guidance for this screen yet.`
+    : null
 
   return (
     <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 14 }}>
@@ -32,8 +51,11 @@ export default function DynamicMentorPanel({ guidance }) {
             </div>
             {mentor.bio && <p style={{ margin: '0 0 6px', fontSize: 11.5, color: CREAM, lineHeight: 1.5 }}>{mentor.bio}</p>}
             <p style={{ margin: 0, fontSize: 11.5, color: 'rgba(229,226,225,0.7)', fontStyle: 'italic' }}>
-              {guidance || `${mentor.name.split(' ')[0]} hasn't left specific guidance for this screen yet.`}
+              {displayText}
             </p>
+            {context && dynamic.status === 'unavailable' && (
+              <button type="button" onClick={dynamic.retry} style={{ marginTop: 6, background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 10, color: GOLD, fontSize: 10, padding: '2px 8px', cursor: 'pointer' }}>Retry</button>
+            )}
           </div>
         </div>
       )}

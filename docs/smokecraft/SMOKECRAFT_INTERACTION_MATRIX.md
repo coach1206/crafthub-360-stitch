@@ -566,3 +566,15 @@ All controls remain reachable by keyboard (Tab) with a visible focus
 style, and by pointer/click at their real (now correctly stacked)
 hit-test area. See `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` and
 `public/proof/smokecraft-holistic-fix-5b-1a/00-proof-index.md`.
+
+## Holistic Fix 5B-2A update (mentor state, guidance, and live screen integration)
+
+No approved mentor visuals were redesigned. Real browser verification
+of Mentor Selection, Skill Tree's mentor panel, and MentorCommentary
+confirmed: mentor-card selection/toggle, refresh persistence, keyboard
+Tab focus, pointer/click activation, Back/Continue navigation, no
+blocked overlays, and zero console errors. `DynamicMentorPanel` gained
+a small non-baked Retry control (shown only in its real `unavailable`
+state) and `MentorCommentary.jsx` gained a small non-baked inline
+retry/status notice (shown only in its real `unavailable`/`offline`
+states) — both additive, no existing control removed or relaid out.

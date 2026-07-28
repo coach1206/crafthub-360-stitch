@@ -345,3 +345,15 @@ elsewhere) and one invisible stacking-order fix (`zIndex: 3` on the
 Pairing Choices panel — its own solid background already painted over
 the affected area, so nothing changed on screen). No layout, spacing,
 color, or artwork changed on either pairing screen.
+
+## Holistic Fix 5B-2A update (mentor state, guidance, and live screen integration)
+
+No approved mentor visuals were redesigned. `MentorCommentary.jsx`'s
+"Curated Mentor Notes — Not AI-Generated" section label was renamed to
+"Mentor Guidance — Based On Your Real Progress" (the content source
+genuinely changed — the old label was no longer accurate once real,
+server-computed, context-aware guidance replaced the broken hardcoded
+map), and its portrait-zone subtitle now shows the real
+`mentor.country`/`mentor.bio` fields instead of the previously-
+undefined `mentor.origin`/`mentor.expertise`. No layout, spacing, or
+artwork changed on any mentor screen.

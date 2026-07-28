@@ -1,0 +1,91 @@
+{
+  "pass": 21,
+  "fail": 0,
+  "total": 21,
+  "results": [
+    {
+      "name": "A request with no mentorId is rejected (400), never silently returns guidance",
+      "ok": true
+    },
+    {
+      "name": "A request with an unrecognized mentorId is rejected, never fabricates a mentor identity",
+      "ok": true
+    },
+    {
+      "name": "A valid mentor with real (if minimal) signal returns guidance",
+      "ok": true
+    },
+    {
+      "name": "Every guidance response has a non-empty message",
+      "ok": true
+    },
+    {
+      "name": "Every guidance response has a reason",
+      "ok": true
+    },
+    {
+      "name": "Every guidance response has a nextAction",
+      "ok": true
+    },
+    {
+      "name": "Every guidance response has a sourceContext",
+      "ok": true
+    },
+    {
+      "name": "Every guidance response has a confidence value",
+      "ok": true
+    },
+    {
+      "name": "Every guidance response has a messageVersion",
+      "ok": true
+    },
+    {
+      "name": "The real mentor identity (name/country/flag) comes from the server roster, never client-submitted",
+      "ok": true
+    },
+    {
+      "name": "Guidance changes after real Skill Tree progress advances (not static regardless of progress)",
+      "ok": true
+    },
+    {
+      "name": "Guidance references the real saved pairing once one exists (highest-priority real signal)",
+      "ok": true
+    },
+    {
+      "name": "The pairing-aware message includes the real pairing type and score",
+      "ok": true
+    },
+    {
+      "name": "Guidance is genuinely per-mentor (different mentor identity in the response)",
+      "ok": true
+    },
+    {
+      "name": "Changing mentor does not change the underlying real signal used (same pairing_result, same guest)",
+      "ok": true
+    },
+    {
+      "name": "Identical mentor + unchanged real state produces an identical guidance message",
+      "ok": true
+    },
+    {
+      "name": "Requesting guidance does not change xpTotal",
+      "ok": true
+    },
+    {
+      "name": "Requesting guidance does not change awards count",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest never sees another guest's real pairing/quiz signal",
+      "ok": true
+    },
+    {
+      "name": "A genuinely first-ever request from a fresh browser does not 401 (guest identity auto-issued)",
+      "ok": true
+    },
+    {
+      "name": "A fresh guest with zero activity gets an honest fallback/low-signal state (never fabricated pairing/quiz data)",
+      "ok": true
+    }
+  ]
+}

@@ -160,7 +160,10 @@ export default function SkillTree() {
           </>
         )}
 
-        <DynamicMentorPanel guidance="Every category above traces back to a real lesson — start with Foundation if you're new." />
+        {/* Holistic Fix 5B-2A: real, server-computed, context-aware
+            guidance (via the shared mentor-guidance service) replaces
+            the previous hardcoded string. */}
+        <DynamicMentorPanel context="skill-tree" />
       </div>
     </div>
     </SmokeCraftScreenShell>

@@ -1369,3 +1369,24 @@ All three closed via `src/pages/smokecraft/PairingLab.jsx`. Encoded as
 permanent regression checks in
 `scripts/validateSmokecraftPairingEngineAuthority.mjs`. See
 `public/proof/smokecraft-holistic-fix-5b-1a/00-proof-index.md`.
+
+## Holistic Fix 5B-2A update (mentor state, guidance, and live screen integration)
+
+- **SC-D050**: `MentorCommentary.jsx`'s hardcoded `COMMENTARY` map was
+  keyed by short first-name-derived ids (`alejandro`, `javier`,
+  `jamastrán`, ...) that never matched the real `MENTORS` roster ids
+  (`dominican`, `nicaragua`, `honduras`, ...) — every real mentor
+  selection silently fell through to `DEFAULT_COMMENTARY`, so every
+  learner saw identical generic commentary regardless of which mentor
+  they actually chose. Closed by routing through the new real,
+  server-authoritative mentor-guidance service.
+- **SC-D051**: `MentorCommentary.jsx` rendered `mentor.origin` and
+  `mentor.expertise` — fields that do not exist on the real `MENTORS`
+  roster (only `country`/`bio` exist) — rendering as literally
+  `undefined`. Closed by using the real `mentor.country`/`mentor.bio`
+  fields.
+
+Both closed via `src/pages/smokecraft/MentorCommentary.jsx`, the new
+`server/services/smokecraft/mentorGuidanceService.js`, and
+`src/hooks/useSmokeCraftMentorGuidance.js`. See
+`public/proof/smokecraft-holistic-fix-5b-2a/00-proof-index.md`.

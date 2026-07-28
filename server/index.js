@@ -30,6 +30,7 @@ import seedSoilRoutes from './routes/seedSoilRoutes.js'
 import fillerArrangementRoutes from './routes/fillerArrangementRoutes.js'
 import skillTreeRoutes from './routes/skillTreeRoutes.js'
 import pairingEngineRoutes from './routes/pairingEngineRoutes.js'
+import mentorGuidanceRoutes from './routes/mentorGuidanceRoutes.js'
 import collectionsRoutes from './routes/collectionsRoutes.js'
 import challengeHubRoutes from './routes/challengeHubRoutes.js'
 import blendFaultRoutes from './routes/blendFaultRoutes.js'
@@ -262,6 +263,7 @@ app.use('/api/smokecraft/seed-soil', seedSoilRoutes)
 app.use('/api/smokecraft/filler-arrangement', fillerArrangementRoutes)
 app.use('/api/smokecraft/skill-tree', skillTreeRoutes)
 app.use('/api/smokecraft/pairing-engine', pairingEngineRoutes)
+app.use('/api/smokecraft/mentor-guidance', mentorGuidanceRoutes)
 app.use('/api/smokecraft/collections', collectionsRoutes)
 app.use('/api/smokecraft/challenge-hub', challengeHubRoutes)
 app.use('/api/smokecraft/blend-fault', blendFaultRoutes)

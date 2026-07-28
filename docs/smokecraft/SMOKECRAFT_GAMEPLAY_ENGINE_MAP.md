@@ -327,3 +327,17 @@ one shared adapter (`useSmokeCraftPairingEngine`). No new cigar/
 beverage facts were invented — only the fields already collected by
 these screens are used. See `SMOKECRAFT_PAIRING_ENGINE_RULES.md` for
 the full rule/scoring model.
+
+## Holistic Fix 5B-2A update (mentor state, guidance, and live screen integration)
+
+Mentor identity (`journey.mentor`) was already single-owner and
+server-synced (Holistic Fix 5A / 4B) — re-confirmed, not rebuilt. This
+pass added a new, versioned, server-authoritative mentor-guidance
+service (`server/services/smokecraft/mentorGuidanceService.js`,
+`/api/smokecraft/mentor-guidance/guidance`) that composes real,
+context-aware guidance from the guest's own real pairing/quiz/tasting/
+skill-tree/progress records — never fabricated, never reward-granting.
+Replaced two real hardcoded/broken-guidance defects (SC-D050, SC-D051)
+in `MentorCommentary.jsx` and wired `SkillTree.jsx`'s
+`DynamicMentorPanel` through the shared service. See
+`SMOKECRAFT_MENTOR_GUIDANCE_RULES.md` for the full rule set.

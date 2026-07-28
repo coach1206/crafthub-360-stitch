@@ -1,0 +1,25 @@
+
+── SmokeCraft Mentor-Guidance-authority validator (Holistic Fix 5B-2A)
+
+  OK    Mentor identity is looked up from the real, single roster (getMentorById), never trusted as a client-submitted name/country/flag
+  OK    An unrecognized mentorId is rejected, never fabricates a mentor identity
+  OK    Guidance never awards XP, badges, or Passport stamps (mentor guidance is read-only)
+  OK    Guidance never issues an UPDATE/INSERT against smokecraft_player_state, smokecraft_awards, or any reward table (read-only queries only)
+  OK    Every real signal query is scoped by guest_reference (never a global/unscoped query that could leak another learner's data)
+  OK    The fallback state (no real signal available) is honestly labeled, using the mentor's own real roster greeting — never a fabricated achievement
+  OK    Every response includes message/reason/nextAction/sourceContext/confidence/messageVersion — no unexplained guidance is possible
+  OK    Mentor-guidance routes have the dev/test rate-limiter skip from day one
+  OK    An authenticated account's mentor-guidance identity is prefixed with user: from day one
+  OK    Mentor-guidance routes issue a fresh guest identity when none exists from day one
+  OK    The shared guidance hook reads the selected mentor from the one canonical source (SmokeCraftJourneyContext.journey.mentor), never a second mentor store
+  OK    The shared guidance hook never computes guidance itself — only requests it from the server
+  OK    The shared guidance hook represents the mandated state set (no-mentor/loading/ready/unavailable/offline/session-expired)
+  OK    DynamicMentorPanel uses the one shared mentor-guidance adapter (useSmokeCraftMentorGuidance)
+  OK    MentorCommentary.jsx no longer keys guidance off a hardcoded per-mentor-id map that never matched the real roster (real found-and-fixed defect SC-D050)
+  OK    MentorCommentary.jsx uses the one shared mentor-guidance adapter (useSmokeCraftMentorGuidance)
+  OK    MentorCommentary.jsx renders real roster fields (mentor.country/mentor.bio), not the nonexistent mentor.origin/mentor.expertise (real found-and-fixed defect)
+  OK    Mentor.jsx retains exactly one write path for the selected mentor (setMentor to SmokeCraftJourneyContext) — no second, competing mentor-selection owner reappeared
+  OK    SkillTree.jsx's mentor panel uses the shared context-aware guidance service (context prop), not a hardcoded guidance string
+
+=== RESULT: PASS (0 checks failed) ===
+
