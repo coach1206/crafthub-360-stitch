@@ -142,3 +142,14 @@ a bare "Save" click. Enforced in code
 (`submitCultivatorEvidence` in `playerStateService.js`), not yet mirrored
 into a `smokecraft_gameplay_rules` row (same disclosed pattern as the
 master-blend evidence rule from Holistic Fix 5A-3).
+
+## Holistic Fix 5A-3F update — Collections rules
+
+Collections eligibility rules already existed as real, structured
+database rows (`smokecraft_collection_items`, migration 087 —
+`earn_condition`, `source_record_type` per item) prior to this pass;
+this is itself a real, versioned-in-spirit rule catalog (not yet linked
+to `smokecraft_gameplay_rules`' `rule_version` scheme — disclosed as a
+future integration, not fabricated as done). No values changed this
+pass — only the identity/conversion/first-visit defects around it were
+fixed, plus the new correction/reversal capability.

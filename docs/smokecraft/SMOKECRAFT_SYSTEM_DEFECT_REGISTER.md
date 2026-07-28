@@ -1235,3 +1235,39 @@ evidence grants XP+stamp exactly once, a two-tab race grants exactly
 once, cross-user isolation holds. Live Playwright smoke test confirmed
 the real screen gates the Save button until all 7 stages are viewed and
 correctly transitions through submitting → saved states.
+
+## Holistic Fix 5A-3F update
+
+**SC-D031 — CLOSED.** `collectionsRoutes.js` lacked the established
+dev/test rate-limiter skip (same class as SC-D021, Holistic Fix 4B) —
+would throttle automated test suites making repeated calls.
+
+**SC-D032 — CLOSED.** An authenticated account's Collections identity
+used the raw, unprefixed `req.smokecraftIdentity.id` instead of the
+established `user:${id}` convention — inconsistent with every other
+player-state table, and as a direct consequence,
+`convertGuestToAccount` never transferred Collections ownership on
+guest-to-account conversion at all (it had no matching `user:` reference
+to find). Fixed: `bridgeIdentity` now prefixes correctly, and
+`convertGuestToAccount` now transfers Collections rows (set union by
+`collection_item_key`, same pattern as awards/sessions). Verified live:
+a guest who earns an item, creates an account, and converts still sees
+the item under their new authenticated identity.
+
+**SC-D033 — CLOSED.** `collectionsRoutes.js` was missing
+`ensureSmokeCraftGuestIdentity` in its middleware chain (only had the
+read-only `attachSmokeCraftIdentity`) — a genuinely first-ever visit
+directly to `/smokecraft/collections`, before visiting any other
+SmokeCraft route, returned a real 401 instead of getting a fresh guest
+identity issued. Found live via a fresh-browser Playwright smoke test
+(not assumed), confirmed by checking every other player-state router's
+established `attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity`
+chain. Fixed by adding the missing middleware.
+
+**Correction/reversal for Collections — ADDED.** Extends the existing
+Holistic Fix 5A-2 correction ledger (`smokecraft_reward_corrections`,
+`correctionType='collection'`) — no new migration needed. A reversal
+never deletes/edits the original `smokecraft_collection_ownership` row;
+`recalculate()` now reads the corrections ledger to report an honest
+`'corrected'` state. Staff-only (`requireStaff`), verified live:
+non-staff rejected 403, staff succeeds 201.

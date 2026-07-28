@@ -1,0 +1,21 @@
+
+── SmokeCraft Collections-authority validator (Holistic Fix 5A-3F)
+
+  OK    The Collections client only exposes read (getCollections/getItem) and server-recalculate (recalculate) calls — no client-set-ownership function exists
+  OK    CollectionsCenter.jsx fetches live data via the shared collectionsApiClient (no local mirror)
+  OK    CollectionsCenter.jsx has real loading/error/offline states (not a static mock)
+  OK    recalculate() checks real evidence tables per item (EVIDENCE_CHECKS), never trusts a client-submitted ownership flag
+  OK    Every collection item insert is duplicate-protected via ON CONFLICT on the real DB constraint
+  OK    Collection unlock is idempotent via a stable idempotency_key, not a random one
+  OK    A staff-authorized reversal is read from the append-only corrections ledger, never by deleting/editing the original ownership row
+  OK    smokecraft_collection_ownership has a real UNIQUE(guest_reference, collection_item_key) constraint (duplicate ownership impossible at the DB level)
+  OK    smokecraft_collection_ownership links a real source_progression_event_id (source event, not a bare flag)
+  OK    Collections routes now have the dev/test rate-limiter skip (matches the established convention, closes a real found gap)
+  OK    An authenticated account's Collections identity is prefixed with user: (consistent with the rest of player-state, real found-and-fixed defect)
+  OK    Collections routes issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity) — real found-and-fixed defect: a first-ever visit directly to /smokecraft/collections previously 401'd instead of getting a real guest identity
+  OK    convertGuestToAccount transfers Collections ownership on guest-to-account conversion (real found-and-fixed gap — was previously never transferred)
+  OK    correctReward supports a real reversed flag persisted to the DB (not silently dropped)
+  OK    The /corrections route remains staff-gated (never a learner path) — unchanged from Holistic Fix 5A-2
+
+=== RESULT: PASS (0 checks failed) ===
+

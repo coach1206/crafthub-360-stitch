@@ -236,3 +236,51 @@ The separate `cultivation-water` named-XP grant in `handleContinue`
 (session-progression, not the stamp) was left untouched — already
 server-verified since Holistic Fix 5A-2, out of this pass's stamp-
 specific scope.
+
+## Holistic Fix 5A-3F update — Collections ledger integration audited and closed
+
+`CollectionsCenter.jsx` (`/smokecraft/collections`) and its backend
+(migration 087, `collectionsService.js`/`collectionsController.js`/
+`collectionsRoutes.js`) were already a genuinely real, server-
+authoritative, evidence-checked system before this pass — no client
+unlock path exists; every item's ownership is recalculated fresh from
+real backend evidence tables (`EVIDENCE_CHECKS`) on every request, never
+trusted from the client, and duplicate ownership is impossible at the
+DB level (`UNIQUE(guest_reference, collection_item_key)`). The audit
+found and this pass closed 3 real, concrete defects rather than
+rebuilding an already-correct system:
+
+1. **Missing rate-limiter dev/test skip** (same class as SC-D021) —
+   would throttle automated test suites.
+2. **Identity-prefix inconsistency for authenticated accounts** —
+   Collections used the raw `req.smokecraftIdentity.id` instead of the
+   established `user:${id}` convention every other player-state table
+   uses, and **guest-to-account conversion never transferred Collections
+   ownership at all** as a direct consequence (no matching `user:`
+   reference existed for it to find).
+3. **Missing `ensureSmokeCraftGuestIdentity`** — a genuinely first-ever
+   visit directly to `/smokecraft/collections` (before visiting any
+   other SmokeCraft route) 401'd instead of getting a real guest
+   identity issued, confirmed live via a fresh-browser Playwright smoke
+   test.
+
+Also added this pass: a real, evidence-preserving correction/reversal
+mechanism (reuses the existing `smokecraft_reward_corrections` ledger
+from Holistic Fix 5A-2, `correctionType='collection'`, staff-only via
+the existing `requireStaff`-gated `/corrections` route) — a reversed
+item's original earn record is never deleted or edited; `recalculate()`
+now reads the corrections ledger to report an honest `'corrected'`
+state without touching history.
+
+The 5 seeded Collection items (Tool Collection and Lounge Collection
+categories were already disclosed in migration 087's own comments as
+having no legitimate backend earn condition — not fabricated this
+pass) each map to a real source event:
+
+| Item | Qualifying activity | Evidence table |
+|---|---|---|
+| filler-mastery-badge | Complete Filler Arrangement lesson | smokecraft_filler_arrangement_completion |
+| seed-soil-scholar-badge | Explore ≥1 Seed & Soil component | smokecraft_seed_soil_progress |
+| master-roller-badge | Complete ≥1 rolling-process step | smokecraft_rolling_progress |
+| skill-tree-starter-badge | Complete Skill Tree Foundation node | smokecraft_skill_tree_learner_state |
+| progression-pioneer-badge | ≥2 distinct progression event types | smokecraft_progression_events |

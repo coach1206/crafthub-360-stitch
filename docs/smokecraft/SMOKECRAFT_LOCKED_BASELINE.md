@@ -298,3 +298,11 @@ approved visuals and the 7 stage cards are unchanged; only the "Save to
 Passport" button's enabled/label state and underlying reward-decision
 ownership changed (real evidence-gated, server-verified, not a bare
 click).
+
+## Holistic Fix 5A-3F update
+
+Baseline unchanged: 109 routes, 27 sessions, 6 phases. Collections'
+approved visuals, controls, and 5 real seeded items are unchanged —
+this pass fixed identity/conversion/first-visit correctness defects
+around an already-real backend and added correction/reversal, with zero
+visual/layout change.

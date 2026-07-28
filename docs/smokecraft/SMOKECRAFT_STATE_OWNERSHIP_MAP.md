@@ -264,3 +264,13 @@ it directly — it is only ever submitted as one-shot evidence to
 `submitCultivatorEvidence`, which independently verifies completeness
 before deciding XP/Passport-stamp eligibility. The client has zero
 authority over the reward decision itself.
+
+## Holistic Fix 5A-3F update — Collections ownership
+
+`smokecraft_collection_ownership` is, and was already, fully server-
+owned — never client-writable. This pass fixed the *identity key* used
+to write/read it: an authenticated account's guest_reference is now
+`user:${id}` (was previously unprefixed, inconsistent with every other
+player-state table), and guest-to-account conversion
+(`convertGuestToAccount`) now transfers Collections ownership rows,
+which it previously never did at all.

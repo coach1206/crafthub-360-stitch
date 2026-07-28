@@ -1,0 +1,83 @@
+{
+  "pass": 19,
+  "fail": 0,
+  "total": 19,
+  "results": [
+    {
+      "name": "Before completing the qualifying activity, the item is honestly locked",
+      "ok": true
+    },
+    {
+      "name": "The real qualifying activity (Filler Arrangement completion) records successfully",
+      "ok": true
+    },
+    {
+      "name": "After the qualifying event, the Collection item is earned (server re-derived, not client-set)",
+      "ok": true
+    },
+    {
+      "name": "The item's earnedAt timestamp is real (present)",
+      "ok": true
+    },
+    {
+      "name": "A guest who never completed a rolling-process step never has master-roller-badge unlocked",
+      "ok": true
+    },
+    {
+      "name": "Re-triggering the same qualifying activity does not change the item's original earnedAt (no duplicate award)",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent recalculate requests return well-formed success (no 500)",
+      "ok": true
+    },
+    {
+      "name": "A two-tab recalculate race still results in exactly one ownership record (DB UNIQUE constraint enforced)",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest never sees another guest's earned item",
+      "ok": true
+    },
+    {
+      "name": "An ordinary (non-staff) identity cannot invoke a correction",
+      "ok": true
+    },
+    {
+      "name": "A staff-authorized correction/reversal succeeds",
+      "ok": true
+    },
+    {
+      "name": "The item now honestly reports a corrected state (not silently re-locked, not still counted as earned)",
+      "ok": true
+    },
+    {
+      "name": "The original earnedAt timestamp is preserved (correction never deletes/edits history)",
+      "ok": true
+    },
+    {
+      "name": "A corrected item no longer counts toward the ownership summary total",
+      "ok": true
+    },
+    {
+      "name": "A fresh guest earns filler-mastery-badge before conversion",
+      "ok": true
+    },
+    {
+      "name": "A real account is created on the same cookie jar as the guest",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion transfers at least 1 Collections item (real cascading unlocks from the same event may produce more than 1)",
+      "ok": true
+    },
+    {
+      "name": "After conversion, the SAME account identity (now authenticated) still sees the earned item",
+      "ok": true
+    }
+  ]
+}
