@@ -34,6 +34,7 @@ import { KNOWLEDGE_CHECK_SETS } from '../../../src/data/knowledgeCheckQuestions.
 import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
 import { scoreLeafChallenge } from '../../../src/data/leafChallengeRounds.js'
 import { getSampleInventory, VENUE_ID as DEFAULT_TASTING_VENUE_ID } from '../../../src/data/venueInventoryData.js'
+import { CULTIVATION_STAGE_IDS } from '../../../src/data/cultivationStages.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -579,6 +580,81 @@ export async function submitBlendSelection({ guestReference, venueId, wrapperInd
     )
     const rankPromotion = await recomputeRankInTx(client, guestReference)
     await recordAudit(client, { guestReference, mutationType: 'blend_submit', idempotencyKey, outcome: 'applied', requestId, deviceId })
+    await client.query('COMMIT')
+    return { ok: true, alreadyScored: false, attempt, xpAwarded: xpAmount, passportStampGranted: stampResult.rows[0] || null, rankPromotion }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Holistic Fix 5A-3E — closes the cultivator Passport stamp's previously
+ * client-decided eligibility (previously granted on any "Save to
+ * Passport" click, regardless of whether the guest had actually viewed
+ * anything). The client submits its raw set of viewed-stage ids as
+ * evidence — the server independently verifies it is a superset of all
+ * 7 real, canonical cultivation stages (src/data/cultivationStages.js,
+ * dual-imported) before granting anything. A real, mechanical
+ * completeness check (all required steps completed) — not a subjective
+ * judgment, matching the same evidence pattern already proven for
+ * master-blend.
+ */
+export async function submitCultivatorEvidence({ guestReference, venueId, viewedStageIds, idempotencyKey, sourceRoute, requestId, deviceId }) {
+  const viewed = new Set(Array.isArray(viewedStageIds) ? viewedStageIds : [])
+  const complete = CULTIVATION_STAGE_IDS.every(id => viewed.has(id))
+  if (!complete) return { ok: false, error: 'incomplete_cultivation_stages' }
+
+  const xpAmount = 50 // matches the existing cultivation-seed named-XP amount (sessionRewardTable.js)
+
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await ensurePlayerStateRow(client, guestReference, venueId)
+
+    const existing = await client.query(
+      `SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'skill_checkpoint' AND activity_key = 'cultivator'`,
+      [guestReference]
+    )
+    if (existing.rows.length > 0) {
+      await recordAudit(client, { guestReference, mutationType: 'cultivator_submit', idempotencyKey, outcome: 'duplicate_replay', requestId, deviceId })
+      await client.query('COMMIT')
+      return { ok: true, alreadyScored: true, attempt: existing.rows[0] }
+    }
+
+    let attempt
+    try {
+      const inserted = await client.query(
+        `INSERT INTO smokecraft_activity_attempts
+           (guest_reference, activity_type, activity_key, evidence, score, total, xp_awarded, idempotency_key, source_route, request_id, device_id)
+         VALUES ($1, 'skill_checkpoint', 'cultivator', $2, $3, $4, $5, $6, $7, $8, $9)
+         RETURNING *`,
+        [guestReference, JSON.stringify({ viewedStageIds: [...viewed] }), viewed.size, CULTIVATION_STAGE_IDS.length, xpAmount, idempotencyKey, sourceRoute || null, requestId || null, deviceId || null]
+      )
+      attempt = inserted.rows[0]
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION) {
+        await client.query('ROLLBACK').catch(() => {})
+        const dup = await db.query(`SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'skill_checkpoint' AND activity_key = 'cultivator'`, [guestReference])
+        return { ok: true, alreadyScored: true, attempt: dup.rows[0] }
+      }
+      throw err
+    }
+
+    await client.query(
+      `UPDATE smokecraft_player_state SET xp_total = xp_total + $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+      [guestReference, xpAmount]
+    )
+    const stampResult = await client.query(
+      `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+       VALUES ($1, 'passport_stamp', 'cultivator', 0, $2, $3, $4, $5) ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING RETURNING *`,
+      [guestReference, `${idempotencyKey}:stamp:cultivator`, sourceRoute || null, requestId || null, deviceId || null]
+    )
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+    await recordAudit(client, { guestReference, mutationType: 'cultivator_submit', idempotencyKey, outcome: 'applied', requestId, deviceId })
     await client.query('COMMIT')
     return { ok: true, alreadyScored: false, attempt, xpAwarded: xpAmount, passportStampGranted: stampResult.rows[0] || null, rankPromotion }
   } catch (err) {

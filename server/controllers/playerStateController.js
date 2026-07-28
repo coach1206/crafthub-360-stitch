@@ -5,7 +5,7 @@
  * trusted from the request body — matches the existing Management Sync
  * convention (managementSyncController.js).
  */
-import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection, getTastingDraft, saveTastingDraft, submitTastingCompletion } from '../services/smokecraft/playerStateService.js'
+import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection, getTastingDraft, saveTastingDraft, submitTastingCompletion, submitCultivatorEvidence } from '../services/smokecraft/playerStateService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -401,6 +401,35 @@ export async function handleSubmitTasting(req, res) {
     if (!result.ok) return res.status(400).json({ success: false, error: result.error })
     res.status(result.alreadyCompleted ? 200 : 201).json({
       success: true, alreadyCompleted: result.alreadyCompleted, xpAwarded: result.xpAwarded || 0, rankPromotion: result.rankPromotion || null,
+    })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Holistic Fix 5A-3E: closes the cultivator Passport stamp's previously
+ * client-decided eligibility. The client submits its raw set of
+ * viewed-stage ids as evidence — the server independently verifies it
+ * covers all 7 real cultivation stages before granting anything.
+ */
+export async function handleSubmitCultivator(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const { viewedStageIds } = req.body || {}
+  if (!Array.isArray(viewedStageIds)) {
+    return res.status(400).json({ success: false, error: 'viewed_stage_ids_required' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitCultivatorEvidence({
+      guestReference, venueId: req.smokecraftIdentity.venueId || null, viewedStageIds,
+      idempotencyKey, sourceRoute: req.body?.sourceRoute || null, requestId: req.id || null, deviceId: req.body?.deviceId || null,
+    })
+    if (!result.ok) return res.status(400).json({ success: false, error: result.error })
+    res.status(result.alreadyScored ? 200 : 201).json({
+      success: true, alreadyScored: result.alreadyScored, xpAwarded: result.xpAwarded || 0,
+      passportStampGranted: result.passportStampGranted || null, rankPromotion: result.rankPromotion || null,
     })
   } catch (err) {
     dbErrorResponse(res, err)

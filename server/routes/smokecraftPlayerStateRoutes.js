@@ -69,4 +69,7 @@ router.get('/tasting/:activityKey/draft', readLimiter, requireSmokeCraftIdentity
 router.put('/tasting/:activityKey/draft', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSaveTastingDraft)
 router.post('/tasting/:activityKey/complete', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitTasting)
 
+// ── Holistic Fix 5A-3E: server-verified cultivator evidence ──
+router.post('/cultivator/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitCultivator)
+
 export default router
