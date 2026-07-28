@@ -313,3 +313,17 @@ fetched entries — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` SC-D041
 through SC-D043) and added real pagination controls + a genuine
 live-refresh action. See
 `public/proof/smokecraft-holistic-fix-5a-3h/00-proof-index.md`.
+
+## Holistic Fix 5B-1 update (server-authoritative pairing engine)
+
+Both real, reachable pairing screens (`PairingLab.jsx` S11,
+`PairingRecommendations.jsx` S22) previously computed their
+compatibility score entirely client-side via
+`src/utils/pairingEngine.js`. This pass ported that same approved
+scoring logic into a new, versioned, server-authoritative engine
+(migration 098, `server/services/smokecraft/pairingEngineService.js`,
+`/api/smokecraft/pairing-engine/*`) and rewired both screens through
+one shared adapter (`useSmokeCraftPairingEngine`). No new cigar/
+beverage facts were invented — only the fields already collected by
+these screens are used. See `SMOKECRAFT_PAIRING_ENGINE_RULES.md` for
+the full rule/scoring model.

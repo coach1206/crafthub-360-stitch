@@ -1,0 +1,31 @@
+
+── SmokeCraft Pairing-Engine-authority validator (Holistic Fix 5B-1)
+
+  OK    computeRecommendation always returns an explanation string
+  OK    computeRecommendation always returns a ruleSetVersion
+  OK    savePairing always recomputes the score itself (computeRecommendation), never trusts a client-submitted score field
+  OK    An identical idempotency-key retry is a true no-op (no version bump, no new revision) — real idempotent save
+  OK    Saved-pairing writes are duplicate-protected via a real DB UNIQUE constraint (natural key), not app-level-only
+  OK    ratePairing enforces optimistic concurrency (expectedVersion) and returns a real 409-shaped conflict, never silently overwriting
+  OK    Every save/rate mutation appends an append-only revision row before changing state — real revision history, never edited in place
+  OK    getSavedPairing enforces ownership at the query level (WHERE ... AND guest_reference = $2), never fetching by id alone
+  OK    The engine reuses the real, already-approved pairing data (STRENGTH_SCORE/TYPE_STRENGTH/HARMONY/GOAL_DESC/ADJUSTMENT_MAP/SERVING_STYLE) rather than inventing new cigar/beverage facts
+  OK    No XP/badge/Passport-stamp is awarded by this package (mandate: only if an already-approved rule explicitly exists — none does here)
+  OK    Ledger events cover all 4 required types: pairing_requested, pairing_recommended, pairing_saved, pairing_rated
+  OK    Pairing-engine routes have the dev/test rate-limiter skip from day one
+  OK    An authenticated account's pairing identity is prefixed with user: from day one (no repeat of the recurring identity-prefix defect)
+  OK    Pairing-engine routes issue a fresh guest identity when none exists from day one (no repeat of the recurring first-visit-401 defect)
+  OK    smokecraft_pairing_rules has a real UNIQUE(rule_key, version) constraint — versions are additive, never overwritable
+  OK    smokecraft_pairing_saves has a real UNIQUE natural-key constraint (duplicate saves impossible at the DB level)
+  OK    smokecraft_pairing_save_revisions has no UPDATE-style column at all — append-only by construction (only INSERT is possible)
+  OK    PairingLab.jsx no longer imports the client-only scoring engine (buildRecommendation)
+  OK    PairingLab.jsx uses the one shared pairing adapter (useSmokeCraftPairingEngine)
+  OK    PairingRecommendations.jsx no longer imports the client-only scoring engine (rankAllCategories)
+  OK    PairingRecommendations.jsx uses the one shared pairing adapter (useSmokeCraftPairingEngine)
+  OK    PairingRecommendations.jsx saves through the real server endpoint (engine.save), not only a local journey mirror
+  OK    The shared adapter never computes a score itself — every status transition is driven by a real server response or a real network condition
+  OK    The shared adapter represents the mandated state set (no-cigar/no-beverage/calculating/ready/low-confidence/no-safe-recommendation/offline/session-expired)
+  OK    The pairing-engine API client only exposes recommend/rank/save/get/rate calls — no client-side score-setting function exists
+
+=== RESULT: PASS (0 checks failed) ===
+

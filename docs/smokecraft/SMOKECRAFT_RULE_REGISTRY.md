@@ -175,3 +175,13 @@ unchanged; this pass added a build-blocking validator check
 rule text in `SMOKECRAFT_LEADERBOARD_RULES.md` to the live SQL `ORDER
 BY` clause, so any future drift between the two now fails the build
 instead of silently diverging.
+
+## Holistic Fix 5B-1 update (server-authoritative pairing engine)
+
+New: `smokecraft_pairing_rules` (migration 098) — 4 versioned rules
+(rule set version 1), a direct port of the pre-existing approved
+scoring logic in `src/utils/pairingEngine.js`. See
+`SMOKECRAFT_PAIRING_ENGINE_RULES.md` for the full rule table. Every
+saved pairing records the `rule_set_version` used, per the mandate's
+"historical saved pairings must retain the rule version used"
+requirement.

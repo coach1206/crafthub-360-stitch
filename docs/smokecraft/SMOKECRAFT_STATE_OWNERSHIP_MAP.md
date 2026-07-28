@@ -304,3 +304,15 @@ SC-D041, a dead write path). The Leaderboard screen's own displayed
 local `GuestSessionContext` mirror (SC-D043) — the mirror remains the
 fast offline-safe UI cache elsewhere in the app but is no longer the
 value actually rendered on this screen once real data is available.
+
+## Holistic Fix 5B-1 update (server-authoritative pairing engine)
+
+New: `smokecraft_pairing_saves` (migration 098) is the sole owner of a
+saved pairing (guest_reference, full input, every scoring output,
+rule_set_version, learner_rating/notes, save_version). New:
+`smokecraft_pairing_save_revisions` is the append-only history of every
+edit. `convertGuestToAccount` transfers both tables on conversion
+(`transferSavedPairings`, wired from day one). Ledger events
+(`pairing_requested`/`pairing_recommended`/`pairing_saved`/
+`pairing_rated`) reuse the existing `smokecraft_progression_events`
+table — no new competing event log.

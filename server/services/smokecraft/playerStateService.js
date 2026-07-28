@@ -30,6 +30,7 @@
  */
 import { getDb } from '../../db/connection.js'
 import { recalculate as recalculateSkillTree } from './skillTreeService.js'
+import { transferSavedPairings } from './pairingEngineService.js'
 import { getSessionBadgeIds, getRankForXp } from './sessionRewardTable.js'
 import { KNOWLEDGE_CHECK_SETS } from '../../../src/data/knowledgeCheckQuestions.js'
 import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
@@ -1033,6 +1034,11 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       leaderboardPreferenceTransferred = true
     }
 
+    // ── Saved pairings: Holistic Fix 5B-1, transferred from day one (this
+    // is a brand-new system — never had a chance to accumulate the
+    // "never transferred" defect class seen in earlier passes). ──
+    const pairingTransfer = await transferSavedPairings(client, guestReference, userReference)
+
     const conversion = await client.query(
       `INSERT INTO smokecraft_guest_conversions
          (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
@@ -1057,7 +1063,7 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       skillTreeCompletedNodes = recalculated.filter(r => r.learnerState.state === 'completed').length
     } catch { /* non-fatal — conversion itself already succeeded */ }
 
-    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred }
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred, pairingSavesTransferred: pairingTransfer.transferred, pairingSavesMergedDuplicate: pairingTransfer.mergedDuplicate }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     if (err.code === UNIQUE_VIOLATION) {

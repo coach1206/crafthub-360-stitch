@@ -1,0 +1,151 @@
+{
+  "pass": 36,
+  "fail": 0,
+  "total": 36,
+  "results": [
+    {
+      "name": "A valid cigar+beverage request succeeds",
+      "ok": true
+    },
+    {
+      "name": "A recommendation has an explanation (never unexplained)",
+      "ok": true
+    },
+    {
+      "name": "A recommendation has a rule set version",
+      "ok": true
+    },
+    {
+      "name": "A recommendation has a serving sequence",
+      "ok": true
+    },
+    {
+      "name": "A recommendation has an alternative recommendation",
+      "ok": true
+    },
+    {
+      "name": "A Full cigar against Whiskey (both intensity 4) reports an even intensity match",
+      "ok": true
+    },
+    {
+      "name": "A Mild cigar against Whiskey (intensity 1 vs 4) reports a mismatched intensity, not falsely \"even\"",
+      "ok": true
+    },
+    {
+      "name": "The mismatch produces a real conflict explanation",
+      "ok": true
+    },
+    {
+      "name": "Selected notes that clash with the pairing type are flagged as a real conflict",
+      "ok": true
+    },
+    {
+      "name": "A clashing pairing scores lower than a harmonious one",
+      "ok": true
+    },
+    {
+      "name": "A request with no pairing type is rejected (400), never silently scored",
+      "ok": true
+    },
+    {
+      "name": "A request with almost no real signal reports a real, non-fabricated confidence value below 1.0",
+      "ok": true
+    },
+    {
+      "name": "Identical input produces an identical score on repeated requests (deterministic, not random)",
+      "ok": true
+    },
+    {
+      "name": "Identical input produces an identical rule set version on repeated requests",
+      "ok": true
+    },
+    {
+      "name": "A client-submitted compatScore/ruleSetVersion is silently ignored — the server always recomputes its own",
+      "ok": true
+    },
+    {
+      "name": "A save request succeeds (201)",
+      "ok": true
+    },
+    {
+      "name": "The saved score matches the server-computed score, never a client value",
+      "ok": true
+    },
+    {
+      "name": "The save is visible in the caller's own saved-pairings list on reload",
+      "ok": true
+    },
+    {
+      "name": "Fetching a single saved pairing returns its revision history",
+      "ok": true
+    },
+    {
+      "name": "Re-saving with the same idempotency key does not duplicate — reports alreadySaved",
+      "ok": true
+    },
+    {
+      "name": "The saved-pairings list still has exactly one row for this exact cigar+beverage combination",
+      "ok": true
+    },
+    {
+      "name": "A rating update with the correct expectedVersion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Re-using the now-stale expectedVersion is rejected with a real 409 conflict, not silently overwritten",
+      "ok": true
+    },
+    {
+      "name": "The rejected stale write never actually changed the rating",
+      "ok": true
+    },
+    {
+      "name": "Each successful rating update appended a new revision row (real history, not overwritten in place)",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest cannot read another guest's saved pairing (404, not 403 — existence is not leaked either)",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest cannot rate another guest's saved pairing",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest's own saved-pairings list never includes another guest's row",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports the saved pairing was transferred (real found-and-verified requirement)",
+      "ok": true
+    },
+    {
+      "name": "The saved pairing is visible under the new account identity",
+      "ok": true
+    },
+    {
+      "name": "Two independent live fetches under the same identity return identical saved-pairing data (no per-device drift)",
+      "ok": true
+    },
+    {
+      "name": "Rank returns every real pairing category",
+      "ok": true
+    },
+    {
+      "name": "Rank results are sorted descending by score",
+      "ok": true
+    },
+    {
+      "name": "Every ranked result has an explanation and rule version",
+      "ok": true
+    },
+    {
+      "name": "A genuinely first-ever request from a fresh browser does not 401 (guest identity auto-issued)",
+      "ok": true
+    }
+  ]
+}

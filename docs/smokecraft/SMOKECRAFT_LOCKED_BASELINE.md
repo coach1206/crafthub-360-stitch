@@ -325,3 +325,14 @@ when there is more than one page of real results) and a genuinely
 functional "Refresh Rankings" action (same existing button, now
 re-fetches real data instead of only bumping a local timestamp). No
 layout, spacing, or artwork changes.
+
+## Holistic Fix 5B-1 update (server-authoritative pairing engine)
+
+Approved visuals for PairingLab (S11) and Personalized Pairing
+Recommendations (S22) are unchanged — only the data source feeding
+the existing panels/occlusions was swapped from a synchronous local
+computation to a real server round-trip. PairingLab gained a small,
+non-baked "Calculating…" / offline-retry indicator in the existing
+Match-badge free space (top-right corner) for the brief period while
+the real server request is in flight — no layout, spacing, or artwork
+changes otherwise.

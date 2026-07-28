@@ -56,7 +56,7 @@ export const PAIRING_CATEGORIES = [
   'Whiskey', 'Rum', 'Coffee', 'Espresso', 'Wine', 'Chocolate', 'Tea', 'Water', 'Mocktail', 'Nonalcoholic',
 ]
 
-const SERVING_STYLE = {
+export const SERVING_STYLE = {
   Whiskey: 'Neat, in a rocks glass, at room temperature.',
   Rum:     'Neat or on a single large ice cube.',
   Coffee:  'Fresh-brewed, served black or lightly sweetened.',

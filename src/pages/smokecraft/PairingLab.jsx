@@ -9,7 +9,7 @@ import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLe
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import { buildRecommendation } from '../../utils/pairingEngine.js'
+import { useSmokeCraftPairingEngine } from '../../hooks/useSmokeCraftPairingEngine.js'
 
 const ENRICHMENT_11 = getEducationalEnrichment(11)
 
@@ -74,7 +74,36 @@ export default function PairingLab({ onBack, onComplete } = {}) {
     }
   })
 
-  const rec = buildRecommendation(sel)
+  // Holistic Fix 5B-1: the compatibility score/explanation/conflicts are
+  // no longer computed client-side — this screen now calls the shared,
+  // server-authoritative pairing engine (via useSmokeCraftPairingEngine)
+  // for every real answer this panel displays. The client only still
+  // computes the trivial, non-authoritative display label
+  // (pairingTypes.join(' + ')), never a score.
+  const engine = useSmokeCraftPairingEngine()
+  const primary = sel.pairingTypes[0] || null
+
+  useEffect(() => {
+    if (!primary) return
+    engine.requestRecommendation({
+      cigarShape: sel.cigarShape, wrapper: sel.wrapper, origin: sel.origin, strength: sel.strength,
+      pairingType: primary, flavorNotes: sel.flavorNotes, pairingGoal: sel.pairingGoal,
+    }, '/smokecraft/pairing-lab')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel.cigarShape, sel.wrapper, sel.origin, sel.strength, primary, JSON.stringify(sel.flavorNotes), sel.pairingGoal])
+
+  const engineResult = engine.result
+  const rec = (primary && engineResult) ? {
+    primary,
+    pairingTypes: sel.pairingTypes,
+    compatScore: engineResult.compatScore,
+    recommendation: sel.pairingTypes.join(' + '),
+    whyItWorks: engineResult.explanation,
+    possibleClashes: engineResult.conflicts.length > 0 ? engineResult.conflicts.join(' ') : null,
+    suggestedAdjustment: engineResult.servingSequence,
+    selectedFlavorNotes: sel.flavorNotes,
+    flavorHarmony: engineResult.matchedFlavorNotes,
+  } : null
 
   useEffect(() => {
     if (rec) {
@@ -92,7 +121,7 @@ export default function PairingLab({ onBack, onComplete } = {}) {
         pairingGoal: sel.pairingGoal,
       })
     }
-  }, [sel]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sel, rec]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function setOne(field, val) {
     triggerHaptic('light')
@@ -214,6 +243,27 @@ export default function PairingLab({ onBack, onComplete } = {}) {
             <SelectorGroup title="Pairing Goal" options={PAIRING_GOALS} field="pairingGoal"  multi={false} />
           </div>
         </div>
+
+        {/* ── Calculating indicator — real server round-trip in flight ── */}
+        {primary && !rec && (engine.status === 'calculating' || engine.status === 'idle') && (
+          <div style={{
+            position: 'absolute', left: '87%', top: '4%', width: '12%',
+            ...glassStyle({ padding: '8px 10px', pointerEvents: 'none' }),
+          }}>
+            <div style={{ fontSize: 9, color: 'rgba(229,226,225,0.5)', fontFamily: 'Georgia, serif' }}>Calculating…</div>
+          </div>
+        )}
+        {primary && (engine.status === 'error' || engine.status === 'offline') && (
+          <div style={{
+            position: 'absolute', left: '87%', top: '4%', width: '12%',
+            ...glassStyle({ padding: '8px 10px', pointerEvents: 'auto' }),
+          }}>
+            <div style={{ fontSize: 9, color: 'rgba(229,170,100,0.85)', fontFamily: 'Georgia, serif', marginBottom: 4 }}>
+              {engine.status === 'offline' ? "You're offline." : 'Couldn’t load your match.'}
+            </div>
+            <button type="button" onClick={() => engine.retry()} style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 10, color: GOLD, fontSize: 8, padding: '2px 6px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>Retry</button>
+          </div>
+        )}
 
         {/* ── Recommendation panel (right) ── */}
         {rec && (

@@ -1323,3 +1323,21 @@ All three closed via `server/services/smokecraft/playerStateService.js`,
 `src/services/smokecraft/smokeLeaderboardService.js`, and
 `src/pages/smokecraft/Leaderboard.jsx`. See
 `public/proof/smokecraft-holistic-fix-5a-3h/00-proof-index.md`.
+
+## Holistic Fix 5B-1 update (server-authoritative pairing engine)
+
+- **SC-D044**: `SERVING_STYLE` was defined but not exported from
+  `src/utils/pairingEngine.js`, breaking the new server-side dual-import
+  — closed (export added, no scoring-behavior change).
+- **SC-D045**: `transferSavedPairings`'s JSONB columns were passed as
+  raw JS arrays instead of JSON-stringified during guest-to-account
+  transfer, causing every conversion with a saved pairing to fail —
+  closed, found live during this pass's own testing.
+- **SC-D046**: the initial `savePairing` implementation bumped
+  `save_version` and appended a new revision on every identical
+  idempotency-key resubmission instead of a true no-op — closed with an
+  early idempotency-key lookup.
+
+All three closed via `src/utils/pairingEngine.js` and
+`server/services/smokecraft/pairingEngineService.js`. See
+`public/proof/smokecraft-holistic-fix-5b-1/00-proof-index.md`.

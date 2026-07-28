@@ -9,7 +9,7 @@ import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLe
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import { rankAllCategories } from '../../utils/pairingEngine.js'
+import { useSmokeCraftPairingEngine } from '../../hooks/useSmokeCraftPairingEngine.js'
 
 const ENRICHMENT_22 = getEducationalEnrichment(22)
 
@@ -167,8 +167,10 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [phase, setPhase] = useState('loading') // loading | no-cigar | error | ready
-  const [ranked, setRanked] = useState(null)
+  // Holistic Fix 5B-1: ranking is no longer computed client-side —
+  // this screen now calls the shared, server-authoritative pairing
+  // engine (POST /rank) for every category's compatibility score.
+  const engine = useSmokeCraftPairingEngine()
   const [saveStatus, setSaveStatus] = useState('idle') // idle | saved
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
   const [showAlternates, setShowAlternates] = useState(false)
@@ -188,19 +190,18 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
 
   const engineContext = useMemo(() => buildEngineContext(journey), [journey])
 
+  // phase mirrors the shared adapter's status onto this screen's own
+  // pre-existing loading/no-cigar/error/ready vocabulary — no cigar
+  // selected is checked locally first (a real precondition this screen
+  // already enforced), everything after that is the server's real status.
+  const phase = !journey.selectedCigar ? 'no-cigar'
+    : (engine.status === 'idle' || engine.status === 'calculating') ? 'loading'
+    : (engine.status === 'error' || engine.status === 'offline' || engine.status === 'session-expired') ? 'error'
+    : 'ready'
+
   const generate = useCallback(() => {
-    setPhase('loading')
-    try {
-      if (!journey.selectedCigar) {
-        setPhase('no-cigar')
-        return
-      }
-      const all = rankAllCategories(engineContext)
-      setRanked(all)
-      setPhase('ready')
-    } catch {
-      setPhase('error')
-    }
+    if (!journey.selectedCigar) return
+    engine.requestRanking(engineContext, '/smokecraft/pairing-recommendations')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [journey.selectedCigar, engineContext])
 
@@ -208,6 +209,23 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
     generate()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Server results (pairingType/explanation/conflicts/servingSequence)
+  // reshaped into this screen's existing display vocabulary
+  // (primary/whyItWorks/possibleClashes/servingStyle) — no new numbers
+  // computed here, purely a field-name adapter.
+  const ranked = useMemo(() => (engine.ranked || []).map(r => ({
+    primary: r.pairingType,
+    compatScore: r.compatScore,
+    recommendation: r.pairingType,
+    whyItWorks: r.explanation,
+    possibleClashes: r.conflicts.length > 0 ? r.conflicts.join(' ') : null,
+    suggestedAdjustment: r.servingSequence,
+    selectedFlavorNotes: r.flavorNotes,
+    flavorHarmony: r.matchedFlavorNotes,
+    servingStyle: r.servingSequence,
+    ruleSetVersion: r.ruleSetVersion,
+  })), [engine.ranked])
 
   // PRESERVED: idempotent persistence of engine input + primary/alternates.
   useEffect(() => {
@@ -255,12 +273,23 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
     })
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (!primary) return
     triggerHaptic('light')
+    // Holistic Fix 5B-1: persists server-side (smokecraft_pairing_saves),
+    // owned by the server-verified identity — the journey-local mirror
+    // below remains only as the fast local "what did I last save" UI
+    // cache, it is no longer the system of record.
+    const idempotencyKey = `pairing-save-${session?.sessionId || 'guest'}-${engineContext.cigarShape || 'x'}-${engineContext.wrapper || 'x'}-${engineContext.origin || 'x'}-${engineContext.strength || 'x'}-${primary.primary}`.slice(0, 200)
+    const result = await engine.save({
+      cigarShape: engineContext.cigarShape, wrapper: engineContext.wrapper, origin: engineContext.origin,
+      strength: engineContext.strength, pairingType: primary.primary, flavorNotes: engineContext.flavorNotes,
+      pairingGoal: engineContext.pairingGoal,
+    }, idempotencyKey, null, null, '/smokecraft/pairing-recommendations')
+    if (!result.ok) return
     setPairingRecommendations({
       ...(journey.pairingRecommendations || {}),
-      savedRecommendation: { ...primary, savedAt: Date.now() },
+      savedRecommendation: { ...primary, savedAt: Date.now(), saveId: result.save?.id ?? null },
     })
     setSaveStatus('saved')
     setTimeout(() => setSaveStatus('idle'), 2000)
@@ -459,7 +488,7 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
         disabled={!primary}
         style={{ ...ACTION_BTN, ...ACT.save, ...ACTION_ROW }}
       >
-        {saveStatus === 'saved' ? 'Saved' : 'Save To My Pairings'}
+        {saveStatus === 'saved' ? (engine.saveStatus === 'already-saved' ? 'Already Saved' : 'Saved') : 'Save To My Pairings'}
       </button>
       <button
         type="button"

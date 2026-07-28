@@ -234,6 +234,7 @@ export async function handleConvertGuest(req, res) {
       collectionsTransferred: result.collectionsTransferred || 0, collectionsMergedDuplicate: result.collectionsMergedDuplicate || 0,
       skillTreeEvidenceRowsTransferred: result.skillTreeEvidenceRowsTransferred || 0, skillTreeCompletedNodes: result.skillTreeCompletedNodes || 0,
       leaderboardPreferenceTransferred: result.leaderboardPreferenceTransferred || false,
+      pairingSavesTransferred: result.pairingSavesTransferred || 0, pairingSavesMergedDuplicate: result.pairingSavesMergedDuplicate || 0,
     })
   } catch (err) {
     dbErrorResponse(res, err)
