@@ -47,5 +47,40 @@ check('Mentor.jsx retains exactly one write path for the selected mentor (setMen
 const skillTree = fs.readFileSync('src/pages/smokecraft/SkillTree.jsx', 'utf8')
 check('SkillTree.jsx\'s mentor panel uses the shared context-aware guidance service (context prop), not a hardcoded guidance string', /<DynamicMentorPanel context="skill-tree" \/>/.test(skillTree))
 
+console.log('\n── Holistic Fix 5B-2A-1 additions ──\n')
+
+check('Live pairing-aware guidance is scored with the SAME computeRecommendation function the pairing engine itself uses — never a second, competing scoring path that could contradict it', /computeRecommendation as computePairingRecommendation/.test(svc) && /computePairingRecommendation\(/.test(svc))
+check('The live-pairing signal takes priority over a stale saved-pairing row when a current pairing selection is supplied', /if \(livePairing\) \{/.test(svc) && svc.indexOf('if (livePairing)') < svc.indexOf('else if (pairingRow)'))
+check('The live-pairing guidance message embeds the exact real compatScore (no rounding/altering it, no independent claim)', /\$\{livePairing\.compatScore\}\/100/.test(svc))
+
+for (const [file, label] of [
+  ['src/pages/smokecraft/ChallengeHub.jsx', 'ChallengeHub.jsx'],
+  ['src/pages/smokecraft/BlendFaultChallenge.jsx', 'BlendFaultChallenge.jsx'],
+  ['src/pages/smokecraft/FillerArrangement.jsx', 'FillerArrangement.jsx'],
+  ['src/pages/smokecraft/CollectionsCenter.jsx', 'CollectionsCenter.jsx'],
+]) {
+  const src = fs.readFileSync(file, 'utf8')
+  check(`${label} no longer passes a static hardcoded guidance string to DynamicMentorPanel`, !/<DynamicMentorPanel guidance="/.test(src))
+  check(`${label} uses the shared context-aware guidance service (context prop)`, /<DynamicMentorPanel context="/.test(src))
+}
+
+for (const [file, label, ctx] of [
+  ['src/pages/smokecraft/PairingLab.jsx', 'PairingLab.jsx', 'pairing-lab'],
+  ['src/pages/smokecraft/PairingRecommendations.jsx', 'PairingRecommendations.jsx', 'pairing-recommendations'],
+]) {
+  const src = fs.readFileSync(file, 'utf8')
+  check(`${label} connects a real mentor-guidance panel using the shared service (context="${ctx}")`, new RegExp(`<DynamicMentorPanel[\\s\\S]{0,40}context="${ctx}"`).test(src))
+  check(`${label} passes the real live cigar+beverage selection as pairingContext (not a static string, not bypassing the shared service)`, /pairingContext=\{/.test(src))
+}
+
+check('No active mentor panel in this pass\'s scope still passes a static guidance string (client-side hardcoded text is fully retired for these 6 screens)',
+  !fs.readFileSync('src/pages/smokecraft/ChallengeHub.jsx', 'utf8').includes('DynamicMentorPanel guidance=') &&
+  !fs.readFileSync('src/pages/smokecraft/BlendFaultChallenge.jsx', 'utf8').includes('DynamicMentorPanel guidance=') &&
+  !fs.readFileSync('src/pages/smokecraft/FillerArrangement.jsx', 'utf8').includes('DynamicMentorPanel guidance=') &&
+  !fs.readFileSync('src/pages/smokecraft/CollectionsCenter.jsx', 'utf8').includes('DynamicMentorPanel guidance='))
+
+check('Mentor.jsx still retains exactly one write path for the selected mentor — no duplicate mentor ownership reappeared across this pass\'s 6-screen wiring',
+  (mentorPage.match(/setMentor\(/g) || []).length === 1)
+
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} (${failures} checks failed) ===\n`)
 process.exit(failures === 0 ? 0 : 1)

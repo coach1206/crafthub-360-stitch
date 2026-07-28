@@ -17,16 +17,26 @@ const GLASS = 'rgba(8,10,16,0.86)'
 // server-computed, context-aware guidance via the shared
 // useSmokeCraftMentorGuidance adapter — pass a screen identifier
 // (e.g. "skill-tree") instead of a hardcoded `guidance` string. The
-// `guidance` string prop remains supported (Challenge Hub / Golden-Box-
-// adjacent callers, explicitly out of this pass's scope, still pass it
-// directly) and always takes precedence when both are supplied.
-export default function DynamicMentorPanel({ guidance, context }) {
+// `guidance` string prop remains supported and always takes precedence
+// when both are supplied.
+//
+// Holistic Fix 5B-2A-1: `pairingContext` (optional) is the learner's
+// current live cigar+beverage selection on a pairing screen — when
+// present, guidance is scored by the same pairing engine the screen
+// itself uses, so it can never contradict the real pairing result.
+export default function DynamicMentorPanel({ guidance, context, pairingContext }) {
   const { journey } = useSmokeCraftJourney()
   const mentor = Array.isArray(journey?.mentor) ? journey.mentor[0] : null
-  const dynamic = useSmokeCraftMentorGuidance(guidance ? null : context)
+  const dynamic = useSmokeCraftMentorGuidance(guidance ? null : context, guidance ? null : pairingContext)
+
+  // "no activity result yet" — a pairing screen that hasn't selected a
+  // beverage yet has genuinely nothing pairing-specific to show; honest
+  // about that rather than requesting/guessing a premature guidance call.
+  const noPairingActivityYet = !guidance && pairingContext !== undefined && !pairingContext?.pairingType
 
   const displayText = guidance
     ? guidance
+    : noPairingActivityYet ? `Select a beverage to see ${mentor ? mentor.name.split(' ')[0] + "'s" : ''} pairing guidance.`
     : dynamic.status === 'loading' ? 'Loading guidance…'
     : dynamic.status === 'ready' ? dynamic.guidance?.message
     : dynamic.status === 'offline' ? "You're offline — guidance can't be loaded right now."

@@ -27,4 +27,4 @@ async function request(path, { method = 'POST', body, timeoutMs = 10000 } = {}) 
   }
 }
 
-export const fetchMentorGuidance = (mentorId, screenContext) => request('/guidance', { body: { mentorId, screenContext } })
+export const fetchMentorGuidance = (mentorId, screenContext, pairingContext) => request('/guidance', { body: { mentorId, screenContext, pairingContext } })

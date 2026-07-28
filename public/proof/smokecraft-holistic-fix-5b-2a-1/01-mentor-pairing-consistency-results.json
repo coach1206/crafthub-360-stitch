@@ -1,0 +1,43 @@
+{
+  "pass": 9,
+  "fail": 0,
+  "total": 9,
+  "results": [
+    {
+      "name": "Mentor guidance is available for a live (unsaved) pairing selection",
+      "ok": true
+    },
+    {
+      "name": "Mentor guidance uses the live-pairing signal (never a stale saved-pairing row) when pairingContext is supplied",
+      "ok": true
+    },
+    {
+      "name": "The score referenced in the guidance message exactly matches the real pairing engine score (never contradicts it)",
+      "ok": true
+    },
+    {
+      "name": "Guidance changes when the live pairing selection changes (beverage type)",
+      "ok": true
+    },
+    {
+      "name": "A real conflict from the pairing engine is reflected in the guidance message",
+      "ok": true
+    },
+    {
+      "name": "The clash-scenario guidance score still exactly matches the pairing engine (no independent scoring path)",
+      "ok": true
+    },
+    {
+      "name": "A request with no mentor selected is rejected, never returns fabricated pairing guidance",
+      "ok": true
+    },
+    {
+      "name": "Requesting live-pairing-aware guidance does not change xpTotal",
+      "ok": true
+    },
+    {
+      "name": "A separate guest gets guidance scored from their OWN pairing context, not another guest's",
+      "ok": true
+    }
+  ]
+}

@@ -14,6 +14,7 @@
 import { getDb } from '../../db/connection.js'
 import { getPlayerState } from './playerStateService.js'
 import { recalculate as recalculateSkillTree } from './skillTreeService.js'
+import { computeRecommendation as computePairingRecommendation, getActiveRules as getActivePairingRules } from './pairingEngineService.js'
 import { MENTORS, getMentorById } from '../../../src/modules/smokecraft/smokeCraftMentors.js'
 
 export class MentorGuidanceError extends Error {
@@ -36,7 +37,7 @@ export function listMentors() {
  * plain routing/display label (e.g. 'skill-tree', 'mentor-commentary'),
  * not evidence, and never changes the guidance's underlying facts.
  */
-export async function getGuidance({ guestReference, mentorId, screenContext }) {
+export async function getGuidance({ guestReference, mentorId, screenContext, pairingContext }) {
   const mentor = getMentorById(mentorId)
   if (!mentor) throw new MentorGuidanceError('mentor_not_selected')
 
@@ -52,6 +53,26 @@ export async function getGuidance({ guestReference, mentorId, screenContext }) {
   const completedNodes = skillTreeResults.filter(r => r.learnerState.state === 'completed')
   const nextGap = skillTreeResults.find(r => r.learnerState.state === 'available')
 
+  // Live pairing context (the cigar/beverage the learner currently has
+  // selected on Pairing Lab / Personalized Pairing Recommendations,
+  // NOT yet necessarily saved). Recomputed here with the exact same
+  // computeRecommendation() function the pairing engine itself uses —
+  // never a second, competing scoring path — so this guidance can never
+  // contradict the real pairing engine result the learner is looking at.
+  let livePairing = null
+  if (pairingContext && pairingContext.pairingType) {
+    const rules = await getActivePairingRules(db)
+    livePairing = computePairingRecommendation({
+      cigarShape: pairingContext.cigarShape || null,
+      wrapper: pairingContext.wrapper || null,
+      origin: pairingContext.origin || null,
+      strength: pairingContext.strength || null,
+      pairingType: pairingContext.pairingType,
+      flavorNotes: pairingContext.flavorNotes || [],
+      pairingGoal: pairingContext.pairingGoal || null,
+    }, rules)
+  }
+
   const firstName = mentor.name.split(' ').slice(-1)[0]
   let message, reason, nextAction, sourceContext, confidence
 
@@ -60,7 +81,15 @@ export async function getGuidance({ guestReference, mentorId, screenContext }) {
   // signal that doesn't exist — falls through to the mentor's own real
   // roster bio/greeting (an honest "fallback" state) when nothing else
   // is available.
-  if (pairingRow) {
+  if (livePairing) {
+    const bridges = livePairing.matchedFlavorNotes.length > 0 ? ` The ${livePairing.matchedFlavorNotes.join(' and ')} notes bridge the two.` : ''
+    const conflictNote = livePairing.conflicts.length > 0 ? ` ${livePairing.conflicts[0]}` : ''
+    message = `${firstName} sees you're considering ${pairingContext.cigarShape || 'this cigar'} with ${livePairing.pairingType}: ${livePairing.compatScore}/100.${bridges}${conflictNote}`
+    reason = `Based on your current live pairing selection, scored by the same pairing engine you're looking at (rule set v${livePairing.ruleSetVersion}).`
+    nextAction = livePairing.compatScore >= 70 ? 'This is a strong match — consider saving it.' : 'Try adjusting your flavor notes or beverage choice for a stronger match.'
+    sourceContext = 'live_pairing_result'
+    confidence = Math.max(0.5, livePairing.confidence)
+  } else if (pairingRow) {
     message = `${firstName} noticed your last pairing (${pairingRow.pairing_type}) scored ${pairingRow.compat_score}/100. ${pairingRow.compat_score >= 70 ? 'That is a genuinely strong match — trust that combination.' : 'There is real room to sharpen that pairing — try adjusting your flavor notes.'}`
     reason = `Based on your most recent real saved pairing (${pairingRow.pairing_type}, ${new Date(pairingRow.updated_at).toISOString()}).`
     nextAction = pairingRow.compat_score >= 70 ? 'Save this pairing as a favorite and try a contrasting one next.' : 'Revisit Pairing Recommendations and try a different beverage category.'

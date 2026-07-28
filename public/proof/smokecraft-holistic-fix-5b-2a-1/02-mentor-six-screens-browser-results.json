@@ -1,0 +1,143 @@
+{
+  "pass": 34,
+  "fail": 0,
+  "total": 34,
+  "results": [
+    {
+      "name": "ChallengeHub route resolves",
+      "ok": true
+    },
+    {
+      "name": "ChallengeHub renders the real selected mentor's name (mentor identity correct)",
+      "ok": true
+    },
+    {
+      "name": "ChallengeHub renders real server-computed guidance (\"Streaks and leaderboards are not yet backend-connected …\")",
+      "ok": true
+    },
+    {
+      "name": "ChallengeHub: keyboard navigation moves focus",
+      "ok": true
+    },
+    {
+      "name": "ChallengeHub: no horizontal layout cutoff",
+      "ok": true
+    },
+    {
+      "name": "ChallengeHub: no console errors",
+      "ok": true
+    },
+    {
+      "name": "BlendFaultChallenge route resolves",
+      "ok": true
+    },
+    {
+      "name": "BlendFaultChallenge renders the real selected mentor's name (mentor identity correct)",
+      "ok": true
+    },
+    {
+      "name": "BlendFaultChallenge renders real server-computed guidance (\"Rafael suggests focusing on Foundation next — 0 Seed & …\")",
+      "ok": true
+    },
+    {
+      "name": "BlendFaultChallenge: keyboard navigation moves focus",
+      "ok": true
+    },
+    {
+      "name": "BlendFaultChallenge: no horizontal layout cutoff",
+      "ok": true
+    },
+    {
+      "name": "BlendFaultChallenge: no console errors",
+      "ok": true
+    },
+    {
+      "name": "FillerArrangement route resolves",
+      "ok": true
+    },
+    {
+      "name": "FillerArrangement renders the real selected mentor's name (mentor identity correct)",
+      "ok": true
+    },
+    {
+      "name": "FillerArrangement renders real server-computed guidance (\"Rafael suggests focusing on Foundation next — 0 Seed & …\")",
+      "ok": true
+    },
+    {
+      "name": "FillerArrangement: keyboard navigation moves focus",
+      "ok": true
+    },
+    {
+      "name": "FillerArrangement: no horizontal layout cutoff",
+      "ok": true
+    },
+    {
+      "name": "FillerArrangement: no console errors",
+      "ok": true
+    },
+    {
+      "name": "CollectionsCenter route resolves",
+      "ok": true
+    },
+    {
+      "name": "CollectionsCenter renders the real selected mentor's name (mentor identity correct)",
+      "ok": true
+    },
+    {
+      "name": "CollectionsCenter renders real server-computed guidance (\"Rafael suggests focusing on Foundation next — 0 Seed & …\")",
+      "ok": true
+    },
+    {
+      "name": "CollectionsCenter: keyboard navigation moves focus",
+      "ok": true
+    },
+    {
+      "name": "CollectionsCenter: no horizontal layout cutoff",
+      "ok": true
+    },
+    {
+      "name": "CollectionsCenter: no console errors",
+      "ok": true
+    },
+    {
+      "name": "PairingLab: honest \"no activity result yet\" state before a beverage is selected",
+      "ok": true
+    },
+    {
+      "name": "PairingLab: mentor guidance score exactly matches the pairing engine's own displayed score (100)",
+      "ok": true
+    },
+    {
+      "name": "PairingLab: keyboard navigation moves focus",
+      "ok": true
+    },
+    {
+      "name": "PairingLab: Continue control is not blocked by an invisible overlay",
+      "ok": true
+    },
+    {
+      "name": "PairingLab: no console errors",
+      "ok": true
+    },
+    {
+      "name": "PairingRecommendations: mentor guidance score exactly matches the score donut (100%)",
+      "ok": true
+    },
+    {
+      "name": "PairingRecommendations: keyboard navigation moves focus",
+      "ok": true
+    },
+    {
+      "name": "PairingRecommendations: Save control is not blocked by an invisible overlay",
+      "ok": true
+    },
+    {
+      "name": "PairingRecommendations: no horizontal layout cutoff",
+      "ok": true
+    },
+    {
+      "name": "PairingRecommendations: no console errors",
+      "ok": true
+    }
+  ]
+}

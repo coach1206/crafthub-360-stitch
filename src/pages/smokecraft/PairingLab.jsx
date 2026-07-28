@@ -10,6 +10,7 @@ import { getEducationalEnrichment } from '../../constants/smokecraftEducationalE
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { useSmokeCraftPairingEngine } from '../../hooks/useSmokeCraftPairingEngine.js'
+import DynamicMentorPanel from '../../components/smokecraft/DynamicMentorPanel.jsx'
 
 const ENRICHMENT_11 = getEducationalEnrichment(11)
 
@@ -294,6 +295,16 @@ export default function PairingLab({ onBack, onComplete } = {}) {
             <button type="button" onClick={() => engine.retry()} style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 10, color: GOLD, fontSize: 8, padding: '2px 6px', cursor: 'pointer', fontFamily: 'Georgia, serif' }}>Retry</button>
           </div>
         )}
+
+        {/* ── Mentor pairing guidance — Holistic Fix 5B-2A-1. Previously
+            unused free space (below the Match badge, above the
+            recommendation detail panel) — no baked artwork occluded. ── */}
+        <div style={{ position: 'absolute', left: '63%', top: '16%', width: '36%', fontSize: 10 }}>
+          <DynamicMentorPanel
+            context="pairing-lab"
+            pairingContext={primary ? { cigarShape: sel.cigarShape, wrapper: sel.wrapper, origin: sel.origin, strength: sel.strength, pairingType: primary, flavorNotes: sel.flavorNotes, pairingGoal: sel.pairingGoal } : { pairingType: null }}
+          />
+        </div>
 
         {/* ── Recommendation panel (right) ── */}
         {rec && (

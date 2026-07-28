@@ -1390,3 +1390,36 @@ Both closed via `src/pages/smokecraft/MentorCommentary.jsx`, the new
 `server/services/smokecraft/mentorGuidanceService.js`, and
 `src/hooks/useSmokeCraftMentorGuidance.js`. See
 `public/proof/smokecraft-holistic-fix-5b-2a/00-proof-index.md`.
+
+## Holistic Fix 5B-2A-1 update (remove remaining static mentor guidance)
+
+- **SC-D052**: `server/routes/blendFaultRoutes.js`,
+  `server/routes/challengeHubRoutes.js`, and
+  `server/routes/fillerArrangementRoutes.js` all mounted
+  `router.use(optionalAuth, attachSmokeCraftIdentity)` without
+  `ensureSmokeCraftGuestIdentity` — the same recurring defect class as
+  SC-D033/SC-D036/SC-D041. `attachSmokeCraftIdentity` only reads an
+  existing guest-identity cookie; it never issues one. A genuinely
+  fresh guest landing directly on Challenge Hub, the Blend Fault
+  Identification challenge, or Filler Arrangement got a real 401 on
+  every request those routers serve. For Filler Arrangement
+  specifically this cascaded into a second, worse symptom: the
+  screen's own progress-fetch 401 set `status = 'error'`, which
+  triggered an early `return <ErrorScreen/>` that skipped rendering
+  `DynamicMentorPanel` entirely — so the mentor guidance panel added
+  this pass appeared to be missing when the true cause was the
+  upstream 401. Found live via Playwright (real console errors and a
+  missing mentor name/guidance on first-navigation). Closed by adding
+  `ensureSmokeCraftGuestIdentity` to the import and `router.use()`
+  chain in all three route files, matching the already-correct pattern
+  in `collectionsRoutes.js`/`skillTreeRoutes.js`/
+  `pairingEngineRoutes.js`/`mentorGuidanceRoutes.js`.
+
+Closed via `server/routes/blendFaultRoutes.js`,
+`server/routes/challengeHubRoutes.js`,
+`server/routes/fillerArrangementRoutes.js`. Encoded as a permanent
+regression check in
+`verify-smokecraft-hf5b2a1-mentor-six-screens-browser.mjs` (the "no
+console errors" and mentor-identity/guidance checks on all six
+screens). See
+`public/proof/smokecraft-holistic-fix-5b-2a-1/00-proof-index.md`.

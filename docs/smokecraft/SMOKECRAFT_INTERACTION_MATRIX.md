@@ -578,3 +578,17 @@ a small non-baked Retry control (shown only in its real `unavailable`
 state) and `MentorCommentary.jsx` gained a small non-baked inline
 retry/status notice (shown only in its real `unavailable`/`offline`
 states) — both additive, no existing control removed or relaid out.
+
+## Holistic Fix 5B-2A-1 update (remove remaining static mentor guidance)
+
+Real browser verification (34/34 checks) of all six affected screens —
+Challenge Hub, Blend Fault Identification, Filler Arrangement,
+Collections Center, Pairing Lab, Personalized Pairing Recommendations —
+confirmed: route resolves, real selected-mentor name renders, real
+server-computed guidance renders (or the honest "no activity yet"
+state on the two pairing screens before a beverage is picked),
+keyboard Tab moves focus, no horizontal layout cutoff, no blocked
+overlays on Continue/Save controls, and zero console errors. Found and
+fixed one real defect in this pass (SC-D052, missing
+`ensureSmokeCraftGuestIdentity` on three routers) via this same live
+testing — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.

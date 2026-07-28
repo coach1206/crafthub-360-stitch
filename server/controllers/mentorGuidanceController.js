@@ -13,9 +13,9 @@ export async function handleGetGuidance(req, res) {
   try {
     const ref = guestRef(req)
     if (!ref) return res.status(400).json({ success: false, error: 'identity_required' })
-    const { mentorId, screenContext } = req.body || {}
+    const { mentorId, screenContext, pairingContext } = req.body || {}
     if (!mentorId) return res.status(400).json({ success: false, error: 'mentor_not_selected' })
-    const guidance = await svc.getGuidance({ guestReference: ref, mentorId, screenContext })
+    const guidance = await svc.getGuidance({ guestReference: ref, mentorId, screenContext, pairingContext })
     res.json({ success: true, guidance })
   } catch (err) { sendError(res, err, 500) }
 }

@@ -240,7 +240,10 @@ export default function BlendFaultChallenge() {
         )}
 
         <div style={{ marginTop: 20 }}>
-          <DynamicMentorPanel guidance="A trained eye catches construction faults before they reach the humidor." />
+          {/* Holistic Fix 5B-2A-1: real, server-computed, context-aware
+              guidance (via the shared mentor-guidance service) replaces
+              the previous hardcoded string. */}
+          <DynamicMentorPanel context="blend-fault-challenge" />
         </div>
       </div>
     </div>

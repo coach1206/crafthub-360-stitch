@@ -26,7 +26,7 @@ let cachedRules = null
 let cachedRulesAt = 0
 const RULES_CACHE_MS = 30_000
 
-async function getActiveRules(db) {
+export async function getActiveRules(db) {
   const now = Date.now()
   if (cachedRules && (now - cachedRulesAt) < RULES_CACHE_MS) return cachedRules
   const { rows } = await db.query(`SELECT * FROM smokecraft_pairing_rules WHERE active = true ORDER BY id`)

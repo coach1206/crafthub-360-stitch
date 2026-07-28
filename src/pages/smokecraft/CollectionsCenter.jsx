@@ -154,7 +154,10 @@ export default function CollectionsCenter() {
           </>
         )}
 
-        <DynamicMentorPanel guidance="Complete lessons and challenges to start unlocking collectible items in each category." />
+        {/* Holistic Fix 5B-2A-1: real, server-computed, context-aware
+            guidance (via the shared mentor-guidance service) replaces
+            the previous hardcoded string. */}
+        <DynamicMentorPanel context="collections" />
       </div>
     </div>
     </SmokeCraftScreenShell>

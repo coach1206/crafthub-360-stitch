@@ -205,7 +205,10 @@ export default function FillerArrangement() {
         )}
 
         <div style={{ marginTop: 20 }}>
-          <DynamicMentorPanel guidance="Arrangement is where blending theory becomes a physical bunch — take your time here." />
+          {/* Holistic Fix 5B-2A-1: real, server-computed, context-aware
+              guidance (via the shared mentor-guidance service) replaces
+              the previous hardcoded string. */}
+          <DynamicMentorPanel context="filler-arrangement" />
         </div>
       </div>
     </div>

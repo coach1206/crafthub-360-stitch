@@ -10,6 +10,7 @@ import { getEducationalEnrichment } from '../../constants/smokecraftEducationalE
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { useSmokeCraftPairingEngine } from '../../hooks/useSmokeCraftPairingEngine.js'
+import DynamicMentorPanel from '../../components/smokecraft/DynamicMentorPanel.jsx'
 
 const ENRICHMENT_22 = getEducationalEnrichment(22)
 
@@ -345,6 +346,16 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
               : 'Generated from your saved cigar, strength and flavour notes.'}
         </span>
       </Occlude>
+
+      {/* ── Mentor pairing guidance — Holistic Fix 5B-2A-1. Previously
+          unused free space between the score caption and the alternates
+          list (no baked artwork occluded). ── */}
+      <div style={{ position: 'absolute', left: '77.6%', top: '32%', width: '21.4%', fontSize: 9 }}>
+        <DynamicMentorPanel
+          context="pairing-recommendations"
+          pairingContext={primary ? { cigarShape: engineContext.cigarShape, wrapper: engineContext.wrapper, origin: engineContext.origin, strength: engineContext.strength, pairingType: primary.primary, flavorNotes: engineContext.flavorNotes, pairingGoal: engineContext.pairingGoal } : { pairingType: null }}
+        />
+      </div>
 
       {/* ── Baked recommendation cards → the real engine result ─────────── */}
       <Occlude

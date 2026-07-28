@@ -92,3 +92,40 @@ explicit mandate exclusion. `ChallengeHub.jsx`, `BlendFaultChallenge.jsx`,
 `guidance` string to `DynamicMentorPanel` — unchanged, out of this
 pass's scope. The full 109-route/five-viewport sweeps were not run, per
 this mandate's own instruction.
+
+## Holistic Fix 5B-2A-1 update (remove remaining static mentor guidance)
+
+The four remaining static `guidance="..."` strings on `ChallengeHub.jsx`,
+`BlendFaultChallenge.jsx`, `FillerArrangement.jsx`, and
+`CollectionsCenter.jsx` are now retired — all four pass `context="..."`
+and render through the shared `useSmokeCraftMentorGuidance` hook, same
+as every other connected screen.
+
+`PairingLab.jsx` and `PairingRecommendations.jsx` now also carry a
+`DynamicMentorPanel`, each passing a new `pairingContext` prop (cigar
+shape/wrapper/origin/strength/pairingType/flavorNotes/pairingGoal —
+the learner's real live selection, not a saved row). When
+`pairingContext.pairingType` is present, `mentorGuidanceService.js`
+computes a `livePairing` signal using the exact same
+`computeRecommendation()`/`getActiveRules()` functions the pairing
+engine's own `/recommend` endpoint uses (now exported from
+`pairingEngineService.js` for this reuse) — never a second, competing
+scoring path. This guarantees the guidance message's embedded
+`${score}/100` can never diverge from the score the learner sees on
+the Match badge / score donut, verified live via Playwright (identical
+scores) and via API test
+(`verify-smokecraft-hf5b2a1-mentor-pairing-consistency.mjs`, 9/9).
+`livePairing` outranks a stale saved-pairing row in priority order
+whenever a current selection is supplied.
+
+A new honest "no activity result yet" state was added specifically for
+the two pairing screens: when `pairingContext` is passed but has no
+`pairingType` yet (before a beverage is chosen), the panel shows
+"Select a beverage to see {mentor}'s pairing guidance." instead of
+issuing a premature request.
+
+## What this pass does NOT include
+
+ElevenLabs mentor voices, Golden Box — untouched, per explicit mandate
+exclusion. The full 109-route/five-viewport sweeps were not run, per
+this mandate's own instruction.

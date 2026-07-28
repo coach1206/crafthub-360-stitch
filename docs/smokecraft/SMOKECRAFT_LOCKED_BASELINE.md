@@ -357,3 +357,17 @@ map), and its portrait-zone subtitle now shows the real
 `mentor.country`/`mentor.bio` fields instead of the previously-
 undefined `mentor.origin`/`mentor.expertise`. No layout, spacing, or
 artwork changed on any mentor screen.
+
+## Holistic Fix 5B-2A-1 update (remove remaining static mentor guidance)
+
+No approved visuals were redesigned. `PairingLab.jsx` and
+`PairingRecommendations.jsx` each gained one small `DynamicMentorPanel`
+placed in previously-unused free space (PairingLab: below the Match
+badge, above the recommendation detail panel; PairingRecommendations:
+between the score caption and the alternates list) — no baked artwork
+was occluded in either placement, verified against the approved
+reference images before placement. `ChallengeHub.jsx`,
+`BlendFaultChallenge.jsx`, `FillerArrangement.jsx`, and
+`CollectionsCenter.jsx` had their existing `DynamicMentorPanel` swapped
+from a static string to a `context` prop in place — no layout change.
+No spacing, color, or artwork changed on any of the six screens.

@@ -6,14 +6,14 @@
 import { Router } from 'express'
 import rateLimit from 'express-rate-limit'
 import { optionalAuth } from '../middleware/authMiddleware.js'
-import { attachSmokeCraftIdentity, requireSmokeCraftIdentity } from '../middleware/smokecraftGuestIdentity.js'
+import { attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity, requireSmokeCraftIdentity } from '../middleware/smokecraftGuestIdentity.js'
 import * as ctrl from '../controllers/blendFaultController.js'
 
 const router = Router()
 const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 90 })
 const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
 
-router.use(optionalAuth, attachSmokeCraftIdentity)
+router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
 
 function bridgeIdentity(req, _res, next) {
   if (req.smokecraftIdentity?.type === 'guest' || req.smokecraftIdentity?.type === 'user') {

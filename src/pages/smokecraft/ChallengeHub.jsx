@@ -208,7 +208,10 @@ export default function ChallengeHub() {
           </>
         )}
 
-        <DynamicMentorPanel guidance="Each challenge sharpens a real skill you'll use again in the Golden Box." />
+        {/* Holistic Fix 5B-2A-1: real, server-computed, context-aware
+            guidance (via the shared mentor-guidance service) replaces
+            the previous hardcoded string. */}
+        <DynamicMentorPanel context="challenge-hub" />
         <p style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', marginTop: 16 }}>
           Streaks and leaderboards are not yet backend-connected for this hub — this screen shows real,
           live-tracked Daily and Weekly challenges rather than fabricated rankings.
