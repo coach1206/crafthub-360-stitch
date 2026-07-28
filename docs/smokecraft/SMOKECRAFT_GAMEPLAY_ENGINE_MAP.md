@@ -215,3 +215,24 @@ the server independently verifies `selectedCigarId` is a real id from
 its own copy of the venue flight inventory before granting XP; a draft
 save alone never grants anything. The "Begin Mini Tasting" nav button
 is now "Complete Tasting" — disabled until a real selection exists.
+
+## Holistic Fix 5A-3E update — cultivator Passport stamp closed
+
+`Cultivation.jsx`'s "Save to Passport" previously granted XP + the
+cultivator stamp on any click, regardless of whether the guest had
+actually viewed any of the 7 cultivation stages (a real "page-visit-only
+award" — the exact gap disclosed since Holistic Fix 5A-2). Closed this
+pass: the client now tracks which stages were genuinely opened
+(`viewedStages`), gates the Save action until all 7 are viewed, and
+submits that raw set as evidence to `submitCultivatorEvidence` (server
+service, `POST /api/smokecraft/player-state/cultivator/submit`) — the
+server independently verifies the submission covers every real required
+stage id (`src/data/cultivationStages.js`, dual-imported) before
+granting anything. Reuses the existing `smokecraft_activity_attempts`
+ledger (`activity_type='skill_checkpoint'`, `activity_key='cultivator'`)
+— no new migration required, same pattern as `master-blend`.
+
+The separate `cultivation-water` named-XP grant in `handleContinue`
+(session-progression, not the stamp) was left untouched — already
+server-verified since Holistic Fix 5A-2, out of this pass's stamp-
+specific scope.

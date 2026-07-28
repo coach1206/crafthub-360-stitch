@@ -1,0 +1,51 @@
+{
+  "pass": 11,
+  "fail": 0,
+  "total": 11,
+  "results": [
+    {
+      "name": "Only 3 of 7 viewed stages is rejected 400, never trusted as complete",
+      "ok": true
+    },
+    {
+      "name": "Zero viewed stages is rejected 400",
+      "ok": true
+    },
+    {
+      "name": "A malformed (non-array) evidence payload is rejected 400",
+      "ok": true
+    },
+    {
+      "name": "A fabricated stage id substituted for a real one is rejected (still missing a real required stage)",
+      "ok": true
+    },
+    {
+      "name": "A complete, real evidence set (all 7 stages) is accepted",
+      "ok": true
+    },
+    {
+      "name": "Grants the server-owned XP amount",
+      "ok": true
+    },
+    {
+      "name": "Grants the cultivator Passport stamp",
+      "ok": true
+    },
+    {
+      "name": "A second submission (even with a different idempotency key) is honestly rejected as already-scored, no double grant",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent submissions return well-formed success (no 500)",
+      "ok": true
+    },
+    {
+      "name": "A two-tab race grants the cultivator XP+stamp exactly once, not twice",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest never sees another guest's cultivator award (honest zero XP)",
+      "ok": true
+    }
+  ]
+}

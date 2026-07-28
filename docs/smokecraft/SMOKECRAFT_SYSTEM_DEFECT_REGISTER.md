@@ -1217,3 +1217,21 @@ completion (`submitTastingCompletion`, reusing the existing
 verifies the submitted `selectedCigarId` is real (from its own copy of
 the flight inventory) before granting XP; draft saves never grant
 anything; a two-tab completion race grants XP exactly once (verified).
+
+## Holistic Fix 5A-3E update
+
+**SC-D030 — CLOSED.** The `cultivator` Passport stamp (disclosed as an
+open gap since Holistic Fix 5A-2: "cultivator stamp still records
+idempotently without independent content verification beyond the paired
+XP activity succeeding") granted XP + the stamp on any "Save to
+Passport" click, with zero requirement to have actually viewed any
+cultivation content. Fixed: the client now tracks which of the 7 real
+cultivation stages were genuinely opened and submits that set as
+evidence; the server independently verifies it covers every required
+stage before granting anything (`submitCultivatorEvidence`, reusing the
+existing `smokecraft_activity_attempts` ledger — no new migration
+needed). Verified: incomplete/fabricated evidence rejected 400, valid
+evidence grants XP+stamp exactly once, a two-tab race grants exactly
+once, cross-user isolation holds. Live Playwright smoke test confirmed
+the real screen gates the Save button until all 7 stages are viewed and
+correctly transitions through submitting → saved states.

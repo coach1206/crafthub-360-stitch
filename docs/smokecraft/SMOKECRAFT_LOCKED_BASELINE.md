@@ -290,3 +290,11 @@ approved visuals and existing controls (flight cards, Select/Compare
 buttons) are unchanged; only the primary nav-bar action's label/enabled
 state and underlying data-ownership changed (real completion gating,
 server-authoritative draft instead of local-only).
+
+## Holistic Fix 5A-3E update
+
+Baseline unchanged: 109 routes, 27 sessions, 6 phases. Cultivation's
+approved visuals and the 7 stage cards are unchanged; only the "Save to
+Passport" button's enabled/label state and underlying reward-decision
+ownership changed (real evidence-gated, server-verified, not a bare
+click).

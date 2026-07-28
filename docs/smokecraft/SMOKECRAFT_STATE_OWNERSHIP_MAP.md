@@ -255,3 +255,12 @@ via a debounced, optimistic-concurrency PUT (same "server value wins on
 conflict" rule as the journey-snapshot sync). Completion validity, score,
 and XP are exclusively server-decided (`submitTastingCompletion`) — the
 client only ever submits the raw selection as evidence.
+
+## Holistic Fix 5A-3E update — cultivator evidence ownership
+
+`Cultivation.jsx`'s `viewedStages` (which of the 7 stage cards were
+genuinely opened) is real, real-time UI state; the server never trusts
+it directly — it is only ever submitted as one-shot evidence to
+`submitCultivatorEvidence`, which independently verifies completeness
+before deciding XP/Passport-stamp eligibility. The client has zero
+authority over the reward decision itself.

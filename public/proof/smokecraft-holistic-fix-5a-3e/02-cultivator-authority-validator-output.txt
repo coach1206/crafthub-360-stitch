@@ -1,0 +1,19 @@
+
+── SmokeCraft cultivator-authority validator (Holistic Fix 5A-3E)
+
+  OK    Cultivation.jsx no longer calls addXP()/awardStamp() directly inside handleSave (server-verified submit only)
+  OK    Cultivation.jsx submits evidence via the shared adapter (submitCultivatorEvidence)
+  OK    Save is gated on all required stages being viewed (allStagesViewed used in the disabled condition)
+  OK    Cultivation.jsx sources the required-stage list from the shared, server-dual-imported data module
+  OK    submitCultivatorEvidence verifies the submitted evidence covers every real required stage (CULTIVATION_STAGE_IDS.every), never trusting a bare completion claim
+  OK    submitCultivatorEvidence is idempotent via the existing smokecraft_activity_attempts UNIQUE constraint (activity_key='cultivator')
+  OK    The cultivator Passport stamp insert uses ON CONFLICT DO NOTHING (duplicate-protected)
+  OK    The cultivator submit route requires a verified SmokeCraft identity
+  OK    handleSubmitCultivator requires a real idempotency key (requireIdempotencyKey)
+  OK    handleSubmitCultivator requires viewedStageIds as a real array (rejects malformed input)
+  OK    Shared cultivation-stage-id data module exists (dual-imported by client and server)
+  OK    The shared stage-id list has no browser-only imports (safe to import server-side)
+  OK    The shared stage-id list has exactly 7 real stage ids
+
+=== RESULT: PASS (0 checks failed) ===
+

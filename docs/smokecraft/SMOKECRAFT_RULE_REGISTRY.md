@@ -131,3 +131,14 @@ ELIGIBILITY requirement changed (server now requires a genuine
 `selectedCigarId` from its own flight-inventory data, not merely "the
 Begin button was clicked"). No new rule row was needed since the amount
 itself did not change.
+
+## Holistic Fix 5A-3E update — cultivator evidence rule
+
+Cultivator XP amount is unchanged (50, matching the existing
+`cultivation-seed` named-XP value); the ELIGIBILITY requirement changed
+— the server now requires real evidence (all 7 cultivation stage ids
+submitted, verified against `src/data/cultivationStages.js`) rather than
+a bare "Save" click. Enforced in code
+(`submitCultivatorEvidence` in `playerStateService.js`), not yet mirrored
+into a `smokecraft_gameplay_rules` row (same disclosed pattern as the
+master-blend evidence rule from Holistic Fix 5A-3).
