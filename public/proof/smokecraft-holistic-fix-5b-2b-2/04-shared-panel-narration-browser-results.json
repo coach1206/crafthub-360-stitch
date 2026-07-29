@@ -1,0 +1,67 @@
+{
+  "pass": 15,
+  "fail": 0,
+  "total": 15,
+  "results": [
+    {
+      "name": "Approved mentor identity (name) still renders unchanged",
+      "ok": true
+    },
+    {
+      "name": "Narrate control appears once real guidance is ready",
+      "ok": true
+    },
+    {
+      "name": "Honest unavailable state renders (no ElevenLabs key in this environment — no fabricated audio)",
+      "ok": true
+    },
+    {
+      "name": "Narration caption/transcript text is byte-for-byte identical to the visible guidance text above it",
+      "ok": true
+    },
+    {
+      "name": "Mute control is present",
+      "ok": true
+    },
+    {
+      "name": "Captions on/off control is present",
+      "ok": true
+    },
+    {
+      "name": "Captions toggle is clickable and does not error",
+      "ok": true
+    },
+    {
+      "name": "Playback speed control is present",
+      "ok": true
+    },
+    {
+      "name": "Playback speed control accepts a real change",
+      "ok": true
+    },
+    {
+      "name": "Retry is correctly withheld for the terminal \"unavailable\" state (retrying would not change a missing provider key) — wiring verified by the voice validator",
+      "ok": true
+    },
+    {
+      "name": "Rapid double-click on Narrate does not crash the panel",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on Skill Tree with narration controls present",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff after adding narration controls",
+      "ok": true
+    },
+    {
+      "name": "No console errors on Skill Tree with narration controls",
+      "ok": true
+    },
+    {
+      "name": "A mentor with no configured voice honestly shows unavailable, never a fake Play control",
+      "ok": true
+    }
+  ]
+}

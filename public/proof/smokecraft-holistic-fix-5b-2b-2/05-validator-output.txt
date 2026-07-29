@@ -1,0 +1,50 @@
+
+── SmokeCraft Mentor-Voice-security validator (Holistic Fix 5B-2B-1)
+
+  OK    src/services/smokecraft/mentorVoiceApiClient.js never references ELEVENLABS_API_KEY or an xi-api-key header (secret stays server-side)
+  OK    src/hooks/useSmokeCraftMentorVoice.js never references ELEVENLABS_API_KEY or an xi-api-key header (secret stays server-side)
+  OK    src/pages/smokecraft/Mentor.jsx never references ELEVENLABS_API_KEY or an xi-api-key header (secret stays server-side)
+  OK    No built client bundle contains the ElevenLabs auth header name (xi-api-key never shipped to the browser)
+  OK    The ElevenLabs API key is read once from process.env and never included in any returned object
+  OK    Voice IDs are reused from the pre-existing, already-real NOVEE OS voice map — not freshly invented for this pass
+  OK    listVoiceProfiles() only marks a mentor active when a real REAL_CONFIGURED_VOICE_IDS entry exists (Boolean(voiceId))
+  OK    getVoiceProfile() computes active the same way (single source of truth, no second competing active flag)
+  OK    The preview controller only reads mentorId and speed from the request body — never a text/transcript field
+  OK    The preview text is generated server-side from the mentor's own real roster greeting (approvedPreviewText), never echoing client input
+  OK    Mentor Selection uses the one shared voice hook (useSmokeCraftMentorVoice) — no bypassing, no second competing voice implementation
+  OK    Mentor Selection never calls the ElevenLabs API directly (only through the shared server-side service)
+  OK    Preview Voice controls carry a real accessible label per mentor (aria-label with the mentor's name)
+  OK    Play/Pause controls carry accessible labels
+  OK    Mute/Unmute controls carry accessible labels
+  OK    Caption/transcript text is rendered with aria-live so screen readers announce it
+  OK    An in-flight-request map de-duplicates concurrent identical preview requests (protects against a rapid double-click provider charge)
+  OK    A completed preview is cached with a bounded (non-infinite) lifetime, not cached forever
+  OK    An inactive mentor (no real voice ID) always returns status "unavailable", never "ready"
+  OK    A missing API key always returns status "unavailable", never "ready"
+  OK    A provider error/timeout is caught and returns status "provider_error", never a fabricated "ready"
+  OK    Voice preferences are saved through a real, guest-scoped UPSERT (one row per guest_reference), not client-side-only storage
+  OK    Preference input is validated server-side (voiceEnabled/captionsEnabled must be real booleans, speed is clamped to an allowed list)
+  OK    Mentor-voice routes issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity present) — prevents the recurring 401-on-first-navigation defect class
+  OK    The preview route has its own (tighter) rate limiter, since it is the one route that can reach a paid provider
+  OK    Rate limiters are skipped outside production (dev/test), matching the established pattern
+
+── Holistic Fix 5B-2B-2 additions ──
+
+  OK    The documented reset workflow (npm run db:migrate) runs the required Seed & Soil content seed after a clean migration, not as a separate manual step
+  OK    The required content seed list includes the Seed & Soil / golden_box_component_catalog seed script
+  OK    The reset workflow spawns the seed as a real child process and waits for it to exit — not a fire-and-forget dynamic import that could race past its async inserts
+  OK    A failed required content seed fails the reset workflow's exit code (build-blocking, not silently ignored)
+  OK    The Seed & Soil content seed is idempotent (ON CONFLICT DO NOTHING on natural keys) — safe to run on every reset, never duplicates or clobbers existing data
+  OK    generateGuidanceNarration derives its transcript from the ONE authoritative getGuidance() function (mentorGuidanceService) — never a second, independently generated line
+  OK    The narration transcript is assigned directly from guidance.message, with no intermediate client-influenced transformation
+  OK    The narrate controller only reads mentorId/screenContext/pairingContext/speed from the request body — never a client-supplied text/transcript field that could bypass the authoritative guidance text
+  OK    DynamicMentorPanel uses the one shared voice hook (useSmokeCraftMentorVoice) for narration — no second, competing voice implementation
+  OK    DynamicMentorPanel never calls the ElevenLabs API directly
+  OK    DynamicMentorPanel never autoplays narration — Narrate is only ever triggered by a real user click (handleNarrate is wired to an onClick, not an effect)
+  OK    DynamicMentorPanel only offers narration once real, ready guidance text already exists on screen (canNarrate gated on dynamic.status === 'ready')
+  OK    The shared panel only renders Play/Pause/Replay once voice.status === 'ready' — an unavailable/provider-error mentor never shows a playable control
+  OK    The shared panel explicitly labels the unavailable state as unavailable (never silent, never a fake ready state)
+  OK    The voice-preview cache is keyed by guest_reference (guest-scoped for narration, '' for the shared preview text) — not a single global cache that could leak one learner's guidance text to another
+
+=== RESULT: PASS (0 checks failed) ===
+

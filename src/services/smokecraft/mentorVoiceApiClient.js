@@ -30,5 +30,6 @@ async function request(path, { method = 'POST', body, timeoutMs = 15000 } = {}) 
 
 export const fetchVoiceProfiles = () => request('/profiles', { method: 'GET' })
 export const fetchVoicePreview = (mentorId, speed) => request('/preview', { body: { mentorId, speed } })
+export const fetchGuidanceNarration = (mentorId, screenContext, pairingContext, speed) => request('/narrate', { body: { mentorId, screenContext, pairingContext, speed } })
 export const fetchVoicePreferences = () => request('/preferences', { method: 'GET' })
 export const saveVoicePreferences = (prefs) => request('/preferences', { body: prefs })

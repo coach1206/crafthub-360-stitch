@@ -1,0 +1,35 @@
+{
+  "pass": 7,
+  "fail": 0,
+  "total": 7,
+  "results": [
+    {
+      "name": "The database is genuinely empty before the reset workflow runs",
+      "ok": true
+    },
+    {
+      "name": "`npm run db:migrate` exits successfully on a clean reset (no manual one-off step required)",
+      "ok": true
+    },
+    {
+      "name": "The reset workflow itself reports the required content seed running",
+      "ok": true
+    },
+    {
+      "name": "golden_box_component_catalog has real rows immediately after a clean reset",
+      "ok": true
+    },
+    {
+      "name": "smokecraft_flavor_notes has real rows immediately after a clean reset",
+      "ok": true
+    },
+    {
+      "name": "Running the reset workflow a second time does not duplicate content rows",
+      "ok": true
+    },
+    {
+      "name": "Existing unrelated data survives a repeat reset run (seed step is additive-only)",
+      "ok": true
+    }
+  ]
+}

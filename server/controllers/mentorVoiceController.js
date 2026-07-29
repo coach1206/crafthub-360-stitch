@@ -1,7 +1,7 @@
 import * as svc from '../services/smokecraft/mentorVoiceService.js'
 
 function sendError(res, err, fallback = 400) {
-  const statusByCode = { mentor_not_found: 404, invalid_voice_enabled: 400, invalid_captions_enabled: 400, invalid_mentor: 400 }
+  const statusByCode = { mentor_not_found: 404, invalid_voice_enabled: 400, invalid_captions_enabled: 400, invalid_mentor: 400, mentor_not_selected: 400 }
   res.status(statusByCode[err.code] || fallback).json({ success: false, error: err.code || 'internal_error' })
 }
 
@@ -23,6 +23,19 @@ export async function handlePreview(req, res) {
     }
     const result = await svc.generatePreview({ mentorId, speed })
     res.json({ success: true, preview: result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleNarrateGuidance(req, res) {
+  try {
+    const ref = guestRef(req)
+    if (!ref) return res.status(400).json({ success: false, error: 'identity_required' })
+    const { mentorId, screenContext, pairingContext, speed } = req.body || {}
+    if (!mentorId || typeof mentorId !== 'string') {
+      return res.status(400).json({ success: false, error: 'mentor_not_selected' })
+    }
+    const result = await svc.generateGuidanceNarration({ guestReference: ref, mentorId, screenContext, pairingContext, speed })
+    res.json({ success: true, narration: result })
   } catch (err) { sendError(res, err, 500) }
 }
 

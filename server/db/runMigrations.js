@@ -15,6 +15,60 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const MIGRATIONS_DIR = path.join(__dirname, 'migrations');
+const SEEDS_DIR = path.join(__dirname, 'seeds');
+
+// Holistic Fix 5B-2B-2 — real root cause of the missing Seed & Soil
+// content after a clean reset: `npm run db:migrate` only ever applied
+// schema migrations. golden_box_component_catalog (and everything that
+// foreign-keys to it — smokecraft_seed_soil_progress, quiz questions,
+// etc.) has never had its rows created by a migration; they were only
+// ever inserted by this standalone, idempotent seed script, which
+// nothing in the automated reset path ever invoked. A completely fresh
+// database therefore always passed every migration yet still had zero
+// catalog rows, so the first real POST referencing a catalog id (e.g.
+// seed-soil/progress) failed with a 23503 foreign-key violation. Every
+// required seed here is independently idempotent (ON CONFLICT DO
+// NOTHING on natural keys) and additive-only — running it against a
+// database that already has content changes nothing.
+const REQUIRED_CONTENT_SEEDS = [
+  'seedSmokecraftEducationalContent.mjs',
+]
+
+/**
+ * Runs every required post-migration content seed, in order. Each seed
+ * script self-executes its own `main().catch(...)` at module scope
+ * without a top-level await, so a plain dynamic import() resolves as
+ * soon as the module body finishes evaluating — BEFORE its async
+ * database inserts actually complete. Running each seed as a real
+ * child process (matching how the script's own docstring says to run
+ * it: `node server/db/seeds/<file>.mjs`) guarantees this function only
+ * returns once every insert has genuinely finished.
+ */
+async function runRequiredContentSeeds() {
+  const { spawn } = await import('child_process')
+  const results = []
+  for (const filename of REQUIRED_CONTENT_SEEDS) {
+    const seedPath = path.join(SEEDS_DIR, filename)
+    if (!fs.existsSync(seedPath)) {
+      results.push({ filename, status: 'missing' })
+      console.error(`[runMigrations] Required content seed not found: ${filename}`)
+      continue
+    }
+    const exitCode = await new Promise((resolvePromise) => {
+      const child = spawn(process.execPath, [seedPath], { env: process.env, stdio: 'inherit' })
+      child.on('exit', (code) => resolvePromise(code))
+      child.on('error', () => resolvePromise(1))
+    })
+    if (exitCode === 0) {
+      results.push({ filename, status: 'seeded' })
+      console.log(`[runMigrations] Seeded: ${filename}`)
+    } else {
+      results.push({ filename, status: 'error', message: `exited with code ${exitCode}` })
+      console.error(`[runMigrations] Seed failed on ${filename}: exited with code ${exitCode}`)
+    }
+  }
+  return results
+}
 
 let getDb;
 try {
@@ -211,6 +265,8 @@ export async function runMigrations() {
   return summary;
 }
 
+export { runRequiredContentSeeds }
+
 /**
  * Return migration status without running any migrations.
  * @returns {Promise<{ status: string, migrations: Array, pendingCount: number }>}
@@ -306,5 +362,20 @@ if (resolve(__filename) === resolve(process.argv[1] ?? '')) {
   if (!ok) {
     console.error(`[runMigrations] Exit with error: ${result.message ?? result.status}`)
   }
-  process.exit(ok ? 0 : 1)
+
+  // Required content seeds run every time `db:migrate` is invoked
+  // directly against a real database — idempotent, so this is safe on
+  // both a clean reset and a database that already has content. Not
+  // run from the plain runMigrations() export (used by health checks
+  // and server startup probes) to avoid changing their behavior.
+  let seedOk = true
+  if (ok && result.databaseStatus === 'database_ready') {
+    const seedResults = await runRequiredContentSeeds()
+    seedOk = seedResults.every(r => r.status === 'seeded')
+    if (!seedOk) {
+      console.error('[runMigrations] One or more required content seeds failed — see above.')
+    }
+  }
+
+  process.exit(ok && seedOk ? 0 : 1)
 }

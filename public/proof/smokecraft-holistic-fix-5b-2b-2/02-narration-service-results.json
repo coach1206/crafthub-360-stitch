@@ -1,0 +1,59 @@
+{
+  "pass": 13,
+  "fail": 0,
+  "total": 13,
+  "results": [
+    {
+      "name": "The narration transcript is byte-for-byte identical to the authoritative guidance message (never a second, independent line)",
+      "ok": true
+    },
+    {
+      "name": "A mentor with a real configured voice returns status \"ready\" with real audio",
+      "ok": true
+    },
+    {
+      "name": "A mentor with no configured voice honestly reports unavailable, never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "The unavailable narration response still carries the real transcript (captions remain honest)",
+      "ok": true
+    },
+    {
+      "name": "An identical repeat narration request for the same learner reuses the cache (no second provider call)",
+      "ok": true
+    },
+    {
+      "name": "A different learner never reuses guest1's cached narration audio — the cache is genuinely learner-scoped, not shared (real provider call, not a cache hit)",
+      "ok": true
+    },
+    {
+      "name": "The isolated narration request still returns real, non-fabricated audio for guest3",
+      "ok": true
+    },
+    {
+      "name": "Two concurrent identical narration requests (rapid double-click) result in exactly one real provider call",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent requests resolve to a real ready result",
+      "ok": true
+    },
+    {
+      "name": "A provider timeout during narration returns an honest \"provider_error\", never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "A provider 500 error during narration returns an honest \"provider_error\", never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "With no ElevenLabs API key configured, narration for an active mentor still returns an honest \"unavailable\" status",
+      "ok": true
+    },
+    {
+      "name": "Narration with no mentor selected is rejected, never returns fabricated guidance narration",
+      "ok": true
+    }
+  ]
+}

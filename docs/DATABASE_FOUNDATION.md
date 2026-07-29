@@ -68,6 +68,37 @@ With a live database, it:
 4. Runs pending migrations wrapped in transactions
 5. Records each applied migration in `schema_migrations`
 6. Returns a summary: `{ migrationsFound, migrationsApplied, migrationsSkipped, migrationsFailed }`
+7. **(Holistic Fix 5B-2B-2)** When run directly (`npm run db:migrate`,
+   not the `runMigrations()` export used by health checks), also runs
+   every required post-migration content seed (currently:
+   `server/db/seeds/seedSmokecraftEducationalContent.mjs`, which
+   populates `golden_box_component_catalog` and the tables that
+   foreign-key to it — required by Seed & Soil, Skill Tree, and
+   mentor-guidance's skill-gap signal) as a real child process, waited
+   to completion. This closes SC-D054: before this fix, a genuinely
+   fresh database passed every migration yet still had zero catalog
+   rows, since nothing in the automated reset path ever ran the seed
+   script. The seed is idempotent (`ON CONFLICT DO NOTHING`) and
+   additive-only — safe to run on every `db:migrate` invocation,
+   including one against a database that already has content. To run
+   the seed on its own: `npm run db:seed`.
+
+### A clean reset, step by step
+
+```bash
+# Drop and recreate the database (destructive — local/dev only)
+psql -c "DROP DATABASE IF EXISTS <name>;" && psql -c "CREATE DATABASE <name>;"
+
+# The one command that fully restores a working database: schema +
+# required content, in one idempotent step.
+DATABASE_URL=postgresql://... npm run db:migrate
+```
+
+No manual `INSERT` is ever required. `verify-smokecraft-hf5b2b1-mentor-voice-service.mjs`'s
+sibling test, `verify-smokecraft-hf5b2b2-clean-reset-baseline.mjs`,
+performs exactly this drop/recreate/`db:migrate` sequence against the
+real database and asserts real content rows exist afterward — run it
+any time this workflow needs re-verifying.
 
 ---
 

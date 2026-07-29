@@ -1,0 +1,63 @@
+{
+  "pass": 14,
+  "fail": 0,
+  "total": 14,
+  "results": [
+    {
+      "name": "Guidance request succeeds",
+      "ok": true
+    },
+    {
+      "name": "Narration request succeeds",
+      "ok": true
+    },
+    {
+      "name": "The narration transcript is byte-for-byte identical to the guidance message returned by the shared guidance endpoint",
+      "ok": true
+    },
+    {
+      "name": "The narration response reports the same real sourceContext as the guidance response (single source of truth)",
+      "ok": true
+    },
+    {
+      "name": "A mentor with a configured voice honestly reports unavailable (provider_not_configured), never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "A mentor with no configured voice honestly reports unavailable (no_voice_configured)",
+      "ok": true
+    },
+    {
+      "name": "Every narration response includes a real request ID",
+      "ok": true
+    },
+    {
+      "name": "A client-supplied \"text\" field is silently ignored — narration always uses the server-computed guidance message",
+      "ok": true
+    },
+    {
+      "name": "A narration request with no mentorId is rejected",
+      "ok": true
+    },
+    {
+      "name": "Preference save succeeds",
+      "ok": true
+    },
+    {
+      "name": "Saved preferences persist and are read back exactly (refresh persistence, same cookie identity)",
+      "ok": true
+    },
+    {
+      "name": "A second independent fetch under the same identity returns identical preferences (same-account second device)",
+      "ok": true
+    },
+    {
+      "name": "A separate guest's narration request succeeds independently of guest 1's state",
+      "ok": true
+    },
+    {
+      "name": "One guest's narration/preference activity never leaks into or overwrites a different guest's preferences",
+      "ok": true
+    }
+  ]
+}

@@ -79,5 +79,36 @@ check('Mentor-voice routes issue a fresh guest identity when none exists (ensure
 check('The preview route has its own (tighter) rate limiter, since it is the one route that can reach a paid provider', /previewLimiter = rateLimit/.test(routes) && /router\.post\('\/preview', previewLimiter/.test(routes))
 check('Rate limiters are skipped outside production (dev/test), matching the established pattern', /skip: \(\) => !IS_PROD/.test(routes))
 
+console.log('\n── Holistic Fix 5B-2B-2 additions ──\n')
+
+// ── 10. Clean-reset workflow always seeds required content ───────────
+const runMigrations = fs.readFileSync('server/db/runMigrations.js', 'utf8')
+check('The documented reset workflow (npm run db:migrate) runs the required Seed & Soil content seed after a clean migration, not as a separate manual step', /REQUIRED_CONTENT_SEEDS/.test(runMigrations) && /runRequiredContentSeeds/.test(runMigrations))
+check('The required content seed list includes the Seed & Soil / golden_box_component_catalog seed script', /seedSmokecraftEducationalContent\.mjs/.test(runMigrations))
+check('The reset workflow spawns the seed as a real child process and waits for it to exit — not a fire-and-forget dynamic import that could race past its async inserts', /spawn\(process\.execPath, \[seedPath\]/.test(runMigrations) && /child\.on\('exit'/.test(runMigrations))
+check('A failed required content seed fails the reset workflow\'s exit code (build-blocking, not silently ignored)', /seedOk = seedResults\.every/.test(runMigrations) && /process\.exit\(ok && seedOk/.test(runMigrations))
+const seedScript = fs.readFileSync('server/db/seeds/seedSmokecraftEducationalContent.mjs', 'utf8')
+check('The Seed & Soil content seed is idempotent (ON CONFLICT DO NOTHING on natural keys) — safe to run on every reset, never duplicates or clobbers existing data', /ON CONFLICT.*DO NOTHING/.test(seedScript))
+
+// ── 11. Narration text is always the exact authoritative guidance text ──
+check('generateGuidanceNarration derives its transcript from the ONE authoritative getGuidance() function (mentorGuidanceService) — never a second, independently generated line', /import \{ getGuidance, MentorGuidanceError \} from '\.\/mentorGuidanceService\.js'/.test(svc) && /const guidance = await getGuidance\(/.test(svc))
+check('The narration transcript is assigned directly from guidance.message, with no intermediate client-influenced transformation', /transcript: guidance\.message/.test(svc))
+const narrationController = controller
+check('The narrate controller only reads mentorId/screenContext/pairingContext/speed from the request body — never a client-supplied text/transcript field that could bypass the authoritative guidance text', /const \{ mentorId, screenContext, pairingContext, speed \} = req\.body/.test(narrationController) && !/body\.text\b|body\.transcript\b/.test(narrationController))
+
+// ── 12. Shared mentor panels use the secure voice service, no bypass ──
+const panel = fs.readFileSync('src/components/smokecraft/DynamicMentorPanel.jsx', 'utf8')
+check('DynamicMentorPanel uses the one shared voice hook (useSmokeCraftMentorVoice) for narration — no second, competing voice implementation', /useSmokeCraftMentorVoice/.test(panel))
+check('DynamicMentorPanel never calls the ElevenLabs API directly', !/api\.elevenlabs\.io/.test(panel))
+check('DynamicMentorPanel never autoplays narration — Narrate is only ever triggered by a real user click (handleNarrate is wired to an onClick, not an effect)', !/useEffect\([^}]*requestNarration/.test(panel))
+check('DynamicMentorPanel only offers narration once real, ready guidance text already exists on screen (canNarrate gated on dynamic.status === \'ready\')', /canNarrate = !guidance && !noPairingActivityYet && dynamic\.status === 'ready'/.test(panel))
+
+// ── 13. Unavailable mentors never claim playable audio in the shared panel ──
+check('The shared panel only renders Play/Pause/Replay once voice.status === \'ready\' — an unavailable/provider-error mentor never shows a playable control', /\{voice\.status === 'ready' && \(/.test(panel))
+check('The shared panel explicitly labels the unavailable state as unavailable (never silent, never a fake ready state)', /Voice narration unavailable for/.test(panel))
+
+// ── 14. Learner-scoped narration cache is genuinely per-guest ────────
+check('The voice-preview cache is keyed by guest_reference (guest-scoped for narration, \'\' for the shared preview text) — not a single global cache that could leak one learner\'s guidance text to another', /guestReference, mentorId, speed, hash/.test(svc) && /UNIQUE \(guest_reference, mentor_id, speed, text_hash\)/.test(fs.readFileSync('server/db/migrations/100_smokecraft_mentor_voice_narration.sql', 'utf8')))
+
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} (${failures} checks failed) ===\n`)
 process.exit(failures === 0 ? 0 : 1)

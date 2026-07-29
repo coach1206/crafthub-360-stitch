@@ -1,13 +1,18 @@
 /**
- * Holistic Fix 5B-2B-1 — shared adapter for the server-authoritative
- * SmokeCraft mentor-voice preview flow. Used by Mentor Selection only
- * in this pass. The hook never computes or fabricates audio — it only
- * requests a preview from the server and manages real HTMLAudioElement
- * playback state (play/pause/replay/mute) plus the honest status set
- * this mandate requires (idle/loading/ready/unavailable/provider_error).
+ * Holistic Fix 5B-2B-1 / 5B-2B-2 — shared adapter for the server-
+ * authoritative SmokeCraft mentor-voice flow. The ONE voice hook used
+ * by both Mentor Selection's Preview Voice (requestPreview) and the
+ * shared DynamicMentorPanel's guidance narration (requestNarration) —
+ * no second, competing voice implementation. The hook never computes
+ * or fabricates audio, and never sends narration text itself — it only
+ * requests audio from the server (which derives narration text from
+ * the same authoritative guidance function the visible text already
+ * comes from) and manages real HTMLAudioElement playback state
+ * (play/pause/replay/mute/speed) plus the honest status set this
+ * mandate requires (idle/loading/ready/unavailable/provider-error).
  */
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { fetchVoicePreview, fetchVoicePreferences, saveVoicePreferences as apiSavePreferences } from '../services/smokecraft/mentorVoiceApiClient.js'
+import { fetchVoicePreview, fetchGuidanceNarration, fetchVoicePreferences, saveVoicePreferences as apiSavePreferences } from '../services/smokecraft/mentorVoiceApiClient.js'
 
 export function useSmokeCraftMentorVoice() {
   const [status, setStatus] = useState('idle')
@@ -52,16 +57,12 @@ export function useSmokeCraftMentorVoice() {
     } catch { setIsPlaying(false) }
   }, [isMuted, stopAudio])
 
-  const requestPreview = useCallback(async (mentorId, speed = 1.0) => {
-    lastRequestRef.current = { mentorId, speed }
-    setStatus('loading')
-    setPreview(null)
-    const res = await fetchVoicePreview(mentorId, speed)
+  const applyResult = useCallback((res) => {
     if (!res.ok) {
       setStatus(res.status === 401 || res.status === 403 ? 'session-expired' : 'unavailable')
       return
     }
-    const p = res.preview
+    const p = res.preview || res.narration
     setPreview(p)
     if (p.status === 'ready') {
       setStatus('ready')
@@ -73,9 +74,31 @@ export function useSmokeCraftMentorVoice() {
     }
   }, [playAudio])
 
+  const requestPreview = useCallback(async (mentorId, speed = 1.0) => {
+    lastRequestRef.current = { kind: 'preview', mentorId, speed }
+    setStatus('loading')
+    setPreview(null)
+    applyResult(await fetchVoicePreview(mentorId, speed))
+  }, [applyResult])
+
+  /**
+   * Narrates the exact server-returned guidance text for the given
+   * mentor/screen/pairing context (never client-supplied text) at a
+   * bounded speed.
+   */
+  const requestNarration = useCallback(async (mentorId, screenContext, pairingContext, speed = 1.0) => {
+    lastRequestRef.current = { kind: 'narration', mentorId, screenContext, pairingContext, speed }
+    setStatus('loading')
+    setPreview(null)
+    applyResult(await fetchGuidanceNarration(mentorId, screenContext, pairingContext, speed))
+  }, [applyResult])
+
   const retry = useCallback(() => {
-    if (lastRequestRef.current) requestPreview(lastRequestRef.current.mentorId, lastRequestRef.current.speed)
-  }, [requestPreview])
+    const last = lastRequestRef.current
+    if (!last) return
+    if (last.kind === 'narration') requestNarration(last.mentorId, last.screenContext, last.pairingContext, last.speed)
+    else if (last.kind === 'preview') requestPreview(last.mentorId, last.speed)
+  }, [requestNarration, requestPreview])
 
   const play = useCallback(() => {
     if (preview?.audio && audioRef.current) {
@@ -110,7 +133,17 @@ export function useSmokeCraftMentorVoice() {
     })
   }, [stopAudio, preferences])
 
-  const savePreferences = useCallback(async (patch) => {
+  const toggleCaptions = useCallback(() => {
+    savePreferencesInternal({ captionsEnabled: !(preferences?.captionsEnabled ?? true) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preferences])
+
+  const setPlaybackSpeed = useCallback((speed) => {
+    savePreferencesInternal({ playbackSpeed: speed })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preferences])
+
+  async function savePreferencesInternal(patch) {
     const res = await apiSavePreferences({
       voiceEnabled: !isMuted,
       playbackSpeed: preferences?.playbackSpeed ?? 1.0,
@@ -120,13 +153,15 @@ export function useSmokeCraftMentorVoice() {
     })
     if (res.ok) setPreferences(res.preferences)
     return res
-  }, [isMuted, preferences])
+  }
+
+  const savePreferences = useCallback((patch) => savePreferencesInternal(patch), [isMuted, preferences])
 
   useEffect(() => () => stopAudio(), [stopAudio])
 
   return {
     status, preview, isPlaying, isMuted, preferences,
-    requestPreview, play, pause, replay, toggleMute, retry, savePreferences,
+    requestPreview, requestNarration, play, pause, replay, toggleMute, toggleCaptions, setPlaybackSpeed, retry, savePreferences,
     transcript: preview?.transcript || null,
   }
 }

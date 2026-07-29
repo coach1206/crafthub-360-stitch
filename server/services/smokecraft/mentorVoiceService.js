@@ -27,6 +27,7 @@
 import { getDb } from '../../db/connection.js'
 import crypto from 'crypto'
 import { MENTORS, getMentorById } from '../../../src/modules/smokecraft/smokeCraftMentors.js'
+import { getGuidance, MentorGuidanceError } from './mentorGuidanceService.js'
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || ''
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1'
@@ -110,30 +111,93 @@ function textHash(text) {
 }
 
 // In-flight request dedupe — protects against a duplicate ElevenLabs
-// provider charge from a rapid double-click on Preview Voice before the
-// first request has finished. Keyed by mentorId:speed (the request is
-// always for the same server-owned text at a given mentor+speed, so
-// this key fully identifies "the same synthesis").
+// provider charge from a rapid double-click on Preview Voice/Play
+// Narration before the first request has finished. Keyed by
+// guestReference:mentorId:speed:hash (guestReference is '' for a plain
+// preview, since that text is identical for every learner; a real
+// guest_reference for guidance narration, since that text is
+// learner-specific) — this key fully identifies "the same synthesis".
 const _inFlight = new Map()
 
-async function fetchFromCache(db, mentorId, speed, hash) {
+async function fetchFromCache(db, guestReference, mentorId, speed, hash) {
   const row = await db.query(
-    `SELECT * FROM smokecraft_voice_preview_cache WHERE mentor_id = $1 AND speed = $2 AND text_hash = $3 AND expires_at > now()`,
-    [mentorId, speed, hash]
+    `SELECT * FROM smokecraft_voice_preview_cache WHERE guest_reference = $1 AND mentor_id = $2 AND speed = $3 AND text_hash = $4 AND expires_at > now()`,
+    [guestReference, mentorId, speed, hash]
   )
   return row.rows[0] || null
 }
 
-async function saveToCache(db, { mentorId, speed, hash, transcript, audioBase64, contentType, voiceId, requestId }) {
+async function saveToCache(db, { guestReference, mentorId, speed, hash, transcript, audioBase64, contentType, voiceId, requestId }) {
   await db.query(
-    `INSERT INTO smokecraft_voice_preview_cache (mentor_id, speed, text_hash, transcript, audio_base64, content_type, voice_id, request_id, expires_at)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8, now() + interval '30 minutes')
-     ON CONFLICT (mentor_id, speed, text_hash) DO UPDATE SET
+    `INSERT INTO smokecraft_voice_preview_cache (guest_reference, mentor_id, speed, text_hash, transcript, audio_base64, content_type, voice_id, request_id, expires_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, now() + interval '30 minutes')
+     ON CONFLICT (guest_reference, mentor_id, speed, text_hash) DO UPDATE SET
        transcript = EXCLUDED.transcript, audio_base64 = EXCLUDED.audio_base64,
        content_type = EXCLUDED.content_type, voice_id = EXCLUDED.voice_id,
        request_id = EXCLUDED.request_id, expires_at = now() + interval '30 minutes'`,
-    [mentorId, speed, hash, transcript, audioBase64, contentType, voiceId, requestId]
+    [guestReference, mentorId, speed, hash, transcript, audioBase64, contentType, voiceId, requestId]
   )
+}
+
+/**
+ * Shared core: synthesizes (or reuses a cached) audio for a given
+ * mentor + already-determined transcript + speed, scoped to
+ * guestReference ('' for the anonymous/global preview cache, a real
+ * guest_reference for per-learner guidance narration). Never fabricates
+ * a successful response — every non-`ready` outcome is explicit.
+ */
+async function synthesizeAndCache({ guestReference, mentorId, speed, transcript }) {
+  const requestId = crypto.randomUUID()
+  const profile = getVoiceProfile(mentorId)
+  if (!profile) throw new MentorVoiceError('mentor_not_found')
+
+  const normalizedSpeed = normalizeSpeed(speed)
+
+  if (!profile.active) {
+    return { status: 'unavailable', reason: 'no_voice_configured', mentorId, transcript, requestId, provider: 'none', fromCache: false, speed: normalizedSpeed }
+  }
+  if (!isElevenLabsConfigured()) {
+    return { status: 'unavailable', reason: 'provider_not_configured', mentorId, transcript, requestId, provider: 'none', fromCache: false, speed: normalizedSpeed }
+  }
+
+  const db = getDb()
+  const hash = textHash(`${transcript}::${normalizedSpeed}`)
+
+  const cached = await fetchFromCache(db, guestReference, mentorId, normalizedSpeed, hash)
+  if (cached) {
+    return {
+      status: 'ready', mentorId, transcript,
+      audio: cached.audio_base64, contentType: cached.content_type,
+      requestId, provider: 'elevenlabs', fromCache: true, speed: normalizedSpeed,
+    }
+  }
+
+  const inFlightKey = `${guestReference}:${mentorId}:${normalizedSpeed}:${hash}`
+  if (_inFlight.has(inFlightKey)) {
+    const result = await _inFlight.get(inFlightKey)
+    return { ...result, requestId, fromCache: true }
+  }
+
+  const work = (async () => {
+    try {
+      const audioBuffer = await callElevenLabs(profile.voiceId, transcript, requestId)
+      const audioBase64 = audioBuffer.toString('base64')
+      await saveToCache(db, {
+        guestReference, mentorId, speed: normalizedSpeed, hash, transcript,
+        audioBase64, contentType: 'audio/mpeg', voiceId: profile.voiceId, requestId,
+      })
+      return { status: 'ready', mentorId, transcript, audio: audioBase64, contentType: 'audio/mpeg', provider: 'elevenlabs', speed: normalizedSpeed }
+    } catch (err) {
+      return { status: 'provider_error', reason: err.code || 'provider_error', mentorId, transcript, provider: 'elevenlabs', speed: normalizedSpeed }
+    }
+  })()
+  _inFlight.set(inFlightKey, work)
+  try {
+    const result = await work
+    return { ...result, requestId, fromCache: false }
+  } finally {
+    _inFlight.delete(inFlightKey)
+  }
 }
 
 async function callElevenLabs(voiceId, text, requestId) {
@@ -170,78 +234,35 @@ async function callElevenLabs(voiceId, text, requestId) {
 }
 
 /**
- * Generates (or reuses a cached) preview for a mentor's voice.
- * Never fabricates a successful audio response — every non-`ready`
- * outcome is an honest, explicit status.
+ * Generates (or reuses a cached) preview for a mentor's voice, using
+ * the fixed, server-owned approved preview text (same for every
+ * learner). Never fabricates a successful audio response.
  */
 export async function generatePreview({ mentorId, speed }) {
-  const requestId = crypto.randomUUID()
   const profile = getVoiceProfile(mentorId)
   if (!profile) throw new MentorVoiceError('mentor_not_found')
+  // guestReference '' — a preview's text is identical for every
+  // learner, so it uses the shared/anonymous cache slot, not a
+  // per-learner one.
+  return synthesizeAndCache({ guestReference: '', mentorId, speed, transcript: profile.previewText })
+}
 
-  const normalizedSpeed = normalizeSpeed(speed)
-  const transcript = profile.previewText
-
-  if (!profile.active) {
-    return {
-      status: 'unavailable', reason: 'no_voice_configured',
-      mentorId, transcript, requestId, provider: 'none', fromCache: false,
-    }
-  }
-  if (!isElevenLabsConfigured()) {
-    return {
-      status: 'unavailable', reason: 'provider_not_configured',
-      mentorId, transcript, requestId, provider: 'none', fromCache: false,
-    }
-  }
-
-  const db = getDb()
-  const hash = textHash(`${transcript}::${normalizedSpeed}`)
-
-  const cached = await fetchFromCache(db, mentorId, normalizedSpeed, hash)
-  if (cached) {
-    return {
-      status: 'ready', mentorId, transcript,
-      audio: cached.audio_base64, contentType: cached.content_type,
-      requestId, provider: 'elevenlabs', fromCache: true,
-      speed: normalizedSpeed,
-    }
-  }
-
-  const inFlightKey = `${mentorId}:${normalizedSpeed}`
-  if (_inFlight.has(inFlightKey)) {
-    const result = await _inFlight.get(inFlightKey)
-    return { ...result, requestId, fromCache: true }
-  }
-
-  const work = (async () => {
-    try {
-      const audioBuffer = await callElevenLabs(profile.voiceId, transcript, requestId)
-      const audioBase64 = audioBuffer.toString('base64')
-      await saveToCache(db, {
-        mentorId, speed: normalizedSpeed, hash, transcript,
-        audioBase64, contentType: 'audio/mpeg', voiceId: profile.voiceId, requestId,
-      })
-      return {
-        status: 'ready', mentorId, transcript,
-        audio: audioBase64, contentType: 'audio/mpeg',
-        provider: 'elevenlabs', speed: normalizedSpeed,
-      }
-    } catch (err) {
-      return {
-        status: 'provider_error',
-        reason: err.code || 'provider_error',
-        mentorId, transcript, provider: 'elevenlabs', speed: normalizedSpeed,
-      }
-    }
-  })()
-  _inFlight.set(inFlightKey, work)
-  try {
-    const result = await work
-    return { ...result, requestId, fromCache: false }
-  } finally {
-    _inFlight.delete(inFlightKey)
-  }
+/**
+ * Narrates a mentor's real, server-computed guidance for the exact
+ * screen/pairing context the learner is looking at right now. Reuses
+ * the ONE secure voice service (synthesizeAndCache — the same core
+ * used by generatePreview) and the ONE authoritative guidance function
+ * (mentorGuidanceService.getGuidance — the same function
+ * DynamicMentorPanel's text already comes from), so the narrated audio
+ * can never diverge from the guidance text already on screen. The
+ * client never supplies narration text — only mentorId/screenContext/
+ * pairingContext/speed, the same inputs the guidance request itself
+ * uses.
+ */
+export async function generateGuidanceNarration({ guestReference, mentorId, screenContext, pairingContext, speed }) {
+  const guidance = await getGuidance({ guestReference, mentorId, screenContext, pairingContext })
+  const result = await synthesizeAndCache({ guestReference, mentorId, speed, transcript: guidance.message })
+  return { ...result, sourceContext: guidance.sourceContext, guidanceMessageVersion: guidance.messageVersion }
 }
 
 export async function getVoicePreferences(guestReference) {

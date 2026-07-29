@@ -386,3 +386,18 @@ was added to each mentor card's existing footer padding (below the
 tag chips, above the card's bottom edge) for the voice controls and
 caption text — additive only, no existing element moved, resized, or
 restyled.
+
+## Holistic Fix 5B-2B-2 update (Seed & Soil baseline repair, shared mentor narration)
+
+No approved mentor visuals were redesigned. `DynamicMentorPanel`
+gained one new, additive section (Narrate control + Play/Pause/Replay/
+Mute/captions-toggle/speed selector, plus a caption line) below its
+existing guidance-text paragraph, rendered only once real `ready`
+guidance already exists — no existing element moved, resized, or
+restyled, and the narration section is entirely absent otherwise (no
+layout reservation/placeholder for it). Mentor name, portrait, flag,
+role, and the guidance text itself are byte-for-byte unchanged. Two
+new non-visual `data-testid` attributes (`mentor-guidance-text`,
+`mentor-narration-caption`) were added for reliable automated testing
+only — no visual or behavioral effect. The Seed & Soil baseline repair
+touched no frontend code at all.

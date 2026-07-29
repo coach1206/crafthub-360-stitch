@@ -104,3 +104,28 @@ in production, every preview request for every mentor (including the
 `status: 'unavailable', reason: 'provider_not_configured'` — this is
 by design, not a defect. Setting a real key in production is the only
 remaining step before real audio previews can be `ready`.
+
+## Holistic Fix 5B-2B-2 — guidance narration endpoint
+
+`POST /api/smokecraft/mentor-voice/narrate` — body: `{ mentorId,
+screenContext?, pairingContext?, speed? }`. Unlike the preview
+endpoint, this endpoint computes its own transcript server-side by
+calling `mentorGuidanceService.getGuidance()` with the same inputs —
+the client cannot submit narration text (any client-supplied `text`
+field is ignored). Response shape matches the preview endpoint
+(`status`/`transcript`/`audio`/`requestId`/...), plus `sourceContext`
+and `guidanceMessageVersion` echoing the authoritative guidance
+response.
+
+Because narration text is per-learner (derived from that learner's
+real progress/pairing/quiz/tasting signals), migration 100 extended
+`smokecraft_voice_preview_cache` with a `guest_reference` column
+(`''` for the shared, learner-independent preview cache; a real
+`guest_reference` for narration) so the cache and in-flight-request
+dedupe are genuinely learner-scoped — one learner's narration audio
+is never served to, or blocks a fresh provider call for, another
+learner requesting the same mentor's guidance.
+
+Narration is only offered by `DynamicMentorPanel` once real `ready`
+guidance text already exists on screen, and is always opt-in (a real
+user click on Narrate) — never autoplayed.

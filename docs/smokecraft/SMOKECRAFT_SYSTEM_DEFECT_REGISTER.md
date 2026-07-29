@@ -1445,3 +1445,45 @@ Closed via `src/pages/smokecraft/Mentor.jsx`. Encoded as a permanent
 regression check in
 `verify-smokecraft-hf5b2b1-mentor-selection-browser.mjs`. See
 `public/proof/smokecraft-holistic-fix-5b-2b-1/00-proof-index.md`.
+
+## Holistic Fix 5B-2B-2 update (Seed & Soil baseline repair, shared mentor narration)
+
+- **SC-D054**: `npm run db:migrate` — the repo's own documented reset
+  workflow (`docs/DATABASE_FOUNDATION.md`) — only ever applied schema
+  migrations. `golden_box_component_catalog` (and everything that
+  foreign-keys to it — `smokecraft_seed_soil_progress`,
+  `smokecraft_quiz_questions`, `smokecraft_flavor_notes`,
+  `smokecraft_component_compatibility`) has never had its rows created
+  by a migration; they were only ever inserted by the pre-existing,
+  already-idempotent `server/db/seeds/seedSmokecraftEducationalContent.mjs`
+  script, which nothing in the automated reset path ever invoked. A
+  genuinely fresh database therefore always passed every migration yet
+  still had zero catalog rows, so the first real request referencing a
+  catalog id (`POST /api/smokecraft/seed-soil/progress`) failed with a
+  23503 foreign-key violation — surfacing as a failing mentor-guidance
+  regression check ("Guidance changes after real Skill Tree progress
+  advances") whose real root cause was one layer upstream of guidance
+  entirely. Reproduced directly: a fresh `npm run db:migrate` left
+  `golden_box_component_catalog` at 0 rows; calling
+  `seed-soil/progress` on that database returned `23503` before any
+  mentor-guidance code ever ran. Closed by having `runMigrations.js`'s
+  CLI entrypoint spawn the required content seed(s) as a real child
+  process (awaited to completion — a first attempt using a plain
+  dynamic `import()` was itself a real defect: the seed script's
+  `main()` is fire-and-forget at module scope with no top-level
+  `await`, so `import()` resolved before the async inserts actually
+  completed, silently leaving the catalog empty despite logging
+  "Seeded") after every clean migration run. Verified idempotent and
+  additive-only across two consecutive resets and against pre-existing
+  unrelated data.
+
+Closed via `server/db/runMigrations.js`,
+`server/db/migrations/100_smokecraft_mentor_voice_narration.sql`
+(unrelated schema change bundled in the same pass — see below),
+`package.json` (`db:seed` script added). Encoded as a permanent
+regression check in
+`verify-smokecraft-hf5b2b2-clean-reset-baseline.mjs` (drops and
+recreates the real database, runs the real reset command, asserts
+real content rows exist) and in
+`scripts/validateSmokecraftMentorVoiceSecurity.mjs`. See
+`public/proof/smokecraft-holistic-fix-5b-2b-2/00-proof-index.md`.

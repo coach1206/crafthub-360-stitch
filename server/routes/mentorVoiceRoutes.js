@@ -32,6 +32,7 @@ function bridgeIdentity(req, _res, next) {
 
 router.get('/profiles', ctrl.handleListProfiles)
 router.post('/preview', previewLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handlePreview)
+router.post('/narrate', previewLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleNarrateGuidance)
 router.get('/preferences', requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleGetPreferences)
 router.post('/preferences', prefsLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleSavePreferences)
 

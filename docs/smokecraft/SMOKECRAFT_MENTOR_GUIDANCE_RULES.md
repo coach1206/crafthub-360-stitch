@@ -140,3 +140,20 @@ already-approved roster greeting, never the dynamic, context-aware
 guidance text this service generates. The two systems are not wired
 together in this pass (no full lesson-by-lesson autoplay of guidance
 text — explicitly out of scope, deferred to Holistic Fix 5B-2B-2).
+
+## Holistic Fix 5B-2B-2 update (shared mentor narration)
+
+`DynamicMentorPanel` — the one shared component every context-aware
+mentor panel renders through (Skill Tree, Collections, Challenge Hub,
+Blend Fault, Filler Arrangement, Pairing Lab, Pairing Recommendations)
+— now offers an opt-in "Narrate" control once real, `ready` guidance
+text is already on screen. Narration is generated server-side by
+`mentorVoiceService.generateGuidanceNarration()`, which calls the
+exact same `mentorGuidanceService.getGuidance()` function the visible
+text already came from — the narrated transcript can never diverge
+from the guidance text rendered above it, verified live via Playwright
+(byte-for-byte identical) and via API test (same `sourceContext` in
+both responses). The client never supplies narration text; only
+`mentorId`/`screenContext`/`pairingContext`/`speed` (an unrestricted
+`text` field sent by a client is silently ignored server-side).
+Narration never autoplays — always opt-in via a real user click.
