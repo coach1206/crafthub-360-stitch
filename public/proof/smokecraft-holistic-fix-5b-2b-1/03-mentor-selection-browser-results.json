@@ -1,0 +1,63 @@
+{
+  "pass": 14,
+  "fail": 0,
+  "total": 14,
+  "results": [
+    {
+      "name": "Mentor Selection route resolves",
+      "ok": true
+    },
+    {
+      "name": "Approved heading still renders (no visual regression)",
+      "ok": true
+    },
+    {
+      "name": "Every one of the 8 real roster mentors has a Preview Voice control",
+      "ok": true
+    },
+    {
+      "name": "Honest \"unavailable\" state renders when the provider is not configured in this environment (no fabricated audio/success)",
+      "ok": true
+    },
+    {
+      "name": "Transcript/caption text is shown even when audio is unavailable (honest, non-fabricated transcript)",
+      "ok": true
+    },
+    {
+      "name": "Mentor with no configured voice honestly shows unavailable, never a fake Play control",
+      "ok": true
+    },
+    {
+      "name": "Every mentor card has its own mute control",
+      "ok": true
+    },
+    {
+      "name": "Toggling mute updates the control's accessible label (mute/unmute both reachable)",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on Mentor Selection",
+      "ok": true
+    },
+    {
+      "name": "Mentor cards remain keyboard-focusable after the role/tabIndex refactor (selection still works via keyboard)",
+      "ok": true
+    },
+    {
+      "name": "Clicking a mentor card still selects it (Preview Voice control does not block the existing selection interaction)",
+      "ok": true
+    },
+    {
+      "name": "Clicking Preview Voice does not accidentally toggle the mentor card's selection state (no blocked/mis-wired overlay)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff after adding voice controls",
+      "ok": true
+    },
+    {
+      "name": "No console errors on Mentor Selection",
+      "ok": true
+    }
+  ]
+}

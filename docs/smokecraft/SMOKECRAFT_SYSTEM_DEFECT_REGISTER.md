@@ -1423,3 +1423,25 @@ regression check in
 console errors" and mentor-identity/guidance checks on all six
 screens). See
 `public/proof/smokecraft-holistic-fix-5b-2a-1/00-proof-index.md`.
+
+## Holistic Fix 5B-2B-1 update (ElevenLabs voice foundation and secure preview)
+
+- **SC-D053**: `DynamicMentorPanel`'s sibling — the new Mentor
+  Selection `VoicePreviewControl` — initially only rendered the
+  preview transcript/caption text while `status === 'ready'` or
+  `'loading'`, so a mentor whose voice is genuinely unavailable (no
+  ElevenLabs key configured, or no real voice ID assigned) showed the
+  honest "Voice unavailable" message but silently withheld the
+  transcript text the learner could otherwise have read — a real,
+  live-found accessibility/honesty gap (mandate requirement 8:
+  "transcript always available when audio is generated" was met
+  narrowly, but the more useful case — transcript available
+  regardless of audio outcome — was missed). Found live via Playwright
+  (transcript text assertion failed against the real unavailable
+  state). Closed by rendering the transcript whenever a preview has
+  been requested at all (`status !== 'idle'`), not only on `ready`.
+
+Closed via `src/pages/smokecraft/Mentor.jsx`. Encoded as a permanent
+regression check in
+`verify-smokecraft-hf5b2b1-mentor-selection-browser.mjs`. See
+`public/proof/smokecraft-holistic-fix-5b-2b-1/00-proof-index.md`.

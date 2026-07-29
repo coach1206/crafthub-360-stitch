@@ -129,3 +129,14 @@ issuing a premature request.
 ElevenLabs mentor voices, Golden Box — untouched, per explicit mandate
 exclusion. The full 109-route/five-viewport sweeps were not run, per
 this mandate's own instruction.
+
+## Holistic Fix 5B-2B-1 note (voice is a separate, additive system)
+
+The new mentor-voice preview foundation
+(`server/services/smokecraft/mentorVoiceService.js`,
+`SMOKECRAFT_MENTOR_VOICE_MAP.md`) is intentionally independent of
+`mentorGuidanceService.js` — voice previews speak a mentor's own
+already-approved roster greeting, never the dynamic, context-aware
+guidance text this service generates. The two systems are not wired
+together in this pass (no full lesson-by-lesson autoplay of guidance
+text — explicitly out of scope, deferred to Holistic Fix 5B-2B-2).

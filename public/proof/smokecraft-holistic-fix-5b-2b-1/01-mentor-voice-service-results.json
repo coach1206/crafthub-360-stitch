@@ -1,0 +1,75 @@
+{
+  "pass": 17,
+  "fail": 0,
+  "total": 17,
+  "results": [
+    {
+      "name": "isElevenLabsConfigured() is true once a key is set",
+      "ok": true
+    },
+    {
+      "name": "listVoiceProfiles returns all 8 real roster mentors",
+      "ok": true
+    },
+    {
+      "name": "Only mentors with a real, already-configured voice ID are active (dominican/nicaragua/honduras/mexico/brazil)",
+      "ok": true
+    },
+    {
+      "name": "A mentor with no real configured voice ID (cuba) is explicitly inactive, never fabricated as active",
+      "ok": true
+    },
+    {
+      "name": "A mentor with a real configured voice and a working provider returns status \"ready\"",
+      "ok": true
+    },
+    {
+      "name": "The ready response includes real audio, transcript, and a request ID",
+      "ok": true
+    },
+    {
+      "name": "The transcript is the mentor's own real, server-owned approved text (not client-supplied)",
+      "ok": true
+    },
+    {
+      "name": "A mentor with no real voice ID returns an honest \"unavailable\" status, never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "An identical repeat request reuses the cached audio (no second provider call)",
+      "ok": true
+    },
+    {
+      "name": "The cached result still returns status \"ready\" with the same real audio",
+      "ok": true
+    },
+    {
+      "name": "Two concurrent identical requests (rapid double-click) result in exactly one real provider call",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent requests still resolve to a real ready result",
+      "ok": true
+    },
+    {
+      "name": "A provider timeout returns an honest \"provider_error\" status, never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "A provider 500 error returns an honest \"provider_error\" status, never fabricated audio",
+      "ok": true
+    },
+    {
+      "name": "With no ElevenLabs API key configured, an active mentor still returns an honest \"unavailable\" status (never fabricated audio)",
+      "ok": true
+    },
+    {
+      "name": "Invalid voiceEnabled type is rejected",
+      "ok": true
+    },
+    {
+      "name": "An out-of-range playback speed is clamped to a real allowed value, never stored as-is",
+      "ok": true
+    }
+  ]
+}

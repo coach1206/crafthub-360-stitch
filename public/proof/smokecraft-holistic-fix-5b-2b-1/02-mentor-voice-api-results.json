@@ -1,0 +1,71 @@
+{
+  "pass": 16,
+  "fail": 0,
+  "total": 16,
+  "results": [
+    {
+      "name": "The profiles list never includes an ElevenLabs voiceId or API key",
+      "ok": true
+    },
+    {
+      "name": "Every mentor has an explicit active boolean (no ambiguous voice availability)",
+      "ok": true
+    },
+    {
+      "name": "A genuinely fresh guest can request a preview without a prior identity round-trip",
+      "ok": true
+    },
+    {
+      "name": "A preview request with no mentorId is rejected",
+      "ok": true
+    },
+    {
+      "name": "A preview request for an unknown mentor is rejected (never fabricates a mentor)",
+      "ok": true
+    },
+    {
+      "name": "An active mentor honestly reports \"unavailable\" (provider_not_configured) rather than fabricating audio",
+      "ok": true
+    },
+    {
+      "name": "A mentor with no configured voice honestly reports \"unavailable\" (no_voice_configured)",
+      "ok": true
+    },
+    {
+      "name": "Every preview response includes a real transcript regardless of audio availability",
+      "ok": true
+    },
+    {
+      "name": "Every preview response includes a real request ID",
+      "ok": true
+    },
+    {
+      "name": "Preferences save succeeds",
+      "ok": true
+    },
+    {
+      "name": "Saved preferences persist and are read back exactly (refresh persistence, same cookie identity)",
+      "ok": true
+    },
+    {
+      "name": "A second independent fetch under the same identity returns identical preferences (no per-device drift)",
+      "ok": true
+    },
+    {
+      "name": "An invalid voiceEnabled type is rejected, not silently coerced",
+      "ok": true
+    },
+    {
+      "name": "An invalid lastPreviewedMentorId is rejected",
+      "ok": true
+    },
+    {
+      "name": "A completely separate guest gets their own default preferences, never another guest's saved values",
+      "ok": true
+    },
+    {
+      "name": "One guest saving preferences never leaks into or overwrites a different guest's preferences",
+      "ok": true
+    }
+  ]
+}

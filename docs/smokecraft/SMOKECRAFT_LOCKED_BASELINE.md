@@ -371,3 +371,18 @@ reference images before placement. `ChallengeHub.jsx`,
 `CollectionsCenter.jsx` had their existing `DynamicMentorPanel` swapped
 from a static string to a `context` prop in place — no layout change.
 No spacing, color, or artwork changed on any of the six screens.
+
+## Holistic Fix 5B-2B-1 update (ElevenLabs voice foundation and secure preview)
+
+No approved mentor visuals were redesigned. Mentor Selection's card
+markup changed from a `<button>` element to a `<div role="button"
+tabIndex>` with the same `onClick`/keyboard (Enter/Space)
+selection behavior — required because the new Preview Voice/Play/
+Pause/Replay/Mute controls are themselves real `<button>` elements,
+and a `<button>` cannot legally contain another `<button>`. Selection
+visuals (border, checkmark badge, glow) and keyboard/pointer selection
+behavior are unchanged; verified live via Playwright. One new section
+was added to each mentor card's existing footer padding (below the
+tag chips, above the card's bottom edge) for the voice controls and
+caption text — additive only, no existing element moved, resized, or
+restyled.

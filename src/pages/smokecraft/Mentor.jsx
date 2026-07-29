@@ -5,6 +5,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { MENTORS, MAX_MENTOR_SELECTIONS } from '../../modules/smokecraft/smokeCraftMentors.js'
+import { useSmokeCraftMentorVoice } from '../../hooks/useSmokeCraftMentorVoice.js'
 
 const GOLD      = '#E9C176'
 const NAVY      = '#0b0f18'
@@ -15,15 +16,117 @@ const GLASS     = 'rgba(8,10,16,0.86)'
 const CREAM     = '#e5e2e1'
 const DIM       = 'rgba(229,226,225,0.65)'
 
+// Holistic Fix 5B-2B-1 — Preview Voice control. Additive to the
+// existing card footer (below the tag chips); no existing layout,
+// spacing, or artwork changed. Always uses the shared, server-
+// authoritative mentor-voice service — never fabricates audio, never
+// sends arbitrary text, never exposes a provider key.
+function VoicePreviewControl({ mentor }) {
+  const voice = useSmokeCraftMentorVoice()
+
+  function stop(e) { e.stopPropagation() }
+
+  function handlePreview(e) {
+    stop(e)
+    triggerHaptic('light')
+    voice.requestPreview(mentor.id, voice.preferences?.playbackSpeed ?? 1.0)
+  }
+
+  return (
+    <div
+      onClick={stop}
+      onKeyDown={e => e.stopPropagation()}
+      style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${BORDER}` }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <button
+          type="button"
+          onClick={handlePreview}
+          aria-label={`Preview ${mentor.name}'s voice`}
+          style={{
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
+            color: GOLD, background: 'rgba(233,193,118,0.08)', border: `1px solid ${BORDER}`,
+            borderRadius: 999, padding: '6px 12px', cursor: 'pointer',
+          }}
+        >
+          {voice.status === 'loading' ? 'Loading…' : 'Preview Voice'}
+        </button>
+
+        {voice.status === 'ready' && (
+          <>
+            <button
+              type="button"
+              aria-label={voice.isPlaying ? `Pause ${mentor.name}'s voice preview` : `Play ${mentor.name}'s voice preview`}
+              onClick={e => { stop(e); voice.isPlaying ? voice.pause() : voice.play() }}
+              style={iconBtnStyle}
+            >
+              {voice.isPlaying ? '⏸' : '▶'}
+            </button>
+            <button
+              type="button"
+              aria-label={`Replay ${mentor.name}'s voice preview`}
+              onClick={e => { stop(e); voice.replay() }}
+              style={iconBtnStyle}
+            >
+              ⟲
+            </button>
+          </>
+        )}
+
+        <button
+          type="button"
+          aria-label={voice.isMuted ? 'Unmute mentor voice' : 'Mute mentor voice'}
+          onClick={e => { stop(e); voice.toggleMute() }}
+          style={iconBtnStyle}
+        >
+          {voice.isMuted ? '🔇' : '🔊'}
+        </button>
+
+        {voice.status === 'unavailable' && (
+          <span style={{ fontSize: 10, color: DIM }}>Voice unavailable for this mentor</span>
+        )}
+        {voice.status === 'provider-error' && (
+          <>
+            <span style={{ fontSize: 10, color: DIM }}>Voice preview failed</span>
+            <button type="button" onClick={e => { stop(e); voice.retry() }} style={{ ...iconBtnStyle, width: 'auto', padding: '0 8px', fontSize: 10 }}>
+              Retry
+            </button>
+          </>
+        )}
+        {voice.status === 'session-expired' && (
+          <span style={{ fontSize: 10, color: DIM }}>Session expired — refresh to preview voice</span>
+        )}
+      </div>
+
+      {voice.transcript && voice.preferences?.captionsEnabled !== false && voice.status !== 'idle' && (
+        <p style={{ fontSize: 10, color: DIM, lineHeight: 1.5, marginTop: 8, marginBottom: 0 }} aria-live="polite">
+          {voice.transcript}
+        </p>
+      )}
+    </div>
+  )
+}
+
+const iconBtnStyle = {
+  width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+  color: GOLD, background: 'rgba(233,193,118,0.08)', border: `1px solid ${BORDER}`, cursor: 'pointer', fontSize: 12, padding: 0,
+}
+
 function MentorCard({ mentor, active, maxed, onToggle }) {
   const [hover, setHover] = useState(false)
+  function handleKeyDown(e) {
+    if (maxed) return
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() }
+  }
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={maxed ? -1 : 0}
       aria-label={`${mentor.name} — ${mentor.country} — ${mentor.bio}${active ? ' (selected)' : ''}`}
       aria-pressed={active}
-      disabled={maxed}
-      onClick={onToggle}
+      aria-disabled={maxed}
+      onClick={maxed ? undefined : onToggle}
+      onKeyDown={handleKeyDown}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onFocus={() => setHover(true)}
@@ -72,8 +175,9 @@ function MentorCard({ mentor, active, maxed, onToggle }) {
             }}>{tag}</span>
           ))}
         </div>
+        <VoicePreviewControl mentor={mentor} />
       </div>
-    </button>
+    </div>
   )
 }
 

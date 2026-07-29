@@ -592,3 +592,21 @@ overlays on Continue/Save controls, and zero console errors. Found and
 fixed one real defect in this pass (SC-D052, missing
 `ensureSmokeCraftGuestIdentity` on three routers) via this same live
 testing — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.
+
+## Holistic Fix 5B-2B-1 update (ElevenLabs voice foundation and secure preview)
+
+Mentor Selection gained a Preview Voice control on every mentor card
+(loading / ready / unavailable / provider-error / session-expired
+states), plus per-card Play/Pause/Replay and Mute controls, and a
+captions/transcript line that renders whenever a preview has been
+requested. Real browser verification (14/14 checks) confirmed: every
+one of the 8 real roster mentors has its own Preview Voice control;
+the honest "unavailable" state renders correctly both for a mentor
+with a configured voice (this environment has no ElevenLabs API key)
+and for a mentor with none configured; the transcript still renders
+even when audio is unavailable; mute/unmute toggles its accessible
+label; keyboard Tab still moves focus and mentor cards remain
+keyboard-selectable after being changed from `<button>` to
+`role="button"` (required to legally nest the new voice controls);
+clicking Preview Voice does not accidentally toggle the card's
+selection state; no horizontal layout cutoff; zero console errors.

@@ -316,3 +316,19 @@ edit. `convertGuestToAccount` transfers both tables on conversion
 (`pairing_requested`/`pairing_recommended`/`pairing_saved`/
 `pairing_rated`) reuse the existing `smokecraft_progression_events`
 table — no new competing event log.
+
+## Holistic Fix 5B-2B-1 update (ElevenLabs voice foundation and secure preview)
+
+New: `smokecraft_voice_preferences` (migration 099) is the sole owner
+of a learner's voice preferences (voice enabled/disabled, preferred
+playback speed, captions enabled, last-previewed mentor), keyed by
+`guest_reference` — same identity model as every other SmokeCraft
+state table, server-authoritative, survives refresh and a second
+device under the same identity. New: `smokecraft_voice_preview_cache`
+holds only already-synthesized preview audio (never private learner
+data — preview text is always server-owned, identical for every
+learner who previews a given mentor at a given speed), bounded to a
+30-minute lifetime, existing purely to avoid duplicate ElevenLabs
+provider calls. `server/services/smokecraft/mentorVoiceService.js` is
+the one place the ElevenLabs API key is read; it never appears in any
+response payload or client bundle.
