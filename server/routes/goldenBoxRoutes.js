@@ -23,12 +23,23 @@ const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
 // Guest-facing routes resolve the same SmokeCraft guest identity used by
 // Management Sync (server-issued JWT + HttpOnly cookie) — never a
 // second, competing guest-identity scheme.
-router.use(optionalAuth, attachSmokeCraftIdentity)
+// Holistic Fix 5C-1B: ensureSmokeCraftGuestIdentity was missing here —
+// the same recurring defect class as SC-D033/036/041/052/055 — a
+// genuinely fresh guest landing directly on a Golden Box route got a
+// real 401 instead of an auto-issued identity.
+router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
 
 function bridgeIdentity(req, _res, next) {
-  if (req.smokecraftIdentity?.type === 'guest') {
-    req.goldenBoxGuestReference = req.smokecraftIdentity.id
-  } else if (req.smokecraftIdentity?.type === 'user') {
+  // Holistic Fix 5C-1B (SC-D055-class fix): an authenticated account's
+  // identity was previously used unprefixed here, while
+  // convertGuestToAccount() transfers guest data to the `user:${id}`
+  // -prefixed identity every other SmokeCraft system uses. That
+  // mismatch meant a converted account's Golden Box requests silently
+  // queried under the wrong identity and never saw their own
+  // just-transferred entry.
+  if (req.smokecraftIdentity?.type === 'user') {
+    req.goldenBoxGuestReference = `user:${req.smokecraftIdentity.id}`
+  } else if (req.smokecraftIdentity?.type === 'guest') {
     req.goldenBoxGuestReference = req.smokecraftIdentity.id
   }
   next()

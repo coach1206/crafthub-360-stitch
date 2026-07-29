@@ -1534,3 +1534,56 @@ transfer). Encoded as permanent regression checks in
 `verify-smokecraft-hf5c1a-challenge-hub-api.mjs` and
 `scripts/validateSmokecraftChallengeHubAuthority.mjs`. See
 `public/proof/smokecraft-holistic-fix-5c-1a/00-proof-index.md`.
+
+## Holistic Fix 5C-1B update (Golden Box scoring and persistence audit)
+
+- **SC-D057**: `goldenBoxRoutes.js` was missing `ensureSmokeCraftGuestIdentity`
+  in its `router.use()` chain — the same recurring defect class as
+  SC-D033/036/041/052/055. A genuinely fresh guest landing directly on
+  a Golden Box route got a real 401. Closed by adding it.
+- **SC-D058**: `goldenBoxRoutes.js`'s `bridgeIdentity` used the raw
+  `smokecraftIdentity.id` for an authenticated account instead of the
+  established `user:${id}` prefix (same SC-D055 defect class,
+  independently present here). Worse than the Challenge Hub instance:
+  because `convertGuestToAccount` writes transferred data to the
+  `user:${id}`-prefixed identity, this mismatch meant a converted
+  account's Golden Box requests never found their own transferred
+  entry — `createEntry`'s existing-entry lookup (`guest_reference`
+  only) would silently create a brand-new, empty entry instead.
+- **SC-D059**: `convertGuestToAccount()` included `golden_box_entries`
+  in the generic set-union copy loop used for simple, childless
+  evidence tables. Because `golden_box_entries.entry_id` has
+  `DEFAULT gen_random_uuid()` and was not in that loop's copied column
+  list, the copied row got a brand-new `entry_id` — silently orphaning
+  every real `golden_box_entry_versions`/`golden_box_blend_components`/
+  `golden_box_submissions` row that referenced the OLD `entry_id` via a
+  real foreign key. A converted account would see an empty, version-1
+  draft with no history and no submission record, despite the
+  conversion itself reporting success. Found via the account-
+  conversion API test (real end-to-end: build a draft, submit it,
+  convert, verify the SAME identity still sees the submitted entry and
+  its 4 saved components). Closed with a bespoke transfer function
+  that generates a real new `entry_id` for the copy but then remaps
+  every child row's foreign key to it (same technique as the Blend
+  Fault attempt/answer transfer in 5C-1A).
+- Structural gap (not a bug per se): `saveDraft()` had zero optimistic-
+  concurrency protection and zero idempotency-key dedupe — a rapid
+  double-click created a real duplicate version row, and two
+  concurrent saves both silently succeeded with no conflict signal
+  (last-write-wins, invisible data loss). Closed via a row-locked
+  (`FOR UPDATE`) transaction, `expectedVersion` conflict detection, and
+  `idempotency_key` (migration 102). `submitEntry()` also never caught
+  a `UNIQUE_VIOLATION` race on the submissions insert (would have
+  produced an unhandled 500 for the losing request in a genuine
+  two-tab race) — closed with a graceful catch that returns the real
+  winning submission.
+
+Closed via `server/routes/goldenBoxRoutes.js`,
+`server/services/goldenBox/entryService.js`,
+`server/services/goldenBox/goldenBoxEventService.js` (new),
+`server/db/migrations/102_smokecraft_golden_box_submission_authority.sql`,
+`server/services/smokecraft/playerStateService.js`. Encoded as
+permanent regression checks in
+`verify-smokecraft-hf5c1b-golden-box-api.mjs` and
+`scripts/validateSmokecraftGoldenBoxAuthority.mjs`. See
+`public/proof/smokecraft-holistic-fix-5c-1b/00-proof-index.md`.

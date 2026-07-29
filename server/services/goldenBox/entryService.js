@@ -6,10 +6,18 @@
 import { getDb } from '../../db/connection.js'
 import { logActivity } from './activityLogService.js'
 import { transitionEntry } from './lifecycleService.js'
+import { recordGoldenBoxEvent } from './goldenBoxEventService.js'
 
 export class EntryError extends Error {
   constructor(code) { super(code); this.code = code }
 }
+
+const UNIQUE_VIOLATION = '23505'
+// Versions the submission-completeness rule (validateSubmission's
+// requiredTypes list) — bump this if that rule ever changes, matching
+// the versioned-rule pattern established across every other SmokeCraft
+// scoring system in this operation.
+const SUBMISSION_RULE_VERSION = 1
 
 export async function createEntry(competitionId, identity, actorId) {
   if (!identity.guestReference) throw new EntryError('guest_reference_required')
@@ -35,6 +43,11 @@ export async function createEntry(competitionId, identity, actorId) {
     )
     await client.query('COMMIT')
     await logActivity({ entryId: entry.entry_id, competitionId, actorId, action: 'entry_created' })
+    await recordGoldenBoxEvent({
+      guestReference: identity.guestReference, sourceScreen: 'GoldenBox', sourceRoute: '/smokecraft/golden-box',
+      eventType: 'golden_box_draft_created', entryId: entry.entry_id, versionId: 1, ruleVersion: SUBMISSION_RULE_VERSION,
+      idempotencyKey: `golden-box-draft-created-${entry.entry_id}`,
+    })
     return entry
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
@@ -65,25 +78,82 @@ export async function getCurrentVersion(entryId) {
  * Saves a draft edit. Before lock: creates a NEW version row (never
  * mutates a prior one) and advances entries.current_version. After
  * lock/submission: rejected outright — "must not silently mutate."
+ *
+ * expectedVersion (optional but recommended): the version_number the
+ * client last loaded/saved. If supplied and it no longer matches the
+ * entry's real current_version (a real optimistic-concurrency
+ * conflict — someone else, or another tab/device, saved a newer
+ * version first), the write is rejected with `stale_version` rather
+ * than silently overwriting the newer edit. Without it, saveDraft
+ * behaves as before (last-write-wins) — existing callers are not
+ * broken by this addition.
+ *
+ * idempotencyKey (optional but recommended): a rapid double-click
+ * retry with the same key returns the already-created version instead
+ * of creating a second, near-duplicate one.
  */
-export async function saveDraft(entryId, { presentationPayload, pairingSelection, pairingDefense, predictedProfile, components, cigarName }, actorId) {
+export async function saveDraft(entryId, { presentationPayload, pairingSelection, pairingDefense, predictedProfile, components, cigarName, expectedVersion, idempotencyKey }, actorId) {
   const db = getDb()
   const entry = await getEntry(entryId)
   if (!entry) throw new EntryError('entry_not_found')
-  if (['locked', 'submitted', 'under_review', 'finalist', 'winner', 'not_selected', 'disqualified'].includes(entry.status)) {
-    throw new EntryError('entry_locked_cannot_edit')
+
+  // Fast-path idempotency check (pre-lock): a true retry of an
+  // already-succeeded save can return immediately without taking a
+  // row lock at all. The authoritative check happens again below,
+  // inside the lock, to close the real race a pre-lock-only check
+  // would still allow: two concurrent first-time saves for the same
+  // edit could otherwise both pass this check (neither found existing
+  // yet) and both attempt to proceed.
+  if (idempotencyKey) {
+    const { rows: existing } = await db.query(
+      `SELECT * FROM golden_box_entry_versions WHERE idempotency_key = $1`, [idempotencyKey]
+    )
+    if (existing[0]) return existing[0]
   }
+
   const client = await db.connect()
   try {
     await client.query('BEGIN')
-    const nextVersion = entry.current_version + 1
-    const { rows: versionRows } = await client.query(
-      `INSERT INTO golden_box_entry_versions
-         (entry_id, version_number, presentation_payload, pairing_selection, pairing_defense, predicted_profile, created_by)
-       VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-      [entryId, nextVersion, JSON.stringify(presentationPayload || {}), pairingSelection ? JSON.stringify(pairingSelection) : null,
-       pairingDefense || null, predictedProfile ? JSON.stringify(predictedProfile) : null, actorId]
-    )
+    // Row-locked read of the real current entry state — closes the
+    // two-tab/rapid-double-click race the pre-lock checks above could
+    // not: two concurrent saveDraft calls for the same entry now
+    // genuinely serialize here, so the second one always sees the
+    // FIRST one's committed current_version, not a stale snapshot.
+    const { rows: lockedRows } = await client.query(`SELECT * FROM golden_box_entries WHERE entry_id = $1 FOR UPDATE`, [entryId])
+    const lockedEntry = lockedRows[0]
+    if (!lockedEntry) throw new EntryError('entry_not_found')
+    if (['locked', 'submitted', 'under_review', 'finalist', 'winner', 'not_selected', 'disqualified'].includes(lockedEntry.status)) {
+      throw new EntryError('entry_locked_cannot_edit')
+    }
+    if (idempotencyKey) {
+      const { rows: existingLocked } = await client.query(`SELECT * FROM golden_box_entry_versions WHERE idempotency_key = $1`, [idempotencyKey])
+      if (existingLocked[0]) { await client.query('ROLLBACK'); return existingLocked[0] }
+    }
+    if (typeof expectedVersion === 'number' && expectedVersion !== lockedEntry.current_version) {
+      await client.query('ROLLBACK')
+      const err = new EntryError('stale_version')
+      err.currentVersion = lockedEntry.current_version
+      throw err
+    }
+
+    const nextVersion = lockedEntry.current_version + 1
+    let versionRows
+    try {
+      ;({ rows: versionRows } = await client.query(
+        `INSERT INTO golden_box_entry_versions
+           (entry_id, version_number, presentation_payload, pairing_selection, pairing_defense, predicted_profile, created_by, idempotency_key)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+        [entryId, nextVersion, JSON.stringify(presentationPayload || {}), pairingSelection ? JSON.stringify(pairingSelection) : null,
+         pairingDefense || null, predictedProfile ? JSON.stringify(predictedProfile) : null, actorId, idempotencyKey || null]
+      ))
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION && idempotencyKey) {
+        await client.query('ROLLBACK')
+        const { rows: dup } = await db.query(`SELECT * FROM golden_box_entry_versions WHERE idempotency_key = $1`, [idempotencyKey])
+        return dup[0]
+      }
+      throw err
+    }
     const version = versionRows[0]
     for (const [i, c] of (components || []).entries()) {
       await client.query(
@@ -98,6 +168,11 @@ export async function saveDraft(entryId, { presentationPayload, pairingSelection
     )
     await client.query('COMMIT')
     await logActivity({ entryId, competitionId: entry.competition_id, actorId, action: 'draft_saved', metadata: { version: nextVersion } })
+    await recordGoldenBoxEvent({
+      guestReference: entry.guest_reference, sourceScreen: 'GoldenBox', sourceRoute: '/smokecraft/golden-box',
+      eventType: 'golden_box_draft_updated', entryId, versionId: version.id, ruleVersion: SUBMISSION_RULE_VERSION,
+      idempotencyKey: idempotencyKey ? `golden-box-draft-updated-canonical-${idempotencyKey}` : `golden-box-draft-updated-canonical-${entryId}-${nextVersion}`,
+    })
     return version
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
@@ -127,11 +202,23 @@ function validateSubmission(version, components) {
   return errors
 }
 
-export async function submitEntry(entryId, actorId, competition) {
+export async function submitEntry(entryId, actorId, competition, idempotencyKey) {
   const db = getDb()
   const entry = await getEntry(entryId)
   if (!entry) throw new EntryError('entry_not_found')
-  if (entry.status === 'submitted' || entry.status === 'locked') throw new EntryError('duplicate_submission')
+
+  if (idempotencyKey) {
+    const { rows: dup } = await db.query(`SELECT * FROM golden_box_submissions WHERE idempotency_key = $1`, [idempotencyKey])
+    if (dup[0]) return dup[0]
+  }
+  if (entry.status === 'submitted' || entry.status === 'locked') {
+    // Real duplicate — the entry-level UNIQUE(entry_id) guard would
+    // also catch this, but returning the existing record here avoids
+    // an unnecessary 500 in the common (non-race) repeat-click case.
+    const { rows: existing } = await db.query(`SELECT * FROM golden_box_submissions WHERE entry_id = $1`, [entryId])
+    if (existing[0]) return existing[0]
+    throw new EntryError('duplicate_submission')
+  }
   if (competition.submission_closes_at && new Date() > new Date(competition.submission_closes_at)) {
     throw new EntryError('submission_closed')
   }
@@ -139,15 +226,40 @@ export async function submitEntry(entryId, actorId, competition) {
   const components = await getBlendComponents(version.id)
   const errors = validateSubmission(version, components)
 
-  const { rows } = await db.query(
-    `INSERT INTO golden_box_submissions (entry_id, entry_version_id, validation_passed, validation_errors)
-     VALUES ($1,$2,$3,$4) RETURNING *`,
-    [entryId, version.id, errors.length === 0, errors.length ? JSON.stringify(errors) : null]
-  )
+  await recordGoldenBoxEvent({
+    guestReference: entry.guest_reference, sourceScreen: 'GoldenBox', sourceRoute: '/smokecraft/golden-box',
+    eventType: 'golden_box_submission_requested', entryId, versionId: version.id, ruleVersion: SUBMISSION_RULE_VERSION,
+    result: { errors },
+    idempotencyKey: idempotencyKey ? `golden-box-submission-requested-canonical-${idempotencyKey}` : `golden-box-submission-requested-canonical-${entryId}-${version.id}`,
+  })
+
+  let rows
+  try {
+    ;({ rows } = await db.query(
+      `INSERT INTO golden_box_submissions (entry_id, entry_version_id, validation_passed, validation_errors, idempotency_key)
+       VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+      [entryId, version.id, errors.length === 0, errors.length ? JSON.stringify(errors) : null, idempotencyKey || null]
+    ))
+  } catch (err) {
+    if (err.code === UNIQUE_VIOLATION) {
+      // Two-tab / rapid-double-click race — a concurrent request won,
+      // the real database UNIQUE(entry_id) constraint caught this one.
+      // Return the winner's real submission, never a fabricated one.
+      const { rows: winner } = await db.query(`SELECT * FROM golden_box_submissions WHERE entry_id = $1`, [entryId])
+      return winner[0]
+    }
+    throw err
+  }
   if (errors.length > 0) throw new EntryError(`validation_failed:${errors.join(',')}`)
 
   await transitionEntry(entryId, 'submitted', actorId, { submitted_at: new Date() })
   await logActivity({ entryId, competitionId: entry.competition_id, actorId, action: 'entry_submitted' })
+  await recordGoldenBoxEvent({
+    guestReference: entry.guest_reference, sourceScreen: 'GoldenBox', sourceRoute: '/smokecraft/golden-box',
+    eventType: 'golden_box_submitted', entryId, versionId: version.id, ruleVersion: SUBMISSION_RULE_VERSION,
+    result: { validationPassed: true },
+    idempotencyKey: idempotencyKey ? `golden-box-submitted-canonical-${idempotencyKey}` : `golden-box-submitted-canonical-${entryId}`,
+  })
   return rows[0]
 }
 

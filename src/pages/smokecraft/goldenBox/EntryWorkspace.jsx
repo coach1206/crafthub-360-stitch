@@ -266,6 +266,7 @@ export default function EntryWorkspace() {
                   {saveState === 'saving' && <span style={{ color: GOLD }}>Saving…</span>}
                   {saveState === 'saved' && <span style={{ color: OK }}>✓ Draft saved</span>}
                   {saveState === 'failed' && <span style={{ color: DANGER }}>Save failed. <button type="button" onClick={handleSaveDraft}>Retry</button></span>}
+                  {saveState === 'stale' && <span style={{ color: DANGER }}>This draft was updated elsewhere (another tab or device) since you loaded it. <button type="button" onClick={load}>Reload the latest version</button> before saving again.</span>}
                 </div>
 
                 <div style={{ display: 'flex', gap: 10 }}>
@@ -378,6 +379,7 @@ export default function EntryWorkspace() {
                 <div role="status" aria-live="polite" aria-atomic="true">
                   {saveState === 'saving' && <span style={{ color: GOLD }}>Saving…</span>}
                   {saveState === 'saved' && <span style={{ color: OK }}>✓ Saved</span>}
+                  {saveState === 'stale' && <span style={{ color: DANGER }}>This draft was updated elsewhere since you loaded it. <button type="button" onClick={load}>Reload the latest version</button> before saving again.</span>}
                 </div>
                 <div style={{ display: 'flex', gap: 10 }}>
                   <button type="button" onClick={() => setStep('review')} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1px solid ${BORDER}`, background: 'transparent', color: CREAM, cursor: 'pointer', fontFamily: 'inherit' }}>Back to Review</button>

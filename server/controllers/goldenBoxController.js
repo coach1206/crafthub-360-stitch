@@ -130,7 +130,12 @@ export async function handleSaveDraft(req, res) {
     if (!entry) return
     const version = await entryService.saveDraft(req.params.entryId, req.body, req.user.id)
     res.json({ success: true, version })
-  } catch (err) { sendError(res, err, 500) }
+  } catch (err) {
+    if (err.code === 'stale_version') {
+      return res.status(409).json({ success: false, error: 'stale_version', currentVersion: err.currentVersion })
+    }
+    sendError(res, err, 500)
+  }
 }
 
 export async function handleSubmitEntry(req, res) {
@@ -138,7 +143,7 @@ export async function handleSubmitEntry(req, res) {
     const entry = await requireOwnedEntry(req, res)
     if (!entry) return
     const competition = await competitionService.getCompetition(entry.competition_id)
-    const submission = await entryService.submitEntry(req.params.entryId, req.user.id, competition)
+    const submission = await entryService.submitEntry(req.params.entryId, req.user.id, competition, req.body?.idempotencyKey)
     res.json({ success: true, submission })
   } catch (err) { sendError(res, err, 500) }
 }

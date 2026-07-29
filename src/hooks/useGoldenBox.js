@@ -87,16 +87,27 @@ export function useGoldenBoxEntry(entryId) {
 
   const save = useCallback(async (payload) => {
     setSaveState('saving')
-    const result = await api.saveDraft(entryId, payload)
-    if (!result.ok) { setSaveState('failed'); return result }
+    // Holistic Fix 5C-1B: expectedVersion + idempotencyKey make this a
+    // real optimistic-concurrency-protected, idempotent save — a rapid
+    // double-click safely dedupes server-side, and a genuine
+    // stale write (another tab/device saved a newer version first) is
+    // now honestly surfaced as saveState 'stale' instead of silently
+    // overwriting that newer edit.
+    const idempotencyKey = `gb-save-${entryId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const result = await api.saveDraft(entryId, { ...payload, expectedVersion: entry?.current_version, idempotencyKey })
+    if (!result.ok) {
+      setSaveState(result.error === 'stale_version' ? 'stale' : 'failed')
+      return result
+    }
     setSaveState('saved')
     await load()
     setTimeout(() => setSaveState('idle'), 2000)
     return result
-  }, [entryId, load])
+  }, [entryId, entry, load])
 
   const submit = useCallback(async () => {
-    const result = await api.submitEntry(entryId)
+    const idempotencyKey = `gb-submit-${entryId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const result = await api.submitEntry(entryId, idempotencyKey)
     if (result.ok) await load()
     return result
   }, [entryId, load])

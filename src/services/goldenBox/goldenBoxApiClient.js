@@ -41,7 +41,7 @@ export const evaluateEligibility = (competitionId) => request(`/competitions/${c
 export const createEntry = (competitionId) => request(`/competitions/${competitionId}/entries`, { method: 'POST' })
 export const getEntry = (entryId) => request(`/entries/${entryId}`)
 export const saveDraft = (entryId, payload) => request(`/entries/${entryId}/draft`, { method: 'PATCH', body: payload })
-export const submitEntry = (entryId) => request(`/entries/${entryId}/submit`, { method: 'POST' })
+export const submitEntry = (entryId, idempotencyKey) => request(`/entries/${entryId}/submit`, { method: 'POST', body: idempotencyKey ? { idempotencyKey } : undefined })
 export const withdrawEntry = (entryId) => request(`/entries/${entryId}/withdraw`, { method: 'POST' })
 export const getResults = (competitionId, entryId) => request(`/competitions/${competitionId}/entries/${entryId}/results`)
 export const requestAiAnalysis = (entryId, analysisType) => request(`/entries/${entryId}/ai-analysis`, { method: 'POST', body: { analysisType } })

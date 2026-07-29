@@ -412,3 +412,15 @@ and a unified canonical event vocabulary. `ChallengeHub.jsx`'s only
 change is a corrected code comment (no runtime effect). Confirmed live
 via Playwright: heading, challenge cards, detail panel, Blend Fault
 entry point, keyboard focus, and layout are all unchanged.
+
+## Holistic Fix 5C-1B update (Golden Box scoring and persistence audit)
+
+No approved visuals were redesigned. `EntryWorkspace.jsx` gained one
+new honest status line (a "this draft was updated elsewhere" stale-
+write notice with a Reload action) in the same `role="status"`
+container the existing Saving/Saved/Failed indicators already use —
+additive only, rendered only in the real `stale` state, no existing
+element moved, resized, or restyled. `GoldenBoxHub.jsx` and
+`GoldenBox.jsx` (rules acknowledgement) are unchanged. No other Golden
+Box screen (Packaging Studio, Judge Dashboard, Mentor Review, Results)
+was touched — explicitly out of scope per mandate.

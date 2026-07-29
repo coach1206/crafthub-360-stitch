@@ -348,3 +348,21 @@ attempts/answers — previously none of these were transferred at all
 (the same recurring "never transferred" defect class as SC-D037/
 SC-D042), silently losing a guest's challenge/assessment progress on
 every conversion to an account.
+
+## Holistic Fix 5C-1B update (Golden Box scoring and persistence audit)
+
+`golden_box_entries.current_version` is the sole optimistic-
+concurrency token for a Golden Box draft — `saveDraft()` now rejects a
+write whose `expectedVersion` doesn't match it (real conflict, never
+silent overwrite), enforced under a row lock (`FOR UPDATE`) so two
+concurrent saves genuinely serialize rather than racing. Migration 102
+adds `idempotency_key` (UNIQUE) to `golden_box_entry_versions` and
+`golden_box_submissions` — the same database-enforced-idempotency
+pattern used everywhere else in this operation. `convertGuestToAccount()`
+was found to be transferring `golden_box_entries` INCORRECTLY (not
+just missing) — the generic set-union copy let `entry_id`
+auto-generate a new UUID, silently orphaning every real FK-referencing
+`golden_box_entry_versions`/`golden_box_blend_components`/
+`golden_box_submissions` row. Fixed with a bespoke transfer that
+preserves the parent/child relationship (same technique as the Blend
+Fault attempt transfer in 5C-1A).

@@ -366,3 +366,26 @@ identity, challenge ID, attempt ID, evidence reference, rule ID/
 version, score result, reward result, idempotency key, audit ID, and
 server timestamp. See `SMOKECRAFT_RULE_REGISTRY.md` and
 `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.
+
+## Holistic Fix 5C-1B update (Golden Box scoring and persistence audit)
+
+Audited the real Golden Box submission model
+(`entryService.js`, migration 077): `golden_box_entries` (one row per
+guest/account per competition, `current_version` as the optimistic-
+concurrency token), `golden_box_entry_versions` (append-only draft
+history — a save never mutates a prior version, only creates the
+next one), `golden_box_blend_components` (per-version evidence:
+wrapper/binder/filler/vitola required, others optional),
+`golden_box_submissions` (one immutable row per entry,
+`UNIQUE(entry_id)`). Submission eligibility (`validateSubmission()`)
+was already fully server-computed — the real gaps were structural,
+not scoring-logic: draft saves had zero optimistic-concurrency
+protection (no `expectedVersion`, silent last-write-wins), no
+idempotency-key dedupe existed for draft saves, `submitEntry()` never
+caught a `UNIQUE_VIOLATION` race gracefully, and Golden Box was
+missing the canonical event vocabulary this operation's other systems
+already have. All four closed via a row-locked (`FOR UPDATE`)
+`saveDraft()`, migration 102's `idempotency_key` columns, and the new
+`goldenBoxEventService.js` (`golden_box_draft_created/_updated/
+_submission_requested/_submitted`). See `SMOKECRAFT_RULE_REGISTRY.md`
+and `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.

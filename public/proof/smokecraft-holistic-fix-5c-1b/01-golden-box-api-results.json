@@ -1,0 +1,111 @@
+{
+  "pass": 26,
+  "fail": 0,
+  "total": 26,
+  "results": [
+    {
+      "name": "A genuinely fresh guest can create an entry without a prior identity round-trip (no 401)",
+      "ok": true
+    },
+    {
+      "name": "Entry starts at version 1, status draft (server-assigned, never client-supplied)",
+      "ok": true
+    },
+    {
+      "name": "First draft save succeeds and creates version 2",
+      "ok": true
+    },
+    {
+      "name": "Reloading the entry shows the real saved current version (server-persisted, not client-cached)",
+      "ok": true
+    },
+    {
+      "name": "Reload rehydrates the real saved presentation payload",
+      "ok": true
+    },
+    {
+      "name": "A retried save with the same idempotency key returns the SAME version, never creates a duplicate",
+      "ok": true
+    },
+    {
+      "name": "Exactly 2 real version rows exist after the retry (initial + one real edit, not three)",
+      "ok": true
+    },
+    {
+      "name": "A save carrying an outdated expectedVersion is rejected with a real conflict (409 stale_version), never silently overwritten",
+      "ok": true
+    },
+    {
+      "name": "Of two concurrent saves both claiming the same expectedVersion, exactly one succeeds and the other is honestly told it lost the race (never both silently accepted, never a crash)",
+      "ok": true
+    },
+    {
+      "name": "Submitting with missing required components is rejected (server decides completeness, never the client)",
+      "ok": true
+    },
+    {
+      "name": "A draft with all required components saves successfully",
+      "ok": true
+    },
+    {
+      "name": "A complete, valid submission is accepted (server-computed eligibility, never client-decided)",
+      "ok": true
+    },
+    {
+      "name": "A retried submit with the same idempotency key returns the SAME real submission, never a second row",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real submission row exists in the database (UNIQUE(entry_id) is genuinely enforced)",
+      "ok": true
+    },
+    {
+      "name": "Two concurrent submit requests (two-tab race) both succeed but resolve to the SAME real submission (no duplicate, no crash)",
+      "ok": true
+    },
+    {
+      "name": "The two-tab submit race produced exactly one real database row",
+      "ok": true
+    },
+    {
+      "name": "All four canonical event types were emitted (golden_box_draft_created/_updated/_submission_requested/_submitted)",
+      "ok": true
+    },
+    {
+      "name": "The canonical golden_box_submitted event carries a real ruleVersion and entryId",
+      "ok": true
+    },
+    {
+      "name": "A different guest is not treated as the entrant for another guest's entry (server-resolved visibility, never client-asserted)",
+      "ok": true
+    },
+    {
+      "name": "A non-owner never receives the real presentation payload/components for a private entry",
+      "ok": true
+    },
+    {
+      "name": "Two independent fetches under the same identity return identical entry state (no per-device drift)",
+      "ok": true
+    },
+    {
+      "name": "A real account is created on the same cookie jar as the guest",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports a real Golden Box entry transferred (found-and-fixed gap — entry_id continuity was previously broken)",
+      "ok": true
+    },
+    {
+      "name": "After conversion, creating/fetching an entry for the same competition under the account identity returns the TRANSFERRED entry (already submitted), not a fresh draft",
+      "ok": true
+    },
+    {
+      "name": "The transferred entry's draft history (components) survived conversion",
+      "ok": true
+    }
+  ]
+}

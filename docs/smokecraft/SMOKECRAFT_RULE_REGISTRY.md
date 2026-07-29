@@ -200,3 +200,14 @@ XP amounts themselves are unchanged — both seeded challenges remain at
 the pre-existing, disclosed `xp_reward = 0`; this pass made that
 already-approved column's value structurally live for the first time,
 it did not introduce a new reward amount.
+
+## Holistic Fix 5C-1B update (Golden Box scoring and persistence audit)
+
+`SUBMISSION_RULE_VERSION = 1` (`entryService.js`) versions the
+submission-completeness rule (`validateSubmission()`'s required-
+component-types list: wrapper, binder, filler, vitola) — a direct,
+unversioned port of the pre-existing, already-approved rule, now
+carried on every canonical Golden Box event
+(`goldenBoxEventService.js`) so a future rule change is auditable
+against exactly which submissions were scored under which version.
+No new scoring rule or reward amount was invented this pass.

@@ -237,6 +237,7 @@ export async function handleConvertGuest(req, res) {
       pairingSavesTransferred: result.pairingSavesTransferred || 0, pairingSavesMergedDuplicate: result.pairingSavesMergedDuplicate || 0,
       challengeStateTransferred: result.challengeStateTransferred || 0, challengeRewardsTransferred: result.challengeRewardsTransferred || 0,
       blendFaultAttemptsTransferred: result.blendFaultAttemptsTransferred || 0,
+      goldenBoxEntriesTransferred: result.goldenBoxEntriesTransferred || 0,
     })
   } catch (err) {
     dbErrorResponse(res, err)

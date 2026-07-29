@@ -1,0 +1,33 @@
+
+── SmokeCraft Golden Box scoring/persistence-authority validator (Holistic Fix 5C-1B)
+
+  OK    Submission completeness (validateSubmission) is computed server-side from real saved components, never a client-submitted eligible/complete flag
+  OK    submitEntry() never trusts a client-submitted score/pass-fail/eligible field — errors are computed by validateSubmission(), not read from req.body
+  OK    EntryWorkspace.jsx never computes its own eligibility/completeness verdict — only submits and renders the server response
+  OK    saveDraft() accepts an expectedVersion and rejects a stale write with a real conflict (never silently overwrites a newer edit)
+  OK    The stale-version check happens under a real row lock (FOR UPDATE) inside the transaction — closes the two-tab race a pre-lock-only check would still allow
+  OK    The stale_version conflict is surfaced to the client as an honest 409 with the real current version
+  OK    The shared client hook exposes a real "stale" save state (previously anticipated in the state list but never reachable)
+  OK    EntryWorkspace.jsx renders an honest UI state for a stale write, offering a real reload action
+  OK    golden_box_entry_versions has a real idempotency_key UNIQUE index (draft save/update dedupe)
+  OK    golden_box_submissions has a real idempotency_key UNIQUE index in addition to the existing entry-level UNIQUE(entry_id)
+  OK    saveDraft() checks the idempotency key BEFORE the stale-version check, so a true retry of an already-succeeded save is never wrongly rejected as a conflict
+  OK    submitEntry() catches a UNIQUE_VIOLATION on the submissions insert and returns the real winning submission (two-tab race), never a fabricated one or an unhandled 500
+  OK    The client generates a real per-request idempotency key for every draft save and submit call
+  OK    goldenBoxEventService.js defines exactly the four mandated canonical event types
+  OK    Every canonical event carries learner identity, entry ID, version ID, rule version, result, idempotency key, audit ID, and server timestamp
+  OK    createEntry() emits golden_box_draft_created
+  OK    saveDraft() emits golden_box_draft_updated
+  OK    submitEntry() emits golden_box_submission_requested before validating, and golden_box_submitted only after real success
+  OK    EntryWorkspace.jsx uses the one shared hook (useGoldenBoxEntry) — no bypassing, no second competing draft-management implementation
+  OK    EntryWorkspace.jsx never calls fetch()/XHR directly for draft/submission mutations — only through the shared goldenBoxApiClient
+  OK    No mock/fake/dummy Golden Box submission result appears as live data in EntryWorkspace.jsx
+  OK    Golden Box routes issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity present) — real found gap, prevents the recurring 401-on-first-navigation defect class
+  OK    Golden Box routes prefix an authenticated account identity with user: (matches the established, correct pattern; the raw id was a real found defect that broke post-conversion entry lookups)
+  OK    convertGuestToAccount() no longer uses the generic entry_id-regenerating copy for golden_box_entries (that broke FK continuity to versions/components/submissions — a real found defect)
+  OK    convertGuestToAccount() transfers Golden Box entries via a bespoke function that preserves parent/child relationships (versions and components remapped to the new entry id)
+  OK    The transferred draft history includes blend components, not just the entry shell
+  OK    The transferred submission record is preserved when its version was actually transferred
+
+=== RESULT: PASS (0 checks failed) ===
+

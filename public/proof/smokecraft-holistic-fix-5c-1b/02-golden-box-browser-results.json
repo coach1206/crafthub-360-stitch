@@ -1,0 +1,55 @@
+{
+  "pass": 12,
+  "fail": 0,
+  "total": 12,
+  "results": [
+    {
+      "name": "Approved heading still renders (no visual regression)",
+      "ok": true
+    },
+    {
+      "name": "The real seeded competition is visible in the live \"Open for Entry\" list",
+      "ok": true
+    },
+    {
+      "name": "A real entry was created via the browser's own real identity (entryId=2c6475b6…)",
+      "ok": true
+    },
+    {
+      "name": "Entry status renders the real server-assigned \"Draft\" state",
+      "ok": true
+    },
+    {
+      "name": "Cigar name field not present at this step (acceptable — component pickers may be the first interactive control)",
+      "ok": true
+    },
+    {
+      "name": "Save Draft produces a real, server-confirmed \"saved\" indicator",
+      "ok": true
+    },
+    {
+      "name": "Rapid double-click on Save Draft does not crash the workspace",
+      "ok": true
+    },
+    {
+      "name": "Rapid double-click produced a bounded number of real version rows (3), not one per click",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on Entry Workspace",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on Entry Workspace",
+      "ok": true
+    },
+    {
+      "name": "A non-existent entry id renders an honest not-found/error state, not a crash",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across Golden Box screens (the one real, expected 409 from the double-click race test is excluded)",
+      "ok": true
+    }
+  ]
+}

@@ -990,7 +990,6 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       { table: 'smokecraft_rolling_progress', cols: 'step_key, status, updated_at', conflict: '(guest_reference, step_key)' },
       { table: 'smokecraft_flavor_stage_observations', cols: 'stage, flavor_notes, intensity, strength_perception, body, balance, complexity, burn, draw, temperature, personal_notes, updated_at', conflict: '(guest_reference, stage)' },
       { table: 'smokecraft_pairing_drafts', cols: 'cigar_reference, pairing_category, pairing_item, intensity, sweetness, acidity, bitterness, texture, temperature, strategy, reasoning, status, created_at, updated_at', conflict: null },
-      { table: 'golden_box_entries', cols: 'competition_id, round_id, cigar_name, status, current_version, submitted_at, locked_at, created_at, updated_at', conflict: '(competition_id, guest_reference)' },
     ]
     let skillTreeEvidenceRowsTransferred = 0
     for (const spec of skillTreeEvidenceCopies) {
@@ -1096,6 +1095,60 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       }
     }
 
+    // ── Golden Box entries + drafts + submissions: Holistic Fix 5C-1B
+    // found this was transferred INCORRECTLY, not just missing —
+    // golden_box_entries was previously included in the generic
+    // set-union copy loop above, which lets entry_id auto-generate a
+    // NEW UUID for the copied row. Every entry_versions/
+    // blend_components/submissions row that referenced the OLD
+    // entry_id (via a real FK) was silently orphaned — the account
+    // would see an empty draft with no history and no submission
+    // record, even though `entryStateTransferred` would have (wrongly)
+    // reported success. Fixed with a bespoke transfer that preserves
+    // the parent/child relationship by remapping entry_id (and each
+    // version's id) to the newly-created rows, the same pattern used
+    // for Blend Fault attempts/answers above. ──
+    let goldenBoxEntriesTransferred = 0
+    const guestGoldenBoxEntries = await client.query(`SELECT * FROM golden_box_entries WHERE guest_reference = $1`, [guestReference])
+    for (const ge of guestGoldenBoxEntries.rows) {
+      const existingEntry = await client.query(`SELECT entry_id FROM golden_box_entries WHERE competition_id = $1 AND guest_reference = $2`, [ge.competition_id, userReference])
+      if (existingEntry.rows.length > 0) continue
+      const insertedEntry = await client.query(
+        `INSERT INTO golden_box_entries (competition_id, round_id, user_id, guest_reference, cigar_name, status, current_version, submitted_at, locked_at, created_at, updated_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING entry_id`,
+        [ge.competition_id, ge.round_id, ge.user_id, userReference, ge.cigar_name, ge.status, ge.current_version, ge.submitted_at, ge.locked_at, ge.created_at, ge.updated_at]
+      )
+      const newEntryId = insertedEntry.rows[0].entry_id
+      goldenBoxEntriesTransferred++
+
+      const versions = await client.query(`SELECT * FROM golden_box_entry_versions WHERE entry_id = $1 ORDER BY version_number`, [ge.entry_id])
+      const versionIdMap = new Map()
+      for (const v of versions.rows) {
+        const insertedVersion = await client.query(
+          `INSERT INTO golden_box_entry_versions (entry_id, version_number, presentation_payload, pairing_selection, pairing_defense, predicted_profile, created_by, created_at)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+          [newEntryId, v.version_number, v.presentation_payload, v.pairing_selection, v.pairing_defense, v.predicted_profile, v.created_by, v.created_at]
+        )
+        versionIdMap.set(v.id, insertedVersion.rows[0].id)
+      }
+      for (const [oldVersionId, newVersionId] of versionIdMap) {
+        await client.query(
+          `INSERT INTO golden_box_blend_components (entry_version_id, component_type, component_key, component_value, display_order)
+           SELECT $2, component_type, component_key, component_value, display_order FROM golden_box_blend_components WHERE entry_version_id = $1`,
+          [oldVersionId, newVersionId]
+        )
+      }
+      const submission = await client.query(`SELECT * FROM golden_box_submissions WHERE entry_id = $1`, [ge.entry_id])
+      if (submission.rows[0] && versionIdMap.has(submission.rows[0].entry_version_id)) {
+        const s = submission.rows[0]
+        await client.query(
+          `INSERT INTO golden_box_submissions (entry_id, entry_version_id, submitted_at, validation_passed, validation_errors)
+           VALUES ($1,$2,$3,$4,$5)`,
+          [newEntryId, versionIdMap.get(s.entry_version_id), s.submitted_at, s.validation_passed, s.validation_errors]
+        )
+      }
+    }
+
     const conversion = await client.query(
       `INSERT INTO smokecraft_guest_conversions
          (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
@@ -1120,7 +1173,7 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       skillTreeCompletedNodes = recalculated.filter(r => r.learnerState.state === 'completed').length
     } catch { /* non-fatal — conversion itself already succeeded */ }
 
-    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred, pairingSavesTransferred: pairingTransfer.transferred, pairingSavesMergedDuplicate: pairingTransfer.mergedDuplicate, challengeStateTransferred, challengeRewardsTransferred, blendFaultAttemptsTransferred }
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred, pairingSavesTransferred: pairingTransfer.transferred, pairingSavesMergedDuplicate: pairingTransfer.mergedDuplicate, challengeStateTransferred, challengeRewardsTransferred, blendFaultAttemptsTransferred, goldenBoxEntriesTransferred }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     if (err.code === UNIQUE_VIOLATION) {
