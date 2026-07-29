@@ -401,3 +401,14 @@ new non-visual `data-testid` attributes (`mentor-guidance-text`,
 `mentor-narration-caption`) were added for reliable automated testing
 only — no visual or behavioral effect. The Seed & Soil baseline repair
 touched no frontend code at all.
+
+## Holistic Fix 5C-1A update (Challenge Hub scoring authority)
+
+No visuals were redesigned. `ChallengeHub.jsx` and
+`BlendFaultChallenge.jsx` are visually and structurally unchanged
+(same cards, same detail panel, same assessment flow) — only the
+server behind them gained rule versioning, idempotent reward grants,
+and a unified canonical event vocabulary. `ChallengeHub.jsx`'s only
+change is a corrected code comment (no runtime effect). Confirmed live
+via Playwright: heading, challenge cards, detail panel, Blend Fault
+entry point, keyboard focus, and layout are all unchanged.

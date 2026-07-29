@@ -1,0 +1,55 @@
+{
+  "pass": 12,
+  "fail": 0,
+  "total": 12,
+  "results": [
+    {
+      "name": "Challenge Hub route resolves",
+      "ok": true
+    },
+    {
+      "name": "Approved heading still renders (no visual regression)",
+      "ok": true
+    },
+    {
+      "name": "Real Daily challenge card renders from live server data",
+      "ok": true
+    },
+    {
+      "name": "Real Weekly challenge card renders from live server data",
+      "ok": true
+    },
+    {
+      "name": "Blend Fault Identification practice card still renders alongside the live challenges",
+      "ok": true
+    },
+    {
+      "name": "Challenge detail shows real server-computed progress (never invented)",
+      "ok": true
+    },
+    {
+      "name": "Start Challenge control works and does not error",
+      "ok": true
+    },
+    {
+      "name": "Blend Fault Identification screen resolves from the hub",
+      "ok": true
+    },
+    {
+      "name": "Blend Fault start control renders",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on Challenge Hub",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff",
+      "ok": true
+    },
+    {
+      "name": "No console errors on Challenge Hub",
+      "ok": true
+    }
+  ]
+}

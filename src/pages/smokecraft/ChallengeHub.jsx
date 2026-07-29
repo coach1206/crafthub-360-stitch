@@ -12,11 +12,17 @@ const CREAM = '#e5e2e1'
 const BORDER = 'rgba(233,193,118,0.22)'
 const GLASS = 'rgba(8,10,16,0.86)'
 
-// Blend Fault Identification predates the Challenge Hub Live State pass and
-// has its own working 3-step flow, but it has no server-side scoring or
-// persistence yet (out of scope for this pass — see migration 088 audit
-// notes). It stays available here as a standalone practice activity,
-// separate from the real backend-tracked Daily/Weekly challenges below.
+// Holistic Fix 5C-1A — this comment previously (incorrectly) claimed
+// Blend Fault Identification had no server-side scoring or persistence.
+// It does: migration 089's smokecraft_blend_fault_attempts/answers
+// tables back a fully server-authoritative, transactional scoring
+// engine (blendFaultService.js — real answer key, real idempotent
+// attempt tracking, real pass/fail). It simply tracks its own attempt
+// state separately from smokecraft_challenge_learner_state (the
+// Daily/Weekly instance-based state machine below), since it is a
+// repeatable practice assessment rather than a dated period challenge.
+// Both now emit the same canonical challenge_started/_submitted/
+// _scored/_completed event vocabulary (challengeEventService.js).
 const STATIC_PRACTICE_CHALLENGE = { id: 'blend-fault-identification', label: 'Blend Fault Identification', category: 'Practice', route: '/smokecraft/challenges/blend-fault-identification' }
 
 function formatRemaining(msRemaining) {

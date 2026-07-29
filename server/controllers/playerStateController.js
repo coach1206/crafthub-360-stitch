@@ -235,6 +235,8 @@ export async function handleConvertGuest(req, res) {
       skillTreeEvidenceRowsTransferred: result.skillTreeEvidenceRowsTransferred || 0, skillTreeCompletedNodes: result.skillTreeCompletedNodes || 0,
       leaderboardPreferenceTransferred: result.leaderboardPreferenceTransferred || false,
       pairingSavesTransferred: result.pairingSavesTransferred || 0, pairingSavesMergedDuplicate: result.pairingSavesMergedDuplicate || 0,
+      challengeStateTransferred: result.challengeStateTransferred || 0, challengeRewardsTransferred: result.challengeRewardsTransferred || 0,
+      blendFaultAttemptsTransferred: result.blendFaultAttemptsTransferred || 0,
     })
   } catch (err) {
     dbErrorResponse(res, err)

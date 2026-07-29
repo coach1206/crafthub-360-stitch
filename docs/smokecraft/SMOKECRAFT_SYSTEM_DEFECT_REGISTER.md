@@ -1487,3 +1487,50 @@ recreates the real database, runs the real reset command, asserts
 real content rows exist) and in
 `scripts/validateSmokecraftMentorVoiceSecurity.mjs`. See
 `public/proof/smokecraft-holistic-fix-5b-2b-2/00-proof-index.md`.
+
+## Holistic Fix 5C-1A update (Challenge Hub scoring authority)
+
+- **SC-D055**: `challengeHubRoutes.js` and `blendFaultRoutes.js` both
+  used the raw `smokecraftIdentity.id` for an authenticated account's
+  `goldenBoxGuestReference` instead of the established `user:${id}`
+  prefix already used correctly by `skillTreeRoutes.js` and
+  `mentorGuidanceRoutes.js`. This meant a converted account's Challenge
+  Hub and Blend Fault Identification requests queried under the WRONG
+  identity string — the just-transferred state (written to
+  `user:${id}` by `convertGuestToAccount`) was invisible to every
+  subsequent request from that same account, silently reverting to a
+  fresh/empty state. Found live via the account-conversion API test
+  (the after-conversion re-fetch failed to see the just-transferred
+  completed challenge and Blend Fault attempt history, despite the
+  transfer itself reporting success). Closed by prefixing with
+  `user:` in both routers' `bridgeIdentity`, matching the established
+  pattern exactly.
+- **SC-D056**: a comment in `ChallengeHub.jsx` incorrectly claimed
+  Blend Fault Identification had "no server-side scoring or
+  persistence yet." It does — migration 089's
+  `smokecraft_blend_fault_attempts`/`_answers` tables have backed a
+  fully server-authoritative, transactional scoring engine
+  (`blendFaultService.js`) since a prior pass. Corrected during this
+  pass's audit; no code change was needed, only the misleading
+  documentation.
+- Real, structural gap closed (not a bug per se): `smokecraft_challenge_definitions.xp_reward`
+  has existed since migration 088 and was already serialized to the
+  client (`ChallengeHub.jsx` reads `activeDetail.xpReward`), but no
+  server code ever read or awarded it — completion set
+  `participation_state = 'completed'` with no reward-granting path at
+  all. Closed via `completeChallengeAndAward()` (row-locked
+  transaction) + `smokecraft_challenge_rewards` (migration 101, real
+  UNIQUE-constraint idempotency). Both currently-seeded challenges
+  remain at the pre-existing, disclosed `xp_reward = 0` — no new
+  reward amount was invented, only the dead code path made live.
+
+Closed via `server/routes/challengeHubRoutes.js`,
+`server/routes/blendFaultRoutes.js`,
+`server/services/smokecraft/challengeHubService.js`,
+`server/services/smokecraft/challengeEventService.js` (new),
+`server/db/migrations/101_smokecraft_challenge_hub_scoring_authority.sql`,
+`server/services/smokecraft/playerStateService.js` (account-conversion
+transfer). Encoded as permanent regression checks in
+`verify-smokecraft-hf5c1a-challenge-hub-api.mjs` and
+`scripts/validateSmokecraftChallengeHubAuthority.mjs`. See
+`public/proof/smokecraft-holistic-fix-5c-1a/00-proof-index.md`.

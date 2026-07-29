@@ -8,6 +8,10 @@
  */
 import { getDb } from '../../db/connection.js'
 import { recordEvent } from './progressionEventService.js'
+import { recordChallengeEvent } from './challengeEventService.js'
+import { ensurePlayerStateRow } from './playerStateService.js'
+
+const UNIQUE_VIOLATION = '23505'
 
 export class ChallengeHubError extends Error {
   constructor(code) { super(code); this.code = code }
@@ -90,6 +94,112 @@ async function evaluateProgress(db, guestReference, definition, instance) {
   throw new ChallengeHubError(`unknown_requirement_type:${definition.requirement_type}`)
 }
 
+// Row-locked, transactional completion + idempotent reward grant.
+// FOR UPDATE closes the real two-tab/rapid-double-click race that a
+// plain SELECT-then-UPDATE could otherwise allow (two concurrent
+// requests both reading participation_state as not-yet-completed
+// before either commits): the second request's lock acquisition
+// blocks until the first commits, then re-reads the now-completed row
+// and returns early instead of double-completing or double-rewarding.
+// The XP award itself is additionally guarded by a real UNIQUE DB
+// constraint (smokecraft_challenge_rewards(guest_reference,
+// challenge_instance_key)), not just the row lock — a defense-in-depth
+// idempotency guarantee matching the established pattern in
+// playerStateService.submitTastingCompletion().
+async function completeChallengeAndAward(db, guestReference, definition, instance, progress) {
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const { rows: lockedRows } = await client.query(
+      `SELECT * FROM smokecraft_challenge_learner_state WHERE guest_reference = $1 AND challenge_instance_key = $2 FOR UPDATE`,
+      [guestReference, instance.instance_key]
+    )
+    const locked = lockedRows[0]
+    if (!locked || locked.participation_state === 'completed') {
+      await client.query('ROLLBACK')
+      return locked || null
+    }
+
+    const { event: completedEvent } = await recordEvent({
+      guestReference, sourceScreen: 'ChallengeHub', sourceRoute: '/smokecraft/challenge-hub',
+      eventType: 'challenge_completed',
+      payload: { challengeKey: definition.challenge_key, instanceKey: instance.instance_key },
+      idempotencyKey: `challenge-complete-event-${guestReference}-${instance.instance_key}`,
+    })
+
+    const { rows: updated } = await client.query(
+      `UPDATE smokecraft_challenge_learner_state
+       SET participation_state = 'completed', progress_value = $1, completed_at = COALESCE(completed_at, now()),
+           completion_source = $2, supporting_progression_event_id = $3, updated_at = now()
+       WHERE guest_reference = $4 AND challenge_instance_key = $5
+       RETURNING *`,
+      [progress, definition.requirement_type, completedEvent.id, guestReference, instance.instance_key]
+    )
+    const learnerState = updated[0]
+
+    let xpAwarded = 0
+    let rewardGranted = false
+    if (definition.xp_reward > 0) {
+      await ensurePlayerStateRow(client, guestReference, null)
+      const idempotencyKey = `challenge-reward-${guestReference}-${instance.instance_key}`
+      try {
+        const inserted = await client.query(
+          `INSERT INTO smokecraft_challenge_rewards (guest_reference, challenge_key, challenge_instance_key, rule_version, xp_awarded, idempotency_key)
+           VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+          [guestReference, definition.challenge_key, instance.instance_key, definition.rule_version, definition.xp_reward, idempotencyKey]
+        )
+        if (inserted.rows[0]) {
+          await client.query(
+            `UPDATE smokecraft_player_state SET xp_total = xp_total + $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+            [guestReference, definition.xp_reward]
+          )
+          xpAwarded = definition.xp_reward
+          rewardGranted = true
+        }
+      } catch (err) {
+        if (err.code !== UNIQUE_VIOLATION) throw err
+        // Already rewarded by a concurrent request — real DB-enforced
+        // idempotency, not an error.
+      }
+    }
+
+    await client.query('COMMIT')
+
+    // Canonical event trail — outside the transaction (matches the
+    // established recordEvent()/reward pattern used throughout this
+    // codebase), each independently idempotent via its own key.
+    const scoreResult = { met: true, progress, targetValue: definition.target_value }
+    const rewardResult = { xpAwarded, granted: rewardGranted }
+    await recordChallengeEvent({
+      guestReference, sourceScreen: 'ChallengeHub', sourceRoute: '/smokecraft/challenge-hub',
+      eventType: 'challenge_submitted', challengeId: definition.challenge_key, attemptId: instance.instance_key,
+      evidenceReference: completedEvent.id, ruleId: definition.requirement_type, ruleVersion: definition.rule_version,
+      idempotencyKey: `challenge-submitted-canonical-${guestReference}-${instance.instance_key}`,
+    })
+    await recordChallengeEvent({
+      guestReference, sourceScreen: 'ChallengeHub', sourceRoute: '/smokecraft/challenge-hub',
+      eventType: 'challenge_scored', challengeId: definition.challenge_key, attemptId: instance.instance_key,
+      evidenceReference: completedEvent.id, ruleId: definition.requirement_type, ruleVersion: definition.rule_version,
+      scoreResult,
+      idempotencyKey: `challenge-scored-canonical-${guestReference}-${instance.instance_key}`,
+    })
+    await recordChallengeEvent({
+      guestReference, sourceScreen: 'ChallengeHub', sourceRoute: '/smokecraft/challenge-hub',
+      eventType: 'challenge_completed', challengeId: definition.challenge_key, attemptId: instance.instance_key,
+      evidenceReference: completedEvent.id, ruleId: definition.requirement_type, ruleVersion: definition.rule_version,
+      scoreResult, rewardResult,
+      idempotencyKey: `challenge-completed-canonical-${guestReference}-${instance.instance_key}`,
+    })
+
+    return learnerState
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
 // Full read-model for the hub: resolves both current instances, computes
 // real time status and real learner state for each — never trusts
 // anything the client sends.
@@ -118,23 +228,8 @@ export async function getHub(guestReference) {
       if (!evalResult.met) missingRequirements = [`Need ${definition.requirement_config.minDistinctEventTypes || definition.target_value} distinct activities this period — currently ${progress}`]
 
       if (learnerState && learnerState.participation_state !== 'completed' && evalResult.met) {
-        // Complete now — idempotent via the unique idempotency_key.
-        const idempotencyKey = `challenge-complete-${guestReference}-${instance.instance_key}`
-        const { event } = await recordEvent({
-          guestReference, sourceScreen: 'ChallengeHub', sourceRoute: '/smokecraft/challenge-hub',
-          eventType: 'challenge_completed',
-          payload: { challengeKey: definition.challenge_key, instanceKey: instance.instance_key },
-          idempotencyKey: `challenge-complete-event-${guestReference}-${instance.instance_key}`,
-        })
-        const { rows: updated } = await db.query(
-          `UPDATE smokecraft_challenge_learner_state
-           SET participation_state = 'completed', progress_value = $1, completed_at = COALESCE(completed_at, now()),
-               completion_source = $2, supporting_progression_event_id = $3, updated_at = now()
-           WHERE guest_reference = $4 AND challenge_instance_key = $5
-           RETURNING *`,
-          [progress, definition.requirement_type, event.id, guestReference, instance.instance_key]
-        )
-        learnerState = updated[0]
+        const completed = await completeChallengeAndAward(db, guestReference, definition, instance, progress)
+        learnerState = completed || learnerState
       } else if (learnerState && learnerState.participation_state !== 'completed') {
         await db.query(
           `UPDATE smokecraft_challenge_learner_state SET progress_value = $1, updated_at = now()
@@ -199,6 +294,12 @@ export async function startChallenge(guestReference, challengeKey) {
     eventType: 'challenge_started',
     payload: { challengeKey, instanceKey: instance.instance_key },
     idempotencyKey: `challenge-start-event-${guestReference}-${instance.instance_key}`,
+  })
+  await recordChallengeEvent({
+    guestReference, sourceScreen: 'ChallengeHub', sourceRoute: '/smokecraft/challenge-hub',
+    eventType: 'challenge_started', challengeId: challengeKey, attemptId: instance.instance_key,
+    ruleId: definition.requirement_type, ruleVersion: definition.rule_version,
+    idempotencyKey: `challenge-started-canonical-${guestReference}-${instance.instance_key}`,
   })
   return rows[0]
 }

@@ -119,7 +119,7 @@ async function recordAudit(client, { guestReference, mutationType, idempotencyKe
   )
 }
 
-async function ensurePlayerStateRow(client, guestReference, venueId) {
+export async function ensurePlayerStateRow(client, guestReference, venueId) {
   await client.query(
     `INSERT INTO smokecraft_player_state (guest_reference, venue_id)
      VALUES ($1, $2)
@@ -1039,6 +1039,63 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
     // "never transferred" defect class seen in earlier passes). ──
     const pairingTransfer = await transferSavedPairings(client, guestReference, userReference)
 
+    // ── Challenge Hub state + rewards, Blend Fault attempts: Holistic
+    // Fix 5C-1A found this was never transferred at all — the same
+    // recurring defect class as SC-D046/047/048 (Skill Tree evidence,
+    // Collections, leaderboard preference never transferred). Without
+    // this, a learner who started/completed a Daily/Weekly challenge or
+    // passed a Blend Fault Identification assessment as a guest would
+    // silently lose that state converting to an account. Set-union by
+    // the real natural key, keep-both-idempotent, same pattern as every
+    // other table above. ──
+    let challengeStateTransferred = 0
+    const guestChallengeState = await client.query(`SELECT * FROM smokecraft_challenge_learner_state WHERE guest_reference = $1`, [guestReference])
+    for (const gs of guestChallengeState.rows) {
+      const existing = await client.query(`SELECT id FROM smokecraft_challenge_learner_state WHERE guest_reference = $1 AND challenge_instance_key = $2`, [userReference, gs.challenge_instance_key])
+      if (existing.rows.length === 0) {
+        await client.query(
+          `INSERT INTO smokecraft_challenge_learner_state
+             (guest_reference, challenge_instance_key, participation_state, progress_value, target_value_snapshot, started_at, completed_at, completion_source, supporting_progression_event_id, idempotency_key)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+          [userReference, gs.challenge_instance_key, gs.participation_state, gs.progress_value, gs.target_value_snapshot, gs.started_at, gs.completed_at, gs.completion_source, gs.supporting_progression_event_id, `converted:${gs.idempotency_key}`]
+        )
+        challengeStateTransferred++
+      }
+    }
+    let challengeRewardsTransferred = 0
+    const guestChallengeRewards = await client.query(`SELECT * FROM smokecraft_challenge_rewards WHERE guest_reference = $1`, [guestReference])
+    for (const gr of guestChallengeRewards.rows) {
+      const existing = await client.query(`SELECT id FROM smokecraft_challenge_rewards WHERE guest_reference = $1 AND challenge_instance_key = $2`, [userReference, gr.challenge_instance_key])
+      if (existing.rows.length === 0) {
+        await client.query(
+          `INSERT INTO smokecraft_challenge_rewards (guest_reference, challenge_key, challenge_instance_key, rule_version, xp_awarded, idempotency_key)
+           VALUES ($1,$2,$3,$4,$5,$6)`,
+          [userReference, gr.challenge_key, gr.challenge_instance_key, gr.rule_version, gr.xp_awarded, `converted:${gr.idempotency_key}`]
+        )
+        challengeRewardsTransferred++
+      }
+    }
+    let blendFaultAttemptsTransferred = 0
+    const guestBlendFaultAttempts = await client.query(`SELECT * FROM smokecraft_blend_fault_attempts WHERE guest_reference = $1`, [guestReference])
+    for (const ba of guestBlendFaultAttempts.rows) {
+      const existing = await client.query(`SELECT attempt_id FROM smokecraft_blend_fault_attempts WHERE guest_reference = $1 AND assessment_key = $2 AND attempt_number = $3`, [userReference, ba.assessment_key, ba.attempt_number])
+      if (existing.rows.length === 0) {
+        const inserted = await client.query(
+          `INSERT INTO smokecraft_blend_fault_attempts
+             (guest_reference, assessment_key, attempt_number, assessment_version, status, started_at, submitted_at, score_earned, score_possible, percentage, pass_fail, completion_source, idempotency_key)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING attempt_id`,
+          [userReference, ba.assessment_key, ba.attempt_number, ba.assessment_version, ba.status, ba.started_at, ba.submitted_at, ba.score_earned, ba.score_possible, ba.percentage, ba.pass_fail, ba.completion_source, `converted:${ba.idempotency_key}`]
+        )
+        const newAttemptId = inserted.rows[0].attempt_id
+        await client.query(
+          `INSERT INTO smokecraft_blend_fault_answers (attempt_id, question_key, submitted_answer, is_correct, points_earned, answered_at)
+           SELECT $2, question_key, submitted_answer, is_correct, points_earned, answered_at FROM smokecraft_blend_fault_answers WHERE attempt_id = $1`,
+          [ba.attempt_id, newAttemptId]
+        )
+        blendFaultAttemptsTransferred++
+      }
+    }
+
     const conversion = await client.query(
       `INSERT INTO smokecraft_guest_conversions
          (guest_reference, user_id, idempotency_key, sessions_transferred, sessions_merged_duplicate, awards_transferred, awards_merged_duplicate, journey_merge_outcome, request_id, device_id)
@@ -1063,7 +1120,7 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
       skillTreeCompletedNodes = recalculated.filter(r => r.learnerState.state === 'completed').length
     } catch { /* non-fatal — conversion itself already succeeded */ }
 
-    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred, pairingSavesTransferred: pairingTransfer.transferred, pairingSavesMergedDuplicate: pairingTransfer.mergedDuplicate }
+    return { ok: true, alreadyConverted: false, conversion: conversion.rows[0], collectionsTransferred, collectionsMergedDuplicate, skillTreeEvidenceRowsTransferred, skillTreeCompletedNodes, leaderboardPreferenceTransferred, pairingSavesTransferred: pairingTransfer.transferred, pairingSavesMergedDuplicate: pairingTransfer.mergedDuplicate, challengeStateTransferred, challengeRewardsTransferred, blendFaultAttemptsTransferred }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     if (err.code === UNIQUE_VIOLATION) {

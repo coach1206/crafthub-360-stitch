@@ -341,3 +341,28 @@ Replaced two real hardcoded/broken-guidance defects (SC-D050, SC-D051)
 in `MentorCommentary.jsx` and wired `SkillTree.jsx`'s
 `DynamicMentorPanel` through the shared service. See
 `SMOKECRAFT_MENTOR_GUIDANCE_RULES.md` for the full rule set.
+
+## Holistic Fix 5C-1A update (Challenge Hub scoring authority)
+
+Both active Challenge Hub systems were audited: the two Daily/Weekly
+progress challenges (`challengeHubService.js`, migration 088 —
+evidence is a distinct-event-type count within a real UTC-day/ISO-week
+window, read from `smokecraft_progression_events`) and Blend Fault
+Identification (`blendFaultService.js`, migration 089 — evidence is a
+per-question answer array, scored against a real server-side answer
+key). Blend Fault was already fully server-authoritative before this
+pass — a stale comment in `ChallengeHub.jsx` incorrectly claimed
+otherwise; corrected. The real gap closed this pass: Challenge Hub's
+own `xp_reward` schema column (already present, already disclosed as 0
+for both seeded challenges) had no code path that ever read or awarded
+it — `completeChallengeAndAward()` now does, guarded by a real
+database UNIQUE constraint (migration 101,
+`smokecraft_challenge_rewards`) and a row lock (`FOR UPDATE`) that
+closes a genuine two-tab/rapid-double-click race the previous
+plain-UPDATE completion logic allowed. Both systems now emit the same
+canonical `challenge_started`/`_submitted`/`_scored`/`_completed`
+event vocabulary (`challengeEventService.js`), each carrying learner
+identity, challenge ID, attempt ID, evidence reference, rule ID/
+version, score result, reward result, idempotency key, audit ID, and
+server timestamp. See `SMOKECRAFT_RULE_REGISTRY.md` and
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.

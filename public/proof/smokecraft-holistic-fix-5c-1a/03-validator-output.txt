@@ -1,0 +1,31 @@
+
+── SmokeCraft Challenge Hub scoring-authority validator (Holistic Fix 5C-1A)
+
+  OK    ChallengeHub.jsx never computes a score/pass-fail/completion value itself — only requests the server adapter
+  OK    ChallengeHub.jsx renders challenge state via the server-provided api client, not a local scoring function
+  OK    BlendFaultChallenge.jsx never computes isCorrect/score itself — only submits raw answers and renders the server response
+  OK    Challenge Hub completion is decided inside completeChallengeAndAward() (server), reading real progression_events, never a client-submitted flag
+  OK    Blend Fault completion (pass/fail) is computed from the real server-side answer key, never trusting a client isCorrect/score field
+  OK    smokecraft_challenge_definitions has a real rule_version column (migration 101)
+  OK    Challenge Hub definitions serialize ruleVersion to the client
+  OK    Blend Fault Identification carries an explicit, versioned assessment (ASSESSMENT_VERSION)
+  OK    smokecraft_challenge_rewards enforces at-most-one XP grant per (guest_reference, challenge_instance_key) via a real UNIQUE constraint
+  OK    The reward grant is attempted inside the same row-locked transaction as completion (FOR UPDATE), closing the two-tab race
+  OK    A UNIQUE_VIOLATION on the reward insert is caught and treated as "already granted", never a 500 or a double-award
+  OK    Blend Fault attempt scoring is guarded by a real row lock (FOR UPDATE) against a concurrent double-submit
+  OK    An already-scored Blend Fault attempt is never rescored — the immutable prior result is returned instead
+  OK    challengeEventService.js defines exactly the four mandated canonical event types
+  OK    Every canonical event carries learner identity, challenge ID, attempt ID, evidence reference, rule ID/version, score result, reward result, idempotency key, audit ID, and server timestamp
+  OK    Challenge Hub (Daily/Weekly) emits all four canonical event types
+  OK    Blend Fault Identification emits all four canonical event types (unified vocabulary across both challenge types)
+  OK    ChallengeHub.jsx never calls fetch()/XHR directly — only through the shared challengeHubApiClient
+  OK    ChallengeHub.jsx never hardcodes a mock challenge result as live data (no mock/fake/dummy challenge state literals)
+  OK    Challenge Hub routes prefix an authenticated account identity with user: (matches the established pattern; the raw id was a real found defect)
+  OK    Blend Fault routes prefix an authenticated account identity with user: (same defect, same fix)
+  OK    Both routers still issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity present)
+  OK    convertGuestToAccount() transfers Challenge Hub learner state (previously never transferred — a real found gap)
+  OK    convertGuestToAccount() transfers Challenge Hub reward grants
+  OK    convertGuestToAccount() transfers Blend Fault attempts and their answers
+
+=== RESULT: PASS (0 checks failed) ===
+

@@ -25,6 +25,7 @@ function serializeEntry(entry) {
     challengeType: definition.challenge_type,
     targetValue: definition.target_value,
     xpReward: definition.xp_reward,
+    ruleVersion: definition.rule_version,
     goldenBoxRelevance: definition.golden_box_relevance,
     instance: {
       instanceKey: instance.instance_key,

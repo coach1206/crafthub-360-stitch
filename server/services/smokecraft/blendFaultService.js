@@ -7,6 +7,9 @@
  */
 import { getDb } from '../../db/connection.js'
 import { recordEvent } from './progressionEventService.js'
+import { recordChallengeEvent } from './challengeEventService.js'
+
+const CHALLENGE_ID = 'blend-fault-identification'
 
 export class BlendFaultError extends Error {
   constructor(code) { super(code); this.code = code }
@@ -113,6 +116,12 @@ export async function startAttempt(guestReference) {
     eventType: 'blend_fault_attempt_started',
     payload: { assessmentKey: ASSESSMENT_KEY, attemptId: attempt.attempt_id, attemptNumber },
     idempotencyKey: `blend-fault-attempt-started-event-${attempt.attempt_id}`,
+  })
+  await recordChallengeEvent({
+    guestReference, sourceScreen: 'BlendFaultChallenge', sourceRoute: '/smokecraft/challenges/blend-fault-identification',
+    eventType: 'challenge_started', challengeId: CHALLENGE_ID, attemptId: attempt.attempt_id,
+    ruleId: ASSESSMENT_KEY, ruleVersion: ASSESSMENT_VERSION,
+    idempotencyKey: `challenge-started-canonical-${attempt.attempt_id}`,
   })
 
   return { attempt, created: true }
@@ -230,6 +239,29 @@ export async function submitAttempt(guestReference, attemptId, submittedAnswers)
     // (the pre-existing shell explicitly disclosed "XP... not yet
     // backend-connected"). Deliberate, disclosed zero-XP design —
     // no awardXp() call is made here.
+
+    const scoreResult = { scoreEarned, scorePossible, percentage, passFail }
+    const rewardResult = { xpAwarded: 0, granted: false }
+    await recordChallengeEvent({
+      guestReference, sourceScreen: 'BlendFaultChallenge', sourceRoute: '/smokecraft/challenges/blend-fault-identification',
+      eventType: 'challenge_submitted', challengeId: CHALLENGE_ID, attemptId,
+      evidenceReference: attemptId, ruleId: ASSESSMENT_KEY, ruleVersion: attempt.assessment_version,
+      idempotencyKey: `challenge-submitted-canonical-${attemptId}`,
+    })
+    await recordChallengeEvent({
+      guestReference, sourceScreen: 'BlendFaultChallenge', sourceRoute: '/smokecraft/challenges/blend-fault-identification',
+      eventType: 'challenge_scored', challengeId: CHALLENGE_ID, attemptId,
+      evidenceReference: attemptId, ruleId: ASSESSMENT_KEY, ruleVersion: attempt.assessment_version,
+      scoreResult,
+      idempotencyKey: `challenge-scored-canonical-${attemptId}`,
+    })
+    await recordChallengeEvent({
+      guestReference, sourceScreen: 'BlendFaultChallenge', sourceRoute: '/smokecraft/challenges/blend-fault-identification',
+      eventType: 'challenge_completed', challengeId: CHALLENGE_ID, attemptId,
+      evidenceReference: attemptId, ruleId: ASSESSMENT_KEY, ruleVersion: attempt.assessment_version,
+      scoreResult, rewardResult,
+      idempotencyKey: `challenge-completed-canonical-${attemptId}`,
+    })
 
     return { attempt: serializeAttempt(finalAttempt), alreadyScored: false, answers: scoredAnswers }
   } catch (err) {

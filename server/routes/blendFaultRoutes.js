@@ -16,7 +16,9 @@ const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
 router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
 
 function bridgeIdentity(req, _res, next) {
-  if (req.smokecraftIdentity?.type === 'guest' || req.smokecraftIdentity?.type === 'user') {
+  if (req.smokecraftIdentity?.type === 'user') {
+    req.goldenBoxGuestReference = `user:${req.smokecraftIdentity.id}`
+  } else if (req.smokecraftIdentity?.type === 'guest') {
     req.goldenBoxGuestReference = req.smokecraftIdentity.id
   }
   next()

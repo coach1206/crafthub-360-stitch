@@ -185,3 +185,18 @@ scoring logic in `src/utils/pairingEngine.js`. See
 saved pairing records the `rule_set_version` used, per the mandate's
 "historical saved pairings must retain the rule version used"
 requirement.
+
+## Holistic Fix 5C-1A update (Challenge Hub scoring authority)
+
+`smokecraft_challenge_definitions` gained a real `rule_version` column
+(migration 101), backfilled to version 1 for both active definitions
+— a direct, unversioned port of their existing, already-approved
+`requirement_config` (no new rule invented). Blend Fault
+Identification's existing `ASSESSMENT_VERSION` (already 1, already
+versioned since migration 089) is unchanged. `smokecraft_challenge_rewards`
+is the new, real, database-enforced idempotency guard for a Challenge
+Hub XP award: `UNIQUE (guest_reference, challenge_instance_key)`. The
+XP amounts themselves are unchanged — both seeded challenges remain at
+the pre-existing, disclosed `xp_reward = 0`; this pass made that
+already-approved column's value structurally live for the first time,
+it did not introduce a new reward amount.

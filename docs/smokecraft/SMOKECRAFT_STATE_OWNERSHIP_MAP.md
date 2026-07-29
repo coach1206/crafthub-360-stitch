@@ -332,3 +332,19 @@ learner who previews a given mentor at a given speed), bounded to a
 provider calls. `server/services/smokecraft/mentorVoiceService.js` is
 the one place the ElevenLabs API key is read; it never appears in any
 response payload or client bundle.
+
+## Holistic Fix 5C-1A update (Challenge Hub scoring authority)
+
+New: `smokecraft_challenge_rewards` (migration 101) is the sole owner
+of a Challenge Hub XP reward grant, one row per (guest_reference,
+challenge_instance_key), database-UNIQUE-enforced. `smokecraft_challenge_learner_state`
+(migration 088) remains the sole owner of a learner's participation
+state per challenge instance; unchanged this pass except that its
+completion transition now happens inside a row-locked transaction
+(`FOR UPDATE`) rather than a plain read-then-update, closing a real
+two-tab race. `convertGuestToAccount()` now also transfers Challenge
+Hub learner state, Challenge Hub reward grants, and Blend Fault
+attempts/answers — previously none of these were transferred at all
+(the same recurring "never transferred" defect class as SC-D037/
+SC-D042), silently losing a guest's challenge/assessment progress on
+every conversion to an account.

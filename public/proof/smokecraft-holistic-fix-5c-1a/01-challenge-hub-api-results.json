@@ -1,0 +1,123 @@
+{
+  "pass": 29,
+  "fail": 0,
+  "total": 29,
+  "results": [
+    {
+      "name": "Hub loads for a genuinely fresh guest (no manual identity round-trip)",
+      "ok": true
+    },
+    {
+      "name": "Both real seeded challenges are returned, each with a real rule version",
+      "ok": true
+    },
+    {
+      "name": "A fresh guest with zero activity honestly shows unmet progress, never fabricated completion",
+      "ok": true
+    },
+    {
+      "name": "Start succeeds",
+      "ok": true
+    },
+    {
+      "name": "Real evidence (a progression event) server-side completes the challenge — never client-decided",
+      "ok": true
+    },
+    {
+      "name": "All four canonical event types were emitted (challenge_started/_submitted/_scored/_completed)",
+      "ok": true
+    },
+    {
+      "name": "The canonical challenge_scored event carries a real ruleId/ruleVersion/scoreResult (never null)",
+      "ok": true
+    },
+    {
+      "name": "The canonical challenge_completed event carries a real rewardResult with an explicit granted flag",
+      "ok": true
+    },
+    {
+      "name": "Re-fetching an already-completed challenge does not re-fire completion/scoring events",
+      "ok": true
+    },
+    {
+      "name": "All concurrent requests during the race succeed",
+      "ok": true
+    },
+    {
+      "name": "A real database-enforced UNIQUE constraint ensures the XP reward is granted at most once despite the concurrent race",
+      "ok": true
+    },
+    {
+      "name": "The awarded XP total reflects exactly one grant, not one per racing request",
+      "ok": true
+    },
+    {
+      "name": "Assessment loads with real questions",
+      "ok": true
+    },
+    {
+      "name": "Starting an attempt succeeds",
+      "ok": true
+    },
+    {
+      "name": "A fully correct submission is server-scored as passed (never client-decided)",
+      "ok": true
+    },
+    {
+      "name": "The server-computed score reflects the real answer key (3/3)",
+      "ok": true
+    },
+    {
+      "name": "An incomplete submission (missing questions) is rejected, never partially scored",
+      "ok": true
+    },
+    {
+      "name": "An unknown question key in the submission is rejected",
+      "ok": true
+    },
+    {
+      "name": "An incorrect submission is server-scored as failed",
+      "ok": true
+    },
+    {
+      "name": "Resubmitting an already-scored attempt is rejected/preserved, never rescored to a different result",
+      "ok": true
+    },
+    {
+      "name": "A rapid double-click submit is safely idempotent (one real scoring outcome, not a crash or double-score)",
+      "ok": true
+    },
+    {
+      "name": "A different guest cannot read another guest's Blend Fault attempt",
+      "ok": true
+    },
+    {
+      "name": "Two independent fetches under the same identity return identical challenge state (no per-device drift)",
+      "ok": true
+    },
+    {
+      "name": "A real account is created on the same cookie jar as the guest",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports real Challenge Hub learner state transferred (previously never transferred — a real found gap)",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports a real Blend Fault attempt transferred (previously never transferred — a real found gap)",
+      "ok": true
+    },
+    {
+      "name": "After conversion, the SAME account identity still sees the completed challenge",
+      "ok": true
+    },
+    {
+      "name": "After conversion, the SAME account identity still sees the transferred Blend Fault attempt history",
+      "ok": true
+    }
+  ]
+}
