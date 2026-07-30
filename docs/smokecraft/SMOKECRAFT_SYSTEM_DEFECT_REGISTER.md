@@ -1770,3 +1770,27 @@ Closed via `server/controllers/goldenBoxController.js`,
 permanent regression check in
 `verify-smokecraft-stage5-closure-integration.mjs`. See
 `public/proof/smokecraft-stage-5-closure/00-proof-index.md`.
+
+## Venue Humidor 1A update
+
+No defects found this pass — this is a brand-new backend foundation
+(migration 106, `inventoryService.js`, `productService.js`,
+`orderService.js`, `venueHumidorController.js`,
+`venueHumidorRoutes.js`), not a fix to prior work. All 32 live API
+assertions and all 20 build-blocking validator checks passed clean.
+Two established defect classes from earlier Golden Box passes were
+proactively designed out from the start rather than found live here:
+- The NULL-uniqueness idempotency gap (SC-D060's class) — every
+  idempotency-key column in this migration uses a real partial
+  `UNIQUE ... WHERE idempotency_key IS NOT NULL` index, and every
+  insert path is wrapped in a `SAVEPOINT`-equivalent
+  transaction/rollback-and-refetch pattern for the first-ever-insert
+  race, matching the fix already proven necessary in Golden Box.
+- The `user:` identity-prefix gap (SC-D055/SC-D058/SC-D063's class) —
+  Venue Humidor's RBAC intentionally does not introduce a second
+  guest/account identity bridge at all; it authenticates every caller
+  through the existing `requireAuth` JWT session and checks real
+  `venue_memberships` rows keyed on `system_users.user_id` directly —
+  there is no guest-reference prefix concept to get wrong here.
+
+See `public/proof/smokecraft-venue-humidor-1a/00-proof-index.md`.

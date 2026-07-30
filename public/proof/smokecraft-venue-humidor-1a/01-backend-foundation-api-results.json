@@ -1,0 +1,135 @@
+{
+  "pass": 32,
+  "fail": 0,
+  "total": 32,
+  "results": [
+    {
+      "name": "A user with no membership for venueB is denied listing venueB products",
+      "ok": true
+    },
+    {
+      "name": "An authorized venue manager can create a product",
+      "ok": true
+    },
+    {
+      "name": "A duplicate SKU within the same venue is rejected",
+      "ok": true
+    },
+    {
+      "name": "A duplicate barcode within the same venue is rejected",
+      "ok": true
+    },
+    {
+      "name": "The SAME SKU is allowed in a DIFFERENT venue (per-venue uniqueness, not global)",
+      "ok": true
+    },
+    {
+      "name": "Venue A's product list contains only Venue A's own products",
+      "ok": true
+    },
+    {
+      "name": "A venue A staff member cannot fetch a venue B product even by pairing A's venueId with B's productId",
+      "ok": true
+    },
+    {
+      "name": "A non-member (customer-equivalent) cannot create a product for a venue they do not staff",
+      "ok": true
+    },
+    {
+      "name": "Receiving inventory increases physical quantity correctly (20 -> 30)",
+      "ok": true
+    },
+    {
+      "name": "Receiving writes exactly one real inventory event with before/after quantities",
+      "ok": true
+    },
+    {
+      "name": "Box opening is a real, recorded, inventory-neutral event",
+      "ok": true
+    },
+    {
+      "name": "Damage adjustment decreases physical quantity (30 -> 28)",
+      "ok": true
+    },
+    {
+      "name": "Complimentary-item adjustment decreases physical quantity (28 -> 27)",
+      "ok": true
+    },
+    {
+      "name": "Count correction adjusts physical quantity to the real audited value (27 -> 30)",
+      "ok": true
+    },
+    {
+      "name": "An adjustment that would drive physical quantity negative is rejected with a real 409",
+      "ok": true
+    },
+    {
+      "name": "The rejected mutation left the real physical quantity unchanged (transaction rolled back)",
+      "ok": true
+    },
+    {
+      "name": "A repeated mutation with the same idempotency key returns the identical original event, never double-applies",
+      "ok": true
+    },
+    {
+      "name": "Physical quantity increased exactly once (30 -> 35), not twice",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent requests with the same idempotency key resolve to the SAME real event (no crash, no double-apply)",
+      "ok": true
+    },
+    {
+      "name": "Physical quantity decreased exactly once (35 -> 32) despite the two-tab race",
+      "ok": true
+    },
+    {
+      "name": "A hold is created and reduces real available quantity",
+      "ok": true
+    },
+    {
+      "name": "Available quantity reflects the active hold (32 physical - 5 held = 27 available)",
+      "ok": true
+    },
+    {
+      "name": "An already-expired hold can be expired (real expires_at check)",
+      "ok": true
+    },
+    {
+      "name": "Available quantity is restored after hold expiration (back to 32)",
+      "ok": true
+    },
+    {
+      "name": "A staff-created reservation succeeds and reduces real available quantity",
+      "ok": true
+    },
+    {
+      "name": "Cancelling the reservation succeeds",
+      "ok": true
+    },
+    {
+      "name": "Available quantity is restored after reservation cancellation (back to 32)",
+      "ok": true
+    },
+    {
+      "name": "Sale completion succeeds and decrements real physical inventory (32 -> 26)",
+      "ok": true
+    },
+    {
+      "name": "Physical quantity genuinely decreased by the sold quantity",
+      "ok": true
+    },
+    {
+      "name": "Cancelling a completed order restores real inventory (refund path)",
+      "ok": true
+    },
+    {
+      "name": "Physical quantity is genuinely restored after cancellation (26 -> 32)",
+      "ok": true
+    },
+    {
+      "name": "A venue A staff member (not a venue B member) is denied mutating a venue B product",
+      "ok": true
+    }
+  ]
+}

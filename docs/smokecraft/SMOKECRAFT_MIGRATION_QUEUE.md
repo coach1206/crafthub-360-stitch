@@ -269,3 +269,17 @@ in `goldenBoxController.js`'s `identityFrom()` (also code-only). Queue
 entries above for migrations 103-105 were added retroactively — they
 had been applied and verified in their originating passes but were
 never recorded here; this closes that documentation gap.
+
+## Venue Humidor 1A update
+
+**106_smokecraft_venue_humidor_foundation.sql** — additive. Adds
+`venue_cigar_products`, `venue_cigar_inventory_events` (append-only),
+`venue_cigar_inventory_holds`, `venue_cigar_reservations`,
+`venue_cigar_orders`, `venue_cigar_order_items` — all FK-scoped to the
+existing `venues(venue_id)`, no parallel venue concept. Per-venue
+unique indexes on `(venue_id, sku)` and `(venue_id, barcode)`, partial
+unique idempotency-key indexes on every mutation-tracking table, and
+non-negative `CHECK` constraints on every quantity column. Rollback:
+`server/db/rollbacks/106_smokecraft_venue_humidor_foundation.rollback.sql`
+(verified live this pass: apply → rollback → reapply all clean, no
+data loss outside this migration's own new tables).

@@ -431,3 +431,21 @@ bridging code paths in Golden Box (`bridgeIdentity` for guest-bridged
 routes, `identityFrom()` for `requireAuth`-only routes) and both are
 verified to produce the same `user:${id}` prefix for an authenticated
 non-guest identity — no third, competing identity resolution exists.
+
+## Venue Humidor 1A update
+
+`venue_cigar_products.physical_quantity` is the sole authoritative
+stock value — mutated ONLY inside `inventoryService.applyInventoryEvent()`
+under a row lock, never directly by `orderService.js` or any route
+handler. `venue_cigar_inventory_events` is the append-only ledger that
+explains every change to it — the same "one column, one writer,
+one append-only explanation ledger" pattern already established by
+`xp_accounts.balance`/`xp_transactions` and
+`golden_box_scorecards.weighted_total`/its computing transaction.
+Available quantity (`physical_quantity - unavailable_quantity -
+active holds - active reservations`) is never itself stored — always
+computed live on read, the same "never duplicate/cache an aggregate
+that could drift" principle `golden_box_results` follows relative to
+individual judge scores. `venue_memberships` (reused, not duplicated)
+remains the sole ownership record for "who may act as staff for which
+venue" — Venue Humidor invented no parallel staff-role table.

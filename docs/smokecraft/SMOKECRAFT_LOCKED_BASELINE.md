@@ -483,3 +483,9 @@ tasting, Master Blend, Cultivator, pairing, mentor, Challenge Hub, and
 the full Golden Box chain) is now verified as one connected system
 through authoritative server services end to end. Venue Humidor was
 not begun, per mandate.
+
+## Venue Humidor 1A update
+
+No screens exist yet for Venue Humidor — this pass is backend
+foundation only (schema, inventory service, venue isolation, RBAC),
+per mandate. No approved SmokeCraft visuals were touched.
