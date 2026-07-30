@@ -14,6 +14,13 @@ import { recordEvent } from '../smokecraft/progressionEventService.js'
 export const CANONICAL_GOLDEN_BOX_EVENT_TYPES = [
   'golden_box_draft_created', 'golden_box_draft_updated',
   'golden_box_submission_requested', 'golden_box_submitted',
+  // Holistic Fix 5C-2A — judge-assignment and scorecard-scoring events.
+  // Keyed by the JUDGE's own identity (guestReference = `user:${judgeUserId}`),
+  // not the entrant's — these describe judging activity, not learner
+  // progress, but reuse the exact same canonical-event mechanism (never
+  // a second, competing event log).
+  'golden_box_judge_assigned', 'golden_box_scorecard_draft_saved',
+  'golden_box_scorecard_submitted', 'golden_box_entry_scored',
 ]
 
 /**

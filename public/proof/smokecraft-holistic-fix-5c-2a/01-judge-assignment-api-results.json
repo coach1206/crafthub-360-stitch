@@ -1,0 +1,51 @@
+{
+  "pass": 11,
+  "fail": 0,
+  "total": 11,
+  "results": [
+    {
+      "name": "Test setup: admin login succeeds",
+      "ok": true
+    },
+    {
+      "name": "An authorized admin can assign a judge to an eligible submitted entry",
+      "ok": true
+    },
+    {
+      "name": "The assignment records who assigned it (assigned_by), not just when",
+      "ok": true
+    },
+    {
+      "name": "A non-admin cannot assign a judge (real role check, not a client-asserted permission)",
+      "ok": true
+    },
+    {
+      "name": "A duplicate assignment is a real database no-op, never a second row",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real assignment row exists after the duplicate attempt",
+      "ok": true
+    },
+    {
+      "name": "Assigning a judge to a still-editable draft entry (never submitted) is rejected",
+      "ok": true
+    },
+    {
+      "name": "Test setup: a real authenticated entrant account logs in",
+      "ok": true
+    },
+    {
+      "name": "An entrant can never be assigned as the judge of their own submitted entry",
+      "ok": true
+    },
+    {
+      "name": "A judge with no real active membership for a venue-scoped competition's venue is denied assignment",
+      "ok": true
+    },
+    {
+      "name": "A judge with a real active venue membership is assigned successfully",
+      "ok": true
+    }
+  ]
+}

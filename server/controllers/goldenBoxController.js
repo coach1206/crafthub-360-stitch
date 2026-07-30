@@ -18,12 +18,16 @@ function sendError(res, err, fallback = 400) {
     identity_required: 400, idempotency_key_required: 400,
     void_reason_required: 400, amend_reason_required: 400,
     no_draft_review_to_submit: 404,
+    judge_self_assignment_prohibited: 403, judge_outside_venue_scope: 403,
+    stale_version: 409,
   }
   const code = err.code || 'internal_error'
   let status = statusByCode[code] || fallback
   if (code.startsWith('invalid_transition_')) status = 409
   if (code.startsWith('validation_failed')) status = 422
   if (code.startsWith('invalid_category') || code.startsWith('invalid_score')) status = 400
+  if (code.startsWith('entry_not_eligible_for_judging')) status = 409
+  if (code.startsWith('missing_criterion') || code.startsWith('comment_required')) status = 422
   res.status(status).json({ success: false, error: code })
 }
 
@@ -164,9 +168,34 @@ export async function handleAssignJudge(req, res) {
   } catch (err) { sendError(res, err, 500) }
 }
 
+export async function handleGetRubric(_req, res) {
+  try {
+    const criteria = await judgingService.getRubric()
+    res.json({ success: true, criteria: criteria.map(r => ({
+      criterionKey: r.criterion_key, ruleVersion: r.rule_version, label: r.label, description: r.description,
+      minScore: Number(r.min_score), maxScore: Number(r.max_score), weight: Number(r.weight),
+      commentRequired: r.comment_required, displayOrder: r.display_order,
+    })) })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleSaveScorecardDraft(req, res) {
+  try {
+    const scorecard = await judgingService.saveScorecardDraft(req.params.entryId, req.user.id, req.body.scores, req.user.id, {
+      expectedVersion: req.body.expectedVersion, idempotencyKey: req.body.idempotencyKey,
+    })
+    res.json({ success: true, scorecard })
+  } catch (err) {
+    if (err.code === 'stale_version') {
+      return res.status(409).json({ success: false, error: 'stale_version', currentVersion: err.currentVersion })
+    }
+    sendError(res, err, 500)
+  }
+}
+
 export async function handleSubmitScorecard(req, res) {
   try {
-    const scorecard = await judgingService.submitScorecard(req.params.entryId, req.user.id, req.body.scores, req.user.id)
+    const scorecard = await judgingService.submitScorecard(req.params.entryId, req.user.id, req.body.scores, req.user.id, req.body.idempotencyKey)
     res.json({ success: true, scorecard })
   } catch (err) { sendError(res, err, 500) }
 }

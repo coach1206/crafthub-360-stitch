@@ -17,8 +17,9 @@ import * as ctrl from '../controllers/goldenBoxController.js'
 
 const router = Router()
 
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
+const IS_PROD = process.env.NODE_ENV === 'production'
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
 
 // Guest-facing routes resolve the same SmokeCraft guest identity used by
 // Management Sync (server-issued JWT + HttpOnly cookie) — never a
@@ -75,8 +76,13 @@ router.post('/entries/:entryId/withdraw', writeLimiter, requireSmokeCraftIdentit
   auditAction('GOLDEN_BOX', 'entry_withdrawn', 'post'), ctrl.handleWithdrawEntry)
 
 // ── Judging (administrator/judge only) ──────────────────────────────
+router.get('/judging/rubric', readLimiter, ctrl.handleGetRubric)
+
 router.post('/competitions/:competitionId/entries/:entryId/judges', writeLimiter, requireAuth, requireRole('admin'),
   auditAction('GOLDEN_BOX', 'judge_assigned', 'post'), ctrl.handleAssignJudge)
+
+router.post('/entries/:entryId/scorecard/draft', writeLimiter, requireAuth,
+  auditAction('GOLDEN_BOX', 'scorecard_draft_saved', 'post'), ctrl.handleSaveScorecardDraft)
 
 router.post('/entries/:entryId/scorecard', writeLimiter, requireAuth,
   auditAction('GOLDEN_BOX', 'scorecard_submitted', 'post'), ctrl.handleSubmitScorecard)

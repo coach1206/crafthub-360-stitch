@@ -424,3 +424,19 @@ element moved, resized, or restyled. `GoldenBoxHub.jsx` and
 `GoldenBox.jsx` (rules acknowledgement) are unchanged. No other Golden
 Box screen (Packaging Studio, Judge Dashboard, Mentor Review, Results)
 was touched — explicitly out of scope per mandate.
+
+## Holistic Fix 5C-2A update (Golden Box judge assignment and scorecard authority)
+
+No approved visuals were redesigned. `JudgeEntryReview.jsx` gained a
+new "Save Draft" button alongside the existing "Submit Scorecard"
+button (previously only Submit existed, so no partial save was ever
+possible), a stale-version alert block with a "Reload the latest
+draft" action (same honest-conflict pattern established in 5C-1B's
+`EntryWorkspace.jsx`), and one new line displaying the server-computed
+weighted total and rule version once present — all additive, no
+existing element moved, resized, or restyled. `JudgeDashboard.jsx` is
+unchanged (its existing status-copy map already covered `draft`/
+`submitted`/`locked`). No other Golden Box screen (Packaging Studio,
+Mentor Review, Results, competition leaderboard) was touched —
+explicitly out of scope per mandate. Final awards and the competition
+leaderboard were not built, per mandate.

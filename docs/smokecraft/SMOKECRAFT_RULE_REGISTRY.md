@@ -211,3 +211,19 @@ carried on every canonical Golden Box event
 (`goldenBoxEventService.js`) so a future rule change is auditable
 against exactly which submissions were scored under which version.
 No new scoring rule or reward amount was invented this pass.
+
+## Holistic Fix 5C-2A update (Golden Box judge assignment and scorecard authority)
+
+`golden_box_rubric_criteria` (migration 103) formalizes the Golden Box
+judging rubric that was already live and approved
+(`JudgeEntryReview.jsx`'s `CATEGORIES` array / `judgingService.js`'s
+old `VALID_CATEGORIES` Set) into a real, versioned rule: 12 criteria
+(construction, draw, burn, aroma, flavor, balance, complexity,
+progression, finish, creativity, rule_compliance, overall_impression),
+each `rule_version = 1`, weight 1 (equal weight, matching the
+pre-existing unweighted-average behavior), range 0–10, no required
+comment. Every scorecard persists the `rule_version` it was scored
+under. `ELIGIBLE_ENTRY_STATUSES_FOR_ASSIGNMENT = ['submitted',
+'locked', 'under_review']` versions which entry states a judge may be
+assigned to. No new or conflicting rubric was invented this pass — see
+`SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md` for the full criterion table.

@@ -1,0 +1,79 @@
+{
+  "pass": 18,
+  "fail": 0,
+  "total": 18,
+  "results": [
+    {
+      "name": "The rubric endpoint returns exactly the 12 already-approved categories",
+      "ok": true
+    },
+    {
+      "name": "Every criterion carries a real rule version",
+      "ok": true
+    },
+    {
+      "name": "Every criterion carries min/max/weight (never invented — weight 1, range 0-10, matching the pre-existing behavior)",
+      "ok": true
+    },
+    {
+      "name": "A partial draft (not every category scored) saves successfully",
+      "ok": true
+    },
+    {
+      "name": "Reloading the entry rehydrates the real saved draft score",
+      "ok": true
+    },
+    {
+      "name": "A final submission missing required criteria is rejected (server decides completeness)",
+      "ok": true
+    },
+    {
+      "name": "A complete, valid submission is accepted",
+      "ok": true
+    },
+    {
+      "name": "The weighted total is genuinely server-computed (8/10 across 12 equal-weight criteria = 80.00), never the fabricated client value",
+      "ok": true
+    },
+    {
+      "name": "The scorecard is stamped with the real rubric rule version",
+      "ok": true
+    },
+    {
+      "name": "A draft-save attempt against an already-submitted scorecard is rejected",
+      "ok": true
+    },
+    {
+      "name": "Resubmitting with different scores never changes the immutable, already-submitted result",
+      "ok": true
+    },
+    {
+      "name": "A draft save carrying an outdated expectedVersion is rejected with a real 409 conflict",
+      "ok": true
+    },
+    {
+      "name": "Both requests of a rapid double-click (same idempotency key) resolve to the SAME real scorecard row",
+      "ok": true
+    },
+    {
+      "name": "Of two concurrent FIRST-EVER draft saves for the same entry+judge, exactly one wins (200) and one honestly loses (409) — never two silently-created scorecards",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real scorecard row exists in the database despite the race",
+      "ok": true
+    },
+    {
+      "name": "A judge not assigned to this entry cannot save a scorecard for it",
+      "ok": true
+    },
+    {
+      "name": "golden_box_scorecard_draft_saved, golden_box_scorecard_submitted, and golden_box_entry_scored were all emitted",
+      "ok": true
+    },
+    {
+      "name": "The canonical golden_box_entry_scored event carries the real server-computed weighted total",
+      "ok": true
+    }
+  ]
+}

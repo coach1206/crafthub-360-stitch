@@ -389,3 +389,30 @@ already have. All four closed via a row-locked (`FOR UPDATE`)
 `goldenBoxEventService.js` (`golden_box_draft_created/_updated/
 _submission_requested/_submitted`). See `SMOKECRAFT_RULE_REGISTRY.md`
 and `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.
+
+## Holistic Fix 5C-2A update (Golden Box judge assignment and scorecard authority)
+
+Audited the judge-assignment and scorecard-scoring model
+(`judgingService.js`, migration 103): `golden_box_judges` (one row per
+judge user), `golden_box_judge_assignments` (`UNIQUE(judge_id,
+entry_id)`, now with a real `assigned_by` audit column),
+`golden_box_scorecards` (one original row per judge+entry, `status`
+draft → submitted → locked, amendments as new rows via
+`amended_from`), `golden_box_rubric_criteria` (new, formalized
+rubric), `golden_box_scores` (per-criterion rows). The real gaps
+found: no draft/final-submission separation existed at all
+(`submitScorecard()` always transitioned straight to `'submitted'` in
+one call), no server-computed weighted total existed for individual
+scorecards, judge assignment had no eligibility/self-assignment/venue-
+scope checks beyond the route-level role gate, and the scorecards
+table's `UNIQUE(entry_id, judge_id, amended_from)` constraint never
+actually enforced one-original-per-judge-per-entry (NULL-uniqueness
+bug — see SC-D060). All closed via a rewritten `judgingService.js`
+(`saveScorecardDraft()`, rewritten `submitScorecard()`, rewritten
+`assignJudge()`), migration 103's `assigned_by`/`weighted_total`/
+`rule_version`/`draft_version`/`idempotency_key` columns and partial
+unique index, and four new canonical events
+(`golden_box_judge_assigned`, `golden_box_scorecard_draft_saved`,
+`golden_box_scorecard_submitted`, `golden_box_entry_scored`). See
+`SMOKECRAFT_RULE_REGISTRY.md`, `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`,
+and `SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`.

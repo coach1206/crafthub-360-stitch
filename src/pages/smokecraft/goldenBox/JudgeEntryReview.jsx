@@ -109,11 +109,34 @@ export default function JudgeEntryReview() {
 
   const allScored = CATEGORIES.every(c => typeof scores[c.key]?.score === 'number')
   const locked = scorecard && ['submitted', 'locked'].includes(scorecard.status)
+  const anyScored = CATEGORIES.some(c => typeof scores[c.key]?.score === 'number')
+
+  function scoredPayload() {
+    return CATEGORIES.filter(c => typeof scores[c.key]?.score === 'number')
+      .map(c => ({ category: c.key, score: scores[c.key].score, maxScore: 10, comment: scores[c.key].comment || undefined }))
+  }
+
+  // Holistic Fix 5C-2A — a real, distinct draft save (never submits,
+  // never requires every category), with optimistic concurrency: the
+  // server rejects a stale write (another tab/session saved a newer
+  // draft first) with a real 409, surfaced here honestly instead of
+  // silently overwriting that newer edit.
+  async function handleSaveDraft() {
+    setError(null)
+    const idempotencyKey = `gb-scorecard-draft-${entryId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const result = await api.saveScorecardDraft(entryId, scoredPayload(), scorecard?.draft_version, idempotencyKey)
+    if (!result.ok) {
+      setError(result.error === 'stale_version' ? 'stale_version' : result.error)
+      return
+    }
+    setMessage('Draft saved.')
+    await load()
+  }
 
   async function handleSubmit() {
     setError(null)
-    const payload = CATEGORIES.map(c => ({ category: c.key, score: scores[c.key].score, maxScore: 10, comment: scores[c.key].comment || undefined }))
-    const result = await api.submitScorecard(entryId, payload)
+    const idempotencyKey = `gb-scorecard-submit-${entryId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const result = await api.submitScorecard(entryId, scoredPayload(), idempotencyKey)
     if (!result.ok) { setError(result.error); return }
     setMessage('Scorecard submitted.')
     await load()
@@ -199,19 +222,36 @@ export default function JudgeEntryReview() {
 
         <h2 style={{ fontSize: 15, color: GOLD }}>Golden Box Judging Scorecard</h2>
         {scorecard && <div style={{ fontSize: 12, marginBottom: 10 }}>Status: <b style={{ color: OK }}>{scorecard.status}</b></div>}
+        {scorecard?.weighted_total != null && (
+          <div style={{ fontSize: 12, marginBottom: 10, color: 'rgba(229,226,225,0.7)' }}>
+            Server-computed weighted total: <b style={{ color: GOLD }}>{Number(scorecard.weighted_total).toFixed(2)}</b> / 100 (rule v{scorecard.rule_version})
+          </div>
+        )}
 
         {CATEGORIES.map(cat => (
           <ScoreInput key={cat.key} cat={cat} value={scores[cat.key]} onChange={handleScoreChange} disabled={locked && !amending} />
         ))}
 
-        {error && <p role="alert" style={{ color: DANGER, fontSize: 12 }}>{error}</p>}
+        {error === 'stale_version' && (
+          <p role="alert" style={{ color: DANGER, fontSize: 12 }}>
+            This scorecard was updated elsewhere (another tab or session) since you loaded it.{' '}
+            <button type="button" onClick={load} style={{ background: 'transparent', border: 'none', color: GOLD, textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>Reload the latest draft</button> before saving again.
+          </p>
+        )}
+        {error && error !== 'stale_version' && <p role="alert" style={{ color: DANGER, fontSize: 12 }}>{error}</p>}
         {message && <p role="status" style={{ color: OK, fontSize: 12 }}>{message}</p>}
 
         {!scorecard || scorecard.status === 'draft' ? (
-          <button type="button" disabled={!allScored} onClick={handleSubmit}
-            style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${allScored ? GOLD : BORDER}`, background: 'transparent', color: allScored ? GOLD : 'rgba(229,226,225,0.35)', cursor: allScored ? 'pointer' : 'not-allowed', fontFamily: 'inherit' }}>
-            Submit Scorecard
-          </button>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <button type="button" disabled={!anyScored} onClick={handleSaveDraft}
+              style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1px solid ${anyScored ? BORDER : BORDER}`, background: 'transparent', color: anyScored ? CREAM : 'rgba(229,226,225,0.35)', cursor: anyScored ? 'pointer' : 'not-allowed', fontFamily: 'inherit' }}>
+              Save Draft
+            </button>
+            <button type="button" disabled={!allScored} onClick={handleSubmit}
+              style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${allScored ? GOLD : BORDER}`, background: 'transparent', color: allScored ? GOLD : 'rgba(229,226,225,0.35)', cursor: allScored ? 'pointer' : 'not-allowed', fontFamily: 'inherit' }}>
+              Submit Scorecard
+            </button>
+          </div>
         ) : scorecard.status === 'submitted' ? (
           <button type="button" onClick={handleLock} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit' }}>
             Lock Scorecard

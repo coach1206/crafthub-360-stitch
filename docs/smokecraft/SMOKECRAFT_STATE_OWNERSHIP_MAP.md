@@ -366,3 +366,25 @@ auto-generate a new UUID, silently orphaning every real FK-referencing
 `golden_box_submissions` row. Fixed with a bespoke transfer that
 preserves the parent/child relationship (same technique as the Blend
 Fault attempt transfer in 5C-1A).
+
+## Holistic Fix 5C-2A update (Golden Box judge assignment and scorecard authority)
+
+`golden_box_scorecards.draft_version` is the optimistic-concurrency
+token for a scorecard draft (mirrors `current_version` on
+`golden_box_entries`) — `saveScorecardDraft()` rejects a write whose
+`expectedVersion` doesn't match, enforced under a row lock (`FOR
+UPDATE`). `golden_box_scorecards.weighted_total` and `rule_version`
+are exclusively server-owned: computed and stamped only inside
+`submitScorecard()`'s transaction, never accepted from the client.
+`golden_box_scorecards.status` (`draft` → `submitted` → `locked`, or
+`amended`/`voided`) is the sole ownership boundary for editability —
+once `status !== 'draft'`, `saveScorecardDraft()` unconditionally
+rejects further writes; a locked scorecard's real edits must go
+through `amendScorecard()`, which creates a new row rather than
+mutating the original. Migration 103 adds `idempotency_key` (UNIQUE)
+to `golden_box_scorecards` for final-submission dedupe, and a partial
+unique index (`idx_gbsc_one_original_per_judge_entry ... WHERE
+amended_from IS NULL`) that is the REAL ownership boundary for "one
+original scorecard per judge+entry" — the table's pre-existing
+`UNIQUE(entry_id, judge_id, amended_from)` never actually enforced
+this (SC-D060).

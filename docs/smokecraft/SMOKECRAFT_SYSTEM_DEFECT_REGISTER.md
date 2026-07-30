@@ -1587,3 +1587,61 @@ permanent regression checks in
 `verify-smokecraft-hf5c1b-golden-box-api.mjs` and
 `scripts/validateSmokecraftGoldenBoxAuthority.mjs`. See
 `public/proof/smokecraft-holistic-fix-5c-1b/00-proof-index.md`.
+
+## Holistic Fix 5C-2A update (Golden Box judge assignment and scorecard authority)
+
+- **SC-D060**: `golden_box_scorecards`' pre-existing
+  `UNIQUE(entry_id, judge_id, amended_from)` constraint (migration 077)
+  never actually enforced "at most one original (non-amended)
+  scorecard per judge+entry" — Postgres treats every `NULL
+  amended_from` as distinct for uniqueness purposes. Two concurrent
+  first-ever `POST .../scorecard/draft` requests for the same brand-new
+  judge+entry pair (no row existed yet to lock) both returned `200 OK`
+  and created two separate scorecard rows. Reproduced live with two
+  backgrounded concurrent `curl` calls, then closed for real, encoded
+  as a permanent regression test (`verify-smokecraft-hf5c2a-scorecard-api.mjs`,
+  "Two-tab race on the very FIRST draft save"). Closed with a partial
+  unique index (`idx_gbsc_one_original_per_judge_entry ON
+  golden_box_scorecards (entry_id, judge_id) WHERE amended_from IS
+  NULL`, migration 103) plus a rewritten `getOrCreateDraftScorecard()`
+  that wraps the risky first-ever INSERT in a `SAVEPOINT` so a
+  `UNIQUE_VIOLATION` (23505) can be caught without aborting the
+  surrounding transaction, then re-fetches the real winning row via
+  `SELECT ... FOR UPDATE`. Same defect class as the voice-preview cache
+  NULL-uniqueness bug fixed earlier in this operation — a recurring
+  pitfall, not a one-off.
+- Structural gap (not a bug per se): `submitScorecard()` previously
+  always transitioned status straight to `'submitted'` in one call,
+  with no way to save an incomplete draft — the mandate's own "draft;
+  draft update" requirement had no real implementation. Closed by
+  splitting into a genuine `saveScorecardDraft()` (never transitions
+  status, partial scores allowed, optimistic-concurrency `draft_version`,
+  idempotency-key dedupe) and a rewritten `submitScorecard()` (requires
+  every rubric criterion present, computes the weighted total
+  server-side, locks).
+- Structural gap (not a bug per se): there was no server-side weighted-
+  total computation for individual scorecards at all — only a separate,
+  unrelated cross-judge `computeAggregateResult()` average existed.
+  Closed by computing `sum(score * weight) / sum(maxScore * weight) *
+  100` server-side from validated scores only inside `submitScorecard()`,
+  verified live that an injected client `weightedTotal`/`totalScore`
+  field is completely ignored.
+- `goldenBoxRoutes.js`'s `readLimiter`/`writeLimiter` lacked the
+  `skip: () => !IS_PROD` dev/test bypass already established elsewhere
+  in this codebase (`mentorVoiceRoutes.js`, `challengeHubRoutes.js`).
+  Real 429s during this pass's own test-writing/testing surfaced the
+  gap live. Closed by adding the same dev-mode skip.
+
+Closed via `server/db/migrations/103_smokecraft_golden_box_judging_authority.sql`,
+`server/services/goldenBox/judgingService.js`,
+`server/services/goldenBox/goldenBoxEventService.js`,
+`server/controllers/goldenBoxController.js`,
+`server/routes/goldenBoxRoutes.js`,
+`src/services/goldenBox/goldenBoxApiClient.js`,
+`src/pages/smokecraft/goldenBox/JudgeEntryReview.jsx`. Encoded as
+permanent regression checks in
+`verify-smokecraft-hf5c2a-judge-assignment-api.mjs`,
+`verify-smokecraft-hf5c2a-scorecard-api.mjs`,
+`verify-smokecraft-hf5c2a-judge-browser.mjs`, and
+`scripts/validateSmokecraftGoldenBoxJudgingAuthority.mjs`. See
+`public/proof/smokecraft-holistic-fix-5c-2a/00-proof-index.md`.

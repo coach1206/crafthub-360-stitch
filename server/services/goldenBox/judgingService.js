@@ -2,17 +2,91 @@
  * Package 1 — human judging (Step 10, Decision 3). Official scores are
  * always human_judge scorer_type; AI output never enters this table
  * (see aiAnalysisService.js — structurally separate table, no path in).
+ *
+ * Holistic Fix 5C-2A — judge-assignment and scorecard-scoring
+ * authority. Rubric formalized from the already-approved, already-live
+ * 12-category scorecard (migration 103, `golden_box_rubric_criteria`)
+ * — no new or conflicting rubric invented. Assignment is now
+ * authorization-checked (eligible entry status, no self-assignment,
+ * venue/competition boundary) with a real assigned-by audit column.
+ * Scorecards now have a genuine draft-save path distinct from final
+ * submission, a server-computed weighted total (never client-
+ * submitted), optimistic concurrency on drafts, and idempotent final
+ * submission.
  */
 import { getDb } from '../../db/connection.js'
 import { logActivity } from './activityLogService.js'
 import { transitionScorecard } from './lifecycleService.js'
+import { recordGoldenBoxEvent } from './goldenBoxEventService.js'
 
 export class JudgingError extends Error {
   constructor(code) { super(code); this.code = code }
 }
 
+const UNIQUE_VIOLATION = '23505'
+
+// Entry statuses a judge assignment is meaningful for — matches the
+// real submission lifecycle (submitEntry -> 'submitted';
+// lockEntry -> 'locked'; under_review is the judging-in-progress
+// state). Assigning a judge to a still-editable draft, or to an entry
+// that never submitted, would let a judge see/score content that
+// isn't the entrant's final, locked-in work.
+const ELIGIBLE_ENTRY_STATUSES_FOR_ASSIGNMENT = ['submitted', 'locked', 'under_review']
+
+export async function getRubric() {
+  const db = getDb()
+  const { rows } = await db.query(
+    `SELECT * FROM golden_box_rubric_criteria WHERE active = true ORDER BY display_order`
+  )
+  return rows
+}
+
+function serializeCriterion(r) {
+  return {
+    criterionKey: r.criterion_key, ruleVersion: r.rule_version, label: r.label, description: r.description,
+    minScore: Number(r.min_score), maxScore: Number(r.max_score), weight: Number(r.weight),
+    commentRequired: r.comment_required, displayOrder: r.display_order,
+  }
+}
+
+/**
+ * Assigns a judge to an entry. Server-authoritative eligibility:
+ *   - the entry must be in a real judging-eligible status (never a
+ *     still-editable draft)
+ *   - a judge may never be assigned to their own entry
+ *   - for a venue-scoped competition, the judge must have a real
+ *     active venue membership for that venue (same check already used
+ *     by visibilityService.resolveViewerRole — reused, not duplicated)
+ *   - duplicate assignment is a real database UNIQUE(judge_id, entry_id)
+ *     no-op, never a second row
+ * Route-level authorization (requireAuth + requireRole('admin')) is
+ * the "only authorized staff" gate — this function additionally
+ * enforces the eligibility rules above, which authorization alone
+ * cannot express.
+ */
 export async function assignJudge(competitionId, entryId, judgeUserId, assignedBy) {
   const db = getDb()
+  const { rows: entryRows } = await db.query(`SELECT * FROM golden_box_entries WHERE entry_id = $1 AND competition_id = $2`, [entryId, competitionId])
+  const entry = entryRows[0]
+  if (!entry) throw new JudgingError('entry_not_found')
+  if (!ELIGIBLE_ENTRY_STATUSES_FOR_ASSIGNMENT.includes(entry.status)) {
+    throw new JudgingError(`entry_not_eligible_for_judging:${entry.status}`)
+  }
+  if (entry.user_id === judgeUserId) {
+    throw new JudgingError('judge_self_assignment_prohibited')
+  }
+
+  const { rows: competitionRows } = await db.query(`SELECT * FROM golden_box_competitions WHERE id = $1`, [competitionId])
+  const competition = competitionRows[0]
+  if (!competition) throw new JudgingError('competition_not_found')
+  if (competition.scope === 'venue' && competition.scope_venue_id) {
+    const { rows: membershipRows } = await db.query(
+      `SELECT membership_type FROM venue_memberships WHERE user_id = $1 AND venue_id = $2 AND status = 'active'`,
+      [judgeUserId, competition.scope_venue_id]
+    )
+    if (membershipRows.length === 0) throw new JudgingError('judge_outside_venue_scope')
+  }
+
   const { rows: judgeRows } = await db.query(
     `INSERT INTO golden_box_judges (user_id) VALUES ($1)
      ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id RETURNING *`,
@@ -20,12 +94,18 @@ export async function assignJudge(competitionId, entryId, judgeUserId, assignedB
   )
   const judge = judgeRows[0]
   const { rows } = await db.query(
-    `INSERT INTO golden_box_judge_assignments (competition_id, judge_id, entry_id)
-     VALUES ($1,$2,$3) ON CONFLICT (judge_id, entry_id) DO NOTHING RETURNING *`,
-    [competitionId, judge.id, entryId]
+    `INSERT INTO golden_box_judge_assignments (competition_id, judge_id, entry_id, assigned_by)
+     VALUES ($1,$2,$3,$4) ON CONFLICT (judge_id, entry_id) DO NOTHING RETURNING *`,
+    [competitionId, judge.id, entryId, assignedBy]
   )
+  const assignment = rows[0]
   await logActivity({ entryId, competitionId, actorId: assignedBy, action: 'judge_assigned', metadata: { judgeUserId } })
-  return rows[0] || { judge_id: judge.id, entry_id: entryId, alreadyAssigned: true }
+  await recordGoldenBoxEvent({
+    guestReference: `user:${assignedBy}`, sourceScreen: 'GoldenBoxAdmin', sourceRoute: `/api/smokecraft/golden-box/competitions/${competitionId}/entries/${entryId}/judges`,
+    eventType: 'golden_box_judge_assigned', entryId, result: { judgeUserId, alreadyAssigned: !assignment },
+    idempotencyKey: `golden-box-judge-assigned-canonical-${competitionId}-${judge.id}-${entryId}`,
+  })
+  return assignment || { judge_id: judge.id, entry_id: entryId, alreadyAssigned: true }
 }
 
 export async function isAssignedJudge(entryId, judgeUserId) {
@@ -39,53 +119,217 @@ export async function isAssignedJudge(entryId, judgeUserId) {
   return rows.length > 0
 }
 
-const VALID_CATEGORIES = new Set([
-  'construction', 'draw', 'burn', 'aroma', 'flavor', 'balance', 'complexity',
-  'progression', 'finish', 'creativity', 'rule_compliance', 'overall_impression',
-])
+function validateScorePayload(scores, rubricByKey) {
+  for (const s of scores) {
+    const criterion = rubricByKey.get(s.category)
+    if (!criterion) throw new JudgingError(`invalid_category:${s.category}`)
+    const max = Number(criterion.max_score)
+    const min = Number(criterion.min_score)
+    if (typeof s.score !== 'number' || s.score < min || s.score > max) throw new JudgingError(`invalid_score:${s.category}`)
+    if (criterion.comment_required && !s.comment) throw new JudgingError(`comment_required:${s.category}`)
+  }
+}
 
-export async function submitScorecard(entryId, judgeUserId, scores, actorId) {
-  const db = getDb()
+async function getOrCreateDraftScorecard(client, entryId, judgeId) {
+  const { rows: existing } = await client.query(
+    `SELECT * FROM golden_box_scorecards WHERE entry_id = $1 AND judge_id = $2 AND amended_from IS NULL FOR UPDATE`,
+    [entryId, judgeId]
+  )
+  if (existing[0]) return existing[0]
+  // A row lock only protects a row that already exists — the FIRST
+  // draft save for a judge+entry has no row to lock, so two concurrent
+  // first saves can both reach here. The real guard is the database's
+  // own partial UNIQUE(entry_id, judge_id) WHERE amended_from IS NULL
+  // (migration 103) — catch the loser's violation (via a SAVEPOINT, so
+  // the surrounding transaction survives) and fetch the real winning
+  // row instead of erroring or creating a duplicate.
+  await client.query('SAVEPOINT before_scorecard_insert')
+  try {
+    const { rows } = await client.query(
+      `INSERT INTO golden_box_scorecards (entry_id, judge_id) VALUES ($1,$2) RETURNING *`,
+      [entryId, judgeId]
+    )
+    return rows[0]
+  } catch (err) {
+    if (err.code === UNIQUE_VIOLATION) {
+      await client.query('ROLLBACK TO SAVEPOINT before_scorecard_insert')
+      const { rows: winner } = await client.query(
+        `SELECT * FROM golden_box_scorecards WHERE entry_id = $1 AND judge_id = $2 AND amended_from IS NULL FOR UPDATE`,
+        [entryId, judgeId]
+      )
+      return winner[0]
+    }
+    throw err
+  }
+}
+
+/**
+ * Saves a real, distinct scorecard DRAFT — never transitions status,
+ * never requires every criterion to be present, never computes an
+ * authoritative total (that only happens on final submission). Real
+ * optimistic concurrency: expectedVersion, if supplied, must match the
+ * scorecard's real draft_version or the write is rejected with a
+ * 409-mapped stale_version conflict. idempotencyKey dedupes a rapid
+ * double-click.
+ */
+export async function saveScorecardDraft(entryId, judgeUserId, scores, actorId, { expectedVersion, idempotencyKey } = {}) {
   const authorized = await isAssignedJudge(entryId, judgeUserId)
   if (!authorized) throw new JudgingError('judge_not_assigned')
-  for (const s of scores) {
-    if (!VALID_CATEGORIES.has(s.category)) throw new JudgingError(`invalid_category:${s.category}`)
-    const max = s.maxScore ?? 10
-    if (typeof s.score !== 'number' || s.score < 0 || s.score > max) throw new JudgingError(`invalid_score:${s.category}`)
-  }
+
+  const db = getDb()
+  const rubric = await getRubric()
+  const rubricByKey = new Map(rubric.map(r => [r.criterion_key, r]))
+  // Draft scores may be partial — only validate the ones actually sent.
+  validateScorePayload(scores, rubricByKey)
+
   const { rows: judgeRows } = await db.query(`SELECT id FROM golden_box_judges WHERE user_id = $1`, [judgeUserId])
   const judgeId = judgeRows[0].id
 
-  const { rows: existing } = await db.query(
-    `SELECT * FROM golden_box_scorecards WHERE entry_id = $1 AND judge_id = $2 AND amended_from IS NULL`,
-    [entryId, judgeId]
-  )
-  if (existing[0] && existing[0].status !== 'draft') throw new JudgingError('scorecard_already_submitted')
+  if (idempotencyKey) {
+    const { rows: dup } = await db.query(`SELECT * FROM golden_box_scorecards WHERE idempotency_key = $1`, [idempotencyKey])
+    if (dup[0]) return dup[0]
+  }
 
   const client = await db.connect()
   try {
     await client.query('BEGIN')
-    let scorecard
-    if (existing[0]) {
-      scorecard = existing[0]
-    } else {
-      const { rows } = await client.query(
-        `INSERT INTO golden_box_scorecards (entry_id, judge_id) VALUES ($1,$2) RETURNING *`,
-        [entryId, judgeId]
-      )
-      scorecard = rows[0]
+    const scorecard = await getOrCreateDraftScorecard(client, entryId, judgeId)
+    if (scorecard.status !== 'draft') throw new JudgingError('scorecard_already_submitted')
+
+    if (idempotencyKey) {
+      const { rows: dupLocked } = await client.query(`SELECT * FROM golden_box_scorecards WHERE idempotency_key = $1`, [idempotencyKey])
+      if (dupLocked[0]) { await client.query('ROLLBACK'); return dupLocked[0] }
     }
+    if (typeof expectedVersion === 'number' && expectedVersion !== scorecard.draft_version) {
+      await client.query('ROLLBACK')
+      const err = new JudgingError('stale_version')
+      err.currentVersion = scorecard.draft_version
+      throw err
+    }
+
+    // Replace this judge's category scores wholesale on each draft save
+    // — simplest correct semantics for "here is my current draft state"
+    // without needing per-category diffing.
+    await client.query(`DELETE FROM golden_box_scores WHERE scorecard_id = $1`, [scorecard.id])
     for (const s of scores) {
+      const criterion = rubricByKey.get(s.category)
       await client.query(
         `INSERT INTO golden_box_scores (scorecard_id, category, score, max_score, comment, scorer_type)
          VALUES ($1,$2,$3,$4,$5,'human_judge')`,
-        [scorecard.id, s.category, s.score, s.maxScore ?? 10, s.comment || null]
+        [scorecard.id, s.category, s.score, criterion.max_score, s.comment || null]
       )
     }
-    await client.query(`UPDATE golden_box_scorecards SET status = 'submitted', submitted_at = now() WHERE id = $1`, [scorecard.id])
+    const nextDraftVersion = scorecard.draft_version + 1
+    const { rows: updated } = await client.query(
+      `UPDATE golden_box_scorecards SET draft_version = $2, idempotency_key = $3, updated_at = now() WHERE id = $1 RETURNING *`,
+      [scorecard.id, nextDraftVersion, idempotencyKey || null]
+    )
     await client.query('COMMIT')
-    await logActivity({ entryId, actorId, action: 'scorecard_submitted', metadata: { judgeUserId } })
-    return scorecard
+    await logActivity({ entryId, actorId, action: 'scorecard_draft_saved', metadata: { judgeUserId, draftVersion: nextDraftVersion } })
+    await recordGoldenBoxEvent({
+      guestReference: `user:${judgeUserId}`, sourceScreen: 'JudgeEntryReview', sourceRoute: '/smokecraft/golden-box/judge',
+      eventType: 'golden_box_scorecard_draft_saved', entryId, versionId: updated[0].id, ruleVersion: rubric[0]?.rule_version,
+      idempotencyKey: idempotencyKey ? `golden-box-scorecard-draft-canonical-${idempotencyKey}` : `golden-box-scorecard-draft-canonical-${scorecard.id}-${nextDraftVersion}`,
+    })
+    return updated[0]
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Final scorecard submission — server-authoritative. Requires every
+ * active rubric criterion to have a valid score (never a client-
+ * asserted "complete" flag). Computes the weighted total itself
+ * (never trusts a client-submitted total): sum(score * weight) /
+ * sum(maxScore * weight) * 100, stamped with the real rubric
+ * rule_version. Once submitted, the scorecard is immutable — a repeat
+ * call with the same idempotencyKey returns the same real result; a
+ * repeat call without one (or a genuinely different attempt) against
+ * an already-submitted scorecard is rejected, never silently rescored.
+ */
+export async function submitScorecard(entryId, judgeUserId, scores, actorId, idempotencyKey) {
+  const authorized = await isAssignedJudge(entryId, judgeUserId)
+  if (!authorized) throw new JudgingError('judge_not_assigned')
+
+  const db = getDb()
+  const rubric = await getRubric()
+  const rubricByKey = new Map(rubric.map(r => [r.criterion_key, r]))
+  validateScorePayload(scores, rubricByKey)
+  const submittedKeys = new Set(scores.map(s => s.category))
+  for (const c of rubric) {
+    if (!submittedKeys.has(c.criterion_key)) throw new JudgingError(`missing_criterion:${c.criterion_key}`)
+  }
+
+  const { rows: judgeRows } = await db.query(`SELECT id FROM golden_box_judges WHERE user_id = $1`, [judgeUserId])
+  const judgeId = judgeRows[0].id
+
+  if (idempotencyKey) {
+    const { rows: dup } = await db.query(`SELECT * FROM golden_box_scorecards WHERE idempotency_key = $1`, [idempotencyKey])
+    if (dup[0] && dup[0].status !== 'draft') return dup[0]
+  }
+
+  const weightedTotal = scores.reduce((sum, s) => {
+    const criterion = rubricByKey.get(s.category)
+    return sum + s.score * Number(criterion.weight)
+  }, 0)
+  const weightPossible = rubric.reduce((sum, c) => sum + Number(c.max_score) * Number(c.weight), 0)
+  const normalizedTotal = weightPossible > 0 ? Math.round((weightedTotal / weightPossible) * 10000) / 100 : 0
+  const ruleVersion = rubric[0]?.rule_version || 1
+
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const scorecard = await getOrCreateDraftScorecard(client, entryId, judgeId)
+    if (scorecard.status !== 'draft') {
+      // Already scored — preserve the immutable prior result, never
+      // rescore. Real database state wins over any late resubmission.
+      await client.query('ROLLBACK')
+      return scorecard
+    }
+    await client.query(`DELETE FROM golden_box_scores WHERE scorecard_id = $1`, [scorecard.id])
+    for (const s of scores) {
+      const criterion = rubricByKey.get(s.category)
+      await client.query(
+        `INSERT INTO golden_box_scores (scorecard_id, category, score, max_score, comment, scorer_type)
+         VALUES ($1,$2,$3,$4,$5,'human_judge')`,
+        [scorecard.id, s.category, s.score, criterion.max_score, s.comment || null]
+      )
+    }
+    let finalRows
+    try {
+      ;({ rows: finalRows } = await client.query(
+        `UPDATE golden_box_scorecards
+         SET status = 'submitted', submitted_at = now(), weighted_total = $2, rule_version = $3, idempotency_key = $4, updated_at = now()
+         WHERE id = $1 RETURNING *`,
+        [scorecard.id, normalizedTotal, ruleVersion, idempotencyKey || null]
+      ))
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION && idempotencyKey) {
+        await client.query('ROLLBACK')
+        const { rows: winner } = await db.query(`SELECT * FROM golden_box_scorecards WHERE idempotency_key = $1`, [idempotencyKey])
+        return winner[0]
+      }
+      throw err
+    }
+    await client.query('COMMIT')
+    await logActivity({ entryId, actorId, action: 'scorecard_submitted', metadata: { judgeUserId, weightedTotal: normalizedTotal } })
+    await recordGoldenBoxEvent({
+      guestReference: `user:${judgeUserId}`, sourceScreen: 'JudgeEntryReview', sourceRoute: '/smokecraft/golden-box/judge',
+      eventType: 'golden_box_scorecard_submitted', entryId, versionId: finalRows[0].id, ruleVersion,
+      result: { weightedTotal: normalizedTotal },
+      idempotencyKey: idempotencyKey ? `golden-box-scorecard-submitted-canonical-${idempotencyKey}` : `golden-box-scorecard-submitted-canonical-${scorecard.id}`,
+    })
+    await recordGoldenBoxEvent({
+      guestReference: `user:${judgeUserId}`, sourceScreen: 'JudgeEntryReview', sourceRoute: '/smokecraft/golden-box/judge',
+      eventType: 'golden_box_entry_scored', entryId, versionId: finalRows[0].id, ruleVersion,
+      result: { weightedTotal: normalizedTotal },
+      idempotencyKey: idempotencyKey ? `golden-box-entry-scored-canonical-${idempotencyKey}` : `golden-box-entry-scored-canonical-${scorecard.id}`,
+    })
+    return finalRows[0]
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     throw err
@@ -196,31 +440,34 @@ export async function voidScorecard(scorecardId, actorId, reason) {
 export async function amendScorecard(scorecardId, judgeUserId, scores, actorId, reason) {
   if (!reason) throw new JudgingError('amend_reason_required')
   await assertOwnsScorecard(scorecardId, judgeUserId)
-  for (const s of scores) {
-    if (!VALID_CATEGORIES.has(s.category)) throw new JudgingError(`invalid_category:${s.category}`)
-    const max = s.maxScore ?? 10
-    if (typeof s.score !== 'number' || s.score < 0 || s.score > max) throw new JudgingError(`invalid_score:${s.category}`)
-  }
+  const rubric = await getRubric()
+  const rubricByKey = new Map(rubric.map(r => [r.criterion_key, r]))
+  validateScorePayload(scores, rubricByKey)
   const db = getDb()
   const { rows: originalRows } = await db.query(`SELECT * FROM golden_box_scorecards WHERE id = $1`, [scorecardId])
   const original = originalRows[0]
   if (!original) throw new JudgingError('record_not_found')
   await transitionScorecard(scorecardId, 'amended', actorId)
 
+  const weightedTotal = scores.reduce((sum, s) => sum + s.score * Number(rubricByKey.get(s.category).weight), 0)
+  const weightPossible = rubric.reduce((sum, c) => sum + Number(c.max_score) * Number(c.weight), 0)
+  const normalizedTotal = weightPossible > 0 ? Math.round((weightedTotal / weightPossible) * 10000) / 100 : 0
+
   const client = await db.connect()
   try {
     await client.query('BEGIN')
     const { rows: newRows } = await client.query(
-      `INSERT INTO golden_box_scorecards (entry_id, judge_id, status, amended_from, submitted_at)
-       VALUES ($1,$2,'locked',$3,now()) RETURNING *`,
-      [original.entry_id, original.judge_id, scorecardId]
+      `INSERT INTO golden_box_scorecards (entry_id, judge_id, status, amended_from, submitted_at, weighted_total, rule_version)
+       VALUES ($1,$2,'locked',$3,now(),$4,$5) RETURNING *`,
+      [original.entry_id, original.judge_id, scorecardId, normalizedTotal, rubric[0]?.rule_version || 1]
     )
     const amended = newRows[0]
     for (const s of scores) {
+      const criterion = rubricByKey.get(s.category)
       await client.query(
         `INSERT INTO golden_box_scores (scorecard_id, category, score, max_score, comment, scorer_type)
          VALUES ($1,$2,$3,$4,$5,'human_judge')`,
-        [amended.id, s.category, s.score, s.maxScore ?? 10, s.comment || null]
+        [amended.id, s.category, s.score, criterion.max_score, s.comment || null]
       )
     }
     await client.query('COMMIT')

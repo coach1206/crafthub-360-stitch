@@ -1,0 +1,75 @@
+{
+  "pass": 17,
+  "fail": 0,
+  "total": 17,
+  "results": [
+    {
+      "name": "A real submitted entry was created via a real browser guest identity (entryId=c3b23b97…)",
+      "ok": true
+    },
+    {
+      "name": "Approved heading still renders (no visual regression)",
+      "ok": true
+    },
+    {
+      "name": "The real assigned entry is visible in the judge's own assignment list",
+      "ok": true
+    },
+    {
+      "name": "A judge with no assignments sees an honest empty state, not a crash",
+      "ok": true
+    },
+    {
+      "name": "Entry Review screen renders with approved visuals",
+      "ok": true
+    },
+    {
+      "name": "A rubric score input accepts real input",
+      "ok": true
+    },
+    {
+      "name": "Save Draft produces a real, server-confirmed \"saved\" indicator (incomplete scorecard, draft-only)",
+      "ok": true
+    },
+    {
+      "name": "Submit Scorecard stays disabled while the scorecard is incomplete",
+      "ok": true
+    },
+    {
+      "name": "Reloading rehydrates the real saved draft score",
+      "ok": true
+    },
+    {
+      "name": "Submit Scorecard produces a real, server-confirmed \"submitted\" indicator",
+      "ok": true
+    },
+    {
+      "name": "The server-computed weighted total is displayed on-screen after submission",
+      "ok": true
+    },
+    {
+      "name": "Score inputs are disabled/locked once the scorecard is submitted",
+      "ok": true
+    },
+    {
+      "name": "A judge not assigned to this entry sees an honest unauthorized state, not a crash",
+      "ok": true
+    },
+    {
+      "name": "A non-existent entry id renders an honest not-found/error state, not a crash",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on Judge Entry Review",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on Judge Entry Review",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across judge screens (expected 401/403/409 from state-transition tests and no-packaging-submission 404 excluded)",
+      "ok": true
+    }
+  ]
+}
