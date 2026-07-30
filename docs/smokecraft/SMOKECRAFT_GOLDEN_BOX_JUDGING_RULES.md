@@ -156,7 +156,43 @@ is immutable and is the ONLY thing every caller (including admins)
 sees for that competition going forward — never a freshly recomputed
 live view that could drift from what was actually finalized.
 
+## Award issuance (Holistic Fix 5C-2B-2)
+
+### Approved award types
+
+`first_place` / `second_place` / `third_place` — objective descriptors
+of an entry's real, immutable placement (`golden_box_results.placement`
+from the 5C-2B-1 finalized ranking), never invented content. Rule:
+`golden_box_placement_award` v1. No award record beyond third place
+exists (no approved "finalist"/"participation" reward content was
+ever defined anywhere in this codebase, despite `golden_box_entries.status`
+having a `finalist` value — that status field belongs to the entry
+lifecycle, not to this award pipeline, and is left untouched here).
+
+### XP, badge, and Passport stamp — documented gap
+
+`xp_award_rules` (provisioned since migration 077) has never been
+seeded with a `golden_box` row; no golden-box badge catalog entry or
+Passport stamp catalog entry exists. These three reward types are
+therefore genuinely unavailable today (`xp_status`/`badge_status`/
+`passport_stamp_status = 'unavailable'` on every award record) — never
+fabricated. The moment a real rule/catalog entry exists, the same
+`awardsService.issueAwards()` grants it through the canonical
+`xpService.awardXp()` / `rewardsIntegrationService.grantBadge()` /
+`passport360SmokeCraftPersistenceService.awardPassportStampLive()` —
+no new reward mechanism was created.
+
+### Issuance
+
+Authorized staff only. Requires an existing finalized result for the
+requested result version (`409 finalized_result_required` otherwise).
+Atomic and database-enforced idempotent
+(`golden_box_award_issuances` `UNIQUE(competition_id, result_version)`
++ idempotency key) — a repeated issuance request for the same
+finalized result version returns the ORIGINAL issuance, never
+recomputes or duplicates.
+
 ## Explicitly out of scope for this pass
 
-Final awards, badge/Passport/XP reward issuance, and Venue Humidor are
-not built here — see the 5C-2B-2 handoff.
+The competition leaderboard beyond the finalized ranking already
+completed, and Venue Humidor, are not built here.

@@ -1,0 +1,123 @@
+{
+  "pass": 29,
+  "fail": 0,
+  "total": 29,
+  "results": [
+    {
+      "name": "Test setup: finalization succeeds for 4 entries",
+      "ok": true
+    },
+    {
+      "name": "Issuing awards before finalization is rejected with a real 409",
+      "ok": true
+    },
+    {
+      "name": "A non-admin cannot issue awards (real role check)",
+      "ok": true
+    },
+    {
+      "name": "Award issuance succeeds",
+      "ok": true
+    },
+    {
+      "name": "Exactly 3 award records were created (top 3 only)",
+      "ok": true
+    },
+    {
+      "name": "The #1 entry receives a first_place award",
+      "ok": true
+    },
+    {
+      "name": "The #2 entry receives a second_place award",
+      "ok": true
+    },
+    {
+      "name": "The #3 entry receives a third_place award",
+      "ok": true
+    },
+    {
+      "name": "The #4 entry (unsupported placement) receives NO fabricated award record",
+      "ok": true
+    },
+    {
+      "name": "Every award carries a real rule ID and version",
+      "ok": true
+    },
+    {
+      "name": "XP is honestly reported unavailable (no xp_award_rules row exists for golden_box)",
+      "ok": true
+    },
+    {
+      "name": "Badge is honestly reported unavailable (no golden-box badge catalog entry exists)",
+      "ok": true
+    },
+    {
+      "name": "Passport stamp is honestly reported unavailable (no golden-box stamp catalog entry exists)",
+      "ok": true
+    },
+    {
+      "name": "No real XP transaction was fabricated for the unavailable reward",
+      "ok": true
+    },
+    {
+      "name": "A repeated issuance call returns the identical original issued_at, never a recomputation",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real issuance row exists despite repeated calls",
+      "ok": true
+    },
+    {
+      "name": "Exactly 3 real award rows exist despite repeated calls (no duplicate awards)",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent issuance requests succeed and resolve to the SAME real issuance (no crash, no duplicate)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real issuance row exists despite the two-tab race",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real award row exists despite the two-tab race",
+      "ok": true
+    },
+    {
+      "name": "The finalized ranking is unchanged after award issuance (placements/scores identical)",
+      "ok": true
+    },
+    {
+      "name": "Venue competition awards contain only that venue's own entry",
+      "ok": true
+    },
+    {
+      "name": "Global competition awards never include the venue competition's entry",
+      "ok": true
+    },
+    {
+      "name": "An entry in an unfinalized competition reports no_finalized_result (honest, never fabricated)",
+      "ok": true
+    },
+    {
+      "name": "The #4 (unsupported placement) entry reports not_qualified after issuance, never a fabricated award",
+      "ok": true
+    },
+    {
+      "name": "The #1 entry reports the real issued award via the visibility endpoint",
+      "ok": true
+    },
+    {
+      "name": "golden_box_awards_issued was emitted for the awarded entry",
+      "ok": true
+    },
+    {
+      "name": "golden_box_xp_awarded/_badge_unlocked/_passport_stamp_awarded were NEVER emitted (no real grant occurred — never fabricated)",
+      "ok": true
+    },
+    {
+      "name": "The canonical golden_box_awards_issued event carries the real competition/placement/awardType/ruleId fields",
+      "ok": true
+    }
+  ]
+}

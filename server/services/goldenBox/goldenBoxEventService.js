@@ -26,6 +26,14 @@ export const CANONICAL_GOLDEN_BOX_EVENT_TYPES = [
   // identity createEntry/submitEntry already use for this entry), since
   // these describe the entry's own results/ranking outcome.
   'golden_box_results_calculated', 'golden_box_ranking_finalized',
+  // Holistic Fix 5C-2B-2 — award-issuance events. Also keyed by the
+  // entrant's identity. golden_box_xp_awarded/_badge_unlocked/
+  // _passport_stamp_awarded are only ever emitted when a real grant
+  // actually happens through the canonical xpService/passport360
+  // services — never fabricated for an unavailable (no approved rule)
+  // reward type.
+  'golden_box_awards_issued', 'golden_box_xp_awarded',
+  'golden_box_badge_unlocked', 'golden_box_passport_stamp_awarded',
 ]
 
 /**

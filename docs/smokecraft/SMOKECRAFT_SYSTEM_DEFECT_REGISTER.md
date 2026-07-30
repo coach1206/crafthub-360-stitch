@@ -1680,3 +1680,49 @@ permanent regression checks in
 `verify-smokecraft-hf5c2b1-results-browser.mjs`, and
 `scripts/validateSmokecraftGoldenBoxResultsAuthority.mjs`. See
 `public/proof/smokecraft-holistic-fix-5c-2b-1/00-proof-index.md`.
+
+## Holistic Fix 5C-2B-2 update (Golden Box award and reward issuance)
+
+- **SC-D062** (client-authority gap, not a live regression — the route
+  predates any real caller): `handleIssueRewards()`
+  (`goldenBoxController.js`, Package 1 era) accepted a fully client-
+  controlled `req.body.xpAmount` and `req.body.badgeId` with zero
+  connection to the entry's real placement or any approved rule — an
+  authenticated admin could grant an arbitrary XP amount or badge to
+  any entry with no rule basis at all. Dead/unwired beyond its own
+  route (never called by any frontend screen or other service). Left
+  in place (its route and behavior are unchanged — deleting a live
+  admin-facing endpoint is out of this mandate's scope), but the new,
+  real award pipeline (`awardsService.issueAwards()`) never calls it
+  and derives every award exclusively from the immutable finalized
+  ranking — no client-submitted placement or amount reaches the new
+  path at all.
+- **Documented rule gap** (not a bug — the mandate's own explicit
+  "if approved rules are incomplete, document the exact gap and
+  implement only supported awards" clause): `xp_award_rules`
+  (migration 077) has never been seeded with a `golden_box` row by any
+  package across this entire codebase; no golden-box-specific badge
+  catalog entry or Passport stamp catalog entry exists anywhere
+  either. Award RECORDS (first/second/third place, objective
+  placement descriptors, not invented content) are fully implemented
+  and issued; XP/badge/Passport-stamp CONTENT is genuinely unavailable
+  today and honestly reported as such (`xp_status`/`badge_status`/
+  `passport_stamp_status = 'unavailable'`) rather than fabricated. The
+  service is fully wired to grant real content through the canonical
+  `xpService.awardXp()` / `rewardsIntegrationService.grantBadge()` /
+  `passport360SmokeCraftPersistenceService.awardPassportStampLive()`
+  the moment a real rule/catalog entry is added — no parallel reward
+  mechanism was created.
+
+Closed via `server/db/migrations/105_smokecraft_golden_box_awards_authority.sql`,
+`server/services/goldenBox/awardsService.js` (new),
+`server/services/goldenBox/goldenBoxEventService.js`,
+`server/controllers/goldenBoxController.js`,
+`server/routes/goldenBoxRoutes.js`,
+`src/services/goldenBox/goldenBoxApiClient.js`,
+`src/pages/smokecraft/goldenBox/ResultsExperience.jsx`. Encoded as
+permanent regression checks in
+`verify-smokecraft-hf5c2b2-awards-api.mjs`,
+`verify-smokecraft-hf5c2b2-awards-browser.mjs`, and
+`scripts/validateSmokecraftGoldenBoxAwardsAuthority.mjs`. See
+`public/proof/smokecraft-holistic-fix-5c-2b-2/00-proof-index.md`.

@@ -1,0 +1,47 @@
+{
+  "pass": 10,
+  "fail": 0,
+  "total": 10,
+  "results": [
+    {
+      "name": "A real submitted entry was created via a real browser guest identity (entryId=ef5ee710…)",
+      "ok": true
+    },
+    {
+      "name": "Award section renders with approved visuals",
+      "ok": true
+    },
+    {
+      "name": "Real awards_pending state renders before issuance",
+      "ok": true
+    },
+    {
+      "name": "Issue Awards control is present and clickable for an authorized admin",
+      "ok": true
+    },
+    {
+      "name": "After issuance, reloading shows the real, server-computed award title (1st Place)",
+      "ok": true
+    },
+    {
+      "name": "XP/badge/stamp render an honest \"unavailable\" state — never a fabricated reward",
+      "ok": true
+    },
+    {
+      "name": "An unrelated stranger viewing the results URL gets an honest response, not a crash",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on the Results screen",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on the Results screen",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the award-display flow",
+      "ok": true
+    }
+  ]
+}

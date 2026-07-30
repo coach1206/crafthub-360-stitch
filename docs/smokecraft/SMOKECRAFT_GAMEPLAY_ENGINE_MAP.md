@@ -437,3 +437,29 @@ result_version)`), and immutable once written. New canonical events
 `golden_box_results_calculated`/`golden_box_ranking_finalized`. See
 `SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`,
 `SMOKECRAFT_RULE_REGISTRY.md`, `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.
+
+## Holistic Fix 5C-2B-2 update (Golden Box award and reward issuance)
+
+Audited existing reward infrastructure: `golden_box_rewards`
+(idempotent grant ledger, unused for placement awards),
+`rewardsIntegrationService.js` (`grantXp`/`grantBadge`/
+`publishToLeaderboard`, real canonical wrappers, previously only
+reachable via the dormant, client-controlled `handleIssueRewards`
+route — SC-D062), `xpService.js` (the real, already-wired XP ledger
+`ResultsExperience.jsx` already displays), and
+`passport360SmokeCraftPersistenceService.js` (the real, canonical
+SmokeCraft Passport stamp/badge/XP system used by Management Sync).
+Built `awardsService.js` (migration 105): `issueAwards()` derives
+every award exclusively from the immutable finalized ranking
+(`resultsService.getLatestFinalizedResult()`) — authorized-staff-only,
+atomic, database-enforced idempotent
+(`golden_box_award_issuances UNIQUE(competition_id, result_version)`).
+XP/badge/Passport-stamp content is genuinely unavailable today (no
+approved rule/catalog entry exists anywhere) and honestly reported as
+such rather than fabricated — see the documented gap in
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` (SC-D062) and
+`SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`. New canonical events
+`golden_box_awards_issued`/`golden_box_xp_awarded`/
+`golden_box_badge_unlocked`/`golden_box_passport_stamp_awarded` — the
+latter three are only ever emitted after a real grant genuinely
+occurs.

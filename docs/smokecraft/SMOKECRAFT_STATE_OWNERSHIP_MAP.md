@@ -403,3 +403,18 @@ never recomputing a live view once one exists. Live (unfinalized)
 computation in `computeCompetitionResults()` never persists anything —
 it is a pure read, so it can never drift from or corrupt a real
 finalized record.
+
+## Holistic Fix 5C-2B-2 update (Golden Box award and reward issuance)
+
+`golden_box_award_issuances`' `UNIQUE(competition_id, result_version)`
+is the real ownership boundary for "at most one award issuance per
+finalized result version" — mirrors `golden_box_result_finalizations`
+exactly. `golden_box_awards`' `UNIQUE(competition_id, entry_id,
+result_version)` is the ownership boundary for "at most one award
+record per entry per result version." Each reward-type status column
+(`xp_status`/`badge_status`/`passport_stamp_status`) is independently
+owned: `awardsService.issueAwards()` is the only writer, and each only
+ever transitions from its `'unavailable'` default to `'issued'` inside
+the same call that performs the real grant through the canonical
+xpService/rewardsIntegrationService/passport360 services — never
+flipped speculatively.

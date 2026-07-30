@@ -41,6 +41,18 @@ const RANKING_STATE_COPY = {
   not_finalized: 'Official rankings have not been published yet.',
 }
 
+const AWARD_TITLES = { first_place: '1st Place', second_place: '2nd Place', third_place: '3rd Place' }
+
+// Holistic Fix 5C-2B-2 — real award states. 'no_finalized_result' and
+// 'awards_pending' are honest waiting states (never a fabricated
+// reward); 'not_qualified' means this entry's real placement was
+// outside the top three; 'issued' renders the real award row.
+const AWARD_STATE_COPY = {
+  no_finalized_result: 'Results have not been finalized yet — awards are not available.',
+  awards_pending: 'Results are finalized. Awards have not been issued yet.',
+  not_qualified: 'This entry did not place in the top three.',
+}
+
 const TIE_BREAK_LABELS = {
   construction_avg: 'Resolved by higher construction-quality average.',
   blend_quality_avg: 'Resolved by higher blend-quality (aroma) average.',
@@ -65,6 +77,30 @@ export default function ResultsExperience() {
   const [ranking, setRanking] = useState(null)
   const [finalizeState, setFinalizeState] = useState('idle')
   const [finalizeError, setFinalizeError] = useState(null)
+  const [awardState, setAwardState] = useState('loading')
+  const [award, setAward] = useState(null)
+  const [issueState, setIssueState] = useState('idle')
+  const [issueError, setIssueError] = useState(null)
+
+  async function loadAward() {
+    if (!entryId) return
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) { setAwardState('offline'); return }
+    setAwardState('loading')
+    const result = await api.getEntryAward(competitionId, entryId)
+    if (!result.ok) { setAwardState(result.status === 401 || result.status === 403 ? 'unauthorized' : 'retry'); return }
+    setAward(result)
+    setAwardState(result.status)
+  }
+
+  async function handleIssueAwards() {
+    setIssueState('issuing')
+    setIssueError(null)
+    const idempotencyKey = `gb-issue-awards-${competitionId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const result = await api.issueAwards(competitionId, 1, idempotencyKey)
+    if (!result.ok) { setIssueState('failed'); setIssueError(result.error); return }
+    setIssueState('issued')
+    await loadAward()
+  }
 
   async function loadRanking() {
     if (typeof navigator !== 'undefined' && navigator.onLine === false) { setRankingState('offline'); return }
@@ -87,6 +123,7 @@ export default function ResultsExperience() {
 
   useEffect(() => { load() }, [load])
   useEffect(() => { loadRanking() }, [competitionId]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { loadAward() }, [competitionId, entryId]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     setXpState('loading')
     api.getXpHistory().then(result => {
@@ -148,6 +185,43 @@ export default function ResultsExperience() {
             <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.6)' }}>Pending — no submitted scorecards counted yet.</div>
           )}
         </div>
+
+        {entryId && (
+          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, marginTop: 16 }}>
+            <h2 style={{ fontSize: 14, color: GOLD, margin: '0 0 8px' }}>Your Award</h2>
+            {awardState === 'loading' && <p style={{ fontSize: 13 }}>Loading award status…</p>}
+            {awardState === 'offline' && (
+              <p style={{ fontSize: 13, color: DANGER }}>You appear to be offline. <button type="button" onClick={loadAward} style={{ background: 'transparent', border: 'none', color: GOLD, textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>Retry</button></p>
+            )}
+            {awardState === 'unauthorized' && <p style={{ fontSize: 13, color: DANGER }}>You are not authorized to view award status for this entry.</p>}
+            {awardState === 'retry' && (
+              <p style={{ fontSize: 13, color: DANGER }}>Unable to load award status right now. <button type="button" onClick={loadAward} style={{ background: 'transparent', border: 'none', color: GOLD, textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>Retry</button></p>
+            )}
+            {['no_finalized_result', 'awards_pending', 'not_qualified'].includes(awardState) && (
+              <p style={{ fontSize: 13, color: 'rgba(229,226,225,0.6)' }}>{AWARD_STATE_COPY[awardState]}</p>
+            )}
+            {awardState === 'issued' && award?.award && (
+              <div>
+                <div style={{ fontSize: 18, color: GOLD }}>{AWARD_TITLES[award.award.award_type] || award.award.award_type}</div>
+                <p style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)' }}>Placement #{award.award.placement} · rule {award.award.rule_id} v{award.award.rule_version} · issued {award.award.issued_at ? new Date(award.award.issued_at).toLocaleString() : ''}</p>
+                <div style={{ display: 'grid', gap: 6, marginTop: 8, fontSize: 13 }}>
+                  <div>XP: {award.award.xp_status === 'issued' ? 'Earned' : 'Not yet available (no approved rule configured)'}</div>
+                  <div>Badge: {award.award.badge_status === 'issued' ? 'Earned' : 'Not yet available (no approved badge configured)'}</div>
+                  <div>Passport Stamp: {award.award.passport_stamp_status === 'issued' ? 'Earned' : 'Not yet available (no approved stamp configured)'}</div>
+                </div>
+              </div>
+            )}
+            {awardState === 'awards_pending' && (
+              <div style={{ marginTop: 10 }}>
+                <button type="button" disabled={issueState === 'issuing'} onClick={handleIssueAwards}
+                  style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: issueState === 'issuing' ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
+                  {issueState === 'issuing' ? 'Issuing…' : 'Issue Awards'}
+                </button>
+                {issueState === 'failed' && <p role="alert" style={{ color: DANGER, fontSize: 12, marginTop: 8 }}>{issueError}</p>}
+              </div>
+            )}
+          </div>
+        )}
 
         <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, marginTop: 16 }}>
           <h2 style={{ fontSize: 14, color: GOLD, margin: '0 0 8px' }}>Competition Rankings</h2>

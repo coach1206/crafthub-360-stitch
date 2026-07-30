@@ -241,3 +241,15 @@ under which version. The criterion mappings for "blend quality" and
 own labels ("Aroma (Blend)", "Presentation (Rule Compliance)") — no
 new criterion was invented to serve the tie-break rule. See
 `SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md` for the full rule.
+
+## Holistic Fix 5C-2B-2 update (Golden Box award and reward issuance)
+
+`AWARD_RULE_ID = 'golden_box_placement_award'`, `AWARD_RULE_VERSION =
+1` (`awardsService.js`) versions the award-eligibility rule: which
+real, immutable placements (first/second/third) receive an award
+record. Recorded on every award row and canonical event. No XP
+amount, badge, or Passport stamp rule was invented — `xp_award_rules`
+(the real, provisioned config table for exactly this purpose) has
+never been seeded with a `golden_box` row, and no badge/stamp catalog
+entry exists; this gap is documented, not silently worked around. See
+`SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`.

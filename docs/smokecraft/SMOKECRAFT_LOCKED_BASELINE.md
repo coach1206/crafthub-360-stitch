@@ -455,3 +455,17 @@ judging in progress / ready to finalize / finalized / offline / retry
 state — a "Finalize Results" action. No other Golden Box screen was
 touched. Final awards, badge/Passport/XP reward issuance, and Venue
 Humidor were not built, per mandate.
+
+## Holistic Fix 5C-2B-2 update (Golden Box award and reward issuance)
+
+No approved visuals were redesigned. `ResultsExperience.jsx` gained a
+new "Your Award" section, additive, placed above the existing
+"Competition Rankings" section in the same `GLASS`/`BORDER` container
+style — no existing element moved, resized, or restyled. It renders
+one of the mandate's real server-driven states (no finalized result /
+awards pending / not qualified / issued / offline / retry /
+unauthorized), the real award title/placement/rule/XP/badge/stamp
+status once issued, and — only in the `awards_pending` state — an
+"Issue Awards" action. No other Golden Box screen was touched. The
+competition leaderboard beyond the finalized ranking, and Venue
+Humidor, were not built, per mandate.

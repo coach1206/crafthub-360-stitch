@@ -8,6 +8,7 @@ import * as rewardsService from '../services/goldenBox/rewardsIntegrationService
 import * as xpService from '../services/goldenBox/xpService.js'
 import * as mentorReviewService from '../services/goldenBox/mentorReviewService.js'
 import * as resultsService from '../services/goldenBox/resultsService.js'
+import * as awardsService from '../services/goldenBox/awardsService.js'
 import { transitionCompetition } from '../services/goldenBox/lifecycleService.js'
 
 function sendError(res, err, fallback = 400) {
@@ -22,6 +23,7 @@ function sendError(res, err, fallback = 400) {
     judge_self_assignment_prohibited: 403, judge_outside_venue_scope: 403,
     stale_version: 409,
     no_entries_to_finalize: 409, judging_incomplete: 409, no_eligible_entries_to_finalize: 409,
+    finalized_result_required: 409,
   }
   const code = err.code || 'internal_error'
   let status = statusByCode[code] || fallback
@@ -259,6 +261,37 @@ export async function handleFinalizeResults(req, res) {
     const result = await resultsService.finalizeResults(competitionId, req.user.id, {
       resultVersion, idempotencyKey: req.body?.idempotencyKey,
     })
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+// Holistic Fix 5C-2B-2 — award issuance. Only resultVersion/
+// idempotencyKey are ever read from the request body — placement,
+// award type, and reward content are decided entirely server-side
+// from the immutable finalized ranking.
+export async function handleIssueAwards(req, res) {
+  try {
+    const competitionId = Number(req.params.competitionId)
+    const resultVersion = Number.isInteger(req.body?.resultVersion) ? req.body.resultVersion : 1
+    const result = await awardsService.issueAwards(competitionId, req.user.id, {
+      resultVersion, idempotencyKey: req.body?.idempotencyKey,
+    })
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleGetEntryAward(req, res) {
+  try {
+    const competitionId = Number(req.params.competitionId)
+    const entry = await entryService.getEntry(req.params.entryId)
+    if (!entry) return res.status(404).json({ success: false, error: 'entry_not_found' })
+    const competition = await competitionService.getCompetition(competitionId)
+    const identity = identityFrom(req)
+    const visibility = await visibilityService.getVisibility(entry, competition, identity)
+    if (!visibility.canViewScores) {
+      return res.status(403).json({ success: false, error: 'results_not_authorized' })
+    }
+    const result = await awardsService.getEntryAward(competitionId, req.params.entryId)
     res.json({ success: true, ...result })
   } catch (err) { sendError(res, err, 500) }
 }
