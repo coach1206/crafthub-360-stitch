@@ -11,6 +11,7 @@ import { requireAuth } from '../middleware/authMiddleware.js'
 import { getDb } from '../db/connection.js'
 import * as ctrl from '../controllers/venueHumidorController.js'
 import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
+import * as adminCtrl from '../controllers/venueHumidorAdminController.js'
 
 const router = Router()
 
@@ -56,6 +57,43 @@ function requireResourceVenueMatch(table, idColumn, paramName) {
   }
 }
 
+// 1B-2B-1 RBAC tiers. venue_memberships.membership_type is the real,
+// existing enum (member/staff/mentor/manager/admin/owner, migration
+// 010) — no parallel role table invented. Mapped onto the mandate's
+// named roles: owner/general-manager -> owner/admin/manager (full
+// access); inventory manager -> staff (products + inventory
+// mutations); tobacconist -> mentor (read-only + staff-notes only,
+// enforced in handleUpdateAdminProduct); bartender/server/cashier/
+// analyst have no dedicated membership_type in this schema. 'member'
+// represents a venue's customer/club membership, not a staff role, so
+// it is intentionally excluded from read access (customer/non-member
+// denied per mandate); no membership row at all is denied.
+const FULL_ACCESS_TYPES = ['owner', 'admin', 'manager']
+const WRITE_ACCESS_TYPES = [...FULL_ACCESS_TYPES, 'staff']
+const READ_ACCESS_TYPES = [...WRITE_ACCESS_TYPES, 'mentor']
+
+function requireVenueRole(allowedTypes) {
+  return async (req, res, next) => {
+    try {
+      if (req.user?.role === 'admin' || req.user?.role === 'founder_level_0') { req.venueMembershipType = 'owner'; return next() }
+      const db = getDb()
+      const { rows } = await db.query(
+        `SELECT membership_type FROM venue_memberships WHERE user_id = $1 AND venue_id = $2 AND status = 'active'`,
+        [req.user?.id, req.params.venueId]
+      )
+      const membership = rows[0]
+      if (!membership || !allowedTypes.includes(membership.membership_type)) {
+        return res.status(403).json({ success: false, error: 'venue_role_required' })
+      }
+      req.venueMembershipType = membership.membership_type
+      next()
+    } catch (err) { res.status(500).json({ success: false, error: 'internal_error' }) }
+  }
+}
+
+const requireVenueRead = requireVenueRole(READ_ACCESS_TYPES)
+const requireVenueWrite = requireVenueRole(WRITE_ACCESS_TYPES)
+
 const productVenueMatch = requireResourceVenueMatch('venue_cigar_products', 'product_id', 'productId')
 const holdVenueMatch = requireResourceVenueMatch('venue_cigar_inventory_holds', 'hold_id', 'holdId')
 const reservationVenueMatch = requireResourceVenueMatch('venue_cigar_reservations', 'reservation_id', 'reservationId')
@@ -90,5 +128,14 @@ router.post('/venues/:venueId/orders/:orderId/items', writeLimiter, requireAuth,
 // never two divergent ones.
 router.post('/venues/:venueId/orders/:orderId/complete', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, checkoutCtrl.handleStaffCompleteOrder)
 router.post('/venues/:venueId/orders/:orderId/cancel', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, checkoutCtrl.handleStaffCancelOrder)
+
+// ── 1B-2B-1: Staff inventory administration ─────────────────────────
+router.get('/venues/:venueId/admin/products', readLimiter, requireAuth, requireVenueRead, adminCtrl.handleListAdminProducts)
+router.get('/venues/:venueId/admin/products/:productId', readLimiter, requireAuth, requireVenueRead, productVenueMatch, adminCtrl.handleGetAdminProduct)
+router.post('/venues/:venueId/admin/products', writeLimiter, requireAuth, requireVenueWrite, adminCtrl.handleCreateAdminProduct)
+router.patch('/venues/:venueId/admin/products/:productId', writeLimiter, requireAuth, requireVenueRead, productVenueMatch, adminCtrl.handleUpdateAdminProduct)
+router.patch('/venues/:venueId/admin/products/:productId/classification', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, adminCtrl.handleUpdateClassification)
+router.post('/venues/:venueId/admin/products/:productId/inventory-mutations', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, adminCtrl.handleInventoryMutation)
+router.get('/venues/:venueId/admin/inventory-events', readLimiter, requireAuth, requireVenueRead, adminCtrl.handleListInventoryEvents)
 
 export default router

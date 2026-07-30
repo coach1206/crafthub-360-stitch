@@ -698,3 +698,41 @@ screens are new, additive routes reached only from a real hold created
 on `VenueHumidorCigarDetail.jsx` ("Proceed to Checkout" appears only
 after a real hold exists) — no existing SmokeCraft screen was
 touched.
+
+## Venue Humidor 1B-2B-1 — staff inventory administration (new screens)
+
+**VenueHumidorAdminDashboard.jsx** (`/smokecraft/admin/humidor`): a
+venue-ID input, search, "+ New Cigar", "Event History", and a real
+server-backed product table (image, brand/name, SKU/barcode, vitola,
+strength, price, sealed/opened box counts, physical/reserved/held/
+available quantities with a low-stock indicator, reorder point,
+status, visibility, zone/location, Edit link). Honest states for
+loading, empty, error/retry, no-venue, unauthorized, offline, session
+expired.
+
+**VenueHumidorAdminProductForm.jsx** (shared by `/smokecraft/admin/humidor/new`
+and `/smokecraft/admin/humidor/:cigarId/edit`): a full field-level
+validated create/edit form covering every approved product field
+(SKU/barcode, brand/line/name, country/region, vitola/length/ring
+gauge, wrapper/binder/filler, strength/body, flavor notes/tags, smoke
+time/experience level, prices/cost, box config, reorder point,
+humidor location, supplier data, images, customer description, staff
+notes). When editing: a live inventory mutation panel (all 9 canonical
+mutation types) and a status/classification control row (archive/
+restore, activate/deactivate, visibility, featured, staff pick,
+limited release, venue exclusive) — every control calls the real
+server and re-renders authoritative results, never a locally-computed
+quantity.
+
+**VenueHumidorAdminInventoryEvents.jsx** (`/smokecraft/admin/humidor/inventory-events`):
+a real, append-only, filterable (product/event type/actor/date range)
+event history table — no edit or delete control exists anywhere in
+this screen. Verified: 15/15 browser checks
+(`verify-smokecraft-venue-humidor-1b2b1-browser.mjs`) covering the add-
+cigar form, edit persistence, receiving/box-opening/damage mutations,
+negative-inventory rejection, rapid double-click, archive/restore,
+customer-browser visibility sync, event history, unauthorized denial,
+keyboard/layout/console-error checks.
+
+All three screens are new, additive routes — no existing SmokeCraft
+screen was touched.

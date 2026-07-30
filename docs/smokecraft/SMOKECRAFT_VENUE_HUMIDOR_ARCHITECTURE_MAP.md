@@ -205,3 +205,58 @@ administration, the full staff fulfillment queue, simulated card
 payment, full-route/five-viewport sweeps as new targeted work (the
 five-viewport proof was regenerated only because the build's own
 prebuild gate requires an up-to-date route count).
+
+## Venue Humidor 1B-2B-1 update — staff inventory administration
+
+Migration 109 (additive) extends `venue_cigar_products` with staff
+admin display/classification fields: `cost_cents`, `product_line`,
+`region`, `tags`, `supplier_name`/`supplier_sku`, `humidor_zone`/
+`storage_location`, `is_venue_exclusive`, `sealed_box_count`/
+`opened_box_count`. No new inventory-event types were needed — the
+106 `venue_cigar_inventory_events.event_type` CHECK constraint already
+covered every admin mutation action this pass required (receiving,
+box_opened, stick_added, stick_removed, damage, loss, complimentary,
+return, count_correction).
+
+`productService.js` (the existing, sole 1A product-catalog service) is
+extended — not duplicated — with `updateProduct()` (full field-level
+validated edit), `listProductsForAdmin()` (dashboard read with live
+availability per row, reusing `computeAvailableQuantity()`), and
+`updateProductClassification()` (the single entry point for archive/
+restore/activate/deactivate/visibility/featured/staff-pick/limited-
+release/venue-exclusive). Quantity-affecting mutations flow
+exclusively through 1A's `inventoryService.applyInventoryEvent()` via
+a new thin controller (`venueHumidorAdminController.js`) that computes
+a delta from the requested action (or, for count correction, from the
+real current row) and forwards it — it never computes or trusts a
+final resulting quantity.
+
+Four new staff screens (`VenueHumidorAdminDashboard.jsx`,
+`VenueHumidorAdminProductForm.jsx` shared by `/new` and `/:cigarId/edit`,
+`VenueHumidorAdminInventoryEvents.jsx`) at `/smokecraft/admin/humidor`,
+`/smokecraft/admin/humidor/new`, `/smokecraft/admin/humidor/:cigarId/edit`,
+`/smokecraft/admin/humidor/inventory-events` — same `SmokeCraftScreenShell`
+system, no existing screen touched. No dedicated staff-venue React
+context exists in this app (staff screens like
+`VenueManagementCommandHub` take a plain venueId input) — the new
+`useAdminVenueId` hook follows that same convention rather than
+inventing a new context; it is a convenience only, never an
+authorization boundary (the server independently re-validates real
+venue membership on every request).
+
+RBAC reuses the real, existing `venue_memberships.membership_type`
+enum (migration 010: member/staff/mentor/manager/admin/owner) — no
+parallel role table invented. Mapped onto the mandate's named roles:
+owner/general-manager -> owner/admin/manager (full access); inventory
+manager -> staff (products + inventory mutations); tobacconist ->
+mentor (read-only, plus server-enforced staffNotes-only edits); a
+plain `member` row (a venue's customer/club membership, not a staff
+role) and no membership at all are both denied admin access. Every
+tier is enforced server-side in `requireVenueRole()` and the
+controller — never only a hidden UI button.
+
+Explicitly out of scope for this pass (per mandate): the staff order/
+fulfillment queue, payment integration, full-route/five-viewport
+sweeps as new targeted work (route count is now 117; the five-viewport
+proof was regenerated only because the build's own prebuild gate
+requires it).

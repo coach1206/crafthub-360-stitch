@@ -1,0 +1,67 @@
+{
+  "pass": 15,
+  "fail": 0,
+  "total": 15,
+  "results": [
+    {
+      "name": "An honest empty state renders for a venue with no products",
+      "ok": true
+    },
+    {
+      "name": "Creating a cigar navigates to its real edit screen with a real product id",
+      "ok": true
+    },
+    {
+      "name": "Edited field values persist after a real reload",
+      "ok": true
+    },
+    {
+      "name": "Receiving inventory increases real physical quantity, shown live on screen",
+      "ok": true
+    },
+    {
+      "name": "Opening a sealed box applies without error",
+      "ok": true
+    },
+    {
+      "name": "Recording damage decreases real physical quantity, shown live on screen",
+      "ok": true
+    },
+    {
+      "name": "Removing more sticks than exist is honestly rejected in the UI, never silently applied",
+      "ok": true
+    },
+    {
+      "name": "A rapid double-click on Apply results in a sane, non-corrupted real quantity (no double-apply from the same click sequence)",
+      "ok": true
+    },
+    {
+      "name": "An archived product disappears from the default dashboard list",
+      "ok": true
+    },
+    {
+      "name": "An archived product is genuinely absent from the real customer browser",
+      "ok": true
+    },
+    {
+      "name": "Inventory event history screen renders real, append-only events",
+      "ok": true
+    },
+    {
+      "name": "An unauthorized user sees an honest permission-denied state, never leaked inventory data",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on the admin dashboard",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on the admin dashboard (scrolls its own table container)",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the admin flow",
+      "ok": true
+    }
+  ]
+}

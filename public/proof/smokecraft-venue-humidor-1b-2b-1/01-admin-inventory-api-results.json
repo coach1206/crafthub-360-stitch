@@ -1,0 +1,171 @@
+{
+  "pass": 41,
+  "fail": 0,
+  "total": 41,
+  "results": [
+    {
+      "name": "An authorized manager can load the admin product dashboard",
+      "ok": true
+    },
+    {
+      "name": "A user with no membership for venueB is denied the admin dashboard",
+      "ok": true
+    },
+    {
+      "name": "A venue A staff member (with no venue B membership) cannot list venue B admin products (venue isolation)",
+      "ok": true
+    },
+    {
+      "name": "Staff can create a real product with the full admin field set",
+      "ok": true
+    },
+    {
+      "name": "Duplicate SKU is honestly rejected (409)",
+      "ok": true
+    },
+    {
+      "name": "Duplicate barcode is honestly rejected (409)",
+      "ok": true
+    },
+    {
+      "name": "Creating a product with no SKU/price returns field-level errors, never a silent failure",
+      "ok": true
+    },
+    {
+      "name": "Editing a product succeeds",
+      "ok": true
+    },
+    {
+      "name": "Edited values persist and survive a fresh read (reload)",
+      "ok": true
+    },
+    {
+      "name": "Receive inventory increases real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "Opening a sealed box succeeds (inventory-neutral, box counters update)",
+      "ok": true
+    },
+    {
+      "name": "Adding loose sticks increases real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "Removing loose sticks decreases real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "Recording damage decreases real physical quantity and records a reason",
+      "ok": true
+    },
+    {
+      "name": "Recording loss decreases real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "Recording a complimentary cigar decreases real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "Recording a return increases real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "Count correction sets real physical quantity to the corrected total",
+      "ok": true
+    },
+    {
+      "name": "Removing more sticks than exist is honestly rejected (409 insufficient_inventory)",
+      "ok": true
+    },
+    {
+      "name": "A rejected negative-inventory mutation never mutates real physical quantity",
+      "ok": true
+    },
+    {
+      "name": "A rapid double-click (shared idempotency key) results in exactly one real quantity change",
+      "ok": true
+    },
+    {
+      "name": "Two genuinely distinct concurrent mutations both apply exactly once each (no lost update, no double-apply)",
+      "ok": true
+    },
+    {
+      "name": "The receiving mutation wrote exactly one inventory event",
+      "ok": true
+    },
+    {
+      "name": "Archiving a product succeeds",
+      "ok": true
+    },
+    {
+      "name": "An archived product is excluded from the default admin dashboard list",
+      "ok": true
+    },
+    {
+      "name": "Restoring a product succeeds",
+      "ok": true
+    },
+    {
+      "name": "Hiding a product from customers succeeds",
+      "ok": true
+    },
+    {
+      "name": "Marking featured/staff-pick/limited-release succeeds together",
+      "ok": true
+    },
+    {
+      "name": "A visible, featured product appears in the real customer browser after staff changes",
+      "ok": true
+    },
+    {
+      "name": "Archiving a product removes it from the real customer browser",
+      "ok": true
+    },
+    {
+      "name": "Restoring a product returns it to the real customer browser",
+      "ok": true
+    },
+    {
+      "name": "Two independent staff sessions read identical authoritative product state",
+      "ok": true
+    },
+    {
+      "name": "A mentor (tobacconist tier) can read the admin dashboard",
+      "ok": true
+    },
+    {
+      "name": "A mentor (tobacconist tier) cannot perform inventory mutations",
+      "ok": true
+    },
+    {
+      "name": "A mentor CAN edit the approved staffNotes field",
+      "ok": true
+    },
+    {
+      "name": "A mentor CANNOT edit other product fields (server-enforced, not just hidden in the UI)",
+      "ok": true
+    },
+    {
+      "name": "A user with no venue membership at all (for this venue) is denied the admin dashboard",
+      "ok": true
+    },
+    {
+      "name": "Inventory event history loads real, append-only events",
+      "ok": true
+    },
+    {
+      "name": "Filtering event history by event type returns only matching real events",
+      "ok": true
+    },
+    {
+      "name": "Filtering event history by product returns only matching real events",
+      "ok": true
+    },
+    {
+      "name": "Filtering event history by actor returns only matching real events",
+      "ok": true
+    }
+  ]
+}

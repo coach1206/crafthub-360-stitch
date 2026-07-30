@@ -165,6 +165,26 @@
     "elementRaw": "<VenueHumidorCigarDetail />"
   },
   {
+    "fullPath": "admin/humidor",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAdminDashboard />"
+  },
+  {
+    "fullPath": "admin/humidor/new",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAdminProductForm />"
+  },
+  {
+    "fullPath": "admin/humidor/inventory-events",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAdminInventoryEvents />"
+  },
+  {
+    "fullPath": "admin/humidor/:cigarId/edit",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAdminProductForm />"
+  },
+  {
     "fullPath": "art",
     "isIndex": false,
     "elementRaw": "<Art />"

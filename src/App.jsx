@@ -108,6 +108,9 @@ const VenueHumidorBrowser = lazy(() => import('./pages/smokecraft/venueHumidor/V
 const VenueHumidorCigarDetail = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx'))
 const VenueHumidorCheckout = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorCheckout.jsx'))
 const VenueHumidorOrderConfirmation = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorOrderConfirmation.jsx'))
+const VenueHumidorAdminDashboard = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminDashboard.jsx'))
+const VenueHumidorAdminProductForm = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminProductForm.jsx'))
+const VenueHumidorAdminInventoryEvents = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminInventoryEvents.jsx'))
 const GoldenBoxCompetitionDetail = lazy(() => import('./pages/smokecraft/goldenBox/CompetitionDetail.jsx'))
 const GoldenBoxEntryWorkspace = lazy(() => import('./pages/smokecraft/goldenBox/EntryWorkspace.jsx'))
 const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenBox/ResultsExperience.jsx'))
@@ -395,6 +398,13 @@ export default function App() {
                 <Route path="venue-humidor/checkout"       element={<VenueHumidorCheckout />} />
                 <Route path="venue-humidor/order/:orderId" element={<VenueHumidorOrderConfirmation />} />
                 <Route path="venue-humidor/:cigarId"       element={<VenueHumidorCigarDetail />} />
+
+                {/* Venue Humidor 1B-2B-1 — staff inventory administration.
+                    Server-side RBAC on every route; no client-only gate. */}
+                <Route path="admin/humidor"                    element={<VenueHumidorAdminDashboard />} />
+                <Route path="admin/humidor/new"                element={<VenueHumidorAdminProductForm />} />
+                <Route path="admin/humidor/inventory-events"   element={<VenueHumidorAdminInventoryEvents />} />
+                <Route path="admin/humidor/:cigarId/edit"      element={<VenueHumidorAdminProductForm />} />
 
                 {/* Mentor Selection — supporting module (outside the 27-session spine).
                     Not yet folded into Meet Your Cigar (S3) as an internal tab per the

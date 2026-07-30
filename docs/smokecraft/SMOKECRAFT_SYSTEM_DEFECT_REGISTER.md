@@ -1855,6 +1855,22 @@ See `public/proof/smokecraft-venue-humidor-1a/00-proof-index.md`.
 
 See `public/proof/smokecraft-venue-humidor-1b-2a/00-proof-index.md`.
 
+## Venue Humidor 1B-2B-1 update
+
+No new defects in previously-locked behavior were found this pass.
+Three bugs were caught in this pass's own new code before commit (via
+its own required tests, never shipped): a sign error where
+`complimentary` initially increased inventory instead of decreasing
+it; an ambiguous-column SQL error in the event-history join
+(`product_id`/`created_at` unqualified across a two-table join); and a
+Playwright locator bug where `text=receiving` matched a hidden
+`<select><option>` before the visible table cell. None of these
+reached the committed baseline, so none receive an SC-D number (that
+sequence is reserved for defects found in already-locked/shipped
+behavior, per this operation's convention).
+
+See `public/proof/smokecraft-venue-humidor-1b-2b-1/00-proof-index.md`.
+
 Closed via `src/pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx`.
 Encoded as a permanent regression check in
 `verify-smokecraft-venue-humidor-1b1-browser.mjs`. See

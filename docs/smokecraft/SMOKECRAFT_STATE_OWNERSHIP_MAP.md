@@ -484,3 +484,21 @@ creation and completion is enforced by the real `idempotency_key`
 unique constraint on `venue_cigar_orders`, checked in-lock as the
 authoritative source of truth (never a pre-lock-only check, per
 SC-D066).
+
+## Venue Humidor 1B-2B-1 update
+
+`productService.js` remains the sole owner of every
+`venue_cigar_products` create/update write — `updateProductClassification()`
+is now the single writer of `is_archived`/`status`/`is_customer_visible`/
+`is_featured`/`is_staff_pick`/`is_limited_release`/`is_venue_exclusive`,
+the exact same columns 1B-1's customer catalog service already reads,
+so staff changes and customer visibility can never drift onto two
+separate representations. `sealed_box_count`/`opened_box_count`
+(migration 109) are administrative display counters, updated only
+alongside — never instead of — the authoritative `physical_quantity`
+mutation inside the same admin request; they are not a second source
+of truth for stick count. RBAC ownership: `venue_memberships.membership_type`
+(unchanged, migration 010) remains the sole role record — 1B-2B-1
+introduces no parallel role/permission table, only a route-level
+tier mapping (`requireVenueRole()` in `venueHumidorRoutes.js`) that
+reads that same column.
