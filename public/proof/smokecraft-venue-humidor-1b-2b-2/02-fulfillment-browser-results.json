@@ -1,0 +1,87 @@
+{
+  "pass": 20,
+  "fail": 0,
+  "total": 20,
+  "results": [
+    {
+      "name": "Queue loads real server-backed order data",
+      "ok": true
+    },
+    {
+      "name": "Status filter narrows the real queue results",
+      "ok": true
+    },
+    {
+      "name": "Search control is present and usable",
+      "ok": true
+    },
+    {
+      "name": "Order detail screen opens with real data",
+      "ok": true
+    },
+    {
+      "name": "Claiming an order shows the real assigned staff member",
+      "ok": true
+    },
+    {
+      "name": "A second staff session sees the real, current assignment after refresh",
+      "ok": true
+    },
+    {
+      "name": "Claim is honestly disabled for a second session once already assigned",
+      "ok": true
+    },
+    {
+      "name": "Order reaches Ready state after confirm → prepare → pick → ready",
+      "ok": true
+    },
+    {
+      "name": "Completing the order shows the real Completed state",
+      "ok": true
+    },
+    {
+      "name": "Real inventory decreased by exactly the ordered quantity on completion",
+      "ok": true
+    },
+    {
+      "name": "The customer-facing order screen shows the real completed status after staff completion",
+      "ok": true
+    },
+    {
+      "name": "Completed state persists correctly across a genuine staff-side reload",
+      "ok": true
+    },
+    {
+      "name": "Cancellation reason validation renders an honest error when left blank",
+      "ok": true
+    },
+    {
+      "name": "Cancelling shows the real Cancelled state",
+      "ok": true
+    },
+    {
+      "name": "The customer-facing order screen shows the real cancelled status after staff cancellation",
+      "ok": true
+    },
+    {
+      "name": "An unauthorized user sees an honest permission-denied state for a venue they do not staff",
+      "ok": true
+    },
+    {
+      "name": "An honest offline/error state renders when the network is unavailable",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on the queue screen",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on the queue screen",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the fulfillment flow",
+      "ok": true
+    }
+  ]
+}

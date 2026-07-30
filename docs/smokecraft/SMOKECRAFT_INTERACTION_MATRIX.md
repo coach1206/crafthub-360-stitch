@@ -736,3 +736,37 @@ keyboard/layout/console-error checks.
 
 All three screens are new, additive routes — no existing SmokeCraft
 screen was touched.
+
+## Venue Humidor 1B-2B-2 — staff order and fulfillment queue (new screens)
+
+**VenueHumidorOrderQueue.jsx** (`/smokecraft/admin/humidor/orders`):
+real, server-backed order table (order number, created/age,
+fulfillment method, item/quantity counts, total, payment status,
+fulfillment status, assigned staff), search, status filter,
+unassigned filter, link to fulfillment history.
+
+**VenueHumidorOrderDetail.jsx** (`/smokecraft/admin/humidor/orders/:orderId`):
+customer/fulfillment info, real order items with image/brand/SKU/
+vitola/strength/quantity/line total/real live availability/humidor
+zone, per-item "Mark Picked" control, real totals breakdown, and a
+full fulfillment-action row (Claim, Confirm, Start Preparation, Mark
+Ready, Complete, Cancel with required reason, staff note) — every
+button's enabled/disabled state is computed from the real server
+`fulfillment_status`/`assigned_staff_id`/item-picked state, never a
+locally-faked eligibility. Complete/Cancel call only
+`checkoutService.completeOrder()`/`cancelOrder()` via
+`fulfillmentService.js`'s thin delegation.
+
+**VenueHumidorFulfillmentHistory.jsx**
+(`/smokecraft/admin/humidor/orders/history`): real, append-only,
+filterable (order/event type/actor) fulfillment event history — no
+edit or delete control exists anywhere. Verified: 20/20 browser checks
+(`verify-smokecraft-venue-humidor-1b2b2-browser.mjs`) covering queue
+load, filters, order detail, claim, two-session claim conflict,
+confirm/prepare/pick/ready/complete, real inventory deduction,
+customer-status synchronization, reload persistence, cancellation with
+required reason, unauthorized denial, offline state, keyboard/layout/
+console-error checks.
+
+All three screens are new, additive routes — no existing SmokeCraft
+screen was touched.

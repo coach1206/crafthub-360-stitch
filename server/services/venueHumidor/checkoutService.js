@@ -272,8 +272,11 @@ export async function completeOrder(orderId, actorId, actorRole, { idempotencyKe
     })
   }
 
+  // fulfillment_status (1B-2B-2) is stamped in this SAME authoritative
+  // UPDATE — never a second write path — so a completed order is
+  // never visible as pending in either dimension.
   const { rows: updatedRows } = await db.query(
-    `UPDATE venue_cigar_orders SET status = 'completed', payment_status = 'confirmed', completed_at = now(), updated_at = now() WHERE order_id = $1 RETURNING *`,
+    `UPDATE venue_cigar_orders SET status = 'completed', payment_status = 'confirmed', fulfillment_status = 'completed', completed_at = now(), updated_at = now() WHERE order_id = $1 RETURNING *`,
     [orderId]
   )
   const updated = updatedRows[0]
@@ -323,9 +326,17 @@ export async function cancelOrder(orderId, actorId, { idempotencyKey, reason } =
     await releaseHold(order.hold_id, actorId).catch(() => {})
   }
 
+  // fulfillment_status (1B-2B-2) is stamped in this SAME authoritative
+  // UPDATE — a cancelled/refunded order is never visible as active in
+  // either dimension. cancellation_reason persists the real reason
+  // the caller supplied, if any. fulfillment_status has no distinct
+  // 'refunded' value (its CHECK constraint only covers the staff
+  // workflow states) — 'refunded' orders (a completed sale later
+  // reversed) map onto the same 'cancelled' fulfillment_status, since
+  // the financial distinction is owned entirely by `status`.
   const { rows: updatedRows } = await db.query(
-    `UPDATE venue_cigar_orders SET status = $2, cancelled_at = now(), updated_at = now() WHERE order_id = $1 RETURNING *`,
-    [orderId, wasCompleted ? 'refunded' : 'cancelled']
+    `UPDATE venue_cigar_orders SET status = $2, fulfillment_status = 'cancelled', cancellation_reason = $3, cancelled_at = now(), updated_at = now() WHERE order_id = $1 RETURNING *`,
+    [orderId, wasCompleted ? 'refunded' : 'cancelled', reason || null]
   )
   const updated = updatedRows[0]
 

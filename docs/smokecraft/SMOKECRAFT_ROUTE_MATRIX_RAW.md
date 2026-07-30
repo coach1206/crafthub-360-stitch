@@ -1,8 +1,8 @@
 # SmokeCraft Route Matrix (Prompt 1/2 — programmatically generated, full nested paths)
 
-Generated from `src/App.jsx` lines 334-609 (the `/smokecraft` parent route group) at commit `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7`, tracking real JSX nesting depth so full paths are reconstructed correctly (e.g. `golden-box/status` -> `/smokecraft/golden-box/status`), not just a flat list of relative path fragments.
+Generated from `src/App.jsx` lines 337-619 (the `/smokecraft` parent route group) at commit `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7`, tracking real JSX nesting depth so full paths are reconstructed correctly (e.g. `golden-box/status` -> `/smokecraft/golden-box/status`), not just a flat list of relative path fragments.
 
-**Total routes found in the /smokecraft group: 117**
+**Total routes found in the /smokecraft group: 120**
 
 | # | Full path | Index | Element (raw JSX, truncated) |
 |---|---|---|---|
@@ -43,83 +43,86 @@ Generated from `src/App.jsx` lines 334-609 (the `/smokecraft` parent route group
 | 35 | `/smokecraft/admin/humidor/new` | no | `<VenueHumidorAdminProductForm />` |
 | 36 | `/smokecraft/admin/humidor/inventory-events` | no | `<VenueHumidorAdminInventoryEvents />` |
 | 37 | `/smokecraft/admin/humidor/:cigarId/edit` | no | `<VenueHumidorAdminProductForm />` |
-| 38 | `/smokecraft/art` | no | `<Art />` |
-| 39 | `/smokecraft/mentor-selection` | no | `<SmokeCraftSessionGuard requires="entry"><Mentor /></SmokeCraftSessionGuard>` |
-| 40 | `/smokecraft/mentor` | no | `<Navigate to="/smokecraft/mentor-selection" replace />` |
-| 41 | `/smokecraft/humidor-match` | no | `<SmokeCraftSessionGuard sessionNumber={2}><SmokeCraftScreenRenderer screenId="session-2" /></SmokeCraftSessionGuard>` |
-| 42 | `/smokecraft/meet-your-cigar` | no | `<SmokeCraftSessionGuard sessionNumber={3}><SmokeCraftScreenRenderer screenId="session-3" /></SmokeCraftSessionGuard>` |
-| 43 | `/smokecraft/terroir` | no | `<SmokeCraftSessionGuard sessionNumber={4}><SmokeCraftScreenRenderer screenId="session-4" /></SmokeCraftSessionGuard>` |
-| 44 | `/smokecraft/format` | no | `<SmokeCraftSessionGuard sessionNumber={5}><SmokeCraftScreenRenderer screenId="session-5" /></SmokeCraftSessionGuard>` |
-| 45 | `/smokecraft/shape-size-burn` | no | `<Navigate to="/smokecraft/format" replace />` |
-| 46 | `/smokecraft/cigar-gauge-guide` | no | `<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>` |
-| 47 | `/smokecraft/wrapper-strength` | no | `<SmokeCraftSessionGuard requires="format"><WrapperStrength /></SmokeCraftSessionGuard>` |
-| 48 | `/smokecraft/seed-soil` | no | `<SmokeCraftSessionGuard requires="mentor"><SeedSoil /></SmokeCraftSessionGuard>` |
-| 49 | `/smokecraft/cut-toast-light` | no | `<SmokeCraftSessionGuard sessionNumber={6}><SmokeCraftScreenRenderer screenId="session-6" /></SmokeCraftSessionGuard>` |
-| 50 | `/smokecraft/lighting-tutorial` | no | `<SmokeCraftSessionGuard sessionNumber={7}><SmokeCraftScreenRenderer screenId="session-7" /></SmokeCraftSessionGuard>` |
-| 51 | `/smokecraft/first-third` | no | `<SmokeCraftSessionGuard sessionNumber={8}><SmokeCraftScreenRenderer screenId="session-8" /></SmokeCraftSessionGuard>` |
-| 52 | `/smokecraft/flavor-memory` | no | `<SmokeCraftSessionGuard sessionNumber={10}><SmokeCraftScreenRenderer screenId="session-10" /></SmokeCraftSessionGuard>` |
-| 53 | `/smokecraft/pairing-lab` | no | `<SmokeCraftSessionGuard sessionNumber={11}><SmokeCraftScreenRenderer screenId="session-11" /></SmokeCraftSessionGuard>` |
-| 54 | `/smokecraft/request-purchase` | no | `<SmokeCraftSessionGuard requires="humidor-match"><RequestPurchase /></SmokeCraftSessionGuard>` |
-| 55 | `/smokecraft/second-third` | no | `<SmokeCraftSessionGuard sessionNumber={12}><SmokeCraftScreenRenderer screenId="session-12" /></SmokeCraftSessionGuard>` |
-| 56 | `/smokecraft/mentor-commentary` | no | `<SmokeCraftSessionGuard sessionNumber={14}><SmokeCraftScreenRenderer screenId="session-14" /></SmokeCraftSessionGuard>` |
-| 57 | `/smokecraft/knowledge-drop` | no | `<SmokeCraftSessionGuard sessionNumber={15}><SmokeCraftScreenRenderer screenId="session-15" /></SmokeCraftSessionGuard>` |
-| 58 | `/smokecraft/knowledge-check-demo` | no | `<SmokeCraftSessionGuard requires="entry"><KnowledgeCheckDemo /></SmokeCraftSessionGuard>` |
-| 59 | `/smokecraft/mini-tasting-module` | no | `<SmokeCraftSessionGuard requires="entry"><MiniTasting /></SmokeCraftSessionGuard>` |
-| 60 | `/smokecraft/final-third` | no | `<SmokeCraftSessionGuard sessionNumber={16}><SmokeCraftScreenRenderer screenId="session-16" /></SmokeCraftSessionGuard>` |
-| 61 | `/smokecraft/scorecard` | no | `<SmokeCraftSessionGuard sessionNumber={19}><SmokeCraftScreenRenderer screenId="session-19" /></SmokeCraftSessionGuard>` |
-| 62 | `/smokecraft/smokecraft-challenge` | no | `<SmokeCraftSessionGuard requires="scorecard"><SmokeCraftChallenge /></SmokeCraftSessionGuard>` |
-| 63 | `/smokecraft/challenge` | no | `<Navigate to="/smokecraft/smokecraft-challenge" replace />` |
-| 64 | `/smokecraft/second-humidor-match` | no | `<SmokeCraftSessionGuard requires="scorecard"><SecondHumidorMatch /></SmokeCraftSessionGuard>` |
-| 65 | `/smokecraft/mini-tasting` | no | `<SmokeCraftSessionGuard requires="scorecard"><MiniTastingRound /></SmokeCraftSessionGuard>` |
-| 66 | `/smokecraft/mini-tasting-round` | no | `<Navigate to="/smokecraft/mini-tasting" replace />` |
-| 67 | `/smokecraft/ai-summary` | no | `<SmokeCraftSessionGuard sessionNumber={21}><SmokeCraftScreenRenderer screenId="session-21" /></SmokeCraftSessionGuard>` |
-| 68 | `/smokecraft/pairing-recommendations` | no | `<SmokeCraftSessionGuard sessionNumber={22}><SmokeCraftScreenRenderer screenId="session-22" /></SmokeCraftSessionGuard>` |
-| 69 | `/smokecraft/passport-stamp` | no | `<SmokeCraftSessionGuard sessionNumber={23}><SmokeCraftScreenRenderer screenId="session-23" /></SmokeCraftSessionGuard>` |
-| 70 | `/smokecraft/connections` | no | `<SmokeCraftSessionGuard requires="passport-stamp"><Connections /></SmokeCraftSessionGuard>` |
-| 71 | `/smokecraft/management-sync` | no | `<SmokeCraftSessionGuard requires="passport-stamp"><ManagementSync /></SmokeCraftSessionGuard>` |
-| 72 | `/smokecraft/management-sync/analytics` | no | `<ManagementSyncAnalytics />` |
-| 73 | `/smokecraft/final-review` | no | `<SmokeCraftSessionGuard sessionNumber={24}><SmokeCraftScreenRenderer screenId="session-24" /></SmokeCraftSessionGuard>` |
-| 74 | `/smokecraft/rewards` | no | `<SmokeCraftSessionGuard sessionNumber={25}><SmokeCraftScreenRenderer screenId="session-25" /></SmokeCraftSessionGuard>` |
-| 75 | `/smokecraft/skill-tree` | no | `<SmokeCraftSessionGuard requires="entry"><SkillTree /></SmokeCraftSessionGuard>` |
-| 76 | `/smokecraft/collections` | no | `<SmokeCraftSessionGuard requires="entry"><CollectionsCenter /></SmokeCraftSessionGuard>` |
-| 77 | `/smokecraft/challenge-hub` | no | `<SmokeCraftSessionGuard requires="entry"><ChallengeHub /></SmokeCraftSessionGuard>` |
-| 78 | `/smokecraft/challenges/blend-fault-identification` | no | `<SmokeCraftSessionGuard requires="entry"><BlendFaultChallenge /></SmokeCraftSessionGuard>` |
-| 79 | `/smokecraft/filler-arrangement` | no | `<SmokeCraftSessionGuard requires="entry"><FillerArrangement /></SmokeCraftSessionGuard>` |
-| 80 | `/smokecraft/session-complete` | no | `<SmokeCraftSessionGuard sessionNumber={27}><SmokeCraftScreenRenderer screenId="session-27" /></SmokeCraftSessionGuard>` |
-| 81 | `/smokecraft/visit-complete` | no | `<VisitComplete />` |
-| 82 | `/smokecraft/origins` | no | `<Origins />` |
-| 83 | `/smokecraft/curation` | no | `<Curation />` |
-| 84 | `/smokecraft/leaves` | no | `<Leaves />` |
-| 85 | `/smokecraft/leaf-challenge` | no | `<LeafChallenge />` |
-| 86 | `/smokecraft/leaf-challenge-calculating` | no | `<LeafChallengeCalculating />` |
-| 87 | `/smokecraft/leaf-challenge-result` | no | `<LeafChallengeResult />` |
-| 88 | `/smokecraft/cultivation` | no | `<Cultivation />` |
-| 89 | `/smokecraft/blend` | no | `<Blend />` |
-| 90 | `/smokecraft/flavor-dna` | no | `<FlavorDNA />` |
-| 91 | `/smokecraft/pairing` | no | `<Pairing />` |
-| 92 | `/smokecraft/available` | no | `<Available />` |
-| 93 | `/smokecraft/assistant` | no | `<Assistant />` |
-| 94 | `/smokecraft/pairing-mastery` | no | `<PairingMastery />` |
-| 95 | `/smokecraft/vitola` | no | `<Vitola />` |
-| 96 | `/smokecraft/identity` | no | `<SmokeCraftSessionGuard requires="enroll"><Identity /></SmokeCraftSessionGuard>` |
-| 97 | `/smokecraft/resume` | no | `<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>` |
-| 98 | `/smokecraft/leaderboard` | no | `<Leaderboard />` |
-| 99 | `/smokecraft/rewards-center` | no | `<RewardsCenter />` |
-| 100 | `/smokecraft/account` | no | `<Account />` |
-| 101 | `/smokecraft/event-challenge` | no | `<EventChallenge />` |
-| 102 | `/smokecraft/how-it-works` | no | `<HowItWorks />` |
-| 103 | `/smokecraft/demo-reset` | no | `<SmokeCraftDemoReset />` |
-| 104 | `/smokecraft/session/start` | no | `<Navigate to="/smokecraft/enroll" replace />` |
-| 105 | `/smokecraft/guest-pass` | no | `<GuestPass />` |
-| 106 | `/smokecraft/demo` | no | `<Demo />` |
-| 107 | `/smokecraft/scan` | no | `<Scan />` |
-| 108 | `/smokecraft/passport` | no | `<SmokeCraftPassport />` |
-| 109 | `/smokecraft/crafthub` | no | `<SmokeCraftCraftHub />` |
-| 110 | `/smokecraft/menu` | no | `<SmokeCraftMenu />` |
-| 111 | `/smokecraft/venue-commerce` | no | `<SmokeCraftVenueCommerce />` |
-| 112 | `/smokecraft/order` | no | `<SmokeCraftVenueCommerce />` |
-| 113 | `/smokecraft/ticket-tapper/staff-specials` | no | `<SmokeCraftVenueCommerce />` |
-| 114 | `/smokecraft/cart` | no | `<SmokeCraftCart />` |
-| 115 | `/smokecraft/checkout` | no | `<SmokeCraftCheckout />` |
-| 116 | `/smokecraft/payment-success` | no | `<SmokeCraftPaymentSuccess />` |
-| 117 | `/smokecraft/order-status` | no | `<SmokeCraftOrderStatus />` |
+| 38 | `/smokecraft/admin/humidor/orders/history` | no | `<VenueHumidorFulfillmentHistory />` |
+| 39 | `/smokecraft/admin/humidor/orders/:orderId` | no | `<VenueHumidorOrderDetail />` |
+| 40 | `/smokecraft/admin/humidor/orders` | no | `<VenueHumidorOrderQueue />` |
+| 41 | `/smokecraft/art` | no | `<Art />` |
+| 42 | `/smokecraft/mentor-selection` | no | `<SmokeCraftSessionGuard requires="entry"><Mentor /></SmokeCraftSessionGuard>` |
+| 43 | `/smokecraft/mentor` | no | `<Navigate to="/smokecraft/mentor-selection" replace />` |
+| 44 | `/smokecraft/humidor-match` | no | `<SmokeCraftSessionGuard sessionNumber={2}><SmokeCraftScreenRenderer screenId="session-2" /></SmokeCraftSessionGuard>` |
+| 45 | `/smokecraft/meet-your-cigar` | no | `<SmokeCraftSessionGuard sessionNumber={3}><SmokeCraftScreenRenderer screenId="session-3" /></SmokeCraftSessionGuard>` |
+| 46 | `/smokecraft/terroir` | no | `<SmokeCraftSessionGuard sessionNumber={4}><SmokeCraftScreenRenderer screenId="session-4" /></SmokeCraftSessionGuard>` |
+| 47 | `/smokecraft/format` | no | `<SmokeCraftSessionGuard sessionNumber={5}><SmokeCraftScreenRenderer screenId="session-5" /></SmokeCraftSessionGuard>` |
+| 48 | `/smokecraft/shape-size-burn` | no | `<Navigate to="/smokecraft/format" replace />` |
+| 49 | `/smokecraft/cigar-gauge-guide` | no | `<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>` |
+| 50 | `/smokecraft/wrapper-strength` | no | `<SmokeCraftSessionGuard requires="format"><WrapperStrength /></SmokeCraftSessionGuard>` |
+| 51 | `/smokecraft/seed-soil` | no | `<SmokeCraftSessionGuard requires="mentor"><SeedSoil /></SmokeCraftSessionGuard>` |
+| 52 | `/smokecraft/cut-toast-light` | no | `<SmokeCraftSessionGuard sessionNumber={6}><SmokeCraftScreenRenderer screenId="session-6" /></SmokeCraftSessionGuard>` |
+| 53 | `/smokecraft/lighting-tutorial` | no | `<SmokeCraftSessionGuard sessionNumber={7}><SmokeCraftScreenRenderer screenId="session-7" /></SmokeCraftSessionGuard>` |
+| 54 | `/smokecraft/first-third` | no | `<SmokeCraftSessionGuard sessionNumber={8}><SmokeCraftScreenRenderer screenId="session-8" /></SmokeCraftSessionGuard>` |
+| 55 | `/smokecraft/flavor-memory` | no | `<SmokeCraftSessionGuard sessionNumber={10}><SmokeCraftScreenRenderer screenId="session-10" /></SmokeCraftSessionGuard>` |
+| 56 | `/smokecraft/pairing-lab` | no | `<SmokeCraftSessionGuard sessionNumber={11}><SmokeCraftScreenRenderer screenId="session-11" /></SmokeCraftSessionGuard>` |
+| 57 | `/smokecraft/request-purchase` | no | `<SmokeCraftSessionGuard requires="humidor-match"><RequestPurchase /></SmokeCraftSessionGuard>` |
+| 58 | `/smokecraft/second-third` | no | `<SmokeCraftSessionGuard sessionNumber={12}><SmokeCraftScreenRenderer screenId="session-12" /></SmokeCraftSessionGuard>` |
+| 59 | `/smokecraft/mentor-commentary` | no | `<SmokeCraftSessionGuard sessionNumber={14}><SmokeCraftScreenRenderer screenId="session-14" /></SmokeCraftSessionGuard>` |
+| 60 | `/smokecraft/knowledge-drop` | no | `<SmokeCraftSessionGuard sessionNumber={15}><SmokeCraftScreenRenderer screenId="session-15" /></SmokeCraftSessionGuard>` |
+| 61 | `/smokecraft/knowledge-check-demo` | no | `<SmokeCraftSessionGuard requires="entry"><KnowledgeCheckDemo /></SmokeCraftSessionGuard>` |
+| 62 | `/smokecraft/mini-tasting-module` | no | `<SmokeCraftSessionGuard requires="entry"><MiniTasting /></SmokeCraftSessionGuard>` |
+| 63 | `/smokecraft/final-third` | no | `<SmokeCraftSessionGuard sessionNumber={16}><SmokeCraftScreenRenderer screenId="session-16" /></SmokeCraftSessionGuard>` |
+| 64 | `/smokecraft/scorecard` | no | `<SmokeCraftSessionGuard sessionNumber={19}><SmokeCraftScreenRenderer screenId="session-19" /></SmokeCraftSessionGuard>` |
+| 65 | `/smokecraft/smokecraft-challenge` | no | `<SmokeCraftSessionGuard requires="scorecard"><SmokeCraftChallenge /></SmokeCraftSessionGuard>` |
+| 66 | `/smokecraft/challenge` | no | `<Navigate to="/smokecraft/smokecraft-challenge" replace />` |
+| 67 | `/smokecraft/second-humidor-match` | no | `<SmokeCraftSessionGuard requires="scorecard"><SecondHumidorMatch /></SmokeCraftSessionGuard>` |
+| 68 | `/smokecraft/mini-tasting` | no | `<SmokeCraftSessionGuard requires="scorecard"><MiniTastingRound /></SmokeCraftSessionGuard>` |
+| 69 | `/smokecraft/mini-tasting-round` | no | `<Navigate to="/smokecraft/mini-tasting" replace />` |
+| 70 | `/smokecraft/ai-summary` | no | `<SmokeCraftSessionGuard sessionNumber={21}><SmokeCraftScreenRenderer screenId="session-21" /></SmokeCraftSessionGuard>` |
+| 71 | `/smokecraft/pairing-recommendations` | no | `<SmokeCraftSessionGuard sessionNumber={22}><SmokeCraftScreenRenderer screenId="session-22" /></SmokeCraftSessionGuard>` |
+| 72 | `/smokecraft/passport-stamp` | no | `<SmokeCraftSessionGuard sessionNumber={23}><SmokeCraftScreenRenderer screenId="session-23" /></SmokeCraftSessionGuard>` |
+| 73 | `/smokecraft/connections` | no | `<SmokeCraftSessionGuard requires="passport-stamp"><Connections /></SmokeCraftSessionGuard>` |
+| 74 | `/smokecraft/management-sync` | no | `<SmokeCraftSessionGuard requires="passport-stamp"><ManagementSync /></SmokeCraftSessionGuard>` |
+| 75 | `/smokecraft/management-sync/analytics` | no | `<ManagementSyncAnalytics />` |
+| 76 | `/smokecraft/final-review` | no | `<SmokeCraftSessionGuard sessionNumber={24}><SmokeCraftScreenRenderer screenId="session-24" /></SmokeCraftSessionGuard>` |
+| 77 | `/smokecraft/rewards` | no | `<SmokeCraftSessionGuard sessionNumber={25}><SmokeCraftScreenRenderer screenId="session-25" /></SmokeCraftSessionGuard>` |
+| 78 | `/smokecraft/skill-tree` | no | `<SmokeCraftSessionGuard requires="entry"><SkillTree /></SmokeCraftSessionGuard>` |
+| 79 | `/smokecraft/collections` | no | `<SmokeCraftSessionGuard requires="entry"><CollectionsCenter /></SmokeCraftSessionGuard>` |
+| 80 | `/smokecraft/challenge-hub` | no | `<SmokeCraftSessionGuard requires="entry"><ChallengeHub /></SmokeCraftSessionGuard>` |
+| 81 | `/smokecraft/challenges/blend-fault-identification` | no | `<SmokeCraftSessionGuard requires="entry"><BlendFaultChallenge /></SmokeCraftSessionGuard>` |
+| 82 | `/smokecraft/filler-arrangement` | no | `<SmokeCraftSessionGuard requires="entry"><FillerArrangement /></SmokeCraftSessionGuard>` |
+| 83 | `/smokecraft/session-complete` | no | `<SmokeCraftSessionGuard sessionNumber={27}><SmokeCraftScreenRenderer screenId="session-27" /></SmokeCraftSessionGuard>` |
+| 84 | `/smokecraft/visit-complete` | no | `<VisitComplete />` |
+| 85 | `/smokecraft/origins` | no | `<Origins />` |
+| 86 | `/smokecraft/curation` | no | `<Curation />` |
+| 87 | `/smokecraft/leaves` | no | `<Leaves />` |
+| 88 | `/smokecraft/leaf-challenge` | no | `<LeafChallenge />` |
+| 89 | `/smokecraft/leaf-challenge-calculating` | no | `<LeafChallengeCalculating />` |
+| 90 | `/smokecraft/leaf-challenge-result` | no | `<LeafChallengeResult />` |
+| 91 | `/smokecraft/cultivation` | no | `<Cultivation />` |
+| 92 | `/smokecraft/blend` | no | `<Blend />` |
+| 93 | `/smokecraft/flavor-dna` | no | `<FlavorDNA />` |
+| 94 | `/smokecraft/pairing` | no | `<Pairing />` |
+| 95 | `/smokecraft/available` | no | `<Available />` |
+| 96 | `/smokecraft/assistant` | no | `<Assistant />` |
+| 97 | `/smokecraft/pairing-mastery` | no | `<PairingMastery />` |
+| 98 | `/smokecraft/vitola` | no | `<Vitola />` |
+| 99 | `/smokecraft/identity` | no | `<SmokeCraftSessionGuard requires="enroll"><Identity /></SmokeCraftSessionGuard>` |
+| 100 | `/smokecraft/resume` | no | `<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>` |
+| 101 | `/smokecraft/leaderboard` | no | `<Leaderboard />` |
+| 102 | `/smokecraft/rewards-center` | no | `<RewardsCenter />` |
+| 103 | `/smokecraft/account` | no | `<Account />` |
+| 104 | `/smokecraft/event-challenge` | no | `<EventChallenge />` |
+| 105 | `/smokecraft/how-it-works` | no | `<HowItWorks />` |
+| 106 | `/smokecraft/demo-reset` | no | `<SmokeCraftDemoReset />` |
+| 107 | `/smokecraft/session/start` | no | `<Navigate to="/smokecraft/enroll" replace />` |
+| 108 | `/smokecraft/guest-pass` | no | `<GuestPass />` |
+| 109 | `/smokecraft/demo` | no | `<Demo />` |
+| 110 | `/smokecraft/scan` | no | `<Scan />` |
+| 111 | `/smokecraft/passport` | no | `<SmokeCraftPassport />` |
+| 112 | `/smokecraft/crafthub` | no | `<SmokeCraftCraftHub />` |
+| 113 | `/smokecraft/menu` | no | `<SmokeCraftMenu />` |
+| 114 | `/smokecraft/venue-commerce` | no | `<SmokeCraftVenueCommerce />` |
+| 115 | `/smokecraft/order` | no | `<SmokeCraftVenueCommerce />` |
+| 116 | `/smokecraft/ticket-tapper/staff-specials` | no | `<SmokeCraftVenueCommerce />` |
+| 117 | `/smokecraft/cart` | no | `<SmokeCraftCart />` |
+| 118 | `/smokecraft/checkout` | no | `<SmokeCraftCheckout />` |
+| 119 | `/smokecraft/payment-success` | no | `<SmokeCraftPaymentSuccess />` |
+| 120 | `/smokecraft/order-status` | no | `<SmokeCraftOrderStatus />` |

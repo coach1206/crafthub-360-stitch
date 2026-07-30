@@ -1871,6 +1871,31 @@ behavior, per this operation's convention).
 
 See `public/proof/smokecraft-venue-humidor-1b-2b-1/00-proof-index.md`.
 
+## Venue Humidor 1B-2B-2 update
+
+No new defects in previously-locked behavior were found this pass.
+One bug was caught in this pass's own new code before commit (via the
+1A regression suite's cancellation-restoration test, run as part of
+this pass's own required regression sweep): the new
+`fulfillment_status` column's `CHECK` constraint only covers the
+staff-workflow values (new/awaiting_confirmation/confirmed/
+in_preparation/ready/completed/cancelled/expired/blocked) — it has no
+`'refunded'` value. `checkoutService.cancelOrder()`'s refund path
+(cancelling an already-completed order) initially tried to stamp
+`fulfillment_status = 'refunded'` in the same authoritative `UPDATE`
+that sets `status = 'refunded'`, violating the `CHECK` constraint and
+breaking 1A's real refund-restoration regression test. Fixed before
+commit by mapping the refund path onto the existing `'cancelled'`
+`fulfillment_status` value (the financial `'refunded'` vs `'cancelled'`
+distinction remains owned entirely by the real `status` column). This
+bug never reached the committed baseline, so it receives no SC-D
+number per this operation's convention — but it is recorded here
+because it was caught by, and is now permanently guarded by, the 1A
+regression suite that continues to run as part of every Venue Humidor
+pass.
+
+See `public/proof/smokecraft-venue-humidor-1b-2b-2/00-proof-index.md`.
+
 Closed via `src/pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx`.
 Encoded as a permanent regression check in
 `verify-smokecraft-venue-humidor-1b1-browser.mjs`. See

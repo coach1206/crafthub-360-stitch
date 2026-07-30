@@ -260,3 +260,61 @@ fulfillment queue, payment integration, full-route/five-viewport
 sweeps as new targeted work (route count is now 117; the five-viewport
 proof was regenerated only because the build's own prebuild gate
 requires it).
+
+## Venue Humidor 1B-2B-2 update — staff order and fulfillment queue
+
+Migration 110 (additive) extends `venue_cigar_orders` with a
+`fulfillment_status` dimension (new/awaiting_confirmation/confirmed/
+in_preparation/ready/completed/cancelled/expired/blocked),
+`assigned_staff_id`/`assigned_staff_role`/`assigned_at`/
+`assignment_version` (optimistic-concurrency claim/assignment),
+`promised_at`/`ready_at`, `blocked_reason`, `cancellation_reason`; and
+`venue_cigar_order_items` with `is_picked`/`picked_at`/`picked_by`
+(whole-item picking only — the backend has no partial-quantity
+fulfillment concept, so this is a real boolean, never a faked
+partial-quantity counter). A new append-only
+`venue_cigar_fulfillment_events` table (same pattern as
+`venue_cigar_inventory_events`) is the sole fulfillment audit trail.
+
+`fulfillment_status` is a genuinely NEW dimension — it does not
+rename or duplicate `venue_cigar_orders.status`/`payment_status`,
+which remain exclusively owned by `checkoutService.js`. The two are
+kept from drifting apart by having `checkoutService.completeOrder()`
+and `checkoutService.cancelOrder()` stamp `fulfillment_status` inside
+the SAME authoritative `UPDATE` that sets `status`/`payment_status` —
+never a second write path.
+
+`fulfillmentService.js` (new) owns only the pre-completion staff
+workflow: queue listing, order-detail read, claim/assign (optimistic
+concurrency via `assignment_version`), confirm/prepare/pick/ready
+transitions (validated against an explicit `ALLOWED_TRANSITIONS` map;
+`ready` requires every item picked first), block/unblock, and staff
+notes. Final completion and cancellation are pure delegation —
+`completeOrderFromQueue()`/`cancelOrderFromQueue()` call
+`checkoutService.completeOrder()`/`checkoutService.cancelOrder()`
+directly and never reimplement order-state mutation, inventory
+deduction, or hold/reservation release. No second complete/cancel
+service, no direct SQL inventory deduction, no direct hold release,
+and no cached available-quantity value exist anywhere in this file —
+verified by the build-blocking validator.
+
+RBAC reuses 1B-2B-1's exact `requireVenueRole()`/`FULL_ACCESS_TYPES`/
+`WRITE_ACCESS_TYPES`/`READ_ACCESS_TYPES` — no parallel system. Only
+full-access (owner/admin/manager) may reassign a claimed order;
+write-access (+ staff) may claim/transition/complete/cancel;
+read-access (+ mentor) may view the queue/detail/history but never
+mutate — enforced entirely server-side.
+
+Two new staff screens: `VenueHumidorOrderQueue.jsx`
+(`/smokecraft/admin/humidor/orders`) and `VenueHumidorOrderDetail.jsx`
+(`/smokecraft/admin/humidor/orders/:orderId`), plus
+`VenueHumidorFulfillmentHistory.jsx`
+(`/smokecraft/admin/humidor/orders/history`) — same
+`SmokeCraftScreenShell` system, no existing screen touched. Every
+action button is disabled honestly based on real server-derived
+eligibility; no success is ever shown before the server confirms it.
+
+Explicitly out of scope for this pass (per mandate): customer pickup
+verification, table/lounge delivery confirmation, staff handoff
+confirmation, pickup codes, no-show/expiration automation — these
+belong to the next package, Venue Humidor 1B-2B-3.

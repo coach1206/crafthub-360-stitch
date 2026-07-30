@@ -12,6 +12,7 @@ import { getDb } from '../db/connection.js'
 import * as ctrl from '../controllers/venueHumidorController.js'
 import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 import * as adminCtrl from '../controllers/venueHumidorAdminController.js'
+import * as fulfillmentCtrl from '../controllers/venueHumidorFulfillmentController.js'
 
 const router = Router()
 
@@ -137,5 +138,30 @@ router.patch('/venues/:venueId/admin/products/:productId', writeLimiter, require
 router.patch('/venues/:venueId/admin/products/:productId/classification', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, adminCtrl.handleUpdateClassification)
 router.post('/venues/:venueId/admin/products/:productId/inventory-mutations', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, adminCtrl.handleInventoryMutation)
 router.get('/venues/:venueId/admin/inventory-events', readLimiter, requireAuth, requireVenueRead, adminCtrl.handleListInventoryEvents)
+
+// ── 1B-2B-2: Staff order and fulfillment queue ──────────────────────
+// Same requireVenueRole tiers as 1B-2B-1 — read tier (owner/admin/
+// manager/staff/mentor) may view the queue and history; write tier
+// (owner/admin/manager/staff) may claim/transition/complete/cancel;
+// only full-access (owner/admin/manager) may reassign a claimed order
+// to a different staff member. Mentor never reaches any mutation
+// route — read-only, matching the mandate's "must not complete,
+// cancel, reassign, or mutate fulfillment status" requirement.
+const fulfillmentOrderVenueMatch = requireResourceVenueMatch('venue_cigar_orders', 'order_id', 'orderId')
+
+router.get('/venues/:venueId/admin/orders', readLimiter, requireAuth, requireVenueRead, fulfillmentCtrl.handleListQueue)
+router.get('/venues/:venueId/admin/orders/history', readLimiter, requireAuth, requireVenueRead, fulfillmentCtrl.handleListHistory)
+router.get('/venues/:venueId/admin/orders/:orderId', readLimiter, requireAuth, requireVenueRead, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleGetOrderDetail)
+router.post('/venues/:venueId/admin/orders/:orderId/claim', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleClaimOrder)
+router.post('/venues/:venueId/admin/orders/:orderId/assign', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, fulfillmentCtrl.handleAssignOrder)
+router.post('/venues/:venueId/admin/orders/:orderId/confirm', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleConfirmOrder)
+router.post('/venues/:venueId/admin/orders/:orderId/prepare', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleStartPreparation)
+router.post('/venues/:venueId/admin/orders/:orderId/items/:orderItemId/pick', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleMarkItemPicked)
+router.post('/venues/:venueId/admin/orders/:orderId/ready', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleMarkReady)
+router.post('/venues/:venueId/admin/orders/:orderId/block', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleBlockOrder)
+router.post('/venues/:venueId/admin/orders/:orderId/unblock', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleUnblockOrder)
+router.post('/venues/:venueId/admin/orders/:orderId/notes', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleAddNote)
+router.post('/venues/:venueId/admin/orders/:orderId/complete', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleCompleteOrder)
+router.post('/venues/:venueId/admin/orders/:orderId/cancel', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleCancelOrder)
 
 export default router

@@ -502,3 +502,21 @@ of truth for stick count. RBAC ownership: `venue_memberships.membership_type`
 introduces no parallel role/permission table, only a route-level
 tier mapping (`requireVenueRole()` in `venueHumidorRoutes.js`) that
 reads that same column.
+
+## Venue Humidor 1B-2B-2 update
+
+`venue_cigar_orders.status`/`payment_status` remain exclusively owned
+by `checkoutService.js` (unchanged from 1B-2A) — `fulfillmentService.js`
+never writes either column. `fulfillment_status` (new) is owned by
+`fulfillmentService.js` for every pre-completion transition
+(claim/confirm/prepare/pick/ready/block/unblock), but its two terminal
+writes (`'completed'`, `'cancelled'`) happen ONLY inside
+`checkoutService.completeOrder()`/`cancelOrder()`'s own authoritative
+`UPDATE` — so there remains exactly one writer per terminal value,
+never two dimensions that can drift. `assignment_version` is the sole
+concurrency-control column for claim/assignment; every claim/assign
+write is a conditional `UPDATE ... WHERE assignment_version = $expected`,
+so a lost update is structurally impossible. `venue_cigar_fulfillment_events`
+is a new, append-only audit ledger — the same "one column, one writer,
+one append-only explanation" pattern as `venue_cigar_inventory_events`
+— no UPDATE/DELETE path exists for it anywhere in the codebase.

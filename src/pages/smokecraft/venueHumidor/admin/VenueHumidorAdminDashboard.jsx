@@ -51,6 +51,7 @@ export default function VenueHumidorAdminDashboard() {
             <button type="button" onClick={load} style={{ minHeight: 44, padding: '8px 16px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit' }}>Search</button>
             <button type="button" onClick={() => navigate('/smokecraft/admin/humidor/new')} style={{ minHeight: 44, padding: '8px 16px', borderRadius: 20, border: `1.5px solid ${OK}`, background: 'transparent', color: OK, cursor: 'pointer', fontFamily: 'inherit' }}>+ New Cigar</button>
             <button type="button" onClick={() => navigate('/smokecraft/admin/humidor/inventory-events')} style={{ minHeight: 44, padding: '8px 16px', borderRadius: 20, border: `1.5px solid ${BORDER}`, background: 'transparent', color: CREAM, cursor: 'pointer', fontFamily: 'inherit' }}>Event History</button>
+            <button type="button" onClick={() => navigate('/smokecraft/admin/humidor/orders')} style={{ minHeight: 44, padding: '8px 16px', borderRadius: 20, border: `1.5px solid ${BORDER}`, background: 'transparent', color: CREAM, cursor: 'pointer', fontFamily: 'inherit' }}>Order Queue</button>
           </div>
 
           {state === 'no_venue' && <p style={{ fontSize: 13 }}>Enter a venue ID to load its inventory.</p>}

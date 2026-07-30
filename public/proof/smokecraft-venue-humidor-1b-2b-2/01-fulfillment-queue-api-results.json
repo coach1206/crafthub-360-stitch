@@ -1,0 +1,167 @@
+{
+  "pass": 40,
+  "fail": 0,
+  "total": 40,
+  "results": [
+    {
+      "name": "An authorized manager can load the real order queue",
+      "ok": true
+    },
+    {
+      "name": "The real order created via checkout appears in the queue",
+      "ok": true
+    },
+    {
+      "name": "A user with no membership is denied the queue",
+      "ok": true
+    },
+    {
+      "name": "A venue A staff member cannot list venue B queue (venue isolation)",
+      "ok": true
+    },
+    {
+      "name": "Order detail loads real items with real availability",
+      "ok": true
+    },
+    {
+      "name": "A staff member cannot fetch venue A order detail via venue B path (cross-venue denial)",
+      "ok": true
+    },
+    {
+      "name": "Staff can claim an unassigned order",
+      "ok": true
+    },
+    {
+      "name": "Two simultaneous claim attempts: exactly one succeeds, one is honestly rejected (409)",
+      "ok": true
+    },
+    {
+      "name": "A manager can reassign an order",
+      "ok": true
+    },
+    {
+      "name": "A staff (non-full-access) member cannot reassign an order",
+      "ok": true
+    },
+    {
+      "name": "Reassigning with a stale expectedVersion is honestly rejected (409)",
+      "ok": true
+    },
+    {
+      "name": "Confirming a claimed order succeeds",
+      "ok": true
+    },
+    {
+      "name": "Starting preparation succeeds",
+      "ok": true
+    },
+    {
+      "name": "Marking ready before items are picked is honestly rejected (409 items_not_picked)",
+      "ok": true
+    },
+    {
+      "name": "Marking an item picked succeeds",
+      "ok": true
+    },
+    {
+      "name": "Marking ready succeeds once all items are picked",
+      "ok": true
+    },
+    {
+      "name": "Jumping straight to ready from new/claimed (no confirm/prepare) is honestly rejected (409)",
+      "ok": true
+    },
+    {
+      "name": "Completing a ready order succeeds via the canonical checkoutService path",
+      "ok": true
+    },
+    {
+      "name": "Inventory decreased by exactly the ordered quantity on completion",
+      "ok": true
+    },
+    {
+      "name": "Re-completing an already-completed order is idempotent, never re-deducts",
+      "ok": true
+    },
+    {
+      "name": "Inventory did not change on the duplicate completion attempt",
+      "ok": true
+    },
+    {
+      "name": "A completed order cannot re-enter preparation",
+      "ok": true
+    },
+    {
+      "name": "A completed order cannot be cancelled through the pre-completion cancel path (already terminal, honestly rejected)",
+      "ok": true
+    },
+    {
+      "name": "Cancelling without a reason is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "Cancelling a pre-completion order succeeds via the canonical checkoutService path",
+      "ok": true
+    },
+    {
+      "name": "The real cancellation reason persists on the order",
+      "ok": true
+    },
+    {
+      "name": "Re-cancelling an already-cancelled order is idempotent",
+      "ok": true
+    },
+    {
+      "name": "A cancelled order cannot later be completed",
+      "ok": true
+    },
+    {
+      "name": "Concurrent identical completion requests (shared idempotency key) deduct inventory exactly once",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent completion requests resolve to the same completed order, no crash",
+      "ok": true
+    },
+    {
+      "name": "Completing an order whose product now has zero real inventory is honestly rejected (409 insufficient_inventory)",
+      "ok": true
+    },
+    {
+      "name": "Fulfillment history loads real, append-only events for the order",
+      "ok": true
+    },
+    {
+      "name": "Filtering history by event type returns only matching real events",
+      "ok": true
+    },
+    {
+      "name": "Filtering history by actor returns only matching real events",
+      "ok": true
+    },
+    {
+      "name": "Direct API claim attempt on a venue A order via venue B path is denied",
+      "ok": true
+    },
+    {
+      "name": "A mentor (tobacconist tier) can read the venue B queue",
+      "ok": true
+    },
+    {
+      "name": "A mentor cannot claim an order",
+      "ok": true
+    },
+    {
+      "name": "A mentor cannot complete an order",
+      "ok": true
+    },
+    {
+      "name": "A mentor cannot cancel an order",
+      "ok": true
+    },
+    {
+      "name": "A user with no venue membership at all for venue B cannot complete an order via direct API call",
+      "ok": true
+    }
+  ]
+}

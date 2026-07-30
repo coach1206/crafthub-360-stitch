@@ -526,3 +526,17 @@ the five-viewport responsive inventory was regenerated against a fresh
 `dist` build covering all 117 routes, and
 `validateSmokecraftResponsive.mjs` passes 0 failed. The staff order/
 fulfillment queue and payment integration were not built, per mandate.
+
+## Venue Humidor 1B-2B-2 update
+
+Three brand-new staff screens (`VenueHumidorOrderQueue.jsx`,
+`VenueHumidorOrderDetail.jsx`, `VenueHumidorFulfillmentHistory.jsx`)
+were added in the same locked navy/champagne-gold `SmokeCraftScreenShell`
+system — no existing approved SmokeCraft screen was touched or
+restyled. Live route count is now 120 (`SMOKECRAFT_GAME_MANIFEST.json`
+regenerated from a fresh `docs/smokecraft/smokecraft-routes-raw.json`);
+the five-viewport responsive inventory was regenerated against a fresh
+`dist` build covering all 120 routes, and
+`validateSmokecraftResponsive.mjs` passes 0 failed. Customer pickup
+verification, delivery confirmation, and payment integration were not
+built, per mandate.
