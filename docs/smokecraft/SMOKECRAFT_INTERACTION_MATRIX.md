@@ -644,3 +644,32 @@ logged here until the Stage 5 Closure Gate.
 
 All three additions are purely additive to their respective screens —
 no existing approved control was moved, resized, restyled, or removed.
+
+## Venue Humidor 1B-1 — customer browsing and cigar detail (new screens)
+
+**VenueHumidorBrowser.jsx** (`/smokecraft/venue-humidor`): search input,
+7 filter selects (brand/country/wrapper/vitola/strength/body/experience
+level, populated from real returned data), a sort select (6 real
+options), and 4 checkboxes (in-stock-only/featured/staff-pick/limited-
+release) — all real, server-backed against `browseCatalog()`, never
+decorative. Cigar cards are real clickable buttons navigating to
+detail. Honest states: no-venue, offline, session-expired, error,
+loading, empty.
+
+**VenueHumidorCigarDetail.jsx** (`/smokecraft/venue-humidor/:cigarId`):
+7 real working actions — Find a Pairing (real navigation to
+`/smokecraft/pairing`), Add One Stick, Purchase Box (disabled when the
+cigar has no configured box price), Reserve, Save to Favorites (real
+persisted state, re-fetched on mount), and two honest-unavailable
+actions (Add to Venue Tab, Request Table/Seat Delivery — real `501`
+responses, never fake success). Similar-cigars section and a working
+Back control. Verified: 23/23 browser checks
+(`verify-smokecraft-venue-humidor-1b1-browser.mjs`) covering no-venue,
+first load, search, filters, sorting, sold-out toggle, low-stock
+state, product detail, hold/reservation creation, the unsupported-
+action boundary, favorites persistence across reload, similar cigars,
+back navigation, cross-venue denial, keyboard focus, pointer/touch
+targets, no horizontal layout cutoff, no console errors.
+
+Both screens are new, additive routes — no existing SmokeCraft screen
+was touched.

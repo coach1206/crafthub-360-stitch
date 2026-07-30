@@ -1,0 +1,99 @@
+{
+  "pass": 23,
+  "fail": 0,
+  "total": 23,
+  "results": [
+    {
+      "name": "An honest \"no venue selected\" state renders when no venue is active",
+      "ok": true
+    },
+    {
+      "name": "The browser screen renders with the approved heading",
+      "ok": true
+    },
+    {
+      "name": "Real cigar cards render from the live server catalog",
+      "ok": true
+    },
+    {
+      "name": "Search filters the real displayed catalog",
+      "ok": true
+    },
+    {
+      "name": "Wrapper filter is applied against real server data",
+      "ok": true
+    },
+    {
+      "name": "Sort control is present and selectable against real server data",
+      "ok": true
+    },
+    {
+      "name": "Unchecking \"In stock only\" reveals the real sold-out item",
+      "ok": true
+    },
+    {
+      "name": "A real low-stock item shows the honest low-stock state",
+      "ok": true
+    },
+    {
+      "name": "Cigar detail screen renders real product data",
+      "ok": true
+    },
+    {
+      "name": "Real stick price renders",
+      "ok": true
+    },
+    {
+      "name": "Real box price renders when configured",
+      "ok": true
+    },
+    {
+      "name": "Add One Stick creates a real server-confirmed hold",
+      "ok": true
+    },
+    {
+      "name": "Reserve creates a real server-confirmed reservation",
+      "ok": true
+    },
+    {
+      "name": "Add to Venue Tab shows an honest unavailable boundary, never a fake success",
+      "ok": true
+    },
+    {
+      "name": "Save to Favorites updates the real persisted favorite state",
+      "ok": true
+    },
+    {
+      "name": "Favorite persists across reload (real server state, not local-only)",
+      "ok": true
+    },
+    {
+      "name": "Similar available cigars section renders real suggestions",
+      "ok": true
+    },
+    {
+      "name": "Back navigation returns to the real browser screen",
+      "ok": true
+    },
+    {
+      "name": "A cross-venue product shows an honest not-available state, never leaked data",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on the browser screen",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on the browser screen",
+      "ok": true
+    },
+    {
+      "name": "Cigar cards are real, clickable pointer/touch targets",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the browsing/detail flow",
+      "ok": true
+    }
+  ]
+}

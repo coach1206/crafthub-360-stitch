@@ -489,3 +489,14 @@ not begun, per mandate.
 No screens exist yet for Venue Humidor — this pass is backend
 foundation only (schema, inventory service, venue isolation, RBAC),
 per mandate. No approved SmokeCraft visuals were touched.
+
+## Venue Humidor 1B-1 update
+
+Two brand-new screens (`VenueHumidorBrowser.jsx`,
+`VenueHumidorCigarDetail.jsx`) were added, built from scratch in the
+established premium navy/champagne-gold `SmokeCraftScreenShell`
+system (GOLD `#E9C176`, NAVY `#0b0f18`, `Georgia, serif`, 44px minimum
+touch targets, working back controls, vertical scroll, no fixed-
+bottom-nav overlap) — no existing approved SmokeCraft screen was
+touched or restyled. Checkout, staff admin, and order fulfillment
+screens were not built, per mandate.

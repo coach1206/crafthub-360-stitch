@@ -449,3 +449,16 @@ that could drift" principle `golden_box_results` follows relative to
 individual judge scores. `venue_memberships` (reused, not duplicated)
 remains the sole ownership record for "who may act as staff for which
 venue" — Venue Humidor invented no parallel staff-role table.
+
+## Venue Humidor 1B-1 update
+
+`venue_cigar_favorites`' `UNIQUE(guest_reference, product_id)` is the
+real ownership boundary for "at most one favorite per guest per
+product." Favorite state is never cached client-side as the source of
+truth — `VenueHumidorCigarDetail.jsx` re-fetches the real persisted
+favorite list on every mount via `listFavorites()`, so a page reload
+or second device always reflects the server's real record, never a
+stale local toggle. `is_archived`/`is_customer_visible` on
+`venue_cigar_products` are staff-owned columns (set via 1A's staff
+routes, unchanged this pass) that the customer catalog reads but never
+writes.

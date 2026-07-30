@@ -113,9 +113,44 @@ validates that the caller has a real, active membership for the exact
 venue in the route path before any mutation is attempted — a
 client-supplied `venueId` is never trusted on its own.
 
+## Venue Humidor 1B-1 update — customer browsing and cigar detail
+
+Migration 107 (additive) extends `venue_cigar_products` with customer-
+facing display fields (country, body, flavor_notes, smoke_time_minutes,
+experience_level, length/ring gauge, binder/filler, box price/quantity,
+images, venue description, staff notes, is_staff_pick, is_archived,
+is_customer_visible) and adds `venue_cigar_favorites`
+(`UNIQUE(guest_reference, product_id)`).
+
+`customerCatalogService.js` is the read/write surface for browsing:
+`validateActiveVenue()` re-validates a real, active venue before any
+catalog data is returned — a client-supplied `venueId` is never
+trusted alone. `browseCatalog()` builds every search/filter/sort as a
+real parameterized SQL condition (never a client-side-only cosmetic
+filter) and excludes archived/non-customer-visible products
+unconditionally, hiding sold-out by default. `getCigarDetail()`
+re-validates the product's real venue ownership (`WHERE venue_id = $1
+AND product_id = $2`) — a wrong-venue product id returns an honest
+404, never leaked data.
+
+Customer actions (Add One Stick, Purchase Box, Reserve) create real
+holds/reservations through the exact same `inventoryService.js`
+primitives built in 1A — no parallel inventory mechanism. Add to
+Venue Tab and Request Table/Seat Delivery are honest `501`
+unavailable-boundary responses (no POS integration exists yet) —
+never a fabricated success. Favorites are a small, real, idempotent
+persistence table, reloaded from the server on every mount (not local-
+only optimistic state).
+
+Routes are mounted at `/api/smokecraft/venue-humidor/customer`,
+reusing the same SmokeCraft guest-identity middleware Golden Box
+already uses — no second, competing guest-identity scheme.
+
 ## Explicitly out of scope for this pass
 
-Customer-facing browsing/checkout screens, staff admin screens, POS
-integration, Passport/pairing integration, full-route/five-viewport
-sweeps — see the Venue Humidor 1B handoff in
-`public/proof/smokecraft-venue-humidor-1a/00-proof-index.md`.
+Checkout, staff admin screens, order fulfillment, POS/Passport
+integration, full-route/five-viewport sweeps as new targeted work
+(the pre-existing five-viewport proof was regenerated only because the
+build's own prebuild gate requires an up-to-date route count, not as
+new 1B-1 scope) — see the Venue Humidor 1B-2 handoff in
+`public/proof/smokecraft-venue-humidor-1b-1/00-proof-index.md`.

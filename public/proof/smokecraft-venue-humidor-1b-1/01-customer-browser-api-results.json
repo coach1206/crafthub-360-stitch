@@ -1,0 +1,135 @@
+{
+  "pass": 32,
+  "fail": 0,
+  "total": 32,
+  "results": [
+    {
+      "name": "A nonexistent/inactive venue returns an honest 404 (never fabricated inventory)",
+      "ok": true
+    },
+    {
+      "name": "First load of a real active venue returns real catalog data",
+      "ok": true
+    },
+    {
+      "name": "Every returned product genuinely belongs to the requested venue",
+      "ok": true
+    },
+    {
+      "name": "Sold-out products are hidden by default",
+      "ok": true
+    },
+    {
+      "name": "Sold-out products appear when the caller explicitly requests inStockOnly=false",
+      "ok": true
+    },
+    {
+      "name": "An archived product never appears in the customer catalog",
+      "ok": true
+    },
+    {
+      "name": "An archived product's detail page returns an honest 404, never leaked data",
+      "ok": true
+    },
+    {
+      "name": "Search filters real products by name/brand server-side",
+      "ok": true
+    },
+    {
+      "name": "Wrapper filter returns only real matching products",
+      "ok": true
+    },
+    {
+      "name": "Strength filter returns only real matching products",
+      "ok": true
+    },
+    {
+      "name": "Price filter returns only real matching products",
+      "ok": true
+    },
+    {
+      "name": "Featured filter returns only real featured products",
+      "ok": true
+    },
+    {
+      "name": "Staff pick filter returns only real staff-picked products",
+      "ok": true
+    },
+    {
+      "name": "Limited release filter returns only real limited-release products",
+      "ok": true
+    },
+    {
+      "name": "Sort price_low_to_high is genuinely ascending",
+      "ok": true
+    },
+    {
+      "name": "Sort price_high_to_low is genuinely descending",
+      "ok": true
+    },
+    {
+      "name": "The low-stock seed item reports a real low-stock availability state",
+      "ok": true
+    },
+    {
+      "name": "Product detail loads full real data including live availability",
+      "ok": true
+    },
+    {
+      "name": "Product detail includes real similar-cigar suggestions",
+      "ok": true
+    },
+    {
+      "name": "A venue B product requested under venue A's path returns an honest 404, never cross-venue data",
+      "ok": true
+    },
+    {
+      "name": "A customer can create a real one-stick hold",
+      "ok": true
+    },
+    {
+      "name": "A customer can create a real reservation",
+      "ok": true
+    },
+    {
+      "name": "A repeated stick-hold request with the same idempotency key returns the identical original hold",
+      "ok": true
+    },
+    {
+      "name": "Add to Venue Tab is honestly unavailable (501), never a fake success",
+      "ok": true
+    },
+    {
+      "name": "Request Table/Seat Delivery is honestly unavailable (501), never a fake success",
+      "ok": true
+    },
+    {
+      "name": "Purchase Box creates a real hold for the real box quantity when the venue supports it",
+      "ok": true
+    },
+    {
+      "name": "Purchase Box is honestly rejected (409) for a cigar with no configured box price",
+      "ok": true
+    },
+    {
+      "name": "Adding a favorite succeeds",
+      "ok": true
+    },
+    {
+      "name": "The favorite persists and is retrievable by the same identity",
+      "ok": true
+    },
+    {
+      "name": "Re-favoriting the same cigar is a real no-op, never a duplicate row",
+      "ok": true
+    },
+    {
+      "name": "Removing a favorite succeeds",
+      "ok": true
+    },
+    {
+      "name": "The favorite is genuinely removed",
+      "ok": true
+    }
+  ]
+}

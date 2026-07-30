@@ -104,6 +104,8 @@ import VenueSelect      from './pages/smokecraft/VenueSelect.jsx'
 import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
 const GoldenBoxHub = lazy(() => import('./pages/smokecraft/goldenBox/GoldenBoxHub.jsx'))
+const VenueHumidorBrowser = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorBrowser.jsx'))
+const VenueHumidorCigarDetail = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx'))
 const GoldenBoxCompetitionDetail = lazy(() => import('./pages/smokecraft/goldenBox/CompetitionDetail.jsx'))
 const GoldenBoxEntryWorkspace = lazy(() => import('./pages/smokecraft/goldenBox/EntryWorkspace.jsx'))
 const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenBox/ResultsExperience.jsx'))
@@ -382,6 +384,13 @@ export default function App() {
                 </Route>
                 {/* gold-box → golden-box alias per spec */}
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
+
+                {/* Venue Humidor 1B-1 — customer browsing/detail only (no
+                    session guard: the server itself enforces venue
+                    validity/isolation on every call, matching Golden Box's
+                    pattern). */}
+                <Route path="venue-humidor"            element={<VenueHumidorBrowser />} />
+                <Route path="venue-humidor/:cigarId"   element={<VenueHumidorCigarDetail />} />
 
                 {/* Mentor Selection — supporting module (outside the 27-session spine).
                     Not yet folded into Meet Your Cigar (S3) as an internal tab per the

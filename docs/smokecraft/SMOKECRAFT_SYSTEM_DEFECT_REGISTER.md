@@ -1794,3 +1794,30 @@ proactively designed out from the start rather than found live here:
   there is no guest-reference prefix concept to get wrong here.
 
 See `public/proof/smokecraft-venue-humidor-1a/00-proof-index.md`.
+
+## Venue Humidor 1B-1 update
+
+- **SC-D064**: `VenueHumidorCigarDetail.jsx`'s Save to Favorites
+  control tracked `isFavorited` as pure local component state,
+  initialized to `false` and only ever flipped by the button's own
+  click handler — the real persisted favorite (or lack of one) was
+  never fetched on load. A page reload or a second device would
+  always show "not favorited" regardless of the real server record.
+  Found live via the browser test's own reload assertion
+  (`verify-smokecraft-venue-humidor-1b1-browser.mjs`, "Favorite
+  persists across reload"). Closed by fetching the real favorite list
+  (`api.listFavorites()`) on every mount and deriving `isFavorited`
+  from it.
+- Test-infrastructure note (not a product defect): the shared seed
+  catalog product used across both the API and browser test suites
+  accumulates real holds/reservations on every run (idempotency keys
+  are per-run-unique, so repeated runs never dedupe against each
+  other) — a genuinely real, expected side effect of exercising real
+  inventory mutations, not a bug. Both suites now reset that one seed
+  product's inventory/holds/reservations/events before running so
+  repeated runs stay deterministic.
+
+Closed via `src/pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx`.
+Encoded as a permanent regression check in
+`verify-smokecraft-venue-humidor-1b1-browser.mjs`. See
+`public/proof/smokecraft-venue-humidor-1b-1/00-proof-index.md`.

@@ -145,6 +145,16 @@
     "elementRaw": "<Navigate to=\"/smokecraft/golden-box\" replace />"
   },
   {
+    "fullPath": "venue-humidor",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorBrowser />"
+  },
+  {
+    "fullPath": "venue-humidor/:cigarId",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorCigarDetail />"
+  },
+  {
     "fullPath": "art",
     "isIndex": false,
     "elementRaw": "<Art />"
