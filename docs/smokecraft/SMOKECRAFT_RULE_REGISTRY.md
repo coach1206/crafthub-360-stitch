@@ -253,3 +253,11 @@ amount, badge, or Passport stamp rule was invented — `xp_award_rules`
 never been seeded with a `golden_box` row, and no badge/stamp catalog
 entry exists; this gap is documented, not silently worked around. See
 `SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`.
+
+## Stage 5 Closure Gate update
+
+No new rule was introduced this pass. Confirmed by direct audit and
+live test that no active or dormant Golden Box endpoint accepts a
+client-submitted rule override for XP amount, badge, stamp,
+placement, or any reward value — `handleIssueRewards` (the one route
+that did) has been removed entirely (SC-D062, permanently closed).

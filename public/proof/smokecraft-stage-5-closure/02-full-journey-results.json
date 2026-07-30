@@ -1,0 +1,95 @@
+{
+  "pass": 22,
+  "fail": 0,
+  "total": 22,
+  "results": [
+    {
+      "name": "The removed legacy rewards route returns an honest 404, never processes a client-controlled XP/badge grant",
+      "ok": true
+    },
+    {
+      "name": "A real entry is created under a real guest identity",
+      "ok": true
+    },
+    {
+      "name": "Draft saves successfully as a guest",
+      "ok": true
+    },
+    {
+      "name": "Draft reloads with the real saved presentation payload",
+      "ok": true
+    },
+    {
+      "name": "Test setup: a real account is created on the same cookie jar as the guest",
+      "ok": true
+    },
+    {
+      "name": "Guest-to-account conversion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Conversion reports a real Golden Box entry transferred",
+      "ok": true
+    },
+    {
+      "name": "The transferred entry is reachable under the converted account identity with its draft state intact — no state loss on conversion",
+      "ok": true
+    },
+    {
+      "name": "The transferred entry retains its real saved presentation payload after conversion",
+      "ok": true
+    },
+    {
+      "name": "Submission finalizes once (real server-side eligibility)",
+      "ok": true
+    },
+    {
+      "name": "A second submit attempt is idempotent/rejected, never a duplicate submission row",
+      "ok": true
+    },
+    {
+      "name": "Judge assignment succeeds (authorized staff, eligible entry)",
+      "ok": true
+    },
+    {
+      "name": "Scorecard submits with a server-computed weighted total",
+      "ok": true
+    },
+    {
+      "name": "Results finalize deterministically",
+      "ok": true
+    },
+    {
+      "name": "Placement award issues once from the immutable finalized ranking",
+      "ok": true
+    },
+    {
+      "name": "The real award record is visible to the entrant",
+      "ok": true
+    },
+    {
+      "name": "XP is honestly unavailable (no approved rule) — never fabricated",
+      "ok": true
+    },
+    {
+      "name": "Badge is honestly unavailable (no approved catalog entry) — never fabricated",
+      "ok": true
+    },
+    {
+      "name": "Passport stamp is honestly unavailable (no approved catalog entry) — never fabricated",
+      "ok": true
+    },
+    {
+      "name": "A second independent read under the same identity returns identical award state (no per-device drift)",
+      "ok": true
+    },
+    {
+      "name": "Repeated finalize after the journey returns the identical original result, never recomputes",
+      "ok": true
+    },
+    {
+      "name": "Repeated award issuance after the journey returns the identical original issuance, never re-issues",
+      "ok": true
+    }
+  ]
+}

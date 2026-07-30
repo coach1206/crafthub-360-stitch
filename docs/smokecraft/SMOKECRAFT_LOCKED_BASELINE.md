@@ -469,3 +469,17 @@ status once issued, and — only in the `awards_pending` state — an
 "Issue Awards" action. No other Golden Box screen was touched. The
 competition leaderboard beyond the finalized ranking, and Venue
 Humidor, were not built, per mandate.
+
+## Stage 5 Closure Gate update
+
+No screens were redesigned this pass, per mandate. `identityFrom()` in
+`goldenBoxController.js` was corrected (SC-D063) — a backend-only fix,
+no visual or interaction change. The dormant `POST
+/entries/:entryId/rewards` route/handler was removed (SC-D062,
+permanently closed) — it had no live caller, so this is not a visual
+or interaction change either. Stage 5 (the gameplay engine — session
+scoring, XP/rank/badges/Passport/Collections/Skill Tree/Leaderboard,
+tasting, Master Blend, Cultivator, pairing, mentor, Challenge Hub, and
+the full Golden Box chain) is now verified as one connected system
+through authoritative server services end to end. Venue Humidor was
+not begun, per mandate.

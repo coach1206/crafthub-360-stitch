@@ -230,3 +230,42 @@ Verified apply/rollback/reapply clean, compatible with 092-095.
 Rule registry rows are seeded (not migrated) via the idempotent
 `scripts/seedSmokecraftGameplayRules.mjs` — 46 version-1 rows, safe to
 re-run.
+
+## Golden Box judging/results/awards migrations (5C-2A / 5C-2B-1 / 5C-2B-2)
+
+**103_smokecraft_golden_box_judging_authority.sql** — additive. Adds
+`golden_box_rubric_criteria` (formalized, already-approved 12-category
+rubric), `assigned_by` on `golden_box_judge_assignments`,
+`weighted_total`/`rule_version`/`draft_version`/`idempotency_key` on
+`golden_box_scorecards`, plus the partial unique index
+`idx_gbsc_one_original_per_judge_entry` that closes SC-D060's
+NULL-uniqueness gap. Rollback:
+`server/db/rollbacks/103_smokecraft_golden_box_judging_authority.rollback.sql`.
+
+**104_smokecraft_golden_box_results_authority.sql** — additive. Adds
+per-entry judge/completion counts, criterion averages, variance, and
+result/rubric versioning columns to `golden_box_results`, plus the new
+`golden_box_result_finalizations` table (`UNIQUE(competition_id,
+result_version)`). Rollback:
+`server/db/rollbacks/104_smokecraft_golden_box_results_authority.rollback.sql`.
+
+**105_smokecraft_golden_box_awards_authority.sql** — additive. Adds
+`golden_box_awards` (per-entry award detail:
+placement/award_type/rule_id/rule_version/xp-badge-stamp status) and
+`golden_box_award_issuances` (`UNIQUE(competition_id, result_version)`
+— the atomic one-issuance-per-finalized-result-version gate). Rollback:
+`server/db/rollbacks/105_smokecraft_golden_box_awards_authority.rollback.sql`.
+
+All three applied and verified clean (apply + targeted regression
+suites green) as part of their respective passes; no schema conflicts
+with 077/096/102.
+
+## Stage 5 Closure Gate update
+
+No new migration this pass — SC-D062 closure removed the dormant
+`POST /entries/:entryId/rewards` route/handler entirely (code-only
+change, no schema change) and fixed a live identity-resolution defect
+in `goldenBoxController.js`'s `identityFrom()` (also code-only). Queue
+entries above for migrations 103-105 were added retroactively — they
+had been applied and verified in their originating passes but were
+never recorded here; this closes that documentation gap.

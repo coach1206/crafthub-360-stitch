@@ -192,6 +192,20 @@ Atomic and database-enforced idempotent
 finalized result version returns the ORIGINAL issuance, never
 recomputes or duplicates.
 
+## Stage 5 Closure Gate — SC-D062 permanently closed
+
+The legacy `POST /entries/:entryId/rewards` route and its
+`handleIssueRewards` handler (which accepted a fully client-controlled
+`xpAmount`/`badgeId` with no rule basis) have been REMOVED from the
+codebase entirely, not merely deprecated or documented. The only real
+award-issuance path is `POST /competitions/:competitionId/awards/issue`
+(`awardsService.issueAwards()`), which derives every award exclusively
+from the immutable finalized ranking and never reads a client-
+submitted placement, XP amount, badge, or stamp value. Verified live:
+the removed route now returns an honest `404`. A permanent regression
+check (`scripts/validateSmokecraftGoldenBoxAwardsAuthority.mjs`)
+fails the build if this authority path ever returns.
+
 ## Explicitly out of scope for this pass
 
 The competition leaderboard beyond the finalized ranking already

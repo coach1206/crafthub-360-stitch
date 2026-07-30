@@ -463,3 +463,24 @@ such rather than fabricated — see the documented gap in
 `golden_box_badge_unlocked`/`golden_box_passport_stamp_awarded` — the
 latter three are only ever emitted after a real grant genuinely
 occurs.
+
+## Stage 5 Closure Gate update (gameplay engine integration and security closeout)
+
+Verified, as one connected system rather than piecemeal, that every
+Stage 5 subsystem (session scoring/completion, XP/rank, badges,
+Passport stamps, Collections, Skill Tree, Leaderboard, tasting, Master
+Blend, Cultivator, pairing engine, mentor identity/guidance/narration,
+Challenge Hub, and the full Golden Box chain — submission, judge
+assignment, scorecards, results/ranking, placement awards) still
+operates exclusively through its own authoritative server service, via
+all 18 relevant build-blocking validators (0 failures across all) and
+the full Golden Box regression set (127 assertions across 5 API
+suites, 0 failures). Permanently closed SC-D062 (removed, not just
+documented — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`). Found and
+fixed SC-D063: a real, live identity-resolution defect in
+`goldenBoxController.js`'s `identityFrom()` that broke a converted
+account's own visibility into their finalized Golden Box results/award
+— found via the first-ever real, continuous, end-to-end integration
+journey across guest entry → account conversion → judging → results →
+awards (`verify-smokecraft-stage5-closure-integration.mjs`). See
+`public/proof/smokecraft-stage-5-closure/00-proof-index.md`.

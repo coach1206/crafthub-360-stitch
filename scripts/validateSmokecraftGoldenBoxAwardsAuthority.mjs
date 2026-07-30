@@ -66,5 +66,18 @@ check('golden_box_awards_issued is emitted for every qualifying entry after real
 // ── 9. Authorization ───────────────────────────────────────────────────────
 check('The award-issuance route requires requireAuth + requireRole(\'admin\') — authorized staff only', /awards\/issue', writeLimiter, requireAuth, requireRole\('admin'\)/.test(routes))
 
+// ── 10. SC-D062 closure (Stage 5 Closure Gate) — the legacy client-
+// controlled rewards route must never return ─────────────────────────
+check('The unsafe legacy POST /entries/:entryId/rewards route no longer exists in goldenBoxRoutes.js', !/entries\/:entryId\/rewards'/.test(routes))
+check('handleIssueRewards() no longer exists in goldenBoxController.js — no dormant client-controlled-XP/badge handler remains reachable', !/export async function handleIssueRewards/.test(controller))
+check('No route in goldenBoxRoutes.js reads a client-submitted xpAmount/badgeId/placement value for any reward grant', !/req\.body\.xpAmount|req\.body\.badgeId\b/.test(controller))
+check('rewardsIntegrationService (grantXp/grantBadge/publishToLeaderboard) is reachable only through awardsService.js — no other controller/route imports it directly', (() => {
+  const importers = fs.readdirSync('server', { recursive: true })
+    .filter(f => f.endsWith('.js') && !f.includes('rewardsIntegrationService.js') && !f.includes('awardsService.js'))
+    .map(f => `server/${f}`)
+    .filter(f => { try { return fs.readFileSync(f, 'utf8').includes('rewardsIntegrationService') } catch { return false } })
+  return importers.length === 0
+})())
+
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} (${failures} checks failed) ===\n`)
 process.exit(failures === 0 ? 0 : 1)

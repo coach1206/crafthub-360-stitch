@@ -610,3 +610,37 @@ keyboard-selectable after being changed from `<button>` to
 `role="button"` (required to legally nest the new voice controls);
 clicking Preview Voice does not accidentally toggle the card's
 selection state; no horizontal layout cutoff; zero console errors.
+
+## Golden Box judging/results/awards controls (Holistic Fix 5C-2A / 5C-2B-1 / 5C-2B-2, consolidated)
+
+Recorded retroactively — these controls were added and browser-verified
+in their originating passes but this consolidated entry was never
+logged here until the Stage 5 Closure Gate.
+
+- **JudgeEntryReview.jsx** (5C-2A): "Save Draft" button (new — no
+  partial save previously existed), "Submit Scorecard" button, a
+  stale-version alert with a "Reload the latest draft" action, and a
+  server-computed weighted-total display line. Verified: 17/17 browser
+  checks (`verify-smokecraft-hf5c2a-judge-browser.mjs`) covering no-
+  assignments/assigned/draft-saved/incomplete/reload/submitted/locked/
+  unauthorized/non-existent-entry states, keyboard focus, no
+  horizontal cutoff, no console errors.
+- **ResultsExperience.jsx — "Competition Rankings" section** (5C-2B-1):
+  a real server-driven ranking list with tie-break explanations, and —
+  admin-only, `ready_to_finalize` state only — a "Finalize Results"
+  button. Verified: 13/13 browser checks
+  (`verify-smokecraft-hf5c2b1-results-browser.mjs`) covering ready-to-
+  finalize preview, real finalize action, immutable finalized view
+  after reload, non-admin published-only view, honest no-entries
+  state.
+- **ResultsExperience.jsx — "Your Award" section** (5C-2B-2): real
+  award title/placement/rule/issued-timestamp display, honest
+  "unavailable" copy per reward type (XP/badge/Passport stamp), and —
+  `awards_pending` state only — an "Issue Awards" button. Verified:
+  10/10 browser checks (`verify-smokecraft-hf5c2b2-awards-browser.mjs`)
+  covering the pending state, the real issuance action, the real award
+  title after reload, the honest unavailable copy, and an unrelated
+  stranger's honest handling.
+
+All three additions are purely additive to their respective screens —
+no existing approved control was moved, resized, restyled, or removed.

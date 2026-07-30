@@ -418,3 +418,16 @@ ever transitions from its `'unavailable'` default to `'issued'` inside
 the same call that performs the real grant through the canonical
 xpService/rewardsIntegrationService/passport360 services — never
 flipped speculatively.
+
+## Stage 5 Closure Gate update
+
+`goldenBoxController.js`'s `identityFrom()` is the single ownership-
+resolution point for every `requireAuth`-only Golden Box route
+(results/award visibility) — it must produce the exact same `user:`-
+prefixed `guestReference` that `convertGuestToAccount()` writes and
+that `bridgeIdentity` already produces for guest-bridged routes
+(SC-D063, closed this pass). There are now exactly two identity-
+bridging code paths in Golden Box (`bridgeIdentity` for guest-bridged
+routes, `identityFrom()` for `requireAuth`-only routes) and both are
+verified to produce the same `user:${id}` prefix for an authenticated
+non-guest identity — no third, competing identity resolution exists.

@@ -1726,3 +1726,47 @@ permanent regression checks in
 `verify-smokecraft-hf5c2b2-awards-browser.mjs`, and
 `scripts/validateSmokecraftGoldenBoxAwardsAuthority.mjs`. See
 `public/proof/smokecraft-holistic-fix-5c-2b-2/00-proof-index.md`.
+
+## Stage 5 Closure Gate update
+
+- **SC-D062 — permanently closed** (previously only documented in
+  5C-2B-2): the dormant `handleIssueRewards` controller function and
+  its `POST /entries/:entryId/rewards` route (client-controlled
+  `xpAmount`/`badgeId`, no rule basis, zero live callers) have been
+  REMOVED from `goldenBoxController.js` and `goldenBoxRoutes.js`
+  entirely — not merely documented. Verified live: the route now
+  returns an honest `404 Route not found`. The unused
+  `rewardsIntegrationService` import in the controller was removed
+  alongside it. A permanent regression check
+  (`scripts/validateSmokecraftGoldenBoxAwardsAuthority.mjs`, section
+  10) fails the build if this route, the `handleIssueRewards` handler,
+  or any `req.body.xpAmount`/`req.body.badgeId` read ever reappears.
+- **SC-D063**: `goldenBoxController.js`'s `identityFrom()` — the
+  identity resolution used by the `requireAuth`-only results/award
+  visibility routes — never applied the `user:` prefix
+  `convertGuestToAccount()` uses when transferring Golden Box entries,
+  the same SC-D055 defect class already fixed once for
+  `goldenBoxRoutes.js`'s `bridgeIdentity` middleware (SC-D058) but
+  independently present here for a different code path (JWT-
+  authenticated `req.user`, not the SmokeCraft guest-identity bridge).
+  A converted account viewing their own finalized results or award
+  through these routes silently resolved to the wrong viewer role
+  (never `'entrant'`) and lost visibility into their own real,
+  finalized data. Found live via the Stage 5 closure integration
+  journey (`verify-smokecraft-stage5-closure-integration.mjs`) — the
+  very first real end-to-end test of the full guest→conversion→judge→
+  results→award chain as one continuous flow. Closed by prefixing any
+  authenticated non-guest `req.user.id` with `user:` in
+  `identityFrom()`, matching `bridgeIdentity`'s established pattern
+  exactly. Verified live: full 22-step integration journey passes,
+  all existing cross-user-denial assertions across every Golden Box
+  regression suite still pass (the fix only restores the legitimate
+  owner's own visibility — it does not loosen any authorization check
+  for any other viewer).
+
+Closed via `server/controllers/goldenBoxController.js`,
+`server/routes/goldenBoxRoutes.js`,
+`scripts/validateSmokecraftGoldenBoxAwardsAuthority.mjs`. Encoded as a
+permanent regression check in
+`verify-smokecraft-stage5-closure-integration.mjs`. See
+`public/proof/smokecraft-stage-5-closure/00-proof-index.md`.

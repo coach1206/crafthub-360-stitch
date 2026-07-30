@@ -108,9 +108,16 @@ router.get('/entries/:entryId/ai-analysis', readLimiter, requireSmokeCraftIdenti
 // ── XP ───────────────────────────────────────────────────────────────
 router.get('/xp/history', readLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleGetXpHistory)
 
-// ── Rewards issuance (administrator only) ───────────────────────────
-router.post('/entries/:entryId/rewards', writeLimiter, requireAuth, requireRole('admin'),
-  auditAction('GOLDEN_BOX', 'rewards_issued', 'post'), ctrl.handleIssueRewards)
+// SC-D062 closure (Stage 5 Closure Gate): the legacy per-entry rewards
+// route (POST /entries/:entryId/rewards) accepted a fully client-
+// controlled XP amount and badge ID with no rule basis and no live
+// caller. Removed entirely rather than left dormant — the only real,
+// server-authoritative award path is
+// POST /competitions/:competitionId/awards/issue (awardsService.js),
+// which derives every award exclusively from the immutable finalized
+// ranking. This route intentionally no longer exists; requests to it
+// now fall through to the router's own 404, never a bypassable
+// authority path.
 
 // ── Package 7A: judge dashboard, entry review, scorecard lifecycle ────
 // Judges are authenticated users authorized per-assignment (matching

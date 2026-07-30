@@ -4,7 +4,6 @@ import * as entryService from '../services/goldenBox/entryService.js'
 import * as judgingService from '../services/goldenBox/judgingService.js'
 import * as aiAnalysisService from '../services/goldenBox/aiAnalysisService.js'
 import * as visibilityService from '../services/goldenBox/visibilityService.js'
-import * as rewardsService from '../services/goldenBox/rewardsIntegrationService.js'
 import * as xpService from '../services/goldenBox/xpService.js'
 import * as mentorReviewService from '../services/goldenBox/mentorReviewService.js'
 import * as resultsService from '../services/goldenBox/resultsService.js'
@@ -35,10 +34,22 @@ function sendError(res, err, fallback = 400) {
   res.status(status).json({ success: false, error: code })
 }
 
+// Stage 5 Closure Gate — SC-D055-class defect, independently present
+// here: routes gated by requireAuth only (results/award visibility)
+// never went through goldenBoxRoutes.js's bridgeIdentity middleware,
+// so an authenticated account's identity was used unprefixed while
+// convertGuestToAccount() transfers guest data to the
+// `user:${id}`-prefixed guest_reference every other SmokeCraft system
+// (and bridgeIdentity itself) uses. A converted account viewing their
+// own finalized results/award via these routes silently resolved to
+// the wrong viewer role and lost visibility — found live via the
+// Stage 5 closure integration journey.
 function identityFrom(req) {
   return {
     userId: req.user?.id && req.user.role !== 'guest' ? req.user.id : null,
-    guestReference: req.goldenBoxGuestReference || (req.user?.role === 'guest' ? req.user.id : null),
+    guestReference: req.goldenBoxGuestReference || (req.user?.id
+      ? (req.user.role === 'guest' ? req.user.id : `user:${req.user.id}`)
+      : null),
     guestUuid: req.goldenBoxGuestUuid || null,
     platformAdmin: req.user?.role === 'admin' || req.user?.role === 'founder_level_0',
   }
@@ -335,21 +346,6 @@ export async function handleGetXpHistory(req, res) {
     const history = await xpService.getXpHistory(identity)
     const balance = await xpService.getXpBalance(identity)
     res.json({ success: true, balance, history })
-  } catch (err) { sendError(res, err, 500) }
-}
-
-export async function handleIssueRewards(req, res) {
-  try {
-    const entry = await entryService.getEntry(req.params.entryId)
-    if (!entry) return res.status(404).json({ success: false, error: 'entry_not_found' })
-    const results = {}
-    if (req.body.xpAmount) results.xp = await rewardsService.grantXp(entry, req.body.xpAmount, req.body.xpReason || 'Golden Box reward')
-    if (req.body.badgeId) results.badge = await rewardsService.grantBadge(entry, req.body.guestUuid, req.body.badgeId, req.body.badgeLabel)
-    if (req.body.publishLeaderboard) {
-      const result = await judgingService.computeAggregateResult(entry.competition_id, entry.entry_id)
-      results.leaderboard = result ? await rewardsService.publishToLeaderboard(entry, result, req.body.venueId) : { skipped: true, reason: 'no_result_yet' }
-    }
-    res.json({ success: true, results })
   } catch (err) { sendError(res, err, 500) }
 }
 
