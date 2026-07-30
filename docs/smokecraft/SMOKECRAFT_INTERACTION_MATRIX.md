@@ -802,3 +802,32 @@ denial, and responsive behavior.
 
 All new screens are additive routes — no existing SmokeCraft screen
 was touched.
+
+## Venue Humidor 1B-2B-4 update
+
+Five new customer screens: `VenueHumidorMyOrders.jsx` (`/smokecraft/orders`),
+`VenueHumidorMyOrderDetail.jsx` (`/smokecraft/orders/:orderId`),
+`VenueHumidorReceipt.jsx` (`/smokecraft/orders/:orderId/receipt`),
+`VenueHumidorMyAcquisitions.jsx` (`/smokecraft/passport/acquisitions`),
+`VenueHumidorAcquisitionDetail.jsx`
+(`/smokecraft/passport/acquisitions/:acquisitionId`). All customer-safe
+reads — reuse the `CUSTOMER_INTERNAL_FIELDS` redaction pattern. Never
+renders staff notes, internal block reasons, or staff identity.
+
+Reorder is pure navigation from `VenueHumidorMyOrderDetail.jsx` into the
+existing `VenueHumidorCigarDetail.jsx` catalog route — no new
+checkout-adjacent screen or backend path. The rating/tasting-note/
+mark-smoked flow on `VenueHumidorAcquisitionDetail.jsx` is the only new
+mutation surface this pass added, gated by verified-acquisition
+ownership and idempotency.
+
+Verified: 21/21 browser checks
+(`verify-smokecraft-venue-humidor-1b2b4-browser.mjs`) covering order
+history load/filter/search, order detail, receipt totals/print,
+Passport acquisitions list/detail, rating/tasting/mark-smoked, reorder
+available vs. honestly disabled after archiving, reload persistence,
+cross-customer denial, offline state, and five-viewport/responsive
+behavior.
+
+All new screens are additive routes — no existing SmokeCraft screen was
+touched.

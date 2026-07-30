@@ -16,6 +16,7 @@ import {
 } from '../middleware/smokecraftGuestIdentity.js'
 import * as ctrl from '../controllers/venueHumidorCustomerController.js'
 import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
+import * as postPurchaseCtrl from '../controllers/venueHumidorPostPurchaseController.js'
 
 const router = Router()
 
@@ -48,5 +49,17 @@ router.post('/venues/:venueId/checkout/quote', writeLimiter, checkoutCtrl.handle
 router.post('/venues/:venueId/checkout/orders', writeLimiter, checkoutCtrl.handleCreateOrder)
 router.get('/venues/:venueId/orders/:orderId', readLimiter, checkoutCtrl.handleGetOrder)
 router.post('/venues/:venueId/orders/:orderId/cancel', writeLimiter, checkoutCtrl.handleCustomerCancelOrder)
+
+// ── Venue Humidor 1B-2B-4: customer order history, receipts, and
+// Passport acquisitions — cross-venue customer views (unlike the
+// venue-scoped routes above), still identity-scoped by the same
+// smokecraftIdentity middleware; ownership is re-verified server-side
+// on every read, never trusted from the URL.
+router.get('/orders', readLimiter, postPurchaseCtrl.handleListOrders)
+router.get('/orders/:orderId', readLimiter, postPurchaseCtrl.handleGetOrderDetail)
+router.get('/orders/:orderId/receipt', readLimiter, postPurchaseCtrl.handleGetReceipt)
+router.get('/passport/acquisitions', readLimiter, postPurchaseCtrl.handleListAcquisitions)
+router.get('/passport/acquisitions/:acquisitionId', readLimiter, postPurchaseCtrl.handleGetAcquisitionDetail)
+router.post('/passport/acquisitions/:acquisitionId/note', writeLimiter, postPurchaseCtrl.handleSaveAcquisitionNote)
 
 export default router

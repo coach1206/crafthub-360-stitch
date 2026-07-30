@@ -373,3 +373,57 @@ per-status messaging, never a fabricated success. `VenueHumidorOrderDetail.jsx`
 paths already existed from 1B-2B-2 but had no UI until this pass) and
 a "Verify & Handoff" gate replacing direct completion for ready
 orders that have not yet been handed off.
+
+## Venue Humidor 1B-2B-4 update — customer order history, Passport acquisition, receipts, and post-purchase experience
+
+Migration 112 (additive) adds exactly one new table,
+`venue_cigar_acquisition_notes` — a narrow, one-row-per-acquisition
+companion table (`UNIQUE(acquisition_id)`) holding a verified-purchase
+1–5 star rating, a free-text tasting note, and a mark-as-smoked flag.
+Confirmed by audit that no rating/review or purchase-linked "mark as
+smoked" system existed anywhere in the codebase beforehand — the only
+adjacent tables (`smokecraft_tasting_drafts`, `golden_box_mentor_reviews`,
+`smokecraft_collection_ownership`) are gameplay/mentorship/in-game-
+collection concepts, not real-purchase consumption tracking, so this is
+genuinely new, minimal surface rather than a duplicate.
+
+Two new services: `customerOrderHistoryService.js` (`listOrders()`,
+`getOrderDetail()`, `getReceipt()`) reads only the existing canonical
+`venue_cigar_orders`/`venue_cigar_order_items`/`venues`/
+`venue_cigar_products` tables — receipt and history totals are read
+directly from the order's own stored columns
+(`subtotal_cents`/`tax_cents`/`service_charge_cents`/`discount_cents`/
+`tip_cents`/`total_cents`, and each item's `unit_price_cents`/
+`line_total_cents`), never recomputed from live catalog pricing. It
+reuses the exact `CUSTOMER_INTERNAL_FIELDS` redaction pattern introduced
+in `checkoutService.getOrder()` (1B-2B-3), extended with
+`idempotency_key`. Per-item reorder eligibility is computed server-side
+from `is_archived`/`is_customer_visible`/`product_status` plus a live
+`getProductAvailability()` check — never a frontend-only flag.
+`passportAcquisitionService.js` (`listAcquisitions()`,
+`getAcquisitionDetail()`, `saveAcquisitionNote()`) is a pure read layer
+over `venue_cigar_passport_acquisitions` (still written only inside
+`checkoutService.completeOrder()`, unchanged since 1B-2B-3) plus the new
+notes table; `saveAcquisitionNote()` is a full idempotent upsert
+(pre-lock fast path + `FOR UPDATE` in-lock authoritative recheck).
+
+Five new customer routes were added to the existing
+`venueHumidorCustomerRoutes.js` (reusing its
+`attachSmokeCraftIdentity`/`ensureSmokeCraftGuestIdentity` middleware
+chain) WITHOUT the file's usual `:venueId` prefix, since this pass's
+required surface (`/smokecraft/orders`, `/smokecraft/orders/:orderId`,
+`/smokecraft/orders/:orderId/receipt`, `/smokecraft/passport/acquisitions`,
+`/smokecraft/passport/acquisitions/:acquisitionId`) is explicitly
+cross-venue — ownership is re-verified server-side per row regardless of
+venue, never trusted from the URL.
+
+Five new screens: `VenueHumidorMyOrders.jsx`, `VenueHumidorMyOrderDetail.jsx`,
+`VenueHumidorReceipt.jsx`, `VenueHumidorMyAcquisitions.jsx`,
+`VenueHumidorAcquisitionDetail.jsx` — same `SmokeCraftScreenShell`
+system, no existing screen touched. Reorder is implemented as pure
+navigation into the existing canonical catalog detail route
+(`/smokecraft/venue-humidor/:cigarId`) — no new reorder-specific
+checkout path was built; reorder always reflects the current catalog
+price, never the historical receipt price. The receipt screen offers a
+real printable browser view and an honest disabled note for PDF export
+(no fake download).

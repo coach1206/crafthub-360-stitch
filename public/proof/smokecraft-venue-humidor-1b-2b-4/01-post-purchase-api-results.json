@@ -1,0 +1,123 @@
+{
+  "pass": 29,
+  "fail": 0,
+  "total": 29,
+  "results": [
+    {
+      "name": "Customer can read their own order history",
+      "ok": true
+    },
+    {
+      "name": "A different customer's order history never includes this order",
+      "ok": true
+    },
+    {
+      "name": "Customer can read their own order detail",
+      "ok": true
+    },
+    {
+      "name": "A different customer cannot read this order's detail",
+      "ok": true
+    },
+    {
+      "name": "Customer can read their own receipt",
+      "ok": true
+    },
+    {
+      "name": "Receipt totals match the canonical completed order totals",
+      "ok": true
+    },
+    {
+      "name": "A different customer cannot read this receipt",
+      "ok": true
+    },
+    {
+      "name": "Historical receipt price does not change after the product's current price changes",
+      "ok": true
+    },
+    {
+      "name": "A completed order has exactly one real Passport acquisition",
+      "ok": true
+    },
+    {
+      "name": "A cancelled order has NO Passport acquisition",
+      "ok": true
+    },
+    {
+      "name": "An expired order has NO Passport acquisition",
+      "ok": true
+    },
+    {
+      "name": "Retrying completion never creates a duplicate acquisition",
+      "ok": true
+    },
+    {
+      "name": "Customer can read their own acquisitions list",
+      "ok": true
+    },
+    {
+      "name": "Customer can read their own acquisition detail with real cigar data",
+      "ok": true
+    },
+    {
+      "name": "A different customer cannot read this acquisition",
+      "ok": true
+    },
+    {
+      "name": "A staff/manager identity querying the customer order-history endpoint sees only their own (empty) guest history, never another customer's data",
+      "ok": true
+    },
+    {
+      "name": "An archived product's order item remains visible in history",
+      "ok": true
+    },
+    {
+      "name": "An archived product is not reorder-eligible",
+      "ok": true
+    },
+    {
+      "name": "An out-of-stock product is not reorder-eligible",
+      "ok": true
+    },
+    {
+      "name": "The real customer catalog detail (the canonical reorder entry point) reflects the current, not historical, price",
+      "ok": true
+    },
+    {
+      "name": "The verified purchaser can rate their own acquisition",
+      "ok": true
+    },
+    {
+      "name": "A non-purchaser cannot rate someone else's acquisition",
+      "ok": true
+    },
+    {
+      "name": "An out-of-range rating is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "Concurrent identical rating requests (shared idempotency key) result in exactly one real note row",
+      "ok": true
+    },
+    {
+      "name": "The verified purchaser can save a tasting note",
+      "ok": true
+    },
+    {
+      "name": "The verified purchaser can mark the acquisition as smoked",
+      "ok": true
+    },
+    {
+      "name": "Historical order total_cents never mutates when the catalog price changes later",
+      "ok": true
+    },
+    {
+      "name": "A cancelled order's receipt honestly shows a non-completed sale",
+      "ok": true
+    },
+    {
+      "name": "A receipt is honestly unavailable for a ready-but-not-completed order",
+      "ok": true
+    }
+  ]
+}

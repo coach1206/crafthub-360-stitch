@@ -116,6 +116,11 @@ const VenueHumidorOrderDetail = lazy(() => import('./pages/smokecraft/venueHumid
 const VenueHumidorFulfillmentHistory = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorFulfillmentHistory.jsx'))
 const VenueHumidorHandoff = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorHandoff.jsx'))
 const VenueHumidorPickup = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorPickup.jsx'))
+const VenueHumidorMyOrders = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorMyOrders.jsx'))
+const VenueHumidorMyOrderDetail = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorMyOrderDetail.jsx'))
+const VenueHumidorReceipt = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorReceipt.jsx'))
+const VenueHumidorMyAcquisitions = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorMyAcquisitions.jsx'))
+const VenueHumidorAcquisitionDetail = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorAcquisitionDetail.jsx'))
 const GoldenBoxCompetitionDetail = lazy(() => import('./pages/smokecraft/goldenBox/CompetitionDetail.jsx'))
 const GoldenBoxEntryWorkspace = lazy(() => import('./pages/smokecraft/goldenBox/EntryWorkspace.jsx'))
 const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenBox/ResultsExperience.jsx'))
@@ -421,6 +426,14 @@ export default function App() {
 
                 {/* Venue Humidor 1B-2B-3 — customer pickup screen. */}
                 <Route path="orders/:orderId/pickup"           element={<VenueHumidorPickup />} />
+
+                {/* Venue Humidor 1B-2B-4 — customer order history,
+                    receipts, and Passport acquisitions. */}
+                <Route path="orders/:orderId/receipt"          element={<VenueHumidorReceipt />} />
+                <Route path="orders/:orderId"                  element={<VenueHumidorMyOrderDetail />} />
+                <Route path="orders"                           element={<VenueHumidorMyOrders />} />
+                <Route path="passport/acquisitions/:acquisitionId" element={<VenueHumidorAcquisitionDetail />} />
+                <Route path="passport/acquisitions"            element={<VenueHumidorMyAcquisitions />} />
 
                 {/* Mentor Selection — supporting module (outside the 27-session spine).
                     Not yet folded into Meet Your Cigar (S3) as an internal tab per the

@@ -1,0 +1,91 @@
+{
+  "pass": 21,
+  "fail": 0,
+  "total": 21,
+  "results": [
+    {
+      "name": "Order-history page loads real orders",
+      "ok": true
+    },
+    {
+      "name": "Filtering by Completed status narrows to the real completed order",
+      "ok": true
+    },
+    {
+      "name": "Search control accepts and submits a real query",
+      "ok": true
+    },
+    {
+      "name": "Completed order detail opens with real data",
+      "ok": true
+    },
+    {
+      "name": "Order detail shows the real purchased item",
+      "ok": true
+    },
+    {
+      "name": "Order detail shows the real Passport acquisition indicator",
+      "ok": true
+    },
+    {
+      "name": "Receipt renders with real totals",
+      "ok": true
+    },
+    {
+      "name": "Print receipt control is present",
+      "ok": true
+    },
+    {
+      "name": "Passport acquisitions page loads real acquisitions",
+      "ok": true
+    },
+    {
+      "name": "Acquisition detail opens with real verified-fulfillment data",
+      "ok": true
+    },
+    {
+      "name": "Product education (country of origin) renders from real data",
+      "ok": true
+    },
+    {
+      "name": "Rating saves and persists in the UI",
+      "ok": true
+    },
+    {
+      "name": "Mark-as-smoked flow works and reflects real saved state",
+      "ok": true
+    },
+    {
+      "name": "Reorder is available for the currently eligible product",
+      "ok": true
+    },
+    {
+      "name": "Reorder is honestly disabled for an archived product, with a real explanation",
+      "ok": true
+    },
+    {
+      "name": "Order detail persists correctly across a genuine reload",
+      "ok": true
+    },
+    {
+      "name": "A different customer sees an honest denial when attempting to open this order",
+      "ok": true
+    },
+    {
+      "name": "An honest offline/error state renders when the network is unavailable",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on order detail/receipt/Passport screens",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff at a narrower tablet viewport",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the post-purchase flow",
+      "ok": true
+    }
+  ]
+}

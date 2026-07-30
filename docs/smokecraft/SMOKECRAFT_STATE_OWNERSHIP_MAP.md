@@ -539,3 +539,18 @@ exclusively by `checkoutService.completeOrder()` — the sole writer,
 guarded by a real `UNIQUE (order_item_id)` constraint, so "exactly one
 Passport acquisition per completed order item" is a database
 invariant, not just an application convention.
+
+## Venue Humidor 1B-2B-4 update
+
+`venue_cigar_acquisition_notes` (migration 112) is owned exclusively by
+`passportAcquisitionService.saveAcquisitionNote()` — the sole writer,
+guarded by `UNIQUE (acquisition_id)`, so "at most one notes row per
+acquisition" is a database invariant. No file in this pass writes to
+`venue_cigar_orders`, `venue_cigar_order_items`, or
+`venue_cigar_passport_acquisitions` — `customerOrderHistoryService.js`
+and `passportAcquisitionService.js`'s list/detail functions are pure
+readers of tables already owned by `checkoutService.js`/
+`fulfillmentService.js`/`checkoutService.completeOrder()` respectively.
+Receipt totals returned by `getReceipt()` are computed fields derived
+purely from the order row already read — no new persisted total is
+written or stored anywhere.

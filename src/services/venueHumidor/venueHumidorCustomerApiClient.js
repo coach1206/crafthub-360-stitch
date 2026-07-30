@@ -62,3 +62,11 @@ export const getCheckoutQuote = (venueId, holdId, tipCents) => request(`/venues/
 export const createOrder = (venueId, holdId, payload, idempotencyKey) => request(`/venues/${venueId}/checkout/orders`, { method: 'POST', body: { holdId, ...payload, idempotencyKey } })
 export const getOrder = (venueId, orderId) => request(`/venues/${venueId}/orders/${orderId}`)
 export const cancelOrder = (venueId, orderId, idempotencyKey) => request(`/venues/${venueId}/orders/${orderId}/cancel`, { method: 'POST', body: { idempotencyKey } })
+
+// Venue Humidor 1B-2B-4 — customer order history, receipts, Passport.
+export const listMyOrders = (filters) => request(`/orders${toQuery(filters)}`)
+export const getMyOrderDetail = (orderId) => request(`/orders/${orderId}`)
+export const getMyReceipt = (orderId) => request(`/orders/${orderId}/receipt`)
+export const listMyAcquisitions = () => request(`/passport/acquisitions`)
+export const getMyAcquisitionDetail = (acquisitionId) => request(`/passport/acquisitions/${acquisitionId}`)
+export const saveAcquisitionNote = (acquisitionId, payload, idempotencyKey) => request(`/passport/acquisitions/${acquisitionId}/note`, { method: 'POST', body: { ...payload, idempotencyKey } })

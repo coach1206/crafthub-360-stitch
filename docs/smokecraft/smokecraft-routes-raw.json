@@ -210,6 +210,31 @@
     "elementRaw": "<VenueHumidorPickup />"
   },
   {
+    "fullPath": "orders/:orderId/receipt",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorReceipt />"
+  },
+  {
+    "fullPath": "orders/:orderId",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorMyOrderDetail />"
+  },
+  {
+    "fullPath": "orders",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorMyOrders />"
+  },
+  {
+    "fullPath": "passport/acquisitions/:acquisitionId",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAcquisitionDetail />"
+  },
+  {
+    "fullPath": "passport/acquisitions",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorMyAcquisitions />"
+  },
+  {
     "fullPath": "art",
     "isIndex": false,
     "elementRaw": "<Art />"

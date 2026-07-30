@@ -1916,3 +1916,19 @@ Closed via `src/pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx`.
 Encoded as a permanent regression check in
 `verify-smokecraft-venue-humidor-1b1-browser.mjs`. See
 `public/proof/smokecraft-venue-humidor-1b-1/00-proof-index.md`.
+
+## Venue Humidor 1B-2B-4 update
+
+No defects found in previously-locked behavior. Two bugs were caught
+and fixed entirely within this pass's own new test code before commit:
+a missing `.patch()` method on a test-file `makeClient()` helper
+(caused a false-negative "archived product still reorder-eligible"
+result — the classification PATCH call silently mismatched the Express
+route since the test harness only exposed `.get()`/`.post()`), and an
+ASI (automatic-semicolon-insertion) parsing bug in the browser test
+where a bare parenthesized boolean expression followed by a ternary,
+on its own line, was parsed as a call onto the prior statement's
+return value. Neither reached the committed baseline, so neither
+receives an SC-D number.
+
+See `public/proof/smokecraft-venue-humidor-1b-2b-4/00-proof-index.md`.
