@@ -154,3 +154,54 @@ integration, full-route/five-viewport sweeps as new targeted work
 build's own prebuild gate requires an up-to-date route count, not as
 new 1B-1 scope) — see the Venue Humidor 1B-2 handoff in
 `public/proof/smokecraft-venue-humidor-1b-1/00-proof-index.md`.
+
+## Venue Humidor 1B-2A update — checkout, order creation, hold conversion
+
+Migration 108 (additive) extends `venue_cigar_orders` with real
+checkout-authority columns: `order_number`, `hold_id`/`reservation_id`
+(real FKs), `fulfillment_method`/`fulfillment_details`,
+`customer_notes`, `tax_cents`/`service_charge_cents`/`discount_cents`/
+`tip_cents`, `currency`, `age_verification_required`/`age_verified`,
+`payment_status`, `product_snapshot`/`pairing_snapshot`.
+
+`checkoutService.js` is the new, sole owner of checkout-quote
+computation and hold-to-order conversion. `getCheckoutQuote()` and
+`createOrderFromHold()` compute price/tax/total entirely server-side
+from the locked hold and product rows — a client-submitted price,
+subtotal, tax, or total is never read or trusted. Tax is computed via
+the real, pre-existing `taxCalculationEngine.js` (reused, not
+duplicated). Fulfillment options are sourced from the real
+`venues.settings` JSONB column (reused, not a new config store),
+merged over a documented default-support map; POS360 tab options are
+unsupported by default, matching the honest `501` boundary already
+established for "Add to Venue Tab" in 1B-1.
+
+`createOrderFromHold()` converts the hold to `'converted'` and creates
+a real `pending_payment` order but never deducts physical inventory —
+inventory is deducted exactly once, only inside `completeOrder()`, on
+valid staff/payment/POS completion. `completeOrder()` is now the
+single completion path for every `venue_cigar_orders` row regardless
+of creation path (the pre-existing 1A staff complete/cancel routes
+were repointed to it) — no second, divergent completion function
+remains reachable for the same table.
+
+Two real defects were found and closed via the mandate's own required
+concurrency tests — see SC-D065 (double-sell via converted-hold
+undercounting) and SC-D066 (idempotency-ordering race) in
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.
+
+Two new customer screens: `VenueHumidorCheckout.jsx`
+(`/smokecraft/venue-humidor/checkout`) and
+`VenueHumidorOrderConfirmation.jsx`
+(`/smokecraft/venue-humidor/order/:orderId`), built in the same
+`SmokeCraftScreenShell` navy/gold system as 1B-1's screens — no
+existing approved screen was touched. Payment processing is not
+connected; both screens display an honest "Payment processing not
+connected" boundary and never claim a successful purchase unless the
+authoritative server order status is `completed`.
+
+Explicitly out of scope for this pass (per mandate): staff inventory
+administration, the full staff fulfillment queue, simulated card
+payment, full-route/five-viewport sweeps as new targeted work (the
+five-viewport proof was regenerated only because the build's own
+prebuild gate requires an up-to-date route count).

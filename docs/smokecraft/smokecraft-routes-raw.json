@@ -150,6 +150,16 @@
     "elementRaw": "<VenueHumidorBrowser />"
   },
   {
+    "fullPath": "venue-humidor/checkout",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorCheckout />"
+  },
+  {
+    "fullPath": "venue-humidor/order/:orderId",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorOrderConfirmation />"
+  },
+  {
     "fullPath": "venue-humidor/:cigarId",
     "isIndex": false,
     "elementRaw": "<VenueHumidorCigarDetail />"

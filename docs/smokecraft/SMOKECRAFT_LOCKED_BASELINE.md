@@ -500,3 +500,16 @@ touch targets, working back controls, vertical scroll, no fixed-
 bottom-nav overlap) — no existing approved SmokeCraft screen was
 touched or restyled. Checkout, staff admin, and order fulfillment
 screens were not built, per mandate.
+
+## Venue Humidor 1B-2A update
+
+Two brand-new screens (`VenueHumidorCheckout.jsx`,
+`VenueHumidorOrderConfirmation.jsx`) were added in the same locked
+navy/champagne-gold `SmokeCraftScreenShell` system — no existing
+approved SmokeCraft screen was touched or restyled. Live route count
+is now 113 (`SMOKECRAFT_GAME_MANIFEST.json` regenerated); the
+five-viewport responsive inventory was regenerated against a fresh
+`dist` build covering all 113 routes, and
+`validateSmokecraftResponsive.mjs` passes 0 failed. Staff inventory
+administration and the full staff fulfillment queue were not built,
+per mandate.

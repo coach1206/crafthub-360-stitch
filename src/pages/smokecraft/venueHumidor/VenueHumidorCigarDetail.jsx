@@ -36,6 +36,7 @@ export default function VenueHumidorCigarDetail() {
   const [favoriteState, setFavoriteState] = useState('idle')
   const [isFavorited, setIsFavorited] = useState(false)
   const [unsupportedMessage, setUnsupportedMessage] = useState(null)
+  const [activeHoldId, setActiveHoldId] = useState(null)
 
   async function load() {
     if (!venueId) { setState('no_venue'); return }
@@ -58,13 +59,13 @@ export default function VenueHumidorCigarDetail() {
     setStickState('loading')
     const result = await api.createStickHold(venueId, cigarId, actionKey('gb-vh-stick'))
     setStickState(result.ok ? 'hold_created' : (result.error === 'insufficient_inventory' ? 'sold_out' : 'error'))
-    if (result.ok) await load()
+    if (result.ok) { setActiveHoldId(result.hold.hold_id); await load() }
   }
   async function handlePurchaseBox() {
     setBoxState('loading')
     const result = await api.createBoxHold(venueId, cigarId, actionKey('gb-vh-box'))
     setBoxState(result.ok ? 'hold_created' : (result.error === 'box_purchase_unavailable' ? 'unavailable' : result.error === 'insufficient_inventory' ? 'sold_out' : 'error'))
-    if (result.ok) await load()
+    if (result.ok) { setActiveHoldId(result.hold.hold_id); await load() }
   }
   async function handleReserve() {
     setReserveState('loading')
@@ -150,6 +151,12 @@ export default function VenueHumidorCigarDetail() {
             <ActionResult state={boxState} messages={{ hold_created: 'Box held for 15 minutes.', unavailable: 'Box purchase is not available for this cigar.', sold_out: 'Not enough stock for a full box.', error: 'Unable to hold this box right now.' }} />
             <ActionResult state={reserveState} messages={{ reservation_created: 'Reserved — a staff member will confirm shortly.', sold_out: 'Not enough stock to reserve.', error: 'Unable to reserve this cigar right now.' }} />
             <ActionResult state={favoriteState} messages={{ error: 'Unable to update favorites right now.' }} />
+            {activeHoldId && (
+              <button type="button" onClick={() => navigate(`/smokecraft/venue-humidor/checkout?holdId=${activeHoldId}`)}
+                style={{ minHeight: 44, padding: '10px 18px', borderRadius: 20, border: `1.5px solid ${OK}`, background: 'transparent', color: OK, cursor: 'pointer', fontFamily: 'inherit', width: 'fit-content' }}>
+                Proceed to Checkout
+              </button>
+            )}
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 10 }}>
               <button type="button" onClick={() => handleUnsupported('tab')} style={{ minHeight: 44, padding: '10px 18px', borderRadius: 20, border: `1px solid ${BORDER}`, background: 'transparent', color: 'rgba(229,226,225,0.7)', cursor: 'pointer', fontFamily: 'inherit' }}>Add to Venue Tab</button>

@@ -47,6 +47,8 @@ async function run() {
   // against it, so repeated runs would otherwise accumulate and
   // eventually sell it out.
   psql(`UPDATE venue_cigar_products SET physical_quantity = 20 WHERE product_id = '${productId}'`)
+  psql(`DELETE FROM venue_cigar_order_items WHERE product_id = '${productId}'`)
+  psql(`DELETE FROM venue_cigar_orders WHERE venue_id = 'vh-seed-venue-alpha' AND product_snapshot->>'name' LIKE '%Featured Reserve%'`)
   psql(`DELETE FROM venue_cigar_inventory_holds WHERE product_id = '${productId}'`)
   psql(`DELETE FROM venue_cigar_reservations WHERE product_id = '${productId}'`)
   psql(`DELETE FROM venue_cigar_inventory_events WHERE product_id = '${productId}'`)

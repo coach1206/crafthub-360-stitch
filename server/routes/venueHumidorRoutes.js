@@ -10,6 +10,7 @@ import rateLimit from 'express-rate-limit'
 import { requireAuth } from '../middleware/authMiddleware.js'
 import { getDb } from '../db/connection.js'
 import * as ctrl from '../controllers/venueHumidorController.js'
+import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 
 const router = Router()
 
@@ -82,7 +83,12 @@ router.post('/venues/:venueId/reservations/:reservationId/fulfill', writeLimiter
 // ── Orders ───────────────────────────────────────────────────────────
 router.post('/venues/:venueId/orders', writeLimiter, requireAuth, requireVenueStaff, ctrl.handleCreateOrder)
 router.post('/venues/:venueId/orders/:orderId/items', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, ctrl.handleAddOrderItem)
-router.post('/venues/:venueId/orders/:orderId/complete', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, ctrl.handleCompleteOrder)
-router.post('/venues/:venueId/orders/:orderId/cancel', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, ctrl.handleCancelOrder)
+// Holistic 1B-2A: completion/cancellation now route through
+// checkoutService.js (a strict superset of the 1A orderService logic
+// that also correctly handles hold-linked checkout orders) — one
+// completion/cancellation code path for every venue_cigar_orders row,
+// never two divergent ones.
+router.post('/venues/:venueId/orders/:orderId/complete', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, checkoutCtrl.handleStaffCompleteOrder)
+router.post('/venues/:venueId/orders/:orderId/cancel', writeLimiter, requireAuth, requireVenueStaff, orderVenueMatch, checkoutCtrl.handleStaffCancelOrder)
 
 export default router

@@ -1,0 +1,127 @@
+{
+  "pass": 30,
+  "fail": 0,
+  "total": 30,
+  "results": [
+    {
+      "name": "Quote succeeds for a valid, owned, active hold",
+      "ok": true
+    },
+    {
+      "name": "Quote subtotal is the real server-computed price × quantity (1200 cents)",
+      "ok": true
+    },
+    {
+      "name": "Quote reports the real hold expiration",
+      "ok": true
+    },
+    {
+      "name": "Quote reports honest payment unavailability",
+      "ok": true
+    },
+    {
+      "name": "Quote reports age-verification requirement honestly",
+      "ok": true
+    },
+    {
+      "name": "Quote reports real fulfillment options from venue config",
+      "ok": true
+    },
+    {
+      "name": "Order creation succeeds despite the fabricated price fields (they are ignored)",
+      "ok": true
+    },
+    {
+      "name": "The real server-computed subtotal (1200) is persisted, never the fabricated value (1)",
+      "ok": true
+    },
+    {
+      "name": "A stale (non-active) hold is rejected with a real 409",
+      "ok": true
+    },
+    {
+      "name": "An expired hold is rejected with a real 409",
+      "ok": true
+    },
+    {
+      "name": "A hold owned by a different guest is denied with a real 403",
+      "ok": true
+    },
+    {
+      "name": "A hold requested under the wrong venue is denied with a real 403",
+      "ok": true
+    },
+    {
+      "name": "A repeated order-creation call with the same idempotency key returns the identical original order, never a duplicate",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent order-creation requests resolve to the SAME real order (no crash, no duplicate)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real order row exists despite the two-tab race",
+      "ok": true
+    },
+    {
+      "name": "A freshly created order starts in pending_payment / pending_staff_confirmation, never marked paid",
+      "ok": true
+    },
+    {
+      "name": "Creating an order with an unsupported fulfillment method (new POS tab) is honestly rejected, never fabricated",
+      "ok": true
+    },
+    {
+      "name": "Order creation without age verification is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "Staff-authorized completion succeeds",
+      "ok": true
+    },
+    {
+      "name": "A repeated completion call returns the identical original completed order, never re-deducts",
+      "ok": true
+    },
+    {
+      "name": "Physical inventory decreased by exactly the ordered quantity (1), not zero and not twice",
+      "ok": true
+    },
+    {
+      "name": "A customer (non-staff) cannot complete an order themselves",
+      "ok": true
+    },
+    {
+      "name": "Attempting to complete an already-completed order is idempotent, never double-deducts",
+      "ok": true
+    },
+    {
+      "name": "Inventory is unchanged after the idempotent re-completion attempt",
+      "ok": true
+    },
+    {
+      "name": "Customer cancellation of a pending order succeeds",
+      "ok": true
+    },
+    {
+      "name": "Available quantity is restored (hold released) after cancelling a pending order",
+      "ok": true
+    },
+    {
+      "name": "A repeated cancellation of an already-cancelled order is idempotent, never errors or double-restores",
+      "ok": true
+    },
+    {
+      "name": "Order confirmation loads real server data including real total and status",
+      "ok": true
+    },
+    {
+      "name": "A second independent read returns identical order state (cross-device consistency)",
+      "ok": true
+    },
+    {
+      "name": "venue_humidor_order_created, _payment_pending, _hold_converted, and _order_completed were all emitted for the completed order",
+      "ok": true
+    }
+  ]
+}

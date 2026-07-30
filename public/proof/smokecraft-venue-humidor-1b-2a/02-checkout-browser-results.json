@@ -1,0 +1,71 @@
+{
+  "pass": 16,
+  "fail": 0,
+  "total": 16,
+  "results": [
+    {
+      "name": "An honest \"start from a cigar\" state renders when no hold is present",
+      "ok": true
+    },
+    {
+      "name": "Proceed to Checkout appears after a real hold is created",
+      "ok": true
+    },
+    {
+      "name": "Checkout screen renders with real quote data",
+      "ok": true
+    },
+    {
+      "name": "Real server-computed subtotal renders (never client-calculated)",
+      "ok": true
+    },
+    {
+      "name": "Honest \"payment processing not connected\" boundary renders",
+      "ok": true
+    },
+    {
+      "name": "Real hold-expiration countdown renders",
+      "ok": true
+    },
+    {
+      "name": "Place Order is disabled until age verification is checked",
+      "ok": true
+    },
+    {
+      "name": "Place Order enables once age verification is checked",
+      "ok": true
+    },
+    {
+      "name": "Order confirmation screen renders with a real server-issued order number",
+      "ok": true
+    },
+    {
+      "name": "Order status honestly shows Pending Confirmation, never a fabricated success",
+      "ok": true
+    },
+    {
+      "name": "No fabricated \"purchase successful\" message renders for an unpaid order",
+      "ok": true
+    },
+    {
+      "name": "Cancelling a pending order shows the real cancelled status",
+      "ok": true
+    },
+    {
+      "name": "Order status persists correctly across reload (real server state)",
+      "ok": true
+    },
+    {
+      "name": "Keyboard navigation moves focus on the confirmation screen",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on checkout/confirmation screens",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the checkout flow",
+      "ok": true
+    }
+  ]
+}

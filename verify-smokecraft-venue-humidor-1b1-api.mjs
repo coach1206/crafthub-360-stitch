@@ -53,6 +53,8 @@ async function main() {
   // catalog — reset before each run so repeated runs never accumulate
   // toward sold-out.
   psql(`UPDATE venue_cigar_products SET physical_quantity = 20 WHERE venue_id = 'vh-seed-venue-alpha' AND sku = 'ALPHA-007'`)
+  psql(`DELETE FROM venue_cigar_order_items WHERE order_id IN (SELECT order_id FROM venue_cigar_orders WHERE venue_id = 'vh-seed-venue-alpha')`)
+  psql(`DELETE FROM venue_cigar_orders WHERE venue_id = 'vh-seed-venue-alpha'`)
   psql(`DELETE FROM venue_cigar_inventory_holds WHERE venue_id = 'vh-seed-venue-alpha'`)
   psql(`DELETE FROM venue_cigar_reservations WHERE venue_id = 'vh-seed-venue-alpha'`)
   psql(`DELETE FROM venue_cigar_inventory_events WHERE venue_id = 'vh-seed-venue-alpha'`)

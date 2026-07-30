@@ -56,3 +56,9 @@ export const listFavorites = () => request(`/favorites`)
 
 export const requestVenueTab = (venueId, productId) => request(`/venues/${venueId}/products/${productId}/venue-tab`, { method: 'POST' })
 export const requestTableDelivery = (venueId, productId) => request(`/venues/${venueId}/products/${productId}/table-delivery`, { method: 'POST' })
+
+// Venue Humidor 1B-2A — checkout, order creation, hold conversion.
+export const getCheckoutQuote = (venueId, holdId, tipCents) => request(`/venues/${venueId}/checkout/quote`, { method: 'POST', body: { holdId, tipCents } })
+export const createOrder = (venueId, holdId, payload, idempotencyKey) => request(`/venues/${venueId}/checkout/orders`, { method: 'POST', body: { holdId, ...payload, idempotencyKey } })
+export const getOrder = (venueId, orderId) => request(`/venues/${venueId}/orders/${orderId}`)
+export const cancelOrder = (venueId, orderId, idempotencyKey) => request(`/venues/${venueId}/orders/${orderId}/cancel`, { method: 'POST', body: { idempotencyKey } })

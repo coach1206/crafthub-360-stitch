@@ -1817,6 +1817,44 @@ See `public/proof/smokecraft-venue-humidor-1a/00-proof-index.md`.
   product's inventory/holds/reservations/events before running so
   repeated runs stay deterministic.
 
+## Venue Humidor 1B-2A update
+
+- **SC-D065** (double-sell via converted-hold undercounting):
+  `inventoryService.js`'s `computeAvailableQuantity()` summed held
+  quantity only from holds with `status = 'active'`. Once
+  `checkoutService.createOrderFromHold()` transitions a hold to
+  `'converted'` (a real pending order now exists against it, unpaid),
+  that hold stopped counting toward consumption — making the exact
+  same physical stick available for a second customer to hold or buy
+  while the first customer's unpaid order was still pending. Found
+  live via the mandate's own cancellation-restoration test: available
+  quantity did not change on order cancellation, because the hold had
+  already silently stopped counting the moment the order was created.
+  Closed by widening the held-quantity query to
+  `WHERE status IN ('active', 'converted')`, and widening
+  `releaseHold()`'s allowed from-statuses from `['active']` to
+  `['active', 'converted']` so cancelling a pending order can actually
+  release its (now-converted) hold back to available inventory.
+- **SC-D066** (idempotency-ordering race, two-tab class):
+  `checkoutService.createOrderFromHold()`'s original implementation
+  locked the hold row and validated its status/ownership/expiry
+  *before* checking the caller's idempotency key. In a genuine
+  concurrent two-tab race sharing one idempotency key, the losing
+  request acquired the lock only after the winner had already
+  committed and flipped the hold to `'converted'` — so the loser's
+  status validation threw a fabricated `stale_hold:converted` error
+  instead of deduping via the real idempotency key it shared with the
+  winner. Found live via the mandate's own required two-tab-race test.
+  Closed by splitting hold-locking (`lockHold`, no status check) from
+  hold-validation (`validateOwnedActiveHold`, pure function) and
+  reordering `createOrderFromHold()` to: lock → recheck idempotency key
+  (authoritative, in-lock) → validate hold status. Same
+  pre-lock-fast-path-plus-in-lock-authoritative-recheck pattern class
+  as SC-D060, but with the ordering corrected relative to the other
+  in-lock validations.
+
+See `public/proof/smokecraft-venue-humidor-1b-2a/00-proof-index.md`.
+
 Closed via `src/pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx`.
 Encoded as a permanent regression check in
 `verify-smokecraft-venue-humidor-1b1-browser.mjs`. See

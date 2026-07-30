@@ -15,6 +15,7 @@ import {
   attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity,
 } from '../middleware/smokecraftGuestIdentity.js'
 import * as ctrl from '../controllers/venueHumidorCustomerController.js'
+import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 
 const router = Router()
 
@@ -41,5 +42,11 @@ router.get('/favorites', readLimiter, ctrl.handleListFavorites)
 // success.
 router.post('/venues/:venueId/products/:productId/venue-tab', writeLimiter, ctrl.handleUnsupportedAction)
 router.post('/venues/:venueId/products/:productId/table-delivery', writeLimiter, ctrl.handleUnsupportedAction)
+
+// ── Venue Humidor 1B-2A: checkout, order creation, hold conversion ──
+router.post('/venues/:venueId/checkout/quote', writeLimiter, checkoutCtrl.handleGetCheckoutQuote)
+router.post('/venues/:venueId/checkout/orders', writeLimiter, checkoutCtrl.handleCreateOrder)
+router.get('/venues/:venueId/orders/:orderId', readLimiter, checkoutCtrl.handleGetOrder)
+router.post('/venues/:venueId/orders/:orderId/cancel', writeLimiter, checkoutCtrl.handleCustomerCancelOrder)
 
 export default router

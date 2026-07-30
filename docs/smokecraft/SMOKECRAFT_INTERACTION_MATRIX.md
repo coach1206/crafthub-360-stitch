@@ -673,3 +673,28 @@ targets, no horizontal layout cutoff, no console errors.
 
 Both screens are new, additive routes — no existing SmokeCraft screen
 was touched.
+
+## Venue Humidor 1B-2A — checkout and order confirmation (new screens)
+
+**VenueHumidorCheckout.jsx** (`/smokecraft/venue-humidor/checkout`):
+real server-authoritative quote (cigar image/brand/name/quantity,
+subtotal/tax/total, hold-expiration live countdown), a fulfillment
+`<select>` with options disabled per real venue configuration, a
+table/seat field (shown only for delivery methods), a notes textarea,
+an honest "Payment processing not connected" note, an age-verification
+checkbox gating the "Place Order" button, and honest states for
+missing hold, offline, session-expired, stale hold, expired hold,
+duplicate submission. Verified: 16/16 browser checks
+(`verify-smokecraft-venue-humidor-1b2a-browser.mjs`).
+
+**VenueHumidorOrderConfirmation.jsx**
+(`/smokecraft/venue-humidor/order/:orderId`): real order number,
+cigar/quantity/pairing, fulfillment method and details, customer
+notes, payment status, total, created time, and a status-keyed honest
+message (`STATUS_COPY[order.status]`) that never claims a successful
+purchase unless the real order status is `completed`. A "Cancel Order"
+control renders only while the order is still `pending_payment`. Both
+screens are new, additive routes reached only from a real hold created
+on `VenueHumidorCigarDetail.jsx` ("Proceed to Checkout" appears only
+after a real hold exists) — no existing SmokeCraft screen was
+touched.

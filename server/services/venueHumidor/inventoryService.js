@@ -29,8 +29,12 @@ export async function computeAvailableQuantity(client, productId) {
   )
   const product = productRows[0]
   if (!product) throw new InventoryError('product_not_found')
+  // 'converted' holds are still committed to a real pending order (not
+  // yet completed or cancelled) — they must keep consuming quantity or
+  // the same stick could be sold twice while an unpaid order sits
+  // pending. Only 'released'/'expired' holds free their quantity back.
   const { rows: heldRows } = await client.query(
-    `SELECT COALESCE(SUM(quantity), 0) AS total FROM venue_cigar_inventory_holds WHERE product_id = $1 AND status = 'active'`,
+    `SELECT COALESCE(SUM(quantity), 0) AS total FROM venue_cigar_inventory_holds WHERE product_id = $1 AND status IN ('active', 'converted')`,
     [productId]
   )
   const { rows: reservedRows } = await client.query(
@@ -242,7 +246,9 @@ async function transitionHold(holdId, fromStatuses, toStatus, eventType, actorId
 }
 
 export async function releaseHold(holdId, actorId) {
-  return transitionHold(holdId, ['active'], 'released', 'hold_released', actorId)
+  // 'converted' is included: a hold whose order was cancelled before
+  // completion must still be releasable (checkoutService.cancelOrder).
+  return transitionHold(holdId, ['active', 'converted'], 'released', 'hold_released', actorId)
 }
 
 export async function expireHold(holdId) {

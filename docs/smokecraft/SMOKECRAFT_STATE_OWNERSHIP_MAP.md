@@ -462,3 +462,25 @@ stale local toggle. `is_archived`/`is_customer_visible` on
 `venue_cigar_products` are staff-owned columns (set via 1A's staff
 routes, unchanged this pass) that the customer catalog reads but never
 writes.
+
+## Venue Humidor 1B-2A update
+
+`venue_cigar_orders.status`/`payment_status` are owned exclusively by
+`checkoutService.js` — `createOrderFromHold()` is the only writer of
+`status = 'pending_payment'`, and `completeOrder()`/`cancelOrder()`
+are the only writers of `'completed'`/`'cancelled'`/`'refunded'`. A
+hold's `status` transition to `'converted'` is owned by
+`createOrderFromHold()` alone (under a row lock); its transition to
+`'released'` is owned by `releaseHold()` alone. Physical inventory
+(`venue_cigar_products.physical_quantity`) remains mutated only inside
+`inventoryService.applyInventoryEvent()` (unchanged ownership from
+1A) — `checkoutService.js` calls that same function rather than
+writing the column itself, so there is still exactly one writer.
+Available quantity's held-holds computation now correctly counts
+`status IN ('active', 'converted')` (SC-D065) — a converted hold still
+represents un-invoiced, un-cancelled commitment against real stock
+until the order completes or is cancelled. Idempotency for order
+creation and completion is enforced by the real `idempotency_key`
+unique constraint on `venue_cigar_orders`, checked in-lock as the
+authoritative source of truth (never a pre-lock-only check, per
+SC-D066).
