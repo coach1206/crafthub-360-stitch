@@ -89,6 +89,11 @@ router.post('/entries/:entryId/scorecard', writeLimiter, requireAuth,
 
 router.get('/competitions/:competitionId/entries/:entryId/results', readLimiter, requireAuth, ctrl.handleGetResults)
 
+// ── Holistic Fix 5C-2B-1: results aggregation and final ranking ─────
+router.get('/competitions/:competitionId/results', readLimiter, requireAuth, ctrl.handleGetCompetitionResults)
+router.post('/competitions/:competitionId/results/finalize', writeLimiter, requireAuth, requireRole('admin'),
+  auditAction('GOLDEN_BOX', 'results_finalized', 'post'), ctrl.handleFinalizeResults)
+
 // ── AI educational analysis ─────────────────────────────────────────
 router.post('/entries/:entryId/ai-analysis', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity,
   auditAction('GOLDEN_BOX', 'ai_analysis_requested', 'post'), ctrl.handleRequestAiAnalysis)

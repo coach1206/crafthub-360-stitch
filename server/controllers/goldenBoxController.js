@@ -7,6 +7,7 @@ import * as visibilityService from '../services/goldenBox/visibilityService.js'
 import * as rewardsService from '../services/goldenBox/rewardsIntegrationService.js'
 import * as xpService from '../services/goldenBox/xpService.js'
 import * as mentorReviewService from '../services/goldenBox/mentorReviewService.js'
+import * as resultsService from '../services/goldenBox/resultsService.js'
 import { transitionCompetition } from '../services/goldenBox/lifecycleService.js'
 
 function sendError(res, err, fallback = 400) {
@@ -20,6 +21,7 @@ function sendError(res, err, fallback = 400) {
     no_draft_review_to_submit: 404,
     judge_self_assignment_prohibited: 403, judge_outside_venue_scope: 403,
     stale_version: 409,
+    no_entries_to_finalize: 409, judging_incomplete: 409, no_eligible_entries_to_finalize: 409,
   }
   const code = err.code || 'internal_error'
   let status = statusByCode[code] || fallback
@@ -218,8 +220,46 @@ export async function handleGetResults(req, res) {
     if (!visibility.canViewScores) {
       return res.status(403).json({ success: false, error: 'results_not_authorized' })
     }
-    const result = await judgingService.computeAggregateResult(Number(req.params.competitionId), req.params.entryId)
-    res.json({ success: true, result })
+    const result = await resultsService.getEntryResult(Number(req.params.competitionId), req.params.entryId)
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+// Holistic Fix 5C-2B-1 — competition-wide results/ranking. Non-admin
+// callers see only the immutable, published finalized ranking (never
+// pre-finalization per-entry pending/eligible detail, which would leak
+// blind-judging-protected state); administrators additionally see the
+// live, server-computed pending/ready-to-finalize view used to drive
+// the finalize action.
+export async function handleGetCompetitionResults(req, res) {
+  try {
+    const competitionId = Number(req.params.competitionId)
+    const competition = await competitionService.getCompetition(competitionId)
+    if (!competition) return res.status(404).json({ success: false, error: 'competition_not_found' })
+    const isAdmin = req.user?.role === 'admin' || req.user?.role === 'founder_level_0'
+    // Once a competition has a real finalized result, EVERY caller
+    // (admin included) sees that immutable record — never a freshly
+    // recomputed live view that could silently drift from what was
+    // actually finalized. Admins only get the live pending/ready-to-
+    // finalize computation while no finalization exists yet.
+    const finalized = await resultsService.getLatestFinalizedResult(competitionId)
+    if (finalized) return res.json({ success: true, ...finalized })
+    if (isAdmin) {
+      const computed = await resultsService.computeCompetitionResults(competitionId)
+      return res.json({ success: true, ...computed })
+    }
+    res.json({ success: true, status: 'not_finalized', ranked: [] })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleFinalizeResults(req, res) {
+  try {
+    const competitionId = Number(req.params.competitionId)
+    const resultVersion = Number.isInteger(req.body?.resultVersion) ? req.body.resultVersion : 1
+    const result = await resultsService.finalizeResults(competitionId, req.user.id, {
+      resultVersion, idempotencyKey: req.body?.idempotencyKey,
+    })
+    res.json({ success: true, ...result })
   } catch (err) { sendError(res, err, 500) }
 }
 

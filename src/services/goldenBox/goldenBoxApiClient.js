@@ -44,6 +44,8 @@ export const saveDraft = (entryId, payload) => request(`/entries/${entryId}/draf
 export const submitEntry = (entryId, idempotencyKey) => request(`/entries/${entryId}/submit`, { method: 'POST', body: idempotencyKey ? { idempotencyKey } : undefined })
 export const withdrawEntry = (entryId) => request(`/entries/${entryId}/withdraw`, { method: 'POST' })
 export const getResults = (competitionId, entryId) => request(`/competitions/${competitionId}/entries/${entryId}/results`)
+export const getCompetitionResults = (competitionId) => request(`/competitions/${competitionId}/results`)
+export const finalizeResults = (competitionId, resultVersion, idempotencyKey) => request(`/competitions/${competitionId}/results/finalize`, { method: 'POST', body: { resultVersion, idempotencyKey } })
 export const requestAiAnalysis = (entryId, analysisType) => request(`/entries/${entryId}/ai-analysis`, { method: 'POST', body: { analysisType } })
 export const listAiAnalyses = (entryId) => request(`/entries/${entryId}/ai-analysis`)
 export const getXpHistory = () => request(`/xp/history`)

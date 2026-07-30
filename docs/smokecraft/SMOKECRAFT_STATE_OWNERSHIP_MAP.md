@@ -388,3 +388,18 @@ amended_from IS NULL`) that is the REAL ownership boundary for "one
 original scorecard per judge+entry" — the table's pre-existing
 `UNIQUE(entry_id, judge_id, amended_from)` never actually enforced
 this (SC-D060).
+
+## Holistic Fix 5C-2B-1 update (Golden Box results aggregation and final ranking)
+
+`golden_box_result_finalizations`' `UNIQUE(competition_id,
+result_version)` is the real ownership boundary for "at most one
+finalization per competition per result version" — a repeated
+finalize call detects this row and returns the original finalized
+result rather than recomputing. `golden_box_results.finalized_at`
+(set only inside `finalizeResults()`'s transaction) is the sole marker
+of immutability: `handleGetCompetitionResults()` treats a finalized
+row's existence as authoritative for every caller (admin included),
+never recomputing a live view once one exists. Live (unfinalized)
+computation in `computeCompetitionResults()` never persists anything —
+it is a pure read, so it can never drift from or corrupt a real
+finalized record.

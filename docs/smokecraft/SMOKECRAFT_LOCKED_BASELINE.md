@@ -440,3 +440,18 @@ unchanged (its existing status-copy map already covered `draft`/
 Mentor Review, Results, competition leaderboard) was touched —
 explicitly out of scope per mandate. Final awards and the competition
 leaderboard were not built, per mandate.
+
+## Holistic Fix 5C-2B-1 update (Golden Box results aggregation and final ranking)
+
+No approved visuals were redesigned. `ResultsExperience.jsx` gained a
+new "Competition Rankings" section, additive, placed after the
+existing per-entry Score card in the same `GLASS`/`BORDER` container
+style already used throughout the screen — no existing element moved,
+resized, or restyled. It renders one of the mandate's real server-
+driven states (no entries / awaiting submissions / awaiting judges /
+judging in progress / ready to finalize / finalized / offline / retry
+/ unauthorized), a ranked-entry list with tie-break explanations, and
+— only for an authorized admin and only in the `ready_to_finalize`
+state — a "Finalize Results" action. No other Golden Box screen was
+touched. Final awards, badge/Passport/XP reward issuance, and Venue
+Humidor were not built, per mandate.

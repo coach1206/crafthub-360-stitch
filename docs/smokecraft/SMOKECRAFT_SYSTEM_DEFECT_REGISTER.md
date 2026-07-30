@@ -1645,3 +1645,38 @@ permanent regression checks in
 `verify-smokecraft-hf5c2a-judge-browser.mjs`, and
 `scripts/validateSmokecraftGoldenBoxJudgingAuthority.mjs`. See
 `public/proof/smokecraft-holistic-fix-5c-2a/00-proof-index.md`.
+
+## Holistic Fix 5C-2B-1 update (Golden Box results aggregation and final ranking)
+
+- **SC-D061**: `handleGetCompetitionResults()`'s first implementation
+  always returned a freshly recomputed LIVE view
+  (`computeCompetitionResults()`) to admin callers, even after a real
+  finalization already existed — meaning an administrator could never
+  actually see the real, immutable finalized ranking through this
+  endpoint; every admin request just recomputed the live
+  pending/ready-to-finalize state again. Found live via the browser
+  test's own reload-after-finalize assertion
+  (`verify-smokecraft-hf5c2b1-results-browser.mjs`, "Finalized ranking
+  renders after reload"). Closed by checking for an existing
+  finalization FIRST for every caller (admin included) — once one
+  exists, it is the only thing returned, never a freshly recomputed
+  view that could silently drift from what was actually finalized.
+- Structural gap (not a bug per se): `golden_box_results` existed
+  since migration 077 but nothing ever populated `placement`,
+  `is_winner`, `tie_break_reason`, or a real per-entry aggregate beyond
+  a naive unweighted average with no eligibility/exclusion/tie-break
+  logic at all. Closed by building the full `resultsService.js`
+  aggregation and finalization engine.
+
+Closed via `server/db/migrations/104_smokecraft_golden_box_results_authority.sql`,
+`server/services/goldenBox/resultsService.js` (new),
+`server/services/goldenBox/goldenBoxEventService.js`,
+`server/controllers/goldenBoxController.js`,
+`server/routes/goldenBoxRoutes.js`,
+`src/services/goldenBox/goldenBoxApiClient.js`,
+`src/pages/smokecraft/goldenBox/ResultsExperience.jsx`. Encoded as
+permanent regression checks in
+`verify-smokecraft-hf5c2b1-results-api.mjs`,
+`verify-smokecraft-hf5c2b1-results-browser.mjs`, and
+`scripts/validateSmokecraftGoldenBoxResultsAuthority.mjs`. See
+`public/proof/smokecraft-holistic-fix-5c-2b-1/00-proof-index.md`.

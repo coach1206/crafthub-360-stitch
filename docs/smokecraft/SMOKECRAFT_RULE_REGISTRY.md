@@ -227,3 +227,17 @@ under. `ELIGIBLE_ENTRY_STATUSES_FOR_ASSIGNMENT = ['submitted',
 'locked', 'under_review']` versions which entry states a judge may be
 assigned to. No new or conflicting rubric was invented this pass — see
 `SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md` for the full criterion table.
+
+## Holistic Fix 5C-2B-1 update (Golden Box results aggregation and final ranking)
+
+`RESULT_TIE_BREAK_RULE_VERSION = 1` (`resultsService.js`) versions the
+deterministic tie-break order: final weighted score, `construction`
+average, `aroma` average (blend quality), `rule_compliance` average
+(presentation), score variance, submission timestamp, entry ID —
+recorded on every finalized result and canonical event so a future
+rule change is auditable against exactly which rankings were computed
+under which version. The criterion mappings for "blend quality" and
+"presentation" are drawn directly from the already-approved rubric's
+own labels ("Aroma (Blend)", "Presentation (Rule Compliance)") — no
+new criterion was invented to serve the tie-break rule. See
+`SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md` for the full rule.

@@ -21,6 +21,11 @@ export const CANONICAL_GOLDEN_BOX_EVENT_TYPES = [
   // a second, competing event log).
   'golden_box_judge_assigned', 'golden_box_scorecard_draft_saved',
   'golden_box_scorecard_submitted', 'golden_box_entry_scored',
+  // Holistic Fix 5C-2B-1 — results aggregation and final ranking
+  // events. Keyed by the ENTRANT's identity (guestReference — same
+  // identity createEntry/submitEntry already use for this entry), since
+  // these describe the entry's own results/ranking outcome.
+  'golden_box_results_calculated', 'golden_box_ranking_finalized',
 ]
 
 /**

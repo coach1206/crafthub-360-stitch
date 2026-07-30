@@ -28,6 +28,28 @@ const RESULT_STATE_COPY = {
   submitted: { label: 'Submitted', color: GOLD, next: 'Awaiting judge assignment and review.' },
 }
 
+// Holistic Fix 5C-2B-1 — real server-computed/finalized ranking states.
+// Never mock winners: this copy only labels a real status string the
+// server returned; the ranking rows themselves are always the live
+// server response.
+const RANKING_STATE_COPY = {
+  no_entries: 'No entries have been submitted to this competition yet.',
+  awaiting_submissions: 'Awaiting entry submissions — rankings are not available yet.',
+  awaiting_judges: 'Entries have been submitted but judges have not yet been assigned.',
+  judging_in_progress: 'Judging is still in progress — rankings will be available once all assigned judges submit their scorecards.',
+  ready_to_finalize: 'All required scorecards are complete. Rankings below are a live preview — not yet official until finalized.',
+  not_finalized: 'Official rankings have not been published yet.',
+}
+
+const TIE_BREAK_LABELS = {
+  construction_avg: 'Resolved by higher construction-quality average.',
+  blend_quality_avg: 'Resolved by higher blend-quality (aroma) average.',
+  presentation_avg: 'Resolved by higher presentation (rule compliance) average.',
+  score_variance: 'Resolved by lower score variance (more consistent judging).',
+  submission_time: 'Resolved by earlier valid final submission.',
+  entry_id_order: 'Resolved by stable entry ordering (final deterministic fallback).',
+}
+
 export default function ResultsExperience() {
   const { competitionId } = useParams()
   const [searchParams] = useSearchParams()
@@ -39,8 +61,32 @@ export default function ResultsExperience() {
   const [entryDetail, setEntryDetail] = useState(null)
   const [resultDetail, setResultDetail] = useState(null)
   const [mentorReviews, setMentorReviews] = useState([])
+  const [rankingState, setRankingState] = useState('loading')
+  const [ranking, setRanking] = useState(null)
+  const [finalizeState, setFinalizeState] = useState('idle')
+  const [finalizeError, setFinalizeError] = useState(null)
+
+  async function loadRanking() {
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) { setRankingState('offline'); return }
+    setRankingState('loading')
+    const result = await api.getCompetitionResults(competitionId)
+    if (!result.ok) { setRankingState(result.status === 401 || result.status === 403 ? 'unauthorized' : 'retry'); return }
+    setRanking(result)
+    setRankingState('ready')
+  }
+
+  async function handleFinalize() {
+    setFinalizeState('finalizing')
+    setFinalizeError(null)
+    const idempotencyKey = `gb-finalize-${competitionId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const result = await api.finalizeResults(competitionId, 1, idempotencyKey)
+    if (!result.ok) { setFinalizeState('failed'); setFinalizeError(result.error); return }
+    setFinalizeState('finalized')
+    await loadRanking()
+  }
 
   useEffect(() => { load() }, [load])
+  useEffect(() => { loadRanking() }, [competitionId]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     setXpState('loading')
     api.getXpHistory().then(result => {
@@ -100,6 +146,57 @@ export default function ResultsExperience() {
             </>
           ) : (
             <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.6)' }}>Pending — no submitted scorecards counted yet.</div>
+          )}
+        </div>
+
+        <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, marginTop: 16 }}>
+          <h2 style={{ fontSize: 14, color: GOLD, margin: '0 0 8px' }}>Competition Rankings</h2>
+          {rankingState === 'loading' && <p style={{ fontSize: 13 }}>Loading rankings…</p>}
+          {rankingState === 'offline' && (
+            <p style={{ fontSize: 13, color: DANGER }}>You appear to be offline. <button type="button" onClick={loadRanking} style={{ background: 'transparent', border: 'none', color: GOLD, textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>Retry</button></p>
+          )}
+          {rankingState === 'unauthorized' && <p style={{ fontSize: 13, color: DANGER }}>You are not authorized to view rankings for this competition.</p>}
+          {rankingState === 'retry' && (
+            <p style={{ fontSize: 13, color: DANGER }}>Unable to load rankings right now. <button type="button" onClick={loadRanking} style={{ background: 'transparent', border: 'none', color: GOLD, textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>Retry</button></p>
+          )}
+          {rankingState === 'ready' && ranking && (
+            <>
+              {ranking.status !== 'finalized' && (
+                <p style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', margin: '0 0 10px' }}>{RANKING_STATE_COPY[ranking.status] || 'Rankings are not available yet.'}</p>
+              )}
+              {ranking.status === 'finalized' && (
+                <p style={{ fontSize: 12, color: OK, margin: '0 0 10px' }}>Official, finalized rankings (result version {ranking.finalization?.result_version}, rubric v{ranking.finalization?.rubric_version}).</p>
+              )}
+              {(ranking.ranked || []).length === 0 ? (
+                ranking.status === 'ready_to_finalize' || ranking.status === 'finalized' ? null : (
+                  <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.6)' }}>No entries.</div>
+                )
+              ) : (
+                <div style={{ display: 'grid', gap: 8 }}>
+                  {ranking.ranked.map(r => {
+                    const rank = r.rank ?? r.placement
+                    const score = r.avgWeightedTotal ?? r.aggregate_score
+                    const tieBreak = r.tieBreakReason ?? r.tie_break_reason
+                    return (
+                      <div key={r.entryId || r.entry_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', border: `1px solid ${BORDER}`, borderRadius: 8, padding: '8px 12px' }}>
+                        <span style={{ fontSize: 13 }}>#{rank} — Entry {(r.entryId || r.entry_id || '').slice(0, 8)}…</span>
+                        <span style={{ fontSize: 13, color: GOLD }}>{score != null ? Number(score).toFixed(2) : '—'}</span>
+                        {tieBreak && <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.55)' }}>{TIE_BREAK_LABELS[tieBreak] || tieBreak}</span>}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+              {ranking.status === 'ready_to_finalize' && (
+                <div style={{ marginTop: 14 }}>
+                  <button type="button" disabled={finalizeState === 'finalizing'} onClick={handleFinalize}
+                    style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: finalizeState === 'finalizing' ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
+                    {finalizeState === 'finalizing' ? 'Finalizing…' : 'Finalize Results'}
+                  </button>
+                  {finalizeState === 'failed' && <p role="alert" style={{ color: DANGER, fontSize: 12, marginTop: 8 }}>{finalizeError}</p>}
+                </div>
+              )}
+            </>
           )}
         </div>
 

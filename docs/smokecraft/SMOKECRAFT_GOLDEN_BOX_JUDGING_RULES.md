@@ -102,7 +102,61 @@ recorded via the existing `smokecraft_progression_events` log
 (`guestReference: user:${judgeUserId}`) since these describe judging
 activity, not learner progress.
 
+## Results aggregation and final ranking (Holistic Fix 5C-2B-1)
+
+### Eligibility
+
+An entry enters final ranking only when: it has a real submission
+(`golden_box_submissions` row), it was never withdrawn or
+disqualified, it has at least one judge assignment, every assigned
+judge has a completed (`submitted`/`locked`) scorecard, and every
+counted scorecard was scored under the currently active rubric
+version. An entry missing any of the above is returned as an honest
+pending state (`awaiting_submission`, `awaiting_judges`,
+`judging_in_progress`, or `rubric_version_mismatch`) — never silently
+treated as scored or averaged with a zero.
+
+### Aggregation
+
+For each eligible entry, computed server-side from every judge's
+LATEST scorecard (an amendment supersedes the scorecard it was
+amended from — never double-counted): judge count, completed
+scorecard count, average weighted score, per-criterion averages,
+minimum/maximum judge score, and population variance of judges'
+weighted totals.
+
+### Deterministic tie-break — rule version 1
+
+1. Higher final weighted score (average of judges' weighted totals)
+2. Higher `construction` criterion average
+3. Higher `aroma` criterion average (its own approved label is "Aroma
+   (Blend)" — the blend-quality measure)
+4. Higher `rule_compliance` criterion average (its own approved label
+   is "Presentation (Rule Compliance)")
+5. Lower score variance (more consistent judging preferred)
+6. Earlier valid final submission timestamp (`golden_box_entries.submitted_at`)
+7. Stable entry ID ordering — the final, deterministic fallback
+
+The rule version used (`RESULT_TIE_BREAK_RULE_VERSION`) is recorded on
+every finalized result and canonical event.
+
+### Finalization
+
+Authorized staff only (`requireRole('admin')`). Atomic — every ranked
+entry's result row is written inside a single transaction. Idempotent
+— `golden_box_result_finalizations` has a real
+`UNIQUE(competition_id, result_version)` constraint plus an
+`idempotency_key`; a repeated finalize call for the same
+(competition, result_version) returns the ORIGINAL finalized result,
+never a recomputation. Blocked (`409 judging_incomplete`) while any
+entry with real judge assignments is still genuinely mid-judging — an
+entry with zero assignments never blocks finalization of the entries
+that were actually judged. Once finalized, a `golden_box_results` row
+is immutable and is the ONLY thing every caller (including admins)
+sees for that competition going forward — never a freshly recomputed
+live view that could drift from what was actually finalized.
+
 ## Explicitly out of scope for this pass
 
-Final awards, the competition leaderboard, and Venue Humidor are not
-built here — see the 5C-2B handoff.
+Final awards, badge/Passport/XP reward issuance, and Venue Humidor are
+not built here — see the 5C-2B-2 handoff.

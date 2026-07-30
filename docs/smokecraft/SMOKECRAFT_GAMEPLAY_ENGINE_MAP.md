@@ -416,3 +416,24 @@ unique index, and four new canonical events
 `golden_box_scorecard_submitted`, `golden_box_entry_scored`). See
 `SMOKECRAFT_RULE_REGISTRY.md`, `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`,
 and `SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`.
+
+## Holistic Fix 5C-2B-1 update (Golden Box results aggregation and final ranking)
+
+Audited the pre-existing `golden_box_results` table (migration 077,
+unused beyond a naive `computeAggregateResult()` that never checked
+judging completeness, exclusion status, or ranking) and built a real
+results engine (`resultsService.js`, migration 104):
+`computeCompetitionResults()` classifies every entry into excluded
+(withdrawn/disqualified), pending (awaiting submission/judges/judging-
+in-progress/rubric-version-mismatch), or eligible-and-scored, then
+deterministically ranks the eligible set using the documented 7-step
+tie-break order and records the exact tie-break reason used. Missing
+scorecards are never silently treated as zero — an incomplete entry
+is reported pending, not ranked. `finalizeResults()` is the only path
+that persists a `golden_box_results` row: authorized-staff-only,
+atomic, database-enforced idempotent via
+`golden_box_result_finalizations` (`UNIQUE(competition_id,
+result_version)`), and immutable once written. New canonical events
+`golden_box_results_calculated`/`golden_box_ranking_finalized`. See
+`SMOKECRAFT_GOLDEN_BOX_JUDGING_RULES.md`,
+`SMOKECRAFT_RULE_REGISTRY.md`, `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`.

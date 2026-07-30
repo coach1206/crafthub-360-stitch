@@ -1,0 +1,139 @@
+{
+  "pass": 33,
+  "fail": 0,
+  "total": 33,
+  "results": [
+    {
+      "name": "Test setup: scorecard submitted",
+      "ok": true
+    },
+    {
+      "name": "Finalization succeeds for a single eligible entry",
+      "ok": true
+    },
+    {
+      "name": "The single entry is ranked #1",
+      "ok": true
+    },
+    {
+      "name": "The aggregate score is the real server-computed weighted total (8/10 x 12 = 80.00)",
+      "ok": true
+    },
+    {
+      "name": "judge_count and completed_scorecard_count are real, non-fabricated counts",
+      "ok": true
+    },
+    {
+      "name": "Criterion-level averages are persisted per category",
+      "ok": true
+    },
+    {
+      "name": "is_winner is set for the top (and only) placement",
+      "ok": true
+    },
+    {
+      "name": "Finalization succeeds for multiple entries",
+      "ok": true
+    },
+    {
+      "name": "Higher-scored entry ranks #1",
+      "ok": true
+    },
+    {
+      "name": "Mid-scored entry ranks #2",
+      "ok": true
+    },
+    {
+      "name": "Lowest-scored entry ranks #3",
+      "ok": true
+    },
+    {
+      "name": "The live admin view reports the incomplete entry as judging_in_progress, never silently scored as zero",
+      "ok": true
+    },
+    {
+      "name": "Finalization is blocked while any entry is still genuinely mid-judging",
+      "ok": true
+    },
+    {
+      "name": "Finalization succeeds once every assigned judge has completed their scorecard",
+      "ok": true
+    },
+    {
+      "name": "Finalization succeeds, ranking only the real eligible entry",
+      "ok": true
+    },
+    {
+      "name": "The withdrawn entry never appears in the eligible ranking pool",
+      "ok": true
+    },
+    {
+      "name": "The disqualified entry never appears in the eligible ranking pool",
+      "ok": true
+    },
+    {
+      "name": "Both entries have the same real total weighted score (9+7 == 7+9)",
+      "ok": true
+    },
+    {
+      "name": "The entry with the higher construction average ranks first, tie-break reason recorded",
+      "ok": true
+    },
+    {
+      "name": "Both entries average to the same real weighted total (80.00)",
+      "ok": true
+    },
+    {
+      "name": "Both entries have identical real per-criterion averages",
+      "ok": true
+    },
+    {
+      "name": "The more consistently judged entry (zero variance) ranks first",
+      "ok": true
+    },
+    {
+      "name": "Identical scores, identical variance — the earlier valid submission ranks first",
+      "ok": true
+    },
+    {
+      "name": "A repeated finalize call for the same competition/result_version returns the identical original finalized row, never a recomputation",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real finalization row exists despite repeated finalize calls",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent finalize requests succeed and resolve to the SAME real finalized result (no crash, no duplicate)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real finalization row exists in the database despite the two-tab race",
+      "ok": true
+    },
+    {
+      "name": "A non-admin cannot finalize results (real role check, not client-asserted)",
+      "ok": true
+    },
+    {
+      "name": "A fabricated client-submitted placement/score in the finalize request body is completely ignored",
+      "ok": true
+    },
+    {
+      "name": "Venue A's finalized ranking contains only Venue A's own entry",
+      "ok": true
+    },
+    {
+      "name": "Competition A's ranking never includes Competition B's entry",
+      "ok": true
+    },
+    {
+      "name": "golden_box_results_calculated and golden_box_ranking_finalized were both emitted for the finalized entry",
+      "ok": true
+    },
+    {
+      "name": "The canonical golden_box_ranking_finalized event carries the real competition/rank/tie-break/result-version fields",
+      "ok": true
+    }
+  ]
+}
