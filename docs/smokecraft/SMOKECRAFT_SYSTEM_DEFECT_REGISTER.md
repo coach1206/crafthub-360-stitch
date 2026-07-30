@@ -1896,6 +1896,22 @@ pass.
 
 See `public/proof/smokecraft-venue-humidor-1b-2b-2/00-proof-index.md`.
 
+## Venue Humidor 1B-2B-3 update
+
+No new defects in previously-locked behavior were found this pass.
+Several bugs were caught in this pass's own new code before commit,
+via its own required tests: a missing regex closing slash in a
+Playwright text-selector (matched nothing, masking a real completion
+check until fixed); an ASI parsing bug where a bare parenthesized
+ternary on its own line was parsed as a call onto the previous
+statement's return value, throwing a "used before initialization"
+error; and a React dev-mode warning (harmless in production, still
+fixed) from mixing the `border` shorthand with a `borderColor`
+override on several new buttons. None of these reached the committed
+baseline, so none receive an SC-D number.
+
+See `public/proof/smokecraft-venue-humidor-1b-2b-3/00-proof-index.md`.
+
 Closed via `src/pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx`.
 Encoded as a permanent regression check in
 `verify-smokecraft-venue-humidor-1b1-browser.mjs`. See

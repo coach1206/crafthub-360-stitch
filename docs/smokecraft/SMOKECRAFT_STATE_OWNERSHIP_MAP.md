@@ -520,3 +520,22 @@ so a lost update is structurally impossible. `venue_cigar_fulfillment_events`
 is a new, append-only audit ledger — the same "one column, one writer,
 one append-only explanation" pattern as `venue_cigar_inventory_events`
 — no UPDATE/DELETE path exists for it anywhere in the codebase.
+
+## Venue Humidor 1B-2B-3 update
+
+`fulfillment_status = 'expired'` remains a value only
+`fulfillmentService.js` writes (in `expireOrder()`, as a follow-up to
+`checkoutService.cancelOrder()`'s own authoritative `status = 'refunded'
+| 'cancelled'` write) — `checkoutService.js` itself never writes
+`'expired'`, keeping the "one real writer per terminal
+`fulfillment_status` value" invariant intact even though the two
+functions cooperate on one order row. Pickup-code verification
+columns (`pickup_code_hash`/`attempts`/`expires_at`,
+`verified_at`/`verification_method`) and handoff columns
+(`handoff_staff_id`/`handoff_at`/`handoff_location`/`handoff_notes`)
+are owned exclusively by `fulfillmentService.js`'s new functions — no
+other file writes them. `venue_cigar_passport_acquisitions` is owned
+exclusively by `checkoutService.completeOrder()` — the sole writer,
+guarded by a real `UNIQUE (order_item_id)` constraint, so "exactly one
+Passport acquisition per completed order item" is a database
+invariant, not just an application convention.

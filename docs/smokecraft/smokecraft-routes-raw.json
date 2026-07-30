@@ -190,6 +190,11 @@
     "elementRaw": "<VenueHumidorFulfillmentHistory />"
   },
   {
+    "fullPath": "admin/humidor/orders/:orderId/handoff",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorHandoff />"
+  },
+  {
     "fullPath": "admin/humidor/orders/:orderId",
     "isIndex": false,
     "elementRaw": "<VenueHumidorOrderDetail />"
@@ -198,6 +203,11 @@
     "fullPath": "admin/humidor/orders",
     "isIndex": false,
     "elementRaw": "<VenueHumidorOrderQueue />"
+  },
+  {
+    "fullPath": "orders/:orderId/pickup",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorPickup />"
   },
   {
     "fullPath": "art",

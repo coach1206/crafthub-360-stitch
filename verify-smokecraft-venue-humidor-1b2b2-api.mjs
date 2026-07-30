@@ -43,6 +43,13 @@ function makeClient() {
 function sh(cmd) { return execSync(cmd, { encoding: 'utf8', env: process.env }) }
 const rid = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 
+// counter_pickup requires real code verification before handoff.
+async function verifyAndHandoff(client, venueId, orderId) {
+  const gen = await client.post(`/api/smokecraft/venue-humidor/venues/${venueId}/admin/orders/${orderId}/verification-code`, { idempotencyKey: `vh1b2b2-gencode-${rid()}` })
+  await client.post(`/api/smokecraft/venue-humidor/venues/${venueId}/admin/orders/${orderId}/verify`, { code: gen.body.code, idempotencyKey: `vh1b2b2-verify-${rid()}` })
+  return client.post(`/api/smokecraft/venue-humidor/venues/${venueId}/admin/orders/${orderId}/handoff`, { verificationMethod: 'pickup_code', idempotencyKey: `vh1b2b2-handoff-${rid()}` })
+}
+
 async function main() {
   const dbName = new URL(process.env.DATABASE_URL).pathname.replace(/^\//, '')
   const psql = (sql) => sh(`sudo -u postgres psql -d ${dbName} -tAc "${sql.replace(/"/g, '\\"')}"`).split('\n')[0].trim()
@@ -149,6 +156,9 @@ async function main() {
   assert('Jumping straight to ready from new/claimed (no confirm/prepare) is honestly rejected (409)', badJump.status === 409)
 
   console.log('\n── 9. Complete order through checkoutService.completeOrder() ──')
+  // 1B-2B-3 requires a real handoff confirmation before a ready order
+  // may complete — the locked 1B-2B-2 flow now includes that step.
+  await verifyAndHandoff(staff, venueA, ctx1.order.order_id)
   const beforeComplete = psql(`SELECT physical_quantity FROM venue_cigar_products WHERE product_id = '${ctx1.productId}'`)
   const complete = await staff.post(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx1.order.order_id}/complete`, { idempotencyKey: `vh1b2b2-complete-${rid()}` })
   assert('Completing a ready order succeeds via the canonical checkoutService path', complete.status === 200 && complete.body.order.status === 'completed' && complete.body.order.fulfillment_status === 'completed')
@@ -192,6 +202,7 @@ async function main() {
   const detail4 = await staff.get(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx4.order.order_id}`)
   await staff.post(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx4.order.order_id}/items/${detail4.body.order.items[0].order_item_id}/pick`, { idempotencyKey: `vh1b2b2-pick4-${rid()}` })
   await staff.post(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx4.order.order_id}/ready`, { idempotencyKey: `vh1b2b2-ready4-${rid()}` })
+  await verifyAndHandoff(staff, venueA, ctx4.order.order_id)
   const beforeConcurrentComplete = psql(`SELECT physical_quantity FROM venue_cigar_products WHERE product_id = '${ctx4.productId}'`)
   const sharedCompleteKey = `vh1b2b2-concurrent-complete-${rid()}`
   const [cc1, cc2] = await Promise.all([
@@ -212,6 +223,7 @@ async function main() {
   const detail5 = await staff.get(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx5.order.order_id}`)
   await staff.post(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx5.order.order_id}/items/${detail5.body.order.items[0].order_item_id}/pick`, { idempotencyKey: `vh1b2b2-pick5-${rid()}` })
   await staff.post(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx5.order.order_id}/ready`, { idempotencyKey: `vh1b2b2-ready5-${rid()}` })
+  await verifyAndHandoff(staff, venueA, ctx5.order.order_id)
   const negComplete = await staff.post(`/api/smokecraft/venue-humidor/venues/${venueA}/admin/orders/${ctx5.order.order_id}/complete`, { idempotencyKey: `vh1b2b2-complete5-${rid()}` })
   assert('Completing an order whose product now has zero real inventory is honestly rejected (409 insufficient_inventory)', negComplete.status === 409 && negComplete.body.error === 'insufficient_inventory')
 

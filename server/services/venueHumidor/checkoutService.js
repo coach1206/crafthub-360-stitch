@@ -294,6 +294,45 @@ export async function completeOrder(orderId, actorId, actorRole, { idempotencyKe
     idempotencyKey: `venue-humidor-order-completed-canonical-${orderId}`,
   })
 
+  // 1B-2B-3 Passport-acquisition boundary: written ONLY here, inside
+  // the sole canonical completion path, guarded by a real unique
+  // constraint on order_item_id — applies exactly once per completed
+  // order item regardless of which caller (fulfillment queue, future
+  // paths) reached completion. A cancelled/expired/blocked/unfulfilled
+  // order never reaches this line, so it never gets a Passport row.
+  for (const item of items) {
+    try {
+      await db.query(
+        `INSERT INTO venue_cigar_passport_acquisitions (
+           order_id, order_item_id, venue_id, customer_reference, product_id,
+           product_snapshot, quantity, idempotency_key
+         ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+         ON CONFLICT (order_item_id) DO NOTHING`,
+        [
+          orderId, item.order_item_id, order.venue_id, order.customer_reference, item.product_id,
+          JSON.stringify(order.product_snapshot || {}), item.quantity,
+          `venue-humidor-passport-${item.order_item_id}`,
+        ]
+      )
+      await recordVenueHumidorEvent({
+        guestReference: order.customer_reference, venueId: order.venue_id, sourceScreen: 'StaffCompletion', sourceRoute: `/api/smokecraft/venue-humidor/orders/${orderId}/complete`,
+        eventType: 'venue_humidor_order_completed', orderId, productId: item.product_id, quantity: item.quantity,
+        status: 'passport_save_completed',
+        idempotencyKey: `venue-humidor-passport-completed-canonical-${item.order_item_id}`,
+      })
+    } catch (err) {
+      // Passport is a real, defined boundary but its failure must
+      // never corrupt the already-committed, authoritative order
+      // completion — recorded honestly, never silently swallowed.
+      await recordVenueHumidorEvent({
+        guestReference: order.customer_reference, venueId: order.venue_id, sourceScreen: 'StaffCompletion', sourceRoute: `/api/smokecraft/venue-humidor/orders/${orderId}/complete`,
+        eventType: 'venue_humidor_order_completed', orderId, productId: item.product_id, quantity: item.quantity,
+        status: 'passport_save_failed',
+        idempotencyKey: `venue-humidor-passport-failed-canonical-${item.order_item_id}-${Date.now()}`,
+      })
+    }
+  }
+
   return { order: updated, deduplicated: false }
 }
 
@@ -357,6 +396,17 @@ export async function cancelOrder(orderId, actorId, { idempotencyKey, reason } =
   return { order: updated, deduplicated: false, restored: wasCompleted }
 }
 
+// Customer-facing read. Redacts staff-internal columns added by
+// 1B-2B-3 (pickup-code hash/attempts, staff handoff notes, internal
+// block reason, assignment/staff identity) — the customer only ever
+// sees whether a pickup code is currently active/expired, never any
+// secret material or internal staff detail.
+const CUSTOMER_INTERNAL_FIELDS = [
+  'pickup_code_hash', 'pickup_code_attempts', 'handoff_notes',
+  'assigned_staff_id', 'assigned_staff_role', 'handoff_staff_id', 'handoff_staff_role',
+  'blocked_reason',
+]
+
 export async function getOrder(venueId, orderId, actorRef) {
   const db = getDb()
   const { rows } = await db.query(`SELECT * FROM venue_cigar_orders WHERE order_id = $1 AND venue_id = $2`, [orderId, venueId])
@@ -364,5 +414,8 @@ export async function getOrder(venueId, orderId, actorRef) {
   if (!order) return null
   if (order.customer_reference !== actorRef) throw new CheckoutError('order_not_owned')
   const { rows: items } = await db.query(`SELECT * FROM venue_cigar_order_items WHERE order_id = $1`, [orderId])
-  return { ...order, items }
+  const safeOrder = { ...order }
+  for (const field of CUSTOMER_INTERNAL_FIELDS) delete safeOrder[field]
+  safeOrder.hasActivePickupCode = !!order.pickup_code_hash && (!order.pickup_code_expires_at || new Date(order.pickup_code_expires_at).getTime() > Date.now())
+  return { ...safeOrder, items }
 }

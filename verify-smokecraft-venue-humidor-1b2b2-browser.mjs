@@ -145,10 +145,24 @@ async function run() {
   const readyStateVisible = await managerPage.locator('text=Ready').first().isVisible().catch(() => false)
   readyStateVisible ? ok('Order reaches Ready state after confirm → prepare → pick → ready') : bad('Order reaches ready state')
 
+  // 1B-2B-3 requires real handoff (and, for counter_pickup, real code
+  // verification) before an order may complete.
+  await managerPage.locator('button:has-text("Verify & Handoff")').first().click()
+  await managerPage.waitForTimeout(1200)
+  await managerPage.click('button:has-text("Generate Pickup Code")')
+  await managerPage.waitForTimeout(1000)
+  const genCodeText = await managerPage.locator('text=/Code: \\d{6}/').first().textContent().catch(() => '')
+  const genCode = (genCodeText.match(/\d{6}/) || [])[0]
+  await managerPage.fill('input[aria-label="Pickup verification code"]', genCode || '')
+  await managerPage.click('button:has-text("Verify Code")')
+  await managerPage.waitForTimeout(1000)
+  await managerPage.click('button:has-text("Confirm Handoff")')
+  await managerPage.waitForTimeout(1000)
+
   const beforeCompleteQty = psql(`SELECT physical_quantity FROM venue_cigar_products WHERE product_id = '${created.product_id}'`)
   await managerPage.locator('button:has-text("Complete Order")').first().click()
   await managerPage.waitForTimeout(1500)
-  const completedStateVisible = await managerPage.locator('text=Completed').first().isVisible().catch(() => false)
+  const completedStateVisible = await managerPage.locator('text=/[Cc]ompleted/').first().isVisible().catch(() => false)
   completedStateVisible ? ok('Completing the order shows the real Completed state') : bad('Complete order shows real state')
   const afterCompleteQty = psql(`SELECT physical_quantity FROM venue_cigar_products WHERE product_id = '${created.product_id}'`)
   const decreasedByOne = Number(beforeCompleteQty) - Number(afterCompleteQty) === 1
@@ -163,7 +177,7 @@ async function run() {
   console.log('\n── Reload persistence / cross-device ──')
   await managerPage.reload({ waitUntil: 'domcontentloaded' })
   await managerPage.waitForTimeout(1200)
-  const persistedAfterReload = await managerPage.locator('text=Completed').first().isVisible().catch(() => false)
+  const persistedAfterReload = await managerPage.locator('text=/[Cc]ompleted/').first().isVisible().catch(() => false)
   persistedAfterReload ? ok('Completed state persists correctly across a genuine staff-side reload') : bad('Completed persists after reload')
 
   console.log('\n── Cancellation with a second order ──')

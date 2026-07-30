@@ -13,6 +13,10 @@ function sendError(res, err, fallback = 400) {
     idempotency_key_required: 400, note_required: 400,
     block_reason_required: 400, cancellation_reason_required: 400,
     age_verification_required: 400,
+    no_active_verification_code: 409, verification_code_expired: 409,
+    verification_rate_limited: 429, verification_failed: 401, verification_failed_order_blocked: 401,
+    verification_required: 409, handoff_required: 409,
+    idempotency_replay_no_code_returned: 409, new_promised_at_required: 400,
   }
   const code = err.code || 'internal_error'
   let status = statusByCode[code] || fallback
@@ -125,4 +129,52 @@ export async function handleListHistory(req, res) {
     const events = await fulfillmentService.listFulfillmentHistory(req.params.venueId, req.query)
     res.json({ success: true, events })
   } catch (err) { sendError(res, err, 500) }
+}
+
+// ── 1B-2B-3: pickup verification, handoff, no-show, expiration ───────
+export async function handleGenerateVerificationCode(req, res) {
+  try {
+    const result = await fulfillmentService.generateVerificationCode(req.params.venueId, req.params.orderId, req.user.id, req.user.role, req.body?.idempotencyKey)
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleVerifyCode(req, res) {
+  try {
+    const result = await fulfillmentService.verifyPickupCode(req.params.venueId, req.params.orderId, req.user.id, req.user.role, req.body?.code, req.body?.idempotencyKey)
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleConfirmHandoff(req, res) {
+  try {
+    const { verificationMethod, location, notes, idempotencyKey } = req.body || {}
+    const result = await fulfillmentService.confirmHandoff(req.params.venueId, req.params.orderId, req.user.id, req.user.role, { verificationMethod, location, notes }, idempotencyKey)
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleMarkNoShow(req, res) {
+  try {
+    const { notes, nextAction, idempotencyKey } = req.body || {}
+    const result = await fulfillmentService.markNoShow(req.params.venueId, req.params.orderId, req.user.id, req.user.role, { notes, nextAction }, idempotencyKey)
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleExtendPickupWindow(req, res) {
+  try {
+    const result = await fulfillmentService.extendPickupWindow(req.params.venueId, req.params.orderId, req.user.id, req.user.role, req.body?.newPromisedAt, req.body?.idempotencyKey)
+    res.json({ success: true, ...result })
+  } catch (err) { sendError(res, err, 500) }
+}
+
+export async function handleExpireOrder(req, res) {
+  try {
+    const result = await fulfillmentService.expireOrder(req.params.venueId, req.params.orderId, req.user.id, req.user.role, req.body?.reason, req.body?.idempotencyKey)
+    res.json({ success: true, ...result })
+  } catch (err) {
+    if (err instanceof CheckoutError) return sendError(res, err, 500)
+    sendError(res, err, 500)
+  }
 }

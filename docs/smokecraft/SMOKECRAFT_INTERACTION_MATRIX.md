@@ -770,3 +770,35 @@ console-error checks.
 
 All three screens are new, additive routes — no existing SmokeCraft
 screen was touched.
+
+## Venue Humidor 1B-2B-3 — customer pickup and staff handoff (new screens)
+
+**VenueHumidorHandoff.jsx** (`/smokecraft/admin/humidor/orders/:orderId/handoff`):
+real generate-code/verify-code flow for `counter_pickup` orders
+(6-digit code shown once to staff, bcrypt-verified server-side,
+rate-limited), a handoff-confirmation step (location/notes, staff
+visual confirmation for delivery methods), and the real Complete
+Order action — gated honestly until handoff (and, for pickup,
+verification) is real and confirmed.
+
+**VenueHumidorPickup.jsx** (`/smokecraft/orders/:orderId/pickup`): the
+real customer-facing pickup screen — venue name, fulfillment method,
+real order items/total, and honest per-fulfillment-status messaging
+(new/confirmed/in_preparation/ready/completed/cancelled/expired/
+blocked) that never claims completion before the real server status
+says so. Auto-refreshes every 15s while the order is still active.
+Never renders staff notes, internal block reasons, or staff identity.
+
+`VenueHumidorOrderDetail.jsx` (1B-2B-2) gained Block/Unblock/No-Show/
+Expire controls (server paths existed since 1B-2B-2; only the UI was
+missing) and a "Verify & Handoff" button that replaces direct
+completion for a ready order that has not yet been handed off.
+Verified: 18/18 browser checks
+(`verify-smokecraft-venue-humidor-1b2b3-browser.mjs`) covering the
+customer pickup screen, staff handoff screen, valid/invalid
+verification, successful pickup and table-delivery completion,
+customer synchronization, no-show, expiration, unauthorized/wrong-venue
+denial, and responsive behavior.
+
+All new screens are additive routes — no existing SmokeCraft screen
+was touched.

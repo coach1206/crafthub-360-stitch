@@ -159,9 +159,21 @@ router.post('/venues/:venueId/admin/orders/:orderId/prepare', writeLimiter, requ
 router.post('/venues/:venueId/admin/orders/:orderId/items/:orderItemId/pick', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleMarkItemPicked)
 router.post('/venues/:venueId/admin/orders/:orderId/ready', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleMarkReady)
 router.post('/venues/:venueId/admin/orders/:orderId/block', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleBlockOrder)
-router.post('/venues/:venueId/admin/orders/:orderId/unblock', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleUnblockOrder)
+// Unblock requires full access (owner/admin/manager) per mandate —
+// staff may block but not resolve/unblock.
+router.post('/venues/:venueId/admin/orders/:orderId/unblock', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, fulfillmentCtrl.handleUnblockOrder)
 router.post('/venues/:venueId/admin/orders/:orderId/notes', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleAddNote)
 router.post('/venues/:venueId/admin/orders/:orderId/complete', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleCompleteOrder)
 router.post('/venues/:venueId/admin/orders/:orderId/cancel', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleCancelOrder)
+
+// ── 1B-2B-3: pickup verification, handoff, no-show, expiration ───────
+router.post('/venues/:venueId/admin/orders/:orderId/verification-code', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleGenerateVerificationCode)
+router.post('/venues/:venueId/admin/orders/:orderId/verify', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleVerifyCode)
+router.post('/venues/:venueId/admin/orders/:orderId/handoff', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleConfirmHandoff)
+router.post('/venues/:venueId/admin/orders/:orderId/no-show', writeLimiter, requireAuth, requireVenueWrite, fulfillmentOrderVenueMatch, fulfillmentCtrl.handleMarkNoShow)
+// Pickup-window extension and expiration require full access
+// (owner/admin/manager) per mandate.
+router.post('/venues/:venueId/admin/orders/:orderId/extend-pickup-window', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, fulfillmentCtrl.handleExtendPickupWindow)
+router.post('/venues/:venueId/admin/orders/:orderId/expire', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, fulfillmentCtrl.handleExpireOrder)
 
 export default router

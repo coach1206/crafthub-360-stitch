@@ -1,0 +1,79 @@
+{
+  "pass": 18,
+  "fail": 0,
+  "total": 18,
+  "results": [
+    {
+      "name": "Customer pickup screen loads the real order",
+      "ok": true
+    },
+    {
+      "name": "Customer pickup screen shows an honest pre-ready status",
+      "ok": true
+    },
+    {
+      "name": "Customer pickup screen shows the real Ready status once staff mark ready",
+      "ok": true
+    },
+    {
+      "name": "Staff handoff screen loads",
+      "ok": true
+    },
+    {
+      "name": "Invalid verification code shows an honest error",
+      "ok": true
+    },
+    {
+      "name": "A valid verification code succeeds and shows the real verified state",
+      "ok": true
+    },
+    {
+      "name": "Completing the pickup order shows the real completed confirmation",
+      "ok": true
+    },
+    {
+      "name": "Real inventory decreased by exactly the ordered quantity on completion",
+      "ok": true
+    },
+    {
+      "name": "Customer pickup screen shows real Completed status after staff handoff",
+      "ok": true
+    },
+    {
+      "name": "Table delivery handoff is available without a pickup code (staff visual confirmation)",
+      "ok": true
+    },
+    {
+      "name": "Table/lounge service order completes successfully",
+      "ok": true
+    },
+    {
+      "name": "Marking a ready order as no-show records the real event and displays it",
+      "ok": true
+    },
+    {
+      "name": "Expiring an order shows the real Expired status",
+      "ok": true
+    },
+    {
+      "name": "Expired state persists correctly across a genuine reload",
+      "ok": true
+    },
+    {
+      "name": "An unauthorized/wrong-venue user sees an honest permission-denied state",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on the order detail/handoff flow",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff at a narrower tablet viewport",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the pickup/handoff flow",
+      "ok": true
+    }
+  ]
+}

@@ -66,3 +66,11 @@ export const unblockOrder = (venueId, orderId, idempotencyKey) => request(`/venu
 export const addFulfillmentNote = (venueId, orderId, note, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/notes`, { method: 'POST', body: { note, idempotencyKey } })
 export const completeFulfillmentOrder = (venueId, orderId, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/complete`, { method: 'POST', body: { idempotencyKey } })
 export const cancelFulfillmentOrder = (venueId, orderId, reason, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/cancel`, { method: 'POST', body: { reason, idempotencyKey } })
+
+// Venue Humidor 1B-2B-3 — pickup verification, handoff, no-show, expiration.
+export const generateVerificationCode = (venueId, orderId, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/verification-code`, { method: 'POST', body: { idempotencyKey } })
+export const verifyPickupCode = (venueId, orderId, code, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/verify`, { method: 'POST', body: { code, idempotencyKey } })
+export const confirmHandoff = (venueId, orderId, payload, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/handoff`, { method: 'POST', body: { ...payload, idempotencyKey } })
+export const markNoShow = (venueId, orderId, notes, nextAction, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/no-show`, { method: 'POST', body: { notes, nextAction, idempotencyKey } })
+export const extendPickupWindow = (venueId, orderId, newPromisedAt, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/extend-pickup-window`, { method: 'POST', body: { newPromisedAt, idempotencyKey } })
+export const expireOrder = (venueId, orderId, reason, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/expire`, { method: 'POST', body: { reason, idempotencyKey } })

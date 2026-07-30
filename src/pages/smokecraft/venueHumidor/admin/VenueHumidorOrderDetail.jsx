@@ -26,7 +26,7 @@ function fmtCents(c) { return `$${((c || 0) / 100).toFixed(2)}` }
 function genKey(prefix) { return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}` }
 
 const actionBtn = { minHeight: 44, padding: '8px 16px', borderRadius: 20, cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD }
-const actionBtnDisabled = { ...actionBtn, opacity: 0.35, cursor: 'not-allowed', borderColor: BORDER, color: 'rgba(229,226,225,0.4)' }
+const actionBtnDisabled = { ...actionBtn, opacity: 0.35, cursor: 'not-allowed', border: `1.5px solid ${BORDER}`, color: 'rgba(229,226,225,0.4)' }
 
 export default function VenueHumidorOrderDetail() {
   const navigate = useNavigate()
@@ -73,6 +73,12 @@ export default function VenueHumidorOrderDetail() {
   const handleReady = () => runAction('ready', () => api.markReady(venueId, orderId, genKey('ready')))
   const handlePick = (itemId) => runAction('pick', () => api.markItemPicked(venueId, orderId, itemId, genKey('pick')))
   const handleComplete = () => runAction('complete', () => api.completeFulfillmentOrder(venueId, orderId, genKey('complete')))
+  const [blockReason, setBlockReason] = useState('')
+  const [showBlockForm, setShowBlockForm] = useState(false)
+  const handleBlock = () => { if (!blockReason.trim()) return; runAction('block', () => api.blockOrder(venueId, orderId, blockReason.trim(), genKey('block'))); setShowBlockForm(false); setBlockReason('') }
+  const handleUnblock = () => runAction('unblock', () => api.unblockOrder(venueId, orderId, genKey('unblock')))
+  const handleNoShow = () => runAction('noshow', () => api.markNoShow(venueId, orderId, 'Customer did not arrive', 'continue_holding', genKey('noshow')))
+  const handleExpire = () => runAction('expire', () => api.expireOrder(venueId, orderId, 'pickup_window_expired', genKey('expire')))
   const handleAddNote = () => { if (!note.trim()) return; runAction('note', () => api.addFulfillmentNote(venueId, orderId, note.trim(), genKey('note'))); setNote('') }
   const handleCancel = () => {
     if (!cancelReason.trim()) { setActionState('failed'); setActionError('cancellation_reason_required'); return }
@@ -95,7 +101,8 @@ export default function VenueHumidorOrderDetail() {
   const canPick = fs === 'confirmed' || fs === 'in_preparation'
   const allPicked = order.items.every(i => i.is_picked)
   const canReady = fs === 'in_preparation' && allPicked
-  const canComplete = fs === 'ready'
+  const canComplete = fs === 'ready' && !!order.handoff_at
+  const needsHandoff = fs === 'ready' && !order.handoff_at
   const canCancel = ['new', 'awaiting_confirmation', 'confirmed', 'in_preparation', 'ready'].includes(fs)
 
   return (
@@ -112,6 +119,10 @@ export default function VenueHumidorOrderDetail() {
             <p style={{ fontSize: 12 }}>Assigned: {order.assigned_staff_id || 'Unassigned'}{order.assigned_staff_id ? ` (v${order.assignment_version})` : ''}</p>
             {order.cancellation_reason && <p style={{ fontSize: 12, color: DANGER }}>Cancellation reason: {order.cancellation_reason}</p>}
             {order.blocked_reason && <p style={{ fontSize: 12, color: DANGER }}>Blocked: {order.blocked_reason}</p>}
+            {order.expired_reason && <p style={{ fontSize: 12, color: DANGER }}>Expired: {order.expired_reason}</p>}
+            {order.no_show_at && <p style={{ fontSize: 12, color: DANGER }}>Marked no-show at {new Date(order.no_show_at).toLocaleString()}</p>}
+            {order.verified_at && <p style={{ fontSize: 12, color: OK }}>Verified at {new Date(order.verified_at).toLocaleString()} ({order.verification_method})</p>}
+            {order.handoff_at && <p style={{ fontSize: 12, color: OK }}>Handed off at {new Date(order.handoff_at).toLocaleString()} by {order.handoff_staff_id}{order.handoff_location ? ` — ${order.handoff_location}` : ''}</p>}
           </div>
 
           <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, marginBottom: 16, display: 'grid', gap: 6, fontSize: 13 }}>
@@ -156,11 +167,34 @@ export default function VenueHumidorOrderDetail() {
             <button type="button" disabled={!canConfirm || actionState === 'running'} onClick={handleConfirm} style={canConfirm ? actionBtn : actionBtnDisabled}>Confirm Order</button>
             <button type="button" disabled={!canPrepare || actionState === 'running'} onClick={handlePrepare} style={canPrepare ? actionBtn : actionBtnDisabled}>Start Preparation</button>
             <button type="button" disabled={!canReady || actionState === 'running'} onClick={handleReady} style={canReady ? actionBtn : actionBtnDisabled} title={!allPicked ? 'All items must be picked first' : ''}>Mark Ready</button>
-            <button type="button" disabled={!canComplete || actionState === 'running'} onClick={handleComplete} style={canComplete ? { ...actionBtn, borderColor: OK, color: OK } : actionBtnDisabled}>Complete Order</button>
+            {needsHandoff && (
+              <button type="button" onClick={() => navigate(`/smokecraft/admin/humidor/orders/${orderId}/handoff`)} style={{ ...actionBtn, border: `1.5px solid ${OK}`, color: OK }}>Verify &amp; Handoff</button>
+            )}
+            <button type="button" disabled={!canComplete || actionState === 'running'} onClick={handleComplete} style={canComplete ? { ...actionBtn, border: `1.5px solid ${OK}`, color: OK } : actionBtnDisabled}>Complete Order</button>
             {canCancel && !showCancelForm && (
-              <button type="button" onClick={() => setShowCancelForm(true)} style={{ ...actionBtn, borderColor: DANGER, color: DANGER }}>Cancel Order</button>
+              <button type="button" onClick={() => setShowCancelForm(true)} style={{ ...actionBtn, border: `1.5px solid ${DANGER}`, color: DANGER }}>Cancel Order</button>
+            )}
+            {fs === 'ready' && <button type="button" disabled={actionState === 'running'} onClick={handleNoShow} style={actionBtn}>Mark No-Show</button>}
+            {['new', 'awaiting_confirmation', 'confirmed', 'in_preparation', 'ready'].includes(fs) && !showBlockForm && (
+              <button type="button" onClick={() => setShowBlockForm(true)} style={{ ...actionBtn, border: `1.5px solid ${DANGER}`, color: DANGER }}>Block Order</button>
+            )}
+            {fs === 'blocked' && <button type="button" disabled={actionState === 'running'} onClick={handleUnblock} style={{ ...actionBtn, border: `1.5px solid ${OK}`, color: OK }}>Unblock Order</button>}
+            {['new', 'awaiting_confirmation', 'confirmed', 'in_preparation', 'ready', 'blocked'].includes(fs) && (
+              <button type="button" disabled={actionState === 'running'} onClick={handleExpire} style={actionBtn}>Expire Order</button>
             )}
           </div>
+
+          {showBlockForm && (
+            <div style={{ background: GLASS, border: `1px solid ${DANGER}`, borderRadius: 10, padding: 16, marginBottom: 16 }}>
+              <label htmlFor="blockReason" style={{ fontSize: 12, display: 'block', marginBottom: 4 }}>Block reason (required)</label>
+              <textarea id="blockReason" value={blockReason} onChange={e => setBlockReason(e.target.value)}
+                style={{ width: '100%', minHeight: 50, padding: 8, borderRadius: 8, border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.06)', color: CREAM, fontFamily: 'inherit', fontSize: 13, boxSizing: 'border-box' }} />
+              <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
+                <button type="button" disabled={!blockReason.trim() || actionState === 'running'} onClick={handleBlock} style={{ ...actionBtn, border: `1.5px solid ${DANGER}`, color: DANGER }}>Confirm Block</button>
+                <button type="button" onClick={() => setShowBlockForm(false)} style={actionBtn}>Back</button>
+              </div>
+            </div>
+          )}
 
           {showCancelForm && (
             <div style={{ background: GLASS, border: `1px solid ${DANGER}`, borderRadius: 10, padding: 16, marginBottom: 16 }}>
@@ -168,7 +202,7 @@ export default function VenueHumidorOrderDetail() {
               <textarea id="cancelReason" value={cancelReason} onChange={e => setCancelReason(e.target.value)}
                 style={{ width: '100%', minHeight: 60, padding: 8, borderRadius: 8, border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.06)', color: CREAM, fontFamily: 'inherit', fontSize: 13, boxSizing: 'border-box' }} />
               <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-                <button type="button" disabled={actionState === 'running'} onClick={handleCancel} style={{ ...actionBtn, borderColor: DANGER, color: DANGER }}>Confirm Cancellation</button>
+                <button type="button" disabled={actionState === 'running'} onClick={handleCancel} style={{ ...actionBtn, border: `1.5px solid ${DANGER}`, color: DANGER }}>Confirm Cancellation</button>
                 <button type="button" onClick={() => setShowCancelForm(false)} style={{ ...actionBtn }}>Back</button>
               </div>
             </div>

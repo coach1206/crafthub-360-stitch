@@ -318,3 +318,58 @@ Explicitly out of scope for this pass (per mandate): customer pickup
 verification, table/lounge delivery confirmation, staff handoff
 confirmation, pickup codes, no-show/expiration automation — these
 belong to the next package, Venue Humidor 1B-2B-3.
+
+## Venue Humidor 1B-2B-3 update — customer pickup, venue service, and fulfillment confirmation
+
+Migration 111 (additive) extends `venue_cigar_orders` with pickup-code
+verification (`pickup_code_hash` — a bcrypt hash only, never
+plaintext — `pickup_code_attempts`, `pickup_code_expires_at`,
+`verified_at`, `verification_method`), handoff (`handoff_staff_id`/
+`handoff_staff_role`/`handoff_at`/`handoff_location`/`handoff_notes`),
+lightweight no-show tracking (`no_show_at`), and `expired_reason`.
+Widens `venue_cigar_fulfillment_events.event_type` (same table, same
+append-only ledger) to cover verification/handoff/no-show/expiration/
+Passport events. Adds a new, minimal
+`venue_cigar_passport_acquisitions` table — confirmed by audit that no
+purchase-completion flow anywhere in the codebase previously wrote to
+any passport/collection table.
+
+`fulfillmentService.js` gains: `generateVerificationCode()`/
+`verifyPickupCode()` (bcrypt-hashed, venue/order-scoped, expiring,
+rate-limited to 5 attempts before auto-blocking the order),
+`confirmHandoff()` (requires real code verification first for
+`counter_pickup`; accepts staff-visual confirmation for table/lounge
+delivery), `markNoShow()` (a real operational event, never a
+fabricated terminal status), `extendPickupWindow()` and `expireOrder()`
+(both full-access only). `expireOrder()` releases inventory
+exclusively through `checkoutService.cancelOrder()`, then stamps the
+real `'expired'` value onto the `fulfillment_status` column
+`fulfillmentService.js` already exclusively owns — never touching
+`status`/`payment_status`.
+
+`completeOrderFromQueue()` now requires a real `handoff_at` (and, for
+`counter_pickup`, a real `verified_at`) before delegating to
+`checkoutService.completeOrder()` — an order never completes merely
+because a screen was opened. `checkoutService.completeOrder()` itself
+gained the Passport-acquisition boundary: after its authoritative
+`status = 'completed'` update, it inserts into
+`venue_cigar_passport_acquisitions` guarded by a real
+`ON CONFLICT (order_item_id) DO NOTHING`, so the insert applies
+exactly once regardless of retry or entry path, and never for a
+cancelled/expired/blocked/unfulfilled order (which never reaches that
+line). `checkoutService.getOrder()` (the customer-facing read) now
+redacts every staff-internal column (pickup-code hash/attempts, staff
+handoff identity/notes, internal block reason) before returning to a
+customer.
+
+Two new screens: `VenueHumidorHandoff.jsx`
+(`/smokecraft/admin/humidor/orders/:orderId/handoff`) — staff
+verification-code generation/entry and handoff confirmation, gating
+the existing Complete Order action — and `VenueHumidorPickup.jsx`
+(`/smokecraft/orders/:orderId/pickup`) — the real customer-facing
+pickup screen, showing only real, redacted order data and honest
+per-status messaging, never a fabricated success. `VenueHumidorOrderDetail.jsx`
+(1B-2B-2) gained Block/Unblock/No-Show/Expire controls (the backend
+paths already existed from 1B-2B-2 but had no UI until this pass) and
+a "Verify & Handoff" gate replacing direct completion for ready
+orders that have not yet been handed off.

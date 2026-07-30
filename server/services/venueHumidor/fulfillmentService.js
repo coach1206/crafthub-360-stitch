@@ -9,9 +9,16 @@
  * `status`/`payment_status`, never calls `applyInventoryEvent()`
  * directly, and never releases a hold directly.
  */
+import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 import { getDb } from '../../db/connection.js'
 import * as checkoutService from './checkoutService.js'
 import { getProductAvailability } from './inventoryService.js'
+
+const SALT_ROUNDS = 10
+const MAX_VERIFICATION_ATTEMPTS = 5
+const PICKUP_CODE_TTL_MS = 24 * 60 * 60 * 1000
+const PICKUP_METHOD_REQUIRES_CODE = new Set(['counter_pickup'])
 
 export class FulfillmentError extends Error {
   constructor(code) { super(code); this.code = code }
@@ -376,6 +383,245 @@ export async function addFulfillmentNote(venueId, orderId, actorId, actorRole, n
   return { deduplicated: false }
 }
 
+// ── Pickup-code verification (1B-2B-3) ────────────────────────────────
+// A real, bcrypt-hashed, venue- and order-scoped, expiring, rate-
+// limited pickup code — never stored or logged in plaintext.
+function generateNumericCode() {
+  return String(crypto.randomInt(0, 1000000)).padStart(6, '0')
+}
+
+export async function generateVerificationCode(venueId, orderId, actorId, actorRole, idempotencyKey) {
+  const db = getDb()
+  const dup = await checkIdempotency(db, idempotencyKey)
+  if (dup) throw new FulfillmentError('idempotency_replay_no_code_returned')
+
+  const order = await loadOrderForVenue(db, venueId, orderId, false)
+  if (!PRE_COMPLETION_STATES.includes(order.fulfillment_status)) throw new FulfillmentError(`invalid_transition:${order.fulfillment_status}->verification_generated`)
+
+  const code = generateNumericCode()
+  const hash = await bcrypt.hash(code, SALT_ROUNDS)
+  const expiresAt = new Date(Date.now() + PICKUP_CODE_TTL_MS).toISOString()
+
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await loadOrderForVenue(client, venueId, orderId, true)
+    await client.query(
+      `UPDATE venue_cigar_orders SET pickup_code_hash = $2, pickup_code_attempts = 0,
+         pickup_code_expires_at = $3, pickup_code_generated_at = now(), verified_at = NULL, updated_at = now()
+       WHERE order_id = $1`,
+      [orderId, hash, expiresAt]
+    )
+    // Never logs the plaintext code or its hash in event metadata.
+    await recordFulfillmentEvent(client, {
+      venueId, orderId, eventType: 'verification_generated', actorId, actorRole, idempotencyKey,
+    })
+    await client.query('COMMIT')
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+  // The plaintext code is returned exactly once, to the authorized
+  // staff caller, for display/handoff to the customer — never persisted.
+  return { code, expiresAt }
+}
+
+export async function verifyPickupCode(venueId, orderId, actorId, actorRole, submittedCode, idempotencyKey) {
+  const db = getDb()
+  const dup = await checkIdempotency(db, idempotencyKey)
+  if (dup) { const order = await loadOrderForVenue(db, venueId, orderId, false); return { order, verified: !!order.verified_at, deduplicated: true } }
+
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const order = await loadOrderForVenue(client, venueId, orderId, true)
+    const dupInLock = await checkIdempotency(client, idempotencyKey)
+    if (dupInLock) { await client.query('ROLLBACK'); return { order, verified: !!order.verified_at, deduplicated: true } }
+
+    if (!order.pickup_code_hash) throw new FulfillmentError('no_active_verification_code')
+    if (order.pickup_code_expires_at && new Date(order.pickup_code_expires_at).getTime() <= Date.now()) throw new FulfillmentError('verification_code_expired')
+    if (order.pickup_code_attempts >= MAX_VERIFICATION_ATTEMPTS) throw new FulfillmentError('verification_rate_limited')
+
+    const matches = await bcrypt.compare(String(submittedCode || ''), order.pickup_code_hash)
+    if (!matches) {
+      const { rows } = await client.query(
+        `UPDATE venue_cigar_orders SET pickup_code_attempts = pickup_code_attempts + 1, updated_at = now() WHERE order_id = $1 RETURNING *`,
+        [orderId]
+      )
+      const afterFail = rows[0]
+      await recordFulfillmentEvent(client, {
+        venueId, orderId, eventType: 'verification_failed', actorId, actorRole, idempotencyKey,
+      })
+      let blocked = false
+      if (afterFail.pickup_code_attempts >= MAX_VERIFICATION_ATTEMPTS) {
+        await client.query(
+          `UPDATE venue_cigar_orders SET fulfillment_status = 'blocked', blocked_reason = 'verification_attempts_exceeded', updated_at = now() WHERE order_id = $1`,
+          [orderId]
+        )
+        await recordFulfillmentEvent(client, {
+          venueId, orderId, eventType: 'order_blocked', previousState: afterFail.fulfillment_status, newState: 'blocked',
+          actorId: 'system', actorRole: 'system', reason: 'verification_attempts_exceeded', idempotencyKey: `${idempotencyKey}-auto-block`,
+        })
+        blocked = true
+      }
+      await client.query('COMMIT')
+      throw new FulfillmentError(blocked ? 'verification_failed_order_blocked' : 'verification_failed')
+    }
+
+    const { rows: verifiedRows } = await client.query(
+      `UPDATE venue_cigar_orders SET verified_at = now(), verification_method = 'pickup_code', updated_at = now() WHERE order_id = $1 RETURNING *`,
+      [orderId]
+    )
+    await recordFulfillmentEvent(client, {
+      venueId, orderId, eventType: 'verification_passed', actorId, actorRole, idempotencyKey,
+    })
+    await client.query('COMMIT')
+    return { order: verifiedRows[0], verified: true, deduplicated: false }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+// ── Handoff confirmation ──────────────────────────────────────────────
+export async function confirmHandoff(venueId, orderId, actorId, actorRole, { verificationMethod, location, notes }, idempotencyKey) {
+  const db = getDb()
+  const dup = await checkIdempotency(db, idempotencyKey)
+  if (dup) return { order: await loadOrderForVenue(db, venueId, orderId), deduplicated: true }
+
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const order = await loadOrderForVenue(client, venueId, orderId, true)
+    const dupInLock = await checkIdempotency(client, idempotencyKey)
+    if (dupInLock) { await client.query('ROLLBACK'); return { order, deduplicated: true } }
+
+    if (order.fulfillment_status !== 'ready') throw new FulfillmentError(`invalid_transition:${order.fulfillment_status}->handoff_confirmed`)
+    // Customer pickup requires real code verification first; other
+    // fulfillment methods (table/lounge/bar delivery) accept staff
+    // visual/recipient confirmation via the explicit verificationMethod.
+    if (PICKUP_METHOD_REQUIRES_CODE.has(order.fulfillment_method) && !order.verified_at) {
+      throw new FulfillmentError('verification_required')
+    }
+
+    const { rows } = await client.query(
+      `UPDATE venue_cigar_orders SET handoff_staff_id = $2, handoff_staff_role = $3, handoff_at = now(),
+         handoff_location = $4, handoff_notes = $5,
+         verification_method = COALESCE(verification_method, $6), updated_at = now()
+       WHERE order_id = $1 RETURNING *`,
+      [orderId, actorId, actorRole, location || null, notes || null, verificationMethod || 'staff_visual']
+    )
+    await recordFulfillmentEvent(client, {
+      venueId, orderId, eventType: 'handoff_confirmed', actorId, actorRole, staffNote: notes, idempotencyKey,
+      metadata: { verificationMethod: verificationMethod || 'staff_visual', location: location || null },
+    })
+    await client.query('COMMIT')
+    return { order: rows[0], deduplicated: false }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+// ── No-show (operational event, not a distinct terminal status) ──────
+export async function markNoShow(venueId, orderId, actorId, actorRole, { notes, nextAction }, idempotencyKey) {
+  const db = getDb()
+  const dup = await checkIdempotency(db, idempotencyKey)
+  if (dup) return { order: await loadOrderForVenue(db, venueId, orderId), deduplicated: true }
+
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const order = await loadOrderForVenue(client, venueId, orderId, true)
+    const dupInLock = await checkIdempotency(client, idempotencyKey)
+    if (dupInLock) { await client.query('ROLLBACK'); return { order, deduplicated: true } }
+    if (!['ready', 'in_preparation', 'confirmed'].includes(order.fulfillment_status)) throw new FulfillmentError(`invalid_transition:${order.fulfillment_status}->no_show_marked`)
+
+    const { rows } = await client.query(
+      `UPDATE venue_cigar_orders SET no_show_at = now(), updated_at = now() WHERE order_id = $1 RETURNING *`,
+      [orderId]
+    )
+    await recordFulfillmentEvent(client, {
+      venueId, orderId, eventType: 'no_show_marked', actorId, actorRole, staffNote: notes, idempotencyKey,
+      metadata: { nextAction: nextAction || null },
+    })
+    await client.query('COMMIT')
+    return { order: rows[0], deduplicated: false }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+// ── Pickup-window extension (full-access only, enforced at the route) ─
+export async function extendPickupWindow(venueId, orderId, actorId, actorRole, newPromisedAt, idempotencyKey) {
+  if (!newPromisedAt) throw new FulfillmentError('new_promised_at_required')
+  const db = getDb()
+  const dup = await checkIdempotency(db, idempotencyKey)
+  if (dup) return { order: await loadOrderForVenue(db, venueId, orderId), deduplicated: true }
+
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    const order = await loadOrderForVenue(client, venueId, orderId, true)
+    const dupInLock = await checkIdempotency(client, idempotencyKey)
+    if (dupInLock) { await client.query('ROLLBACK'); return { order, deduplicated: true } }
+    if (!PRE_COMPLETION_STATES.includes(order.fulfillment_status)) throw new FulfillmentError(`invalid_transition:${order.fulfillment_status}->pickup_window_extended`)
+
+    const { rows } = await client.query(
+      `UPDATE venue_cigar_orders SET promised_at = $2, updated_at = now() WHERE order_id = $1 RETURNING *`,
+      [orderId, newPromisedAt]
+    )
+    await recordFulfillmentEvent(client, {
+      venueId, orderId, eventType: 'pickup_window_extended', actorId, actorRole, idempotencyKey,
+      metadata: { newPromisedAt },
+    })
+    await client.query('COMMIT')
+    return { order: rows[0], deduplicated: false }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+// ── Expiration — releases inventory ONLY through the canonical
+// cancellation service, then stamps the real 'expired' workflow
+// state (a value checkoutService.cancelOrder() itself never writes,
+// since expiration is a fulfillment-workflow concept, not a payment
+// one) as a follow-up write to the column fulfillmentService already
+// exclusively owns. ─────────────────────────────────────────────────
+export async function expireOrder(venueId, orderId, actorId, actorRole, reason, idempotencyKey) {
+  const db = getDb()
+  const order = await loadOrderForVenue(db, venueId, orderId, false)
+  if (order.fulfillment_status === 'expired') return { order, deduplicated: true }
+  if (!PRE_COMPLETION_STATES.includes(order.fulfillment_status)) throw new FulfillmentError(`invalid_transition:${order.fulfillment_status}->expired`)
+
+  const result = await checkoutService.cancelOrder(orderId, actorId, { idempotencyKey, reason: reason || 'pickup_window_expired' })
+  const { rows } = await db.query(
+    `UPDATE venue_cigar_orders SET fulfillment_status = 'expired', expired_reason = $2, updated_at = now() WHERE order_id = $1 RETURNING *`,
+    [orderId, reason || 'pickup_window_expired']
+  )
+  const client = await db.connect()
+  try {
+    await recordFulfillmentEvent(client, {
+      venueId, orderId, eventType: 'order_expired', previousState: order.fulfillment_status, newState: 'expired',
+      actorId, actorRole, reason, idempotencyKey: `${idempotencyKey}-fulfillment-log`,
+    })
+  } catch { /* best-effort log entry; the real state change already committed */ }
+  finally { client.release() }
+  return { order: rows[0], checkoutResult: result, deduplicated: false }
+}
+
 // ── Completion / cancellation — DELEGATE ONLY, never reimplement ─────
 export async function completeOrderFromQueue(venueId, orderId, actorId, actorRole, idempotencyKey) {
   const db = getDb()
@@ -387,10 +633,17 @@ export async function completeOrderFromQueue(venueId, orderId, actorId, actorRol
   if (order.fulfillment_status !== 'ready' && order.fulfillment_status !== 'completed') {
     throw new FulfillmentError(`invalid_transition:${order.fulfillment_status}->completed`)
   }
+  // Real handoff and (for customer pickup) real code verification are
+  // required BEFORE the order may complete — an order never completes
+  // merely because a screen was opened.
+  if (order.fulfillment_status === 'ready') {
+    if (!order.handoff_at) throw new FulfillmentError('handoff_required')
+    if (PICKUP_METHOD_REQUIRES_CODE.has(order.fulfillment_method) && !order.verified_at) throw new FulfillmentError('verification_required')
+  }
   // The ENTIRE completion effect (order status, payment status,
-  // fulfillment_status, inventory deduction, audit events) happens
-  // inside checkoutService.completeOrder() — the sole authoritative
-  // completion path in the codebase.
+  // fulfillment_status, inventory deduction, Passport acquisition,
+  // audit events) happens inside checkoutService.completeOrder() —
+  // the sole authoritative completion path in the codebase.
   const result = await checkoutService.completeOrder(orderId, actorId, actorRole, { idempotencyKey })
   const client = await db.connect()
   try {
@@ -398,6 +651,10 @@ export async function completeOrderFromQueue(venueId, orderId, actorId, actorRol
       venueId, orderId, eventType: 'order_completed', previousState: 'ready', newState: 'completed',
       actorId, actorRole, idempotencyKey: `${idempotencyKey}-fulfillment-log`,
     })
+    // Invalidate the pickup code — a used/completed order's code must
+    // never be usable again. Owns only its own verification columns,
+    // never status/payment_status.
+    await client.query(`UPDATE venue_cigar_orders SET pickup_code_hash = NULL WHERE order_id = $1`, [orderId])
   } catch { /* best-effort log entry; completion itself already succeeded/deduped */ }
   finally { client.release() }
   return result

@@ -1,0 +1,131 @@
+{
+  "pass": 31,
+  "fail": 0,
+  "total": 31,
+  "results": [
+    {
+      "name": "Staff can generate a real pickup verification code for an eligible ready order",
+      "ok": true
+    },
+    {
+      "name": "Verifying the correct code succeeds",
+      "ok": true
+    },
+    {
+      "name": "An invalid pickup code is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "An expired pickup code is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "Verifying a code against the wrong venue is denied (venue isolation)",
+      "ok": true
+    },
+    {
+      "name": "A pickup code cannot be reused after the order completed (invalidated on completion)",
+      "ok": true
+    },
+    {
+      "name": "Exceeding the verification attempt limit auto-blocks the order and denies further attempts",
+      "ok": true
+    },
+    {
+      "name": "The auto-blocked order shows fulfillment_status blocked",
+      "ok": true
+    },
+    {
+      "name": "Table delivery handoff succeeds without a pickup code (staff visual confirmation)",
+      "ok": true
+    },
+    {
+      "name": "Completing after handoff succeeds via the canonical checkoutService path",
+      "ok": true
+    },
+    {
+      "name": "Completion without any handoff confirmation is honestly denied",
+      "ok": true
+    },
+    {
+      "name": "Handoff for a counter-pickup order without prior code verification is honestly denied",
+      "ok": true
+    },
+    {
+      "name": "A blocked order cannot be completed",
+      "ok": true
+    },
+    {
+      "name": "Staff (non-full-access) cannot unblock an order",
+      "ok": true
+    },
+    {
+      "name": "A manager can unblock an order",
+      "ok": true
+    },
+    {
+      "name": "An authorized manager can expire an eligible ready order",
+      "ok": true
+    },
+    {
+      "name": "Expiration releases the hold through the canonical cancellation path, restoring real availability (no physical deduction ever happened, so quantity is unchanged, not double-restored)",
+      "ok": true
+    },
+    {
+      "name": "An expired order cannot be completed",
+      "ok": true
+    },
+    {
+      "name": "Staff (non-full-access) cannot expire an order",
+      "ok": true
+    },
+    {
+      "name": "Staff can mark an eligible ready order as a no-show",
+      "ok": true
+    },
+    {
+      "name": "Staff (non-full-access) cannot extend the pickup window",
+      "ok": true
+    },
+    {
+      "name": "A manager can extend the pickup window and the new time persists",
+      "ok": true
+    },
+    {
+      "name": "Duplicate completion calls are idempotent, both resolve to the identical completed order",
+      "ok": true
+    },
+    {
+      "name": "Verifying a venue A order via the venue B path is denied",
+      "ok": true
+    },
+    {
+      "name": "A mentor (tobacconist tier) cannot confirm handoff",
+      "ok": true
+    },
+    {
+      "name": "A mentor (tobacconist tier) cannot expire an order even though mentor is in FULL_ACCESS role check bucket only for owner/admin/manager",
+      "ok": true
+    },
+    {
+      "name": "A completed order has exactly one real Passport acquisition row",
+      "ok": true
+    },
+    {
+      "name": "The Passport acquisition row has real customer/venue/quantity data",
+      "ok": true
+    },
+    {
+      "name": "An expired order has NO Passport acquisition row",
+      "ok": true
+    },
+    {
+      "name": "A cancelled order has NO Passport acquisition row",
+      "ok": true
+    },
+    {
+      "name": "The completed order's fulfillment history includes real verification/handoff/completion events",
+      "ok": true
+    }
+  ]
+}

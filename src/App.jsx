@@ -114,6 +114,8 @@ const VenueHumidorAdminInventoryEvents = lazy(() => import('./pages/smokecraft/v
 const VenueHumidorOrderQueue = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorOrderQueue.jsx'))
 const VenueHumidorOrderDetail = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorOrderDetail.jsx'))
 const VenueHumidorFulfillmentHistory = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorFulfillmentHistory.jsx'))
+const VenueHumidorHandoff = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorHandoff.jsx'))
+const VenueHumidorPickup = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorPickup.jsx'))
 const GoldenBoxCompetitionDetail = lazy(() => import('./pages/smokecraft/goldenBox/CompetitionDetail.jsx'))
 const GoldenBoxEntryWorkspace = lazy(() => import('./pages/smokecraft/goldenBox/EntryWorkspace.jsx'))
 const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenBox/ResultsExperience.jsx'))
@@ -413,8 +415,12 @@ export default function App() {
                     queue. Completion/cancellation delegate solely to
                     checkoutService.completeOrder()/cancelOrder(). */}
                 <Route path="admin/humidor/orders/history"     element={<VenueHumidorFulfillmentHistory />} />
+                <Route path="admin/humidor/orders/:orderId/handoff" element={<VenueHumidorHandoff />} />
                 <Route path="admin/humidor/orders/:orderId"    element={<VenueHumidorOrderDetail />} />
                 <Route path="admin/humidor/orders"             element={<VenueHumidorOrderQueue />} />
+
+                {/* Venue Humidor 1B-2B-3 — customer pickup screen. */}
+                <Route path="orders/:orderId/pickup"           element={<VenueHumidorPickup />} />
 
                 {/* Mentor Selection — supporting module (outside the 27-session spine).
                     Not yet folded into Meet Your Cigar (S3) as an internal tab per the
