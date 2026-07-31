@@ -1,0 +1,142 @@
+{
+  "pass": 34,
+  "fail": 0,
+  "results": [
+    {
+      "name": "Recommendations request succeeds",
+      "ok": true
+    },
+    {
+      "name": "Eligible product included",
+      "ok": true
+    },
+    {
+      "name": "Archived product excluded from purchase recommendations",
+      "ok": true
+    },
+    {
+      "name": "Hidden product excluded from purchase recommendations",
+      "ok": true
+    },
+    {
+      "name": "Out-of-stock product excluded from purchase recommendations",
+      "ok": true
+    },
+    {
+      "name": "Out-of-stock product appears in honest out-of-stock list",
+      "ok": true
+    },
+    {
+      "name": "Recommendation shows current live-computed availability",
+      "ok": true
+    },
+    {
+      "name": "Recommendation shows current price",
+      "ok": true
+    },
+    {
+      "name": "A different venue's product never appears in venue A recommendations",
+      "ok": true
+    },
+    {
+      "name": "Cold-start flag is false once real purchase history exists",
+      "ok": true
+    },
+    {
+      "name": "Recommendation request succeeds after mixed completed/cancelled history",
+      "ok": true
+    },
+    {
+      "name": "Cold-start recommendation returns real eligible results",
+      "ok": true
+    },
+    {
+      "name": "Cold-start recommendation is honestly labeled as based on selections, no purchase history",
+      "ok": true
+    },
+    {
+      "name": "Beverage pairing (real category) returns beverageDataAvailable true",
+      "ok": true
+    },
+    {
+      "name": "Unknown beverage category honestly reports beverageDataAvailable false",
+      "ok": true
+    },
+    {
+      "name": "Alternatives request succeeds for an unavailable product",
+      "ok": true
+    },
+    {
+      "name": "Alternatives correctly identify the target as out of stock",
+      "ok": true
+    },
+    {
+      "name": "Every alternative includes an honest explanation",
+      "ok": true
+    },
+    {
+      "name": "Every alternative reports stronger/milder and price comparison",
+      "ok": true
+    },
+    {
+      "name": "Top recommendation includes at least one reason or caution",
+      "ok": true
+    },
+    {
+      "name": "Staff can run assisted-selling recommendations",
+      "ok": true
+    },
+    {
+      "name": "Unauthenticated request to assisted-selling is denied",
+      "ok": true
+    },
+    {
+      "name": "A staff member without membership in venue B is denied assisted-selling access there",
+      "ok": true
+    },
+    {
+      "name": "A different customer never sees another customer's saved preferences",
+      "ok": true
+    },
+    {
+      "name": "Recommended product can be held via the canonical stick-hold endpoint (same flow as browse/detail)",
+      "ok": true
+    },
+    {
+      "name": "Recommendation initially shows the product as eligible",
+      "ok": true
+    },
+    {
+      "name": "A fresh recommendation call rechecks current inventory and excludes the now-unavailable product",
+      "ok": true
+    },
+    {
+      "name": "The canonical hold endpoint independently rejects a stale (now out-of-stock) recommendation result",
+      "ok": true
+    },
+    {
+      "name": "Preference save is naturally idempotent per customer (upsert-by-customer, not a duplicate row)",
+      "ok": true
+    },
+    {
+      "name": "No duplicate preference rows are created for the same customer",
+      "ok": true
+    },
+    {
+      "name": "Duplicate assisted-selling outcome submission is deduplicated",
+      "ok": true
+    },
+    {
+      "name": "Exactly one outcome row exists for the shared idempotency key",
+      "ok": true
+    },
+    {
+      "name": "Recommendation analytics events accumulate (append-only, never overwritten)",
+      "ok": true
+    },
+    {
+      "name": "No UPDATE/DELETE path exists for recommendation events (service module only INSERTs via recordEvent)",
+      "ok": true
+    }
+  ]
+}

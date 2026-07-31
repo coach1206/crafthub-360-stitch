@@ -554,3 +554,19 @@ readers of tables already owned by `checkoutService.js`/
 Receipt totals returned by `getReceipt()` are computed fields derived
 purely from the order row already read — no new persisted total is
 written or stored anywhere.
+
+## Venue Humidor 1B-2B-5 update
+
+`venue_cigar_recommendation_preferences` is owned exclusively by
+`recommendationService.savePreferences()` — the sole writer, upserted
+by `UNIQUE(customer_reference)`, so "one preference row per customer"
+is a database invariant. `venue_cigar_assisted_selling_outcomes` is
+owned exclusively by `recommendationService.recordAssistedSellingOutcome()`,
+guarded by `UNIQUE(idempotency_key)`. Neither table is ever written by
+any controller directly — both go through the service layer only.
+`recommendationService.js` writes no other table: recommendation
+analytics events go through the existing `recordEvent()` writer
+(`smokecraft_progression_events`, already owned by
+`progressionEventService.js` since migration 085), and every product/
+inventory/order/Passport read in this service is read-only — this pass
+introduces no new writer to any of those pre-existing tables.

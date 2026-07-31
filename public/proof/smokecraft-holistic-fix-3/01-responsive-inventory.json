@@ -21,7 +21,7 @@
           "renderedW": 390,
           "renderedH": 218.765625,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7407990225118484,
         "minTouchTarget": 13.125,
@@ -43,7 +43,7 @@
           "renderedW": 1280,
           "renderedH": 718.046875,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10244140624999998,
         "minTouchTarget": 31.59375,
@@ -65,10 +65,10 @@
           "renderedW": 1366,
           "renderedH": 766.28125,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.251678466796875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 33.703125,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -87,10 +87,10 @@
           "renderedW": 1440,
           "renderedH": 807.796875,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10244791666666664,
-        "minTouchTarget": 32,
+        "minTouchTarget": 35.53125,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -109,10 +109,10 @@
           "renderedW": 1920,
           "renderedH": 1077.0625,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0027199074074074625,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -141,7 +141,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "session%201.png?v=08ab72e"
+          "src": "session%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 10.8125,
@@ -163,7 +163,7 @@
           "renderedW": 960,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "session%201.png?v=08ab72e"
+          "src": "session%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.32499999999999996,
         "minTouchTarget": 26.625,
@@ -185,10 +185,10 @@
           "renderedW": 1258.65625,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "session%201.png?v=08ab72e"
+          "src": "session%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1505682793054539,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34.921875,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -207,7 +207,7 @@
           "renderedW": 1093.328125,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "session%201.png?v=08ab72e"
+          "src": "session%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3082337480709877,
         "minTouchTarget": 30.328125,
@@ -229,10 +229,10 @@
           "renderedW": 1333.328125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "session%201.png?v=08ab72e"
+          "src": "session%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.35699839650848764,
-        "minTouchTarget": 32,
+        "minTouchTarget": 37,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -261,7 +261,7 @@
           "renderedW": 390,
           "renderedH": 520,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3838862559241706,
         "minTouchTarget": 16.625,
@@ -283,7 +283,7 @@
           "renderedW": 600,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.53125,
         "minTouchTarget": 25.59375,
@@ -305,10 +305,10 @@
           "renderedW": 768,
           "renderedH": 1024,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.4377745241581259,
-        "minTouchTarget": 32,
+        "minTouchTarget": 32.765625,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -327,7 +327,7 @@
           "renderedW": 675,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.53125,
         "minTouchTarget": 28.796875,
@@ -349,10 +349,10 @@
           "renderedW": 810,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.578125,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34.546875,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -390,7 +390,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 10,
         "bodyEmpty": false
       },
@@ -404,7 +404,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 10,
         "bodyEmpty": false
       },
@@ -418,7 +418,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 10,
         "bodyEmpty": false
       },
@@ -432,7 +432,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 10,
         "bodyEmpty": false
       }
@@ -461,7 +461,7 @@
           "renderedW": 390,
           "renderedH": 520,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3838862559241706,
         "minTouchTarget": 16.625,
@@ -483,7 +483,7 @@
           "renderedW": 600,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.53125,
         "minTouchTarget": 25.59375,
@@ -505,10 +505,10 @@
           "renderedW": 768,
           "renderedH": 1024,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.4377745241581259,
-        "minTouchTarget": 32,
+        "minTouchTarget": 32.765625,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -527,7 +527,7 @@
           "renderedW": 675,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.53125,
         "minTouchTarget": 28.796875,
@@ -549,10 +549,10 @@
           "renderedW": 810,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.578125,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34.546875,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -581,7 +581,7 @@
           "renderedW": 390,
           "renderedH": 218.765625,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7407990225118484,
         "minTouchTarget": 13.125,
@@ -603,7 +603,7 @@
           "renderedW": 1280,
           "renderedH": 718.046875,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10244140624999998,
         "minTouchTarget": 31.59375,
@@ -625,10 +625,10 @@
           "renderedW": 1366,
           "renderedH": 766.28125,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.251678466796875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 33.703125,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -647,10 +647,10 @@
           "renderedW": 1440,
           "renderedH": 807.796875,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10244791666666664,
-        "minTouchTarget": 32,
+        "minTouchTarget": 35.53125,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -669,10 +669,10 @@
           "renderedW": 1920,
           "renderedH": 1077.0625,
           "objectFit": "fill",
-          "src": "smokecraft-landing.png?v=08ab72e"
+          "src": "smokecraft-landing.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0027199074074074625,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -701,7 +701,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 8.109375,
@@ -723,7 +723,7 @@
           "renderedW": 1280,
           "renderedH": 720.375,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 26.640625,
@@ -745,7 +745,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 28.4375,
@@ -767,7 +767,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 29.984375,
@@ -789,10 +789,10 @@
           "renderedW": 1918.96875,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0005371093749999556,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -821,7 +821,7 @@
           "renderedW": 390,
           "renderedH": 243.921875,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.710993039099526,
         "minTouchTarget": 34,
@@ -843,10 +843,10 @@
           "renderedW": 1151.125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.19061523437500005,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -865,10 +865,10 @@
           "renderedW": 1366,
           "renderedH": 854.390625,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1656341552734375,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -887,10 +887,10 @@
           "renderedW": 1311,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1705092592592593,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -909,10 +909,10 @@
           "renderedW": 1598.78125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.22898280767746915,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1029,7 +1029,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 9.90625,
@@ -1051,7 +1051,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 18,
@@ -1073,7 +1073,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 18,
@@ -1095,7 +1095,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 18,
@@ -1117,7 +1117,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 18,
@@ -1149,7 +1149,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 13.15625,
@@ -1171,10 +1171,10 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1193,10 +1193,10 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1215,10 +1215,10 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1237,10 +1237,10 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1278,7 +1278,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1292,7 +1292,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1306,7 +1306,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1320,7 +1320,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1349,7 +1349,7 @@
           "renderedW": 390,
           "renderedH": 289.28125,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6572497037914692,
         "minTouchTarget": 14.75,
@@ -1371,10 +1371,10 @@
           "renderedW": 1078.515625,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.15740966796875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1393,10 +1393,10 @@
           "renderedW": 1366,
           "renderedH": 1013.234375,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0105133056640625,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1415,10 +1415,10 @@
           "renderedW": 1213.328125,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.15741102430555554,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1437,10 +1437,10 @@
           "renderedW": 1456,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.2416666666666667,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1478,7 +1478,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1492,7 +1492,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1506,7 +1506,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1520,7 +1520,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1558,7 +1558,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 11,
         "bodyEmpty": false
       },
@@ -1572,7 +1572,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 11,
         "bodyEmpty": false
       },
@@ -1586,7 +1586,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 11,
         "bodyEmpty": false
       },
@@ -1600,7 +1600,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 11,
         "bodyEmpty": false
       }
@@ -1638,7 +1638,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1652,7 +1652,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1666,7 +1666,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1680,7 +1680,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1718,7 +1718,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1732,7 +1732,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1746,7 +1746,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1760,7 +1760,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1798,7 +1798,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1812,7 +1812,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1826,7 +1826,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1840,7 +1840,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1869,7 +1869,7 @@
           "renderedW": 358,
           "renderedH": 140,
           "objectFit": "cover",
-          "src": "golden-box-judging-criteria.png?v=08ab72e"
+          "src": "golden-box-judging-criteria.png?v=6e08614"
         },
         "deadSpaceRatio": 0.8477336249848098,
         "minTouchTarget": 38,
@@ -1891,10 +1891,10 @@
           "renderedW": 836,
           "renderedH": 140,
           "objectFit": "cover",
-          "src": "golden-box-judging-criteria.png?v=08ab72e"
+          "src": "golden-box-judging-criteria.png?v=6e08614"
         },
         "deadSpaceRatio": 0.885703125,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1913,10 +1913,10 @@
           "renderedW": 836,
           "renderedH": 140,
           "objectFit": "cover",
-          "src": "golden-box-judging-criteria.png?v=08ab72e"
+          "src": "golden-box-judging-criteria.png?v=6e08614"
         },
         "deadSpaceRatio": 0.9163273243045388,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1935,10 +1935,10 @@
           "renderedW": 836,
           "renderedH": 140,
           "objectFit": "cover",
-          "src": "golden-box-judging-criteria.png?v=08ab72e"
+          "src": "golden-box-judging-criteria.png?v=6e08614"
         },
         "deadSpaceRatio": 0.9096913580246914,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -1957,10 +1957,10 @@
           "renderedW": 836,
           "renderedH": 140,
           "objectFit": "cover",
-          "src": "golden-box-judging-criteria.png?v=08ab72e"
+          "src": "golden-box-judging-criteria.png?v=6e08614"
         },
         "deadSpaceRatio": 0.9435570987654321,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -1998,7 +1998,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2012,7 +2012,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2026,7 +2026,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2040,7 +2040,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2078,7 +2078,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2092,7 +2092,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2106,7 +2106,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2120,7 +2120,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2158,7 +2158,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2172,7 +2172,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2186,7 +2186,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2200,7 +2200,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2238,7 +2238,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2252,7 +2252,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2266,7 +2266,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2280,7 +2280,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2318,7 +2318,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2332,7 +2332,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2346,7 +2346,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2360,7 +2360,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2398,7 +2398,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2412,7 +2412,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2426,7 +2426,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2440,7 +2440,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2478,7 +2478,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2492,7 +2492,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2506,7 +2506,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2520,7 +2520,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2558,7 +2558,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2572,7 +2572,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2586,7 +2586,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2600,7 +2600,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2638,7 +2638,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2652,7 +2652,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2666,7 +2666,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2680,7 +2680,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2709,7 +2709,7 @@
           "renderedW": 390,
           "renderedH": 289.28125,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6572497037914692,
         "minTouchTarget": 14.75,
@@ -2731,10 +2731,10 @@
           "renderedW": 1078.515625,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.15740966796875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2753,10 +2753,10 @@
           "renderedW": 1366,
           "renderedH": 1013.234375,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0105133056640625,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2775,10 +2775,10 @@
           "renderedW": 1213.328125,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.15741102430555554,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2797,10 +2797,10 @@
           "renderedW": 1456,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "GOLDEN%20BOX%20RULES.png?v=08ab72e"
+          "src": "GOLDEN%20BOX%20RULES.png?v=6e08614"
         },
         "deadSpaceRatio": 0.2416666666666667,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2838,7 +2838,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2852,7 +2852,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2866,7 +2866,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2880,7 +2880,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2918,7 +2918,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2932,7 +2932,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2946,7 +2946,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -2960,7 +2960,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -2998,7 +2998,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3012,7 +3012,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3026,7 +3026,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3040,7 +3040,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3078,7 +3078,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3092,7 +3092,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3106,7 +3106,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3120,7 +3120,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3158,7 +3158,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3172,7 +3172,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3186,7 +3186,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3200,7 +3200,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3238,7 +3238,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3252,7 +3252,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3266,7 +3266,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3280,7 +3280,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3318,7 +3318,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3332,7 +3332,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3346,7 +3346,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3360,7 +3360,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3398,7 +3398,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3412,7 +3412,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3426,7 +3426,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3440,7 +3440,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3478,7 +3478,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3492,7 +3492,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3506,7 +3506,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3520,7 +3520,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3558,7 +3558,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3572,7 +3572,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3586,7 +3586,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3600,7 +3600,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3638,7 +3638,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3652,7 +3652,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3666,7 +3666,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3680,7 +3680,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3718,7 +3718,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3732,7 +3732,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3746,7 +3746,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3760,7 +3760,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3798,7 +3798,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3812,7 +3812,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3826,7 +3826,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3840,7 +3840,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3878,7 +3878,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3892,7 +3892,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3906,7 +3906,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3920,7 +3920,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -3958,7 +3958,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3972,7 +3972,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -3986,7 +3986,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4000,7 +4000,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -4038,7 +4038,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4052,7 +4052,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4066,7 +4066,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4080,7 +4080,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -4118,7 +4118,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4132,7 +4132,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4146,7 +4146,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4160,7 +4160,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -4198,7 +4198,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4212,7 +4212,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4226,7 +4226,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4240,7 +4240,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
@@ -4249,6 +4249,246 @@
   },
   {
     "idx": 48,
+    "path": "/smokecraft/humidor/recommendations",
+    "testedUrl": "/smokecraft/humidor/recommendations",
+    "isDynamicSegment": false,
+    "isRedirect": false,
+    "viewports": {
+      "handheld-portrait": {
+        "viewportW": 390,
+        "viewportH": 844,
+        "scrollableHeight": 844,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "tablet-10in-landscape": {
+        "viewportW": 1280,
+        "viewportH": 800,
+        "scrollableHeight": 800,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "tablet-12in-landscape": {
+        "viewportW": 1366,
+        "viewportH": 1024,
+        "scrollableHeight": 1024,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "15in-display": {
+        "viewportW": 1440,
+        "viewportH": 900,
+        "scrollableHeight": 900,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "desktop": {
+        "viewportW": 1920,
+        "viewportH": 1080,
+        "scrollableHeight": 1080,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      }
+    },
+    "screenshot": "048-humidor_recommendations.png"
+  },
+  {
+    "idx": 49,
+    "path": "/smokecraft/humidor/pairing",
+    "testedUrl": "/smokecraft/humidor/pairing",
+    "isDynamicSegment": false,
+    "isRedirect": false,
+    "viewports": {
+      "handheld-portrait": {
+        "viewportW": 390,
+        "viewportH": 844,
+        "scrollableHeight": 844,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "tablet-10in-landscape": {
+        "viewportW": 1280,
+        "viewportH": 800,
+        "scrollableHeight": 800,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "tablet-12in-landscape": {
+        "viewportW": 1366,
+        "viewportH": 1024,
+        "scrollableHeight": 1024,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "15in-display": {
+        "viewportW": 1440,
+        "viewportH": 900,
+        "scrollableHeight": 900,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "desktop": {
+        "viewportW": 1920,
+        "viewportH": 1080,
+        "scrollableHeight": 1080,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      }
+    },
+    "screenshot": "049-humidor_pairing.png"
+  },
+  {
+    "idx": 50,
+    "path": "/smokecraft/admin/humidor/assisted-selling",
+    "testedUrl": "/smokecraft/admin/humidor/assisted-selling",
+    "isDynamicSegment": false,
+    "isRedirect": false,
+    "viewports": {
+      "handheld-portrait": {
+        "viewportW": 390,
+        "viewportH": 844,
+        "scrollableHeight": 844,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "tablet-10in-landscape": {
+        "viewportW": 1280,
+        "viewportH": 800,
+        "scrollableHeight": 800,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "tablet-12in-landscape": {
+        "viewportW": 1366,
+        "viewportH": 1024,
+        "scrollableHeight": 1024,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "15in-display": {
+        "viewportW": 1440,
+        "viewportH": 900,
+        "scrollableHeight": 900,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      },
+      "desktop": {
+        "viewportW": 1920,
+        "viewportH": 1080,
+        "scrollableHeight": 1080,
+        "horizontalOverflow": false,
+        "canScrollIfNeeded": true,
+        "bottomNavHeight": 0,
+        "obscuredControls": 0,
+        "heroImage": null,
+        "deadSpaceRatio": null,
+        "minTouchTarget": 38,
+        "minFontSize": 8,
+        "bodyEmpty": false
+      }
+    },
+    "screenshot": "050-admin_humidor_assisted-selling.png"
+  },
+  {
+    "idx": 51,
     "path": "/smokecraft/art",
     "testedUrl": "/smokecraft/art",
     "isDynamicSegment": false,
@@ -4278,7 +4518,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4292,7 +4532,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4306,7 +4546,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4320,15 +4560,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "048-art.png"
+    "screenshot": "051-art.png"
   },
   {
-    "idx": 49,
+    "idx": 52,
     "path": "/smokecraft/mentor-selection",
     "testedUrl": "/smokecraft/mentor-selection",
     "isDynamicSegment": false,
@@ -4413,10 +4653,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "049-mentor-selection.png"
+    "screenshot": "052-mentor-selection.png"
   },
   {
-    "idx": 50,
+    "idx": 53,
     "path": "/smokecraft/mentor",
     "testedUrl": "/smokecraft/mentor",
     "isDynamicSegment": false,
@@ -4501,10 +4741,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "050-mentor.png"
+    "screenshot": "053-mentor.png"
   },
   {
-    "idx": 51,
+    "idx": 54,
     "path": "/smokecraft/humidor-match",
     "testedUrl": "/smokecraft/humidor-match",
     "isDynamicSegment": false,
@@ -4525,7 +4765,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 9.90625,
@@ -4547,7 +4787,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 18,
@@ -4569,7 +4809,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 18,
@@ -4591,7 +4831,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 18,
@@ -4613,7 +4853,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "Humidor%20Match%201.png?v=08ab72e"
+          "src": "Humidor%20Match%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 18,
@@ -4621,10 +4861,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "051-humidor-match.png"
+    "screenshot": "054-humidor-match.png"
   },
   {
-    "idx": 52,
+    "idx": 55,
     "path": "/smokecraft/meet-your-cigar",
     "testedUrl": "/smokecraft/meet-your-cigar",
     "isDynamicSegment": false,
@@ -4645,7 +4885,7 @@
           "renderedW": 356,
           "renderedH": 200.34375,
           "objectFit": "cover",
-          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=08ab72e"
+          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7833200419248998,
         "minTouchTarget": 34,
@@ -4667,10 +4907,10 @@
           "renderedW": 718,
           "renderedH": 220,
           "objectFit": "cover",
-          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=08ab72e"
+          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.8457421875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4689,10 +4929,10 @@
           "renderedW": 718,
           "renderedH": 220,
           "objectFit": "cover",
-          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=08ab72e"
+          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.887073343704246,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4711,10 +4951,10 @@
           "renderedW": 718,
           "renderedH": 220,
           "objectFit": "cover",
-          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=08ab72e"
+          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.8781172839506173,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4733,18 +4973,18 @@
           "renderedW": 718,
           "renderedH": 220,
           "objectFit": "cover",
-          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=08ab72e"
+          "src": "DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.9238233024691358,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "052-meet-your-cigar.png"
+    "screenshot": "055-meet-your-cigar.png"
   },
   {
-    "idx": 53,
+    "idx": 56,
     "path": "/smokecraft/terroir",
     "testedUrl": "/smokecraft/terroir",
     "isDynamicSegment": false,
@@ -4774,7 +5014,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4788,7 +5028,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4802,7 +5042,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4816,15 +5056,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "053-terroir.png"
+    "screenshot": "056-terroir.png"
   },
   {
-    "idx": 54,
+    "idx": 57,
     "path": "/smokecraft/format",
     "testedUrl": "/smokecraft/format",
     "isDynamicSegment": false,
@@ -4845,7 +5085,7 @@
           "renderedW": 390,
           "renderedH": 243.921875,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.710993039099526,
         "minTouchTarget": 34,
@@ -4867,10 +5107,10 @@
           "renderedW": 1151.125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.19061523437500005,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4889,10 +5129,10 @@
           "renderedW": 1366,
           "renderedH": 854.390625,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1656341552734375,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4911,10 +5151,10 @@
           "renderedW": 1311,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1705092592592593,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -4933,18 +5173,18 @@
           "renderedW": 1598.78125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.22898280767746915,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "054-format.png"
+    "screenshot": "057-format.png"
   },
   {
-    "idx": 55,
+    "idx": 58,
     "path": "/smokecraft/shape-size-burn",
     "testedUrl": "/smokecraft/shape-size-burn",
     "isDynamicSegment": false,
@@ -4965,7 +5205,7 @@
           "renderedW": 390,
           "renderedH": 243.921875,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.710993039099526,
         "minTouchTarget": 34,
@@ -4987,10 +5227,10 @@
           "renderedW": 1151.125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.19061523437500005,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5009,10 +5249,10 @@
           "renderedW": 1366,
           "renderedH": 854.390625,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1656341552734375,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5031,10 +5271,10 @@
           "renderedW": 1311,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1705092592592593,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5053,18 +5293,18 @@
           "renderedW": 1598.78125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "smokecraft-vitola.png?v=08ab72e"
+          "src": "smokecraft-vitola.png?v=6e08614"
         },
         "deadSpaceRatio": 0.22898280767746915,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "055-shape-size-burn.png"
+    "screenshot": "058-shape-size-burn.png"
   },
   {
-    "idx": 56,
+    "idx": 59,
     "path": "/smokecraft/cigar-gauge-guide",
     "testedUrl": "/smokecraft/cigar-gauge-guide",
     "isDynamicSegment": false,
@@ -5094,7 +5334,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5108,7 +5348,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5122,7 +5362,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5136,15 +5376,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "056-cigar-gauge-guide.png"
+    "screenshot": "059-cigar-gauge-guide.png"
   },
   {
-    "idx": 57,
+    "idx": 60,
     "path": "/smokecraft/wrapper-strength",
     "testedUrl": "/smokecraft/wrapper-strength",
     "isDynamicSegment": false,
@@ -5221,7 +5461,7 @@
           "renderedW": 466,
           "renderedH": 70,
           "objectFit": "cover",
-          "src": "final-resting-aging.png?v=08ab72e"
+          "src": "final-resting-aging.png?v=6e08614"
         },
         "deadSpaceRatio": 0.9842689043209877,
         "minTouchTarget": 24,
@@ -5229,10 +5469,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "057-wrapper-strength.png"
+    "screenshot": "060-wrapper-strength.png"
   },
   {
-    "idx": 58,
+    "idx": 61,
     "path": "/smokecraft/seed-soil",
     "testedUrl": "/smokecraft/seed-soil",
     "isDynamicSegment": false,
@@ -5253,7 +5493,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "SEED%20&%20SOIL.png?v=08ab72e"
+          "src": "SEED%20&%20SOIL.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 15.140625,
@@ -5275,7 +5515,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "SEED%20&%20SOIL.png?v=08ab72e"
+          "src": "SEED%20&%20SOIL.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 20,
@@ -5297,7 +5537,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "SEED%20&%20SOIL.png?v=08ab72e"
+          "src": "SEED%20&%20SOIL.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 20,
@@ -5319,7 +5559,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "SEED%20&%20SOIL.png?v=08ab72e"
+          "src": "SEED%20&%20SOIL.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 20,
@@ -5341,7 +5581,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "SEED%20&%20SOIL.png?v=08ab72e"
+          "src": "SEED%20&%20SOIL.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 20,
@@ -5349,10 +5589,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "058-seed-soil.png"
+    "screenshot": "061-seed-soil.png"
   },
   {
-    "idx": 59,
+    "idx": 62,
     "path": "/smokecraft/cut-toast-light",
     "testedUrl": "/smokecraft/cut-toast-light",
     "isDynamicSegment": false,
@@ -5373,7 +5613,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 13.15625,
@@ -5395,10 +5635,10 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5417,10 +5657,10 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5439,10 +5679,10 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5461,18 +5701,18 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=08ab72e"
+          "src": "CUT%20%20TOAST,%20&%20LIGHT.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "059-cut-toast-light.png"
+    "screenshot": "062-cut-toast-light.png"
   },
   {
-    "idx": 60,
+    "idx": 63,
     "path": "/smokecraft/lighting-tutorial",
     "testedUrl": "/smokecraft/lighting-tutorial",
     "isDynamicSegment": false,
@@ -5549,10 +5789,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "060-lighting-tutorial.png"
+    "screenshot": "063-lighting-tutorial.png"
   },
   {
-    "idx": 61,
+    "idx": 64,
     "path": "/smokecraft/first-third",
     "testedUrl": "/smokecraft/first-third",
     "isDynamicSegment": false,
@@ -5573,7 +5813,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "FIRST%20%20THIRD1.png?v=08ab72e"
+          "src": "FIRST%20%20THIRD1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 24.140625,
@@ -5595,7 +5835,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "FIRST%20%20THIRD1.png?v=08ab72e"
+          "src": "FIRST%20%20THIRD1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 30,
@@ -5617,7 +5857,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "FIRST%20%20THIRD1.png?v=08ab72e"
+          "src": "FIRST%20%20THIRD1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 30,
@@ -5639,7 +5879,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "FIRST%20%20THIRD1.png?v=08ab72e"
+          "src": "FIRST%20%20THIRD1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 30,
@@ -5661,7 +5901,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "FIRST%20%20THIRD1.png?v=08ab72e"
+          "src": "FIRST%20%20THIRD1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 30,
@@ -5669,10 +5909,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "061-first-third.png"
+    "screenshot": "064-first-third.png"
   },
   {
-    "idx": 62,
+    "idx": 65,
     "path": "/smokecraft/flavor-memory",
     "testedUrl": "/smokecraft/flavor-memory",
     "isDynamicSegment": false,
@@ -5693,7 +5933,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "FLAVOR%20MEMORY.png?v=08ab72e"
+          "src": "FLAVOR%20MEMORY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 34,
@@ -5715,10 +5955,10 @@
           "renderedW": 960,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "FLAVOR%20MEMORY.png?v=08ab72e"
+          "src": "FLAVOR%20MEMORY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.32499999999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 7.424,
         "bodyEmpty": false
       },
@@ -5737,10 +5977,10 @@
           "renderedW": 1258.65625,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "FLAVOR%20MEMORY.png?v=08ab72e"
+          "src": "FLAVOR%20MEMORY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1505682793054539,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 7.9228,
         "bodyEmpty": false
       },
@@ -5759,10 +5999,10 @@
           "renderedW": 1093.328125,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "FLAVOR%20MEMORY.png?v=08ab72e"
+          "src": "FLAVOR%20MEMORY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3082337480709877,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -5781,18 +6021,18 @@
           "renderedW": 1333.328125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "FLAVOR%20MEMORY.png?v=08ab72e"
+          "src": "FLAVOR%20MEMORY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.35699839650848764,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "062-flavor-memory.png"
+    "screenshot": "065-flavor-memory.png"
   },
   {
-    "idx": 63,
+    "idx": 66,
     "path": "/smokecraft/pairing-lab",
     "testedUrl": "/smokecraft/pairing-lab",
     "isDynamicSegment": false,
@@ -5813,7 +6053,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "PAIRING%20LAB1.png?v=08ab72e"
+          "src": "PAIRING%20LAB1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 25.296875,
@@ -5835,7 +6075,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "PAIRING%20LAB1.png?v=08ab72e"
+          "src": "PAIRING%20LAB1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 28.015625,
@@ -5857,7 +6097,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "PAIRING%20LAB1.png?v=08ab72e"
+          "src": "PAIRING%20LAB1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 28.515625,
@@ -5879,7 +6119,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "PAIRING%20LAB1.png?v=08ab72e"
+          "src": "PAIRING%20LAB1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 28.515625,
@@ -5901,7 +6141,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "PAIRING%20LAB1.png?v=08ab72e"
+          "src": "PAIRING%20LAB1.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 28.515625,
@@ -5909,10 +6149,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "063-pairing-lab.png"
+    "screenshot": "066-pairing-lab.png"
   },
   {
-    "idx": 64,
+    "idx": 67,
     "path": "/smokecraft/request-purchase",
     "testedUrl": "/smokecraft/request-purchase",
     "isDynamicSegment": false,
@@ -5933,7 +6173,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "REQUEST%20PURCHASE.png?v=08ab72e"
+          "src": "REQUEST%20PURCHASE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 32,
@@ -5955,7 +6195,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "REQUEST%20PURCHASE.png?v=08ab72e"
+          "src": "REQUEST%20PURCHASE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 32,
@@ -5977,7 +6217,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "REQUEST%20PURCHASE.png?v=08ab72e"
+          "src": "REQUEST%20PURCHASE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 32,
@@ -5999,7 +6239,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "REQUEST%20PURCHASE.png?v=08ab72e"
+          "src": "REQUEST%20PURCHASE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 32,
@@ -6021,7 +6261,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "REQUEST%20PURCHASE.png?v=08ab72e"
+          "src": "REQUEST%20PURCHASE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 32,
@@ -6029,10 +6269,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "064-request-purchase.png"
+    "screenshot": "067-request-purchase.png"
   },
   {
-    "idx": 65,
+    "idx": 68,
     "path": "/smokecraft/second-third",
     "testedUrl": "/smokecraft/second-third",
     "isDynamicSegment": false,
@@ -6053,7 +6293,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "SECOND%20THIRD.png?v=08ab72e"
+          "src": "SECOND%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 24.140625,
@@ -6075,7 +6315,7 @@
           "renderedW": 1279.3125,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "SECOND%20THIRD.png?v=08ab72e"
+          "src": "SECOND%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.10048339843749998,
         "minTouchTarget": 30,
@@ -6097,7 +6337,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "SECOND%20THIRD.png?v=08ab72e"
+          "src": "SECOND%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 30,
@@ -6119,7 +6359,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "SECOND%20THIRD.png?v=08ab72e"
+          "src": "SECOND%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 30,
@@ -6141,7 +6381,7 @@
           "renderedW": 1776.828125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "SECOND%20THIRD.png?v=08ab72e"
+          "src": "SECOND%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.14311915268132713,
         "minTouchTarget": 30,
@@ -6149,10 +6389,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "065-second-third.png"
+    "screenshot": "068-second-third.png"
   },
   {
-    "idx": 66,
+    "idx": 69,
     "path": "/smokecraft/mentor-commentary",
     "testedUrl": "/smokecraft/mentor-commentary",
     "isDynamicSegment": false,
@@ -6182,7 +6422,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6196,7 +6436,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6210,7 +6450,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6224,15 +6464,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "066-mentor-commentary.png"
+    "screenshot": "069-mentor-commentary.png"
   },
   {
-    "idx": 67,
+    "idx": 70,
     "path": "/smokecraft/knowledge-drop",
     "testedUrl": "/smokecraft/knowledge-drop",
     "isDynamicSegment": false,
@@ -6262,7 +6502,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6276,7 +6516,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6290,7 +6530,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6304,15 +6544,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "067-knowledge-drop.png"
+    "screenshot": "070-knowledge-drop.png"
   },
   {
-    "idx": 68,
+    "idx": 71,
     "path": "/smokecraft/knowledge-check-demo",
     "testedUrl": "/smokecraft/knowledge-check-demo",
     "isDynamicSegment": false,
@@ -6342,7 +6582,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6356,7 +6596,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6370,7 +6610,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6384,15 +6624,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "068-knowledge-check-demo.png"
+    "screenshot": "071-knowledge-check-demo.png"
   },
   {
-    "idx": 69,
+    "idx": 72,
     "path": "/smokecraft/mini-tasting-module",
     "testedUrl": "/smokecraft/mini-tasting-module",
     "isDynamicSegment": false,
@@ -6422,7 +6662,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6436,7 +6676,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6450,7 +6690,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6464,15 +6704,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "069-mini-tasting-module.png"
+    "screenshot": "072-mini-tasting-module.png"
   },
   {
-    "idx": 70,
+    "idx": 73,
     "path": "/smokecraft/final-third",
     "testedUrl": "/smokecraft/final-third",
     "isDynamicSegment": false,
@@ -6493,7 +6733,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "FINAL%20THIRD.png?v=08ab72e"
+          "src": "FINAL%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 14.03125,
@@ -6515,10 +6755,10 @@
           "renderedW": 960,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "FINAL%20THIRD.png?v=08ab72e"
+          "src": "FINAL%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.32499999999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6537,10 +6777,10 @@
           "renderedW": 1258.65625,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "FINAL%20THIRD.png?v=08ab72e"
+          "src": "FINAL%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1505682793054539,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6559,10 +6799,10 @@
           "renderedW": 1093.328125,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "FINAL%20THIRD.png?v=08ab72e"
+          "src": "FINAL%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3082337480709877,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6581,18 +6821,18 @@
           "renderedW": 1333.328125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "FINAL%20THIRD.png?v=08ab72e"
+          "src": "FINAL%20THIRD.png?v=6e08614"
         },
         "deadSpaceRatio": 0.35699839650848764,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "070-final-third.png"
+    "screenshot": "073-final-third.png"
   },
   {
-    "idx": 71,
+    "idx": 74,
     "path": "/smokecraft/scorecard",
     "testedUrl": "/smokecraft/scorecard",
     "isDynamicSegment": false,
@@ -6613,7 +6853,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "Scorecard.png?v=08ab72e"
+          "src": "Scorecard.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 20,
@@ -6635,7 +6875,7 @@
           "renderedW": 960,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "Scorecard.png?v=08ab72e"
+          "src": "Scorecard.png?v=6e08614"
         },
         "deadSpaceRatio": 0.32499999999999996,
         "minTouchTarget": 20,
@@ -6657,7 +6897,7 @@
           "renderedW": 1258.65625,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "Scorecard.png?v=08ab72e"
+          "src": "Scorecard.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1505682793054539,
         "minTouchTarget": 20,
@@ -6679,7 +6919,7 @@
           "renderedW": 1093.328125,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "Scorecard.png?v=08ab72e"
+          "src": "Scorecard.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3082337480709877,
         "minTouchTarget": 20,
@@ -6701,7 +6941,7 @@
           "renderedW": 1333.328125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "Scorecard.png?v=08ab72e"
+          "src": "Scorecard.png?v=6e08614"
         },
         "deadSpaceRatio": 0.35699839650848764,
         "minTouchTarget": 20,
@@ -6709,10 +6949,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "071-scorecard.png"
+    "screenshot": "074-scorecard.png"
   },
   {
-    "idx": 72,
+    "idx": 75,
     "path": "/smokecraft/smokecraft-challenge",
     "testedUrl": "/smokecraft/smokecraft-challenge",
     "isDynamicSegment": false,
@@ -6742,7 +6982,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6756,7 +6996,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6770,7 +7010,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6784,15 +7024,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "072-smokecraft-challenge.png"
+    "screenshot": "075-smokecraft-challenge.png"
   },
   {
-    "idx": 73,
+    "idx": 76,
     "path": "/smokecraft/challenge",
     "testedUrl": "/smokecraft/challenge",
     "isDynamicSegment": false,
@@ -6822,7 +7062,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6836,7 +7076,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6850,7 +7090,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6864,15 +7104,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "073-challenge.png"
+    "screenshot": "076-challenge.png"
   },
   {
-    "idx": 74,
+    "idx": 77,
     "path": "/smokecraft/second-humidor-match",
     "testedUrl": "/smokecraft/second-humidor-match",
     "isDynamicSegment": false,
@@ -6902,7 +7142,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6916,7 +7156,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6930,7 +7170,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6944,15 +7184,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "074-second-humidor-match.png"
+    "screenshot": "077-second-humidor-match.png"
   },
   {
-    "idx": 75,
+    "idx": 78,
     "path": "/smokecraft/mini-tasting",
     "testedUrl": "/smokecraft/mini-tasting",
     "isDynamicSegment": false,
@@ -6982,7 +7222,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -6996,7 +7236,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7010,7 +7250,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7024,15 +7264,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "075-mini-tasting.png"
+    "screenshot": "078-mini-tasting.png"
   },
   {
-    "idx": 76,
+    "idx": 79,
     "path": "/smokecraft/mini-tasting-round",
     "testedUrl": "/smokecraft/mini-tasting-round",
     "isDynamicSegment": false,
@@ -7062,7 +7302,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7076,7 +7316,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7090,7 +7330,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7104,15 +7344,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "076-mini-tasting-round.png"
+    "screenshot": "079-mini-tasting-round.png"
   },
   {
-    "idx": 77,
+    "idx": 80,
     "path": "/smokecraft/ai-summary",
     "testedUrl": "/smokecraft/ai-summary",
     "isDynamicSegment": false,
@@ -7142,7 +7382,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7156,7 +7396,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7170,7 +7410,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7184,15 +7424,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "077-ai-summary.png"
+    "screenshot": "080-ai-summary.png"
   },
   {
-    "idx": 78,
+    "idx": 81,
     "path": "/smokecraft/pairing-recommendations",
     "testedUrl": "/smokecraft/pairing-recommendations",
     "isDynamicSegment": false,
@@ -7222,7 +7462,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7236,7 +7476,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7250,7 +7490,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7264,15 +7504,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "078-pairing-recommendations.png"
+    "screenshot": "081-pairing-recommendations.png"
   },
   {
-    "idx": 79,
+    "idx": 82,
     "path": "/smokecraft/passport-stamp",
     "testedUrl": "/smokecraft/passport-stamp",
     "isDynamicSegment": false,
@@ -7302,7 +7542,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7316,7 +7556,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7330,7 +7570,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7344,15 +7584,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "079-passport-stamp.png"
+    "screenshot": "082-passport-stamp.png"
   },
   {
-    "idx": 80,
+    "idx": 83,
     "path": "/smokecraft/connections",
     "testedUrl": "/smokecraft/connections",
     "isDynamicSegment": false,
@@ -7373,7 +7613,7 @@
           "renderedW": 390,
           "renderedH": 619.078125,
           "objectFit": "fill",
-          "src": "connections-hero.jpg?v=08ab72e"
+          "src": "connections-hero.jpg?v=6e08614"
         },
         "deadSpaceRatio": 0.26649511255924174,
         "minTouchTarget": 38,
@@ -7395,10 +7635,10 @@
           "renderedW": 453.5625,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "connections-hero.jpg?v=08ab72e"
+          "src": "connections-hero.jpg?v=6e08614"
         },
         "deadSpaceRatio": 0.6810888671875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7417,10 +7657,10 @@
           "renderedW": 594.671875,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "connections-hero.jpg?v=08ab72e"
+          "src": "connections-hero.jpg?v=6e08614"
         },
         "deadSpaceRatio": 0.5986726685463946,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7439,10 +7679,10 @@
           "renderedW": 516.5625,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "connections-hero.jpg?v=08ab72e"
+          "src": "connections-hero.jpg?v=6e08614"
         },
         "deadSpaceRatio": 0.6731626157407408,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7461,18 +7701,18 @@
           "renderedW": 629.953125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "connections-hero.jpg?v=08ab72e"
+          "src": "connections-hero.jpg?v=6e08614"
         },
         "deadSpaceRatio": 0.6962031611689814,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "080-connections.png"
+    "screenshot": "083-connections.png"
   },
   {
-    "idx": 81,
+    "idx": 84,
     "path": "/smokecraft/management-sync",
     "testedUrl": "/smokecraft/management-sync",
     "isDynamicSegment": false,
@@ -7493,7 +7733,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "MANAGEMENT%20SYNC.png?v=08ab72e"
+          "src": "MANAGEMENT%20SYNC.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 38,
@@ -7515,10 +7755,10 @@
           "renderedW": 960,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "MANAGEMENT%20SYNC.png?v=08ab72e"
+          "src": "MANAGEMENT%20SYNC.png?v=6e08614"
         },
         "deadSpaceRatio": 0.32499999999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7537,10 +7777,10 @@
           "renderedW": 1258.65625,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "MANAGEMENT%20SYNC.png?v=08ab72e"
+          "src": "MANAGEMENT%20SYNC.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1505682793054539,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7559,10 +7799,10 @@
           "renderedW": 1093.328125,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "MANAGEMENT%20SYNC.png?v=08ab72e"
+          "src": "MANAGEMENT%20SYNC.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3082337480709877,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7581,18 +7821,18 @@
           "renderedW": 1333.328125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "MANAGEMENT%20SYNC.png?v=08ab72e"
+          "src": "MANAGEMENT%20SYNC.png?v=6e08614"
         },
         "deadSpaceRatio": 0.35699839650848764,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "081-management-sync.png"
+    "screenshot": "084-management-sync.png"
   },
   {
-    "idx": 82,
+    "idx": 85,
     "path": "/smokecraft/management-sync/analytics",
     "testedUrl": "/smokecraft/management-sync/analytics",
     "isDynamicSegment": false,
@@ -7622,7 +7862,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7636,7 +7876,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7650,7 +7890,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7664,15 +7904,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "082-management-sync_analytics.png"
+    "screenshot": "085-management-sync_analytics.png"
   },
   {
-    "idx": 83,
+    "idx": 86,
     "path": "/smokecraft/final-review",
     "testedUrl": "/smokecraft/final-review",
     "isDynamicSegment": false,
@@ -7702,7 +7942,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7716,7 +7956,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7730,7 +7970,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7744,15 +7984,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "083-final-review.png"
+    "screenshot": "086-final-review.png"
   },
   {
-    "idx": 84,
+    "idx": 87,
     "path": "/smokecraft/rewards",
     "testedUrl": "/smokecraft/rewards",
     "isDynamicSegment": false,
@@ -7782,7 +8022,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7796,7 +8036,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7810,7 +8050,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -7824,15 +8064,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "084-rewards.png"
+    "screenshot": "087-rewards.png"
   },
   {
-    "idx": 85,
+    "idx": 88,
     "path": "/smokecraft/skill-tree",
     "testedUrl": "/smokecraft/skill-tree",
     "isDynamicSegment": false,
@@ -7853,7 +8093,7 @@
           "renderedW": 356,
           "renderedH": 237.328125,
           "objectFit": "fill",
-          "src": "skill%20tree%201.png?v=08ab72e"
+          "src": "skill%20tree%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7433199279985417,
         "minTouchTarget": 24,
@@ -7875,7 +8115,7 @@
           "renderedW": 1034,
           "renderedH": 689.328125,
           "objectFit": "fill",
-          "src": "skill%20tree%201.png?v=08ab72e"
+          "src": "skill%20tree%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.30394015502929683,
         "minTouchTarget": 24,
@@ -7897,7 +8137,7 @@
           "renderedW": 1034,
           "renderedH": 689.328125,
           "objectFit": "fill",
-          "src": "skill%20tree%201.png?v=08ab72e"
+          "src": "skill%20tree%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.490439352144434,
         "minTouchTarget": 24,
@@ -7919,7 +8159,7 @@
           "renderedW": 1034,
           "renderedH": 689.328125,
           "objectFit": "fill",
-          "src": "skill%20tree%201.png?v=08ab72e"
+          "src": "skill%20tree%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.45002678915895067,
         "minTouchTarget": 24,
@@ -7941,7 +8181,7 @@
           "renderedW": 1034,
           "renderedH": 689.328125,
           "objectFit": "fill",
-          "src": "skill%20tree%201.png?v=08ab72e"
+          "src": "skill%20tree%201.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6562667432243441,
         "minTouchTarget": 24,
@@ -7949,10 +8189,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "085-skill-tree.png"
+    "screenshot": "088-skill-tree.png"
   },
   {
-    "idx": 86,
+    "idx": 89,
     "path": "/smokecraft/collections",
     "testedUrl": "/smokecraft/collections",
     "isDynamicSegment": false,
@@ -7973,7 +8213,7 @@
           "renderedW": 356,
           "renderedH": 267,
           "objectFit": "fill",
-          "src": "collection%20center.png?v=08ab72e"
+          "src": "collection%20center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7112285818446955,
         "minTouchTarget": 24,
@@ -7995,7 +8235,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "collection%20center.png?v=08ab72e"
+          "src": "collection%20center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.21692675781250004,
         "minTouchTarget": 24,
@@ -8017,7 +8257,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "collection%20center.png?v=08ab72e"
+          "src": "collection%20center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.4267399398334554,
         "minTouchTarget": 24,
@@ -8039,7 +8279,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "collection%20center.png?v=08ab72e"
+          "src": "collection%20center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.381275462962963,
         "minTouchTarget": 24,
@@ -8061,7 +8301,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "collection%20center.png?v=08ab72e"
+          "src": "collection%20center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6132971643518519,
         "minTouchTarget": 24,
@@ -8069,10 +8309,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "086-collections.png"
+    "screenshot": "089-collections.png"
   },
   {
-    "idx": 87,
+    "idx": 90,
     "path": "/smokecraft/challenge-hub",
     "testedUrl": "/smokecraft/challenge-hub",
     "isDynamicSegment": false,
@@ -8093,7 +8333,7 @@
           "renderedW": 356,
           "renderedH": 267,
           "objectFit": "fill",
-          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=08ab72e"
+          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7112285818446955,
         "minTouchTarget": 24,
@@ -8115,7 +8355,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=08ab72e"
+          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=6e08614"
         },
         "deadSpaceRatio": 0.21692675781250004,
         "minTouchTarget": 24,
@@ -8137,7 +8377,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=08ab72e"
+          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=6e08614"
         },
         "deadSpaceRatio": 0.4267399398334554,
         "minTouchTarget": 24,
@@ -8159,7 +8399,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=08ab72e"
+          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=6e08614"
         },
         "deadSpaceRatio": 0.381275462962963,
         "minTouchTarget": 24,
@@ -8181,7 +8421,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=08ab72e"
+          "src": "Daily%20and%20weekly%20Challenge%20Hub.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6132971643518519,
         "minTouchTarget": 24,
@@ -8189,10 +8429,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "087-challenge-hub.png"
+    "screenshot": "090-challenge-hub.png"
   },
   {
-    "idx": 88,
+    "idx": 91,
     "path": "/smokecraft/challenges/blend-fault-identification",
     "testedUrl": "/smokecraft/challenges/blend-fault-identification",
     "isDynamicSegment": false,
@@ -8269,10 +8509,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "088-challenges_blend-fault-identification.png"
+    "screenshot": "091-challenges_blend-fault-identification.png"
   },
   {
-    "idx": 89,
+    "idx": 92,
     "path": "/smokecraft/filler-arrangement",
     "testedUrl": "/smokecraft/filler-arrangement",
     "isDynamicSegment": false,
@@ -8293,7 +8533,7 @@
           "renderedW": 356,
           "renderedH": 267,
           "objectFit": "fill",
-          "src": "filler%20arrangement.png?v=08ab72e"
+          "src": "filler%20arrangement.png?v=6e08614"
         },
         "deadSpaceRatio": 0.7112285818446955,
         "minTouchTarget": 24,
@@ -8315,7 +8555,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "filler%20arrangement.png?v=08ab72e"
+          "src": "filler%20arrangement.png?v=6e08614"
         },
         "deadSpaceRatio": 0.21692675781250004,
         "minTouchTarget": 24,
@@ -8337,7 +8577,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "filler%20arrangement.png?v=08ab72e"
+          "src": "filler%20arrangement.png?v=6e08614"
         },
         "deadSpaceRatio": 0.4267399398334554,
         "minTouchTarget": 24,
@@ -8359,7 +8599,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "filler%20arrangement.png?v=08ab72e"
+          "src": "filler%20arrangement.png?v=6e08614"
         },
         "deadSpaceRatio": 0.381275462962963,
         "minTouchTarget": 24,
@@ -8381,7 +8621,7 @@
           "renderedW": 1034,
           "renderedH": 775.5,
           "objectFit": "fill",
-          "src": "filler%20arrangement.png?v=08ab72e"
+          "src": "filler%20arrangement.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6132971643518519,
         "minTouchTarget": 24,
@@ -8389,10 +8629,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "089-filler-arrangement.png"
+    "screenshot": "092-filler-arrangement.png"
   },
   {
-    "idx": 90,
+    "idx": 93,
     "path": "/smokecraft/session-complete",
     "testedUrl": "/smokecraft/session-complete",
     "isDynamicSegment": false,
@@ -8422,7 +8662,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8436,7 +8676,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8450,7 +8690,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8464,15 +8704,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "090-session-complete.png"
+    "screenshot": "093-session-complete.png"
   },
   {
-    "idx": 91,
+    "idx": 94,
     "path": "/smokecraft/visit-complete",
     "testedUrl": "/smokecraft/visit-complete",
     "isDynamicSegment": false,
@@ -8502,7 +8742,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8516,7 +8756,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8530,7 +8770,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8544,15 +8784,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "091-visit-complete.png"
+    "screenshot": "094-visit-complete.png"
   },
   {
-    "idx": 92,
+    "idx": 95,
     "path": "/smokecraft/origins",
     "testedUrl": "/smokecraft/origins",
     "isDynamicSegment": false,
@@ -8582,7 +8822,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8596,7 +8836,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8610,7 +8850,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8624,15 +8864,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "092-origins.png"
+    "screenshot": "095-origins.png"
   },
   {
-    "idx": 93,
+    "idx": 96,
     "path": "/smokecraft/curation",
     "testedUrl": "/smokecraft/curation",
     "isDynamicSegment": false,
@@ -8662,7 +8902,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8676,7 +8916,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8690,7 +8930,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8704,15 +8944,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "093-curation.png"
+    "screenshot": "096-curation.png"
   },
   {
-    "idx": 94,
+    "idx": 97,
     "path": "/smokecraft/leaves",
     "testedUrl": "/smokecraft/leaves",
     "isDynamicSegment": false,
@@ -8742,7 +8982,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8756,7 +8996,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8770,7 +9010,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8784,15 +9024,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "094-leaves.png"
+    "screenshot": "097-leaves.png"
   },
   {
-    "idx": 95,
+    "idx": 98,
     "path": "/smokecraft/leaf-challenge",
     "testedUrl": "/smokecraft/leaf-challenge",
     "isDynamicSegment": false,
@@ -8869,10 +9109,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "095-leaf-challenge.png"
+    "screenshot": "098-leaf-challenge.png"
   },
   {
-    "idx": 96,
+    "idx": 99,
     "path": "/smokecraft/leaf-challenge-calculating",
     "testedUrl": "/smokecraft/leaf-challenge-calculating",
     "isDynamicSegment": false,
@@ -8902,7 +9142,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8916,7 +9156,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8930,7 +9170,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8944,15 +9184,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "096-leaf-challenge-calculating.png"
+    "screenshot": "099-leaf-challenge-calculating.png"
   },
   {
-    "idx": 97,
+    "idx": 100,
     "path": "/smokecraft/leaf-challenge-result",
     "testedUrl": "/smokecraft/leaf-challenge-result",
     "isDynamicSegment": false,
@@ -8982,7 +9222,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -8996,7 +9236,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9010,7 +9250,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9024,15 +9264,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "097-leaf-challenge-result.png"
+    "screenshot": "100-leaf-challenge-result.png"
   },
   {
-    "idx": 98,
+    "idx": 101,
     "path": "/smokecraft/cultivation",
     "testedUrl": "/smokecraft/cultivation",
     "isDynamicSegment": false,
@@ -9062,7 +9302,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9076,7 +9316,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9090,7 +9330,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9104,15 +9344,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "098-cultivation.png"
+    "screenshot": "101-cultivation.png"
   },
   {
-    "idx": 99,
+    "idx": 102,
     "path": "/smokecraft/blend",
     "testedUrl": "/smokecraft/blend",
     "isDynamicSegment": false,
@@ -9189,10 +9429,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "099-blend.png"
+    "screenshot": "102-blend.png"
   },
   {
-    "idx": 100,
+    "idx": 103,
     "path": "/smokecraft/flavor-dna",
     "testedUrl": "/smokecraft/flavor-dna",
     "isDynamicSegment": false,
@@ -9222,7 +9462,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9236,7 +9476,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9250,7 +9490,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9264,15 +9504,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "100-flavor-dna.png"
+    "screenshot": "103-flavor-dna.png"
   },
   {
-    "idx": 101,
+    "idx": 104,
     "path": "/smokecraft/pairing",
     "testedUrl": "/smokecraft/pairing",
     "isDynamicSegment": false,
@@ -9389,10 +9629,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "101-pairing.png"
+    "screenshot": "104-pairing.png"
   },
   {
-    "idx": 102,
+    "idx": 105,
     "path": "/smokecraft/available",
     "testedUrl": "/smokecraft/available",
     "isDynamicSegment": false,
@@ -9469,10 +9709,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "102-available.png"
+    "screenshot": "105-available.png"
   },
   {
-    "idx": 103,
+    "idx": 106,
     "path": "/smokecraft/assistant",
     "testedUrl": "/smokecraft/assistant",
     "isDynamicSegment": false,
@@ -9502,7 +9742,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9516,7 +9756,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9530,7 +9770,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9544,15 +9784,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "103-assistant.png"
+    "screenshot": "106-assistant.png"
   },
   {
-    "idx": 104,
+    "idx": 107,
     "path": "/smokecraft/pairing-mastery",
     "testedUrl": "/smokecraft/pairing-mastery",
     "isDynamicSegment": false,
@@ -9582,7 +9822,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9596,7 +9836,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9610,7 +9850,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9624,15 +9864,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "104-pairing-mastery.png"
+    "screenshot": "107-pairing-mastery.png"
   },
   {
-    "idx": 105,
+    "idx": 108,
     "path": "/smokecraft/vitola",
     "testedUrl": "/smokecraft/vitola",
     "isDynamicSegment": false,
@@ -9709,10 +9949,10 @@
         "bodyEmpty": false
       }
     },
-    "screenshot": "105-vitola.png"
+    "screenshot": "108-vitola.png"
   },
   {
-    "idx": 106,
+    "idx": 109,
     "path": "/smokecraft/identity",
     "testedUrl": "/smokecraft/identity",
     "isDynamicSegment": false,
@@ -9733,7 +9973,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 8.109375,
@@ -9755,7 +9995,7 @@
           "renderedW": 1280,
           "renderedH": 720.375,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 26.640625,
@@ -9777,7 +10017,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 28.4375,
@@ -9799,7 +10039,7 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 29.984375,
@@ -9821,18 +10061,18 @@
           "renderedW": 1918.96875,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "IDENTY.png?v=08ab72e"
+          "src": "IDENTY.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0005371093749999556,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "106-identity.png"
+    "screenshot": "109-identity.png"
   },
   {
-    "idx": 107,
+    "idx": 110,
     "path": "/smokecraft/resume",
     "testedUrl": "/smokecraft/resume",
     "isDynamicSegment": false,
@@ -9853,7 +10093,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "Resume%20Your%20Journey.png?v=08ab72e"
+          "src": "Resume%20Your%20Journey.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 27.78125,
@@ -9875,10 +10115,10 @@
           "renderedW": 960,
           "renderedH": 720,
           "objectFit": "fill",
-          "src": "Resume%20Your%20Journey.png?v=08ab72e"
+          "src": "Resume%20Your%20Journey.png?v=6e08614"
         },
         "deadSpaceRatio": 0.32499999999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9897,10 +10137,10 @@
           "renderedW": 1258.65625,
           "renderedH": 944,
           "objectFit": "fill",
-          "src": "Resume%20Your%20Journey.png?v=08ab72e"
+          "src": "Resume%20Your%20Journey.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1505682793054539,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9919,10 +10159,10 @@
           "renderedW": 1093.328125,
           "renderedH": 820,
           "objectFit": "fill",
-          "src": "Resume%20Your%20Journey.png?v=08ab72e"
+          "src": "Resume%20Your%20Journey.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3082337480709877,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -9941,18 +10181,18 @@
           "renderedW": 1333.328125,
           "renderedH": 1000,
           "objectFit": "fill",
-          "src": "Resume%20Your%20Journey.png?v=08ab72e"
+          "src": "Resume%20Your%20Journey.png?v=6e08614"
         },
         "deadSpaceRatio": 0.35699839650848764,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "107-resume.png"
+    "screenshot": "110-resume.png"
   },
   {
-    "idx": 108,
+    "idx": 111,
     "path": "/smokecraft/leaderboard",
     "testedUrl": "/smokecraft/leaderboard",
     "isDynamicSegment": false,
@@ -9973,7 +10213,7 @@
           "renderedW": 390,
           "renderedH": 259.140625,
           "objectFit": "fill",
-          "src": "LEADERBOARD%20111.png?v=08ab72e"
+          "src": "LEADERBOARD%20111.png?v=6e08614"
         },
         "deadSpaceRatio": 0.6929613447867299,
         "minTouchTarget": 11.90625,
@@ -9995,10 +10235,10 @@
           "renderedW": 1203.90625,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "LEADERBOARD%20111.png?v=08ab72e"
+          "src": "LEADERBOARD%20111.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0594482421875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36.796875,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10017,10 +10257,10 @@
           "renderedW": 1366,
           "renderedH": 907.703125,
           "objectFit": "fill",
-          "src": "LEADERBOARD%20111.png?v=08ab72e"
+          "src": "LEADERBOARD%20111.png?v=6e08614"
         },
         "deadSpaceRatio": 0.1135711669921875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10039,10 +10279,10 @@
           "renderedW": 1354.390625,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "LEADERBOARD%20111.png?v=08ab72e"
+          "src": "LEADERBOARD%20111.png?v=6e08614"
         },
         "deadSpaceRatio": 0.05945095486111107,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10061,18 +10301,18 @@
           "renderedW": 1625.28125,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "LEADERBOARD%20111.png?v=08ab72e"
+          "src": "LEADERBOARD%20111.png?v=6e08614"
         },
         "deadSpaceRatio": 0.15349934895833328,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "108-leaderboard.png"
+    "screenshot": "111-leaderboard.png"
   },
   {
-    "idx": 109,
+    "idx": 112,
     "path": "/smokecraft/rewards-center",
     "testedUrl": "/smokecraft/rewards-center",
     "isDynamicSegment": false,
@@ -10093,7 +10333,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "Reward%20Center.png?v=08ab72e"
+          "src": "Reward%20Center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 14.046875,
@@ -10115,10 +10355,10 @@
           "renderedW": 1280,
           "renderedH": 720.375,
           "objectFit": "fill",
-          "src": "Reward%20Center.png?v=08ab72e"
+          "src": "Reward%20Center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10137,10 +10377,10 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "Reward%20Center.png?v=08ab72e"
+          "src": "Reward%20Center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10159,10 +10399,10 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "Reward%20Center.png?v=08ab72e"
+          "src": "Reward%20Center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10181,18 +10421,18 @@
           "renderedW": 1918.96875,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "Reward%20Center.png?v=08ab72e"
+          "src": "Reward%20Center.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0005371093749999556,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "109-rewards-center.png"
+    "screenshot": "112-rewards-center.png"
   },
   {
-    "idx": 110,
+    "idx": 113,
     "path": "/smokecraft/account",
     "testedUrl": "/smokecraft/account",
     "isDynamicSegment": false,
@@ -10222,7 +10462,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10236,7 +10476,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10250,7 +10490,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10264,15 +10504,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "110-account.png"
+    "screenshot": "113-account.png"
   },
   {
-    "idx": 111,
+    "idx": 114,
     "path": "/smokecraft/event-challenge",
     "testedUrl": "/smokecraft/event-challenge",
     "isDynamicSegment": false,
@@ -10302,7 +10542,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10316,7 +10556,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10330,7 +10570,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10344,15 +10584,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "111-event-challenge.png"
+    "screenshot": "114-event-challenge.png"
   },
   {
-    "idx": 112,
+    "idx": 115,
     "path": "/smokecraft/how-it-works",
     "testedUrl": "/smokecraft/how-it-works",
     "isDynamicSegment": false,
@@ -10373,7 +10613,7 @@
           "renderedW": 390,
           "renderedH": 292.5,
           "objectFit": "fill",
-          "src": "HOW%20IT%20WORKS.png?v=08ab72e"
+          "src": "HOW%20IT%20WORKS.png?v=6e08614"
         },
         "deadSpaceRatio": 0.653436018957346,
         "minTouchTarget": 11.6875,
@@ -10395,7 +10635,7 @@
           "renderedW": 1066.65625,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "HOW%20IT%20WORKS.png?v=08ab72e"
+          "src": "HOW%20IT%20WORKS.png?v=6e08614"
         },
         "deadSpaceRatio": 0.16667480468749996,
         "minTouchTarget": 32,
@@ -10417,10 +10657,10 @@
           "renderedW": 1365.328125,
           "renderedH": 1024,
           "objectFit": "fill",
-          "src": "HOW%20IT%20WORKS.png?v=08ab72e"
+          "src": "HOW%20IT%20WORKS.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0004918557833089032,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10439,10 +10679,10 @@
           "renderedW": 1200,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "HOW%20IT%20WORKS.png?v=08ab72e"
+          "src": "HOW%20IT%20WORKS.png?v=6e08614"
         },
         "deadSpaceRatio": 0.16666666666666663,
-        "minTouchTarget": 32,
+        "minTouchTarget": 36,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10461,18 +10701,18 @@
           "renderedW": 1440,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "HOW%20IT%20WORKS.png?v=08ab72e"
+          "src": "HOW%20IT%20WORKS.png?v=6e08614"
         },
         "deadSpaceRatio": 0.25,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "112-how-it-works.png"
+    "screenshot": "115-how-it-works.png"
   },
   {
-    "idx": 113,
+    "idx": 116,
     "path": "/smokecraft/demo-reset",
     "testedUrl": "/smokecraft/demo-reset",
     "isDynamicSegment": false,
@@ -10502,7 +10742,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10516,7 +10756,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10530,7 +10770,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10544,15 +10784,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "113-demo-reset.png"
+    "screenshot": "116-demo-reset.png"
   },
   {
-    "idx": 114,
+    "idx": 117,
     "path": "/smokecraft/session/start",
     "testedUrl": "/smokecraft/session/start",
     "isDynamicSegment": false,
@@ -10573,7 +10813,7 @@
           "renderedW": 390,
           "renderedH": 520,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.3838862559241706,
         "minTouchTarget": 16.625,
@@ -10595,7 +10835,7 @@
           "renderedW": 600,
           "renderedH": 800,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.53125,
         "minTouchTarget": 25.59375,
@@ -10617,10 +10857,10 @@
           "renderedW": 768,
           "renderedH": 1024,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.4377745241581259,
-        "minTouchTarget": 32,
+        "minTouchTarget": 32.765625,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10639,7 +10879,7 @@
           "renderedW": 675,
           "renderedH": 900,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.53125,
         "minTouchTarget": 28.796875,
@@ -10661,18 +10901,18 @@
           "renderedW": 810,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "smokecraft-guest-pass.png?v=08ab72e"
+          "src": "smokecraft-guest-pass.png?v=6e08614"
         },
         "deadSpaceRatio": 0.578125,
-        "minTouchTarget": 32,
+        "minTouchTarget": 34.546875,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "114-session_start.png"
+    "screenshot": "117-session_start.png"
   },
   {
-    "idx": 115,
+    "idx": 118,
     "path": "/smokecraft/guest-pass",
     "testedUrl": "/smokecraft/guest-pass",
     "isDynamicSegment": false,
@@ -10702,7 +10942,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10716,7 +10956,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10730,7 +10970,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10744,15 +10984,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "115-guest-pass.png"
+    "screenshot": "118-guest-pass.png"
   },
   {
-    "idx": 116,
+    "idx": 119,
     "path": "/smokecraft/demo",
     "testedUrl": "/smokecraft/demo",
     "isDynamicSegment": false,
@@ -10782,7 +11022,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10796,7 +11036,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10810,7 +11050,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10824,15 +11064,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "116-demo.png"
+    "screenshot": "119-demo.png"
   },
   {
-    "idx": 117,
+    "idx": 120,
     "path": "/smokecraft/scan",
     "testedUrl": "/smokecraft/scan",
     "isDynamicSegment": false,
@@ -10862,7 +11102,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10876,7 +11116,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10890,7 +11130,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -10904,15 +11144,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "117-scan.png"
+    "screenshot": "120-scan.png"
   },
   {
-    "idx": 118,
+    "idx": 121,
     "path": "/smokecraft/passport",
     "testedUrl": "/smokecraft/passport",
     "isDynamicSegment": false,
@@ -10933,7 +11173,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "360%20PASSPORT%20%202.png?v=08ab72e"
+          "src": "360%20PASSPORT%20%202.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 8.765625,
@@ -10955,7 +11195,7 @@
           "renderedW": 1280,
           "renderedH": 720.375,
           "objectFit": "fill",
-          "src": "360%20PASSPORT%20%202.png?v=08ab72e"
+          "src": "360%20PASSPORT%20%202.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
         "minTouchTarget": 28.8125,
@@ -10977,7 +11217,7 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "360%20PASSPORT%20%202.png?v=08ab72e"
+          "src": "360%20PASSPORT%20%202.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
         "minTouchTarget": 30.75,
@@ -10999,10 +11239,10 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "360%20PASSPORT%20%202.png?v=08ab72e"
+          "src": "360%20PASSPORT%20%202.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 32.40625,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11021,18 +11261,18 @@
           "renderedW": 1918.96875,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "360%20PASSPORT%20%202.png?v=08ab72e"
+          "src": "360%20PASSPORT%20%202.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0005371093749999556,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "118-passport.png"
+    "screenshot": "121-passport.png"
   },
   {
-    "idx": 119,
+    "idx": 122,
     "path": "/smokecraft/crafthub",
     "testedUrl": "/smokecraft/crafthub",
     "isDynamicSegment": false,
@@ -11053,7 +11293,7 @@
           "renderedW": 390,
           "renderedH": 219.484375,
           "objectFit": "fill",
-          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=08ab72e"
+          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.739947422985782,
         "minTouchTarget": 11.84375,
@@ -11075,10 +11315,10 @@
           "renderedW": 1280,
           "renderedH": 720.375,
           "objectFit": "fill",
-          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=08ab72e"
+          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11097,10 +11337,10 @@
           "renderedW": 1366,
           "renderedH": 768.78125,
           "objectFit": "fill",
-          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=08ab72e"
+          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.249237060546875,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11119,10 +11359,10 @@
           "renderedW": 1440,
           "renderedH": 810.421875,
           "objectFit": "fill",
-          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=08ab72e"
+          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.09953124999999996,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11141,18 +11381,18 @@
           "renderedW": 1918.96875,
           "renderedH": 1080,
           "objectFit": "fill",
-          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=08ab72e"
+          "src": "CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=6e08614"
         },
         "deadSpaceRatio": 0.0005371093749999556,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "119-crafthub.png"
+    "screenshot": "122-crafthub.png"
   },
   {
-    "idx": 120,
+    "idx": 123,
     "path": "/smokecraft/menu",
     "testedUrl": "/smokecraft/menu",
     "isDynamicSegment": false,
@@ -11198,7 +11438,7 @@
           "src": "smokecraft-explore-venue-menu-2.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11220,7 +11460,7 @@
           "src": "smokecraft-explore-venue-menu-2.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11242,7 +11482,7 @@
           "src": "smokecraft-explore-venue-menu-2.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11264,15 +11504,15 @@
           "src": "smokecraft-explore-venue-menu-2.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "120-menu.png"
+    "screenshot": "123-menu.png"
   },
   {
-    "idx": 121,
+    "idx": 124,
     "path": "/smokecraft/venue-commerce",
     "testedUrl": "/smokecraft/venue-commerce",
     "isDynamicSegment": false,
@@ -11318,7 +11558,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11340,7 +11580,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11362,7 +11602,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11384,15 +11624,15 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "121-venue-commerce.png"
+    "screenshot": "124-venue-commerce.png"
   },
   {
-    "idx": 122,
+    "idx": 125,
     "path": "/smokecraft/order",
     "testedUrl": "/smokecraft/order",
     "isDynamicSegment": false,
@@ -11438,7 +11678,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11460,7 +11700,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11482,7 +11722,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11504,15 +11744,15 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "122-order.png"
+    "screenshot": "125-order.png"
   },
   {
-    "idx": 123,
+    "idx": 126,
     "path": "/smokecraft/ticket-tapper/staff-specials",
     "testedUrl": "/smokecraft/ticket-tapper/staff-specials",
     "isDynamicSegment": false,
@@ -11558,7 +11798,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11580,7 +11820,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11602,7 +11842,7 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11624,15 +11864,15 @@
           "src": "cigar%20,%20drink%20&%20pairingfood%200rdering.png"
         },
         "deadSpaceRatio": 0,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "123-ticket-tapper_staff-specials.png"
+    "screenshot": "126-ticket-tapper_staff-specials.png"
   },
   {
-    "idx": 124,
+    "idx": 127,
     "path": "/smokecraft/cart",
     "testedUrl": "/smokecraft/cart",
     "isDynamicSegment": false,
@@ -11662,7 +11902,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11676,7 +11916,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11690,7 +11930,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11704,15 +11944,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "124-cart.png"
+    "screenshot": "127-cart.png"
   },
   {
-    "idx": 125,
+    "idx": 128,
     "path": "/smokecraft/checkout",
     "testedUrl": "/smokecraft/checkout",
     "isDynamicSegment": false,
@@ -11742,7 +11982,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11756,7 +11996,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11770,7 +12010,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11784,15 +12024,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "125-checkout.png"
+    "screenshot": "128-checkout.png"
   },
   {
-    "idx": 126,
+    "idx": 129,
     "path": "/smokecraft/payment-success",
     "testedUrl": "/smokecraft/payment-success",
     "isDynamicSegment": false,
@@ -11822,7 +12062,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11836,7 +12076,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11850,7 +12090,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11864,15 +12104,15 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "126-payment-success.png"
+    "screenshot": "129-payment-success.png"
   },
   {
-    "idx": 127,
+    "idx": 130,
     "path": "/smokecraft/order-status",
     "testedUrl": "/smokecraft/order-status",
     "isDynamicSegment": false,
@@ -11902,7 +12142,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11916,7 +12156,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11930,7 +12170,7 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       },
@@ -11944,11 +12184,11 @@
         "obscuredControls": 0,
         "heroImage": null,
         "deadSpaceRatio": null,
-        "minTouchTarget": 32,
+        "minTouchTarget": 38,
         "minFontSize": 8,
         "bodyEmpty": false
       }
     },
-    "screenshot": "127-order-status.png"
+    "screenshot": "130-order-status.png"
   }
 ]

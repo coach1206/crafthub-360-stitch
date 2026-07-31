@@ -1932,3 +1932,20 @@ return value. Neither reached the committed baseline, so neither
 receives an SC-D number.
 
 See `public/proof/smokecraft-venue-humidor-1b-2b-4/00-proof-index.md`.
+
+## Venue Humidor 1B-2B-5 update
+
+No defects found in previously-locked behavior. Two issues were caught
+and fixed entirely within this pass's own new code before commit: (1)
+`getAlternatives()` initially did not compute live availability for the
+target product before deriving its unavailability reason, so an
+out-of-stock target was never correctly reported as such; (2) an
+initial standalone pairing-page wrapper file had no detectable
+interactive markup of its own, causing the route classifier to honestly
+mark it "unclassified" rather than fabricate a classification — fixed
+by routing `/smokecraft/humidor/pairing` directly to the same live
+`VenueHumidorRecommendations` component instead of a separate wrapper.
+Neither reached the committed baseline, so neither receives an SC-D
+number.
+
+See `public/proof/smokecraft-venue-humidor-1b-2b-5/00-proof-index.md`.

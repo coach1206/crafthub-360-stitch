@@ -13,6 +13,7 @@ import * as ctrl from '../controllers/venueHumidorController.js'
 import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 import * as adminCtrl from '../controllers/venueHumidorAdminController.js'
 import * as fulfillmentCtrl from '../controllers/venueHumidorFulfillmentController.js'
+import * as assistedSellingCtrl from '../controllers/venueHumidorAssistedSellingController.js'
 
 const router = Router()
 
@@ -175,5 +176,16 @@ router.post('/venues/:venueId/admin/orders/:orderId/no-show', writeLimiter, requ
 // (owner/admin/manager) per mandate.
 router.post('/venues/:venueId/admin/orders/:orderId/extend-pickup-window', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, fulfillmentCtrl.handleExtendPickupWindow)
 router.post('/venues/:venueId/admin/orders/:orderId/expire', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, fulfillmentCtrl.handleExpireOrder)
+
+// ── 1B-2B-5: assisted selling / staff & tobacconist recommendations ──
+// Read tier (owner/admin/manager/staff/mentor) may view inventory-aware
+// recommendations and alternatives — mentor (tobacconist) is
+// read-only here, same as every other Venue Humidor admin surface.
+// Only write tier (owner/admin/manager/staff) may record an
+// accepted/declined/modified assisted-selling outcome; mentor never
+// reaches this route.
+router.post('/venues/:venueId/admin/assisted-selling/recommendations', readLimiter, requireAuth, requireVenueRead, assistedSellingCtrl.handleAssistedRecommendations)
+router.get('/venues/:venueId/admin/assisted-selling/alternatives/:productId', readLimiter, requireAuth, requireVenueRead, assistedSellingCtrl.handleAssistedAlternatives)
+router.post('/venues/:venueId/admin/assisted-selling/outcome', writeLimiter, requireAuth, requireVenueWrite, assistedSellingCtrl.handleRecordOutcome)
 
 export default router

@@ -70,3 +70,10 @@ export const getMyReceipt = (orderId) => request(`/orders/${orderId}/receipt`)
 export const listMyAcquisitions = () => request(`/passport/acquisitions`)
 export const getMyAcquisitionDetail = (acquisitionId) => request(`/passport/acquisitions/${acquisitionId}`)
 export const saveAcquisitionNote = (acquisitionId, payload, idempotencyKey) => request(`/passport/acquisitions/${acquisitionId}/note`, { method: 'POST', body: { ...payload, idempotencyKey } })
+
+// Venue Humidor 1B-2B-5 — inventory-aware recommendations, pairing, alternatives.
+export const getRecommendations = (venueId, preferences, beverageCategory, idempotencyKey) => request(`/recommendations`, { method: 'POST', body: { venueId, preferences, beverageCategory, idempotencyKey } })
+export const getAlternatives = (venueId, productId) => request(`/recommendations/${productId}/alternatives${toQuery({ venueId })}`)
+export const savePreferences = (preferences, idempotencyKey) => request(`/recommendations/preferences`, { method: 'POST', body: { preferences, idempotencyKey } })
+export const getMyPreferences = () => request(`/recommendations/preferences`)
+export const recordRecommendationOutcome = (venueId, productId, outcome, idempotencyKey) => request(`/recommendations/outcome`, { method: 'POST', body: { venueId, productId, outcome, idempotencyKey } })

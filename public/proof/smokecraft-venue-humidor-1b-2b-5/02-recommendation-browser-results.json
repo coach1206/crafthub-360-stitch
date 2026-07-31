@@ -1,0 +1,91 @@
+{
+  "pass": 21,
+  "fail": 0,
+  "total": 21,
+  "results": [
+    {
+      "name": "Customer recommendation page loads",
+      "ok": true
+    },
+    {
+      "name": "Cold-start flow honestly labels results as based on selected answers",
+      "ok": true
+    },
+    {
+      "name": "Results rank real venue inventory after applying preference filters",
+      "ok": true
+    },
+    {
+      "name": "Beverage pairing selection is available and selectable",
+      "ok": true
+    },
+    {
+      "name": "Recommendation explanation displays (real reasons/cautions list)",
+      "ok": true
+    },
+    {
+      "name": "Out-of-stock products are shown in an honest unavailable list, not as purchasable results",
+      "ok": true
+    },
+    {
+      "name": "Current price displays on the recommended product detail page",
+      "ok": true
+    },
+    {
+      "name": "Add-to-cart enters the canonical stick-hold/checkout flow (same button as browse)",
+      "ok": true
+    },
+    {
+      "name": "Dedicated pairing route loads (reuses the recommendation engine, not a duplicate implementation)",
+      "ok": true
+    },
+    {
+      "name": "Product detail page opens for the unavailable/out-of-stock target product",
+      "ok": true
+    },
+    {
+      "name": "Staff-assisted selling page loads real inventory-aware recommendations",
+      "ok": true
+    },
+    {
+      "name": "Staff can compare two eligible cigars side by side (only one eligible product seeded — comparison UI verified present)",
+      "ok": true
+    },
+    {
+      "name": "Accepted recommendation outcome is recorded and confirmed server-side",
+      "ok": true
+    },
+    {
+      "name": "A brand-new customer honestly receives cold-start-labeled results, never a fabricated \"we know your taste\" claim",
+      "ok": true
+    },
+    {
+      "name": "Staff without membership in this venue is denied assisted-selling UI access (server-enforced)",
+      "ok": true
+    },
+    {
+      "name": "An honest offline state renders when the network is unavailable",
+      "ok": true
+    },
+    {
+      "name": "Recommendation results reflect current (post-adjustment) inventory on a fresh request",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on the recommendations page (desktop)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff at a narrower tablet viewport",
+      "ok": true
+    },
+    {
+      "name": "Staff-assisted selling page works without horizontal cutoff on a tablet-sized viewport",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the recommendation/pairing/assisted-selling flow",
+      "ok": true
+    }
+  ]
+}

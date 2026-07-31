@@ -235,6 +235,21 @@
     "elementRaw": "<VenueHumidorMyAcquisitions />"
   },
   {
+    "fullPath": "humidor/recommendations",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorRecommendations />"
+  },
+  {
+    "fullPath": "humidor/pairing",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorRecommendations pairingMode />"
+  },
+  {
+    "fullPath": "admin/humidor/assisted-selling",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAssistedSelling />"
+  },
+  {
     "fullPath": "art",
     "isIndex": false,
     "elementRaw": "<Art />"

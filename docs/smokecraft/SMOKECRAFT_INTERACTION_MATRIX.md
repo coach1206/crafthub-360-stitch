@@ -831,3 +831,26 @@ behavior.
 
 All new screens are additive routes — no existing SmokeCraft screen was
 touched.
+
+## Venue Humidor 1B-2B-5 update
+
+`VenueHumidorRecommendations.jsx` serves both
+`/smokecraft/humidor/recommendations` and `/smokecraft/humidor/pairing`
+(via a `pairingMode` prop) — real preference filters, a beverage-pairing
+selector drawn from the existing pairing engine's category list, ranked
+results with explanations, and an honest out-of-stock list. "View & Add"
+navigates into the existing catalog detail page's real stick-hold/
+checkout controls — no new cart UI. `VenueHumidorAssistedSelling.jsx`
+(`/smokecraft/admin/humidor/assisted-selling`) lets staff run the same
+recommendation engine, compare two eligible products, and record a real
+accepted/declined outcome.
+
+Verified: 21/21 browser checks
+(`verify-smokecraft-venue-humidor-1b2b5-browser.mjs`) covering cold-start,
+preference filters, beverage pairing selection, out-of-stock exclusion,
+alternative display, canonical add-to-cart, staff-assisted selling and
+comparison, cross-venue denial, offline state, stale-inventory recheck,
+and five-viewport/responsive behavior.
+
+All new screens are additive routes or an additive prop on an existing
+route's shared component — no existing SmokeCraft screen was touched.

@@ -74,3 +74,8 @@ export const confirmHandoff = (venueId, orderId, payload, idempotencyKey) => req
 export const markNoShow = (venueId, orderId, notes, nextAction, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/no-show`, { method: 'POST', body: { notes, nextAction, idempotencyKey } })
 export const extendPickupWindow = (venueId, orderId, newPromisedAt, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/extend-pickup-window`, { method: 'POST', body: { newPromisedAt, idempotencyKey } })
 export const expireOrder = (venueId, orderId, reason, idempotencyKey) => request(`/venues/${venueId}/admin/orders/${orderId}/expire`, { method: 'POST', body: { reason, idempotencyKey } })
+
+// Venue Humidor 1B-2B-5 — assisted selling / tobacconist recommendations.
+export const getAssistedRecommendations = (venueId, customerReference, preferences, beverageCategory) => request(`/venues/${venueId}/admin/assisted-selling/recommendations`, { method: 'POST', body: { customerReference, preferences, beverageCategory } })
+export const getAssistedAlternatives = (venueId, productId) => request(`/venues/${venueId}/admin/assisted-selling/alternatives/${productId}`)
+export const recordAssistedSellingOutcome = (venueId, productId, outcome, customerReference, notes, idempotencyKey) => request(`/venues/${venueId}/admin/assisted-selling/outcome`, { method: 'POST', body: { productId, outcome, customerReference, notes, idempotencyKey } })

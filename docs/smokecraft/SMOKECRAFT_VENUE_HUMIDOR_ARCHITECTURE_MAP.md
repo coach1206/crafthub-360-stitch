@@ -427,3 +427,51 @@ checkout path was built; reorder always reflects the current catalog
 price, never the historical receipt price. The receipt screen offers a
 real printable browser view and an honest disabled note for PDF export
 (no fake download).
+
+## Venue Humidor 1B-2B-5 update — inventory-aware pairing, venue recommendations, and assisted selling
+
+Migration 113 (additive) adds exactly two new tables:
+`venue_cigar_recommendation_preferences` (one row per customer,
+`UNIQUE(customer_reference)`, upserted) — the only customer-preference
+store anywhere in the codebase — and `venue_cigar_assisted_selling_outcomes`
+(one row per staff assisted-selling outcome, `UNIQUE(idempotency_key)`).
+No new inventory, product, cart, checkout, order, or Passport table.
+Recommendation analytics events reuse the existing, already-idempotent
+`smokecraft_progression_events` ledger via `recordEvent()` — the same
+pattern already established by `venueHumidorEventService.js`.
+
+`recommendationService.js` is a pure read/scoring layer: it computes
+eligibility from `venue_cigar_products` (customer-visible, not archived,
+not discontinued/sold-out) combined with a live
+`inventoryService.getProductAvailability()` call per candidate — never a
+cached quantity. Its scoring function imports the existing pairing
+engine's `HARMONY`/`STRENGTH_SCORE`/`TYPE_STRENGTH`/`PAIRING_CATEGORIES`
+data (`src/utils/pairingEngine.js`) unchanged rather than inventing a
+second pairing vocabulary; confirmed by audit that no real venue
+beverage/menu catalog exists anywhere in the codebase, so beverage
+pairing is honestly limited to the pairing engine's abstract category
+vocabulary — an unrecognized category returns
+`beverageDataAvailable: false` rather than a fabricated result.
+`getAlternatives()` ranks currently-eligible products by real similarity
+(strength/body/flavor-note overlap/vitola/country/price distance) to an
+unavailable target.
+
+Five new customer routes on the existing `venueHumidorCustomerRoutes.js`
+(`POST /recommendations`, `GET /recommendations/:productId/alternatives`,
+`POST /recommendations/preferences`, `GET /recommendations/preferences`,
+`POST /recommendations/outcome`) and three new venue-scoped admin
+routes on `venueHumidorRoutes.js` (`POST .../assisted-selling/recommendations`,
+`GET .../assisted-selling/alternatives/:productId`,
+`POST .../assisted-selling/outcome`) reusing the existing
+`requireVenueRead`/`requireVenueWrite` RBAC tiers unchanged — mentor
+(tobacconist) can view but never record an outcome.
+
+Two new customer screens sharing one component: `VenueHumidorRecommendations.jsx`
+serves both `/smokecraft/humidor/recommendations` and
+`/smokecraft/humidor/pairing` (via a `pairingMode` prop toggling label
+copy only) — deliberately not two disconnected implementations. One new
+admin screen: `VenueHumidorAssistedSelling.jsx`
+(`/smokecraft/admin/humidor/assisted-selling`). "Add to cart" from a
+recommendation is pure navigation into the existing catalog detail page
+and its existing stick-hold/checkout flow — no new cart or checkout
+logic was added.

@@ -17,6 +17,7 @@ import {
 import * as ctrl from '../controllers/venueHumidorCustomerController.js'
 import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 import * as postPurchaseCtrl from '../controllers/venueHumidorPostPurchaseController.js'
+import * as recCtrl from '../controllers/venueHumidorRecommendationController.js'
 
 const router = Router()
 
@@ -61,5 +62,16 @@ router.get('/orders/:orderId/receipt', readLimiter, postPurchaseCtrl.handleGetRe
 router.get('/passport/acquisitions', readLimiter, postPurchaseCtrl.handleListAcquisitions)
 router.get('/passport/acquisitions/:acquisitionId', readLimiter, postPurchaseCtrl.handleGetAcquisitionDetail)
 router.post('/passport/acquisitions/:acquisitionId/note', writeLimiter, postPurchaseCtrl.handleSaveAcquisitionNote)
+
+// ── Venue Humidor 1B-2B-5: inventory-aware recommendations, pairing,
+// alternatives, and customer preference storage. Cross-venue customer
+// surface (venueId is supplied in the request body/query, never
+// trusted for authorization — recommendations only ever return
+// products already scoped to that venueId's own catalog).
+router.post('/recommendations', writeLimiter, recCtrl.handleGetRecommendations)
+router.get('/recommendations/:productId/alternatives', readLimiter, recCtrl.handleGetAlternatives)
+router.post('/recommendations/preferences', writeLimiter, recCtrl.handleSavePreferences)
+router.get('/recommendations/preferences', readLimiter, recCtrl.handleGetMyPreferences)
+router.post('/recommendations/outcome', writeLimiter, recCtrl.handleRecordOutcome)
 
 export default router

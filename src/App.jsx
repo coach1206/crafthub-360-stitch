@@ -121,6 +121,8 @@ const VenueHumidorMyOrderDetail = lazy(() => import('./pages/smokecraft/venueHum
 const VenueHumidorReceipt = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorReceipt.jsx'))
 const VenueHumidorMyAcquisitions = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorMyAcquisitions.jsx'))
 const VenueHumidorAcquisitionDetail = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorAcquisitionDetail.jsx'))
+const VenueHumidorRecommendations = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorRecommendations.jsx'))
+const VenueHumidorAssistedSelling = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAssistedSelling.jsx'))
 const GoldenBoxCompetitionDetail = lazy(() => import('./pages/smokecraft/goldenBox/CompetitionDetail.jsx'))
 const GoldenBoxEntryWorkspace = lazy(() => import('./pages/smokecraft/goldenBox/EntryWorkspace.jsx'))
 const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenBox/ResultsExperience.jsx'))
@@ -434,6 +436,15 @@ export default function App() {
                 <Route path="orders"                           element={<VenueHumidorMyOrders />} />
                 <Route path="passport/acquisitions/:acquisitionId" element={<VenueHumidorAcquisitionDetail />} />
                 <Route path="passport/acquisitions"            element={<VenueHumidorMyAcquisitions />} />
+
+                {/* Venue Humidor 1B-2B-5 — inventory-aware recommendations,
+                    pairing, and staff-assisted selling. */}
+                {/* /humidor/pairing reuses the exact same live component
+                    as /humidor/recommendations (pairingMode toggles only
+                    label copy) — not a second, disconnected page. */}
+                <Route path="humidor/recommendations"          element={<VenueHumidorRecommendations />} />
+                <Route path="humidor/pairing"                  element={<VenueHumidorRecommendations pairingMode />} />
+                <Route path="admin/humidor/assisted-selling"   element={<VenueHumidorAssistedSelling />} />
 
                 {/* Mentor Selection — supporting module (outside the 27-session spine).
                     Not yet folded into Meet Your Cigar (S3) as an internal tab per the
