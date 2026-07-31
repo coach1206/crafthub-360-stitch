@@ -12,27 +12,52 @@
  * dedupe_key idempotency) — guestId is always derived from the
  * caller's own verified session, never from the request body.
  *
- * The underlying eligibility signal (completedSteps) remains
- * client-reported, a disclosed, pre-existing limitation of the
- * broader, out-of-scope 27-session client-tracked journey
- * architecture — this remediation closes the identity/persistence
- * defect, not the (separately disclosed, unchanged) eligibility
- * limitation.
+ * Required-Interaction Closure Package E (SC-D067 fix): eligibility is
+ * now checked against the caller's REAL server-recorded session
+ * completions (smokecraft_session_completions, via
+ * playerStateService.getPlayerState) rather than a client-submitted
+ * completedSteps array / scorecardId. A client can no longer claim the
+ * stamp by simply POSTing a fabricated completedSteps list. Since
+ * Package B already gates the 'scorecard' session's own completion on
+ * real, server-recorded Scorecard evidence, "has scorecard" reduces to
+ * "'scorecard' is present in the real completed-sessions set" — no
+ * separate scorecardId concept is needed.
+ *
+ * Also, SC-D067: REQUIRED_STEPS previously included 'final-review'
+ * (Session 24), which comes AFTER passport-stamp (Session 23) in route
+ * order (pairing-recommendations(22) -> passport-stamp(23) ->
+ * final-review(24)) — making first-time eligibility impossible on a
+ * normal visit. Removed.
  */
 import { Router } from 'express'
 import { optionalAuth } from '../middleware/authMiddleware.js'
 import { attachSmokeCraftIdentity, requireSmokeCraftIdentity } from '../middleware/smokecraftGuestIdentity.js'
 import { claimJourneyCompletionStamp, getStamps } from '../services/passport360/passport360SyncService.js'
+import { getPlayerState } from '../services/smokecraft/playerStateService.js'
 
 const router = Router()
 
 router.use(optionalAuth, attachSmokeCraftIdentity)
 
+// SC-D067 identity fix: use the SAME guestReference convention
+// ('user:<id>' for an authenticated account, raw cookie-issued id for a
+// guest) as smokecraft_session_completions / playerStateService
+// (ownerGuestReference() in playerStateController.js) for BOTH the
+// Passport-360 claim identity and the completion-gate lookup below —
+// previously this route passed the raw, unprefixed id to the Passport
+// service while playerStateService's own hasPassportStampEvidence gate
+// (added in Package E) resolves guests by the prefixed convention,
+// which would silently desync stamp lookups for authenticated users.
 function bridgeIdentity(req, _res, next) {
-  if (req.smokecraftIdentity?.type === 'guest' || req.smokecraftIdentity?.type === 'user') {
-    req.goldenBoxGuestReference = req.smokecraftIdentity.id
+  const identity = req.smokecraftIdentity
+  if (identity?.type === 'guest' || identity?.type === 'user') {
+    req.goldenBoxGuestReference = identity.type === 'user' ? `user:${identity.id}` : identity.id
   }
   next()
+}
+
+function playerStateGuestReference(req) {
+  return req.goldenBoxGuestReference || null
 }
 
 const REQUIRED_STEPS = [
@@ -42,25 +67,28 @@ const REQUIRED_STEPS = [
   'flavor-memory',
   'final-third',
   'scorecard',
-  'final-review',
 ]
 
-function checkEligibility(completedSteps = [], scorecardId = null) {
-  const missing = REQUIRED_STEPS.filter(s => !completedSteps.includes(s))
-  const hasScorecard = Boolean(scorecardId)
-  const eligible = missing.length === 0 && hasScorecard
-  const reasons = [
-    ...missing.map(s => `Step incomplete: ${s}`),
-    ...(!hasScorecard ? ['Scorecard not submitted'] : []),
-  ]
+// Real, server-authoritative eligibility check — reads the caller's own
+// completed sessions from smokecraft_session_completions, never trusts
+// a client-submitted completedSteps array or scorecardId.
+async function checkEligibility(req) {
+  const guestReference = playerStateGuestReference(req)
+  let completedIds = []
+  try {
+    const state = await getPlayerState(guestReference)
+    completedIds = state.completedSessions.map(s => s.sessionId)
+  } catch { /* no server record yet — treat as nothing completed */ }
+
+  const missing = REQUIRED_STEPS.filter(s => !completedIds.includes(s))
+  const eligible = missing.length === 0
+  const reasons = missing.map(s => `Step incomplete: ${s}`)
   return { eligible, missing, reasons }
 }
 
 // ── GET /api/smokecraft/passport-stamp/eligibility ────────────────────────────
 router.get('/eligibility', requireSmokeCraftIdentity, bridgeIdentity, async (req, res) => {
-  const { completedSteps, scorecardId } = req.query
-  const steps = completedSteps ? completedSteps.split(',').map(s => s.trim()).filter(Boolean) : []
-  const { eligible, missing, reasons } = checkEligibility(steps, scorecardId)
+  const { eligible, missing, reasons } = await checkEligibility(req)
   let alreadyClaimed = false
   try {
     const stamps = await getStamps(req.goldenBoxGuestReference)
@@ -94,9 +122,7 @@ router.get('/status/:sessionId', requireSmokeCraftIdentity, bridgeIdentity, asyn
 
 // ── POST /api/smokecraft/passport-stamp/claim ─────────────────────────────────
 router.post('/claim', requireSmokeCraftIdentity, bridgeIdentity, async (req, res) => {
-  const { completedSteps, scorecardId } = req.body || {}
-  const steps = Array.isArray(completedSteps) ? completedSteps : []
-  const { eligible, reasons } = checkEligibility(steps, scorecardId)
+  const { eligible, reasons } = await checkEligibility(req)
   if (!eligible) {
     return res.status(422).json({ ok: false, error: 'Eligibility requirements not met', reasons })
   }

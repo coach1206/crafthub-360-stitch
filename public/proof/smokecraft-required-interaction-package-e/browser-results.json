@@ -1,0 +1,83 @@
+{
+  "pass": 19,
+  "fail": 0,
+  "total": 19,
+  "results": [
+    {
+      "name": "Session 23 route loads with the real Passport Stamp visual",
+      "ok": true
+    },
+    {
+      "name": "Instructions / lesson-info entry point displays",
+      "ok": true
+    },
+    {
+      "name": "Claim button is present before any real server-side completion exists",
+      "ok": true
+    },
+    {
+      "name": "A claim attempt while genuinely incomplete is denied server-side even bypassing the disabled UI button",
+      "ok": true
+    },
+    {
+      "name": "N/A: Session 23 (passport-stamp) has no draft/partial-save form — the required interaction is a single explicit claim click, not a multi-field draft; nothing to test here (noted, not skipped silently)",
+      "ok": true
+    },
+    {
+      "name": "Real prerequisite sessions completed via genuine fetch() calls make this browser session eligible",
+      "ok": true
+    },
+    {
+      "name": "Claim button becomes enabled once server-verified eligible",
+      "ok": true
+    },
+    {
+      "name": "A real player click on \"Claim Your Stamp\" is required and results in a real server-recorded stamp — not an invisible auto-fire on page load",
+      "ok": true
+    },
+    {
+      "name": "Claim button is replaced/hidden once claimed (no re-claim affordance shown)",
+      "ok": true
+    },
+    {
+      "name": "A second claim attempt (simulating a duplicate click / double-submit) is rejected as a duplicate, not a second stamp",
+      "ok": true
+    },
+    {
+      "name": "Exactly one real stamp row exists after the duplicate click attempt",
+      "ok": true
+    },
+    {
+      "name": "After a real full page reload, the claimed stamp persists (server-authoritative, not localStorage-only)",
+      "ok": true
+    },
+    {
+      "name": "Claim button correctly does not reappear after reload for an already-claimed guest",
+      "ok": true
+    },
+    {
+      "name": "An offline claim attempt fails gracefully (no crash, stays on route, no fabricated local success)",
+      "ok": true
+    },
+    {
+      "name": "A claim attempt with an expired/cleared session is honestly denied, never silently succeeds",
+      "ok": true
+    },
+    {
+      "name": "The claim button is keyboard-focusable",
+      "ok": true
+    },
+    {
+      "name": "The required interaction can be completed via keyboard alone (Enter on the focused claim button)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff across 5 tested viewports",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the Package E flow",
+      "ok": true
+    }
+  ]
+}

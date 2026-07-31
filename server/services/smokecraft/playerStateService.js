@@ -40,6 +40,23 @@ import { CULTIVATION_STAGE_IDS } from '../../../src/data/cultivationStages.js'
 import { hasTastingObservationEvidence, validateTastingDraftPayload, TASTING_OBSERVATION_SESSIONS } from './tastingObservationService.js'
 import { hasScorecardEvidence, validateScorecardDraftPayload } from './scorecardEvaluationService.js'
 import { hasSelectionEvidence, validateSelectionDraftPayload, PACKAGE_C_SESSIONS } from './selectionClassificationService.js'
+import { getStamps as getPassportStamps } from '../passport360/passport360SyncService.js'
+
+// Required-Interaction Closure Package E: 'passport-stamp' (Session 23)
+// completion requires a real, server-recorded Passport stamp
+// (stamp_id === 'smokecraft-journey-complete', passport_360_earned_stamps,
+// real dedupe_key idempotency) first — same additive gate pattern as
+// Packages A/B/C, scoped only to this one sessionId. Returns true
+// immediately for any sessionId outside this package's scope.
+export async function hasPassportStampEvidence(guestReference, sessionId) {
+  if (sessionId !== 'passport-stamp') return true
+  try {
+    const stamps = await getPassportStamps(guestReference)
+    return stamps.some(s => s.stamp_id === 'smokecraft-journey-complete')
+  } catch {
+    return false
+  }
+}
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -200,6 +217,16 @@ export async function completeSession({ guestReference, venueId, sessionId, xpAw
   if (!hasSelection) {
     const err = new Error('selection_evidence_required')
     err.code = 'selection_evidence_required'
+    throw err
+  }
+  // Required-Interaction Closure Package E: 'passport-stamp' (Session 23)
+  // completion requires a real, server-recorded Passport stamp first —
+  // same additive gate pattern as Packages A/B/C, scoped only to this
+  // one sessionId.
+  const hasPassportStamp = await hasPassportStampEvidence(guestReference, sessionId)
+  if (!hasPassportStamp) {
+    const err = new Error('passport_stamp_evidence_required')
+    err.code = 'passport_stamp_evidence_required'
     throw err
   }
 

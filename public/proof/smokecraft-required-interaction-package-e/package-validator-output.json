@@ -1,0 +1,32 @@
+{
+  "failures": 0,
+  "entry": {
+    "sessionId": "passport-stamp",
+    "sessionNumber": 23,
+    "phaseId": 6,
+    "route": "/smokecraft/passport-stamp",
+    "title": "Passport Stamp Animation",
+    "learningObjective": "Certify completion of the tasting journey with a real Passport stamp record.",
+    "requiredInteractionId": "S23-STAMP-CERTIFICATION",
+    "requiredInteractionType": "status-gated-certification",
+    "completionRequired": true,
+    "scoringRequired": false,
+    "mentorRequired": false,
+    "canonicalComponent": "src/pages/smokecraft/PassportStamp.jsx",
+    "canonicalApi": "GET /api/smokecraft/passport-stamp/eligibility; POST /api/smokecraft/passport-stamp/claim; GET /api/smokecraft/passport-stamp/status/:sessionId; GET /api/smokecraft/passport-stamp/guest/me; POST /api/smokecraft/player-state/sessions/passport-stamp/complete",
+    "canonicalService": "server/routes/smokecraftPassportStampRoutes.js (server-authoritative eligibility via playerStateService.getPlayerState); server/services/passport360/passport360SyncService.js#claimJourneyCompletionStamp/getStamps; server/services/smokecraft/playerStateService.js#completeSession (gated by hasPassportStampEvidence)",
+    "canonicalPersistence": "passport_360_earned_stamps (stamp_id=smokecraft-journey-complete, real dedupe_key idempotency); smokecraft_session_completions (session_id=passport-stamp)",
+    "progressionRequired": true,
+    "persistenceRequired": true,
+    "testReferences": [
+      "verify-smokecraft-required-interaction-package-e-api.mjs (28/28)",
+      "verify-smokecraft-required-interaction-package-e-browser.mjs (19/19)"
+    ],
+    "proofReferences": [
+      "public/proof/smokecraft-required-interaction-package-e/"
+    ],
+    "implementationStatus": "COMPLETE_AND_VERIFIED",
+    "gapClassification": "COMPLETE_AND_VERIFIED",
+    "notes": "Required-Interaction Closure Package E (SC-D067): fixed a real backward/unreachable sequencing defect — REQUIRED_STEPS previously included Session 24 (final-review), which comes AFTER Session 23 in route order, making first-time eligibility impossible on a normal visit; removed. Fixed missing server authority — eligibility/claim previously trusted a client-submitted completedSteps array and scorecardId; now reads the caller's own real smokecraft_session_completions via playerStateService.getPlayerState, never a client-supplied value. The session's own generic completion is now additionally gated on real, server-recorded Passport stamp evidence (hasPassportStampEvidence, same additive pattern as Packages A/B/C) so it can never complete from a route visit alone. The silent auto-claim effect was replaced with an explicit \"Claim Your Stamp\" button requiring a real player click, disabled until server-verified eligible. Reuses the existing canonical Passport-360 stamp system (claimJourneyCompletionStamp/getStamps, real dedupe_key idempotency) — no second Passport/rewards system created. Verified end-to-end via API and real-browser tests, including cross-player denial, concurrency, duplicate-claim, and reload persistence."
+  }
+}

@@ -1,9 +1,7 @@
 {
   "failures": 0,
   "totals": {
-    "COMPLETE_AND_VERIFIED": 8,
-    "VISUAL_ONLY": 4,
-    "PARTIAL": 8,
+    "COMPLETE_AND_VERIFIED": 20,
     "COMPLETE_BUT_UNTESTED": 1
   },
   "sessionCount": 21

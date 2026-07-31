@@ -96,6 +96,9 @@ export async function handleCompleteSession(req, res) {
     if (err.code === 'selection_evidence_required') {
       return res.status(400).json({ success: false, error: 'selection_evidence_required' })
     }
+    if (err.code === 'passport_stamp_evidence_required') {
+      return res.status(400).json({ success: false, error: 'passport_stamp_evidence_required' })
+    }
     dbErrorResponse(res, err)
   }
 }

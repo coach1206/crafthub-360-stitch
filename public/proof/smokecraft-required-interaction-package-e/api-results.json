@@ -1,0 +1,118 @@
+{
+  "pass": 28,
+  "fail": 0,
+  "results": [
+    {
+      "name": "An authorized (identity-bearing) guest can read eligibility",
+      "ok": true
+    },
+    {
+      "name": "A request with no verified SmokeCraft identity at all is denied or auto-issued a fresh (empty-progress) identity, never another guest's state",
+      "ok": true
+    },
+    {
+      "name": "REQUIRED_STEPS no longer includes final-review (Session 24, which comes after Session 23)",
+      "ok": true
+    },
+    {
+      "name": "REQUIRED_STEPS is exactly the 6 real, reachable prerequisite sessions",
+      "ok": true
+    },
+    {
+      "name": "A fresh guest with zero real completions is not eligible",
+      "ok": true
+    },
+    {
+      "name": "Claim is rejected (422) for a guest with no real prerequisite completions",
+      "ok": true
+    },
+    {
+      "name": "A client-submitted completedSteps/scorecardId/guestId/xpEarned payload is completely ignored — claim still denied without real server-recorded completions",
+      "ok": true
+    },
+    {
+      "name": "Fabricated completedSteps/scorecardId in the eligibility querystring are also ignored (server reads real completions only)",
+      "ok": true
+    },
+    {
+      "name": "Stamp status is honestly false before any real completion",
+      "ok": true
+    },
+    {
+      "name": "Session 23's own completion is rejected (400 passport_stamp_evidence_required) without a real, previously-claimed Passport stamp",
+      "ok": true
+    },
+    {
+      "name": "A guest with all 6 real prerequisite sessions completed is eligible",
+      "ok": true
+    },
+    {
+      "name": "A fully-eligible guest's claim succeeds",
+      "ok": true
+    },
+    {
+      "name": "Stamp now shows as claimed via the real server-authoritative status endpoint",
+      "ok": true
+    },
+    {
+      "name": "A second claim attempt by the same guest is rejected as a duplicate (409)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one smokecraft-journey-complete stamp exists for this guest despite 2 claim attempts",
+      "ok": true
+    },
+    {
+      "name": "Exactly one of 3 concurrent claim attempts succeeds as the real claim",
+      "ok": true
+    },
+    {
+      "name": "Exactly one stamp row exists after 3 concurrent claim attempts (real dedupe_key idempotency, not reinvented)",
+      "ok": true
+    },
+    {
+      "name": "Session 23's own completion succeeds once the real stamp has been claimed",
+      "ok": true
+    },
+    {
+      "name": "XP awarded and passport-stamp appears in completedSessions exactly once",
+      "ok": true
+    },
+    {
+      "name": "Duplicate completion is a safe no-op, no duplicate XP/progression",
+      "ok": true
+    },
+    {
+      "name": "After a simulated reload (fresh GETs, same identity cookie), completion persists",
+      "ok": true
+    },
+    {
+      "name": "After a simulated reload, the claimed stamp persists",
+      "ok": true
+    },
+    {
+      "name": "eligibility reports alreadyClaimed:true and eligible:false once claimed (cannot re-claim)",
+      "ok": true
+    },
+    {
+      "name": "A different guest never sees another guest's claimed stamp",
+      "ok": true
+    },
+    {
+      "name": "A different guest's /guest/me never returns another guest's stamps",
+      "ok": true
+    },
+    {
+      "name": "A different guest cannot complete Session 23 by riding on another guest's evidence",
+      "ok": true
+    },
+    {
+      "name": "The real, existing ledger (passport_360_earned_stamps + smokecraft_award_audit, not a fabricated separate audit system) records this claim — verified structurally in the package validator",
+      "ok": true
+    },
+    {
+      "name": "A session outside Package E scope completes without needing Passport stamp evidence",
+      "ok": true
+    }
+  ]
+}

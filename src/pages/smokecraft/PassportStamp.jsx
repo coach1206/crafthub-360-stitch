@@ -16,9 +16,13 @@ const ENRICHMENT_23 = getEducationalEnrichment(23)
 const NAT_W = 1448
 const NAT_H = 1086
 
+// SC-D067 fix: 'final-review' (Session 24) is REMOVED — it comes AFTER
+// passport-stamp (Session 23) in route order (pairing-recommendations(22)
+// -> passport-stamp(23) -> final-review(24)), so requiring it made
+// first-time eligibility impossible on a normal visit.
 const REQUIRED_STEPS = [
   'humidor-match', 'first-third', 'second-third',
-  'flavor-memory', 'final-third', 'scorecard', 'final-review',
+  'flavor-memory', 'final-third', 'scorecard',
 ]
 
 function readCigarName(smokeCraft) {
@@ -131,21 +135,25 @@ export default function PassportStamp({ onBack, onComplete } = {}) {
   function handleContinue() {
     if (done) return
     setDone(true)
-    const isClaimed = claimStatus === 'claimed' || claimStatus === 'duplicate'
     if (onComplete) {
       onComplete()
       return
     }
-    if (!isClaimed) awardSessionRewards('passport-stamp')
+    // Session 23's own generic completion is now server-gated on real
+    // Passport stamp evidence (hasPassportStampEvidence, mirroring the
+    // Package A/B/C additive gate-check pattern) — this call is safe to
+    // fire unconditionally because the server will reject it (and no
+    // local state changes) unless the stamp was actually claimed via a
+    // real player click above. The stamp itself can never appear from a
+    // route visit alone.
+    awardSessionRewards('passport-stamp')
     navigate('/smokecraft/final-review')
   }
 
-  // Auto-claim when eligible and page loads
-  useEffect(() => {
-    if (isEligible && claimStatus === 'idle') {
-      handleClaimStamp()
-    }
-  }, [isEligible, claimStatus, handleClaimStamp])
+  // Note: the stamp is now claimed only via an explicit player click on
+  // the "Claim Your Stamp" button (handleClaimStamp), never auto-fired
+  // by an effect on page load — matching every other Package's
+  // requirement that the player perform the required interaction.
 
   return (
     <>
@@ -160,6 +168,24 @@ export default function PassportStamp({ onBack, onComplete } = {}) {
         sessionNumber={23} totalSessions={TOTAL_SESSIONS} phase={6} totalPhases={TOTAL_VISITS}
         title="Passport Stamp Animation" whyItMatters={ENRICHMENT_23?.whyItMatters} goldenBox={ENRICHMENT_23?.goldenBox}
       />
+
+      {claimStatus !== 'claimed' && claimStatus !== 'duplicate' && (
+        <button
+          type="button"
+          onClick={handleClaimStamp}
+          disabled={!isEligible || claimStatus === 'claiming'}
+          aria-label="Claim Your Stamp"
+          style={{
+            position: 'fixed', bottom: '96px', left: '50%', transform: 'translateX(-50%)',
+            zIndex: 20, padding: '12px 28px', borderRadius: '999px', border: 'none',
+            fontWeight: 700, fontSize: '15px', cursor: (!isEligible || claimStatus === 'claiming') ? 'not-allowed' : 'pointer',
+            opacity: (!isEligible || claimStatus === 'claiming') ? 0.5 : 1,
+            background: '#c9a35a', color: '#1a1a1a',
+          }}
+        >
+          {claimStatus === 'claiming' ? 'Claiming…' : 'Claim Your Stamp'}
+        </button>
+      )}
 
       <SmokeCraftNavBar
         primary={done ? 'Continuing…' : 'Continue to Completed Scorecard →'}
