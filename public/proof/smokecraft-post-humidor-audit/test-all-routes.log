@@ -1,0 +1,13 @@
+
+=== All-routes browser test: 130 routes ===
+{
+  "PASS": 115,
+  "REDIRECT PASS": 14,
+  "BLOCKED": 1
+}
+
+Routes requiring attention (not PASS/ALIAS PASS/REDIRECT PASS):
+  [BLOCKED] /smokecraft/flavor-memory -> page.goto: Timeout 12000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:5050/smokecraft/flavor-memory", waiting until "networkidle"[22m
+ (dynamic=false, title=null)

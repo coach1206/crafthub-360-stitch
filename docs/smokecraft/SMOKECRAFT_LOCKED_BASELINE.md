@@ -599,3 +599,11 @@ cancellation/expiration/block/unblock/no-show), and captured a real,
 live 18-screenshot investor-demo run. See
 `public/proof/smokecraft-venue-humidor-1b-2b-6/00-proof-index.md` for
 full detail. Route count remains 130.
+
+## Post–Venue Humidor Remaining-Work Audit
+
+Audit-only pass at baseline `eb5e67b5` — no feature code changed, no
+Venue Humidor regression found (32/32 + 31/31 spot-check re-run). Full
+findings: `public/proof/smokecraft-post-humidor-audit/`. Recommended
+next work package: SmokeCraft Production Hardening — Phase 1 (secrets,
+dependency patching, security headers) — not built this pass.

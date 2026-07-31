@@ -1,0 +1,10 @@
+=== verify-smokecraft-venue-humidor-1a-api.mjs ===
+  PASS  A venue A staff member (not a venue B member) is denied mutating a venue B product
+
+=== RESULT: 32 passed, 0 failed (of 32 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b6-closure.mjs ===
+── Summary ──
+
+=== RESULT: 31 passed, 0 failed (of 31 total) ===
+

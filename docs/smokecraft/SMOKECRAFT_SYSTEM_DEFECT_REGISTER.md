@@ -1963,3 +1963,22 @@ cross-customer denial, and financial/Passport integrity under real
 concurrent load. No new SC-D number assigned — highest remains SC-D066.
 
 See `public/proof/smokecraft-venue-humidor-1b-2b-6/00-proof-index.md`.
+
+## Post–Venue Humidor Audit (SmokeCraft Remaining-Work Audit)
+
+Audit-only pass, no feature code changed. Re-ran every directly
+relevant existing test suite live (496+ checks across Venue Humidor,
+Golden Box, mentor engine, pairing engine, rewards/leaderboard/
+skill-tree/collections, a fresh 130-route navigation sweep, and the
+full five-viewport responsive validator) — 100% passing except one
+investigated-and-explained test-harness false positive (`networkidle`
+timeout on `/smokecraft/flavor-memory`; direct re-navigation confirmed
+a real 200 response with real content — not a defect, no SC-D number
+assigned per this operation's "no numbers for unverified suspicions"
+rule). No new SC-D defects found. SC-D002 (portrait assets) remains
+open exactly as previously disclosed, unchanged. Highest SC-D number
+remains SC-D066.
+
+Full findings, priority matrix, and recommended next work package
+(SmokeCraft Production Hardening — Phase 1) at
+`public/proof/smokecraft-post-humidor-audit/20-final-audit-report.md`.

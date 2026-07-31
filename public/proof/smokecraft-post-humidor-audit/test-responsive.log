@@ -1,0 +1,10 @@
+── SmokeCraft responsive-regression validator (Holistic Fix 3)
+
+  OK    inventory covers all live routes (130)
+  OK    no route has a navigation timeout/crash at any viewport
+  OK    no route has horizontal overflow at any of the 5 viewports
+  OK    no route blocks vertical scrolling when content exceeds the viewport
+  OK    no route has a real control obscured behind the fixed bottom nav
+  OK    no hero/backdrop image is stretched or distorted (object-fit:fill with a mismatched box)
+
+=== RESULT: PASS (0 checks failed) ===

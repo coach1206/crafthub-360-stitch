@@ -1,0 +1,35 @@
+=== verify-smokecraft-hf5b2a-mentor-guidance.mjs ===
+  PASS  A fresh guest with zero activity gets an honest fallback/low-signal state (never fabricated pairing/quiz data)
+
+=== RESULT: 21 passed, 0 failed (of 21 total) ===
+
+=== verify-smokecraft-hf5b2b1-mentor-voice-service.mjs ===
+  PASS  An out-of-range playback speed is clamped to a real allowed value, never stored as-is
+
+=== RESULT: 17 passed, 0 failed (of 17 total) ===
+
+=== verify-smokecraft-hf5b2b1-mentor-voice-api.mjs ===
+  PASS  One guest saving preferences never leaks into or overwrites a different guest's preferences
+
+=== RESULT: 16 passed, 0 failed (of 16 total) ===
+
+=== verify-smokecraft-hf5b2b2-narration-service.mjs ===
+  PASS  Narration with no mentor selected is rejected, never returns fabricated guidance narration
+
+=== RESULT: 13 passed, 0 failed (of 13 total) ===
+
+=== verify-smokecraft-hf5b2b2-narration-api.mjs ===
+  PASS  One guest's narration/preference activity never leaks into or overwrites a different guest's preferences
+
+=== RESULT: 14 passed, 0 failed (of 14 total) ===
+
+=== scripts/validateSmokecraftMentorGuidanceAuthority.mjs ===
+  OK    Mentor.jsx still retains exactly one write path for the selected mentor — no duplicate mentor ownership reappeared across this pass's 6-screen wiring
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== scripts/validateSmokecraftMentorVoiceSecurity.mjs ===
+  OK    The voice-preview cache is keyed by guest_reference (guest-scoped for narration, '' for the shared preview text) — not a single global cache that could leak one learner's guidance text to another
+
+=== RESULT: PASS (0 checks failed) ===
+

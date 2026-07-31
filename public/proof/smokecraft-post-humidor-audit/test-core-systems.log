@@ -1,0 +1,45 @@
+=== verify-smokecraft-hf5a-gameplay-engine.mjs ===
+── 10. Historical award stability
+  PASS  Replaying a completed session's completion returns the ORIGINAL xp_awarded value, never recalculated
+
+=== RESULT: 22 passed, 0 failed (of 22 total) ===
+=== verify-smokecraft-hf5a2-reward-authority.mjs ===
+  PASS  A two-tab race on the same quiz module grants XP exactly once, not twice
+
+=== RESULT: 19 passed, 0 failed (of 19 total) ===
+
+=== verify-smokecraft-rewards-achievements.mjs ===
+    `  - waiting for locator('[role="tab"][aria-label="Rewards and XP"]')`
+  ],
+  name: 'TimeoutError'
+}
+=== verify-smokecraft-leaderboard.mjs ===
+    `  - waiting for locator('button[aria-pressed]:has-text("Venue")')`
+  ],
+  name: 'TimeoutError'
+}
+=== verify-smokecraft-skill-tree.mjs ===
+  file: 'postmaster.c',
+  line: '2274',
+  routine: 'ProcessStartupPacket'
+}
+=== verify-smokecraft-collections.mjs ===
+  file: 'postmaster.c',
+  line: '2274',
+  routine: 'ProcessStartupPacket'
+}
+=== verify-smokecraft-hf5a3f-collections-flow.mjs ===
+  PASS  After conversion, the SAME account identity (now authenticated) still sees the earned item
+
+=== RESULT: 19 passed, 0 failed (of 19 total) ===
+
+=== verify-smokecraft-hf5a3g-skill-tree-flow.mjs ===
+  PASS  A genuinely first-ever visit to the Skill Tree route (no prior SmokeCraft navigation) does not 401
+
+=== RESULT: 22 passed, 0 failed (of 22 total) ===
+
+=== verify-smokecraft-hf5a3h-leaderboard-flow.mjs ===
+  PASS  A negative offset is server-side clamped to 0
+
+=== RESULT: 25 passed, 0 failed (of 25 total) ===
+

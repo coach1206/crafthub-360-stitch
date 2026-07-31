@@ -1,0 +1,50 @@
+=== verify-smokecraft-hf5c1b-golden-box-api.mjs ===
+  PASS  The transferred entry's draft history (components) survived conversion
+
+=== RESULT: 26 passed, 0 failed (of 26 total) ===
+
+=== verify-smokecraft-hf5c2a-judge-assignment-api.mjs ===
+  PASS  A judge with a real active venue membership is assigned successfully
+
+=== RESULT: 11 passed, 0 failed (of 11 total) ===
+
+=== verify-smokecraft-hf5c2a-scorecard-api.mjs ===
+  PASS  The canonical golden_box_entry_scored event carries the real server-computed weighted total
+
+=== RESULT: 18 passed, 0 failed (of 18 total) ===
+
+=== verify-smokecraft-hf5c2b1-results-api.mjs ===
+  PASS  The canonical golden_box_ranking_finalized event carries the real competition/rank/tie-break/result-version fields
+
+=== RESULT: 33 passed, 0 failed (of 33 total) ===
+
+=== verify-smokecraft-hf5c2b2-awards-api.mjs ===
+  PASS  The canonical golden_box_awards_issued event carries the real competition/placement/awardType/ruleId fields
+
+=== RESULT: 29 passed, 0 failed (of 29 total) ===
+
+=== scripts/validateSmokecraftGoldenBoxAuthority.mjs ===
+  OK    The transferred submission record is preserved when its version was actually transferred
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== scripts/validateSmokecraftGoldenBoxJudgingAuthority.mjs ===
+  OK    submitScorecard() emits golden_box_scorecard_submitted and golden_box_entry_scored only after real server success
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== scripts/validateSmokecraftGoldenBoxResultsAuthority.mjs ===
+  OK    The finalize route requires requireAuth + requireRole('admin') — authorized staff only, real server-side role check
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== scripts/validateSmokecraftGoldenBoxAwardsAuthority.mjs ===
+  OK    rewardsIntegrationService (grantXp/grantBadge/publishToLeaderboard) is reachable only through awardsService.js — no other controller/route imports it directly
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== verify-smokecraft-hf5c1b-golden-box-browser.mjs ===
+  PASS  No unexpected console errors across Golden Box screens (the one real, expected 409 from the double-click race test is excluded)
+
+=== RESULT: 12 passed, 0 failed (of 12 total) ===
+

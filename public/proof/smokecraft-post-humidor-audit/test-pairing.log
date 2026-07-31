@@ -1,0 +1,10 @@
+=== verify-smokecraft-hf5b1-pairing-engine.mjs ===
+  PASS  A genuinely first-ever request from a fresh browser does not 401 (guest identity auto-issued)
+
+=== RESULT: 36 passed, 0 failed (of 36 total) ===
+
+=== validateSmokecraftPairingEngineAuthority.mjs ===
+  OK    The pairing-engine API client only exposes recommend/rank/save/get/rate calls — no client-side score-setting function exists
+
+=== RESULT: PASS (0 checks failed) ===
+
