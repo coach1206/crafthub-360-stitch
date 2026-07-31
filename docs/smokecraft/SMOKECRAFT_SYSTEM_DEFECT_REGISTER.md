@@ -1982,3 +1982,20 @@ remains SC-D066.
 Full findings, priority matrix, and recommended next work package
 (SmokeCraft Production Hardening — Phase 1) at
 `public/proof/smokecraft-post-humidor-audit/20-final-audit-report.md`.
+
+## SmokeCraft Production Hardening — Phase 1
+
+No new SC-D defects found (no functional/security defect newly
+confirmed in previously-locked behavior). Strengthened
+`server/config/envValidator.js` (unsafe-default/length/malformed-origin
+rejection), added `server/config/securityHeaders.js` (CSP,
+Permissions-Policy, COOP, production-only HSTS, Cache-Control: no-store
+for `/api`), patched `body-parser` to 1.20.6 via a `package.json`
+override. `react-router`/`react-router-dom` remain unresolved (no fixed
+6.x release exists; documented with a real exposure assessment — no
+user-controlled navigation targets found anywhere in this codebase).
+228 regression checks re-run clean (Venue Humidor, Golden Box,
+scoring, mentor, pairing, rewards, plus a new 29-check security suite).
+Highest SC-D number remains SC-D066.
+
+Full findings: `public/proof/smokecraft-production-hardening-phase-1/00-final-report.md`.

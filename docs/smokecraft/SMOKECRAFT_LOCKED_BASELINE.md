@@ -607,3 +607,12 @@ Venue Humidor regression found (32/32 + 31/31 spot-check re-run). Full
 findings: `public/proof/smokecraft-post-humidor-audit/`. Recommended
 next work package: SmokeCraft Production Hardening — Phase 1 (secrets,
 dependency patching, security headers) — not built this pass.
+
+## SmokeCraft Production Hardening — Phase 1
+
+Security-hardening-only pass: secrets, dependency patching (body-parser),
+and security headers (CSP/Permissions-Policy/COOP/HSTS). No business
+logic changed, no regression found (228 checks re-run clean). React
+Router remains a known, unresolved, documented dependency vulnerability
+pending a dedicated future major-version migration package. Full
+findings: `public/proof/smokecraft-production-hardening-phase-1/`.

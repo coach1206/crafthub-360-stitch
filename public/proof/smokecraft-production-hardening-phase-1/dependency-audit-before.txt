@@ -1,0 +1,17 @@
+npm audit --production (before this pass), captured at Venue Humidor 1B-2B-6 and reconfirmed at the start of this pass:
+
+body-parser  <1.20.6
+Severity: low
+body-parser vulnerable to denial of service when invalid limit value silently disables size enforcement
+node_modules/body-parser
+
+react-router  6.0.0 - 7.17.0
+Severity: moderate
+React Router: Open redirect via backslash in <Link> and useNavigate (CVE-2025-68470 bypass)
+React Router: Arbitrary Constructor Injection via deserializeErrors() in React Router SSR Hydration
+node_modules/react-router
+  react-router-dom  6.0.0-alpha.0 - 7.17.0
+  Depends on vulnerable versions of react-router
+  node_modules/react-router-dom
+
+3 vulnerabilities (1 low, 2 moderate)

@@ -1,0 +1,27 @@
+[auth] ⚠  JWT_SECRET not set — using insecure dev default. Set JWT_SECRET in .env for real testing.
+[NOVEE OS DB] PostgreSQL connected ✓
+[EnvValidator] ⚠  ELEVENLABS_API_KEY not set — mentor voice uses Web Speech API (prototype mode)
+[EnvValidator] ⚠  JWT_SECRET not set — using insecure dev default (never deploy without a real secret)
+[EnvValidator] ⚠  FOUNDER_CHALLENGE_SECRET not set — founder login will be disabled
+
+🥃 NOVEE OS Backend — port 3001
+   Health:      http://localhost:3001/api/health
+   Auth:        http://localhost:3001/api/auth/me
+   Admin:       http://localhost:3001/api/admin/my-permissions
+   Mentor:      http://localhost:3001/api/mentor/profile
+   Developer:   http://localhost:3001/api/developer/health
+   POS3 Sync:   http://localhost:3001/api/pos3/sync/status
+   Mode:        development
+
+[proxy-diagnostic] environment          : development
+[proxy-diagnostic] trust proxy setting   : false (disabled — direct local connections)
+[proxy-diagnostic] req.ip resolves from   : direct socket address
+[proxy-diagnostic] rate limiter enabled   : no (skipped in dev/test)
+[proxy-diagnostic] X-Forwarded-For safe   : yes — express-rate-limit validator will not throw ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+
+  ✓ Mentor seeded: Marcus Cole (marcus.mentor@novee.dev)
+  ✓ Mentor seeded: Diana Reeves (diana.mentor@novee.dev)
+[POS3Sync] Auto-sync started. Interval: 300s
+[resetScheduler] Auto-reset is disabled — no schedule active.
+[POS3Sync] Running startup sync for provider: prototype
+[POS3Sync] Sync complete — provider:prototype status:success orders:4 inventory:16 tables:13 staff:4

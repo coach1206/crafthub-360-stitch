@@ -1,0 +1,35 @@
+=== verify-smokecraft-venue-humidor-1a-api.mjs ===
+  PASS  A venue A staff member (not a venue B member) is denied mutating a venue B product
+
+=== RESULT: 32 passed, 0 failed (of 32 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b6-closure.mjs ===
+── Summary ──
+
+=== RESULT: 31 passed, 0 failed (of 31 total) ===
+
+=== verify-smokecraft-hf5c1b-golden-box-api.mjs ===
+  PASS  The transferred entry's draft history (components) survived conversion
+
+=== RESULT: 26 passed, 0 failed (of 26 total) ===
+
+=== verify-smokecraft-hf5a-gameplay-engine.mjs ===
+── 10. Historical award stability
+  PASS  Replaying a completed session's completion returns the ORIGINAL xp_awarded value, never recalculated
+
+=== RESULT: 22 passed, 0 failed (of 22 total) ===
+=== verify-smokecraft-hf5b2a-mentor-guidance.mjs ===
+  PASS  A fresh guest with zero activity gets an honest fallback/low-signal state (never fabricated pairing/quiz data)
+
+=== RESULT: 21 passed, 0 failed (of 21 total) ===
+
+=== verify-smokecraft-hf5b1-pairing-engine.mjs ===
+  PASS  A genuinely first-ever request from a fresh browser does not 401 (guest identity auto-issued)
+
+=== RESULT: 36 passed, 0 failed (of 36 total) ===
+
+=== verify-smokecraft-hf5a2-reward-authority.mjs ===
+  PASS  A two-tab race on the same quiz module grants XP exactly once, not twice
+
+=== RESULT: 19 passed, 0 failed (of 19 total) ===
+

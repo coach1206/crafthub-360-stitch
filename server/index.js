@@ -162,6 +162,7 @@ import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
 import { initScheduler }     from './services/resetScheduleService.js'
 import { validateEnv }        from './config/envValidator.js'
 import rateLimit              from 'express-rate-limit'
+import { buildSecurityHeaders, permissionsPolicyHeader, noStoreForApi } from './config/securityHeaders.js'
 
 // Validate environment variables on startup
 validateEnv()
@@ -194,6 +195,15 @@ const CLIENT_DIST = path.resolve(__dirname, '../dist')
 // warrants trusting one hop.
 const TRUST_PROXY = IS_PROD ? 1 : false
 app.set('trust proxy', TRUST_PROXY)
+
+// ── Security headers (Production Hardening Phase 1) ────────────
+// Applied before CORS/body-parsing/routes so every response —
+// including error responses — carries them. See
+// server/config/securityHeaders.js for the compatibility rationale
+// behind each directive.
+app.use(buildSecurityHeaders({ isProd: IS_PROD }))
+app.use(permissionsPolicyHeader)
+app.use(noStoreForApi)
 
 // ── CORS ──────────────────────────────────────────────────────
 // In production, CORS_ORIGIN must be explicitly set.

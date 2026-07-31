@@ -1,0 +1,5 @@
+=== verify-smokecraft-hf5c1b-golden-box-browser.mjs ===
+  PASS  No unexpected console errors across Golden Box screens (the one real, expected 409 from the double-click race test is excluded)
+
+=== RESULT: 11 passed, 1 failed (of 12 total) ===
+

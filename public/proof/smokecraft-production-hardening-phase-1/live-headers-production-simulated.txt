@@ -1,0 +1,18 @@
+connection: keep-alive
+content-length: 11
+content-security-policy: default-src 'self';base-uri 'self';font-src 'self' data:;form-action 'self';frame-ancestors 'none';img-src 'self' data: https:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' 'unsafe-inline';upgrade-insecure-requests;connect-src 'self'
+content-type: application/json; charset=utf-8
+cross-origin-opener-policy: same-origin
+cross-origin-resource-policy: cross-origin
+date: Fri, 31 Jul 2026 09:03:10 GMT
+etag: W/"b-Ai2R8hgEarLmHKwesT1qcY913ys"
+keep-alive: timeout=5
+origin-agent-cluster: ?1
+referrer-policy: strict-origin-when-cross-origin
+strict-transport-security: max-age=15552000; includeSubDomains
+x-content-type-options: nosniff
+x-dns-prefetch-control: off
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-permitted-cross-domain-policies: none
+x-xss-protection: 0

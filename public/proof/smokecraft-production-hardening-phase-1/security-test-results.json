@@ -1,0 +1,122 @@
+{
+  "pass": 29,
+  "fail": 0,
+  "results": [
+    {
+      "name": "Production exits non-zero when JWT_SECRET is missing",
+      "ok": true
+    },
+    {
+      "name": "Production exits non-zero when JWT_SECRET is a known-unsafe default (\"changeme\")",
+      "ok": true
+    },
+    {
+      "name": "Production exits non-zero when JWT_SECRET is below the minimum safe length",
+      "ok": true
+    },
+    {
+      "name": "Production exits non-zero when CORS_ORIGIN is not a valid URL",
+      "ok": true
+    },
+    {
+      "name": "Production exits non-zero when CORS_ORIGIN is a wildcard",
+      "ok": true
+    },
+    {
+      "name": "Development starts cleanly with no required secrets set (warnings only, exit 0)",
+      "ok": true
+    },
+    {
+      "name": "Production starts cleanly (exit 0) with valid, sufficiently-long, non-default secrets",
+      "ok": true
+    },
+    {
+      "name": "X-Content-Type-Options: nosniff present",
+      "ok": true
+    },
+    {
+      "name": "Referrer-Policy present",
+      "ok": true
+    },
+    {
+      "name": "Permissions-Policy present and denies camera/microphone/geolocation",
+      "ok": true
+    },
+    {
+      "name": "Cross-Origin-Opener-Policy: same-origin present",
+      "ok": true
+    },
+    {
+      "name": "X-Powered-By header is removed (no framework fingerprinting)",
+      "ok": true
+    },
+    {
+      "name": "Content-Security-Policy header present",
+      "ok": true
+    },
+    {
+      "name": "CSP default-src is self (no wildcard)",
+      "ok": true
+    },
+    {
+      "name": "CSP frame-ancestors is none (clickjacking protection)",
+      "ok": true
+    },
+    {
+      "name": "CSP object-src is none",
+      "ok": true
+    },
+    {
+      "name": "CSP does NOT force upgrade-insecure-requests in local dev (would break http://localhost)",
+      "ok": true
+    },
+    {
+      "name": "HSTS is absent on the local dev server (correct — dev is plain HTTP)",
+      "ok": true
+    },
+    {
+      "name": "Approved origin receives a matching Access-Control-Allow-Origin",
+      "ok": true
+    },
+    {
+      "name": "An unapproved origin never sees itself reflected back in Access-Control-Allow-Origin",
+      "ok": true
+    },
+    {
+      "name": "Access-Control-Allow-Origin is a specific origin, never \"*\", while Allow-Credentials is true",
+      "ok": true
+    },
+    {
+      "name": "Authenticated/API JSON responses carry Cache-Control: no-store",
+      "ok": true
+    },
+    {
+      "name": "errorHandler.js only includes err.stack when NODE_ENV !== production",
+      "ok": true
+    },
+    {
+      "name": "errorHandler.js uses a fixed generic message in production, never err.message",
+      "ok": true
+    },
+    {
+      "name": "Server startup log never prints the literal DATABASE_URL connection string",
+      "ok": true
+    },
+    {
+      "name": "Server startup log never prints a \"Cookie:\" or \"Authorization:\" header value",
+      "ok": true
+    },
+    {
+      "name": "Stripe readiness check reports honest unavailable status when STRIPE_SECRET_KEY is unset, never a fake ready state",
+      "ok": true
+    },
+    {
+      "name": "Stripe config never hardcodes a fallback secret key",
+      "ok": true
+    },
+    {
+      "name": "body-parser installed version is >= 1.20.6 (patched)",
+      "ok": true
+    }
+  ]
+}
