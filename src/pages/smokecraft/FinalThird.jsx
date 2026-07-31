@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -40,24 +40,91 @@ const FLAVOR_ZONES = [
 ]
 
 const EMPTY = { selectedFlavors: [], focusSelected: [], savedAt: null }
+const ACTIVITY_KEY = 'final-third'
+
+// The server's tasting-draft vocabulary for final-third is one combined
+// notesSelected array — split back into the two client-side groups
+// (flavor-wheel ids vs. focus-card ids) using FLAVOR_ZONES membership,
+// mirroring the same split the server enforces during evidence
+// submission (see tastingObservationService.js VALID_NOTE_IDS).
+function splitNotes(notesSelected) {
+  const flavorIds = new Set(FLAVOR_ZONES.map(z => z.id))
+  const selectedFlavors = notesSelected.filter(id => flavorIds.has(id))
+  const focusSelected = notesSelected.filter(id => !flavorIds.has(id))
+  return { selectedFlavors, focusSelected }
+}
 
 export default function FinalThird({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, setFinalThirdTasting, submitTastingObservation } = useGuestSession()
-  const { journey, setFinalThird } = useSmokeCraftJourney()
+  const { awardSessionRewards, setFinalThirdTasting, submitTastingObservation, loadTastingDraft, saveTastingDraft } = useGuestSession()
+  const { setFinalThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [ft, setFt] = useState(() => {
-    const saved = journey.finalThird
-    return saved ? { ...EMPTY, ...saved } : { ...EMPTY }
-  })
+  const [phase, setPhase] = useState('loading')
+  const [ft, setFt] = useState({ ...EMPTY })
+  const [personalNotes, setPersonalNotes] = useState('')
+  const [draftVersion, setDraftVersion] = useState(0)
+  const [saveStatus, setSaveStatus] = useState('idle')
+  const [draftLocked, setDraftLocked] = useState(false)
   const [done, setDone] = useState(false)
   const [submitError, setSubmitError] = useState(null)
-  const initialized = useRef(false)
 
   useEffect(() => {
-    if (!initialized.current) { initialized.current = true; return }
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      const { selectedFlavors, focusSelected } = splitNotes(d.notesSelected || [])
+      setFt({ ...EMPTY, selectedFlavors, focusSelected })
+      setPersonalNotes(d.personalNotes || '')
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+  }, [loadTastingDraft])
+
+  function handleRetryLoad() {
+    setPhase('loading')
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      const { selectedFlavors, focusSelected } = splitNotes(d.notesSelected || [])
+      setFt({ ...EMPTY, selectedFlavors, focusSelected })
+      setPersonalNotes(d.personalNotes || '')
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+  }
+
+  useEffect(() => {
+    if (phase !== 'ready') return
     setFinalThird(ft)
-  }, [ft]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, ft]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const combinedNotesForSave = [...ft.selectedFlavors, ...(ft.focusSelected || [])]
+
+  useEffect(() => {
+    if (phase !== 'ready' || done || draftLocked) return
+    const t = setTimeout(() => {
+      setSaveStatus('saving')
+      saveTastingDraft(ACTIVITY_KEY, { notesSelected: combinedNotesForSave, personalNotes }, draftVersion).then(result => {
+        if (result.alreadyCompleted) { setSaveStatus('idle'); setDraftLocked(true); return }
+        if (result.conflict) {
+          const { selectedFlavors, focusSelected } = splitNotes(result.current.draftData?.notesSelected || [])
+          setFt(prev => ({ ...prev, selectedFlavors, focusSelected }))
+          setPersonalNotes(result.current.draftData?.personalNotes || '')
+          setDraftVersion(result.current.version)
+          setSaveStatus('conflict')
+          return
+        }
+        if (!result.ok) { setSaveStatus('error'); return }
+        setDraftVersion(result.current.version)
+        setSaveStatus('saved')
+      })
+    }, 1200)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, ft, personalNotes, done, draftVersion, draftLocked])
 
   function toggleFlavor(id) {
     triggerHaptic('light')
@@ -106,14 +173,14 @@ export default function FinalThird({ onBack, onComplete } = {}) {
       drawQuality: null, burnQuality: null, ashColor: null, smokeTexture: null,
       heatHarshness: null, burnFinish: null,
       finalPairingReaction: null, wouldSmokeAgain: null, pairingMatchScore: null,
-      personalNotes: '',
+      personalNotes,
       savedAt: Date.now(),
     }
 
     setFinalThirdTasting(payload)
     setFinalThird(payload)
 
-    const result = await submitTastingObservation('final-third', combinedNotes, '')
+    const result = await submitTastingObservation('final-third', combinedNotes, personalNotes)
     if (!result.ok) {
       setDone(false)
       setSubmitError('Unable to save your observations right now. Please try again.')
@@ -125,6 +192,44 @@ export default function FinalThird({ onBack, onComplete } = {}) {
     }
     awardSessionRewards('final-third')
     navigate('/smokecraft/scorecard')
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        Loading your saved observations…
+      </div>
+    )
+  }
+  if (phase === 'error') {
+    return (
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        <p style={{ margin: 0 }}>Something went wrong loading your saved observations.</p>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+          Retry
+        </button>
+      </div>
+    )
+  }
+
+  function handleSaveDraft() {
+    if (phase !== 'ready' || done || draftLocked) return
+    triggerHaptic('light')
+    setSaveStatus('saving')
+    saveTastingDraft(ACTIVITY_KEY, { notesSelected: combinedNotesForSave, personalNotes }, draftVersion).then(result => {
+      if (result.alreadyCompleted) { setSaveStatus('idle'); setDraftLocked(true); return }
+      if (result.conflict) {
+        const { selectedFlavors, focusSelected } = splitNotes(result.current.draftData?.notesSelected || [])
+        setFt(prev => ({ ...prev, selectedFlavors, focusSelected }))
+        setPersonalNotes(result.current.draftData?.personalNotes || '')
+        setDraftVersion(result.current.version)
+        setSaveStatus('conflict')
+        return
+      }
+      if (!result.ok) { setSaveStatus('error'); return }
+      setDraftVersion(result.current.version)
+      setSaveStatus('saved')
+    })
   }
 
   return (
@@ -207,6 +312,53 @@ export default function FinalThird({ onBack, onComplete } = {}) {
             </button>
           )
         })}
+
+        {/* Notes panel */}
+        <div style={{
+          position: 'absolute', left: '3%', top: '75%', width: '94%', height: '10%',
+          background: '#050505', border: '1px solid rgba(233,193,118,0.22)',
+          borderRadius: 5, boxSizing: 'border-box',
+          padding: 'clamp(4px,0.7vw,8px) clamp(6px,0.9vw,12px)',
+          display: 'flex', flexDirection: 'column', gap: 3, pointerEvents: 'auto', zIndex: 3,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)',
+              textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'Georgia, serif' }}>
+              Final Third Observations
+            </span>
+            <button
+              type="button"
+              aria-label="Save draft"
+              onClick={handleSaveDraft}
+              disabled={phase !== 'ready' || done}
+              style={{
+                padding: '2px 8px', borderRadius: 4,
+                border: `1px solid ${saveStatus === 'saved' ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.3)'}`,
+                background: 'transparent',
+                color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.45)',
+                fontSize: 'clamp(7px,0.58vw,8px)', fontFamily: 'Georgia, serif',
+                cursor: 'pointer', outline: 'none',
+              }}
+            >
+              {saveStatus === 'saving' && 'Saving…'}
+              {saveStatus === 'saved' && '✓ Saved'}
+              {saveStatus === 'error' && 'Retry Save'}
+              {saveStatus === 'conflict' && 'Synced'}
+              {saveStatus === 'idle' && 'Save Draft'}
+            </button>
+          </div>
+          <textarea
+            value={personalNotes}
+            onChange={e => setPersonalNotes(e.target.value)}
+            placeholder="Final impressions, aftertaste, would you smoke again…"
+            aria-label="Final third personal notes"
+            style={{
+              flex: 1, resize: 'none', background: 'transparent',
+              border: 'none', outline: 'none', color: 'rgba(229,226,225,0.8)',
+              fontSize: 'clamp(8px,0.72vw,10px)', fontFamily: 'Georgia, serif', lineHeight: 1.4,
+            }}
+          />
+        </div>
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftLessonInfoButton

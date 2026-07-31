@@ -43,6 +43,39 @@ const VALID_NOTE_IDS = {
 
 export const TASTING_OBSERVATION_SESSIONS = Object.freeze(Object.keys(VALID_NOTE_IDS))
 
+const DRAFT_ALLOWED_FIELDS = new Set(['notesSelected', 'personalNotes'])
+
+/**
+ * Package A draft-persistence correction — narrow, session-scoped field
+ * validation for the shared smokecraft_tasting_drafts table (the same
+ * table/route already used by Mini Tasting's own draft, keyed by
+ * activityKey — no new table, no second draft system). Only applies
+ * when activityKey is one of the three Package A sessions; any other
+ * activityKey (e.g. 'mini-tasting') is untouched by this function.
+ */
+export function validateTastingDraftPayload(sessionId, draftData) {
+  const validIds = VALID_NOTE_IDS[sessionId]
+  if (!validIds) return { ok: true }
+  if (typeof draftData !== 'object' || draftData === null || Array.isArray(draftData)) {
+    return { ok: false, error: 'draft_data_object_required' }
+  }
+  const keys = Object.keys(draftData)
+  if (!keys.every(k => DRAFT_ALLOWED_FIELDS.has(k))) {
+    return { ok: false, error: 'unknown_draft_field' }
+  }
+  const { notesSelected, personalNotes } = draftData
+  if (notesSelected !== undefined) {
+    if (!Array.isArray(notesSelected) || !notesSelected.every(id => typeof id === 'string' && validIds.has(id))) {
+      return { ok: false, error: 'invalid_observation_id' }
+    }
+  }
+  if (personalNotes !== undefined && personalNotes !== null) {
+    if (typeof personalNotes !== 'string') return { ok: false, error: 'invalid_personal_notes' }
+    if (personalNotes.length > 2000) return { ok: false, error: 'personal_notes_too_long' }
+  }
+  return { ok: true }
+}
+
 export async function submitTastingObservation({ guestReference, venueId, sessionId, notesSelected, personalNotes, idempotencyKey, sourceRoute, requestId, deviceId }) {
   const validIds = VALID_NOTE_IDS[sessionId]
   if (!validIds) throw new TastingObservationError('unsupported_session')

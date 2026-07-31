@@ -1,0 +1,126 @@
+{
+  "pass": 30,
+  "fail": 0,
+  "results": [
+    {
+      "name": "A fresh guest reads an empty draft (version 0)",
+      "ok": true
+    },
+    {
+      "name": "Creating a Session 8 draft succeeds and returns version 1",
+      "ok": true
+    },
+    {
+      "name": "Reading back the Session 8 draft returns exactly what was saved",
+      "ok": true
+    },
+    {
+      "name": "Updating the Session 8 draft succeeds and returns version 2",
+      "ok": true
+    },
+    {
+      "name": "A fresh read (simulating genuine page reload) returns the latest saved draft",
+      "ok": true
+    },
+    {
+      "name": "A non-object draftData is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "A missing expectedVersion is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "An unknown draft field is rejected (400 unknown_draft_field)",
+      "ok": true
+    },
+    {
+      "name": "A draft with an out-of-vocabulary observation id is rejected (400 invalid_observation_id)",
+      "ok": true
+    },
+    {
+      "name": "Personal notes over 2000 chars are rejected (400 personal_notes_too_long)",
+      "ok": true
+    },
+    {
+      "name": "A different guest never sees another guest's Session 8 draft (reads their own empty draft)",
+      "ok": true
+    },
+    {
+      "name": "Session 12 draft save succeeds independently",
+      "ok": true
+    },
+    {
+      "name": "Session 8's own draft is unaffected by an unrelated Session 12 draft save",
+      "ok": true
+    },
+    {
+      "name": "Session 8's vocabulary is rejected when saved against Session 12's draft (distinct per-session vocabularies enforced on drafts too)",
+      "ok": true
+    },
+    {
+      "name": "Baseline final-third draft save succeeds",
+      "ok": true
+    },
+    {
+      "name": "A stale-version save (expectedVersion behind current) is honestly rejected with 409",
+      "ok": true
+    },
+    {
+      "name": "The 409 response returns the server's current authoritative draft, not silently applying the stale write",
+      "ok": true
+    },
+    {
+      "name": "Two concurrent saves sharing the same expectedVersion: exactly one succeeds, the other gets an honest 409 (no silent corruption)",
+      "ok": true
+    },
+    {
+      "name": "Draft save before completion succeeds",
+      "ok": true
+    },
+    {
+      "name": "Real evidence submission succeeds",
+      "ok": true
+    },
+    {
+      "name": "Session 8 completes",
+      "ok": true
+    },
+    {
+      "name": "A draft write attempted AFTER completion is denied (409 already_completed) — a stale draft can never overwrite completed state",
+      "ok": true
+    },
+    {
+      "name": "The draft itself is unchanged by the rejected post-completion write attempt",
+      "ok": true
+    },
+    {
+      "name": "XP total is unchanged by draft saves (draft save never awards XP)",
+      "ok": true
+    },
+    {
+      "name": "No completion record is created by draft saves alone",
+      "ok": true
+    },
+    {
+      "name": "Session 12 draft creates",
+      "ok": true
+    },
+    {
+      "name": "Session 12 draft reads back correctly",
+      "ok": true
+    },
+    {
+      "name": "Session 16 draft creates (combined focus+flavor vocabulary)",
+      "ok": true
+    },
+    {
+      "name": "Session 16 draft reads back correctly",
+      "ok": true
+    },
+    {
+      "name": "Mini Tasting's own draft (unrelated activityKey, different field shape) still saves exactly as before — no regression from the new field-validation logic",
+      "ok": true
+    }
+  ]
+}

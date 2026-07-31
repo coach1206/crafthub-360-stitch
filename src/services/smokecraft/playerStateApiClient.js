@@ -141,8 +141,17 @@ export async function saveTastingDraftOnServer(activityKey, draftData, expectedV
       body: JSON.stringify({ draftData, expectedVersion }),
     })
     if (res.status === 409) {
-      const data = await res.json()
-      return { ok: false, conflict: true, current: data.current }
+      const data = await res.json().catch(() => null)
+      // Package A draft-persistence correction: a 409 means either a
+      // stale-version write (data.current holds the server's real
+      // current draft) or the session is already completed — a real,
+      // distinct outcome with no draft to fall back to. Conflating the
+      // two crashed the caller (reading .draftData off an undefined
+      // `current`) whenever a stale save landed after completion.
+      if (data?.error === 'already_completed') {
+        return { ok: false, alreadyCompleted: true }
+      }
+      return { ok: false, conflict: true, current: data?.current }
     }
     const data = await res.json().catch(() => null)
     if (!res.ok || !data || data.success !== true) return { ok: false, status: res.status }

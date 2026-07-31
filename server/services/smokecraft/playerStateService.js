@@ -37,7 +37,7 @@ import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
 import { scoreLeafChallenge } from '../../../src/data/leafChallengeRounds.js'
 import { getSampleInventory, VENUE_ID as DEFAULT_TASTING_VENUE_ID } from '../../../src/data/venueInventoryData.js'
 import { CULTIVATION_STAGE_IDS } from '../../../src/data/cultivationStages.js'
-import { hasTastingObservationEvidence } from './tastingObservationService.js'
+import { hasTastingObservationEvidence, validateTastingDraftPayload, TASTING_OBSERVATION_SESSIONS } from './tastingObservationService.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -703,6 +703,24 @@ export async function getTastingDraft({ guestReference, activityKey }) {
 }
 
 export async function saveTastingDraft({ guestReference, activityKey, draftData, expectedVersion }) {
+  // Package A draft-persistence correction: for Sessions 8/12/16 only,
+  // validate the draft's field names/types/vocabulary server-side
+  // (never trust arbitrary client fields), and refuse to accept a draft
+  // write once real completion evidence already exists for this guest
+  // and session — a stale draft must never be able to overwrite
+  // completed state. Other activityKeys (e.g. 'mini-tasting') are
+  // unaffected by either check.
+  const validation = validateTastingDraftPayload(activityKey, draftData)
+  if (!validation.ok) {
+    return { ok: false, error: validation.error }
+  }
+  if (TASTING_OBSERVATION_SESSIONS.includes(activityKey)) {
+    const alreadyCompleted = await hasTastingObservationEvidence(guestReference, activityKey)
+    if (alreadyCompleted) {
+      return { ok: false, error: 'already_completed' }
+    }
+  }
+
   const db = dbOrThrow()
   const client = await db.connect()
   try {

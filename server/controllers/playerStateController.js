@@ -427,6 +427,10 @@ export async function handleSaveTastingDraft(req, res) {
   try {
     const guestReference = ownerGuestReference(req.smokecraftIdentity)
     const result = await saveTastingDraft({ guestReference, activityKey: req.params.activityKey, draftData, expectedVersion })
+    if (result.ok === false) {
+      const status = result.error === 'already_completed' ? 409 : 400
+      return res.status(status).json({ success: false, error: result.error })
+    }
     if (result.conflict) return res.status(409).json({ success: false, error: 'stale_version', current: result.current })
     res.json({ success: true, current: result.current })
   } catch (err) {

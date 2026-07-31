@@ -26,23 +26,53 @@ const EXPLORE_ZONES = [
   { id: 'Complexity Shift',   x: 83.0, y: 25.1, w: 14.5, h: 11.0 },
 ]
 
+const ACTIVITY_KEY = 'second-third'
+
 export default function SecondThird({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, setSecondThirdTasting, submitTastingObservation } = useGuestSession()
-  const { journey, setSecondThird } = useSmokeCraftJourney()
+  const { awardSessionRewards, setSecondThirdTasting, submitTastingObservation, loadTastingDraft, saveTastingDraft } = useGuestSession()
+  const { setSecondThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  // Load from canonical journey state
-  const [checked,    setChecked]    = useState(() => journey.secondThird?.notesSelected || [])
-  const [notes,      setNotes]      = useState(() => journey.secondThird?.personalNotes || '')
+  const [phase,      setPhase]      = useState('loading')
+  const [checked,    setChecked]    = useState([])
+  const [notes,      setNotes]      = useState('')
+  const [draftVersion, setDraftVersion] = useState(0)
   const [saveStatus, setSaveStatus] = useState('idle')
+  const [draftLocked, setDraftLocked] = useState(false)
   const [done,       setDone]       = useState(false)
   const [submitError, setSubmitError] = useState(null)
 
-  // Auto-persist every change to canonical journey state
   useEffect(() => {
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      setChecked(d.notesSelected || [])
+      setNotes(d.personalNotes || '')
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+  }, [loadTastingDraft])
+
+  function handleRetryLoad() {
+    setPhase('loading')
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      setChecked(d.notesSelected || [])
+      setNotes(d.personalNotes || '')
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+  }
+
+  useEffect(() => {
+    if (phase !== 'ready') return
     setSecondThird({
       status: 'in_progress',
-      source: 'local_only',
+      source: 'server_draft',
       tasteProfileSource: checked.length > 0 ? 'guest_selected' : 'not_collected',
       safeClaim: checked.length > 0
         ? 'Guest confirmed observations — selections captured'
@@ -55,7 +85,29 @@ export default function SecondThird({ onBack, onComplete } = {}) {
       bodyChange: null, ashQuality: null,
       pairingReaction: null, mentorTip: null, mentorName: null,
     })
-  }, [checked, notes]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, checked, notes]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (phase !== 'ready' || done || draftLocked) return
+    const t = setTimeout(() => {
+      setSaveStatus('saving')
+      saveTastingDraft(ACTIVITY_KEY, { notesSelected: checked, personalNotes: notes }, draftVersion).then(result => {
+        if (result.alreadyCompleted) { setSaveStatus('idle'); setDraftLocked(true); return }
+        if (result.conflict) {
+          setChecked(result.current.draftData?.notesSelected || [])
+          setNotes(result.current.draftData?.personalNotes || '')
+          setDraftVersion(result.current.version)
+          setSaveStatus('conflict')
+          return
+        }
+        if (!result.ok) { setSaveStatus('error'); return }
+        setDraftVersion(result.current.version)
+        setSaveStatus('saved')
+      })
+    }, 1200)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, checked, notes, done, draftVersion, draftLocked])
 
   function toggleItem(id) {
     triggerHaptic('light')
@@ -63,10 +115,22 @@ export default function SecondThird({ onBack, onComplete } = {}) {
   }
 
   function handleSaveDraft() {
-    // State already persisted via useEffect; confirm immediately
-    setSaveStatus('saved')
+    if (phase !== 'ready' || done || draftLocked) return
     triggerHaptic('light')
-    setTimeout(() => setSaveStatus('idle'), 2000)
+    setSaveStatus('saving')
+    saveTastingDraft(ACTIVITY_KEY, { notesSelected: checked, personalNotes: notes }, draftVersion).then(result => {
+      if (result.alreadyCompleted) { setSaveStatus('idle'); setDraftLocked(true); return }
+      if (result.conflict) {
+        setChecked(result.current.draftData?.notesSelected || [])
+        setNotes(result.current.draftData?.personalNotes || '')
+        setDraftVersion(result.current.version)
+        setSaveStatus('conflict')
+        return
+      }
+      if (!result.ok) { setSaveStatus('error'); return }
+      setDraftVersion(result.current.version)
+      setSaveStatus('saved')
+    })
   }
 
   async function handleContinue() {
@@ -79,7 +143,7 @@ export default function SecondThird({ onBack, onComplete } = {}) {
     setDone(true)
     const payload = {
       status: 'observe_confirm_step',
-      source: 'local_only',
+      source: 'server_draft',
       tasteProfileSource: checked.length > 0 ? 'guest_selected' : 'not_collected',
       safeClaim: checked.length > 0
         ? 'Guest confirmed observations — selections captured'
@@ -106,6 +170,24 @@ export default function SecondThird({ onBack, onComplete } = {}) {
     }
     awardSessionRewards('second-third')
     navigate('/smokecraft/mentor-commentary')
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        Loading your saved observations…
+      </div>
+    )
+  }
+  if (phase === 'error') {
+    return (
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        <p style={{ margin: 0 }}>Something went wrong loading your saved observations.</p>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+          Retry
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -162,6 +244,7 @@ export default function SecondThird({ onBack, onComplete } = {}) {
               type="button"
               aria-label="Save draft"
               onClick={handleSaveDraft}
+              disabled={phase !== 'ready' || done}
               style={{
                 padding: '2px 8px', borderRadius: 4,
                 border: `1px solid ${saveStatus === 'saved' ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.3)'}`,
@@ -171,7 +254,11 @@ export default function SecondThird({ onBack, onComplete } = {}) {
                 cursor: 'pointer', outline: 'none',
               }}
             >
-              {saveStatus === 'saved' ? '✓ Saved' : 'Save Draft'}
+              {saveStatus === 'saving' && 'Saving…'}
+              {saveStatus === 'saved' && '✓ Saved'}
+              {saveStatus === 'error' && 'Retry Save'}
+              {saveStatus === 'conflict' && 'Synced'}
+              {saveStatus === 'idle' && 'Save Draft'}
             </button>
           </div>
           <textarea

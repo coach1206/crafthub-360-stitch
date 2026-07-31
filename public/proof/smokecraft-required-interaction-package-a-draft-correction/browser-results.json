@@ -1,0 +1,63 @@
+{
+  "pass": 14,
+  "fail": 0,
+  "total": 14,
+  "results": [
+    {
+      "name": "Session 8 loads past the server-draft loading phase into the real interaction UI",
+      "ok": true
+    },
+    {
+      "name": "Save Draft shows a real server-confirmed \"Saved\" state (not a fake local-only confirmation)",
+      "ok": true
+    },
+    {
+      "name": "After leaving the route and returning, the server draft restores both the selection and the personal note",
+      "ok": true
+    },
+    {
+      "name": "A genuine hard reload restores the selection from the server draft",
+      "ok": true
+    },
+    {
+      "name": "Session 8 completes and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "XP total is greater than zero after Session 8 completion",
+      "ok": true
+    },
+    {
+      "name": "A stale draft write attempted after completion is denied with 409 (completed state cannot be overwritten)",
+      "ok": true
+    },
+    {
+      "name": "No duplicate XP was granted from the stale-draft attempt or revisiting",
+      "ok": true
+    },
+    {
+      "name": "Session 12 loads past the server-draft loading phase",
+      "ok": true
+    },
+    {
+      "name": "Session 12 draft save confirms server-side",
+      "ok": true
+    },
+    {
+      "name": "Session 12 selection survives a genuine reload",
+      "ok": true
+    },
+    {
+      "name": "Session 16 draft save confirms server-side",
+      "ok": true
+    },
+    {
+      "name": "Session 16 selection survives a genuine reload",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the draft-persistence flow",
+      "ok": true
+    }
+  ]
+}
