@@ -87,3 +87,17 @@ Fixed Golden Box relevance and Why It Matters coverage for the 7 remaining sessi
 ## Conclusion
 
 Structural completeness (files exist, assets resolve, sequence is locked, shell adoption is enforced) is confirmed. Educational-content completeness (the specific per-criterion checklist in the mandate) is **not** confirmed for 18 of 21 session slots and is explicitly flagged as the primary remaining gap, not silently marked done.
+
+## Required-Interaction Manifest and 21-Session Audit update
+
+Superseded/sharpened by a new canonical, machine-readable manifest:
+`src/constants/smokecraftRequiredInteractions.js`. Built via direct
+source inspection (API/service imports per session component) rather
+than a rendered-text keyword scan. Real finding: 8 of 21 sessions
+COMPLETE_AND_VERIFIED, 1 COMPLETE_BUT_UNTESTED, 8 PARTIAL, 4 VISUAL_ONLY,
+0 missing/wrong-type/blocked/duplicated. The prior "quiz keyword"
+open gap is now precisely explained architecturally: all 21 sessions
+share one real, server-authoritative, XP-safe completion mechanism
+that accepts only a session ID — 12 sessions' real captured player
+input is never submitted to any endpoint that evaluates it. See
+`public/proof/smokecraft-required-interaction-manifest-audit/01-executive-summary.md`.

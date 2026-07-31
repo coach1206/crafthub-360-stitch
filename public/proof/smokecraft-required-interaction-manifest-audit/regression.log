@@ -1,0 +1,40 @@
+=== verify-smokecraft-venue-humidor-1a-api.mjs ===
+
+=== RESULT: 32 passed, 0 failed (of 32 total) ===
+
+=== verify-smokecraft-hf5c1b-golden-box-api.mjs ===
+
+=== RESULT: 26 passed, 0 failed (of 26 total) ===
+
+=== verify-smokecraft-hf5a-gameplay-engine.mjs ===
+  PASS  Replaying a completed session's completion returns the ORIGINAL xp_awarded value, never recalculated
+
+=== RESULT: 22 passed, 0 failed (of 22 total) ===
+
+── SmokeCraft required-interaction manifest validator (discovery-only) ─
+
+  OK    Exactly 21 sessions declared
+  OK    Session numbers are unique
+  OK    Required interaction IDs are unique (no undocumented reuse)
+  OK    Every session maps to a real route defined in VISIT_STRUCTURE
+  OK    Every interaction type uses the approved vocabulary
+  OK    Every gap classification uses an approved category
+  OK    Every session declares completion/scoring/mentor/persistence/progression expectations
+  OK    Every COMPLETE_AND_VERIFIED session cites a canonicalComponent, canonicalApi, canonicalService, and canonicalPersistence
+  OK    No session is silently omitted (1,2,3,4,5,6,7,8,10,11,12,14,15,16,19,21,22,23,24,25,27)
+  OK    No extra session was silently added beyond the 21 canonical primary sessions
+  OK    Manifest honestly reports 13 of 21 sessions as NOT COMPLETE_AND_VERIFIED (this validator does not force a false 21/21 claim)
+  OK    Every non-complete session records a real notes field explaining the gap (no silent placeholder)
+
+=== Classification totals ===
+  COMPLETE_AND_VERIFIED: 8
+  COMPLETE_BUT_UNTESTED: 1
+  PARTIAL: 8
+  VISUAL_ONLY: 4
+  WRONG_INTERACTION_TYPE: 0
+  MISSING: 0
+  BLOCKED: 0
+  DUPLICATED_OR_CONFLICTING: 0
+
+=== RESULT: PASS (manifest structurally sound and honest) (0 checks failed) ===
+

@@ -1999,3 +1999,11 @@ scoring, mentor, pairing, rewards, plus a new 29-check security suite).
 Highest SC-D number remains SC-D066.
 
 Full findings: `public/proof/smokecraft-production-hardening-phase-1/00-final-report.md`.
+
+## Required-Interaction Manifest and 21-Session Audit
+
+No new SC-D defect assigned — the 13 non-complete sessions found this
+pass are newly-defined scope gaps (relative to a manifest this pass
+itself created), not previously-promised, now-broken behavior. Full
+findings: `public/proof/smokecraft-required-interaction-manifest-audit/15-final-audit-report.md`.
+Highest SC-D number remains SC-D066.
