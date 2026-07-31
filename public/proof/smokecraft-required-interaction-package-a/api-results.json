@@ -1,0 +1,110 @@
+{
+  "pass": 26,
+  "fail": 0,
+  "results": [
+    {
+      "name": "A fresh guest can read player state (identity auto-provisioned)",
+      "ok": true
+    },
+    {
+      "name": "Empty notesSelected is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "Malformed/invalid observation id is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "Session 8 completion is rejected without prior tasting evidence (400 tasting_observation_required)",
+      "ok": true
+    },
+    {
+      "name": "Real tasting observation submission succeeds (201)",
+      "ok": true
+    },
+    {
+      "name": "Session 8 completes successfully after real evidence recorded",
+      "ok": true
+    },
+    {
+      "name": "Player XP total increased after Session 8 completion",
+      "ok": true
+    },
+    {
+      "name": "Session 8 appears in completedSessions",
+      "ok": true
+    },
+    {
+      "name": "Re-submitting observation for an already-recorded session returns alreadyRecorded, not a new row",
+      "ok": true
+    },
+    {
+      "name": "Re-completing Session 8 is a safe idempotent no-op (alreadyCompleted)",
+      "ok": true
+    },
+    {
+      "name": "No duplicate XP was awarded from the duplicate completion attempt",
+      "ok": true
+    },
+    {
+      "name": "A different guest never sees Session 8 as completed",
+      "ok": true
+    },
+    {
+      "name": "A different guest cannot complete Session 8 without submitting their own real evidence",
+      "ok": true
+    },
+    {
+      "name": "Session 12 completion blocked without evidence",
+      "ok": true
+    },
+    {
+      "name": "Session-8-only vocabulary is rejected for Session 12 (sessions have distinct real vocabularies)",
+      "ok": true
+    },
+    {
+      "name": "Session 12 real observation submission succeeds",
+      "ok": true
+    },
+    {
+      "name": "Session 12 completes after real evidence",
+      "ok": true
+    },
+    {
+      "name": "Session 16 real observation (combined flavor+focus vocabulary) submission succeeds",
+      "ok": true
+    },
+    {
+      "name": "Session 16 completes after real evidence",
+      "ok": true
+    },
+    {
+      "name": "Session 8 vocabulary is rejected for Session 16 (distinct real vocabularies enforced)",
+      "ok": true
+    },
+    {
+      "name": "All 3 concurrent observation submissions (shared idempotency key) succeed without error",
+      "ok": true
+    },
+    {
+      "name": "Completion after concurrent evidence submission succeeds exactly once",
+      "ok": true
+    },
+    {
+      "name": "Exactly one completion record exists despite 3 concurrent evidence submissions",
+      "ok": true
+    },
+    {
+      "name": "Missing idempotencyKey is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "Non-string personalNotes is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "A session outside Package A scope (e.g. entry/Welcome) completes without needing tasting evidence",
+      "ok": true
+    }
+  ]
+}

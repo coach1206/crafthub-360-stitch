@@ -27,7 +27,7 @@ const EXPLORE_ZONES = [
 ]
 
 export default function SecondThird({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, setSecondThirdTasting } = useGuestSession()
+  const { awardSessionRewards, setSecondThirdTasting, submitTastingObservation } = useGuestSession()
   const { journey, setSecondThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
@@ -36,6 +36,7 @@ export default function SecondThird({ onBack, onComplete } = {}) {
   const [notes,      setNotes]      = useState(() => journey.secondThird?.personalNotes || '')
   const [saveStatus, setSaveStatus] = useState('idle')
   const [done,       setDone]       = useState(false)
+  const [submitError, setSubmitError] = useState(null)
 
   // Auto-persist every change to canonical journey state
   useEffect(() => {
@@ -68,8 +69,13 @@ export default function SecondThird({ onBack, onComplete } = {}) {
     setTimeout(() => setSaveStatus('idle'), 2000)
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (done) return
+    if (checked.length === 0) {
+      setSubmitError('Select at least one observation before continuing.')
+      return
+    }
+    setSubmitError(null)
     setDone(true)
     const payload = {
       status: 'observe_confirm_step',
@@ -87,6 +93,13 @@ export default function SecondThird({ onBack, onComplete } = {}) {
     }
     setSecondThirdTasting(payload)
     setSecondThird(payload)
+
+    const result = await submitTastingObservation('second-third', checked, notes)
+    if (!result.ok) {
+      setDone(false)
+      setSubmitError('Unable to save your observations right now. Please try again.')
+      return
+    }
     if (onComplete) {
       onComplete()
       return
@@ -180,9 +193,21 @@ export default function SecondThird({ onBack, onComplete } = {}) {
         title="Flavor Evolution" whyItMatters={ENRICHMENT_12?.whyItMatters} goldenBox={ENRICHMENT_12?.goldenBox}
       />
 
+      {submitError && (
+        <div role="alert" style={{
+          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
+          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
+          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
+          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
+        }}>
+          {submitError}
+        </div>
+      )}
+
       <SmokeCraftNavBar
-        primary="Continue to Flavor Memory →"
+        primary={done ? 'Saving…' : 'Continue to Flavor Memory →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
       />
     </>
   )

@@ -27,7 +27,7 @@ const EXPLORE_ZONES = [
 ]
 
 export default function FirstThird({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, setFirstThirdTasting } = useGuestSession()
+  const { awardSessionRewards, setFirstThirdTasting, submitTastingObservation } = useGuestSession()
   const { journey, setFirstThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
@@ -36,6 +36,7 @@ export default function FirstThird({ onBack, onComplete } = {}) {
   const [notes,      setNotes]      = useState(() => journey.firstThird?.personalNotes || '')
   const [saveStatus, setSaveStatus] = useState('idle')
   const [done,       setDone]       = useState(false)
+  const [submitError, setSubmitError] = useState(null)
 
   // Auto-persist every change to canonical journey state (no private keys)
   useEffect(() => {
@@ -68,8 +69,13 @@ export default function FirstThird({ onBack, onComplete } = {}) {
     setTimeout(() => setSaveStatus('idle'), 2000)
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (done) return
+    if (checked.length === 0) {
+      setSubmitError('Select at least one observation before continuing.')
+      return
+    }
+    setSubmitError(null)
     setDone(true)
     const payload = {
       status: 'observe_confirm_step',
@@ -88,6 +94,20 @@ export default function FirstThird({ onBack, onComplete } = {}) {
     }
     setFirstThirdTasting(payload)
     setFirstThird(payload)
+
+    // Required-Interaction Closure Package A: real tasting evidence
+    // must be recorded server-side BEFORE either completion path below
+    // runs — completeSession() (reached via onComplete() -> the
+    // canonical SmokeCraftScreenRenderer -> awardSessionRewards(), or
+    // via the direct awardSessionRewards() call in the fallback branch)
+    // independently re-verifies this evidence exists, so this is a
+    // real, server-enforced gate, not a client-trusted claim.
+    const result = await submitTastingObservation('first-third', checked, notes)
+    if (!result.ok) {
+      setDone(false)
+      setSubmitError('Unable to save your observations right now. Please try again.')
+      return
+    }
     if (onComplete) {
       onComplete()
       return
@@ -181,9 +201,21 @@ export default function FirstThird({ onBack, onComplete } = {}) {
         title="First Draw" whyItMatters={ENRICHMENT_8?.whyItMatters} goldenBox={ENRICHMENT_8?.goldenBox}
       />
 
+      {submitError && (
+        <div role="alert" style={{
+          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
+          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
+          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
+          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
+        }}>
+          {submitError}
+        </div>
+      )}
+
       <SmokeCraftNavBar
-        primary="Continue to Second Third →"
+        primary={done ? 'Saving…' : 'Continue to Second Third →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
       />
     </>
   )

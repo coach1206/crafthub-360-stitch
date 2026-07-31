@@ -6,6 +6,7 @@
  * convention (managementSyncController.js).
  */
 import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection, getTastingDraft, saveTastingDraft, submitTastingCompletion, submitCultivatorEvidence } from '../services/smokecraft/playerStateService.js'
+import { submitTastingObservation, TastingObservationError } from '../services/smokecraft/tastingObservationService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -84,6 +85,35 @@ export async function handleCompleteSession(req, res) {
       badgesGranted: result.badgesGranted || [], passportStampGranted: result.passportStampGranted || null, rankPromotion: result.rankPromotion || null,
     })
   } catch (err) {
+    if (err.code === 'tasting_observation_required') {
+      return res.status(400).json({ success: false, error: 'tasting_observation_required' })
+    }
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Required-Interaction Closure Package A — records real tasting-
+ * observation evidence for Sessions 8/12/16 before their completion
+ * call is allowed to succeed. See tastingObservationService.js.
+ */
+export async function handleSubmitTastingObservation(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const sessionId = req.params.sessionId
+  const { notesSelected, personalNotes } = req.body || {}
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitTastingObservation({
+      guestReference, venueId: req.smokecraftIdentity.venueId || null, sessionId,
+      notesSelected, personalNotes, idempotencyKey,
+      sourceRoute: req.body?.sourceRoute || null, requestId: req.id || null, deviceId: req.body?.deviceId || null,
+    })
+    res.status(result.alreadyRecorded ? 200 : 201).json({ success: true, alreadyRecorded: result.alreadyRecorded })
+  } catch (err) {
+    if (err instanceof TastingObservationError) {
+      return res.status(400).json({ success: false, error: err.code })
+    }
     dbErrorResponse(res, err)
   }
 }

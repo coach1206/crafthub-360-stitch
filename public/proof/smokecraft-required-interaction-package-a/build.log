@@ -1,0 +1,806 @@
+
+> crafthub-360-production@1.0.0 prebuild
+> node scripts/validateSmokecraftAssets.mjs && node scripts/generateBuildManifest.mjs && node scripts/generateSmokecraftGameManifest.mjs && node scripts/validateSmokecraftManifest.mjs && node scripts/validateSmokecraftShellAdoption.mjs && node scripts/validateSmokecraftControlCoverage.mjs && node scripts/validateSmokecraftResponsive.mjs && node scripts/validateSmokecraftPlayerStateIntegrity.mjs && node scripts/validateSmokecraftAccountIntegrity.mjs && node scripts/validateSmokecraftGameplayIntegrity.mjs && node scripts/validateSmokecraftGameplayAuthority.mjs && node scripts/validateSmokecraftAlertPointerSafety.mjs && node scripts/validateSmokecraftTastingAuthority.mjs && node scripts/validateSmokecraftCultivatorAuthority.mjs && node scripts/validateSmokecraftCollectionsAuthority.mjs && node scripts/validateSmokecraftSkillTreeAuthority.mjs && node scripts/validateSmokecraftLeaderboardAuthority.mjs && node scripts/validateSmokecraftPairingEngineAuthority.mjs && node scripts/validateSmokecraftMentorGuidanceAuthority.mjs
+
+
+SmokeCraft asset validation: 83/83 registered assets verified on disk with correct case.
+All registered SmokeCraft assets verified. Build may proceed.
+build-manifest.json generated — commit 6cde950, 27/28 critical assets ok.
+Wrote docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json
+Total routes: 130 (entry: 4, curriculum: 21, supporting: 105)
+Classification counts: {
+  'full-live-react': 105,
+  'clean-image-shell': 7,
+  'alias-redirect': 14,
+  'instructional-image': 4
+}
+
+=== SmokeCraft game-manifest / navigation / shell validation (Holistic Fix 1) ===
+
+  PASS  Route inventory regenerates without error
+  PASS  SMOKECRAFT_GAME_MANIFEST.json exists
+  PASS  Manifest totalRoutes matches live /smokecraft route count (no route missing from the manifest)
+  PASS  No duplicate screenId in the manifest
+  PASS  Every manifest entry has a route string
+  PASS  Every screen classified as live/clean-shell cites real audit evidence (auditedIn is not empty/unclassified)
+  PASS  Exactly 27 sessions in the spine
+  PASS  TOTAL_SESSIONS constant equals 27
+  PASS  Exactly 6 phases
+  PASS  TOTAL_VISITS constant equals 6
+  PASS  Session numbers are exactly 1..27, no gap, no duplicate
+  PASS  Every curriculum manifest entry has an assetStatus field
+  PASS  No curriculum manifest entry silently references a non-existent SC_ASSETS key
+  PASS  Every SmokeCraft-namespace navigation-registry destination resolves to a real, currently-registered route
+  PASS  Locked phase groupings unchanged (Package J decision)
+  PASS  No route remains unclassified (0 unclassified)
+  PASS  Every legacy <Navigate> alias resolves to a currently-registered route (14 aliases checked, 0 broken)
+  PASS  Every <Navigate> alias target inside the SmokeCraft route tree is documented in the canonical alias table (manifest alias-redirect entries) (13 literal targets checked, 0 undocumented)
+  PASS  venue-commerce / order / ticket-tapper/staff-specials remain a documented, enforced alias group (identical component)
+  PASS  Manifest fullyMigratedScreens (82) — every claimed route (82) is backed by a real <SmokeCraftScreenShell> render (82 verified)
+  PASS  Educational completeness audit doc still covers all 21 primary session slots (0 missing)
+
+=== RESULT: PASS — 0 failing check(s) ===
+
+
+=== SmokeCraft shell/navigation-registry adoption lock (Holistic Fix 2A) ===
+
+  PASS  Welcome: imports SmokeCraftScreenShell
+  PASS  Welcome: actually renders <SmokeCraftScreenShell
+  PASS  Welcome: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Welcome: registered destination "/smokecraft/rewards-center" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/passport" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/leaderboard" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/event-challenge" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/collections" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/mentor-selection" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/knowledge-drop" is not reintroduced as a bare local literal
+  PASS  Welcome: registered destination "/smokecraft/golden-box" is not reintroduced as a bare local literal
+  PASS  Leaderboard: imports SmokeCraftScreenShell
+  PASS  Leaderboard: actually renders <SmokeCraftScreenShell
+  PASS  Leaderboard: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Leaderboard: registered destination "/smokecraft/humidor-match" is not reintroduced as a bare local literal
+  PASS  Leaderboard: registered destination "/smokecraft/challenge-hub" is not reintroduced as a bare local literal
+  PASS  Leaderboard: registered destination "/smokecraft/event-challenge" is not reintroduced as a bare local literal
+  PASS  Leaderboard: registered destination "/smokecraft/rewards-center" is not reintroduced as a bare local literal
+  PASS  Leaderboard: registered destination "/smokecraft/passport" is not reintroduced as a bare local literal
+  PASS  Passport: imports SmokeCraftScreenShell
+  PASS  Passport: actually renders <SmokeCraftScreenShell
+  PASS  Passport: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Passport: registered destination "/passport/scan" is not reintroduced as a bare local literal
+  PASS  Passport: registered destination "/passport/directory" is not reintroduced as a bare local literal
+  PASS  Passport: registered destination "/passport/events" is not reintroduced as a bare local literal
+  PASS  Passport: registered destination "/passport/benefits" is not reintroduced as a bare local literal
+  PASS  Passport: registered destination "/passport/how-it-works" is not reintroduced as a bare local literal
+  PASS  Venue Selection: imports SmokeCraftScreenShell
+  PASS  Venue Selection: actually renders <SmokeCraftScreenShell
+  PASS  Venue Selection: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  CraftHub: imports SmokeCraftScreenShell
+  PASS  CraftHub: actually renders <SmokeCraftScreenShell
+  PASS  CraftHub: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Challenge Hub: imports SmokeCraftScreenShell
+  PASS  Challenge Hub: actually renders <SmokeCraftScreenShell
+  PASS  Challenge Hub: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Rewards: imports SmokeCraftScreenShell
+  PASS  Rewards: actually renders <SmokeCraftScreenShell
+  PASS  Rewards: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Rewards: registered destination "/smokecraft/challenge-hub" is not reintroduced as a bare local literal
+  PASS  Rewards: registered destination "/smokecraft/collections" is not reintroduced as a bare local literal
+  PASS  Golden Box Rules: imports SmokeCraftScreenShell
+  PASS  Golden Box Rules: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Rules: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Rules: registered destination "/smokecraft/mentor-selection" is not reintroduced as a bare local literal
+  PASS  Golden Box Status: imports SmokeCraftScreenShell
+  PASS  Golden Box Status: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Status: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Hub: imports SmokeCraftScreenShell
+  PASS  Golden Box Hub: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Hub: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Competition Detail: imports SmokeCraftScreenShell
+  PASS  Golden Box Competition Detail: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Competition Detail: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Competition Detail: registered destination "/smokecraft/golden-box" is not reintroduced as a bare local literal
+  PASS  Golden Box Entry Workspace: imports SmokeCraftScreenShell
+  PASS  Golden Box Entry Workspace: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Entry Workspace: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Results: imports SmokeCraftScreenShell
+  PASS  Golden Box Results: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Results: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Results: registered destination "/smokecraft/golden-box" is not reintroduced as a bare local literal
+  PASS  Golden Box Results: registered destination "/smokecraft/leaderboard" is not reintroduced as a bare local literal
+  PASS  Golden Box Judge Dashboard: imports SmokeCraftScreenShell
+  PASS  Golden Box Judge Dashboard: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Judge Dashboard: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Judge Entry Review: imports SmokeCraftScreenShell
+  PASS  Golden Box Judge Entry Review: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Judge Entry Review: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Golden Box Mentor Review: imports SmokeCraftScreenShell
+  PASS  Golden Box Mentor Review: actually renders <SmokeCraftScreenShell
+  PASS  Golden Box Mentor Review: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Packaging Studio Dashboard: imports SmokeCraftScreenShell
+  PASS  Packaging Studio Dashboard: actually renders <SmokeCraftScreenShell
+  PASS  Packaging Studio Dashboard: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Packaging Studio Editor: imports SmokeCraftScreenShell
+  PASS  Packaging Studio Editor: actually renders <SmokeCraftScreenShell
+  PASS  Packaging Studio Editor: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Packaging Studio Versions: imports SmokeCraftScreenShell
+  PASS  Packaging Studio Versions: actually renders <SmokeCraftScreenShell
+  PASS  Packaging Studio Versions: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Packaging Studio Share: imports SmokeCraftScreenShell
+  PASS  Packaging Studio Share: actually renders <SmokeCraftScreenShell
+  PASS  Packaging Studio Share: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Packaging Review (public share link): imports SmokeCraftScreenShell
+  PASS  Packaging Review (public share link): actually renders <SmokeCraftScreenShell
+  PASS  Packaging Review (public share link): does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Origins: imports SmokeCraftScreenShell
+  PASS  Origins: actually renders <SmokeCraftScreenShell
+  PASS  Origins: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Curation: imports SmokeCraftScreenShell
+  PASS  Curation: actually renders <SmokeCraftScreenShell
+  PASS  Curation: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Curation: registered destination "/grand-lounge-ranking" is not reintroduced as a bare local literal
+  PASS  Leaves: imports SmokeCraftScreenShell
+  PASS  Leaves: actually renders <SmokeCraftScreenShell
+  PASS  Leaves: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Leaves: registered destination "/grand-lounge-ranking" is not reintroduced as a bare local literal
+  PASS  Leaves: registered destination "/passport" is not reintroduced as a bare local literal
+  PASS  Leaf Challenge: imports SmokeCraftScreenShell
+  PASS  Leaf Challenge: actually renders <SmokeCraftScreenShell
+  PASS  Leaf Challenge: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Leaf Challenge Calculating: imports SmokeCraftScreenShell
+  PASS  Leaf Challenge Calculating: actually renders <SmokeCraftScreenShell
+  PASS  Leaf Challenge Calculating: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Leaf Challenge Result: imports SmokeCraftScreenShell
+  PASS  Leaf Challenge Result: actually renders <SmokeCraftScreenShell
+  PASS  Leaf Challenge Result: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Leaf Challenge Result: registered destination "/passport" is not reintroduced as a bare local literal
+  PASS  Cultivation: imports SmokeCraftScreenShell
+  PASS  Cultivation: actually renders <SmokeCraftScreenShell
+  PASS  Cultivation: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Blend: imports SmokeCraftScreenShell
+  PASS  Blend: actually renders <SmokeCraftScreenShell
+  PASS  Blend: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Flavor DNA: imports SmokeCraftScreenShell
+  PASS  Flavor DNA: actually renders <SmokeCraftScreenShell
+  PASS  Flavor DNA: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Pairing: imports SmokeCraftScreenShell
+  PASS  Pairing: actually renders <SmokeCraftScreenShell
+  PASS  Pairing: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Available: imports SmokeCraftScreenShell
+  PASS  Available: actually renders <SmokeCraftScreenShell
+  PASS  Available: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Assistant: imports SmokeCraftScreenShell
+  PASS  Assistant: actually renders <SmokeCraftScreenShell
+  PASS  Assistant: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Pairing Mastery: imports SmokeCraftScreenShell
+  PASS  Pairing Mastery: actually renders <SmokeCraftScreenShell
+  PASS  Pairing Mastery: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Vitola: imports SmokeCraftScreenShell
+  PASS  Vitola: actually renders <SmokeCraftScreenShell
+  PASS  Vitola: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Landing: imports SmokeCraftScreenShell
+  PASS  Landing: actually renders <SmokeCraftScreenShell
+  PASS  Landing: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Seed & Soil: imports SmokeCraftScreenShell
+  PASS  Seed & Soil: actually renders <SmokeCraftScreenShell
+  PASS  Seed & Soil: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Request Purchase: imports SmokeCraftScreenShell
+  PASS  Request Purchase: actually renders <SmokeCraftScreenShell
+  PASS  Request Purchase: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Management Sync: imports SmokeCraftScreenShell
+  PASS  Management Sync: actually renders <SmokeCraftScreenShell
+  PASS  Management Sync: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Resume Journey: imports SmokeCraftScreenShell
+  PASS  Resume Journey: actually renders <SmokeCraftScreenShell
+  PASS  Resume Journey: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Rewards Center: imports SmokeCraftScreenShell
+  PASS  Rewards Center: actually renders <SmokeCraftScreenShell
+  PASS  Rewards Center: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  How It Works: imports SmokeCraftScreenShell
+  PASS  How It Works: actually renders <SmokeCraftScreenShell
+  PASS  How It Works: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Guest Pass: imports SmokeCraftScreenShell
+  PASS  Guest Pass: actually renders <SmokeCraftScreenShell
+  PASS  Guest Pass: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Scan: imports SmokeCraftScreenShell
+  PASS  Scan: actually renders <SmokeCraftScreenShell
+  PASS  Scan: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Enroll: imports SmokeCraftScreenShell
+  PASS  Enroll: actually renders <SmokeCraftScreenShell
+  PASS  Enroll: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Identity: imports SmokeCraftScreenShell
+  PASS  Identity: actually renders <SmokeCraftScreenShell
+  PASS  Identity: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Art: imports SmokeCraftScreenShell
+  PASS  Art: actually renders <SmokeCraftScreenShell
+  PASS  Art: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Cigar Gauge Guide: imports SmokeCraftScreenShell
+  PASS  Cigar Gauge Guide: actually renders <SmokeCraftScreenShell
+  PASS  Cigar Gauge Guide: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Knowledge Check Demo: imports SmokeCraftScreenShell
+  PASS  Knowledge Check Demo: actually renders <SmokeCraftScreenShell
+  PASS  Knowledge Check Demo: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Skill Tree: imports SmokeCraftScreenShell
+  PASS  Skill Tree: actually renders <SmokeCraftScreenShell
+  PASS  Skill Tree: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Collections Center: imports SmokeCraftScreenShell
+  PASS  Collections Center: actually renders <SmokeCraftScreenShell
+  PASS  Collections Center: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Demo: imports SmokeCraftScreenShell
+  PASS  Demo: actually renders <SmokeCraftScreenShell
+  PASS  Demo: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Demo Reset: imports SmokeCraftScreenShell
+  PASS  Demo Reset: actually renders <SmokeCraftScreenShell
+  PASS  Demo Reset: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Visit Complete: imports SmokeCraftScreenShell
+  PASS  Visit Complete: actually renders <SmokeCraftScreenShell
+  PASS  Visit Complete: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Filler Arrangement: imports SmokeCraftScreenShell
+  PASS  Filler Arrangement: actually renders <SmokeCraftScreenShell
+  PASS  Filler Arrangement: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  SmokeCraft Curriculum Screen Renderer (all 21 session slots): imports SmokeCraftScreenShell
+  PASS  SmokeCraft Curriculum Screen Renderer (all 21 session slots): actually renders <SmokeCraftScreenShell
+  PASS  SmokeCraft Curriculum Screen Renderer (all 21 session slots): does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Wrapper Strength (Leaf to Cigar construction module): imports SmokeCraftScreenShell
+  PASS  Wrapper Strength (Leaf to Cigar construction module): actually renders <SmokeCraftScreenShell
+  PASS  Wrapper Strength (Leaf to Cigar construction module): does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Commerce Menu: imports SmokeCraftScreenShell
+  PASS  Commerce Menu: actually renders <SmokeCraftScreenShell
+  PASS  Commerce Menu: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Commerce Cart: imports SmokeCraftScreenShell
+  PASS  Commerce Cart: actually renders <SmokeCraftScreenShell
+  PASS  Commerce Cart: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Commerce Checkout: imports SmokeCraftScreenShell
+  PASS  Commerce Checkout: actually renders <SmokeCraftScreenShell
+  PASS  Commerce Checkout: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Commerce Payment Success: imports SmokeCraftScreenShell
+  PASS  Commerce Payment Success: actually renders <SmokeCraftScreenShell
+  PASS  Commerce Payment Success: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  Commerce Order Status: imports SmokeCraftScreenShell
+  PASS  Commerce Order Status: actually renders <SmokeCraftScreenShell
+  PASS  Commerce Order Status: does not import SmokeCraftImageBoundsOverlay directly (must go through the shell)
+  PASS  src/pages/smokecraft/WelcomeExperience.jsx: still references its locked approved asset (SC_ASSETS.session1)
+  PASS  src/pages/smokecraft/Leaderboard.jsx: still references its locked approved asset (SC_ASSETS.leaderboard)
+  PASS  src/pages/smokecraft/SmokeCraftPassport.jsx: still references its locked approved asset (SC_ASSETS.passportHub)
+  PASS  src/pages/smokecraft/SmokeCraftCraftHub.jsx: still references its locked approved asset (SC_ASSETS.craftHubVenueTable)
+  PASS  src/pages/smokecraft/Rewards.jsx: still references its locked approved asset (SC_ASSETS.rewards)
+  PASS  src/pages/smokecraft/GoldenBox.jsx: still references its locked approved asset (SC_ASSETS.goldenBox)
+  PASS  No collision among the 5 distinct pairing-family routes (pairing/pairing-lab/pairing-recommendations/humidor-match/pairing-mastery)
+  PASS  smokecraftNavigationRegistry keeps PAIRING and PAIRING_STANDALONE as distinct, non-collapsed values
+  PASS  Curriculum component registry still registers all 21 session slots (session-1..session-27 with merges)
+  PASS  No curriculum session component is rendered directly from App.jsx (all must route through SmokeCraftScreenRenderer)
+  PASS  session-21's required interactive region ('section-review') is still registered in the interaction manifest
+  PASS  src/pages/smokecraft/HumidorMatch.jsx: still renders SmokeCraftLessonInfoButton (Session 2 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 2 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/Format.jsx: still renders SmokeCraftLessonInfoButton (Session 5 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 5 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/CutToastLight.jsx: still renders SmokeCraftLessonInfoButton (Session 6 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 6 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/FirstThird.jsx: still renders SmokeCraftLessonInfoButton (Session 8 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 8 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/FlavorMemory.jsx: still renders SmokeCraftLessonInfoButton (Session 10 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 10 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/PairingLab.jsx: still renders SmokeCraftLessonInfoButton (Session 11 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 11 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/SecondThird.jsx: still renders SmokeCraftLessonInfoButton (Session 12 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 12 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/FinalThird.jsx: still renders SmokeCraftLessonInfoButton (Session 16 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 16 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/Scorecard.jsx: still renders SmokeCraftLessonInfoButton (Session 19 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 19 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/PassportStamp.jsx: still renders SmokeCraftLessonInfoButton (Session 23 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 23 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/FinalReview.jsx: still renders SmokeCraftLessonInfoButton (Session 24 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 24 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/MeetYourCigar.jsx: still renders SmokeCraftLessonInfoButton (Session 3 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 3 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/Terroir.jsx: still renders SmokeCraftLessonInfoButton (Session 4 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 4 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/LightingTutorial.jsx: still renders SmokeCraftLessonInfoButton (Session 7 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 7 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/MentorCommentary.jsx: still renders SmokeCraftLessonInfoButton (Session 14 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 14 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/KnowledgeDrop.jsx: still renders SmokeCraftLessonInfoButton (Session 15 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 15 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/AISummary.jsx: still renders SmokeCraftLessonInfoButton (Session 21 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 21 entry still has both whyItMatters and goldenBox
+  PASS  src/pages/smokecraft/PairingRecommendations.jsx: still renders SmokeCraftLessonInfoButton (Session 22 lesson title/Golden Box/Why It Matters)
+  PASS  smokecraftEducationalEnrichment.js: session 22 entry still has both whyItMatters and goldenBox
+  PASS  SmokeCraftLessonInfoButton: button uses position:'fixed' (not 'absolute', which clips inside SmokeCraftImageBoundsOverlay)
+  PASS  src/pages/smokecraft/HumidorMatch.jsx: still has the "if (done) return" duplicate-fire guard on its Continue handler
+  PASS  src/pages/smokecraft/FirstThird.jsx: still has the "if (done) return" duplicate-fire guard on its Continue handler
+
+=== RESULT: PASS — 0 failing check(s) ===
+
+── SmokeCraft control-coverage validator (Holistic Fix 2E-11)
+
+  OK    raw discovery total (276) equals inventory total (276)
+  OK    map doc declares "Total controls: 276. Total mapped: 276. Unmapped: 0."
+  OK    every control in the inventory has a non-empty group assignment
+  OK    group "navigation": inventory count (55) matches byGroupCounts (55)
+  OK    group "navigation": map doc summary table shows count 55
+  OK    group "selection-toggle": inventory count (94) matches byGroupCounts (94)
+  OK    group "selection-toggle": map doc summary table shows count 94
+  OK    group "rating-toggle": inventory count (67) matches byGroupCounts (67)
+  OK    group "rating-toggle": map doc summary table shows count 67
+  OK    group "tab-disclosure": inventory count (23) matches byGroupCounts (23)
+  OK    group "tab-disclosure": map doc summary table shows count 23
+  OK    group "tasting-input": inventory count (12) matches byGroupCounts (12)
+  OK    group "tasting-input": map doc summary table shows count 12
+  OK    group "completion": inventory count (23) matches byGroupCounts (23)
+  OK    group "completion": map doc summary table shows count 23
+  OK    group "honest-disabled": inventory count (2) matches byGroupCounts (2)
+  OK    group "honest-disabled": map doc summary table shows count 2
+  OK    sum of all group counts (276) equals total controls (276)
+  OK    group "navigation" has a browser-test reference
+  OK    group "navigation"'s referenced test script exists on disk (verify-smokecraft-hf2e5-curriculum-forward-backward.mjs)
+  OK    group "selection-toggle" has a browser-test reference
+  OK    group "selection-toggle"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "rating-toggle" has a browser-test reference
+  OK    group "rating-toggle"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "tab-disclosure" has a browser-test reference
+  OK    group "tab-disclosure"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "tasting-input" has a browser-test reference
+  OK    group "tasting-input"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "completion" has a browser-test reference
+  OK    group "completion"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "honest-disabled" has a browser-test reference
+  OK    group "honest-disabled"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    navigation-required group "navigation" has a destination-assertion reference
+  OK    persistence-required group "rating-toggle" has a reload-test reference
+  OK    navigation-required group "completion" has a destination-assertion reference
+  OK    duplicate-risk group "completion" has a rapid-double-action test reference
+  OK    disabled-state-expected group "honest-disabled" has an honest-state assertion reference
+  OK    session 1 has at least one mapped control
+  OK    session 2 has at least one mapped control
+  OK    session 3 has at least one mapped control
+  OK    session 4 has at least one mapped control
+  OK    session 5 has at least one mapped control
+  OK    session 6 has at least one mapped control
+  OK    session 7 has at least one mapped control
+  OK    session 8 has at least one mapped control
+  OK    session 10 has at least one mapped control
+  OK    session 11 has at least one mapped control
+  OK    session 12 has at least one mapped control
+  OK    session 14 has at least one mapped control
+  OK    session 15 has at least one mapped control
+  OK    session 16 has at least one mapped control
+  OK    session 19 has at least one mapped control
+  OK    session 21 has at least one mapped control
+  OK    session 22 has at least one mapped control
+  OK    session 23 has at least one mapped control
+  OK    session 24 has at least one mapped control
+  OK    session 25 has at least one mapped control
+  OK    session 26 has at least one mapped control
+  OK    session 27 has at least one mapped control
+  OK    all 22 primary sessions are represented in the inventory
+  OK    deep control-behavior proof file exists
+  OK    deep control-behavior proof reports 0 failures
+  OK    deep control-behavior proof covers the 6 non-navigation implementation groups
+  OK    navigation group's forward/backward test script exists on disk
+
+=== RESULT: PASS (0 checks failed) ===
+── SmokeCraft responsive-regression validator (Holistic Fix 3)
+
+  OK    inventory covers all live routes (130)
+  OK    no route has a navigation timeout/crash at any viewport
+  OK    no route has horizontal overflow at any of the 5 viewports
+  OK    no route blocks vertical scrolling when content exceeds the viewport
+  OK    no route has a real control obscured behind the fixed bottom nav
+  OK    no hero/backdrop image is stretched or distorted (object-fit:fill with a mismatched box)
+
+=== RESULT: PASS (0 checks failed) ===
+── SmokeCraft player-state integrity validator (Holistic Fix 4)
+
+  OK    docs/smokecraft/SMOKECRAFT_STATE_OWNERSHIP_MAP.md exists
+  OK    migration 092 (canonical player state) exists
+  OK    migration 092 has a rollback script
+  OK    migration 093 (idempotency-key guest-scope fix) exists
+  OK    rollback file does NOT live inside server/db/migrations (would be picked up and auto-run as a forward migration)
+  OK    smokecraft_session_completions has a UNIQUE constraint on (guest_reference, session_id)
+  OK    smokecraft_awards has a UNIQUE index on (guest_reference, award_type, award_key)
+  OK    migration 093 drops the global UNIQUE constraint on smokecraft_session_completions.idempotency_key
+  OK    migration 093 adds a guest-scoped UNIQUE index instead
+  OK    migration 093 does the same fix for smokecraft_awards
+  OK    controller derives guestReference only from req.smokecraftIdentity, never req.body
+  OK    XP amount for session completion comes from the server-owned reward table, not the request body
+  OK    XP award endpoint validates the award key against a server-known table (getNamedXpAmount), never trusts a client amount directly
+  OK    every mutation requires a client-supplied idempotencyKey (validated, not optional)
+  OK    completeSession uses BEGIN/COMMIT/ROLLBACK (real transaction, not fire-and-forget writes)
+  OK    every mutation path records an audit row (applied or duplicate_replay)
+  OK    client.release() is called (no connection leak) via a finally block
+  OK    player-state routes require requireSmokeCraftIdentity (server-verified cookie) on every state-touching route
+  OK    player-state routes are rate-limited
+  OK    mutation routes reuse ensureSmokeCraftGuestIdentity (the existing, proven JWT-cookie identity system) rather than inventing a new one
+  OK    smokecraftPlayerStateRoutes is imported in server/index.js
+  OK    smokecraftPlayerStateRoutes is mounted at '/api/smokecraft/player-state'
+  OK    awardSessionRewards calls the new server-authoritative completeSessionOnServer
+  OK    awardStamp calls the new server-authoritative awardPassportStampOnServer
+  OK    client adapter returns { ok: false } on network failure, never a fabricated success
+  OK    client adapter checks data.success === true before treating a response as ok (no fake-success on a malformed 200)
+
+=== RESULT: PASS (0 checks failed) ===
+── SmokeCraft account-integrity validator (Holistic Fix 4B)
+
+  OK    docs/smokecraft/SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md exists
+  OK    migration 094 exists
+  OK    migration 094 has a rollback script
+  OK    rollback file does not live inside server/db/migrations
+  OK    smokecraft_guest_conversions has UNIQUE(guest_reference) — a guest can convert at most once, ever
+  OK    smokecraft_player_state gains journey_version for optimistic concurrency
+  OK    convertGuestToAccount recomputes XP from merged rows (SUM), never adds guest.xp + account.xp directly
+  OK    convertGuestToAccount checks smokecraft_guest_conversions for an existing row before converting (idempotent)
+  OK    saveJourneySnapshot rejects a stale expectedVersion with a conflict result rather than silently overwriting
+  OK    handleConvertGuest requires req.user.role === passport_member (a real authenticated account)
+  OK    handleConvertGuest requires req.smokecraftGuestCookieIdentity (server-verified cookie), never a client-supplied guest id
+  OK    handleSaveJourneySnapshot requires a numeric expectedVersion from the client (optimistic-concurrency contract)
+  OK    accountService reuses authService.hashPin/verifyPin (bcrypt) rather than inventing new hashing
+  OK    accountService reuses authService.createJwtForUser/createAuthSession (existing session infra)
+  OK    accountService reuses the existing lockout pattern (lockUserIfNeeded) rather than inventing new lockout logic
+  OK    no raw/plaintext password or PIN is ever logged or returned outside the dev-only response path
+  OK    devDeliveryPin (dev-only PIN exposure) is gated on NODE_ENV, never unconditional
+  OK    src/pages/smokecraft/Account.jsx contains no JWT_SECRET / hardcoded credential / bcrypt hash literal
+  OK    src/services/smokecraft/stateAdapter.js contains no JWT_SECRET / hardcoded credential / bcrypt hash literal
+  OK    src/services/smokecraft/playerStateApiClient.js contains no JWT_SECRET / hardcoded credential / bcrypt hash literal
+  OK    SmokeCraftJourneyContext imports and uses the shared stateAdapter (not bypassing it)
+  OK    smokecraftAccountRoutes is mounted
+  OK    convert-guest route is mounted
+  OK    journey-snapshot GET/PUT routes are mounted
+
+=== RESULT: PASS (0 checks failed) ===
+── SmokeCraft gameplay-integrity validator (Holistic Fix 5A)
+
+  OK    docs/smokecraft/SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md exists
+  OK    migration 095 exists
+  OK    migration 095 has a rollback script
+  OK    rollback file does not live inside server/db/migrations
+  OK    smokecraft_rank_history has UNIQUE(guest_reference, rank_label) — idempotent promotion
+  OK    smokecraft_gameplay_rules has UNIQUE(rule_key, version) — versioned, not overwritable
+  OK    grantSessionBadgesInTx runs inside completeSession's transaction (client never separately claims a session-tied badge)
+  OK    grantSessionPassportStampInTx runs inside the same transaction
+  OK    badge/stamp grants use ON CONFLICT DO NOTHING against the real UNIQUE index (duplicate-protected, not app-level only)
+  OK    rank is recomputed server-side from xp_total, never trusted from the client
+  OK    no automatic demotion — recomputeRankInTx only ever changes rank when the newly computed rank differs (promotion), never compares for a lower value to force a downgrade
+  OK    badge criteria are read from SESSION_REWARDS (existing single source of truth), not duplicated
+  OK    rank ladder is read from SC_RANKS (existing, already-approved, already-aligned constant) — not a newly invented ladder
+  OK    leaderboard query selects from smokecraft_player_state (real data)
+  OK    leaderboard query has no hardcoded/mock guest names or scores
+  OK    client leaderboard service fetches the real API, never returns a hardcoded communityEntries array
+  OK    leaderboard preference endpoint validates displayName/eligible types, never trusts arbitrary client fields for scoring
+  OK    no controller path accepts a client-supplied XP/score/badge/rank amount for the completion or award endpoints (still true from Holistic Fix 4)
+  OK    Mentor.jsx has exactly one setSelectedMentor call site, reactive to journey.mentor (not an independent write)
+  OK    leaderboard read route is mounted
+  OK    leaderboard preference route requires identity (not anonymous-writable)
+
+=== RESULT: PASS (0 checks failed) ===
+
+── SmokeCraft gameplay-reward-authority validator (Holistic Fix 5A-2)
+
+  OK    src/pages/smokecraft/Art.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Available.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Cultivation.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Leaves.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    KnowledgeCheck.jsx no longer calls addXP() directly (server-verified quiz submit only)
+  OK    KnowledgeCheck.jsx submits raw responses via submitKnowledgeCheck, not a client score
+  OK    LeafChallenge.jsx no longer calls addXP()/addBadge()/awardStamp() directly for the final-round reward (server-verified submit only)
+  OK    LeafChallenge.jsx submits raw answers via submitLeafChallenge, not a client score
+  OK    LeafChallenge.jsx sources its answer key from the shared, server-dual-imported data module (not an inline duplicate)
+  OK    Blend.jsx no longer calls addXP()/awardStamp() directly (server-verified blend-selection submit only, Holistic Fix 5A-3)
+  OK    Blend.jsx submits its raw wrapper/binder/filler selection via submitBlendSelection, not a client claim
+  OK    submitBlendSelection validates a complete, well-formed selection server-side (wrapper/binder/exactly-3-fillers), never trusting a bare completion claim
+  OK    submitKnowledgeCheck scores server-side against the real question data (scoreQuestionSet), not a client-submitted score
+  OK    submitLeafChallenge scores server-side against the real answer key (scoreLeafChallenge), not a client-submitted score
+  OK    correctReward requires both a reason and an authorizedBy identity (never a silent/anonymous correction)
+  OK    correctReward never deletes/updates the original award/attempt row — only inserts a new correction row
+  OK    The /corrections route is gated by requireStaff (never reachable by a plain learner identity)
+  OK    Quiz and Leaf Challenge submit routes require a verified SmokeCraft identity
+  OK    NAMED_XP_SOURCES is populated (not the empty placeholder from Holistic Fix 4) — named XP is now real, not dead code
+  OK    Migration 096 (activity ledger + corrections) exists
+  OK    Migration 096 has a rollback script outside server/db/migrations
+  OK    smokecraft_activity_attempts has UNIQUE(guest_reference, activity_type, activity_key) — one scored attempt per activity ever
+  OK    smokecraft_reward_corrections is append-only structured (has a reason and authorized_by column)
+  OK    Seed script for the versioned rule registry exists
+  OK    Rule seed script sources values from existing constants (SESSION_REWARDS/SC_RANKS/question sets), never invents new numbers
+  OK    Rule seed script uses ON CONFLICT DO NOTHING on (rule_key, version) — a rule row is immutable once written
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft alert pointer-safety validator (Holistic Fix 5A-3B, SC-D027)
+
+  OK    BuildDiagnosticFooter.jsx exists and is readable
+  OK    The mismatch banner still has role="alert" (screen-reader semantics intact)
+  OK    The mismatch-banner JSX block is present and parseable
+  OK    The banner's outer wrapper is pointer-transparent (pointerEvents: 'none') — SC-D027 fix, empty regions never block controls underneath
+  OK    The Refresh button explicitly opts back into pointer events (pointerEvents: 'auto') — remains clickable
+  OK    The Refresh button still has a real onClick handler (interactive action not accidentally disabled)
+  OK    The banner is still full-viewport-width at top:0 (visual/position unchanged — no redesign)
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft tasting-authority validator (Holistic Fix 5A-3D)
+
+  OK    MiniTasting.jsx no longer calls addXP() directly (server-verified completion only)
+  OK    MiniTasting.jsx uses the shared server adapter for draft load/save (loadTastingDraft/saveTastingDraft)
+  OK    MiniTasting.jsx submits completion via the shared adapter (completeTasting), not a local claim
+  OK    Completion is gated on a real selection (primaryDisabled tied to !selectedId)
+  OK    submitTastingCompletion validates selectedCigarId against the server's own flight inventory (validIds), never trusting the client id blindly
+  OK    submitTastingCompletion is idempotent via the existing smokecraft_activity_attempts UNIQUE constraint (activity_type='tasting')
+  OK    saveTastingDraft never grants XP or completion (draft save is reward-free — search confirms no xp_total UPDATE inside saveTastingDraft)
+  OK    saveTastingDraft enforces optimistic concurrency (expectedVersion check before write)
+  OK    Tasting draft/completion routes all require a verified SmokeCraft identity
+  OK    handleSaveTastingDraft requires an explicit expectedVersion (no default that would silently skip stale-write protection)
+  OK    Draft/completion controllers never log or forward request bodies to a public audit/console path beyond the DB row itself (no console.log of req.body in these handlers)
+  OK    Migration 097 (tasting drafts) exists
+  OK    Migration 097 has a rollback script outside server/db/migrations
+  OK    smokecraft_tasting_drafts has UNIQUE(guest_reference, activity_key) — one draft row per guest per activity
+  OK    smokecraft_tasting_drafts has a version column for optimistic concurrency
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft cultivator-authority validator (Holistic Fix 5A-3E)
+
+  OK    Cultivation.jsx no longer calls addXP()/awardStamp() directly inside handleSave (server-verified submit only)
+  OK    Cultivation.jsx submits evidence via the shared adapter (submitCultivatorEvidence)
+  OK    Save is gated on all required stages being viewed (allStagesViewed used in the disabled condition)
+  OK    Cultivation.jsx sources the required-stage list from the shared, server-dual-imported data module
+  OK    submitCultivatorEvidence verifies the submitted evidence covers every real required stage (CULTIVATION_STAGE_IDS.every), never trusting a bare completion claim
+  OK    submitCultivatorEvidence is idempotent via the existing smokecraft_activity_attempts UNIQUE constraint (activity_key='cultivator')
+  OK    The cultivator Passport stamp insert uses ON CONFLICT DO NOTHING (duplicate-protected)
+  OK    The cultivator submit route requires a verified SmokeCraft identity
+  OK    handleSubmitCultivator requires a real idempotency key (requireIdempotencyKey)
+  OK    handleSubmitCultivator requires viewedStageIds as a real array (rejects malformed input)
+  OK    Shared cultivation-stage-id data module exists (dual-imported by client and server)
+  OK    The shared stage-id list has no browser-only imports (safe to import server-side)
+  OK    The shared stage-id list has exactly 7 real stage ids
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Collections-authority validator (Holistic Fix 5A-3F)
+
+  OK    The Collections client only exposes read (getCollections/getItem) and server-recalculate (recalculate) calls — no client-set-ownership function exists
+  OK    CollectionsCenter.jsx fetches live data via the shared collectionsApiClient (no local mirror)
+  OK    CollectionsCenter.jsx has real loading/error/offline states (not a static mock)
+  OK    recalculate() checks real evidence tables per item (EVIDENCE_CHECKS), never trusts a client-submitted ownership flag
+  OK    Every collection item insert is duplicate-protected via ON CONFLICT on the real DB constraint
+  OK    Collection unlock is idempotent via a stable idempotency_key, not a random one
+  OK    A staff-authorized reversal is read from the append-only corrections ledger, never by deleting/editing the original ownership row
+  OK    smokecraft_collection_ownership has a real UNIQUE(guest_reference, collection_item_key) constraint (duplicate ownership impossible at the DB level)
+  OK    smokecraft_collection_ownership links a real source_progression_event_id (source event, not a bare flag)
+  OK    Collections routes now have the dev/test rate-limiter skip (matches the established convention, closes a real found gap)
+  OK    An authenticated account's Collections identity is prefixed with user: (consistent with the rest of player-state, real found-and-fixed defect)
+  OK    Collections routes issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity) — real found-and-fixed defect: a first-ever visit directly to /smokecraft/collections previously 401'd instead of getting a real guest identity
+  OK    convertGuestToAccount transfers Collections ownership on guest-to-account conversion (real found-and-fixed gap — was previously never transferred)
+  OK    correctReward supports a real reversed flag persisted to the DB (not silently dropped)
+  OK    The /corrections route remains staff-gated (never a learner path) — unchanged from Holistic Fix 5A-2
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Skill-Tree-authority validator (Holistic Fix 5A-3G)
+
+  OK    The Skill Tree client only exposes read (getSkillTree/getNode) and server-recalculate (recalculate) calls — no client-set-progress function exists
+  OK    SkillTree.jsx fetches live data via the shared skillTreeApiClient (no local mirror)
+  OK    SkillTree.jsx has real loading/error/offline states (not a static mock)
+  OK    SkillTree.jsx renders a distinct visual state for a corrected/reversed node (not silently hidden)
+  OK    recalculate() checks real evidence tables per node (EVIDENCE_CHECKS), never trusts a client-submitted completion flag
+  OK    Every node has a completion_rule mapped to a real EVIDENCE_CHECKS entry (no node lacks verified evidence)
+  OK    Node progression is duplicate-protected via ON CONFLICT on the real DB constraint
+  OK    A staff-authorized reversal is read from the append-only corrections ledger, never by deleting/editing the original learner-state row
+  OK    The persisted DB state column is never set to the non-enum "corrected" value (real CHECK constraint honored — correction is a read-time overlay only)
+  OK    A reversed node breaks the downstream prerequisite chain (node totals are genuinely recalculated, not just relabeled)
+  OK    smokecraft_skill_tree_learner_state has a real UNIQUE(guest_reference, node_key) constraint (duplicate progression impossible at the DB level)
+  OK    smokecraft_skill_tree_learner_state links a real supporting_event_id (source event, not a bare flag)
+  OK    Every node definition carries a completion_rule (the rule version/reference used for evidence evaluation)
+  OK    Skill Tree routes have the dev/test rate-limiter skip (matches the established convention, closes a real found gap)
+  OK    An authenticated account's Skill Tree identity is prefixed with user: (consistent with the rest of player-state, real found-and-fixed defect)
+  OK    Skill Tree routes issue a fresh guest identity when none exists (ensureSmokeCraftGuestIdentity) — real found-and-fixed defect: a first-ever visit directly to /smokecraft/skill-tree previously 401'd instead of getting a real guest identity
+  OK    convertGuestToAccount transfers the Skill Tree evidence tables on guest-to-account conversion (real found-and-fixed gap — was previously never transferred)
+  OK    The evidence transfer is a deterministic recalculation performed AFTER commit, on a fresh connection (never reads its own uncommitted transaction)
+  OK    The /corrections route remains staff-gated (never a learner path) — unchanged from Holistic Fix 5A-2
+  OK    convert-guest response surfaces skillTreeEvidenceRowsTransferred/skillTreeCompletedNodes (auditable, not silently dropped)
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Leaderboard-authority validator (Holistic Fix 5A-3H)
+
+  OK    getLeaderboard never accepts a client-submitted xpTotal/score — it SELECTs xp_total from the real player-state table
+  OK    The eligibility WHERE clause enforces the real server-side opt-out (COALESCE(le.eligible, true) = true), not a client-supplied flag
+  OK    A guest with zero real XP is honestly excluded, never shown as a fabricated zero-score row
+  OK    Tie-breaking is deterministic: xp_total DESC, then completed_session_count DESC, then guest_reference ASC
+  OK    displayName defaults to an honest "Guest ####" pattern, never the real email/account id, when unset
+  OK    The public leaderboard payload never returns the raw guest_reference — only isCurrentUser is derived from it server-side
+  OK    Venue scoping is a real, settable, persisted preference (venue_id column actually written), not a dead column
+  OK    Pagination is real SQL LIMIT/OFFSET, not a client-side array slice
+  OK    convertGuestToAccount transfers the leaderboard eligibility/opt-out/venue preference (real found-and-fixed gap — was previously never transferred)
+  OK    XP corrections recompute smokecraft_player_state.xp_total directly (the same column the leaderboard reads), so placement is genuinely recalculated, never a separate cached leaderboard total
+  OK    The leaderboard limit is server-side clamped to a real max (100), never trusting an arbitrarily large client-requested page size
+  OK    The leaderboard offset is server-side clamped to a non-negative value
+  OK    setLeaderboardPreference derives guestReference from the server-verified identity only (self-service, own identity only — never trusts a client-submitted guestReference for writes)
+  OK    getLeaderboardSnapshot fetches the real authoritative player-state (fetchPlayerState) rather than trusting only the local GuestSessionContext mirror for the numbers it returns
+  OK    A failed/offline fetch returns an honest error/offline status, never a fabricated empty-looking success
+  OK    The Leaderboard screen renders the real fetched community entries (snapshot.communityEntries via filteredEntries), not only a synthetic single local entry
+  OK    The screen prefers server-authoritative XP (authoritativeXp) for the displayed totals, not the local session mirror alone
+  OK    The "You" indicator on a leaderboard row is driven by the server-computed isCurrentUser flag, never assumed for every row
+  OK    The screen has real loading/error/offline states (not a static mock)
+  OK    The screen supports real pagination controls (Prev/Next) over the server LIMIT/OFFSET
+  OK    The "Refresh Rankings" control re-fetches real server data, not just a local timestamp bump
+  OK    smokecraft_leaderboard_eligibility has a real UNIQUE guest_reference constraint (one preference row per identity)
+  OK    smokecraft_leaderboard_eligibility carries a real venue_id column for venue-boundary enforcement
+  OK    The documented tie-breaking rule matches the implementation exactly (xp_total DESC, completed_session_count DESC, guest_reference ASC)
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Pairing-Engine-authority validator (Holistic Fix 5B-1)
+
+  OK    computeRecommendation always returns an explanation string
+  OK    computeRecommendation always returns a ruleSetVersion
+  OK    savePairing always recomputes the score itself (computeRecommendation), never trusts a client-submitted score field
+  OK    An identical idempotency-key retry is a true no-op (no version bump, no new revision) — real idempotent save
+  OK    Saved-pairing writes are duplicate-protected via a real DB UNIQUE constraint (natural key), not app-level-only
+  OK    ratePairing enforces optimistic concurrency (expectedVersion) and returns a real 409-shaped conflict, never silently overwriting
+  OK    Every save/rate mutation appends an append-only revision row before changing state — real revision history, never edited in place
+  OK    getSavedPairing enforces ownership at the query level (WHERE ... AND guest_reference = $2), never fetching by id alone
+  OK    The engine reuses the real, already-approved pairing data (STRENGTH_SCORE/TYPE_STRENGTH/HARMONY/GOAL_DESC/ADJUSTMENT_MAP/SERVING_STYLE) rather than inventing new cigar/beverage facts
+  OK    No XP/badge/Passport-stamp is awarded by this package (mandate: only if an already-approved rule explicitly exists — none does here)
+  OK    Ledger events cover all 4 required types: pairing_requested, pairing_recommended, pairing_saved, pairing_rated
+  OK    Pairing-engine routes have the dev/test rate-limiter skip from day one
+  OK    An authenticated account's pairing identity is prefixed with user: from day one (no repeat of the recurring identity-prefix defect)
+  OK    Pairing-engine routes issue a fresh guest identity when none exists from day one (no repeat of the recurring first-visit-401 defect)
+  OK    smokecraft_pairing_rules has a real UNIQUE(rule_key, version) constraint — versions are additive, never overwritable
+  OK    smokecraft_pairing_saves has a real UNIQUE natural-key constraint (duplicate saves impossible at the DB level)
+  OK    smokecraft_pairing_save_revisions has no UPDATE-style column at all — append-only by construction (only INSERT is possible)
+  OK    PairingLab.jsx no longer imports the client-only scoring engine (buildRecommendation)
+  OK    PairingLab.jsx uses the one shared pairing adapter (useSmokeCraftPairingEngine)
+  OK    PairingLab.jsx has a single accessible page title (real found-and-fixed gap — Holistic Fix 5B-1A, found live via Playwright)
+  OK    PairingLab.jsx's journey-sync effect depends on real primitive values, not a freshly-created object each render (real found-and-fixed infinite-render-loop defect — Holistic Fix 5B-1A, found live via Playwright: chip buttons constantly detaching from the DOM)
+  OK    PairingLab.jsx's Pairing Choices panel has an explicit stacking order above the underlying pairing-type hotspots it measurably overlaps (real found-and-fixed blocked-overlay defect — Holistic Fix 5B-1A, found live via Playwright: "element intercepts pointer events")
+  OK    PairingRecommendations.jsx no longer imports the client-only scoring engine (rankAllCategories)
+  OK    PairingRecommendations.jsx uses the one shared pairing adapter (useSmokeCraftPairingEngine)
+  OK    PairingRecommendations.jsx saves through the real server endpoint (engine.save), not only a local journey mirror
+  OK    The shared adapter never computes a score itself — every status transition is driven by a real server response or a real network condition
+  OK    The shared adapter represents the mandated state set (no-cigar/no-beverage/calculating/ready/low-confidence/no-safe-recommendation/offline/session-expired)
+  OK    The pairing-engine API client only exposes recommend/rank/save/get/rate calls — no client-side score-setting function exists
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Mentor-Guidance-authority validator (Holistic Fix 5B-2A)
+
+  OK    Mentor identity is looked up from the real, single roster (getMentorById), never trusted as a client-submitted name/country/flag
+  OK    An unrecognized mentorId is rejected, never fabricates a mentor identity
+  OK    Guidance never awards XP, badges, or Passport stamps (mentor guidance is read-only)
+  OK    Guidance never issues an UPDATE/INSERT against smokecraft_player_state, smokecraft_awards, or any reward table (read-only queries only)
+  OK    Every real signal query is scoped by guest_reference (never a global/unscoped query that could leak another learner's data)
+  OK    The fallback state (no real signal available) is honestly labeled, using the mentor's own real roster greeting — never a fabricated achievement
+  OK    Every response includes message/reason/nextAction/sourceContext/confidence/messageVersion — no unexplained guidance is possible
+  OK    Mentor-guidance routes have the dev/test rate-limiter skip from day one
+  OK    An authenticated account's mentor-guidance identity is prefixed with user: from day one
+  OK    Mentor-guidance routes issue a fresh guest identity when none exists from day one
+  OK    The shared guidance hook reads the selected mentor from the one canonical source (SmokeCraftJourneyContext.journey.mentor), never a second mentor store
+  OK    The shared guidance hook never computes guidance itself — only requests it from the server
+  OK    The shared guidance hook represents the mandated state set (no-mentor/loading/ready/unavailable/offline/session-expired)
+  OK    DynamicMentorPanel uses the one shared mentor-guidance adapter (useSmokeCraftMentorGuidance)
+  OK    MentorCommentary.jsx no longer keys guidance off a hardcoded per-mentor-id map that never matched the real roster (real found-and-fixed defect SC-D050)
+  OK    MentorCommentary.jsx uses the one shared mentor-guidance adapter (useSmokeCraftMentorGuidance)
+  OK    MentorCommentary.jsx renders real roster fields (mentor.country/mentor.bio), not the nonexistent mentor.origin/mentor.expertise (real found-and-fixed defect)
+  OK    Mentor.jsx retains exactly one write path for the selected mentor (setMentor to SmokeCraftJourneyContext) — no second, competing mentor-selection owner reappeared
+  OK    SkillTree.jsx's mentor panel uses the shared context-aware guidance service (context prop), not a hardcoded guidance string
+
+── Holistic Fix 5B-2A-1 additions ──
+
+  OK    Live pairing-aware guidance is scored with the SAME computeRecommendation function the pairing engine itself uses — never a second, competing scoring path that could contradict it
+  OK    The live-pairing signal takes priority over a stale saved-pairing row when a current pairing selection is supplied
+  OK    The live-pairing guidance message embeds the exact real compatScore (no rounding/altering it, no independent claim)
+  OK    ChallengeHub.jsx no longer passes a static hardcoded guidance string to DynamicMentorPanel
+  OK    ChallengeHub.jsx uses the shared context-aware guidance service (context prop)
+  OK    BlendFaultChallenge.jsx no longer passes a static hardcoded guidance string to DynamicMentorPanel
+  OK    BlendFaultChallenge.jsx uses the shared context-aware guidance service (context prop)
+  OK    FillerArrangement.jsx no longer passes a static hardcoded guidance string to DynamicMentorPanel
+  OK    FillerArrangement.jsx uses the shared context-aware guidance service (context prop)
+  OK    CollectionsCenter.jsx no longer passes a static hardcoded guidance string to DynamicMentorPanel
+  OK    CollectionsCenter.jsx uses the shared context-aware guidance service (context prop)
+  OK    PairingLab.jsx connects a real mentor-guidance panel using the shared service (context="pairing-lab")
+  OK    PairingLab.jsx passes the real live cigar+beverage selection as pairingContext (not a static string, not bypassing the shared service)
+  OK    PairingRecommendations.jsx connects a real mentor-guidance panel using the shared service (context="pairing-recommendations")
+  OK    PairingRecommendations.jsx passes the real live cigar+beverage selection as pairingContext (not a static string, not bypassing the shared service)
+  OK    No active mentor panel in this pass's scope still passes a static guidance string (client-side hardcoded text is fully retired for these 6 screens)
+  OK    Mentor.jsx still retains exactly one write path for the selected mentor — no duplicate mentor ownership reappeared across this pass's 6-screen wiring
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+> crafthub-360-production@1.0.0 build
+> vite build
+
+vite v4.5.14 building for production...
+transforming...
+[plugin:vite:esbuild] Duplicate key "border" in object literal
+113|          borderRadius: 9,
+114|          background: selected ? `linear-gradient(160deg, ${statusColor}55, ${statusColor}22)` : cardBg,
+115|          border: `2px solid ${selected ? GOLD : statusColor}`,
+   |          ^
+116|          boxShadow: selected
+117|            ? `0 0 0 3px rgba(201,149,44,0.35), 0 0 12px ${statusColor}88, 0 2px 8px rgba(0,0,0,0.6)`
+
+✓ 2025 modules transformed.
+rendering chunks...
+[plugin:vite:reporter] 
+(!) /home/user/crafthub-360-stitch/src/api/passportScanApi.js is dynamically imported by /home/user/crafthub-360-stitch/src/pages/passport/PassportHome.jsx but also statically imported by /home/user/crafthub-360-stitch/src/pages/passport/PassportHome.jsx, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/index.html                                               0.80 kB │ gzip:   0.41 kB
+dist/assets/BootConsole-174cbfbc.css                          8.49 kB │ gzip:   2.16 kB
+dist/assets/index-b84cfafb.css                              129.56 kB │ gzip:  22.28 kB
+dist/assets/testModeConfig-93ff0050.js                        1.22 kB │ gzip:   0.52 kB
+dist/assets/packagingStudioApiClient-dafcb5ef.js              1.56 kB │ gzip:   0.73 kB
+dist/assets/venueHumidorCustomerApiClient-f32151ec.js         2.43 kB │ gzip:   0.97 kB
+dist/assets/MentorGuidancePanel-1cd5f452.js                   2.68 kB │ gzip:   0.84 kB
+dist/assets/PinPad-3dc0fb0e.js                                3.27 kB │ gzip:   1.14 kB
+dist/assets/useAdminVenueId-33a6f9a3.js                       3.71 kB │ gzip:   1.20 kB
+dist/assets/PrototypeDisclosure-438d3a25.js                   3.97 kB │ gzip:   1.56 kB
+dist/assets/PackagingStudioDashboard-4ce91327.js              4.68 kB │ gzip:   1.43 kB
+dist/assets/PackagingReview-076762e8.js                       4.82 kB │ gzip:   1.42 kB
+dist/assets/JudgeDashboard-1ab6f59d.js                        4.85 kB │ gzip:   1.51 kB
+dist/assets/PackagingStudioShare-20c034ee.js                  6.13 kB │ gzip:   1.55 kB
+dist/assets/OfflineMode-757e7b7c.js                           6.40 kB │ gzip:   1.91 kB
+dist/assets/VenueHumidorMyAcquisitions-49c10229.js            6.81 kB │ gzip:   1.70 kB
+dist/assets/MentorReview-656316fa.js                          7.16 kB │ gzip:   2.23 kB
+dist/assets/AdminLogin-1f487a50.js                            7.24 kB │ gzip:   2.03 kB
+dist/assets/StaffLogin-869c711d.js                            7.35 kB │ gzip:   2.14 kB
+dist/assets/FounderLogin-b1ae543c.js                          7.82 kB │ gzip:   2.05 kB
+dist/assets/PackagingStudioVersions-7ebcafd1.js               8.03 kB │ gzip:   1.65 kB
+dist/assets/MentorLogin-5bcc94b2.js                           8.15 kB │ gzip:   2.23 kB
+dist/assets/DevLogin-60f87891.js                              8.51 kB │ gzip:   2.32 kB
+dist/assets/InstallHelp-d51ee1c1.js                           8.75 kB │ gzip:   2.57 kB
+dist/assets/VenueHumidorOrderConfirmation-59941de7.js         9.03 kB │ gzip:   2.23 kB
+dist/assets/VenueHumidorMyOrders-506d7bf9.js                  9.92 kB │ gzip:   2.25 kB
+dist/assets/KioskSetup-1e84853c.js                           10.06 kB │ gzip:   2.36 kB
+dist/assets/GoldenBoxHub-89420771.js                         10.29 kB │ gzip:   2.08 kB
+dist/assets/VenueHumidorPickup-2028a46a.js                   10.53 kB │ gzip:   2.50 kB
+dist/assets/PilotReadinessDashboard-d4ff3dcd.js              10.59 kB │ gzip:   2.13 kB
+dist/assets/CompetitionDetail-d6b76753.js                    10.79 kB │ gzip:   2.26 kB
+dist/assets/VenueHumidorFulfillmentHistory-b8d1fd0d.js       11.06 kB │ gzip:   2.04 kB
+dist/assets/SystemOverview-3b9a1e6a.js                       11.28 kB │ gzip:   2.96 kB
+dist/assets/VenueHumidorAcquisitionDetail-5639ccbe.js        11.91 kB │ gzip:   2.53 kB
+dist/assets/VenueHumidorAdminInventoryEvents-f9e22d4e.js     13.22 kB │ gzip:   2.23 kB
+dist/assets/VenueHumidorHandoff-6306ae51.js                  13.40 kB │ gzip:   3.04 kB
+dist/assets/VenueHumidorReceipt-00f37e1b.js                  14.09 kB │ gzip:   2.38 kB
+dist/assets/VenueHumidorCheckout-77744092.js                 14.74 kB │ gzip:   3.19 kB
+dist/assets/VenueHumidorAssistedSelling-2dc9310f.js          14.83 kB │ gzip:   2.64 kB
+dist/assets/VenueHumidorOrderQueue-99fae774.js               14.83 kB │ gzip:   2.63 kB
+dist/assets/MentorConsole-807f9ca3.js                        15.12 kB │ gzip:   3.42 kB
+dist/assets/VenueHumidorMyOrderDetail-f00200f0.js            15.13 kB │ gzip:   2.79 kB
+dist/assets/InvestorDemo-7e439fb0.js                         16.08 kB │ gzip:   3.78 kB
+dist/assets/DeviceStatus-f4a10d76.js                         16.09 kB │ gzip:   3.54 kB
+dist/assets/VenueHumidorBrowser-7c2eb502.js                  16.67 kB │ gzip:   3.34 kB
+dist/assets/DevDiagnostics-86b0fb56.js                       17.16 kB │ gzip:   3.22 kB
+dist/assets/VenueHumidorAdminDashboard-2bb6d299.js           18.13 kB │ gzip:   2.58 kB
+dist/assets/VenueOwnerDemo-9fab332b.js                       18.86 kB │ gzip:   4.43 kB
+dist/assets/VenueHumidorRecommendations-7e4fde8c.js          19.09 kB │ gzip:   3.41 kB
+dist/assets/VenueHumidorCigarDetail-1d2d1b09.js              19.65 kB │ gzip:   3.79 kB
+dist/assets/FounderControl-c259adde.js                       21.82 kB │ gzip:   4.34 kB
+dist/assets/PilotOnboarding-51f08581.js                      22.63 kB │ gzip:   3.98 kB
+dist/assets/JudgeEntryReview-332e202c.js                     23.23 kB │ gzip:   5.15 kB
+dist/assets/PackagingStudioEditor-ffb9f312.js                24.32 kB │ gzip:   4.75 kB
+dist/assets/ResultsExperience-19ae0ba1.js                    24.47 kB │ gzip:   4.67 kB
+dist/assets/FounderDemo-2f8a4df3.js                          25.15 kB │ gzip:   5.66 kB
+dist/assets/VenueHumidorOrderDetail-3da8f608.js              26.02 kB │ gzip:   4.47 kB
+dist/assets/VenueManagementCommandHub-069db1eb.js            29.74 kB │ gzip:   5.69 kB
+dist/assets/BootConsole-0c2c124f.js                          32.58 kB │ gzip:   6.79 kB
+dist/assets/VenueHumidorAdminProductForm-872e9cad.js         35.92 kB │ gzip:   5.51 kB
+dist/assets/EntryWorkspace-57396862.js                       37.95 kB │ gzip:   7.01 kB
+dist/assets/ModuleDeploymentCenter-147c4132.js               38.13 kB │ gzip:   8.69 kB
+dist/assets/VenueTestControl-71117202.js                     55.37 kB │ gzip:   9.15 kB
+dist/assets/Admin-4820c9bf.js                                97.90 kB │ gzip:  16.93 kB
+dist/assets/index-66817e5e.js                             5,337.97 kB │ gzip: 915.66 kB
+
+(!) Some chunks are larger than 500 kBs after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 20.10s

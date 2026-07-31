@@ -1,0 +1,325 @@
+=== verify-smokecraft-hf5a-gameplay-engine.mjs ===
+
+── 1. First session completion auto-grants its tied badge
+  PASS  Session completion returns 201
+  PASS  The tied badge (sc-profile-started) is auto-granted in the SAME response, not a separate claim
+  PASS  Client never supplied the badge id — it came from the server-owned SESSION_REWARDS table
+
+── 2. Repeat session completion does not re-grant the badge
+  PASS  Repeat completion returns alreadyCompleted:true
+  PASS  No badges re-granted on replay
+  PASS  Guest still has exactly one sc-profile-started badge (not two)
+
+── 3. Completing session-complete auto-grants the journey-complete Passport stamp
+  PASS  session-complete completion returns 201
+  PASS  The journey-complete Passport stamp is auto-granted in the same response
+
+── 4. XP accumulation triggers real rank promotions using the existing approved ladder
+  PASS  At 75 XP, rank is Novice (existing approved ladder: 0-199)
+  PASS  Crossing 200 XP promotes to Enthusiast
+  PASS  Player state reflects the current rank label
+
+── 5. No duplicate rank-promotion event for the same rank
+  PASS  No new rank-promotion event when the rank has not actually changed
+
+── 6. A badge tied to an uncompleted session never appears
+  PASS  A guest who has completed nothing has zero badges (honest locked state, nothing fabricated)
+
+── 7. Leaderboard reflects real, current server data
+  PASS  Leaderboard request succeeds
+  PASS  Guest C (325 XP, Enthusiast) appears in the leaderboard with real, matching data
+  PASS  Leaderboard entries are ordered by XP descending
+
+── 8. Leaderboard privacy
+  PASS  No leaderboard entry displays a real email address
+  PASS  A guest can set their own leaderboard preference (self-service, own identity only)
+  PASS  After opting out, the guest no longer appears on the leaderboard
+
+── 9. Two-tab race on a completion that grants a badge and a rank promotion
+  PASS  Both concurrent requests return well-formed success (no 500)
+  PASS  Exactly one badge (sc-cigar-review) and one (sc-scorecard) granted from the race, not two of each
+
+── 10. Historical award stability
+  PASS  Replaying a completed session's completion returns the ORIGINAL xp_awarded value, never recalculated
+
+=== RESULT: 22 passed, 0 failed (of 22 total) ===
+
+=== verify-smokecraft-hf5a2-reward-authority.mjs ===
+
+── 1. Server-verified quiz scoring (never trusts client correctness) ──
+  PASS  Wrong answer submission (201) returns a server-computed score, not a client-trusted one
+  PASS  Server awards the real, existing session-linked XP amount (seed-soil = 75)
+  PASS  A second attempt at an already-scored quiz module is honestly rejected as already-scored, XP not re-granted
+  PASS  Player state XP total reflects exactly one grant of the quiz XP, not two
+
+── 2. Server-verified Leaf Challenge (real answer key, never a client score) ──
+  PASS  A genuinely perfect answer set scores 5/5 server-side
+  PASS  Perfect score grants the tiered 125 XP (not a client-fabricated amount)
+  PASS  Perfect score grants both the botanist AND leaf-scholar badges
+  PASS  Perfect score grants the leaf-recognition Passport stamp
+  PASS  An all-wrong answer set is scored 0/5 server-side, never trusting a claimed high score
+  PASS  A 0-score attempt does not grant the leaf-scholar badge
+  PASS  Re-submitting Leaf Challenge with a DIFFERENT (better) answer set after a first attempt is rejected — first real attempt is final, not farmable
+
+── 3. Named one-time XP activities — server decides the amount ──
+  PASS  A real named XP source (art-observation) is granted its server-approved amount (50)
+  PASS  An unknown/fabricated named XP source is rejected with 400, never silently granted
+  PASS  The same named XP source cannot be granted twice to the same guest, even under a different idempotency key
+
+── 4. Badge mirror (addBadge direct-award path is now server-idempotent) ──
+  PASS  A direct-award Origins badge (art-appreciation) is granted server-side
+  PASS  The same badge cannot be granted twice under a different idempotency key
+
+── 5. Correction/reversal endpoint — staff-only, never learner-reachable ──
+  PASS  A plain guest identity attempting a correction is rejected (403), never applied
+
+── 6. Two-tab race on quiz submission ──
+  PASS  Both concurrent requests return well-formed success (no 500)
+  PASS  A two-tab race on the same quiz module grants XP exactly once, not twice
+
+=== RESULT: 19 passed, 0 failed (of 19 total) ===
+
+
+=== verify-smokecraft-venue-humidor-1a-api.mjs ===
+
+── 1. Venue isolation — a stranger with no membership cannot read/write ──
+  PASS  A user with no membership for venueB is denied listing venueB products
+
+── 2. Product creation, duplicate SKU/barcode rejection ──
+  PASS  An authorized venue manager can create a product
+  PASS  A duplicate SKU within the same venue is rejected
+  PASS  A duplicate barcode within the same venue is rejected
+  PASS  The SAME SKU is allowed in a DIFFERENT venue (per-venue uniqueness, not global)
+
+── 3. Venue isolation — products never leak across venues ──
+  PASS  Venue A's product list contains only Venue A's own products
+  PASS  A venue A staff member cannot fetch a venue B product even by pairing A's venueId with B's productId
+
+── 4. Customers cannot call admin/staff mutations ──
+  PASS  A non-member (customer-equivalent) cannot create a product for a venue they do not staff
+
+── 5. Receiving inventory ──
+  PASS  Receiving inventory increases physical quantity correctly (20 -> 30)
+  PASS  Receiving writes exactly one real inventory event with before/after quantities
+
+── 6. Box opening (inventory-neutral) ──
+  PASS  Box opening is a real, recorded, inventory-neutral event
+
+── 7. Adjustment (damage, loss, complimentary, return, count correction) ──
+  PASS  Damage adjustment decreases physical quantity (30 -> 28)
+  PASS  Complimentary-item adjustment decreases physical quantity (28 -> 27)
+  PASS  Count correction adjusts physical quantity to the real audited value (27 -> 30)
+
+── 8. Negative inventory prevention ──
+  PASS  An adjustment that would drive physical quantity negative is rejected with a real 409
+  PASS  The rejected mutation left the real physical quantity unchanged (transaction rolled back)
+
+── 9. Duplicate mutation prevention (idempotency) ──
+  PASS  A repeated mutation with the same idempotency key returns the identical original event, never double-applies
+  PASS  Physical quantity increased exactly once (30 -> 35), not twice
+
+── 10. Two-tab race on inventory mutation ──
+  PASS  Both concurrent requests with the same idempotency key resolve to the SAME real event (no crash, no double-apply)
+  PASS  Physical quantity decreased exactly once (35 -> 32) despite the two-tab race
+
+── 11. Hold creation and expiration ──
+  PASS  A hold is created and reduces real available quantity
+  PASS  Available quantity reflects the active hold (32 physical - 5 held = 27 available)
+  PASS  An already-expired hold can be expired (real expires_at check)
+  PASS  Available quantity is restored after hold expiration (back to 32)
+
+── 12. Reservation and cancellation restoration ──
+  PASS  A staff-created reservation succeeds and reduces real available quantity
+  PASS  Cancelling the reservation succeeds
+  PASS  Available quantity is restored after reservation cancellation (back to 32)
+
+── 13. Sale completion and cancellation restoration (order flow) ──
+  PASS  Sale completion succeeds and decrements real physical inventory (32 -> 26)
+  PASS  Physical quantity genuinely decreased by the sold quantity
+  PASS  Cancelling a completed order restores real inventory (refund path)
+  PASS  Physical quantity is genuinely restored after cancellation (26 -> 32)
+
+── 14. Cross-user / cross-venue denial ──
+  PASS  A venue A staff member (not a venue B member) is denied mutating a venue B product
+
+=== RESULT: 32 passed, 0 failed (of 32 total) ===
+
+
+=== verify-smokecraft-hf5c1b-golden-box-api.mjs ===
+
+── 1. Live-screen refresh — fresh guest, no manual identity round-trip ──
+  PASS  A genuinely fresh guest can create an entry without a prior identity round-trip (no 401)
+  PASS  Entry starts at version 1, status draft (server-assigned, never client-supplied)
+
+── 2. New draft / update draft / reload draft ──
+  PASS  First draft save succeeds and creates version 2
+  PASS  Reloading the entry shows the real saved current version (server-persisted, not client-cached)
+  PASS  Reload rehydrates the real saved presentation payload
+
+── 3. Rapid double-click — same idempotency key returns the same version, no duplicate ──
+  PASS  A retried save with the same idempotency key returns the SAME version, never creates a duplicate
+  PASS  Exactly 2 real version rows exist after the retry (initial + one real edit, not three)
+
+── 4. Stale-write rejection (real optimistic-concurrency conflict) ──
+  PASS  A save carrying an outdated expectedVersion is rejected with a real conflict (409 stale_version), never silently overwritten
+
+── 5. Two-tab race on draft save (concurrent saves from the same entry, different expectedVersion assumptions) ──
+  PASS  Of two concurrent saves both claiming the same expectedVersion, exactly one succeeds and the other is honestly told it lost the race (never both silently accepted, never a crash)
+
+── 6. Incomplete submission rejected / valid submission accepted ──
+  PASS  Submitting with missing required components is rejected (server decides completeness, never the client)
+  PASS  A draft with all required components saves successfully
+  PASS  A complete, valid submission is accepted (server-computed eligibility, never client-decided)
+
+── 7. Duplicate submission / rapid double-click / two-tab race on submit ──
+  PASS  A retried submit with the same idempotency key returns the SAME real submission, never a second row
+  PASS  Exactly one real submission row exists in the database (UNIQUE(entry_id) is genuinely enforced)
+  PASS  Two concurrent submit requests (two-tab race) both succeed but resolve to the SAME real submission (no duplicate, no crash)
+  PASS  The two-tab submit race produced exactly one real database row
+
+── 8. Canonical events with full required fields ──
+  PASS  All four canonical event types were emitted (golden_box_draft_created/_updated/_submission_requested/_submitted)
+  PASS  The canonical golden_box_submitted event carries a real ruleVersion and entryId
+
+── 9. Cross-user denial ──
+  PASS  A different guest is not treated as the entrant for another guest's entry (server-resolved visibility, never client-asserted)
+  PASS  A non-owner never receives the real presentation payload/components for a private entry
+
+── 10. Cross-device resume (same identity, two independent fetches) ──
+  PASS  Two independent fetches under the same identity return identical entry state (no per-device drift)
+
+── 11. Account conversion — Golden Box entry, draft history, and submission transfer ──
+  PASS  A real account is created on the same cookie jar as the guest
+  PASS  Guest-to-account conversion succeeds
+  PASS  Conversion reports a real Golden Box entry transferred (found-and-fixed gap — entry_id continuity was previously broken)
+  PASS  After conversion, creating/fetching an entry for the same competition under the account identity returns the TRANSFERRED entry (already submitted), not a fresh draft
+  PASS  The transferred entry's draft history (components) survived conversion
+
+=== RESULT: 26 passed, 0 failed (of 26 total) ===
+
+
+=== verify-smokecraft-required-interaction-package-a-api.mjs ===
+
+── 1. Authorized access / identity auto-provisioning ──
+  PASS  A fresh guest can read player state (identity auto-provisioned)
+
+── 2. Session 8 (first-third) — incorrect/empty submission rejected ──
+  PASS  Empty notesSelected is rejected (400)
+  PASS  Malformed/invalid observation id is rejected (400)
+
+── 3. Session 8 — completion blocked without evidence ──
+  PASS  Session 8 completion is rejected without prior tasting evidence (400 tasting_observation_required)
+
+── 4. Session 8 — correct submission, then completion succeeds ──
+  PASS  Real tasting observation submission succeeds (201)
+  PASS  Session 8 completes successfully after real evidence recorded
+
+── 5. XP and progression (server-owned) ──
+  PASS  Player XP total increased after Session 8 completion
+  PASS  Session 8 appears in completedSessions
+
+── 6. Duplicate submission / idempotency ──
+  PASS  Re-submitting observation for an already-recorded session returns alreadyRecorded, not a new row
+  PASS  Re-completing Session 8 is a safe idempotent no-op (alreadyCompleted)
+  PASS  No duplicate XP was awarded from the duplicate completion attempt
+
+── 7. Cross-player isolation ──
+  PASS  A different guest never sees Session 8 as completed
+  PASS  A different guest cannot complete Session 8 without submitting their own real evidence
+
+── 8. Session 12 (second-third) — full flow ──
+  PASS  Session 12 completion blocked without evidence
+  PASS  Session-8-only vocabulary is rejected for Session 12 (sessions have distinct real vocabularies)
+  PASS  Session 12 real observation submission succeeds
+  PASS  Session 12 completes after real evidence
+
+── 9. Session 16 (final-third) — full flow with combined flavor+focus vocabulary ──
+  PASS  Session 16 real observation (combined flavor+focus vocabulary) submission succeeds
+  PASS  Session 16 completes after real evidence
+  PASS  Session 8 vocabulary is rejected for Session 16 (distinct real vocabularies enforced)
+
+── 10. Concurrent submission (exactly-once) ──
+  PASS  All 3 concurrent observation submissions (shared idempotency key) succeed without error
+  PASS  Completion after concurrent evidence submission succeeds exactly once
+  PASS  Exactly one completion record exists despite 3 concurrent evidence submissions
+
+── 11. Malformed payload / missing idempotency key ──
+  PASS  Missing idempotencyKey is rejected (400)
+  PASS  Non-string personalNotes is rejected (400)
+
+── 12. Unaffected sessions are not gated ──
+  PASS  A session outside Package A scope (e.g. entry/Welcome) completes without needing tasting evidence
+
+── Summary ──
+
+=== RESULT: 26 passed, 0 failed (of 26 total) ===
+
+
+=== verify-smokecraft-required-interaction-package-a-browser.mjs ===
+
+── Session 8 (First Third) route loads, instructions/fields usable ──
+  PASS  Session 8 route loads with real instructions visible
+
+── Session 8 — incorrect/empty attempt: Continue without selecting anything ──
+  PASS  An empty submission is honestly rejected client-side before hitting the server
+
+── Session 8 — correct interaction: select a real zone, save partial, exit, reload, resume ──
+  PASS  Draft save confirms visibly
+  PASS  Genuine reload preserves the in-progress selection (journey-state resume)
+
+── Session 8 — submit real completion, server-scored ──
+  PASS  Session 8 completes and navigates to the real next step (server-confirmed, not optimistic-only)
+
+── Session 8 — reload after completion, XP visible on player state ──
+  PASS  Real server-side XP total is greater than zero after Session 8 completion
+
+── Session 8 — duplicate click does not duplicate completion ──
+  PASS  Exactly one Session 8 completion record exists after a duplicate completion call
+
+── Session 12 (Second Third) — full real flow ──
+  PASS  Session 12 completes with real observation and navigates to the real next step
+
+── Session 16 (Final Third) — full real flow ──
+  PASS  Session 16 completes with real observation and navigates to the real next step
+
+── Offline state ──
+  PASS  An honest error state renders when the network is unavailable (no fake success)
+
+── Responsive behavior (desktop + tablet) ──
+  PASS  No horizontal layout cutoff on Session 8 (desktop)
+  PASS  No horizontal layout cutoff at a tablet viewport
+  PASS  Submit/continue control remains visible and reachable at tablet size
+  PASS  No unexpected console errors across the tasting-capture flow
+
+=== RESULT: 14 passed, 0 failed (of 14 total) ===
+
+
+=== scripts/validateSmokecraftRequiredInteractionManifest.mjs ===
+
+── SmokeCraft required-interaction manifest validator (discovery-only) ─
+
+  OK    Exactly 21 sessions declared
+  OK    Session numbers are unique
+  OK    Required interaction IDs are unique (no undocumented reuse)
+  OK    Every session maps to a real route defined in VISIT_STRUCTURE
+  OK    Every interaction type uses the approved vocabulary
+  OK    Every gap classification uses an approved category
+  OK    Every session declares completion/scoring/mentor/persistence/progression expectations
+  OK    Every COMPLETE_AND_VERIFIED session cites a canonicalComponent, canonicalApi, canonicalService, and canonicalPersistence
+  OK    No session is silently omitted (1,2,3,4,5,6,7,8,10,11,12,14,15,16,19,21,22,23,24,25,27)
+  OK    No extra session was silently added beyond the 21 canonical primary sessions
+  OK    Manifest honestly reports 10 of 21 sessions as NOT COMPLETE_AND_VERIFIED (this validator does not force a false 21/21 claim)
+  OK    Every non-complete session records a real notes field explaining the gap (no silent placeholder)
+
+=== Classification totals ===
+  COMPLETE_AND_VERIFIED: 11
+  COMPLETE_BUT_UNTESTED: 1
+  PARTIAL: 5
+  VISUAL_ONLY: 4
+  WRONG_INTERACTION_TYPE: 0
+  MISSING: 0
+  BLOCKED: 0
+  DUPLICATED_OR_CONFLICTING: 0
+
+=== RESULT: PASS (manifest structurally sound and honest) (0 checks failed) ===
+

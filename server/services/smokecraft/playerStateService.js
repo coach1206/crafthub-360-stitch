@@ -37,6 +37,7 @@ import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
 import { scoreLeafChallenge } from '../../../src/data/leafChallengeRounds.js'
 import { getSampleInventory, VENUE_ID as DEFAULT_TASTING_VENUE_ID } from '../../../src/data/venueInventoryData.js'
 import { CULTIVATION_STAGE_IDS } from '../../../src/data/cultivationStages.js'
+import { hasTastingObservationEvidence } from './tastingObservationService.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -166,6 +167,20 @@ export async function getPlayerState(guestReference) {
  * (guest_reference, session_id) AND per idempotency_key.
  */
 export async function completeSession({ guestReference, venueId, sessionId, xpAwarded = 0, idempotencyKey, sourceRoute, requestId, deviceId }) {
+  // Required-Interaction Closure Package A: for Sessions 8/12/16
+  // (first-third/second-third/final-third) only, completion requires
+  // real, server-recorded tasting-observation evidence first — a
+  // player cannot complete these three sessions merely by opening the
+  // route and clicking Continue. Every other session is unaffected
+  // (hasTastingObservationEvidence returns true immediately for any
+  // sessionId outside this package's scope).
+  const hasEvidence = await hasTastingObservationEvidence(guestReference, sessionId)
+  if (!hasEvidence) {
+    const err = new Error('tasting_observation_required')
+    err.code = 'tasting_observation_required'
+    throw err
+  }
+
   const db = dbOrThrow()
   const client = await db.connect()
   try {

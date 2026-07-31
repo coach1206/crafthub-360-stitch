@@ -42,7 +42,7 @@ const FLAVOR_ZONES = [
 const EMPTY = { selectedFlavors: [], focusSelected: [], savedAt: null }
 
 export default function FinalThird({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, setFinalThirdTasting } = useGuestSession()
+  const { awardSessionRewards, setFinalThirdTasting, submitTastingObservation } = useGuestSession()
   const { journey, setFinalThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
@@ -51,6 +51,7 @@ export default function FinalThird({ onBack, onComplete } = {}) {
     return saved ? { ...EMPTY, ...saved } : { ...EMPTY }
   })
   const [done, setDone] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
   const initialized = useRef(false)
 
   useEffect(() => {
@@ -80,6 +81,12 @@ export default function FinalThird({ onBack, onComplete } = {}) {
 
   async function handleContinue() {
     if (done) return
+    const combinedNotes = [...ft.selectedFlavors, ...(ft.focusSelected || [])]
+    if (combinedNotes.length === 0) {
+      setSubmitError('Select at least one observation before continuing.')
+      return
+    }
+    setSubmitError(null)
     setDone(true)
     triggerHaptic('medium')
 
@@ -106,6 +113,12 @@ export default function FinalThird({ onBack, onComplete } = {}) {
     setFinalThirdTasting(payload)
     setFinalThird(payload)
 
+    const result = await submitTastingObservation('final-third', combinedNotes, '')
+    if (!result.ok) {
+      setDone(false)
+      setSubmitError('Unable to save your observations right now. Please try again.')
+      return
+    }
     if (onComplete) {
       onComplete()
       return
@@ -201,9 +214,21 @@ export default function FinalThird({ onBack, onComplete } = {}) {
         title="Flavor Finish" whyItMatters={ENRICHMENT_16?.whyItMatters} goldenBox={ENRICHMENT_16?.goldenBox}
       />
 
+      {submitError && (
+        <div role="alert" style={{
+          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
+          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
+          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
+          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
+        }}>
+          {submitError}
+        </div>
+      )}
+
       <SmokeCraftNavBar
         primary={done ? 'Saving…' : 'Continue to Scorecard →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
       />
     </>
   )

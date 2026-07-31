@@ -1,0 +1,63 @@
+{
+  "pass": 14,
+  "fail": 0,
+  "total": 14,
+  "results": [
+    {
+      "name": "Session 8 route loads with real instructions visible",
+      "ok": true
+    },
+    {
+      "name": "An empty submission is honestly rejected client-side before hitting the server",
+      "ok": true
+    },
+    {
+      "name": "Draft save confirms visibly",
+      "ok": true
+    },
+    {
+      "name": "Genuine reload preserves the in-progress selection (journey-state resume)",
+      "ok": true
+    },
+    {
+      "name": "Session 8 completes and navigates to the real next step (server-confirmed, not optimistic-only)",
+      "ok": true
+    },
+    {
+      "name": "Real server-side XP total is greater than zero after Session 8 completion",
+      "ok": true
+    },
+    {
+      "name": "Exactly one Session 8 completion record exists after a duplicate completion call",
+      "ok": true
+    },
+    {
+      "name": "Session 12 completes with real observation and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "Session 16 completes with real observation and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "An honest error state renders when the network is unavailable (no fake success)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff on Session 8 (desktop)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff at a tablet viewport",
+      "ok": true
+    },
+    {
+      "name": "Submit/continue control remains visible and reachable at tablet size",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the tasting-capture flow",
+      "ok": true
+    }
+  ]
+}

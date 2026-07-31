@@ -38,7 +38,7 @@ import {
   awardBadgeOnServer, submitKnowledgeCheckOnServer, submitLeafChallengeOnServer,
   submitBlendSelectionOnServer,
   fetchTastingDraft, saveTastingDraftOnServer, submitTastingCompletionOnServer,
-  submitCultivatorEvidenceOnServer,
+  submitCultivatorEvidenceOnServer, submitTastingObservationOnServer,
 } from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
@@ -199,6 +199,23 @@ export function GuestSessionProvider({ children }) {
   const completeTasting = useCallback((activityKey, selectedCigarId, compareIds) => {
     const guestId = sessionRef.current.guestId
     return submitTastingCompletionOnServer(guestId, activityKey, selectedCigarId, compareIds, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Required-Interaction Closure Package A: submits real
+   * tasting-observation evidence (the notes/hotspots the player
+   * actually selected) for Sessions 8/12/16 — the server independently
+   * validates the ids against its own real vocabulary before recording
+   * evidence that completeSession() will require to complete these
+   * three sessions. Never awards XP itself — session XP remains solely
+   * owned by completeSession()/sessionRewardTable.js.
+   */
+  const submitTastingObservation = useCallback((sessionId, notesSelected, personalNotes) => {
+    const guestId = sessionRef.current.guestId
+    return submitTastingObservationOnServer(guestId, sessionId, notesSelected, personalNotes, {
       sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
       deviceId: sessionRef.current.deviceId,
     })
@@ -1105,6 +1122,7 @@ export function GuestSessionProvider({ children }) {
       loadTastingDraft,
       saveTastingDraft,
       completeTasting,
+      submitTastingObservation,
       submitCultivatorEvidence,
       awardSessionRewards,
       // Scoring + loyalty engine

@@ -158,6 +158,16 @@ export async function submitTastingCompletionOnServer(guestId, activityKey, sele
 }
 
 /**
+ * Required-Interaction Closure Package A — submits real
+ * tasting-observation evidence for Sessions 8/12/16 before their
+ * generic session-completion call is allowed to succeed server-side.
+ */
+export async function submitTastingObservationOnServer(guestId, sessionId, notesSelected, personalNotes, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, `tasting-observation:${sessionId}`)
+  return postJson(`/tasting-observation/${encodeURIComponent(sessionId)}`, { idempotencyKey, notesSelected, personalNotes, sourceRoute, deviceId })
+}
+
+/**
  * Holistic Fix 5A-3E: submits the raw set of viewed cultivation-stage
  * ids as evidence — the server verifies it covers all real required
  * stages before granting XP/the cultivator Passport stamp.

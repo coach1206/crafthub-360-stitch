@@ -38,6 +38,8 @@ router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity
 
 router.get('/', readLimiter, requireSmokeCraftIdentity, ctrl.handleGetPlayerState)
 router.post('/sessions/:sessionId/complete', writeLimiter, requireSmokeCraftIdentity, ctrl.handleCompleteSession)
+// Required-Interaction Closure Package A — Sessions 8/12/16 tasting-observation evidence.
+router.post('/tasting-observation/:sessionId', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitTastingObservation)
 router.post('/awards/xp', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardXp)
 router.post('/awards/badge', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardBadge)
 router.post('/awards/passport-stamp', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardPassportStamp)
