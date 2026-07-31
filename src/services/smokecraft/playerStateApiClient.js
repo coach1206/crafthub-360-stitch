@@ -177,6 +177,17 @@ export async function submitTastingObservationOnServer(guestId, sessionId, notes
 }
 
 /**
+ * Required-Interaction Closure Package B — submits the real 6-category
+ * scorecard rating for Session 19 as evidence before the generic
+ * session-completion call is allowed to succeed server-side. The
+ * server independently computes and owns the weighted overall score.
+ */
+export async function submitScorecardOnServer(guestId, categories, personalNotes, meta, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, 'scorecard-submit')
+  return postJson('/scorecard/submit', { idempotencyKey, categories, personalNotes, meta, sourceRoute, deviceId })
+}
+
+/**
  * Holistic Fix 5A-3E: submits the raw set of viewed cultivation-stage
  * ids as evidence — the server verifies it covers all real required
  * stages before granting XP/the cultivator Passport stamp.

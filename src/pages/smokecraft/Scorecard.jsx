@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -49,6 +49,9 @@ const EMPTY_STATE = {
   submittedScorecardId: null,
 }
 
+const ACTIVITY_KEY = 'scorecard'
+const CATEGORY_IDS = ['appearance', 'construction', 'draw', 'burn', 'flavor', 'pairing']
+
 function calcOverall(cats) {
   const vals = Object.values(cats).filter(v => v !== null && v !== undefined)
   if (!vals.length) return null
@@ -85,7 +88,7 @@ function RatingDots({ value, onChange, label }) {
 }
 
 export default function Scorecard({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, session } = useGuestSession()
+  const { awardSessionRewards, session, loadTastingDraft, saveTastingDraft, submitScorecard: submitScorecardEvidence } = useGuestSession()
   const { journey, setScorecard } = useSmokeCraftJourney()
   const { managementSync, saveSnapshot } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
@@ -101,86 +104,147 @@ export default function Scorecard({ onBack, onComplete } = {}) {
   const secondThird = smokeCraft?.secondThird  || null
   const finalThird  = journey.finalThird || null
 
-  const [sc, setSc] = useState(() => {
-    const saved = journey.scorecard
-    if (!saved) return { ...EMPTY_STATE }
-    return {
-      ...EMPTY_STATE,
-      ...saved,
-      categories: { ...EMPTY_STATE.categories, ...(saved.categories || {}) },
-      meta: { ...EMPTY_STATE.meta, ...(saved.meta || {}) },
-    }
-  })
+  // Required-Interaction Closure Package B: the server-authoritative
+  // scorecard draft (smokecraft_tasting_drafts, activityKey='scorecard'
+  // — the same table/routes Package A's Sessions 8/12/16 and Mini
+  // Tasting already use) is the source of truth on entry —
+  // localStorage/journey state is never treated as authority.
+  const [phase, setPhase] = useState('loading')
+  const [sc, setSc] = useState({ ...EMPTY_STATE })
+  const [draftVersion, setDraftVersion] = useState(0)
+  const [saveStatus, setSave] = useState('idle') // idle | saving | saved | error | conflict
+  const [draftLocked, setDraftLocked] = useState(false)
   const [done, setDone]       = useState(false)
-  const [saveStatus, setSave] = useState('idle')
+  const [submitError, setSubmitError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      setSc({
+        ...EMPTY_STATE,
+        categories: { ...EMPTY_STATE.categories, ...(d.categories || {}) },
+        meta: { ...EMPTY_STATE.meta, ...(d.meta || {}) },
+        personalNotes: d.personalNotes || '',
+      })
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+  }, [loadTastingDraft])
+
+  function handleRetryLoad() {
+    setPhase('loading')
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      setSc({
+        ...EMPTY_STATE,
+        categories: { ...EMPTY_STATE.categories, ...(d.categories || {}) },
+        meta: { ...EMPTY_STATE.meta, ...(d.meta || {}) },
+        personalNotes: d.personalNotes || '',
+      })
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+  }
+
+  // Mirror into local journey state too (used for the in-progress UI
+  // only — the server draft above remains the authoritative source read
+  // on entry/reload).
+  useEffect(() => {
+    if (phase !== 'ready') return
+    setScorecard({ ...sc, overall: calcOverall(sc.categories) })
+  }, [phase, sc]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Debounced server-authoritative draft save — partial ratings only,
+  // never completion or XP. A 409 (another tab/device saved first, or
+  // the session is already completed) adopts the server's current state
+  // rather than silently overwriting it.
+  useEffect(() => {
+    if (phase !== 'ready' || done || draftLocked) return
+    const t = setTimeout(() => {
+      setSave('saving')
+      saveTastingDraft(ACTIVITY_KEY, { categories: sc.categories, personalNotes: sc.personalNotes, meta: sc.meta }, draftVersion).then(result => {
+        if (result.alreadyCompleted) { setSave('idle'); setDraftLocked(true); return }
+        if (result.conflict) {
+          const d = result.current.draftData || {}
+          setSc(prev => ({ ...prev, categories: { ...EMPTY_STATE.categories, ...(d.categories || {}) }, meta: { ...EMPTY_STATE.meta, ...(d.meta || {}) }, personalNotes: d.personalNotes || '' }))
+          setDraftVersion(result.current.version)
+          setSave('conflict')
+          return
+        }
+        if (!result.ok) { setSave('error'); return }
+        setDraftVersion(result.current.version)
+        setSave('saved')
+      })
+    }, 1200)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, sc, done, draftVersion, draftLocked])
 
   function setCategory(id, val) {
-    setSc(prev => {
-      const next = { ...prev, categories: { ...prev.categories, [id]: val } }
-      setScorecard(next)
-      return next
-    })
+    triggerHaptic('light')
+    setSc(prev => ({ ...prev, categories: { ...prev.categories, [id]: val } }))
   }
 
   function setMeta(key, val) {
-    setSc(prev => {
-      const next = { ...prev, meta: { ...prev.meta, [key]: val } }
-      setScorecard(next)
-      return next
-    })
+    setSc(prev => ({ ...prev, meta: { ...prev.meta, [key]: val } }))
   }
 
   function setNotes(val) {
-    setSc(prev => {
-      const next = { ...prev, personalNotes: val }
-      setScorecard(next)
-      return next
-    })
+    setSc(prev => ({ ...prev, personalNotes: val }))
   }
 
   function handleSaveDraft() {
-    const snap = { ...sc, savedAt: Date.now(), overall: calcOverall(sc.categories) }
-    setSc(prev => ({ ...prev, savedAt: snap.savedAt }))
-    setScorecard(snap)
-    setSave('saved')
-    setTimeout(() => setSave('idle'), 2000)
-  }
-
-  const submitScorecard = useCallback(async (data) => {
-    try {
-      const r = await fetch('/api/smokecraft/scorecard/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId: session?.sessionId || 'local-session',
-          guestId: session?.guestId || 'guest',
-          categories: data.categories,
-          overall: calcOverall(data.categories),
-          cigarDetails,
-          pairingDetails: pairingDetails ? { selectedPairings: pairingDetails } : null,
-          tastingData: { firstThird, secondThird, finalThird },
-          sessionMeta: { ...data.meta, xpAtSubmission: currentXP, rank: currentRank, stepsCompleted: stepsCount },
-          notes: data.personalNotes,
-        }),
-      })
-      if (r.ok) {
-        const result = await r.json()
-        setSc(prev => {
-          const next = { ...prev, submittedScorecardId: result.scorecard?.scorecardId, savedAt: Date.now() }
-          setScorecard(next)
-          return next
-        })
+    if (phase !== 'ready' || done || draftLocked) return
+    triggerHaptic('light')
+    setSave('saving')
+    saveTastingDraft(ACTIVITY_KEY, { categories: sc.categories, personalNotes: sc.personalNotes, meta: sc.meta }, draftVersion).then(result => {
+      if (result.alreadyCompleted) { setSave('idle'); setDraftLocked(true); return }
+      if (result.conflict) {
+        const d = result.current.draftData || {}
+        setSc(prev => ({ ...prev, categories: { ...EMPTY_STATE.categories, ...(d.categories || {}) }, meta: { ...EMPTY_STATE.meta, ...(d.meta || {}) }, personalNotes: d.personalNotes || '' }))
+        setDraftVersion(result.current.version)
+        setSave('conflict')
+        return
       }
-    } catch {}
-  }, [session, cigarDetails, pairingDetails, firstThird, secondThird, finalThird, currentXP, currentRank, stepsCount, setScorecard]) // eslint-disable-line react-hooks/exhaustive-deps
+      if (!result.ok) { setSave('error'); return }
+      setDraftVersion(result.current.version)
+      setSave('saved')
+    })
+  }
 
   async function handleContinue() {
     if (done) return
+    const missing = CATEGORY_IDS.filter(id => sc.categories[id] === null || sc.categories[id] === undefined)
+    if (missing.length > 0) {
+      setSubmitError('Rate all 6 categories before continuing.')
+      return
+    }
+    setSubmitError(null)
     setDone(true)
     triggerHaptic('medium')
+
     const snap = { ...sc, savedAt: Date.now(), overall: calcOverall(sc.categories) }
     setScorecard(snap)
-    await submitScorecard(snap)
+
+    // Required-Interaction Closure Package B: real, complete scorecard
+    // evidence is submitted server-side BEFORE either completion path
+    // below runs — completeSession() independently re-verifies this
+    // evidence exists, so this is a real, server-enforced gate, not a
+    // client-trusted claim. The server computes and owns the overall
+    // score; the client never submits its own "overall"/"passed" value.
+    const result = await submitScorecardEvidence(sc.categories, sc.personalNotes, sc.meta)
+    if (!result.ok) {
+      setDone(false)
+      setSubmitError('Unable to save your scorecard right now. Please try again.')
+      return
+    }
+    setSc(prev => ({ ...prev, submittedScorecardId: result.data?.overall != null ? String(result.data.overall) : prev.submittedScorecardId }))
+
     if (!onComplete) awardSessionRewards('scorecard')
     // Meaningful checkpoint: save a real server snapshot including the
     // scorecard just submitted — only if a server journey already
@@ -205,6 +269,24 @@ export default function Scorecard({ onBack, onComplete } = {}) {
     borderRadius: 8,
     ...extra,
   })
+
+  if (phase === 'loading') {
+    return (
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        Loading your saved scorecard…
+      </div>
+    )
+  }
+  if (phase === 'error') {
+    return (
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        <p style={{ margin: 0 }}>Something went wrong loading your saved scorecard.</p>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+          Retry
+        </button>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -355,6 +437,7 @@ export default function Scorecard({ onBack, onComplete } = {}) {
             <button
               type="button"
               onClick={handleSaveDraft}
+              disabled={phase !== 'ready' || done || draftLocked}
               style={{
                 background: 'transparent',
                 border: `1px solid ${BORDER}`,
@@ -409,9 +492,21 @@ export default function Scorecard({ onBack, onComplete } = {}) {
         title="Rate Every Category" whyItMatters={ENRICHMENT_19?.whyItMatters} goldenBox={ENRICHMENT_19?.goldenBox}
       />
 
+      {submitError && (
+        <div role="alert" style={{
+          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
+          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
+          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
+          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
+        }}>
+          {submitError}
+        </div>
+      )}
+
       <SmokeCraftNavBar
         primary={done ? 'Continuing…' : 'Continue to AI Summary →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
         secondary="← Back"
         onSecondary={onBack || (() => navigate('/smokecraft/final-third'))}
       />

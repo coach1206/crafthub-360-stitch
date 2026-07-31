@@ -117,6 +117,15 @@ assert('After opting out, the guest no longer appears on the leaderboard', !lbAf
 section('9. Two-tab race on a completion that grants a badge and a rank promotion')
 const guestE = makeClient()
 await guestE.get('/api/smokecraft/player-state')
+// Required-Interaction Closure Package B: completing 'scorecard' now
+// requires real, server-recorded scorecard evidence first (the same
+// additive gate pattern Package A applied to Sessions 8/12/16) — submit
+// it once before racing the completion call itself, which is what this
+// test actually exercises.
+await guestE.post('/api/smokecraft/player-state/scorecard/submit', {
+  idempotencyKey: 'hf5a-race-scorecard-evidence',
+  categories: { appearance: 4, construction: 4, draw: 4, burn: 4, flavor: 4, pairing: 4 },
+})
 const [race1, race2] = await Promise.all([
   guestE.post('/api/smokecraft/player-state/sessions/scorecard/complete', { idempotencyKey: 'hf5a-race-key' }),
   guestE.post('/api/smokecraft/player-state/sessions/scorecard/complete', { idempotencyKey: 'hf5a-race-key' }),

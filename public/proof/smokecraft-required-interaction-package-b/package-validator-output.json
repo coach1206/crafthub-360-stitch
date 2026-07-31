@@ -1,0 +1,32 @@
+{
+  "failures": 0,
+  "entry": {
+    "sessionId": "scorecard",
+    "sessionNumber": 19,
+    "phaseId": 5,
+    "route": "/smokecraft/scorecard",
+    "title": "Rate Every Category",
+    "learningObjective": "Rate the cigar across 6 categories (Appearance/Construction/Draw/Burn/Flavor/Pairing Match) with real per-category guidance.",
+    "requiredInteractionId": "S19-MULTI-CATEGORY-RATING",
+    "requiredInteractionType": "multi-category-rating",
+    "completionRequired": true,
+    "scoringRequired": false,
+    "mentorRequired": false,
+    "canonicalComponent": "src/pages/smokecraft/Scorecard.jsx",
+    "canonicalApi": "POST /api/smokecraft/player-state/scorecard/submit; POST /api/smokecraft/player-state/sessions/scorecard/complete; GET/PUT /api/smokecraft/player-state/tasting/scorecard/draft",
+    "canonicalService": "server/services/smokecraft/scorecardEvaluationService.js#submitScorecardCompletion; playerStateService.js#completeSession (gated by hasScorecardEvidence)",
+    "canonicalPersistence": "smokecraft_activity_attempts (activity_type=scorecard, activity_key=scorecard); smokecraft_tasting_drafts (activityKey=scorecard, shared with Package A/Mini Tasting)",
+    "progressionRequired": true,
+    "persistenceRequired": true,
+    "testReferences": [
+      "verify-smokecraft-required-interaction-package-b-api.mjs (34/34)",
+      "verify-smokecraft-required-interaction-package-b-browser.mjs (12/12)"
+    ],
+    "proofReferences": [
+      "public/proof/smokecraft-required-interaction-package-b/"
+    ],
+    "implementationStatus": "COMPLETE_AND_VERIFIED",
+    "gapClassification": "COMPLETE_AND_VERIFIED",
+    "notes": "Required-Interaction Closure Package B: all 6 categories must be rated and are validated server-side (range 1-5, real vocabulary) before completion; the server independently computes and owns the weighted overall score (the client can no longer submit its own overall/passed/xpEarned). Reuses the exact same evidence ledger and draft table/routes established by Package A — no second scoring system. Verified end-to-end via API and real-browser tests, including cross-player/cross-session isolation, concurrency, and stale-draft-after-completion rejection."
+  }
+}

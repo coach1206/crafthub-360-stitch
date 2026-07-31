@@ -7,6 +7,7 @@
  */
 import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection, getTastingDraft, saveTastingDraft, submitTastingCompletion, submitCultivatorEvidence } from '../services/smokecraft/playerStateService.js'
 import { submitTastingObservation, TastingObservationError } from '../services/smokecraft/tastingObservationService.js'
+import { submitScorecardCompletion, ScorecardError } from '../services/smokecraft/scorecardEvaluationService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -88,6 +89,9 @@ export async function handleCompleteSession(req, res) {
     if (err.code === 'tasting_observation_required') {
       return res.status(400).json({ success: false, error: 'tasting_observation_required' })
     }
+    if (err.code === 'scorecard_evidence_required') {
+      return res.status(400).json({ success: false, error: 'scorecard_evidence_required' })
+    }
     dbErrorResponse(res, err)
   }
 }
@@ -112,6 +116,32 @@ export async function handleSubmitTastingObservation(req, res) {
     res.status(result.alreadyRecorded ? 200 : 201).json({ success: true, alreadyRecorded: result.alreadyRecorded })
   } catch (err) {
     if (err instanceof TastingObservationError) {
+      return res.status(400).json({ success: false, error: err.code })
+    }
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Required-Interaction Closure Package B — records the real 6-category
+ * scorecard rating for Session 19 as server-verified evidence (with a
+ * server-computed weighted overall) before its completion call is
+ * allowed to succeed. See scorecardEvaluationService.js.
+ */
+export async function handleSubmitScorecard(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const { categories, personalNotes, meta } = req.body || {}
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitScorecardCompletion({
+      guestReference, venueId: req.smokecraftIdentity.venueId || null,
+      categories, personalNotes, meta, idempotencyKey,
+      sourceRoute: req.body?.sourceRoute || null, requestId: req.id || null, deviceId: req.body?.deviceId || null,
+    })
+    res.status(result.alreadyRecorded ? 200 : 201).json({ success: true, alreadyRecorded: result.alreadyRecorded, overall: result.overall })
+  } catch (err) {
+    if (err instanceof ScorecardError) {
       return res.status(400).json({ success: false, error: err.code })
     }
     dbErrorResponse(res, err)

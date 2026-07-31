@@ -1,0 +1,55 @@
+{
+  "pass": 12,
+  "fail": 0,
+  "total": 12,
+  "results": [
+    {
+      "name": "Scorecard route loads with real category instructions visible",
+      "ok": true
+    },
+    {
+      "name": "An incomplete scorecard is honestly rejected client-side before hitting the server",
+      "ok": true
+    },
+    {
+      "name": "Draft save confirms server-side (real round trip, not a fake local confirmation)",
+      "ok": true
+    },
+    {
+      "name": "After leaving the route and returning, the server draft restores the rated categories",
+      "ok": true
+    },
+    {
+      "name": "A genuine hard reload restores the rated categories from the server draft",
+      "ok": true
+    },
+    {
+      "name": "A complete scorecard submits and navigates to the real next step (server-confirmed)",
+      "ok": true
+    },
+    {
+      "name": "Real server-side XP total is greater than zero after Session 19 completion",
+      "ok": true
+    },
+    {
+      "name": "Completion persists across a genuine reload (server-confirmed, not localStorage-only)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one Session 19 completion record exists after a duplicate completion call",
+      "ok": true
+    },
+    {
+      "name": "No fake \"Saved\" confirmation is shown while offline",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff across all 5 tested viewports",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the scorecard flow",
+      "ok": true
+    }
+  ]
+}

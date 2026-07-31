@@ -1,0 +1,142 @@
+{
+  "pass": 34,
+  "fail": 0,
+  "results": [
+    {
+      "name": "A fresh guest reads an empty scorecard draft (version 0)",
+      "ok": true
+    },
+    {
+      "name": "A partial scorecard draft saves successfully",
+      "ok": true
+    },
+    {
+      "name": "Reading back the draft returns exactly what was saved",
+      "ok": true
+    },
+    {
+      "name": "A different guest never sees another guest's scorecard draft",
+      "ok": true
+    },
+    {
+      "name": "Saving a first-third draft does not leak into or create a scorecard draft for the same guest",
+      "ok": true
+    },
+    {
+      "name": "First-third-shaped draft fields are rejected against the scorecard draft (unknown_draft_field)",
+      "ok": true
+    },
+    {
+      "name": "Non-object draftData rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "A client-supplied \"overall\" field is rejected on the draft (400 unknown_draft_field) — the server, not the client, owns the overall score",
+      "ok": true
+    },
+    {
+      "name": "An out-of-vocabulary category key is rejected (400 invalid_category_value)",
+      "ok": true
+    },
+    {
+      "name": "An out-of-range category value (9, not 1-5) is rejected (400 invalid_category_value)",
+      "ok": true
+    },
+    {
+      "name": "An out-of-range meta value is rejected (400 invalid_meta_value)",
+      "ok": true
+    },
+    {
+      "name": "Submitting with a missing category (pairing) is rejected (400 all_categories_required)",
+      "ok": true
+    },
+    {
+      "name": "Session 19 completion is rejected without a real submitted scorecard (400 scorecard_evidence_required)",
+      "ok": true
+    },
+    {
+      "name": "A category rated 0 (out of 1-5 range) is rejected (400 invalid_category_value)",
+      "ok": true
+    },
+    {
+      "name": "An unknown category key is rejected (400 invalid_category_value)",
+      "ok": true
+    },
+    {
+      "name": "A complete, valid scorecard submission succeeds (201)",
+      "ok": true
+    },
+    {
+      "name": "The server computes and returns the weighted overall score itself (never trusting a client-submitted value)",
+      "ok": true
+    },
+    {
+      "name": "Session 19 completes successfully after real evidence recorded",
+      "ok": true
+    },
+    {
+      "name": "Player XP total increased after Session 19 completion",
+      "ok": true
+    },
+    {
+      "name": "Session 19 (scorecard) appears in completedSessions",
+      "ok": true
+    },
+    {
+      "name": "Re-submitting a scorecard for an already-recorded session returns alreadyRecorded, not a new row",
+      "ok": true
+    },
+    {
+      "name": "Re-completing Session 19 is a safe idempotent no-op (alreadyCompleted)",
+      "ok": true
+    },
+    {
+      "name": "No duplicate XP was awarded from the duplicate completion attempt",
+      "ok": true
+    },
+    {
+      "name": "All 3 concurrent scorecard submissions (shared idempotency key) succeed without error",
+      "ok": true
+    },
+    {
+      "name": "Completion after concurrent evidence submission succeeds exactly once",
+      "ok": true
+    },
+    {
+      "name": "Exactly one completion record exists despite 3 concurrent evidence submissions",
+      "ok": true
+    },
+    {
+      "name": "A draft write attempted after completion is denied (409 already_completed)",
+      "ok": true
+    },
+    {
+      "name": "A different guest cannot complete Session 19 without submitting their own real evidence",
+      "ok": true
+    },
+    {
+      "name": "Client-supplied overall/passed/xpEarned fields on the raw completion call are ignored — completion is still denied without real evidence",
+      "ok": true
+    },
+    {
+      "name": "Completion succeeds and unlocks progression (badgesGranted array present, real completion object returned)",
+      "ok": true
+    },
+    {
+      "name": "XP total is unchanged by a draft save alone",
+      "ok": true
+    },
+    {
+      "name": "No completion record exists from a draft save alone",
+      "ok": true
+    },
+    {
+      "name": "Completion for Session 19 uses the same audited completeSession() path as every other session (verified structurally — same endpoint, same service, no bypass route exists)",
+      "ok": true
+    },
+    {
+      "name": "A session outside Package B scope (e.g. entry/Welcome) completes without needing scorecard evidence",
+      "ok": true
+    }
+  ]
+}

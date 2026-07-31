@@ -38,6 +38,7 @@ import { scoreLeafChallenge } from '../../../src/data/leafChallengeRounds.js'
 import { getSampleInventory, VENUE_ID as DEFAULT_TASTING_VENUE_ID } from '../../../src/data/venueInventoryData.js'
 import { CULTIVATION_STAGE_IDS } from '../../../src/data/cultivationStages.js'
 import { hasTastingObservationEvidence, validateTastingDraftPayload, TASTING_OBSERVATION_SESSIONS } from './tastingObservationService.js'
+import { hasScorecardEvidence, validateScorecardDraftPayload } from './scorecardEvaluationService.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -178,6 +179,16 @@ export async function completeSession({ guestReference, venueId, sessionId, xpAw
   if (!hasEvidence) {
     const err = new Error('tasting_observation_required')
     err.code = 'tasting_observation_required'
+    throw err
+  }
+  // Required-Interaction Closure Package B: 'scorecard' (Session 19)
+  // completion requires a real, complete, server-recorded scorecard
+  // first — same additive gate pattern as Package A, scoped only to
+  // this one sessionId.
+  const hasScorecard = await hasScorecardEvidence(guestReference, sessionId)
+  if (!hasScorecard) {
+    const err = new Error('scorecard_evidence_required')
+    err.code = 'scorecard_evidence_required'
     throw err
   }
 
@@ -710,12 +721,24 @@ export async function saveTastingDraft({ guestReference, activityKey, draftData,
   // and session — a stale draft must never be able to overwrite
   // completed state. Other activityKeys (e.g. 'mini-tasting') are
   // unaffected by either check.
-  const validation = validateTastingDraftPayload(activityKey, draftData)
+  // Package B draft-persistence: the 'scorecard' activityKey gets its
+  // own narrow field/vocabulary validation and completed-state check,
+  // via the same dispatch pattern — every other activityKey is
+  // unaffected by either branch.
+  const validation = activityKey === 'scorecard'
+    ? validateScorecardDraftPayload(activityKey, draftData)
+    : validateTastingDraftPayload(activityKey, draftData)
   if (!validation.ok) {
     return { ok: false, error: validation.error }
   }
   if (TASTING_OBSERVATION_SESSIONS.includes(activityKey)) {
     const alreadyCompleted = await hasTastingObservationEvidence(guestReference, activityKey)
+    if (alreadyCompleted) {
+      return { ok: false, error: 'already_completed' }
+    }
+  }
+  if (activityKey === 'scorecard') {
+    const alreadyCompleted = await hasScorecardEvidence(guestReference, activityKey)
     if (alreadyCompleted) {
       return { ok: false, error: 'already_completed' }
     }
