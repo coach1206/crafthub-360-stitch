@@ -39,7 +39,7 @@ import {
   submitBlendSelectionOnServer,
   fetchTastingDraft, saveTastingDraftOnServer, submitTastingCompletionOnServer,
   submitCultivatorEvidenceOnServer, submitTastingObservationOnServer,
-  submitScorecardOnServer,
+  submitScorecardOnServer, submitSelectionAttemptOnServer,
 } from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
@@ -234,6 +234,21 @@ export function GuestSessionProvider({ children }) {
   const submitScorecard = useCallback((categories, personalNotes, meta) => {
     const guestId = sessionRef.current.guestId
     return submitScorecardOnServer(guestId, categories, personalNotes, meta, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Required-Interaction Closure Package C: submits one real selection/
+   * sequencing/matching/hotspot attempt for Sessions 2/5/6/10 — the
+   * server independently evaluates correctness and only records
+   * evidence completeSession() will require when the attempt is
+   * actually correct. Never awards XP itself.
+   */
+  const submitSelectionAttempt = useCallback((sessionId, payload) => {
+    const guestId = sessionRef.current.guestId
+    return submitSelectionAttemptOnServer(guestId, sessionId, payload, {
       sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
       deviceId: sessionRef.current.deviceId,
     })
@@ -1142,6 +1157,7 @@ export function GuestSessionProvider({ children }) {
       completeTasting,
       submitTastingObservation,
       submitScorecard,
+      submitSelectionAttempt,
       submitCultivatorEvidence,
       awardSessionRewards,
       // Scoring + loyalty engine

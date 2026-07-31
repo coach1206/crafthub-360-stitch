@@ -42,6 +42,8 @@ router.post('/sessions/:sessionId/complete', writeLimiter, requireSmokeCraftIden
 router.post('/tasting-observation/:sessionId', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitTastingObservation)
 // Required-Interaction Closure Package B — Session 19 scorecard evidence.
 router.post('/scorecard/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitScorecard)
+// Required-Interaction Closure Package C — Sessions 2/5/6/10 selection/sequencing/matching/hotspot evidence.
+router.post('/selection/:sessionId', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitSelectionAttempt)
 router.post('/awards/xp', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardXp)
 router.post('/awards/badge', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardBadge)
 router.post('/awards/passport-stamp', writeLimiter, requireSmokeCraftIdentity, ctrl.handleAwardPassportStamp)

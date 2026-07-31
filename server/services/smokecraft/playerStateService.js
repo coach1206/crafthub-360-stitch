@@ -39,6 +39,7 @@ import { getSampleInventory, VENUE_ID as DEFAULT_TASTING_VENUE_ID } from '../../
 import { CULTIVATION_STAGE_IDS } from '../../../src/data/cultivationStages.js'
 import { hasTastingObservationEvidence, validateTastingDraftPayload, TASTING_OBSERVATION_SESSIONS } from './tastingObservationService.js'
 import { hasScorecardEvidence, validateScorecardDraftPayload } from './scorecardEvaluationService.js'
+import { hasSelectionEvidence, validateSelectionDraftPayload, PACKAGE_C_SESSIONS } from './selectionClassificationService.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -189,6 +190,16 @@ export async function completeSession({ guestReference, venueId, sessionId, xpAw
   if (!hasScorecard) {
     const err = new Error('scorecard_evidence_required')
     err.code = 'scorecard_evidence_required'
+    throw err
+  }
+  // Required-Interaction Closure Package C: Sessions 2/5/6/10 completion
+  // requires a real, CORRECT, server-recorded attempt first — same
+  // additive gate pattern as Packages A/B, scoped only to these 4
+  // sessionIds.
+  const hasSelection = await hasSelectionEvidence(guestReference, sessionId)
+  if (!hasSelection) {
+    const err = new Error('selection_evidence_required')
+    err.code = 'selection_evidence_required'
     throw err
   }
 
@@ -725,14 +736,25 @@ export async function saveTastingDraft({ guestReference, activityKey, draftData,
   // own narrow field/vocabulary validation and completed-state check,
   // via the same dispatch pattern — every other activityKey is
   // unaffected by either branch.
+  // Package C draft-persistence: Sessions 2/5/6/10 get their own narrow
+  // field/vocabulary validation and completed-state check, via the same
+  // dispatch pattern — every other activityKey is unaffected.
   const validation = activityKey === 'scorecard'
     ? validateScorecardDraftPayload(activityKey, draftData)
+    : PACKAGE_C_SESSIONS.includes(activityKey)
+    ? validateSelectionDraftPayload(activityKey, draftData)
     : validateTastingDraftPayload(activityKey, draftData)
   if (!validation.ok) {
     return { ok: false, error: validation.error }
   }
   if (TASTING_OBSERVATION_SESSIONS.includes(activityKey)) {
     const alreadyCompleted = await hasTastingObservationEvidence(guestReference, activityKey)
+    if (alreadyCompleted) {
+      return { ok: false, error: 'already_completed' }
+    }
+  }
+  if (PACKAGE_C_SESSIONS.includes(activityKey)) {
+    const alreadyCompleted = await hasSelectionEvidence(guestReference, activityKey)
     if (alreadyCompleted) {
       return { ok: false, error: 'already_completed' }
     }

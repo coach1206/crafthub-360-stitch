@@ -130,7 +130,7 @@ function RadarChart({ flavors }) {
 }
 
 export default function FlavorMemory({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, session } = useGuestSession()
+  const { awardSessionRewards, session, submitSelectionAttempt } = useGuestSession()
   const { journey, setFlavorMemory } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
@@ -139,6 +139,7 @@ export default function FlavorMemory({ onBack, onComplete } = {}) {
     return saved ? { ...EMPTY_STATE, ...saved } : { ...EMPTY_STATE }
   })
   const [done, setDone] = useState(false)
+  const [feedback, setFeedback] = useState(null)
   const [saveState, setSaveState] = useState('idle') // idle | saving | saved | error
   const initialized = useRef(false)
   const saveTimerRef = useRef(null)
@@ -214,6 +215,10 @@ export default function FlavorMemory({ onBack, onComplete } = {}) {
 
   async function handleContinue() {
     if (done) return
+    if (fm.selectedFlavors.length < 2) {
+      setFeedback({ correct: false, message: 'Select at least 2 flavor notes before continuing.' })
+      return
+    }
     triggerHaptic('medium')
 
     const snapshot = { ...fm, savedAt: Date.now() }
@@ -227,6 +232,23 @@ export default function FlavorMemory({ onBack, onComplete } = {}) {
       return
     }
     setSaveState('saved')
+
+    // Required-Interaction Closure Package C: the flavor-wheel zones
+    // above are real, data-driven hotspot overlays — the server
+    // independently validates that only real, in-vocabulary hotspots
+    // were selected (never trusting a client-claimed "correct" flag) —
+    // the same principled resolution already used for Package A's
+    // inherently subjective tasting-note sessions.
+    const result = await submitSelectionAttempt('flavor-memory', { selectedHotspotIds: fm.selectedFlavors })
+    if (!result.ok) {
+      setFeedback({ correct: false, message: 'Unable to submit your selections right now. Please try again.' })
+      return
+    }
+    if (!result.data.correct) {
+      setFeedback({ correct: false, message: 'One or more selections were not recognized. Please try again.' })
+      return
+    }
+    setFeedback(null)
     setDone(true)
     if (onComplete) {
       onComplete()
@@ -381,9 +403,21 @@ export default function FlavorMemory({ onBack, onComplete } = {}) {
         title="Flavor Memory Exercise" whyItMatters={ENRICHMENT_10?.whyItMatters} goldenBox={ENRICHMENT_10?.goldenBox}
       />
 
+      {feedback && (
+        <div role="alert" style={{
+          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
+          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
+          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
+          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
+        }}>
+          {feedback.message}
+        </div>
+      )}
+
       <SmokeCraftNavBar
         primary={done ? 'Saving…' : 'Continue to Suggested Pairings →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
       />
     </>
   )

@@ -8,6 +8,7 @@
 import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection, getTastingDraft, saveTastingDraft, submitTastingCompletion, submitCultivatorEvidence } from '../services/smokecraft/playerStateService.js'
 import { submitTastingObservation, TastingObservationError } from '../services/smokecraft/tastingObservationService.js'
 import { submitScorecardCompletion, ScorecardError } from '../services/smokecraft/scorecardEvaluationService.js'
+import { submitSelectionAttempt, SelectionError } from '../services/smokecraft/selectionClassificationService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -92,6 +93,9 @@ export async function handleCompleteSession(req, res) {
     if (err.code === 'scorecard_evidence_required') {
       return res.status(400).json({ success: false, error: 'scorecard_evidence_required' })
     }
+    if (err.code === 'selection_evidence_required') {
+      return res.status(400).json({ success: false, error: 'selection_evidence_required' })
+    }
     dbErrorResponse(res, err)
   }
 }
@@ -142,6 +146,33 @@ export async function handleSubmitScorecard(req, res) {
     res.status(result.alreadyRecorded ? 200 : 201).json({ success: true, alreadyRecorded: result.alreadyRecorded, overall: result.overall })
   } catch (err) {
     if (err instanceof ScorecardError) {
+      return res.status(400).json({ success: false, error: err.code })
+    }
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Required-Interaction Closure Package C — records one selection/
+ * sequencing/matching/hotspot attempt for Sessions 2/5/6/10. Every
+ * attempt (correct or not) is audited; only a correct attempt records
+ * winning evidence that completeSession() will require.
+ */
+export async function handleSubmitSelectionAttempt(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const sessionId = req.params.sessionId
+  const { payload } = req.body || {}
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitSelectionAttempt({
+      guestReference, venueId: req.smokecraftIdentity.venueId || null, sessionId,
+      payload, idempotencyKey,
+      sourceRoute: req.body?.sourceRoute || null, requestId: req.id || null, deviceId: req.body?.deviceId || null,
+    })
+    res.status(result.alreadyRecorded ? 200 : (result.correct ? 201 : 200)).json({ success: true, correct: result.correct, alreadyRecorded: result.alreadyRecorded })
+  } catch (err) {
+    if (err instanceof SelectionError) {
       return res.status(400).json({ success: false, error: err.code })
     }
     dbErrorResponse(res, err)

@@ -101,6 +101,12 @@ section('4. Guest-to-new-account conversion (real merge)')
 const guestClient = makeClient()
 await guestClient.get('/api/smokecraft/player-state') // establish guest cookie
 const gc1 = await guestClient.post('/api/smokecraft/player-state/sessions/enroll/complete', { idempotencyKey: 'hf4b-guest-enroll-1' })
+// Required-Interaction Closure Package C: completing 'format' now
+// requires a real, correct, server-recorded sequencing attempt first.
+await guestClient.post('/api/smokecraft/player-state/selection/format', {
+  idempotencyKey: 'hf4b-guest-format-evidence',
+  payload: { orderedIds: ['corona', 'robusto', 'toro', 'torpedo', 'churchill', 'gordo'] },
+})
 const gc2 = await guestClient.post('/api/smokecraft/player-state/sessions/format/complete', { idempotencyKey: 'hf4b-guest-format-1' })
 await guestClient.post('/api/smokecraft/player-state/awards/badge', { idempotencyKey: 'hf4b-guest-badge-1', awardKey: 'sc-hf4b-test-badge' })
 const guestStateBefore = await guestClient.get('/api/smokecraft/player-state')

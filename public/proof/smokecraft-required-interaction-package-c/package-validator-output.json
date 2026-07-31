@@ -1,0 +1,121 @@
+{
+  "failures": 0,
+  "entries": {
+    "2": {
+      "sessionId": "humidor-match",
+      "sessionNumber": 2,
+      "phaseId": 1,
+      "route": "/smokecraft/humidor-match",
+      "title": "Choose Your Cigar",
+      "learningObjective": "Apply humidor environment knowledge (temp/humidity/seal/airflow) to select an appropriate cigar.",
+      "requiredInteractionId": "S2-HUMIDOR-SELECTION",
+      "requiredInteractionType": "device-simulation-selection",
+      "completionRequired": true,
+      "scoringRequired": true,
+      "mentorRequired": false,
+      "canonicalComponent": "src/pages/smokecraft/HumidorMatch.jsx",
+      "canonicalApi": "POST /api/smokecraft/player-state/selection/humidor-match; POST /api/smokecraft/player-state/sessions/humidor-match/complete",
+      "canonicalService": "server/services/smokecraft/selectionClassificationService.js#submitSelectionAttempt; playerStateService.js#completeSession (gated by hasSelectionEvidence)",
+      "canonicalPersistence": "smokecraft_activity_attempts (activity_type=selection_image, activity_key=humidor-match); smokecraft_award_audit (attempt history)",
+      "progressionRequired": true,
+      "persistenceRequired": true,
+      "testReferences": [
+        "verify-smokecraft-required-interaction-package-c-api.mjs (39/39)",
+        "verify-smokecraft-required-interaction-package-c-browser.mjs (17/17)"
+      ],
+      "proofReferences": [
+        "public/proof/smokecraft-required-interaction-package-c/"
+      ],
+      "implementationStatus": "COMPLETE_AND_VERIFIED",
+      "gapClassification": "COMPLETE_AND_VERIFIED",
+      "notes": "Required-Interaction Closure Package C: the real image-based environment selection (Virtual Humidor / Dry Box / Travel Case) is now server-evaluated — the server independently knows Virtual Humidor is the only climate-controlled, factually correct choice. An incorrect selection is recorded as a real attempt but never completes the session; every attempt is audited."
+    },
+    "5": {
+      "sessionId": "format",
+      "sessionNumber": 5,
+      "phaseId": 1,
+      "route": "/smokecraft/format",
+      "title": "Construction Inspection",
+      "learningObjective": "Classify cigar shape/size (Robusto/Toro/Churchill/Corona/Gordo/Torpedo) and its effect on burn/body.",
+      "requiredInteractionId": "S5-SHAPE-CLASSIFICATION",
+      "requiredInteractionType": "construction-classification",
+      "completionRequired": true,
+      "scoringRequired": true,
+      "mentorRequired": false,
+      "canonicalComponent": "src/pages/smokecraft/Format.jsx",
+      "canonicalApi": "POST /api/smokecraft/player-state/selection/format; POST /api/smokecraft/player-state/sessions/format/complete",
+      "canonicalService": "server/services/smokecraft/selectionClassificationService.js#submitSelectionAttempt; playerStateService.js#completeSession (gated by hasSelectionEvidence)",
+      "canonicalPersistence": "smokecraft_activity_attempts (activity_type=sequence, activity_key=format); smokecraft_tasting_drafts (activityKey=format, draft resume); smokecraft_award_audit (attempt history)",
+      "progressionRequired": true,
+      "persistenceRequired": true,
+      "testReferences": [
+        "verify-smokecraft-required-interaction-package-c-api.mjs (39/39)",
+        "verify-smokecraft-required-interaction-package-c-browser.mjs (17/17)"
+      ],
+      "proofReferences": [
+        "public/proof/smokecraft-required-interaction-package-c/"
+      ],
+      "implementationStatus": "COMPLETE_AND_VERIFIED",
+      "gapClassification": "COMPLETE_AND_VERIFIED",
+      "notes": "Required-Interaction Closure Package C: the player now sequences the 6 real shapes from shortest to longest burn time via keyboard-accessible move-earlier/move-later controls — the server independently owns and validates the correct order (derived from each shape's own documented burnTime range). An incorrect sequence never completes the session; every attempt is audited."
+    },
+    "6": {
+      "sessionId": "cut-toast-light",
+      "sessionNumber": 6,
+      "phaseId": 1,
+      "route": "/smokecraft/cut-toast-light",
+      "title": "Choose Your Cut",
+      "learningObjective": "Select an appropriate cut style (Straight/V-Cut/Punch) for the chosen cigar.",
+      "requiredInteractionId": "S6-CUT-SELECTION",
+      "requiredInteractionType": "technique-selection",
+      "completionRequired": true,
+      "scoringRequired": true,
+      "mentorRequired": false,
+      "canonicalComponent": "src/pages/smokecraft/CutToastLight.jsx",
+      "canonicalApi": "POST /api/smokecraft/player-state/selection/cut-toast-light; POST /api/smokecraft/player-state/sessions/cut-toast-light/complete",
+      "canonicalService": "server/services/smokecraft/selectionClassificationService.js#submitSelectionAttempt; playerStateService.js#completeSession (gated by hasSelectionEvidence)",
+      "canonicalPersistence": "smokecraft_activity_attempts (activity_type=match, activity_key=cut-toast-light); smokecraft_tasting_drafts (activityKey=cut-toast-light, draft resume); smokecraft_award_audit (attempt history)",
+      "progressionRequired": true,
+      "persistenceRequired": true,
+      "testReferences": [
+        "verify-smokecraft-required-interaction-package-c-api.mjs (39/39)",
+        "verify-smokecraft-required-interaction-package-c-browser.mjs (17/17)"
+      ],
+      "proofReferences": [
+        "public/proof/smokecraft-required-interaction-package-c/"
+      ],
+      "implementationStatus": "COMPLETE_AND_VERIFIED",
+      "gapClassification": "COMPLETE_AND_VERIFIED",
+      "notes": "Required-Interaction Closure Package C: the player now matches each real cut method to its real defining characteristic (condensed directly from the existing METHOD_TIPS content) via an accessible native-select matching interface — the server independently owns and validates the correct relationship map. An incorrect or incomplete matching never completes the session; every attempt is audited."
+    },
+    "10": {
+      "sessionId": "flavor-memory",
+      "sessionNumber": 10,
+      "phaseId": 2,
+      "route": "/smokecraft/flavor-memory",
+      "title": "Flavor Memory Exercise",
+      "learningObjective": "Select flavor-wheel notes and intensity/body/strength ratings for the cigar tasted.",
+      "requiredInteractionId": "S10-FLAVOR-WHEEL",
+      "requiredInteractionType": "flavor-wheel-selection",
+      "completionRequired": true,
+      "scoringRequired": false,
+      "mentorRequired": false,
+      "canonicalComponent": "src/pages/smokecraft/FlavorMemory.jsx",
+      "canonicalApi": "POST /api/smokecraft/player-state/selection/flavor-memory; POST /api/smokecraft/player-state/sessions/flavor-memory/complete",
+      "canonicalService": "server/services/smokecraft/selectionClassificationService.js#submitSelectionAttempt; playerStateService.js#completeSession (gated by hasSelectionEvidence)",
+      "canonicalPersistence": "smokecraft_activity_attempts (activity_type=hotspot, activity_key=flavor-memory); smokecraft_award_audit (attempt history)",
+      "progressionRequired": true,
+      "persistenceRequired": true,
+      "testReferences": [
+        "verify-smokecraft-required-interaction-package-c-api.mjs (39/39)",
+        "verify-smokecraft-required-interaction-package-c-browser.mjs (17/17)"
+      ],
+      "proofReferences": [
+        "public/proof/smokecraft-required-interaction-package-c/"
+      ],
+      "implementationStatus": "COMPLETE_AND_VERIFIED",
+      "gapClassification": "COMPLETE_AND_VERIFIED",
+      "notes": "Required-Interaction Closure Package C: the existing 8 flavor-wheel zones are real, data-driven hotspot overlays — the server independently validates that at least 2 real, in-vocabulary hotspots were selected before completion (the same principled resolution already used by Package A for inherently subjective sensory/tasting content — flavor perception cannot be objectively \"graded,\" but a fabricated/out-of-vocabulary hotspot id is rejected). An out-of-vocabulary hotspot never completes the session; every attempt is audited."
+    }
+  }
+}

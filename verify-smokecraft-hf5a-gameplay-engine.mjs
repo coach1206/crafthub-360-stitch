@@ -79,6 +79,14 @@ await guestC.get('/api/smokecraft/player-state')
 const c4a = await guestC.post('/api/smokecraft/player-state/sessions/enroll/complete', { idempotencyKey: 'hf5a-c-enroll' }) // 75 xp -> Novice (0-199)
 assert('At 75 XP, rank is Novice (existing approved ladder: 0-199)', c4a.body.rankPromotion?.rank_label === 'Novice')
 await guestC.post('/api/smokecraft/player-state/sessions/mentor/complete', { idempotencyKey: 'hf5a-c-mentor' }) // +100 = 175, still Novice
+// Required-Interaction Closure Package C: completing 'format' now
+// requires a real, correct, server-recorded sequencing attempt first —
+// submit it once before completing (same additive gate pattern already
+// applied to Package A/B sessions).
+await guestC.post('/api/smokecraft/player-state/selection/format', {
+  idempotencyKey: 'hf5a-c-format-evidence',
+  payload: { orderedIds: ['corona', 'robusto', 'toro', 'torpedo', 'churchill', 'gordo'] },
+})
 const c4b = await guestC.post('/api/smokecraft/player-state/sessions/format/complete', { idempotencyKey: 'hf5a-c-format' }) // +75 = 250 -> Enthusiast (200-499)
 assert('Crossing 200 XP promotes to Enthusiast', c4b.body.rankPromotion?.rank_label === 'Enthusiast')
 const stateC = await guestC.get('/api/smokecraft/player-state')

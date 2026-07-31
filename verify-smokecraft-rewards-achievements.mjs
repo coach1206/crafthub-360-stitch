@@ -11,9 +11,19 @@ let pass = 0, fail = 0
 function ok(msg)  { pass++; console.log(`  ✓ ${msg}`) }
 function bad(msg) { fail++; console.error(`  ✗ ${msg}`) }
 
+// Test-harness fix (not a production change): seeding via
+// page.goto(BASE) followed by page.evaluate(...) races against the
+// already-mounted app's own default-session autosave effect — the app
+// can write its own (unseeded) session back to localStorage moments
+// after our seed lands, silently discarding it (the same root cause
+// documented and fixed for the Package A browser suite; see
+// public/proof/smokecraft-required-interaction-package-a-draft-correction/10-browser-test-seeding-bug-and-fix.md).
+// Fixed here via a pre-navigation context-level init script
+// (context.addInitScript) instead of a post-mount page.evaluate — the
+// seed is guaranteed to run before the app ever boots, on every
+// subsequent navigation too, eliminating the race entirely.
 async function seedGuest(page, { completedSteps = [], demoMode = false, journeyPatch, activeScreen, xp } = {}) {
-  await page.goto(BASE, { waitUntil: 'domcontentloaded' })
-  await page.evaluate(({ completedSteps, demoMode, journeyPatch, activeScreen, xp }) => {
+  await page.context().addInitScript(({ completedSteps, demoMode, journeyPatch, activeScreen, xp }) => {
     if (journeyPatch) {
       localStorage.setItem('sc_journey_v1', JSON.stringify({ stateVersion: 3, ...journeyPatch }))
     } else {
@@ -29,6 +39,7 @@ async function seedGuest(page, { completedSteps = [], demoMode = false, journeyP
       __version: 4,
     }))
   }, { completedSteps, demoMode, journeyPatch, activeScreen, xp })
+  await page.goto(BASE, { waitUntil: 'domcontentloaded' })
 }
 
 async function nav(page, path) {

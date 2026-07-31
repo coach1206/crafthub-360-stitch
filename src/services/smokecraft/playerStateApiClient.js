@@ -188,6 +188,17 @@ export async function submitScorecardOnServer(guestId, categories, personalNotes
 }
 
 /**
+ * Required-Interaction Closure Package C — submits one selection/
+ * sequencing/matching/hotspot attempt for Sessions 2/5/6/10. The
+ * server independently evaluates correctness; the client never claims
+ * "correct" itself.
+ */
+export async function submitSelectionAttemptOnServer(guestId, sessionId, payload, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, `selection-attempt:${sessionId}`)
+  return postJson(`/selection/${encodeURIComponent(sessionId)}`, { idempotencyKey, payload, sourceRoute, deviceId })
+}
+
+/**
  * Holistic Fix 5A-3E: submits the raw set of viewed cultivation-stage
  * ids as evidence — the server verifies it covers all real required
  * stages before granting XP/the cultivator Passport stamp.

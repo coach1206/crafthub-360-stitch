@@ -1,0 +1,162 @@
+{
+  "pass": 39,
+  "fail": 0,
+  "results": [
+    {
+      "name": "Fresh identity auto-provisions on first read (no hard 401 — matches existing guest-identity pattern)",
+      "ok": true
+    },
+    {
+      "name": "An incorrect (non-climate-controlled) selection is accepted as a real attempt but marked incorrect",
+      "ok": true
+    },
+    {
+      "name": "Session 2 completion is rejected after only an incorrect attempt (400 selection_evidence_required)",
+      "ok": true
+    },
+    {
+      "name": "An unknown/fabricated option id is rejected (400 invalid_selection_id)",
+      "ok": true
+    },
+    {
+      "name": "The correct selection (virtual_humidor) is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 2 completes after a correct attempt",
+      "ok": true
+    },
+    {
+      "name": "XP total increased and session 2 appears in completedSessions",
+      "ok": true
+    },
+    {
+      "name": "Duplicate completion is a safe no-op (alreadyCompleted, no duplicate XP)",
+      "ok": true
+    },
+    {
+      "name": "Session 2 draft persists",
+      "ok": true
+    },
+    {
+      "name": "Cross-player denial: a different guest never sees another guest's Session 2 draft",
+      "ok": true
+    },
+    {
+      "name": "Direct API bypass: a stranger cannot complete Session 2 without their own real evidence",
+      "ok": true
+    },
+    {
+      "name": "An incomplete sequence (2 of 6) is rejected (400 incomplete_sequence)",
+      "ok": true
+    },
+    {
+      "name": "A sequence with a duplicated id is rejected (400 duplicate_sequence_id)",
+      "ok": true
+    },
+    {
+      "name": "A sequence containing an unknown id is rejected (400 unknown_sequence_id)",
+      "ok": true
+    },
+    {
+      "name": "A well-formed but incorrect order is accepted as an attempt but marked incorrect",
+      "ok": true
+    },
+    {
+      "name": "Session 5 completion is rejected after only an incorrect sequence",
+      "ok": true
+    },
+    {
+      "name": "The correct shortest-to-longest burn-time order is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 5 completes after the correct sequence",
+      "ok": true
+    },
+    {
+      "name": "Session 5 XP awarded, appears in completedSessions",
+      "ok": true
+    },
+    {
+      "name": "A draft write attempted after Session 5 completion is denied (409 already_completed)",
+      "ok": true
+    },
+    {
+      "name": "An incomplete matching (1 of 3) is rejected (400 incomplete_matching)",
+      "ok": true
+    },
+    {
+      "name": "An invalid category assignment is rejected (400 unknown_match_category)",
+      "ok": true
+    },
+    {
+      "name": "Two items assigned to the same category is rejected (400 duplicate_match_category)",
+      "ok": true
+    },
+    {
+      "name": "An incorrect but well-formed matching is accepted as an attempt but marked incorrect",
+      "ok": true
+    },
+    {
+      "name": "Session 6 completion is rejected after only an incorrect matching",
+      "ok": true
+    },
+    {
+      "name": "The correct matching is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 6 completes after the correct matching",
+      "ok": true
+    },
+    {
+      "name": "badgesGranted array present (progression wiring uses canonical completion path)",
+      "ok": true
+    },
+    {
+      "name": "Fewer than 2 hotspot selections is rejected (400 at_least_two_hotspots_required)",
+      "ok": true
+    },
+    {
+      "name": "An unknown/fabricated hotspot id is rejected (400 invalid_hotspot_id)",
+      "ok": true
+    },
+    {
+      "name": "A valid, real hotspot selection is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 10 completion is blocked for a different guest with no evidence",
+      "ok": true
+    },
+    {
+      "name": "Session 10 completes after a valid hotspot selection",
+      "ok": true
+    },
+    {
+      "name": "Hotspot identification is validated by stable data-driven ids (not viewport-relative pixel coordinates), so it is inherently responsive-safe by design",
+      "ok": true
+    },
+    {
+      "name": "All 3 concurrent correct submissions succeed without error",
+      "ok": true
+    },
+    {
+      "name": "Completion after concurrent correct submissions succeeds exactly once",
+      "ok": true
+    },
+    {
+      "name": "Exactly one completion record exists despite 3 concurrent correct submissions",
+      "ok": true
+    },
+    {
+      "name": "Session 2-shaped draft fields are rejected against Session 6's draft (unknown_draft_field)",
+      "ok": true
+    },
+    {
+      "name": "A session outside Package C scope completes without needing selection evidence",
+      "ok": true
+    }
+  ]
+}

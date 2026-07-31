@@ -1,0 +1,75 @@
+{
+  "pass": 17,
+  "fail": 0,
+  "total": 17,
+  "results": [
+    {
+      "name": "Session 2 route loads with real environment zones visible",
+      "ok": true
+    },
+    {
+      "name": "An incorrect environment selection shows real, honest feedback (no fake success)",
+      "ok": true
+    },
+    {
+      "name": "Incorrect selection does not navigate away / complete the session",
+      "ok": true
+    },
+    {
+      "name": "The correct selection completes and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "XP total increased after Session 2 completion",
+      "ok": true
+    },
+    {
+      "name": "Session 2 completion persists after a genuine reload",
+      "ok": true
+    },
+    {
+      "name": "Session 5 route loads with the required sequencing panel visible",
+      "ok": true
+    },
+    {
+      "name": "An incorrect sequence shows real, honest feedback",
+      "ok": true
+    },
+    {
+      "name": "The correct sequence completes and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "Session 6 route loads with the required matching panel visible",
+      "ok": true
+    },
+    {
+      "name": "An incorrect matching shows real, honest feedback",
+      "ok": true
+    },
+    {
+      "name": "The correct matching completes and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "Session 10 route loads with real flavor hotspots visible",
+      "ok": true
+    },
+    {
+      "name": "Fewer than 2 flavor selections is honestly rejected client-side",
+      "ok": true
+    },
+    {
+      "name": "A valid hotspot selection completes and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff across 5 tested viewports on Session 5",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the full Package C flow",
+      "ok": true
+    }
+  ]
+}

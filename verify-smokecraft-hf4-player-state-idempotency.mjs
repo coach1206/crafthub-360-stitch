@@ -111,6 +111,13 @@ const guestD = makeClient()
 const guestE = makeClient()
 await guestD.get('/api/smokecraft/player-state')
 await guestE.get('/api/smokecraft/player-state')
+// Required-Interaction Closure Package C: completing 'format' now
+// requires a real, correct, server-recorded sequencing attempt first —
+// submit it for both guests before exercising the idempotency-key
+// collision this section actually tests.
+const formatEvidence = { payload: { orderedIds: ['corona', 'robusto', 'toro', 'torpedo', 'churchill', 'gordo'] } }
+await guestD.post('/api/smokecraft/player-state/selection/format', { idempotencyKey: 'shared-fallback-key-evidence-d', ...formatEvidence })
+await guestE.post('/api/smokecraft/player-state/selection/format', { idempotencyKey: 'shared-fallback-key-evidence-e', ...formatEvidence })
 const dResult = await guestD.post('/api/smokecraft/player-state/sessions/format/complete', { idempotencyKey: 'shared-fallback-key' })
 const eResult = await guestE.post('/api/smokecraft/player-state/sessions/format/complete', { idempotencyKey: 'shared-fallback-key' })
 assert('Guest D completing with a shared/reused idempotency key succeeds for their own record', dResult.body.alreadyCompleted === false)

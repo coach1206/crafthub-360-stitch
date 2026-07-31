@@ -120,15 +120,26 @@ function Toggle({ label, value, onChange }) {
   )
 }
 
+const ACTIVITY_KEY = 'humidor-match'
+
 export default function HumidorMatch({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, setHumidorMatchSelection, setSelectedHumidorRecommendation } = useGuestSession()
+  const { awardSessionRewards, setHumidorMatchSelection, setSelectedHumidorRecommendation, loadTastingDraft, saveTastingDraft, submitSelectionAttempt } = useGuestSession()
   const { journey, setSelectedCigar } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   // Load from canonical journey state
   const savedCigar = journey.selectedCigar
 
-  const [selectedEnv,   setSelectedEnv]   = useState(() => savedCigar?.humidorEnv || null)
+  // Required-Interaction Closure Package C: the environment zone
+  // selection below (Virtual Humidor / Dry Box / Travel Case) is the
+  // real, server-evaluated "image-based selection" interaction for this
+  // session — the server independently knows which of the three is the
+  // factually correct climate-controlled storage choice. The rest of
+  // this screen's rich simulation (temp/humidity/seal/airflow, cigar
+  // picker) is unchanged and still persisted locally as before.
+  const [phase, setPhase] = useState('loading')
+  const [draftVersion, setDraftVersion] = useState(0)
+  const [selectedEnv,   setSelectedEnv]   = useState(null)
   const [selectedCigar, setLocalCigar]    = useState(() => savedCigar?.name ? savedCigar : null)
   const [temp,          setTemp]          = useState(() => savedCigar?.humidorTemp || 70)
   const [humidity,      setHumidity]      = useState(() => savedCigar?.humidorHumidity || 70)
@@ -136,6 +147,43 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
   const [airflowOn,     setAirflowOn]     = useState(() => savedCigar?.humidorAirflow ?? true)
   const [applyStatus,   setApplyStatus]   = useState('idle')
   const [done,          setDone]          = useState(false)
+  const [draftLocked,   setDraftLocked]   = useState(false)
+  const [feedback,      setFeedback]      = useState(null) // { correct: bool, message } | null
+
+  useEffect(() => {
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      setSelectedEnv(result.draftData?.selectedId || savedCigar?.humidorEnv || null)
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadTastingDraft])
+
+  function handleRetryLoad() {
+    setPhase('loading')
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      setSelectedEnv(result.draftData?.selectedId || null)
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+  }
+
+  useEffect(() => {
+    if (phase !== 'ready' || done || draftLocked) return
+    const t = setTimeout(() => {
+      saveTastingDraft(ACTIVITY_KEY, { selectedId: selectedEnv }, draftVersion).then(result => {
+        if (result.alreadyCompleted) { setDraftLocked(true); return }
+        if (result.conflict) { setSelectedEnv(result.current.draftData?.selectedId || null); setDraftVersion(result.current.version); return }
+        if (result.ok) setDraftVersion(result.current.version)
+      })
+    }, 900)
+    return () => clearTimeout(t)
+  }, [phase, selectedEnv, done, draftVersion, draftLocked, saveTastingDraft])
 
   // Persist all humidor state to canonical journey via selectedCigar
   useEffect(() => {
@@ -160,6 +208,7 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
     triggerHaptic('light')
     const next = envId === selectedEnv ? null : envId
     setSelectedEnv(next)
+    setFeedback(null)
     if (applyStatus === 'applied') setApplyStatus('idle')
   }
 
@@ -175,27 +224,64 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
     setApplyStatus('applied')
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (done) return
+    if (!selectedEnv) {
+      setFeedback({ correct: false, message: 'Select a storage environment before continuing.' })
+      return
+    }
     setDone(true)
     triggerHaptic('medium')
-    if (selectedEnv) {
-      const envLabel = HUMIDOR_ZONES.find(e => e.id === selectedEnv)?.label || selectedEnv
-      setHumidorMatchSelection({ id: selectedEnv, label: envLabel, desc: `Environment: ${envLabel}` })
-      setSelectedHumidorRecommendation({
-        recommendationType: 'guest_selected',
-        environment: selectedEnv,
-        environmentLabel: envLabel,
-        selectedCigarName: selectedCigar?.name || null,
-        settings: { temp, humidity, sealOn, airflowOn },
-      })
+
+    // Required-Interaction Closure Package C: the server independently
+    // evaluates which environment is the factually correct climate-
+    // controlled storage choice — never a client-trusted claim.
+    const result = await submitSelectionAttempt('humidor-match', { selectedId: selectedEnv })
+    if (!result.ok) {
+      setDone(false)
+      setFeedback({ correct: false, message: 'Unable to submit your selection right now. Please try again.' })
+      return
     }
+    if (!result.data.correct) {
+      setDone(false)
+      setFeedback({ correct: false, message: 'Not quite — that environment does not offer real climate control. Try again.' })
+      return
+    }
+    setFeedback({ correct: true, message: 'Correct — a real humidor keeps consistent temperature and humidity.' })
+
+    const envLabel = HUMIDOR_ZONES.find(e => e.id === selectedEnv)?.label || selectedEnv
+    setHumidorMatchSelection({ id: selectedEnv, label: envLabel, desc: `Environment: ${envLabel}` })
+    setSelectedHumidorRecommendation({
+      recommendationType: 'guest_selected',
+      environment: selectedEnv,
+      environmentLabel: envLabel,
+      selectedCigarName: selectedCigar?.name || null,
+      settings: { temp, humidity, sealOn, airflowOn },
+    })
     if (onComplete) {
       onComplete()
       return
     }
     awardSessionRewards('humidor-match')
     navigate('/smokecraft/meet-your-cigar')
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        Loading…
+      </div>
+    )
+  }
+  if (phase === 'error') {
+    return (
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        <p style={{ margin: 0 }}>Something went wrong loading this session.</p>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+          Retry
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -302,9 +388,22 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
         title="Choose Your Cigar" whyItMatters={ENRICHMENT_2?.whyItMatters} goldenBox={ENRICHMENT_2?.goldenBox}
       />
 
+      {feedback && (
+        <div role="alert" style={{
+          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
+          background: feedback.correct ? 'rgba(20,90,50,0.9)' : 'rgba(120,20,20,0.9)',
+          border: `1px solid ${feedback.correct ? 'rgba(150,255,180,0.5)' : 'rgba(255,150,150,0.5)'}`,
+          borderRadius: 6, padding: '6px 10px', color: feedback.correct ? '#d6ffe4' : '#ffdada',
+          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
+        }}>
+          {feedback.message}
+        </div>
+      )}
+
       <SmokeCraftNavBar
-        primary="Continue to Meet Your Cigar →"
+        primary={done ? 'Checking…' : 'Continue to Meet Your Cigar →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft')}
       />
