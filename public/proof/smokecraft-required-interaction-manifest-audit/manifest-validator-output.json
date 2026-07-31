@@ -1,8 +1,7 @@
 {
   "failures": 0,
   "totals": {
-    "COMPLETE_AND_VERIFIED": 20,
-    "COMPLETE_BUT_UNTESTED": 1
+    "COMPLETE_AND_VERIFIED": 21
   },
   "sessionCount": 21
 }

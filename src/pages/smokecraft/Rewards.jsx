@@ -11,6 +11,7 @@ import { RANKS, getRankFromXP } from '../../constants/session.js'
 import { getSessionRewards, getSmokeCraftXP, getEarnedBadges, SMOKECRAFT_BADGES } from '../../constants/smokecraftRewards.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
+import { fetchPlayerState } from '../../services/smokecraft/playerStateApiClient.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -201,6 +202,16 @@ export default function Rewards({ onBack, onComplete } = {}) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const [phase, setPhase] = useState('loading') // loading | error | ready
+  // Required-Interaction Closure Package F — Session 25's displayed XP/rank
+  // totals must come from the canonical server record
+  // (smokecraft_player_state, read via GET /api/smokecraft/player-state /
+  // fetchPlayerState()), not only from the local optimistic cache
+  // (session.xp). serverXpState is the fetched canonical value; when the
+  // fetch fails (offline, network error), the UI honestly falls back to the
+  // local cache and says so (see isOffline / usingLocalXpFallback below) —
+  // it never fabricates a server value.
+  const [serverXpState, setServerXpState] = useState(null) // { xpTotal, rankLabel } | null
+  const [serverXpFetchFailed, setServerXpFetchFailed] = useState(false)
   const [mode, setMode] = useState(() => {
     if (journey.rewards?.activeMode) return journey.rewards.activeMode
     // completedSteps (not currentSession) drives the fallback — currentSession
@@ -230,13 +241,29 @@ export default function Rewards({ onBack, onComplete } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode])
 
+  // Load the canonical server player-state (XP total, rank) once per mount.
+  // This is the same fetchPlayerState() client already proven for the
+  // leaderboard (smokeLeaderboardService.js) — no second reward/XP read
+  // path is invented for this screen.
   useEffect(() => {
-    try {
-      const t = setTimeout(() => setPhase('ready'), 200)
-      return () => clearTimeout(t)
-    } catch {
-      setPhase('error')
+    let cancelled = false
+    async function run() {
+      setPhase('loading')
+      const result = await fetchPlayerState()
+      if (cancelled) return
+      if (result.ok) {
+        setServerXpState({ xpTotal: result.state.xpTotal, rankLabel: result.state.rankLabel })
+        setServerXpFetchFailed(false)
+      } else {
+        // Honest fallback — do not block the screen, but do not silently
+        // pretend the local cache is server-verified either.
+        setServerXpState(null)
+        setServerXpFetchFailed(true)
+      }
+      setPhase('ready')
     }
+    run()
+    return () => { cancelled = true }
   }, [])
 
   // Persist active mode (idempotent — only writes when it actually changed).
@@ -246,7 +273,12 @@ export default function Rewards({ onBack, onComplete } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode])
 
-  const totalXP = session?.xp || 0
+  // Canonical XP source — server player-state when reachable, honest local
+  // fallback (with an explicit "offline"/unsynced flag exposed for UI +
+  // tests) when it isn't. The local value is never presented as
+  // server-verified when it wasn't.
+  const usingServerXp = serverXpState !== null
+  const totalXP = usingServerXp ? serverXpState.xpTotal : (session?.xp || 0)
   const currentRank = getRankFromXP(totalXP)
   const { totals: xpTotals, unconfiguredCompleted } = useMemo(
     () => buildXPBreakdown(session?.completedSteps || []),
@@ -304,12 +336,39 @@ export default function Rewards({ onBack, onComplete } = {}) {
 
   const handleRetry = useCallback(() => {
     setPhase('loading')
-    setTimeout(() => setPhase('ready'), 200)
+    fetchPlayerState().then(result => {
+      if (result.ok) {
+        setServerXpState({ xpTotal: result.state.xpTotal, rankLabel: result.state.rankLabel })
+        setServerXpFetchFailed(false)
+      } else {
+        setServerXpState(null)
+        setServerXpFetchFailed(true)
+      }
+      setPhase('ready')
+    })
+  }, [])
+
+  // Re-reads the canonical server XP total shortly after a local award —
+  // completeSessionOnServer (called inside awardSessionRewards) is
+  // fire-and-forget, so this re-fetch lets the displayed total catch up to
+  // the now-authoritative server record without requiring a full reload.
+  // Best-effort only: a failure here just leaves the previous server
+  // reading (or local fallback) in place, honestly.
+  const refreshServerXp = useCallback(() => {
+    setTimeout(() => {
+      fetchPlayerState().then(result => {
+        if (result.ok) {
+          setServerXpState({ xpTotal: result.state.xpTotal, rankLabel: result.state.rankLabel })
+          setServerXpFetchFailed(false)
+        }
+      })
+    }, 250)
   }, [])
 
   function handleRewardsContinue() {
     // Views the Rewards section, then marks S25 complete only now — never on mount.
     awardSessionRewards('rewards')
+    refreshServerXp()
     setRewards({ ...(journey.rewards || {}), activeMode: 'achievements', viewedAt: journey.rewards?.viewedAt || Date.now(), completedAt: journey.rewards?.completedAt || Date.now(), updatedAt: Date.now() })
     setMode('achievements')
   }
@@ -320,6 +379,7 @@ export default function Rewards({ onBack, onComplete } = {}) {
 
   function handleAchievementsContinue() {
     awardSessionRewards('achievements')
+    refreshServerXp()
     setAchievements({ ...(journey.achievements || {}), completedAt: journey.achievements?.completedAt || Date.now(), updatedAt: Date.now() })
     navigate('/smokecraft/session-complete')
   }
@@ -342,6 +402,14 @@ export default function Rewards({ onBack, onComplete } = {}) {
           position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
           overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
         }}>SmokeCraft 360 — Session 25 Rewards</h1>
+
+        {/* Package F: exposes which XP source is currently backing the
+            display — 'server' (canonical smokecraft_player_state) or
+            'local-fallback' (offline/unreachable). Visually hidden;
+            consumed by tests and support tooling only. */}
+        <span data-testid="s25-xp-source" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>
+          {usingServerXp ? 'server' : 'local-fallback'}
+        </span>
 
         {/* Four blank point circles, filled honestly — same disclosed pattern
             as the Rewards Center: only Available and Earned This Session are
@@ -504,7 +572,10 @@ export default function Rewards({ onBack, onComplete } = {}) {
         <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, letterSpacing: '0.01em', lineHeight: 1.15 }}>
           Rewards, XP &amp; Achievements
         </h1>
-        {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
+        {(isOffline || serverXpFetchFailed) && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Offline: showing your locally saved data. XP/rank will refresh once reconnected.</div>}
+        <span data-testid="s25-xp-source" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>
+          {usingServerXp ? 'server' : 'local-fallback'}
+        </span>
 
         <div role="tablist" aria-label="Rewards sections" style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
           <button

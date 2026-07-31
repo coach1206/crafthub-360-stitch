@@ -1,0 +1,34 @@
+{
+  "failures": 0,
+  "entry": {
+    "sessionId": "rewards",
+    "sessionNumber": 25,
+    "phaseId": 6,
+    "route": "/smokecraft/rewards",
+    "title": "Rewards and XP (serves Session 26 Achievements)",
+    "learningObjective": "Review earned XP, rank milestones, and achievement criteria tied to real completed actions.",
+    "requiredInteractionId": "S25-REWARD-REVIEW",
+    "requiredInteractionType": "reward-display",
+    "completionRequired": true,
+    "scoringRequired": false,
+    "mentorRequired": false,
+    "canonicalComponent": "src/pages/smokecraft/Rewards.jsx",
+    "canonicalApi": "POST /api/smokecraft/player-state/sessions/:sessionId/complete",
+    "canonicalService": "server/services/smokecraft/playerStateService.js#completeSession",
+    "canonicalPersistence": "smokecraft_session_completions (guest_reference, session_id unique)",
+    "progressionRequired": true,
+    "persistenceRequired": true,
+    "testReferences": [
+      "verify-smokecraft-required-interaction-package-f-api.mjs",
+      "verify-smokecraft-required-interaction-package-f-browser.mjs"
+    ],
+    "proofReferences": [
+      "public/proof/smokecraft-required-interaction-package-f/"
+    ],
+    "implementationStatus": "COMPLETE_AND_VERIFIED",
+    "gapClassification": "COMPLETE_AND_VERIFIED",
+    "notes": "Required-Interaction Closure Package F: confirmed the flagged data-source gap was real — Rewards.jsx previously displayed only the local optimistic XP cache (session.xp), never independently reading the canonical server record. Fixed by fetching GET /api/smokecraft/player-state (fetchPlayerState(), the same canonical client already proven for the leaderboard) on mount/retry/after-claim and sourcing the displayed XP total + rank from it, with an honest local fallback (never presented as server-verified) when offline. Completion/XP/badge award path is unchanged — same completeSession()/smokecraft_session_completions ledger and awardSessionRewards() flow already proven idempotent and server-authoritative for every other session; no second reward/achievement system was created."
+  },
+  "totalSessions": 21,
+  "nonCompleteCount": 0
+}

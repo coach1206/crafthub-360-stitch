@@ -1,0 +1,80 @@
+=== npm run prebuild ===
+  OK    No active mentor panel in this pass's scope still passes a static guidance string (client-side hardcoded text is fully retired for these 6 screens)
+  OK    Mentor.jsx still retains exactly one write path for the selected mentor — no duplicate mentor ownership reappeared across this pass's 6-screen wiring
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== npm run build ===
+dist/assets/Admin-427da4fb.js                                97.90 kB │ gzip:  16.93 kB
+dist/assets/index-186826c7.js                             5,385.34 kB │ gzip: 923.73 kB
+
+(!) Some chunks are larger than 500 kBs after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 19.47s
+=== required-interaction manifest validator ===
+  OK    Every gap classification uses an approved category
+  OK    Every session declares completion/scoring/mentor/persistence/progression expectations
+  OK    Every COMPLETE_AND_VERIFIED session cites a canonicalComponent, canonicalApi, canonicalService, and canonicalPersistence
+  OK    No session is silently omitted (1,2,3,4,5,6,7,8,10,11,12,14,15,16,19,21,22,23,24,25,27)
+  OK    No extra session was silently added beyond the 21 canonical primary sessions
+  OK    Manifest honestly reports 0 of 21 sessions as NOT COMPLETE_AND_VERIFIED (0 is legitimate once real evidence backs every session; this validator still fails on a malformed/negative count)
+  OK    Every non-complete session records a real notes field explaining the gap (no silent placeholder)
+
+=== Classification totals ===
+  COMPLETE_AND_VERIFIED: 21
+  COMPLETE_BUT_UNTESTED: 0
+  PARTIAL: 0
+  VISUAL_ONLY: 0
+  WRONG_INTERACTION_TYPE: 0
+  MISSING: 0
+  BLOCKED: 0
+  DUPLICATED_OR_CONFLICTING: 0
+
+=== RESULT: PASS (manifest structurally sound and honest) (0 checks failed) ===
+
+=== Package F validator ===
+
+── Tests and proof exist ──
+  OK    Test references are recorded for Session 25
+  OK    Proof references are recorded for Session 25
+  OK    canonicalApi/canonicalService/canonicalPersistence are all populated for Session 25 (real, not placeholder)
+  OK    API test results file exists with 0 failures
+  OK    Browser test results file exists with 0 failures
+
+=== RESULT: PASS (Package F rewards data-source authority verified against real evidence — 21/21 required interactions) (0 checks failed) ===
+
+=== gameplay authority/integrity/player-state ===
+
+=== RESULT: PASS (0 checks failed) ===
+
+  OK    leaderboard preference route requires identity (not anonymous-writable)
+
+=== RESULT: PASS (0 checks failed) ===
+  OK    client adapter checks data.success === true before treating a response as ok (no fake-success on a malformed 200)
+
+=== RESULT: PASS (0 checks failed) ===
+=== golden box / venue humidor spot regression ===
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+=== RESULT: PASS (0 checks failed) ===
+
+=== Package A-E API regression ===
+=== RESULT: 26 passed, 0 failed (of 26 total) ===
+
+=== RESULT: 34 passed, 0 failed (of 34 total) ===
+
+=== RESULT: 39 passed, 0 failed (of 39 total) ===
+
+=== RESULT: 34 passed, 0 failed (of 34 total) ===
+
+=== RESULT: 28 passed, 0 failed (of 28 total) ===
+
+=== Package F API + Browser ===
+=== RESULT: 25 passed, 0 failed (of 25 total) ===
+
+=== RESULT: 18 passed, 0 failed (of 18 total) ===
+

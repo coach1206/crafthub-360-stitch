@@ -1,0 +1,106 @@
+{
+  "pass": 25,
+  "fail": 0,
+  "results": [
+    {
+      "name": "An authorized (identity-bearing) guest can read canonical player-state",
+      "ok": true
+    },
+    {
+      "name": "A request with no verified identity is denied or auto-issued a fresh (zero-progress) identity, never another guest's state",
+      "ok": true
+    },
+    {
+      "name": "Fresh guest has zero XP and no rewards completion before any real interaction",
+      "ok": true
+    },
+    {
+      "name": "rewards session is not in completedSessions before it is actually completed",
+      "ok": true
+    },
+    {
+      "name": "Completion without a valid idempotencyKey is rejected (400)",
+      "ok": true
+    },
+    {
+      "name": "Completion succeeds (this session type requires no extra evidence gate) but ignores any client-submitted XP amount",
+      "ok": true
+    },
+    {
+      "name": "Server-side completedSessions now includes rewards exactly once",
+      "ok": true
+    },
+    {
+      "name": "XP awarded matches the server-owned reward table (50), not any client-submitted value",
+      "ok": true
+    },
+    {
+      "name": "A second completion attempt for the same session is a safe no-op (alreadyCompleted)",
+      "ok": true
+    },
+    {
+      "name": "XP is not duplicated by the repeat completion attempt",
+      "ok": true
+    },
+    {
+      "name": "completedSessions still lists rewards exactly once after the duplicate attempt",
+      "ok": true
+    },
+    {
+      "name": "The distinct achievements (S26) completion succeeds independently of rewards (S25)",
+      "ok": true
+    },
+    {
+      "name": "Total XP after both S25 and S26 completions is exactly 100 (50 + 50, no duplication, no cross-award)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one of 3 concurrent completion attempts is the real (201) award; the rest see alreadyCompleted",
+      "ok": true
+    },
+    {
+      "name": "Concurrent completion race results in exactly one XP award (50), not 3",
+      "ok": true
+    },
+    {
+      "name": "Concurrent completion race results in exactly one completedSessions row for rewards",
+      "ok": true
+    },
+    {
+      "name": "Two independent reads (simulated reload) of the same identity return identical, persisted XP",
+      "ok": true
+    },
+    {
+      "name": "Reload preserves the rewards + achievements completion records",
+      "ok": true
+    },
+    {
+      "name": "Completed state cannot revert to in-progress — repeat completion remains a safe no-op",
+      "ok": true
+    },
+    {
+      "name": "A different guest starts with their own isolated, zero-XP state (never sees another guest's rewards/XP)",
+      "ok": true
+    },
+    {
+      "name": "A fabricated completedSteps/xp/badges payload never inflates the real server XP total",
+      "ok": true
+    },
+    {
+      "name": "The real existing audit ledger (smokecraft_session_completions + smokecraft_award_audit) records this completion — verified structurally in the package validator",
+      "ok": true
+    },
+    {
+      "name": "A late/retried completion request after the session is already complete is a safe no-op, never a duplicate award",
+      "ok": true
+    },
+    {
+      "name": "A session outside Package F scope still completes normally (no cross-package regression)",
+      "ok": true
+    },
+    {
+      "name": "The public leaderboard endpoint is reachable and reads from the same player-state store (structural — no separate rewards table exists)",
+      "ok": true
+    }
+  ]
+}

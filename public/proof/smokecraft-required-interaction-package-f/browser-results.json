@@ -1,0 +1,79 @@
+{
+  "pass": 18,
+  "fail": 0,
+  "total": 18,
+  "results": [
+    {
+      "name": "A real server-side XP total exists for this browser session before the Rewards screen is evaluated",
+      "ok": true
+    },
+    {
+      "name": "Session 25 route loads with the real Rewards visual",
+      "ok": true
+    },
+    {
+      "name": "Instructions / screen title displays",
+      "ok": true
+    },
+    {
+      "name": "The XP source marker reports \"server\" — displayed totals are read from the canonical server player-state, not only the local cache",
+      "ok": true
+    },
+    {
+      "name": "Displayed \"available\" XP reflects the real server XP total (non-zero, matches the real completion seeded above)",
+      "ok": true
+    },
+    {
+      "name": "At least one rank-milestone reward correctly shows Locked (not claimable) before enough XP is earned",
+      "ok": true
+    },
+    {
+      "name": "A completion request with no idempotency key is honestly rejected, not silently accepted",
+      "ok": true
+    },
+    {
+      "name": "A real player click on \"Continue to Achievements\" is required and moves to the Achievements view",
+      "ok": true
+    },
+    {
+      "name": "Session 25 completion is now recorded server-side (real completedSessions row), not only in local state",
+      "ok": true
+    },
+    {
+      "name": "A duplicate completion attempt (simulating a duplicate click) is a safe no-op, not a second award",
+      "ok": true
+    },
+    {
+      "name": "After a real full page reload, the displayed XP is still sourced from the canonical server record",
+      "ok": true
+    },
+    {
+      "name": "Session 25 completion persists across a real reload (server-authoritative, not localStorage-only)",
+      "ok": true
+    },
+    {
+      "name": "An offline Rewards screen fails gracefully (no crash) and honestly falls back to local data, never fabricating a server value",
+      "ok": true
+    },
+    {
+      "name": "A completion attempt with cleared cookies either re-issues a fresh (zero-progress) identity or is denied — never silently rides on a stale identity",
+      "ok": true
+    },
+    {
+      "name": "The primary continue action is keyboard-focusable",
+      "ok": true
+    },
+    {
+      "name": "The required interaction can be completed via keyboard alone (Enter on the focused Continue button)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff across 5 tested viewports",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the Package F flow",
+      "ok": true
+    }
+  ]
+}
