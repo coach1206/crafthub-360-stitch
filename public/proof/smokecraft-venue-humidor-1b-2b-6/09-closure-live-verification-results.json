@@ -1,0 +1,130 @@
+{
+  "pass": 31,
+  "fail": 0,
+  "results": [
+    {
+      "name": "Customer can browse real venue catalog",
+      "ok": true
+    },
+    {
+      "name": "Recommendations available mid-flow",
+      "ok": true
+    },
+    {
+      "name": "Completed order appears in customer order history",
+      "ok": true
+    },
+    {
+      "name": "Receipt reflects the completed sale",
+      "ok": true
+    },
+    {
+      "name": "Passport acquisition recorded exactly once for the completed order",
+      "ok": true
+    },
+    {
+      "name": "Reorder eligibility reported honestly on order detail",
+      "ok": true
+    },
+    {
+      "name": "Cancellation succeeds through checkoutService.cancelOrder()",
+      "ok": true
+    },
+    {
+      "name": "No Passport acquisition created for a cancelled order",
+      "ok": true
+    },
+    {
+      "name": "Cancelled order receipt does not present as a completed sale",
+      "ok": true
+    },
+    {
+      "name": "Manager can expire an eligible ready order",
+      "ok": true
+    },
+    {
+      "name": "No Passport acquisition created for an expired order",
+      "ok": true
+    },
+    {
+      "name": "Staff can block a ready order",
+      "ok": true
+    },
+    {
+      "name": "A blocked order cannot be completed",
+      "ok": true
+    },
+    {
+      "name": "Staff (non-full-access) is denied unblocking",
+      "ok": true
+    },
+    {
+      "name": "Manager (full-access) can unblock",
+      "ok": true
+    },
+    {
+      "name": "Staff can mark a ready order no-show",
+      "ok": true
+    },
+    {
+      "name": "Staff without membership in venue B is denied reading its order queue",
+      "ok": true
+    },
+    {
+      "name": "A venue A order id cannot be read through venue B's admin path",
+      "ok": true
+    },
+    {
+      "name": "A different customer cannot read this order",
+      "ok": true
+    },
+    {
+      "name": "A different customer cannot read this receipt",
+      "ok": true
+    },
+    {
+      "name": "All three concurrent completion calls (shared idempotency key) succeed without error",
+      "ok": true
+    },
+    {
+      "name": "Exactly one Passport acquisition exists after 3 concurrent completion calls",
+      "ok": true
+    },
+    {
+      "name": "Inventory was deducted exactly once (single sale_completed event) despite 3 concurrent calls",
+      "ok": true
+    },
+    {
+      "name": "A retried completion with the same idempotency key is a safe no-op",
+      "ok": true
+    },
+    {
+      "name": "Exactly one Passport acquisition after a duplicate completion retry",
+      "ok": true
+    },
+    {
+      "name": "Product initially appears eligible in recommendations",
+      "ok": true
+    },
+    {
+      "name": "The canonical hold endpoint independently rejects the now-out-of-stock product regardless of a stale recommendation result",
+      "ok": true
+    },
+    {
+      "name": "Historical receipt total is unchanged after the current catalog price is mutated",
+      "ok": true
+    },
+    {
+      "name": "Every completed order in this run has exactly one Passport acquisition row",
+      "ok": true
+    },
+    {
+      "name": "Staff-assisted selling recommendations succeed",
+      "ok": true
+    },
+    {
+      "name": "Assisted-selling outcome recorded",
+      "ok": true
+    }
+  ]
+}

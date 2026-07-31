@@ -1,0 +1,35 @@
+=== verify-smokecraft-venue-humidor-1b1-browser.mjs ===
+  PASS  No unexpected console errors across the browsing/detail flow
+
+=== RESULT: 23 passed, 0 failed (of 23 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2a-browser.mjs ===
+  PASS  No unexpected console errors across the checkout flow
+
+=== RESULT: 16 passed, 0 failed (of 16 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b1-browser.mjs ===
+  PASS  No unexpected console errors across the admin flow
+
+=== RESULT: 15 passed, 0 failed (of 15 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b2-browser.mjs ===
+  PASS  No unexpected console errors across the fulfillment flow
+
+=== RESULT: 20 passed, 0 failed (of 20 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b3-browser.mjs ===
+  PASS  No unexpected console errors across the pickup/handoff flow
+
+=== RESULT: 18 passed, 0 failed (of 18 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b4-browser.mjs ===
+  PASS  No unexpected console errors across the post-purchase flow
+
+=== RESULT: 21 passed, 0 failed (of 21 total) ===
+
+=== verify-smokecraft-venue-humidor-1b2b5-browser.mjs ===
+  PASS  No unexpected console errors across the recommendation/pairing/assisted-selling flow
+
+=== RESULT: 21 passed, 0 failed (of 21 total) ===
+

@@ -1949,3 +1949,17 @@ Neither reached the committed baseline, so neither receives an SC-D
 number.
 
 See `public/proof/smokecraft-venue-humidor-1b-2b-5/00-proof-index.md`.
+
+## Venue Humidor 1B-2B-6 update
+
+No defects found in previously-locked behavior. Full regression suite
+(269 API + 8 validators + 134 browser = 411 checks across all 8 Venue
+Humidor packages) passed clean on this pass's first run with zero
+drift from every prior package's own recorded numbers. A new 31-check
+live closure-verification script
+(`verify-smokecraft-venue-humidor-1b2b6-closure.mjs`) also passed
+31/31 on its first run, covering concurrency, idempotency, cross-venue/
+cross-customer denial, and financial/Passport integrity under real
+concurrent load. No new SC-D number assigned — highest remains SC-D066.
+
+See `public/proof/smokecraft-venue-humidor-1b-2b-6/00-proof-index.md`.

@@ -584,3 +584,18 @@ covering all 130 routes, and `validateSmokecraftResponsive.mjs` passes
 0 failed. Real venue beverage/menu integration was not built (an honest
 `beverageDataAvailable: false` state is returned for any category
 outside the existing pairing engine's vocabulary), per mandate.
+
+## Venue Humidor 1B-2B-6 — full vertical-slice closure
+
+Venue Humidor (packages 1A through 1B-2B-5) is now closed as a complete
+production-ready vertical slice. This pass added no new routes, no new
+screens, and no new features — it re-ran and re-confirmed the full
+locked regression suite (269 API + 8 validators + 134 browser = 411
+checks, all passing with zero drift), performed a scoped security
+review, produced an RBAC matrix, ran a live 31-check closure
+verification (concurrency, idempotency, cross-venue/cross-customer
+denial, historical price preservation, Passport exactly-once,
+cancellation/expiration/block/unblock/no-show), and captured a real,
+live 18-screenshot investor-demo run. See
+`public/proof/smokecraft-venue-humidor-1b-2b-6/00-proof-index.md` for
+full detail. Route count remains 130.
