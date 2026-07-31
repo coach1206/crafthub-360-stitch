@@ -9,7 +9,11 @@ import fs from 'node:fs'
 import { chromium } from 'playwright'
 
 const API = process.env.SC_API || 'http://localhost:3001'
-const UI = process.env.SC_UI || 'http://localhost:5050'
+// Test-harness fix (not a production change): this hardcoded default
+// pointed at a port (5050) no dev server in this environment actually
+// serves — the real frontend dev server runs on 5000 (see BASE in every
+// other browser-test file in this repo). Overridable via SC_UI as before.
+const UI = process.env.SC_UI || 'http://localhost:5000'
 const PROOF = 'public/proof/smokecraft-holistic-fix-4'
 fs.mkdirSync(PROOF, { recursive: true })
 
@@ -164,7 +168,14 @@ await seed(page1)
 await page1.goto(`${UI}/smokecraft/humidor-match`, { waitUntil: 'networkidle' })
 await page1.waitForTimeout(400)
 const netReqs = []
-page1.on('requestfinished', async r => { if (r.url().includes('/player-state/sessions/')) { const resp = await r.response(); netReqs.push(resp ? resp.status() : null) } })
+page1.on('requestfinished', async r => { if (r.url().includes('/player-state/sessions/') || r.url().includes('/player-state/selection/')) { const resp = await r.response(); netReqs.push(resp ? resp.status() : null) } })
+// Required-Interaction Closure Package C: 'humidor-match' now requires a
+// real, correct environment selection (server-evaluated) before it can
+// complete — select the real, factually-correct climate-controlled
+// option before clicking Continue, matching every other Package C/D
+// regression fix already applied elsewhere in this suite.
+await page1.locator('button[aria-label*="Virtual Humidor"]').first().click()
+await page1.waitForTimeout(300)
 const continueBtn = page1.getByRole('button', { name: /continue/i }).first()
 await continueBtn.click()
 await page1.waitForTimeout(1200)

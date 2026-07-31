@@ -68,8 +68,11 @@ const TOPICS = [
   },
 ]
 
+const ACTIVITY_KEY = 'knowledge-drop'
+const REQUIRED_CHECKPOINTS = TOPICS.map(t => t.id)
+
 export default function KnowledgeDrop({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, session } = useGuestSession()
+  const { awardSessionRewards, session, loadTastingDraft, saveTastingDraft, submitSelectionAttempt } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setKnowledgeDrop } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -104,11 +107,50 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
   const [viewedTopics, setViewedTopics] = useState(() => new Set(savedViewed))
   const [imgStatus, setImgStatus] = useState('idle') // idle | loading | loaded | error
   const [quizOpen, setQuizOpen]   = useState(false)
-  const [quizAnswer, setQuizAnswer] = useState(null)
+  const [answers, setAnswers]     = useState({}) // { topicId: answerIndex }
   const [quizScore, setQuizScore] = useState(savedScore)
+
+  // Required-Interaction Closure Package D: the optional practice quiz
+  // above is now the REQUIRED interaction — the player must answer all
+  // 4 topic quizzes and submit a final synthesis (which topic they
+  // found most useful) before this session can complete. The server
+  // holds its own copy of the answer key (KNOWLEDGE_DROP_ANSWERS,
+  // selectionClassificationService.js) and grades independently — the
+  // client's local topic.quiz.answer is used only for this immediate
+  // in-page practice hint, never trusted for completion.
+  const [phase, setPhase] = useState('loading')
+  const [synthesis, setSynthesis] = useState(null)
+  const [draftVersion, setDraftVersion] = useState(0)
+  const [draftLocked, setDraftLocked] = useState(false)
+  const [done, setDone] = useState(false)
+  const [feedback, setFeedback] = useState(null)
 
   const topic = topicId ? TOPICS.find(t => t.id === topicId) : null
   const allViewed = viewedTopics.size === TOPICS.length
+  const allAnswered = REQUIRED_CHECKPOINTS.every(id => answers[id] !== undefined)
+
+  useEffect(() => {
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      if (d.checkpoints) setAnswers(d.checkpoints)
+      if (d.synthesis) setSynthesis(d.synthesis)
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadTastingDraft])
+
+  function handleRetryLoad() {
+    setPhase('loading')
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      setPhase('ready')
+    })
+  }
 
   useEffect(() => {
     if (viewedTopics.size > 0 || quizScore !== null) {
@@ -117,12 +159,24 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewedTopics.size, quizScore])
 
+  useEffect(() => {
+    if (phase !== 'ready' || done || draftLocked) return
+    const t = setTimeout(() => {
+      saveTastingDraft(ACTIVITY_KEY, { checkpoints: answers, synthesis }, draftVersion).then(result => {
+        if (result.alreadyCompleted) { setDraftLocked(true); return }
+        if (result.conflict) { setDraftVersion(result.current.version); return }
+        if (result.ok) setDraftVersion(result.current.version)
+      })
+    }, 900)
+    return () => clearTimeout(t)
+  }, [phase, answers, synthesis, done, draftVersion, draftLocked, saveTastingDraft])
+
   function selectTopic(id) {
     triggerHaptic('light')
     setTopicId(id)
     setImgStatus('loading')
     setQuizOpen(false)
-    setQuizAnswer(null)
+    setFeedback(null)
     setViewedTopics(prev => {
       if (prev.has(id)) return prev
       const next = new Set(prev)
@@ -133,24 +187,64 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
 
   function submitQuizAnswer(index) {
     triggerHaptic('light')
-    setQuizAnswer(index)
+    setAnswers(prev => ({ ...prev, [topic.id]: index }))
     if (index === topic.quiz.answer) {
       setQuizScore(prev => (prev || 0) + 1)
     }
   }
 
-  function handleContinue() {
+  async function handleContinue() {
+    if (done) return
+    if (!allAnswered) {
+      setFeedback({ message: 'Answer the knowledge check for all 4 topics before continuing.' })
+      return
+    }
+    if (!synthesis) {
+      setFeedback({ message: 'Select which topic you found most useful.' })
+      return
+    }
+    setDone(true)
     setKnowledgeDrop({
       viewedTopics: Array.from(viewedTopics),
       quizScore,
       completedAt: journey.knowledgeDrop?.completedAt || Date.now(),
     })
+
+    const result = await submitSelectionAttempt(ACTIVITY_KEY, { checkpoints: answers, synthesis })
+    if (!result.ok) {
+      setDone(false)
+      setFeedback({ message: 'Unable to submit right now. Please try again.' })
+      return
+    }
+    if (!result.data.correct) {
+      setDone(false)
+      setFeedback({ message: 'One or more answers were incorrect. Review and try again.' })
+      return
+    }
     if (onComplete) {
       onComplete()
       return
     }
     awardSessionRewards('knowledge-drop')
     navigate('/smokecraft/final-third')
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: NAVY_DEEP, color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        Loading…
+      </div>
+    )
+  }
+  if (phase === 'error') {
+    return (
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: NAVY_DEEP, color: 'rgba(233,193,118,0.85)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        <p style={{ margin: 0 }}>Something went wrong loading this session.</p>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+          Retry
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -327,7 +421,7 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
                     minHeight: 40,
                   }}
                 >
-                  {quizOpen ? 'Hide Knowledge Check' : 'Take Optional Knowledge Check'}
+                  {quizOpen ? 'Hide Knowledge Check' : `Required Knowledge Check${answers[topic.id] !== undefined ? ' ✓' : ''}`}
                 </button>
 
                 {quizOpen && (
@@ -337,14 +431,15 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
                     </p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {topic.quiz.options.map((opt, i) => {
-                        const chosen = quizAnswer === i
-                        const correct = quizAnswer !== null && i === topic.quiz.answer
+                        const answered = answers[topic.id]
+                        const chosen = answered === i
+                        const correct = answered !== undefined && i === topic.quiz.answer
                         return (
                           <button
                             key={opt}
                             type="button"
                             aria-pressed={chosen}
-                            disabled={quizAnswer !== null}
+                            disabled={answered !== undefined}
                             onClick={() => submitQuizAnswer(i)}
                             style={{
                               textAlign: 'left', minHeight: 44,
@@ -353,7 +448,7 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
                               background: correct ? 'rgba(233,193,118,0.14)' : 'transparent',
                               color: 'rgba(229,226,225,0.9)',
                               fontFamily: 'Georgia, serif', fontSize: 13,
-                              cursor: quizAnswer !== null ? 'default' : 'pointer',
+                              cursor: answered !== undefined ? 'default' : 'pointer',
                               outline: 'none',
                             }}
                           >
@@ -362,9 +457,9 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
                         )
                       })}
                     </div>
-                    {quizAnswer !== null && (
-                      <p style={{ margin: '10px 0 0', fontSize: 12, color: quizAnswer === topic.quiz.answer ? GOLD : 'rgba(229,226,225,0.6)' }}>
-                        {quizAnswer === topic.quiz.answer ? 'Correct.' : `Not quite — the answer is "${topic.quiz.options[topic.quiz.answer]}".`}
+                    {answers[topic.id] !== undefined && (
+                      <p style={{ margin: '10px 0 0', fontSize: 12, color: answers[topic.id] === topic.quiz.answer ? GOLD : 'rgba(229,226,225,0.6)' }}>
+                        {answers[topic.id] === topic.quiz.answer ? 'Correct.' : `Not quite — the answer is "${topic.quiz.options[topic.quiz.answer]}".`}
                       </p>
                     )}
                   </div>
@@ -381,6 +476,44 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
             <span aria-hidden="true">{allViewed ? '✓' : '○'}</span>
             <span>{allViewed ? 'All Knowledge Drop topics reviewed' : `${TOPICS.length - viewedTopics.size} topic${TOPICS.length - viewedTopics.size === 1 ? '' : 's'} remaining`}</span>
           </div>
+
+          {allAnswered && (
+            <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 10 }}>
+                Required: Which topic did you find most useful?
+              </div>
+              <div role="radiogroup" aria-label="Most useful topic" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {TOPICS.map(t => {
+                  const active = synthesis === t.id
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      aria-label={t.title}
+                      onClick={() => { triggerHaptic('light'); setFeedback(null); setSynthesis(t.id) }}
+                      style={{
+                        minHeight: 44, padding: '8px 16px', borderRadius: 20,
+                        border: `1.5px solid ${active ? GOLD : 'rgba(229,226,225,0.25)'}`,
+                        background: active ? 'rgba(233,193,118,0.14)' : 'transparent',
+                        color: active ? GOLD : 'rgba(229,226,225,0.75)',
+                        fontFamily: 'Georgia, serif', fontSize: 13, cursor: 'pointer', outline: 'none',
+                      }}
+                    >
+                      {t.title}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {feedback && (
+            <div role="alert" style={{ background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)', borderRadius: 8, padding: '8px 14px', color: '#ffdada', fontSize: 13, fontFamily: 'Georgia, serif' }}>
+              {feedback.message}
+            </div>
+          )}
         </div>
       </main>
 
@@ -390,8 +523,9 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
       />
 
       <SmokeCraftNavBar
-        primary="Continue →"
+        primary={done ? 'Checking…' : 'Continue →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
         secondary="← Back"
         onSecondary={onBack || (() => navigate('/smokecraft/mentor-commentary'))}
       />

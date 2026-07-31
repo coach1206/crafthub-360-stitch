@@ -60,8 +60,13 @@ const SECTIONS = [
   },
 ]
 
+const ACTIVITY_KEY = 'terroir'
+// The 5 real shaping factors (excludes 'why', meta-commentary about
+// terroir itself, not a factor to weigh).
+const REQUIRED_CHECKPOINTS = ['country', 'region', 'soil', 'climate', 'growing']
+
 export default function Terroir({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, session } = useGuestSession()
+  const { awardSessionRewards, session, loadTastingDraft, saveTastingDraft, submitSelectionAttempt } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setTerroir } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -96,6 +101,48 @@ export default function Terroir({ onBack, onComplete } = {}) {
   const section = sectionId ? SECTIONS.find(s => s.id === sectionId) : null
   const allViewed = viewedSections.size === SECTIONS.length
 
+  // Required-Interaction Closure Package D: the player must inspect all
+  // 5 real terroir factors AND submit a final synthesis — which factor
+  // they judge most shapes a cigar's character — before this session
+  // can complete server-side.
+  const [phase, setPhase] = useState('loading')
+  const [synthesis, setSynthesis] = useState(null)
+  const [draftVersion, setDraftVersion] = useState(0)
+  const [draftLocked, setDraftLocked] = useState(false)
+  const [done, setDone] = useState(false)
+  const [feedback, setFeedback] = useState(null)
+
+  const requiredViewed = REQUIRED_CHECKPOINTS.every(id => viewedSections.has(id))
+
+  useEffect(() => {
+    let cancelled = false
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (cancelled) return
+      if (!result.ok) { setPhase('error'); return }
+      const d = result.draftData || {}
+      if (d.checkpoints) {
+        setViewedSections(prev => {
+          const next = new Set(prev)
+          for (const id of REQUIRED_CHECKPOINTS) if (d.checkpoints[id]) next.add(id)
+          return next
+        })
+      }
+      if (d.synthesis) setSynthesis(d.synthesis)
+      setDraftVersion(result.version || 0)
+      setPhase('ready')
+    })
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadTastingDraft])
+
+  function handleRetryLoad() {
+    setPhase('loading')
+    loadTastingDraft(ACTIVITY_KEY).then(result => {
+      if (!result.ok) { setPhase('error'); return }
+      setPhase('ready')
+    })
+  }
+
   // Persist progress to canonical journey state whenever it changes.
   useEffect(() => {
     if (viewedSections.size > 0) {
@@ -104,10 +151,25 @@ export default function Terroir({ onBack, onComplete } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewedSections.size])
 
+  useEffect(() => {
+    if (phase !== 'ready' || done || draftLocked) return
+    const t = setTimeout(() => {
+      const checkpoints = {}
+      for (const id of REQUIRED_CHECKPOINTS) if (viewedSections.has(id)) checkpoints[id] = true
+      saveTastingDraft(ACTIVITY_KEY, { checkpoints, synthesis }, draftVersion).then(result => {
+        if (result.alreadyCompleted) { setDraftLocked(true); return }
+        if (result.conflict) { setDraftVersion(result.current.version); return }
+        if (result.ok) setDraftVersion(result.current.version)
+      })
+    }, 900)
+    return () => clearTimeout(t)
+  }, [phase, viewedSections, synthesis, done, draftVersion, draftLocked, saveTastingDraft])
+
   function selectSection(id) {
     triggerHaptic('light')
     setSectionId(id)
     setImgStatus('loading')
+    setFeedback(null)
     setViewedSections(prev => {
       if (prev.has(id)) return prev
       const next = new Set(prev)
@@ -116,14 +178,56 @@ export default function Terroir({ onBack, onComplete } = {}) {
     })
   }
 
-  function handleContinue() {
+  async function handleContinue() {
+    if (done) return
+    if (!requiredViewed) {
+      setFeedback({ message: 'Review Country, Region, Soil, Climate, and Growing Conditions before continuing.' })
+      return
+    }
+    if (!synthesis) {
+      setFeedback({ message: 'Select which factor you judge most shapes a cigar\'s character.' })
+      return
+    }
+    setDone(true)
     setTerroir({ viewedSections: Array.from(viewedSections), completedAt: journey.terroir?.completedAt || Date.now() })
+
+    const checkpoints = {}
+    for (const id of REQUIRED_CHECKPOINTS) checkpoints[id] = true
+    const result = await submitSelectionAttempt(ACTIVITY_KEY, { checkpoints, synthesis })
+    if (!result.ok) {
+      setDone(false)
+      setFeedback({ message: 'Unable to submit right now. Please try again.' })
+      return
+    }
+    if (!result.data.correct) {
+      setDone(false)
+      setFeedback({ message: 'Your response was incomplete. Please review and try again.' })
+      return
+    }
     if (onComplete) {
       onComplete()
       return
     }
     awardSessionRewards('terroir')
     navigate('/smokecraft/format')
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: NAVY_DEEP, color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        Loading…
+      </div>
+    )
+  }
+  if (phase === 'error') {
+    return (
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: NAVY_DEEP, color: 'rgba(233,193,118,0.85)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+        <p style={{ margin: 0 }}>Something went wrong loading this session.</p>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+          Retry
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -280,6 +384,45 @@ export default function Terroir({ onBack, onComplete } = {}) {
             <span aria-hidden="true">{allViewed ? '✓' : '○'}</span>
             <span>{allViewed ? 'All terroir sections reviewed' : `${SECTIONS.length - viewedSections.size} section${SECTIONS.length - viewedSections.size === 1 ? '' : 's'} remaining`}</span>
           </div>
+
+          {requiredViewed && (
+            <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 10 }}>
+                Required: Which factor do you judge most shapes a cigar's character?
+              </div>
+              <div role="radiogroup" aria-label="Most influential terroir factor" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {REQUIRED_CHECKPOINTS.map(id => {
+                  const label = SECTIONS.find(s => s.id === id)?.title || id
+                  const active = synthesis === id
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      aria-label={label}
+                      onClick={() => { triggerHaptic('light'); setFeedback(null); setSynthesis(id) }}
+                      style={{
+                        minHeight: 44, padding: '8px 16px', borderRadius: 20,
+                        border: `1.5px solid ${active ? GOLD : 'rgba(229,226,225,0.25)'}`,
+                        background: active ? 'rgba(233,193,118,0.14)' : 'transparent',
+                        color: active ? GOLD : 'rgba(229,226,225,0.75)',
+                        fontFamily: 'Georgia, serif', fontSize: 13, cursor: 'pointer', outline: 'none',
+                      }}
+                    >
+                      {label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {feedback && (
+            <div role="alert" style={{ background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)', borderRadius: 8, padding: '8px 14px', color: '#ffdada', fontSize: 13, fontFamily: 'Georgia, serif' }}>
+              {feedback.message}
+            </div>
+          )}
         </div>
       </main>
 
@@ -289,8 +432,9 @@ export default function Terroir({ onBack, onComplete } = {}) {
       />
 
       <SmokeCraftNavBar
-        primary="Continue →"
+        primary={done ? 'Checking…' : 'Continue →'}
         onPrimary={handleContinue}
+        primaryDisabled={done}
         secondary="← Back"
         onSecondary={onBack || (() => navigate('/smokecraft/meet-your-cigar'))}
       />

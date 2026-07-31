@@ -1,0 +1,9 @@
+# 14 — Known Limitations
+
+1. **A real, pre-existing defect (Sessions 3 and 4 could never complete server-side) was found and fixed.** See `08-completion-progression.md` for full detail. This is documented here rather than assigned a new SC-D number per mandate §22 ("Do not assign defects to implementation mistakes caught before commit... assign a new SC-D number only if a previously promised functional interaction is proven broken"): this was proven broken (not an implementation mistake introduced by this pass), but the fix — adding the two missing reward-table entries — was completed within this same pass, before any commit, so no session was ever left in a broken state at a commit boundary. Disclosed in full regardless.
+
+2. **`verify-smokecraft-hf4-player-state-idempotency.mjs`'s hardcoded UI port (5050) was repaired** to the real port this environment's dev server actually uses (5000), per this mandate's explicit §19 instruction. This was a genuine test-harness bug (not merely a race, unlike the Package A/B localStorage-seeding fixes) — production code was not touched. The suite now runs to completion for the first time in this operation (previously it always crashed with `ERR_CONNECTION_REFUSED` partway through, in every prior package's regression run). One additional assertion in that same section needed updating (Session 2's Continue-click flow, since Package C added a real required selection there) — same established pattern as every other regression-test update this operation has made.
+
+3. **No new SC-D defect number was assigned** for the reward-table fix, per the reasoning in item 1 above.
+
+4. **No image screenshots were captured** for this proof directory — real Playwright DOM/server assertions were used instead (see prior packages' proof for the same disclosed limitation).

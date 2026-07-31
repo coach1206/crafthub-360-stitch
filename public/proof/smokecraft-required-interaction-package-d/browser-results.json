@@ -1,0 +1,67 @@
+{
+  "pass": 15,
+  "fail": 0,
+  "total": 15,
+  "results": [
+    {
+      "name": "Session 3 route loads with real checkpoint tabs visible",
+      "ok": true
+    },
+    {
+      "name": "Continuing before visiting required checkpoints is honestly rejected client-side",
+      "ok": true
+    },
+    {
+      "name": "The required final-synthesis picker appears only after all checkpoints are visited",
+      "ok": true
+    },
+    {
+      "name": "Continuing without a synthesis selection is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "A complete checkpoint set + synthesis completes Session 3 and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "After leaving the route and returning, the server draft restores partial checkpoint progress",
+      "ok": true
+    },
+    {
+      "name": "Session 4 completes with all checkpoints + synthesis and navigates to the real next step",
+      "ok": true
+    },
+    {
+      "name": "Session 15 route loads with real topic tabs visible",
+      "ok": true
+    },
+    {
+      "name": "An incorrect quiz answer shows honest, truthful feedback",
+      "ok": true
+    },
+    {
+      "name": "Continuing without the required synthesis pick is honestly rejected",
+      "ok": true
+    },
+    {
+      "name": "A quiz set with one wrong answer does not complete the session (server-graded, not client-trusted)",
+      "ok": true
+    },
+    {
+      "name": "Genuine reload preserves in-progress quiz draft state (tobacco answered: true)",
+      "ok": true
+    },
+    {
+      "name": "Session 15 has genuinely not completed yet (no false completion from the earlier incorrect attempt)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal layout cutoff across 5 tested viewports",
+      "ok": true
+    },
+    {
+      "name": "No unexpected console errors across the full Package D flow",
+      "ok": true
+    }
+  ]
+}

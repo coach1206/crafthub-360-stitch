@@ -75,6 +75,48 @@ const CUT_CORRECT_MAP = { 'straight-cut': 'full-cap-removal', 'v-cut': 'wedge-ch
 // selections are required to satisfy "the required hotspot set."
 const FLAVOR_HOTSPOT_IDS = new Set(['earth', 'wood', 'spice', 'cocoa', 'coffee', 'sweet', 'nuts', 'floral'])
 
+// ── Required-Interaction Closure Package D — guided-exploration sessions ──
+// Same shared architecture as Package C, generalized to a
+// { checkpoints: {...}, synthesis } payload shape: the player must
+// record a real response at each required checkpoint AND submit one
+// final synthesis/applied-judgment response — a real, server-validated
+// step beyond merely opening every panel.
+
+// ── Session 3 — Meet Your Cigar: the only 3 sections that ever carry
+// real, non-fallback content for the fixed 8-cigar catalog (see
+// MeetYourCigar.jsx buildSections() — binder/filler/factory/
+// masterBlender are always null/"Not available" for this catalog, so
+// requiring them as checkpoints would demand engagement with content
+// that does not exist).
+const MEET_YOUR_CIGAR_CHECKPOINTS = ['brand', 'blend', 'wrapper']
+
+// ── Session 4 — Terroir: the 5 real shaping factors (excludes 'why',
+// which is meta-commentary about terroir itself, not a factor to weigh).
+const TERROIR_CHECKPOINTS = ['country', 'region', 'soil', 'climate', 'growing']
+
+// ── Session 15 — Knowledge Drop: the 4 real topics, each with the exact
+// same quiz question/answer-key already defined in KnowledgeDrop.jsx —
+// moved server-side so grading is never client-trusted. The client's
+// own copy remains for the optional in-page practice hint UI; the
+// REQUIRED interaction is graded only by this server copy.
+const KNOWLEDGE_DROP_ANSWERS = { tobacco: 0, fermentation: 1, aging: 1, factory: 0 }
+const KNOWLEDGE_DROP_CHECKPOINTS = Object.keys(KNOWLEDGE_DROP_ANSWERS)
+
+function validateExplorationSubmission(payload, requiredCheckpoints, { checkpointValueOk, synthesisOk }) {
+  if (typeof payload !== 'object' || payload === null) return { ok: false, error: 'payload_object_required' }
+  const { checkpoints, synthesis } = payload
+  if (typeof checkpoints !== 'object' || checkpoints === null || Array.isArray(checkpoints)) {
+    return { ok: false, error: 'checkpoints_object_required' }
+  }
+  const keys = Object.keys(checkpoints)
+  if (!keys.every(k => requiredCheckpoints.includes(k))) return { ok: false, error: 'unknown_checkpoint_id' }
+  if (!keys.every(k => checkpointValueOk(checkpoints[k]))) return { ok: false, error: 'invalid_checkpoint_response' }
+  const missing = requiredCheckpoints.filter(id => !(id in checkpoints))
+  if (missing.length > 0) return { ok: false, error: 'missing_required_checkpoint' }
+  if (!synthesisOk(synthesis)) return { ok: false, error: 'synthesis_required' }
+  return { ok: true }
+}
+
 function arraysEqual(a, b) {
   return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => v === b[i])
 }
@@ -172,7 +214,104 @@ const SESSION_DEFS = {
       return deduped.length >= 2 && deduped.every(id => FLAVOR_HOTSPOT_IDS.has(id))
     },
   },
+  'meet-your-cigar': {
+    activityType: 'exploration',
+    draftAllowedFields: new Set(['checkpoints', 'synthesis']),
+    validateDraft(draftData) {
+      if (draftData.checkpoints !== undefined) {
+        if (typeof draftData.checkpoints !== 'object' || draftData.checkpoints === null || Array.isArray(draftData.checkpoints)) {
+          return { ok: false, error: 'checkpoints_object_required' }
+        }
+        if (!Object.keys(draftData.checkpoints).every(k => MEET_YOUR_CIGAR_CHECKPOINTS.includes(k))) {
+          return { ok: false, error: 'unknown_checkpoint_id' }
+        }
+      }
+      if (draftData.synthesis !== undefined && draftData.synthesis !== null && !MEET_YOUR_CIGAR_CHECKPOINTS.includes(draftData.synthesis)) {
+        return { ok: false, error: 'invalid_synthesis' }
+      }
+      return { ok: true }
+    },
+    validateSubmission(payload) {
+      return validateExplorationSubmission(payload, MEET_YOUR_CIGAR_CHECKPOINTS, {
+        checkpointValueOk: v => v === true,
+        synthesisOk: s => MEET_YOUR_CIGAR_CHECKPOINTS.includes(s),
+      })
+    },
+    // Which section most influenced the player's impression is
+    // inherently a personal judgment (no single "correct" answer) — the
+    // same principled resolution already used for Package A/C's
+    // subjective content: "correct" means a real, valid, complete
+    // response, not a graded right/wrong answer.
+    evaluate(payload) {
+      return MEET_YOUR_CIGAR_CHECKPOINTS.every(id => payload.checkpoints[id] === true) && MEET_YOUR_CIGAR_CHECKPOINTS.includes(payload.synthesis)
+    },
+  },
+  terroir: {
+    activityType: 'exploration',
+    draftAllowedFields: new Set(['checkpoints', 'synthesis']),
+    validateDraft(draftData) {
+      if (draftData.checkpoints !== undefined) {
+        if (typeof draftData.checkpoints !== 'object' || draftData.checkpoints === null || Array.isArray(draftData.checkpoints)) {
+          return { ok: false, error: 'checkpoints_object_required' }
+        }
+        if (!Object.keys(draftData.checkpoints).every(k => TERROIR_CHECKPOINTS.includes(k))) {
+          return { ok: false, error: 'unknown_checkpoint_id' }
+        }
+      }
+      if (draftData.synthesis !== undefined && draftData.synthesis !== null && !TERROIR_CHECKPOINTS.includes(draftData.synthesis)) {
+        return { ok: false, error: 'invalid_synthesis' }
+      }
+      return { ok: true }
+    },
+    validateSubmission(payload) {
+      return validateExplorationSubmission(payload, TERROIR_CHECKPOINTS, {
+        checkpointValueOk: v => v === true,
+        synthesisOk: s => TERROIR_CHECKPOINTS.includes(s),
+      })
+    },
+    // Which terroir factor most shapes character is a real, defensible
+    // judgment call — same subjective-content resolution as above.
+    evaluate(payload) {
+      return TERROIR_CHECKPOINTS.every(id => payload.checkpoints[id] === true) && TERROIR_CHECKPOINTS.includes(payload.synthesis)
+    },
+  },
+  'knowledge-drop': {
+    activityType: 'exploration',
+    draftAllowedFields: new Set(['checkpoints', 'synthesis']),
+    validateDraft(draftData) {
+      if (draftData.checkpoints !== undefined) {
+        if (typeof draftData.checkpoints !== 'object' || draftData.checkpoints === null || Array.isArray(draftData.checkpoints)) {
+          return { ok: false, error: 'checkpoints_object_required' }
+        }
+        const keys = Object.keys(draftData.checkpoints)
+        if (!keys.every(k => KNOWLEDGE_DROP_CHECKPOINTS.includes(k))) return { ok: false, error: 'unknown_checkpoint_id' }
+        if (!keys.every(k => Number.isInteger(draftData.checkpoints[k]) && draftData.checkpoints[k] >= 0 && draftData.checkpoints[k] <= 2)) {
+          return { ok: false, error: 'invalid_checkpoint_response' }
+        }
+      }
+      if (draftData.synthesis !== undefined && draftData.synthesis !== null && !KNOWLEDGE_DROP_CHECKPOINTS.includes(draftData.synthesis)) {
+        return { ok: false, error: 'invalid_synthesis' }
+      }
+      return { ok: true }
+    },
+    validateSubmission(payload) {
+      return validateExplorationSubmission(payload, KNOWLEDGE_DROP_CHECKPOINTS, {
+        checkpointValueOk: v => Number.isInteger(v) && v >= 0 && v <= 2,
+        synthesisOk: s => KNOWLEDGE_DROP_CHECKPOINTS.includes(s),
+      })
+    },
+    // Unlike Sessions 3/4, each topic has a real, objective, already-
+    // published correct answer (KNOWLEDGE_DROP_ANSWERS, moved
+    // server-side from KnowledgeDrop.jsx so grading is never
+    // client-trusted) — all 4 must be answered correctly.
+    evaluate(payload) {
+      return KNOWLEDGE_DROP_CHECKPOINTS.every(id => payload.checkpoints[id] === KNOWLEDGE_DROP_ANSWERS[id])
+        && KNOWLEDGE_DROP_CHECKPOINTS.includes(payload.synthesis)
+    },
+  },
 }
+
+export const PACKAGE_D_SESSIONS = Object.freeze(['meet-your-cigar', 'terroir', 'knowledge-drop'])
 
 function validateMatchesShape(matches, { partial }) {
   if (typeof matches !== 'object' || matches === null || Array.isArray(matches)) {

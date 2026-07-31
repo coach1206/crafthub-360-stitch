@@ -1,0 +1,142 @@
+{
+  "pass": 34,
+  "fail": 0,
+  "results": [
+    {
+      "name": "Session 3 partial checkpoint draft saves",
+      "ok": true
+    },
+    {
+      "name": "Session 3 draft reads back correctly",
+      "ok": true
+    },
+    {
+      "name": "Cross-player denial: a different guest never sees another guest's Session 3 draft",
+      "ok": true
+    },
+    {
+      "name": "An unknown checkpoint id is rejected (400 unknown_checkpoint_id)",
+      "ok": true
+    },
+    {
+      "name": "Missing required checkpoints is rejected (400 missing_required_checkpoint)",
+      "ok": true
+    },
+    {
+      "name": "Missing final synthesis is rejected (400 synthesis_required)",
+      "ok": true
+    },
+    {
+      "name": "Session 3 completion rejected without real submitted evidence (400 selection_evidence_required)",
+      "ok": true
+    },
+    {
+      "name": "A complete, valid Session 3 submission is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 3 completes after real evidence",
+      "ok": true
+    },
+    {
+      "name": "XP awarded and Session 3 appears in completedSessions (real defect fixed this pass — see proof)",
+      "ok": true
+    },
+    {
+      "name": "Duplicate completion is a safe no-op, no duplicate XP",
+      "ok": true
+    },
+    {
+      "name": "A draft write attempted after Session 3 completion is denied (409 already_completed)",
+      "ok": true
+    },
+    {
+      "name": "Incomplete checkpoints rejected for Session 4 (400 missing_required_checkpoint)",
+      "ok": true
+    },
+    {
+      "name": "An invalid synthesis value (outside the 5 real factors) is rejected (400 synthesis_required)",
+      "ok": true
+    },
+    {
+      "name": "Session 4 completion rejected without evidence",
+      "ok": true
+    },
+    {
+      "name": "A complete, valid Session 4 submission is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 4 completes after real evidence",
+      "ok": true
+    },
+    {
+      "name": "A well-formed but entirely incorrect quiz submission is accepted as an attempt but marked incorrect",
+      "ok": true
+    },
+    {
+      "name": "Session 15 completion rejected after only an incorrect quiz attempt",
+      "ok": true
+    },
+    {
+      "name": "An out-of-range answer index is rejected (400 invalid_checkpoint_response)",
+      "ok": true
+    },
+    {
+      "name": "An unknown topic id is rejected (400 unknown_checkpoint_id)",
+      "ok": true
+    },
+    {
+      "name": "A fully correct quiz submission (server-graded against its own answer key) is recognized as correct",
+      "ok": true
+    },
+    {
+      "name": "Session 15 completes after a fully correct quiz + synthesis",
+      "ok": true
+    },
+    {
+      "name": "Session 15 XP awarded exactly once, appears in completedSessions",
+      "ok": true
+    },
+    {
+      "name": "Re-submitting after already-correct returns alreadyRecorded, not a new row",
+      "ok": true
+    },
+    {
+      "name": "Terroir-shaped checkpoint ids are rejected against Meet Your Cigar's draft (unknown_checkpoint_id)",
+      "ok": true
+    },
+    {
+      "name": "Client-supplied allVisited/completed/passed/xpEarned fields are ignored — completion still denied without real evidence",
+      "ok": true
+    },
+    {
+      "name": "All 3 concurrent correct submissions succeed without error",
+      "ok": true
+    },
+    {
+      "name": "Completion after concurrent correct submissions succeeds exactly once",
+      "ok": true
+    },
+    {
+      "name": "Exactly one completion record exists despite 3 concurrent correct submissions",
+      "ok": true
+    },
+    {
+      "name": "XP total unchanged by any number of draft saves",
+      "ok": true
+    },
+    {
+      "name": "No completion record from draft saves alone",
+      "ok": true
+    },
+    {
+      "name": "A session outside Package D scope completes without needing exploration evidence",
+      "ok": true
+    },
+    {
+      "name": "Every Package D attempt (correct or not) is recorded via the shared recordAttemptAudit()/smokecraft_award_audit path (verified structurally in the package validator)",
+      "ok": true
+    }
+  ]
+}

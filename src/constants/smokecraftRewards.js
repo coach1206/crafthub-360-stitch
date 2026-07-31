@@ -94,6 +94,26 @@ export const SESSION_REWARDS = {
     sessionBadges: [SMOKECRAFT_BADGES.MENTOR_PAIR],
     unlockSignal: 'visit-2',
   },
+  // Required-Interaction Closure Package D defect fix: these two entries
+  // were missing entirely — awardSessionRewards() hard-returns when
+  // getSessionRewards(sessionId) is null (see below), so Sessions 3
+  // (Meet Your Cigar) and 4 (Terroir) could never actually complete
+  // server-side through the real completion path; the client would
+  // silently no-op and navigate forward regardless. Not previously
+  // caught because completion was never verified end-to-end for these
+  // two sessions before this pass. XP amount matches the standard
+  // per-session value used throughout this table; no new badge is
+  // invented for either.
+  'meet-your-cigar': {
+    sessionNumber: null, visit: 1, xp: 75,
+    sessionBadges: [],
+    unlockSignal: 'terroir',
+  },
+  terroir: {
+    sessionNumber: null, visit: 1, xp: 75,
+    sessionBadges: [],
+    unlockSignal: 'format',
+  },
 
   // ── Visit 2 ────────────────────────────────────────────────────────────────
   format: {
