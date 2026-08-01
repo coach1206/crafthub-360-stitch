@@ -1,0 +1,457 @@
+{
+  "pass": 82,
+  "fail": 0,
+  "total": 82,
+  "results": [
+    {
+      "label": "Demo setup: session 'entry' (Welcome) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'humidor-match' (Choose Your Cigar) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'meet-your-cigar' (Meet Your Cigar) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'terroir' (Terroir) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'format' (Construction Inspection) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'cut-toast-light' (Choose Your Cut) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'lighting-tutorial' (Lighting Tutorial) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'first-third' (First Draw) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'flavor-memory' (Flavor Memory Exercise) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'pairing-lab' (Suggested Pairings) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'second-third' (Flavor Evolution) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'mentor-commentary' (Mentor Commentary) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'knowledge-drop' (Knowledge Drop) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'final-third' (Flavor Finish) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'scorecard' (Rate Every Category) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'ai-summary' (Session Summary) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'pairing-recommendations' (Personalized Pairing Recommendations) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'passport-stamp' (Passport Stamp Animation) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'final-review' (Completed Scorecard) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'rewards' (Rewards and XP) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'achievements' (Achievements) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo setup: session 'session-complete' (Recommended Next Journey) completes",
+      "ok": true
+    },
+    {
+      "label": "Demo player fully completes the 22 distinct required sessions server-side",
+      "ok": true
+    },
+    {
+      "label": "Golden Box competition fixture created (admin-created, same technique as every prior GB package)",
+      "ok": true
+    },
+    {
+      "label": "Demo player creates a real Golden Box entry",
+      "ok": true
+    },
+    {
+      "label": "Demo player builds a complete cigar entry via the draft API",
+      "ok": true
+    },
+    {
+      "label": "Entry submits successfully",
+      "ok": true
+    },
+    {
+      "label": "Real admin account logs in for judging",
+      "ok": true
+    },
+    {
+      "label": "Real distinct judge account logs in",
+      "ok": true
+    },
+    {
+      "label": "Admin assigns judge to entry",
+      "ok": true
+    },
+    {
+      "label": "Judge submits real scorecard",
+      "ok": true
+    },
+    {
+      "label": "Admin finalizes competition results",
+      "ok": true
+    },
+    {
+      "label": "Demo player entry receives a real server-computed award",
+      "ok": true
+    },
+    {
+      "label": "Real server-issued guest cookie captured for browser reuse",
+      "ok": true
+    },
+    {
+      "label": "Real click on the app's own sanctioned investor Demo Experience control activates demo/navigation-unlock mode",
+      "ok": true
+    },
+    {
+      "label": "Screen '01-welcome' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '01-welcome' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '01-welcome' @ tablet renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '01-welcome' @ tablet has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '01-welcome' @ mobile renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '01-welcome' @ mobile has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '02-venue-select' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '02-venue-select' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '03-mentor-selection' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '03-mentor-selection' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '04-humidor-match' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '04-humidor-match' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '05-first-third' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '05-first-third' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '06-scorecard' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '06-scorecard' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '06-scorecard' @ tablet renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '06-scorecard' @ tablet has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '06-scorecard' @ mobile renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '06-scorecard' @ mobile has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '07-rewards' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '07-rewards' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '07-rewards' @ tablet renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '07-rewards' @ tablet has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '07-rewards' @ mobile renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '07-rewards' @ mobile has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '08-passport' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '08-passport' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '09-skill-tree' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '09-skill-tree' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '10-leaderboard' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '10-leaderboard' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '11-golden-box-build' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '11-golden-box-build' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '11-golden-box-build' @ tablet renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '11-golden-box-build' @ tablet has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '11-golden-box-build' @ mobile renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '11-golden-box-build' @ mobile has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '12-golden-box-competitions' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '12-golden-box-competitions' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '13-golden-box-results' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '13-golden-box-results' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Screen '14-session-complete' @ desktop renders without console errors or failed critical requests",
+      "ok": true
+    },
+    {
+      "label": "Screen '14-session-complete' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
+      "ok": true
+    },
+    {
+      "label": "Rewards screen: same-session GET /api/smokecraft/player-state returns a real XP total",
+      "ok": true
+    },
+    {
+      "label": "Rewards screen UI displays the server's own XP total (1175) somewhere on the page — UI is not disconnected from server truth",
+      "ok": true
+    },
+    {
+      "label": "Demo player completion state survives a hard reload (server-persisted, not client-memory-only)",
+      "ok": true
+    }
+  ],
+  "demoPlayer": {
+    "xpTotal": 1175,
+    "completedSessions": 22
+  },
+  "goldenBox": {
+    "competitionId": "287",
+    "entryId": "3d602fdd-ced1-4c60-b817-813e85eeae8f",
+    "awardType": "first_place"
+  },
+  "screenConsoleAndNetwork": {
+    "01-welcome@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "01-welcome@tablet": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "01-welcome@mobile": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "02-venue-select@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "03-mentor-selection@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "04-humidor-match@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "05-first-third@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "06-scorecard@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "06-scorecard@tablet": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "06-scorecard@mobile": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "07-rewards@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "07-rewards@tablet": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "07-rewards@mobile": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "08-passport@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "09-skill-tree@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "10-leaderboard@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "11-golden-box-build@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "11-golden-box-build@tablet": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "11-golden-box-build@mobile": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "12-golden-box-competitions@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "13-golden-box-results@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    },
+    "14-session-complete@desktop": {
+      "consoleErrors": [],
+      "failedRequests": [],
+      "navOk": true
+    }
+  },
+  "capturedAt": "2026-08-01T03:41:34.996Z"
+}

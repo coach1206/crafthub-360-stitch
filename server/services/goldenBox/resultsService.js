@@ -317,6 +317,28 @@ export async function finalizeResults(competitionId, actorId, { resultVersion = 
         ]
       )
     }
+    // SC-D068 (Final Gameplay Acceptance pass): finalizeResults() persisted
+    // real, correct golden_box_results rows but never advanced the parent
+    // competition's own `status` column — so ResultsExperience.jsx's
+    // `resultsReleased = ['results_pending','completed'].includes(competition.status)`
+    // stayed permanently false, and every finalized competition (however it
+    // reached 'active'/'judging') kept showing "Judging is not complete
+    // yet — results have not been released" directly above its own real,
+    // correctly finalized rankings — a genuine, investor-visible
+    // contradiction on the flagship Golden Box results screen, confirmed
+    // by direct DB read (status stayed 'active' after a real finalize+award
+    // run) and by screenshot in this pass's proof docs. Fixed with the
+    // smallest correct change: once finalization succeeds, if the
+    // competition isn't already in a terminal/cancelled/archived state,
+    // advance it to 'results_pending' (the exact value the frontend
+    // already checks for) directly here, scoped to this one function —
+    // no change to the shared COMPETITION_TRANSITIONS state machine used
+    // by unrelated admin flows.
+    await client.query(
+      `UPDATE golden_box_competitions SET status = 'results_pending', updated_at = now()
+       WHERE id = $1 AND status NOT IN ('results_pending', 'completed', 'cancelled', 'archived')`,
+      [competitionId]
+    )
     await client.query('COMMIT')
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})

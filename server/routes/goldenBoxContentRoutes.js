@@ -10,8 +10,17 @@ import { requireRole, auditAction } from '../middleware/roleMiddleware.js'
 import * as ctrl from '../controllers/goldenBoxContentController.js'
 
 const router = Router()
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 90 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
+// SC-D068b (Final Gameplay Acceptance pass): unlike every sibling Golden
+// Box router (e.g. goldenBoxRoutes.js's own readLimiter/writeLimiter),
+// these two limiters had no `skip: () => !IS_PROD` dev/test exemption —
+// a real, narrow, pre-existing inconsistency that surfaced as genuine
+// 429 console errors on the Golden Box results/competitions screens
+// during this pass's automated investor-demo walk (multiple content
+// reads within one minute from one browser). Brought in line with the
+// rest of this route family; production behavior is unchanged.
+const IS_PROD = process.env.NODE_ENV === 'production'
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 90, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
 
 // ── Learner reads (public, published-only) ──────────────────────────
 router.get('/components', readLimiter, ctrl.handleListComponents)
