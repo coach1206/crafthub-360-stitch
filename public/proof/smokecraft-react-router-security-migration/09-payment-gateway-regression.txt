@@ -1,0 +1,46 @@
+
+=== verifyStripeConnectMoneyBridge — 38 checks ===
+
+  ✓ [1] paymentProviderConfig.js exists
+  ✓ [2] Stripe readiness returns stripe_keys_missing when keys are missing
+  ✓ [3] Stripe readiness does not expose raw keys
+  ✓ [4] Stripe Connect migration 019 exists
+  ✓ [5] payment_provider_accounts table defined
+  ✓ [6] payment_intents_log table defined
+  ✓ [7] money_bridge_settlement_ledger table defined
+  ✓ [8] money_bridge_refund_reversal_logs table defined
+  ✓ [9] payment_webhook_events table defined
+  ✓ [10] payment_audit_logs table defined
+  ✓ [11] Money Bridge payment engine exists
+[NOVEE OS DB] No DATABASE_URL — prototype mode active (in-memory)
+  ✓ [12] Split math: 10% commission, 5% referral, 85% partner payout
+  ✓ [13] $4.50 delivery fee applied for partner food items
+  ✓ [14] Missing tax config returns taxStatus: preview_only
+  ✓ [15] Stripe Connect service exists
+  ✓ [16] Missing Stripe keys returns stripe_keys_missing
+  ✓ [17] Missing connected account returns connected_account_required or stripe_keys_missing
+  ✓ [18] Payment account onboarding service exists
+  ✓ [19] Venue payout readiness requires connected account
+  ✓ [20] Partner payout readiness requires connected account
+  ✓ [21] Payment refund/reversal service exists
+  ✓ [22] Full refund reversal math: commission + referral + payout = refund amount
+  ✓ [23] Partial refund reversal math
+  ✓ [24] Payment webhook service exists
+  ✓ [25] Missing webhook secret does not fake verified processing
+  ✓ [26] Payment audit log service exists
+  ✓ [27] Audit logging does not fake persistence without database
+  ✓ [28] Payment routes mounted in server/index.js
+  ✓ [29] Ticket Tapper specials data file still exists
+  ✓ [30] Settlement status remains settlement_pending_preview without Stripe
+  ✓ [31] No forbidden fake payment language in moneyBridgePaymentEngine.js
+  ✓ [32] SmokeCraftAssetScreen.jsx untouched
+  ✓ [33] SmokeCraftHotspotLayer.jsx untouched
+  ✓ [34] SmokeCraftAssetRoute.jsx untouched
+  ✓ [35] session.js / VISIT_STRUCTURE untouched
+  ✓ [36] Passport/Connections/8-visit files untouched
+  ✓ [37] STRIPE_CONNECT_MONEY_BRIDGE_FOUNDATION.md exists
+  ✓ [38] Doc includes required phrase about preview mode
+
+=== Results: 38/38 passing ===
+
+All 38 checks passed. Stripe Connect Money Bridge foundation verified.

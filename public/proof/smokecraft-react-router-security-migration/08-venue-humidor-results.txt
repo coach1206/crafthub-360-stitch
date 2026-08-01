@@ -1,0 +1,246 @@
+
+── SmokeCraft Venue Humidor admin inventory validator (Venue Humidor 1B-2B-1)
+
+  OK    Admin dashboard fetches real data via listAdminProducts() — no mock/fake/dummy product array
+  OK    Product form loads a real product via getAdminProduct() when editing — no mock data
+  OK    Event history fetches real events via listInventoryEvents() — no mock data
+  OK    handleInventoryMutation() never reads a client-submitted final/resulting quantity — only a requested delta, corrected total (for count_correction), or fixed sign
+  OK    handleInventoryMutation() computes count_correction delta from the real current server row, not a client-submitted delta
+  OK    The admin product form never computes a final inventory quantity in the browser — only submits a requested quantity/correction to the server
+  OK    handleInventoryMutation() calls the canonical inventoryService.applyInventoryEvent() — no parallel mutation path
+  OK    productService.js never writes physical_quantity directly — quantity changes are owned exclusively by inventoryService.applyInventoryEvent()
+  OK    handleInventoryMutation() rejects a missing idempotency key before calling the inventory service
+  OK    The admin product form generates a real, unique idempotency key per mutation submission
+  OK    applyInventoryEvent() (the shared, single writer) inserts exactly one venue_cigar_inventory_events row per call, under a row lock
+  OK    Sealed/opened box counters are updated alongside, never instead of, the authoritative inventory event
+  OK    Every admin route requires requireAuth and a venue-role check (requireVenueRead/requireVenueWrite) scoped to :venueId
+  OK    Admin product/classification/mutation routes revalidate the resource itself belongs to :venueId (productVenueMatch) — never trust venueId alone
+  OK    RBAC tiers are defined and checked server-side against the real venue_memberships.membership_type — never only hidden buttons client-side
+  OK    The mentor (tobacconist) tier is restricted to the staffNotes field server-side in the controller, not only hidden in the form
+  OK    A mentor-tier caller cannot reach the inventory-mutation route at all (requireVenueWrite excludes mentor)
+  OK    The admin controller exposes no update/delete handler for inventory events — history is read-only
+  OK    No admin route exists to mutate or delete an existing inventory event by id
+  OK    The event-history screen renders events read-only — no edit/delete control on an event row
+  OK    updateProductClassification() is the single writer of is_archived/is_customer_visible/is_featured/is_staff_pick/is_limited_release — the same columns the customer catalog already reads
+  OK    The customer catalog service (browseCatalog) excludes archived/hidden products from the exact same columns the admin classification controls write — no separate visibility mechanism
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor authority validator (Venue Humidor 1A)
+
+  OK    requireVenueStaff() validates a real, active venue_memberships row for the EXACT :venueId in the route path — never trusts a client-supplied venueId alone
+  OK    Every resource-mutating route additionally verifies the RESOURCE's own venue_id matches :venueId (requireResourceVenueMatch) — defense in depth beyond membership alone
+  OK    Every product/inventory/hold/reservation/order query is scoped by a real venue_id or product_id/order_id parameter — no query aggregates across venues
+  OK    SKU uniqueness is per-venue (UNIQUE(venue_id, sku)), never global — the same SKU is legitimately reusable across different venues
+  OK    applyInventoryEvent() requires a real idempotency key and rejects its absence
+  OK    applyInventoryEvent() checks idempotency BEFORE the lock (fast path) and AGAIN after acquiring it (authoritative recheck) — closes the two-tab race a pre-lock-only check would still allow
+  OK    venue_cigar_inventory_events has a real idempotency_key UNIQUE partial index
+  OK    venue_cigar_inventory_holds and venue_cigar_reservations both have real idempotency_key UNIQUE partial indexes
+  OK    createHold()/createReservation() gracefully catch a UNIQUE_VIOLATION race on the insert itself, returning the real winning row rather than crashing or duplicating
+  OK    completeOrder()/cancelOrder() require a real idempotency key and are structurally idempotent (already-completed/cancelled orders short-circuit to the original result)
+  OK    applyInventoryEvent() rejects any mutation that would drive physical_quantity negative BEFORE writing anything
+  OK    venue_cigar_products has a real CHECK(physical_quantity >= 0) constraint — database-enforced, not just application-level
+  OK    createHold()/createReservation() revalidate real-time computed availability (not a stale cached value) under the SAME product-row lock before committing
+  OK    applyInventoryEvent() writes exactly one venue_cigar_inventory_events row per call, inside the same transaction as the product update
+  OK    Hold/reservation lifecycle transitions (created/released/expired/fulfilled) each write a real inventory event too — the ledger covers non-quantity-affecting state changes, not just quantity changes
+  OK    completeOrder()/cancelOrder() route every physical quantity change exclusively through applyInventoryEvent() — no direct UPDATE venue_cigar_products bypass in the order service
+  OK    handleApplyInventoryEvent() reads eventType/quantityDelta from the authenticated staff caller's request but the RESULT (final quantities) is always the server-computed value returned by the service, never echoed from the client
+  OK    getProductAvailability()/computeAvailableQuantity() compute available quantity live from physical/unavailable/held/reserved columns — never a client-submitted or stale cached availability value
+  OK    The Venue Humidor seed script hard-guards against running in production (matches the established seedPrototypeUsers.js pattern)
+  OK    The seed is idempotent (ON CONFLICT ... DO NOTHING throughout) — safe to re-run, never duplicates venues/products/memberships
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor checkout validator (Venue Humidor 1B-2A)
+
+  OK    getCheckoutQuote() computes subtotal from the real stored product.price_cents × hold.quantity — never a client-submitted price
+  OK    createOrderFromHold() recomputes subtotal/tax server-side from the locked product row — never reads req.body price/subtotal/tax/total
+  OK    Tax is computed via the real, existing taxCalculationEngine.js — never a duplicated/invented tax calculation
+  OK    VenueHumidorCheckout.jsx renders only the server-returned quote fields — no local subtotal/tax/total computation
+  OK    A freshly created order is always pending_payment with a real pending payment_status — never marked paid at creation
+  OK    Orders are inserted with status literally 'pending_payment' — never 'completed' at creation time
+  OK    VenueHumidorOrderConfirmation.jsx never renders a fabricated "purchase successful" message — status copy is keyed off the real server order.status
+  OK    The checkout screen displays the real, honest "Payment processing not connected" note sourced from the server quote, never a fabricated payment success
+  OK    createOrderFromHold() never calls applyInventoryEvent (no inventory deduction at order-creation time) — only converts the hold
+  OK    applyInventoryEvent(item.product_id, 'sale_completed', ...) is called exactly once in the file, only inside completeOrder() — the sole point where physical inventory is deducted for a sale
+  OK    A converted hold (committed to a pending order) still counts toward held/reserved quantity — closes the double-sell gap where an unpaid order could be double-sold
+  OK    completeOrder() requires a real idempotency key and rejects its absence
+  OK    An already-completed order short-circuits to the original result — completeOrder() is idempotent by construction, never re-deducts
+  OK    Each order item's inventory event uses a real, deterministic idempotency key derived from the caller's key — never re-appliable
+  OK    createOrderFromHold() validates the real active venue before doing anything else
+  OK    createOrderFromHold() validates the hold's real venue_id matches the requested venueId (never trusts a client-supplied venue)
+  OK    createOrderFromHold() validates real hold ownership (held_by === actorRef) — never trusts a client-asserted identity
+  OK    completeOrder() is the ONLY completion path for every venue_cigar_orders row (staff route repointed to it) — no second, divergent completion function remains reachable
+  OK    The idempotency-key check happens BEFORE the per-item inventory deduction loop, so a duplicate completion request never reaches applyInventoryEvent twice for the same order
+  OK    VenueHumidorOrderConfirmation.jsx renders only the real server-returned order object — no mock/fake/dummy order data
+  OK    goldenBoxApiClient-style adapter (venueHumidorCustomerApiClient.js) is the only path the checkout/confirmation screens use — no direct fetch() calls
+  OK    getCheckoutQuote() and createOrderFromHold() both reject an expired hold with a real expiration check against the actual stored expires_at
+  OK    The checkout screen renders a real, live countdown computed from the server-returned holdExpiresAt — never a static/fabricated timer
+  OK    An expired hold transitions the checkout screen to a real, honest expired state, not a silent failure
+  OK    venueHumidorEventService.js defines all 7 mandated canonical event types
+  OK    checkoutService.js emits real canonical events at each real lifecycle transition (quoted, created, payment_pending, hold_converted, order_completed, order_canceled, hold_released)
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor customer validator (Venue Humidor 1B-1)
+
+  OK    VenueHumidorBrowser.jsx renders only the server response's products array — no hardcoded/static cigar list
+  OK    VenueHumidorCigarDetail.jsx renders only the server-returned product — no hardcoded fallback cigar data
+  OK    No mock/fake/dummy inventory appears as live data in either customer screen
+  OK    browseCatalog() and getCigarDetail() are both scoped by a real venue_id parameter — never cross-venue
+  OK    validateActiveVenue() re-validates the venue server-side (real venues table, status=active) — never trusts the client's claim alone
+  OK    Every controller handler calls validateActiveVenue() before returning any catalog/detail data
+  OK    getCigarDetail() excludes any product not genuinely belonging to the requested venue (a wrong-venue productId returns null, never leaked data)
+  OK    Every documented filter (brand/country/wrapper/vitola/strength/body/flavor/price/smokeTime/experienceLevel/featured/staffPick/limitedRelease) maps to a real SQL condition — never a client-side-only cosmetic filter
+  OK    Sold-out products are excluded by default at the SQL layer (status != sold_out) unless the caller explicitly opts in — never a client-side-only toggle
+  OK    Archived and non-customer-visible products are excluded unconditionally at the SQL layer, not just hidden in the UI
+  OK    All 6 documented sort options map to real SQL ORDER BY expressions
+  OK    handleGetCigarDetail() re-validates the venue AND the product's real venue ownership before ever responding — never a client-supplied venue trusted for detail data
+  OK    Available quantity is computed via the real inventoryService.getProductAvailability() (physical/unavailable/held/reserved), never a client-submitted or component-local value
+  OK    VenueHumidorBrowser.jsx/VenueHumidorCigarDetail.jsx render only product.availability.availableQuantity from the server response — no local quantity computation
+  OK    handleUnsupportedAction() returns a real 501 with an honest error code — never a fabricated 200 success
+  OK    Purchase Box is honestly rejected (never a fake hold) when the product has no configured box price/quantity
+  OK    VenueHumidorCigarDetail.jsx never renders a fabricated "purchase successful" or "order complete" message for any action in this package
+  OK    Add One Stick calls the real createStickHold API, never a local-only state update
+  OK    Purchase Box calls the real createBoxHold API
+  OK    Reserve calls the real createReservation API
+  OK    Save to Favorites calls the real addFavorite/removeFavorite API and reloads real persisted state on mount (not just local optimistic state)
+  OK    goldenBoxApiClient-style adapter (venueHumidorCustomerApiClient.js) is the only path these screens use — no direct fetch() calls in either screen
+  OK    Every customer hold/reservation action generates a real idempotency key client-side before calling the API
+  OK    createHold()/createReservation() in the API client accept and forward a real idempotency key
+  OK    Both required customer routes are registered (browse and detail)
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor fulfillment-queue validator (Venue Humidor 1B-2B-2)
+
+  OK    fulfillmentService.js contains no direct order-status-to-completed/cancelled UPDATE — only checkoutService delegation
+  OK    completeOrderFromQueue() calls checkoutService.completeOrder() — never reimplements completion
+  OK    cancelOrderFromQueue() calls checkoutService.cancelOrder() — never reimplements cancellation
+  OK    fulfillmentService.js never calls applyInventoryEvent() directly — all inventory effects flow through checkoutService/inventoryService
+  OK    fulfillmentService.js never calls releaseHold() directly — hold release flows only through checkoutService.cancelOrder()
+  OK    fulfillmentController.js exposes no direct order-completion/cancellation route bypassing fulfillmentService's delegation
+  OK    Fulfillment routes reuse the existing requireVenueRole()/requireVenueRead/requireVenueWrite from 1B-2B-1 — no parallel RBAC system
+  OK    Only FULL_ACCESS_TYPES may reassign an order (requireVenueRole(FULL_ACCESS_TYPES))
+  OK    Every mutating fulfillment route requires requireAuth and a real resource-venue match (fulfillmentOrderVenueMatch)
+  OK    claimOrder() requires idempotency via checkIdempotency() before any write
+  OK    checkIdempotency() throws when no idempotency key is supplied — never a silent optional
+  OK    Every transition/claim/assign/pick function checks idempotency again INSIDE the row lock (in-lock authoritative recheck)
+  OK    claimOrder() performs a conditional UPDATE guarded by assignment_version — no lost update on a claim race
+  OK    assignOrder() rejects a stale expectedVersion before writing (a stale page cannot overwrite newer server state)
+  OK    A claim conflict returns a real, honest 409 — never a silent overwrite
+  OK    Status transitions are validated against an explicit ALLOWED_TRANSITIONS map — no arbitrary status jump is possible
+  OK    Ready requires every order item to be picked first — a real server-side precondition, not a UI-only restriction
+  OK    completeOrderFromQueue() only proceeds from ready (or already-completed for idempotency) — never lets an unprepared order complete
+  OK    fulfillment_status is stamped inside the SAME authoritative UPDATE as status/payment_status in checkoutService.completeOrder() — never a second, drifting write
+  OK    fulfillment_status is stamped inside the SAME authoritative UPDATE as status in checkoutService.cancelOrder() — never a second, drifting write
+  OK    loadOrderForVenue() never leaks cross-venue order existence — a mismatched venue_id returns the same order_not_found as a missing order
+  OK    Every admin/orders route is scoped by :venueId and (for order-specific routes) resource-level fulfillmentOrderVenueMatch
+  OK    venue_cigar_fulfillment_events has no UPDATE/DELETE path anywhere in the controller or service
+  OK    The fulfillment-history screen renders events read-only — no edit/delete control
+  OK    Every fulfillment mutation writes a real event via recordFulfillmentEvent() before commit
+  OK    The order detail screen disables actions honestly based on real server-derived eligibility (canClaim/canConfirm/canPrepare/canReady/canComplete/canCancel) — never a fake-enabled control
+  OK    The order detail screen renders real, distinct honest states for not-found/unauthorized/session-expired/error — never a single generic failure message
+  OK    The queue screen never shows a success toast before a real server response — filters/search always await the real API result
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor pickup/handoff validator (Venue Humidor 1B-2B-3)
+
+  OK    completeOrderFromQueue() still calls checkoutService.completeOrder() as the sole completion path — 1B-2B-3 adds only preconditions, never a second completion implementation
+  OK    expireOrder() releases inventory ONLY through checkoutService.cancelOrder() — never a direct hold/reservation release or inventory event
+  OK    expireOrder() never calls applyInventoryEvent() or releaseHold() directly
+  OK    No pickup-specific or venue-service-specific completion service file exists (fulfillmentService.js remains the sole pre-completion orchestrator)
+  OK    completeOrderFromQueue() requires a real handoff_at before completing a ready order
+  OK    completeOrderFromQueue() requires real code verification for counter_pickup specifically, before completing
+  OK    confirmHandoff() requires real verification for counter_pickup before recording a handoff — never fabricated
+  OK    Pickup codes are hashed with bcrypt — never stored or compared in plaintext
+  OK    The pickup-code column stores only a hash (pickup_code_hash), never a plaintext code column
+  OK    Verification is rate-limited against repeated guessing (MAX_VERIFICATION_ATTEMPTS enforced server-side)
+  OK    A pickup code expires and expired codes are honestly rejected
+  OK    A pickup code becomes unusable after completion (invalidated, never reusable)
+  OK    The generated plaintext code is never logged into fulfillment-event metadata
+  OK    A blocked order cannot be completed (rejected before reaching checkoutService.completeOrder())
+  OK    expireOrder() stamps the real reserved 'expired' fulfillment_status as a follow-up write to the column fulfillmentService exclusively owns — never touching status/payment_status
+  OK    Repeated verification failures past the limit auto-block the order server-side (not just UI-hidden)
+  OK    The Passport acquisition insert happens ONLY inside checkoutService.completeOrder(), after the authoritative status UPDATE — never from a pickup/handoff-specific path
+  OK    The Passport acquisition insert is guarded by a real unique constraint (ON CONFLICT DO NOTHING on order_item_id) — cannot double-insert on retry
+  OK    venue_cigar_passport_acquisitions.order_item_id has a real UNIQUE constraint in the schema, not just application-level intent
+  OK    Unblock is restricted to FULL_ACCESS_TYPES (owner/admin/manager) — staff may block but not resolve
+  OK    Expiration is restricted to FULL_ACCESS_TYPES
+  OK    Pickup-window extension is restricted to FULL_ACCESS_TYPES
+  OK    Verification/handoff/no-show routes require at least write access (mentor, read-only tier, is excluded)
+  OK    checkoutService.getOrder() (the customer-facing read) redacts staff-internal fields — pickup-code hash/attempts, staff identity, handoff/block notes never leak to the customer
+  OK    The customer pickup screen never renders staff notes, blocked_reason, or assigned-staff identity
+  OK    venue_cigar_fulfillment_events still has no UPDATE/DELETE path anywhere in the controller or service after this pass's additions
+  OK    The migration widens the event_type vocabulary (verification/handoff/no-show/expiration/passport) on the SAME table — no second ledger created
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor post-purchase validator (Venue Humidor 1B-2B-4)
+
+  OK    venue_cigar_passport_acquisitions is written ONLY inside checkoutService.completeOrder() — this pass adds no second writer
+  OK    Migration 112 creates no second acquisition/order-history/receipt table — only the narrow acquisition-notes companion table
+  OK    venue_cigar_acquisition_notes has a UNIQUE constraint on acquisition_id — never more than one note row per acquisition
+  OK    customerOrderHistoryService never joins current product price into order/receipt totals — receipt fields are read directly from stored order columns
+  OK    getReceipt() derives totals only from the canonical order object (subtotal/tax/service/discount/tip/total), never recomputed from item price × current quantity
+  OK    Order item receipt lines use the stored historical unit_price_cents/line_total_cents columns, not live catalog pricing
+  OK    A receipt is never returned for a never-completed order — restricted to completed/cancelled/refunded statuses
+  OK    customerOrderHistoryService redacts the same staff-internal fields as checkoutService.getOrder(), plus idempotency_key
+  OK    Every order-history read path (listOrders, getOrderDetail) applies redact() before returning to the customer
+  OK    The order-detail screen never renders staff notes, blocked_reason, or assigned-staff identity
+  OK    getOrderDetail() throws order_not_owned when the row does not belong to the requesting customer
+  OK    getAcquisitionDetail() throws acquisition_not_owned when the row does not belong to the requesting customer
+  OK    saveAcquisitionNote() re-verifies acquisition ownership server-side before writing — never trusts the client
+  OK    listOrders()/listAcquisitions() filter by customer_reference at the SQL layer, not just in application code after the fact
+  OK    Reorder eligibility is computed server-side from real archived/visible/status/availability checks, never a frontend-only flag
+  OK    The order-detail screen's reorder action navigates to the existing canonical catalog detail route — no new reorder-specific checkout path
+  OK    No new reorder-specific cart/checkout/payment service file was introduced this pass
+  OK    saveAcquisitionNote() requires an idempotency key and rejects when absent
+  OK    saveAcquisitionNote() checks for a duplicate before and re-checks inside the row lock (pre-lock fast path + in-lock authoritative recheck)
+  OK    The note upsert locks the existing row with FOR UPDATE before deciding INSERT vs UPDATE
+  OK    Every post-purchase controller handler requires a resolved guest/customer identity before touching data
+  OK    The 6 new cross-venue customer routes are registered on the existing customer route file, reusing its identity middleware chain — no new parallel router
+  OK    No fake PDF download is offered — an honest disabled note is shown instead
+  OK    The receipt screen honestly flags a non-completed sale rather than presenting it as completed
+
+=== RESULT: PASS (0 checks failed) ===
+
+
+── SmokeCraft Venue Humidor recommendation/assisted-selling validator (Venue Humidor 1B-2B-5)
+
+  OK    recommendationService imports live availability from the canonical inventoryService — never a cached/duplicate availability field
+  OK    recommendationService never computes availability from a static/cached column — always calls getProductAvailability()
+  OK    Migration 113 creates no second product/order/cart/checkout/Passport table
+  OK    Migration 113 adds no second inventory-holds/reservations table
+  OK    No duplicate customer-preference table exists beyond the one new table this pass adds
+  OK    Recommendation analytics events are recorded via the shared recordEvent() (smokecraft_progression_events) — no second generic event-log table created
+  OK    recommendationService never issues a raw INSERT into a new generic analytics table — only the two narrow, purpose-specific tables this pass adds
+  OK    No UPDATE/DELETE path exists against smokecraft_progression_events from this pass (append-only)
+  OK    isPurchaseEligible() requires customer visibility, non-archived, non-discontinued/sold-out status, and live available quantity > 0
+  OK    getRecommendations() only ranks the isPurchaseEligible() subset for purchase — out-of-stock items are returned in a separate, clearly labeled list
+  OK    Archived products are excluded at the SQL layer for every product list this service reads
+  OK    recommendationService imports HARMONY/STRENGTH_SCORE/TYPE_STRENGTH/PAIRING_CATEGORIES unchanged from the existing pairing engine data module — no second pairing dataset invented
+  OK    An unrecognized beverage category honestly reports unavailable data rather than fabricating a pairing
+  OK    The pairing engine data module itself documents no real beverage-product data exists, and this pass does not contradict that by inventing one
+  OK    Recommendation results always report the product's current price_cents — never a historical order price
+  OK    Add-to-cart/reorder is never implemented as a direct purchase shortcut in this service — no order/payment mutation exists here
+  OK    Assisted-selling recommendations route uses the read tier (owner/admin/manager/staff/mentor)
+  OK    Assisted-selling alternatives route uses the read tier
+  OK    Assisted-selling outcome route requires the write tier (mentor excluded)
+  OK    Assisted-selling outcome controller never writes inventory, pricing, or order/payment data — only records a narrow outcome row
+  OK    Every customer recommendation controller handler requires a resolved guest/customer identity before touching data
+  OK    Preferences are looked up strictly by the resolved customer_reference — never a client-supplied customer ID
+  OK    savePreferences() upserts by customer_reference (unique constraint) — one row per customer, no duplicate/cross-customer row possible
+  OK    recordAssistedSellingOutcome() requires a real idempotency key and rejects when absent
+  OK    recordAssistedSellingOutcome() uses ON CONFLICT (idempotency_key) DO NOTHING plus a dedupe re-read — a duplicate submission is a no-op, not a second row
+  OK    The assisted_selling_outcomes table enforces a real UNIQUE constraint on idempotency_key at the schema level, not just in application code
+
+=== RESULT: PASS (0 checks failed) ===
+

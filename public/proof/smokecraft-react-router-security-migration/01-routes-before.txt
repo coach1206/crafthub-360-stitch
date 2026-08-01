@@ -1,0 +1,291 @@
+316:            <Route path="/" element={<Boot />} />
+317:            <Route path="boot" element={<Boot />} />
+318:            <Route path="boot/console" element={<BootConsole />} />
+320:            <Route path="system/build-info" element={<BuildInfo />} />
+323:            <Route path="staff-login"   element={<StaffLogin />} />
+324:            <Route path="staff/pin"     element={<StaffPinScreen />} />
+325:            <Route path="admin-login"   element={<AdminLogin />} />
+326:            <Route path="founder-login" element={<FounderLogin />} />
+327:            <Route path="mentor-login"  element={<MentorLogin />} />
+328:            <Route path="dev-login"     element={<DevLogin />} />
+331:            <Route element={<Layout />}>
+332:              <Route path="home"     element={<NoveeHome />} />
+333:              <Route path="novee-home" element={
+344:              <Route path="crafthub" element={<CraftHub />} />
+345:              <Route path="system-explained" element={<PublicCraftHubLanding />} />
+348:              <Route path="smokecraft" element={<SmokeCraftJourneyProvider><SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider></SmokeCraftJourneyProvider>}>
+354:                <Route index element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false}><SmokeCraft /></SmokeCraftSessionGuard>} />
+357:                <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraftScreenRenderer screenId="session-1" /></SmokeCraftSessionGuard>} />
+360:                <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />
+366:                <Route path="venue-select"     element={<SmokeCraftSessionGuard requires="identity"><VenueSelect /></SmokeCraftSessionGuard>} />
+367:                <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
+368:                <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
+370:                <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
+371:                <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
+372:                <Route path="mentors"          element={<Navigate to="/smokecraft/mentor-selection" replace />} />
+373:                <Route path="humidor"          element={<Navigate to="/smokecraft/humidor-match" replace />} />
+374:                <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
+375:                <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
+378:                <Route path="golden-box">
+379:                  <Route index             element={<SmokeCraftSessionGuard requires="entry"><GoldenBox /></SmokeCraftSessionGuard>} />
+380:                  <Route path="status"     element={<GoldenBoxStatus />} />
+385:                  <Route path="competitions" element={<GoldenBoxHub />} />
+386:                  <Route path="competitions/:competitionId" element={<GoldenBoxCompetitionDetail />} />
+387:                  <Route path="entries/:entryId/blend" element={<GoldenBoxEntryWorkspace />} />
+388:                  <Route path="results/:competitionId" element={<GoldenBoxResultsExperience />} />
+389:                  <Route path="judge" element={<GoldenBoxJudgeDashboard />} />
+390:                  <Route path="judge/entries/:entryId" element={<GoldenBoxJudgeEntryReview />} />
+391:                  <Route path="mentor/entries/:entryId" element={<GoldenBoxMentorReview />} />
+396:                  <Route path="packaging-studio" element={<PackagingStudioDashboard />} />
+397:                  <Route path="packaging-studio/new" element={<PackagingStudioDashboard />} />
+398:                  <Route path="packaging-studio/:designId" element={<PackagingStudioEditor />} />
+399:                  <Route path="packaging-studio/:designId/preview" element={<PackagingStudioEditor />} />
+400:                  <Route path="packaging-studio/:designId/versions" element={<PackagingStudioVersions />} />
+401:                  <Route path="packaging-studio/:designId/share" element={<PackagingStudioShare />} />
+402:                  <Route path="packaging-review/:shareToken" element={<PackagingReview />} />
+405:                <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
+411:                <Route path="venue-humidor"                element={<VenueHumidorBrowser />} />
+412:                <Route path="venue-humidor/checkout"       element={<VenueHumidorCheckout />} />
+413:                <Route path="venue-humidor/order/:orderId" element={<VenueHumidorOrderConfirmation />} />
+414:                <Route path="venue-humidor/:cigarId"       element={<VenueHumidorCigarDetail />} />
+418:                <Route path="admin/humidor"                    element={<VenueHumidorAdminDashboard />} />
+419:                <Route path="admin/humidor/new"                element={<VenueHumidorAdminProductForm />} />
+420:                <Route path="admin/humidor/inventory-events"   element={<VenueHumidorAdminInventoryEvents />} />
+421:                <Route path="admin/humidor/media"              element={<VenueHumidorAdminMedia />} />
+422:                <Route path="admin/humidor/:cigarId/edit"      element={<VenueHumidorAdminProductForm />} />
+427:                <Route path="admin/humidor/orders/history"     element={<VenueHumidorFulfillmentHistory />} />
+431:                <Route path="admin/humidor/payments"           element={<VenueHumidorAdminPayments />} />
+432:                <Route path="admin/humidor/orders/:orderId/handoff" element={<VenueHumidorHandoff />} />
+433:                <Route path="admin/humidor/orders/:orderId"    element={<VenueHumidorOrderDetail />} />
+434:                <Route path="admin/humidor/orders"             element={<VenueHumidorOrderQueue />} />
+437:                <Route path="orders/:orderId/pickup"           element={<VenueHumidorPickup />} />
+441:                <Route path="orders/:orderId/receipt"          element={<VenueHumidorReceipt />} />
+442:                <Route path="orders/:orderId"                  element={<VenueHumidorMyOrderDetail />} />
+443:                <Route path="orders"                           element={<VenueHumidorMyOrders />} />
+444:                <Route path="passport/acquisitions/:acquisitionId" element={<VenueHumidorAcquisitionDetail />} />
+445:                <Route path="passport/acquisitions"            element={<VenueHumidorMyAcquisitions />} />
+452:                <Route path="humidor/recommendations"          element={<VenueHumidorRecommendations />} />
+453:                <Route path="humidor/pairing"                  element={<VenueHumidorRecommendations pairingMode />} />
+454:                <Route path="admin/humidor/assisted-selling"   element={<VenueHumidorAssistedSelling />} />
+460:                <Route path="art"            element={<Art />} />
+461:                <Route path="mentor-selection" element={<SmokeCraftSessionGuard requires="entry"><Mentor /></SmokeCraftSessionGuard>} />
+462:                <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
+465:                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={2}><SmokeCraftScreenRenderer screenId="session-2" /></SmokeCraftSessionGuard>} />
+468:                <Route path="meet-your-cigar"  element={<SmokeCraftSessionGuard sessionNumber={3}><SmokeCraftScreenRenderer screenId="session-3" /></SmokeCraftSessionGuard>} />
+471:                <Route path="terroir"        element={<SmokeCraftSessionGuard sessionNumber={4}><SmokeCraftScreenRenderer screenId="session-4" /></SmokeCraftSessionGuard>} />
+474:                <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><SmokeCraftScreenRenderer screenId="session-5" /></SmokeCraftSessionGuard>} />
+476:                <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
+477:                <Route path="cigar-gauge-guide" element={<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>} />
+480:                <Route path="wrapper-strength" element={<SmokeCraftSessionGuard requires="format"><WrapperStrength /></SmokeCraftSessionGuard>} />
+485:                <Route path="seed-soil"        element={<SmokeCraftSessionGuard requires="mentor"><SeedSoil /></SmokeCraftSessionGuard>} />
+488:                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={6}><SmokeCraftScreenRenderer screenId="session-6" /></SmokeCraftSessionGuard>} />
+490:                <Route path="lighting-tutorial" element={<SmokeCraftSessionGuard sessionNumber={7}><SmokeCraftScreenRenderer screenId="session-7" /></SmokeCraftSessionGuard>} />
+493:                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={8}><SmokeCraftScreenRenderer screenId="session-8" /></SmokeCraftSessionGuard>} />
+496:                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={10}><SmokeCraftScreenRenderer screenId="session-10" /></SmokeCraftSessionGuard>} />
+499:                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={11}><SmokeCraftScreenRenderer screenId="session-11" /></SmokeCraftSessionGuard>} />
+504:                <Route path="request-purchase" element={<SmokeCraftSessionGuard requires="humidor-match"><RequestPurchase /></SmokeCraftSessionGuard>} />
+507:                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={12}><SmokeCraftScreenRenderer screenId="session-12" /></SmokeCraftSessionGuard>} />
+510:                <Route path="mentor-commentary" element={<SmokeCraftSessionGuard sessionNumber={14}><SmokeCraftScreenRenderer screenId="session-14" /></SmokeCraftSessionGuard>} />
+513:                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><SmokeCraftScreenRenderer screenId="session-15" /></SmokeCraftSessionGuard>} />
+518:                <Route path="knowledge-check-demo" element={<SmokeCraftSessionGuard requires="entry"><KnowledgeCheckDemo /></SmokeCraftSessionGuard>} />
+525:                <Route path="mini-tasting-module" element={<SmokeCraftSessionGuard requires="entry"><MiniTasting /></SmokeCraftSessionGuard>} />
+528:                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={16}><SmokeCraftScreenRenderer screenId="session-16" /></SmokeCraftSessionGuard>} />
+531:                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={19}><SmokeCraftScreenRenderer screenId="session-19" /></SmokeCraftSessionGuard>} />
+534:                <Route path="smokecraft-challenge"  element={<SmokeCraftSessionGuard requires="scorecard"><SmokeCraftChallenge /></SmokeCraftSessionGuard>} />
+536:                <Route path="challenge"        element={<Navigate to="/smokecraft/smokecraft-challenge" replace />} />
+539:                <Route path="second-humidor-match"  element={<SmokeCraftSessionGuard requires="scorecard"><SecondHumidorMatch /></SmokeCraftSessionGuard>} />
+542:                <Route path="mini-tasting"          element={<SmokeCraftSessionGuard requires="scorecard"><MiniTastingRound /></SmokeCraftSessionGuard>} />
+543:                <Route path="mini-tasting-round"    element={<Navigate to="/smokecraft/mini-tasting" replace />} />
+547:                <Route path="ai-summary"       element={<SmokeCraftSessionGuard sessionNumber={21}><SmokeCraftScreenRenderer screenId="session-21" /></SmokeCraftSessionGuard>} />
+550:                <Route path="pairing-recommendations" element={<SmokeCraftSessionGuard sessionNumber={22}><SmokeCraftScreenRenderer screenId="session-22" /></SmokeCraftSessionGuard>} />
+553:                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={23}><SmokeCraftScreenRenderer screenId="session-23" /></SmokeCraftSessionGuard>} />
+556:                <Route path="connections"      element={<SmokeCraftSessionGuard requires="passport-stamp"><Connections /></SmokeCraftSessionGuard>} />
+559:                <Route path="management-sync"  element={<SmokeCraftSessionGuard requires="passport-stamp"><ManagementSync /></SmokeCraftSessionGuard>} />
+564:                <Route path="management-sync/analytics" element={<ManagementSyncAnalytics />} />
+567:                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={24}><SmokeCraftScreenRenderer screenId="session-24" /></SmokeCraftSessionGuard>} />
+572:                <Route path="rewards"          element={<SmokeCraftSessionGuard sessionNumber={25}><SmokeCraftScreenRenderer screenId="session-25" /></SmokeCraftSessionGuard>} />
+577:                <Route path="skill-tree"     element={<SmokeCraftSessionGuard requires="entry"><SkillTree /></SmokeCraftSessionGuard>} />
+578:                <Route path="collections"    element={<SmokeCraftSessionGuard requires="entry"><CollectionsCenter /></SmokeCraftSessionGuard>} />
+579:                <Route path="challenge-hub"  element={<SmokeCraftSessionGuard requires="entry"><ChallengeHub /></SmokeCraftSessionGuard>} />
+580:                <Route path="challenges/blend-fault-identification" element={<SmokeCraftSessionGuard requires="entry"><BlendFaultChallenge /></SmokeCraftSessionGuard>} />
+581:                <Route path="filler-arrangement" element={<SmokeCraftSessionGuard requires="entry"><FillerArrangement /></SmokeCraftSessionGuard>} />
+588:                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={27}><SmokeCraftScreenRenderer screenId="session-27" /></SmokeCraftSessionGuard>} />
+591:                <Route path="visit-complete"   element={<VisitComplete />} />
+594:                <Route path="origins"        element={<Origins />} />
+595:                <Route path="curation"       element={<Curation />} />
+596:                <Route path="leaves"         element={<Leaves />} />
+597:                <Route path="leaf-challenge"             element={<LeafChallenge />} />
+598:                <Route path="leaf-challenge-calculating" element={<LeafChallengeCalculating />} />
+599:                <Route path="leaf-challenge-result"      element={<LeafChallengeResult />} />
+600:                <Route path="cultivation"    element={<Cultivation />} />
+601:                <Route path="blend"          element={<Blend />} />
+602:                <Route path="flavor-dna"     element={<FlavorDNA />} />
+603:                <Route path="pairing"        element={<Pairing />} />
+604:                <Route path="available"      element={<Available />} />
+605:                <Route path="assistant"      element={<Assistant />} />
+606:                <Route path="pairing-mastery" element={<PairingMastery />} />
+607:                <Route path="vitola"         element={<Vitola />} />
+613:                <Route path="identity"       element={<SmokeCraftSessionGuard requires="enroll"><Identity /></SmokeCraftSessionGuard>} />
+616:                <Route path="resume"         element={<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>} />
+618:                <Route path="leaderboard"    element={<Leaderboard />} />
+623:                <Route path="rewards-center"   element={<RewardsCenter />} />
+624:                <Route path="account"          element={<Account />} />
+625:                <Route path="event-challenge"  element={<EventChallenge />} />
+626:                <Route path="how-it-works"     element={<HowItWorks />} />
+627:                <Route path="demo-reset"       element={<SmokeCraftDemoReset />} />
+628:                <Route path="session/start"    element={<Navigate to="/smokecraft/enroll" replace />} />
+629:                <Route path="guest-pass"       element={<GuestPass />} />
+630:                <Route path="demo"             element={<Demo />} />
+631:                <Route path="scan"             element={<Scan />} />
+640:                <Route path="passport"         element={<SmokeCraftPassport />} />
+646:                <Route path="crafthub"         element={<SmokeCraftCraftHub />} />
+648:                <Route path="menu"             element={<SmokeCraftMenu />} />
+649:                <Route path="venue-commerce"                    element={<SmokeCraftVenueCommerce />} />
+650:                <Route path="order"                           element={<SmokeCraftVenueCommerce />} />
+651:                <Route path="ticket-tapper/staff-specials"    element={<SmokeCraftVenueCommerce />} />
+652:                <Route path="cart"             element={<SmokeCraftCart />} />
+653:                <Route path="checkout"         element={<SmokeCraftCheckout />} />
+654:                <Route path="payment-success"  element={<SmokeCraftPaymentSuccess />} />
+655:                <Route path="order-status"     element={<SmokeCraftOrderStatus />} />
+658:              <Route path="signin" element={<SignIn />} />
+661:              <Route path="passport">
+662:                <Route index                  element={<PassportHome />} />
+663:                <Route path="profile"         element={<PassportProfile />} />
+664:                <Route path="stamps"          element={<PassportStamps />} />
+665:                <Route path="directory"       element={<PassportDirectory />} />
+666:                <Route path="connections"     element={<PassportConnections />} />
+667:                <Route path="events"          element={<PassportEvents />} />
+668:                <Route path="benefits"        element={<PassportBenefits />} />
+669:                <Route path="scan"            element={<PassportScan />} />
+670:                <Route path="how-it-works"    element={<PassportHowItWorks />} />
+671:                <Route path="ceremony"        element={<Navigate to="/smokecraft/passport-stamp" replace />} />
+672:                <Route path="leaderboard"     element={<Navigate to="/smokecraft/leaderboard" replace />} />
+675:              <Route path="passport-networking" element={<PassportConnection />} />
+676:              <Route path="grand-lounge-ranking" element={<Leaderboard />} />
+677:              <Route path="dayone360-travel"    element={<DayOneTravel />} />
+678:              <Route path="dayone360"           element={<DayOneTravel />} />
+679:              <Route path="ticket-tapper/management" element={<TicketTapperManagement />} />
+680:              <Route path="leaderboard"         element={<Leaderboard />} />
+681:              <Route path="pourcraft"  element={<PourCraft />} />
+682:              <Route path="beercraft"  element={<BeerCraft />} />
+683:              <Route path="winecraft"  element={<WineCraft />} />
+684:              <Route path="demo" element={
+691:              <Route path="ultra-command-center" element={
+706:              <Route path="novee-vault" element={
+721:              <Route path="remote-software-control" element={
+736:              <Route path="venue-mirror" element={
+753:              <Route path="mentor-console" element={
+766:              <Route path="dev-diagnostics" element={
+779:              <Route path="pos" element={
+790:              <Route path="pos/table/:tableId" element={
+804:              <Route path="eat-legacy" element={
+817:              <Route path="pos360-visual-proof" element={<POS360VisualProof />} />
+818:              <Route path="smokecraft-visual-proof" element={<SmokeCraftVisualProof />} />
+819:              <Route path="smokecraft-image-diagnostic" element={<SmokeCraftImageDiagnostic />} />
+821:              <Route path="smokecraft/venue-pilot-package" element={<SmokeCraftVenuePilotPackage />} />
+825:              <Route path="pos3" element={
+836:                <Route index            element={<POS3Home />} />
+837:                <Route path="handheld"  element={<POS3Handheld />} />
+838:                <Route path="tables"    element={<POS3Tables />} />
+839:                <Route path="venue-tables" element={<POS360TableManagement />} />
+840:                <Route path="venue-systems" element={<POS360VenueSystemsSetup />} />
+841:                <Route path="orders"    element={<POS3Orders />} />
+842:                <Route path="checkout"  element={<POS3Checkout />} />
+843:                <Route path="kitchen"   element={<KitchenDisplay />} />
+844:                <Route path="bar"       element={<BarDisplay />} />
+845:                <Route path="humidor"   element={<HumidorControl />} />
+846:                <Route path="inventory" element={<InventoryControl />} />
+847:                <Route path="integrations" element={<POSIntegrationHub />} />
+848:                <Route path="settings"  element={<POS3Settings />} />
+849:                <Route path="smokecraft-checkout" element={<POS360SmokeCraftCheckout />} />
+850:                <Route path="floor-management"  element={<POS360FloorManagement />} />
+851:                <Route path="menu-builder"      element={<POS360VenueMenuBuilder />} />
+852:                <Route path="handheld"          element={<POS360HandheldPOS />} />
+853:                <Route path="production"        element={<POS360ProductionDisplay />} />
+854:                <Route path="orders"           element={<POS360OrderLifecycle />} />
+855:                <Route path="sync"             element={<POS360OfflineSync />} />
+856:                <Route path="payments"         element={<POS360Payments />} />
+857:                <Route path="guests"           element={<POS360CustomerLoyalty />} />
+858:                <Route path="reservations"    element={<POS360ReservationsGuestFlow />} />
+859:                <Route path="event-packages"  element={<POS360EventPackagesMonetization />} />
+860:                <Route path="payments-closeout" element={<POS360PaymentsCloseout />} />
+861:                <Route path="staff-labor-governance" element={<POS360StaffLaborGovernance />} />
+862:                <Route path="reports-analytics-decision" element={<POS360ReportsAnalyticsDecision />} />
+863:                <Route path="settings-venue-admin" element={<POS360SettingsVenueAdmin />} />
+864:                <Route path="external-integrations" element={<POS360ExternalIntegrations />} />
+865:                <Route path="fulfillment-kds" element={<POS360FulfillmentKds />} />
+866:                <Route path="self-ordering" element={<POS360SelfOrdering />} />
+867:                <Route path="production-readiness" element={<POS360ProductionReadiness />} />
+871:              <Route path="novee-os/modules" element={<NoveeOSModuleRegistry />} />
+872:              <Route path="novee-os/tenants" element={<NoveeOSTenantGovernance />} />
+873:              <Route path="novee-os/billing" element={<NoveeOSBillingGovernance />} />
+874:              <Route path="novee-os/security" element={<NoveeOSSecurityGovernance />} />
+875:              <Route path="crafthub/dashboard" element={<CraftHubDashboard />} />
+876:              <Route path="crafthub/onboarding" element={<CraftHubOnboardingWizard />} />
+877:              <Route path="novee-os/final-readiness" element={<NoveeOSFinalReadiness />} />
+878:              <Route path="phase-d/provider-activation" element={<PhaseDProviderActivation />} />
+879:              <Route path="phase-d/payment-provider-activation" element={<PhaseDPaymentProviderActivation />} />
+880:              <Route path="phase-d/external-pos-activation" element={<PhaseDExternalPOSActivation />} />
+881:              <Route path="phase-d/inventory-activation" element={<PhaseDInventoryActivation />} />
+882:              <Route path="phase-d/communication-activation" element={<PhaseDCommunicationActivation />} />
+883:              <Route path="phase-d/security-activation"      element={<SecurityActivation />} />
+884:              <Route path="phase-d/deployment-activation"    element={<DeploymentActivation />} />
+885:              <Route path="phase-d/live-pilot-readiness"     element={<LivePilotReadiness />} />
+886:              <Route path="novee-os/remote-distribution"    element={<RemoteModuleDistribution />} />
+887:              <Route path="novee-os/onboarding-training"   element={<OnboardingTrainingCenter />} />
+888:              <Route path="novee-os/ambi-foundation"       element={<AMBIFoundation />} />
+889:              <Route path="novee-os/documentation-portal"  element={<DocumentationPortal />} />
+890:              <Route path="novee-os/command-center"         element={<NoveeOSCommandCenter />} />
+891:              <Route path="novee-os/360-platforms"          element={<NoveeOS360PlatformRegistry />} />
+892:              <Route path="placeholder/*"                   element={<ModulePlaceholderReserved />} />
+896:              <Route path="eat" element={
+907:                <Route index              element={<EATCommandHub />} />
+908:                <Route path="command-hub" element={<EATCommandHub />} />
+909:                <Route path="pos-control" element={<EATPosControl />} />
+910:                <Route path="operations"  element={<EATOperations />} />
+911:                <Route path="inventory"   element={<EATInventory />} />
+912:                <Route path="reorders"    element={<EATReorders />} />
+913:                <Route path="staff"       element={<EATStaff />} />
+914:                <Route path="sections"    element={<EATSections />} />
+915:                <Route path="kitchen"     element={<EATKitchen />} />
+916:                <Route path="bar"         element={<EATBar />} />
+917:                <Route path="humidor"     element={<EATHumidor />} />
+918:                <Route path="data"        element={<EATData />} />
+919:                <Route path="reports"     element={<EATReports />} />
+920:                <Route path="device-mode" element={<EATDeviceMode />} />
+921:                <Route path="media"       element={<EATMediaLibrary />} />
+922:                <Route path="settings"    element={<EATSettings />} />
+923:                <Route path="smokecraft-panel" element={<EATSmokeCraftPanel />} />
+931:              <Route path="venue-management" element={<VenueManagementCommandHub />} />
+934:              <Route path="admin" element={
+947:              <Route path="admin/deployment-center" element={
+964:              <Route path="review/deployment-center" element={
+969:              <Route path="founder" element={
+982:              <Route path="offline" element={<OfflineMode />} />
+985:              <Route path="device-status" element={
+998:              <Route path="kiosk-setup" element={
+1011:              <Route path="install-help" element={
+1024:              <Route path="venue-test" element={
+1037:              <Route path="founder-demo" element={
+1048:              <Route path="investor-demo" element={
+1059:              <Route path="venue-demo" element={
+1070:              <Route path="pilot-onboarding" element={
+1081:              <Route path="system-overview" element={
+1094:              <Route path="smokecraft/error-log" element={
+1107:              <Route path="smokecraft/feature-flag-admin" element={
+1120:              <Route path="management"   element={<Navigate to="/venue-mirror" replace />} />
+1121:              <Route path="novee"        element={<Navigate to="/ultra-command-center" replace />} />
+1122:              <Route path="system"       element={<Navigate to="/system-overview" replace />} />
+1123:              <Route path="diagnostics"  element={<Navigate to="/dev-diagnostics" replace />} />
+1124:              <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
+1125:              <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
+1126:              <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />
+1128:              <Route path="command-center" element={<Navigate to="/eat" replace />} />
+1129:              <Route path="eat-command"  element={<Navigate to="/eat" replace />} />
+1131:              <Route path="founder-command" element={<Navigate to="/founder" replace />} />
+1132:              <Route path="admin-command" element={<Navigate to="/admin" replace />} />
+1134:              <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />
+1135:              <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft/enroll" replace />} />
+1136:              <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft/golden-box" replace />} />
+1137:              <Route path="smokecraft/session-4" element={<Navigate to="/smokecraft/mentor-selection" replace />} />
+1139:              <Route path="*" element={<Navigate to="/" replace />} />

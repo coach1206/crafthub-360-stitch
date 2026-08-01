@@ -1,0 +1,60 @@
+dist/assets/PackagingStudioShare-a3336c96.js                  6.13 kB │ gzip:   1.55 kB
+dist/assets/OfflineMode-bae14890.js                           6.40 kB │ gzip:   1.92 kB
+dist/assets/VenueHumidorMyAcquisitions-2d7300e4.js            6.81 kB │ gzip:   1.69 kB
+dist/assets/MentorReview-c5ed45f1.js                          7.16 kB │ gzip:   2.23 kB
+dist/assets/AdminLogin-bb7eca10.js                            7.24 kB │ gzip:   2.03 kB
+dist/assets/StaffLogin-aed90891.js                            7.35 kB │ gzip:   2.14 kB
+dist/assets/FounderLogin-7e2e7abd.js                          7.82 kB │ gzip:   2.05 kB
+dist/assets/PackagingStudioVersions-f4446d59.js               8.03 kB │ gzip:   1.65 kB
+dist/assets/MentorLogin-78e1f402.js                           8.15 kB │ gzip:   2.23 kB
+dist/assets/DevLogin-a252b45c.js                              8.51 kB │ gzip:   2.32 kB
+dist/assets/InstallHelp-2e86108f.js                           8.75 kB │ gzip:   2.57 kB
+dist/assets/VenueHumidorMyOrders-85c8295e.js                  9.92 kB │ gzip:   2.25 kB
+dist/assets/KioskSetup-407bd267.js                           10.06 kB │ gzip:   2.36 kB
+dist/assets/GoldenBoxHub-ab7e8f97.js                         10.29 kB │ gzip:   2.09 kB
+dist/assets/VenueHumidorPickup-9827decd.js                   10.53 kB │ gzip:   2.50 kB
+dist/assets/PilotReadinessDashboard-ae9bb769.js              10.59 kB │ gzip:   2.13 kB
+dist/assets/CompetitionDetail-4a44a700.js                    10.79 kB │ gzip:   2.26 kB
+dist/assets/VenueHumidorFulfillmentHistory-82755afb.js       11.06 kB │ gzip:   2.04 kB
+dist/assets/SystemOverview-3b3f76d3.js                       11.28 kB │ gzip:   2.97 kB
+dist/assets/VenueHumidorAcquisitionDetail-46392a27.js        11.91 kB │ gzip:   2.53 kB
+dist/assets/VenueHumidorAdminInventoryEvents-ea880de9.js     13.22 kB │ gzip:   2.24 kB
+dist/assets/VenueHumidorHandoff-99df794a.js                  13.40 kB │ gzip:   3.04 kB
+dist/assets/VenueHumidorReceipt-624bfbc0.js                  14.09 kB │ gzip:   2.38 kB
+dist/assets/VenueHumidorOrderConfirmation-f1087daf.js        14.25 kB │ gzip:   3.44 kB
+dist/assets/VenueHumidorCheckout-1749374f.js                 14.74 kB │ gzip:   3.20 kB
+dist/assets/VenueHumidorAssistedSelling-98fcd67f.js          14.83 kB │ gzip:   2.64 kB
+dist/assets/VenueHumidorOrderQueue-02d0e6a6.js               14.83 kB │ gzip:   2.63 kB
+dist/assets/MentorConsole-9a019d6a.js                        15.12 kB │ gzip:   3.42 kB
+dist/assets/VenueHumidorMyOrderDetail-b1fa2ef2.js            15.13 kB │ gzip:   2.80 kB
+dist/assets/InvestorDemo-3ec2ec27.js                         16.08 kB │ gzip:   3.78 kB
+dist/assets/DeviceStatus-d692f700.js                         16.09 kB │ gzip:   3.54 kB
+dist/assets/VenueHumidorBrowser-18357dbd.js                  16.67 kB │ gzip:   3.35 kB
+dist/assets/DevDiagnostics-3c4fb4b5.js                       17.16 kB │ gzip:   3.22 kB
+dist/assets/VenueHumidorAdminDashboard-ea8a0ee6.js           18.55 kB │ gzip:   2.61 kB
+dist/assets/VenueOwnerDemo-db82bc21.js                       18.86 kB │ gzip:   4.43 kB
+dist/assets/VenueHumidorRecommendations-761ab2aa.js          19.09 kB │ gzip:   3.41 kB
+dist/assets/VenueHumidorCigarDetail-6e029d1a.js              19.65 kB │ gzip:   3.79 kB
+dist/assets/VenueHumidorAdminMedia-f59dc8cb.js               21.54 kB │ gzip:   3.92 kB
+dist/assets/FounderControl-c621f356.js                       21.82 kB │ gzip:   4.34 kB
+dist/assets/PilotOnboarding-d8567a46.js                      22.63 kB │ gzip:   3.98 kB
+dist/assets/JudgeEntryReview-f68d3e08.js                     23.23 kB │ gzip:   5.15 kB
+dist/assets/VenueHumidorAdminPayments-8bc3aa14.js            23.76 kB │ gzip:   3.47 kB
+dist/assets/PackagingStudioEditor-8317161a.js                24.32 kB │ gzip:   4.75 kB
+dist/assets/ResultsExperience-1b7d7cea.js                    24.47 kB │ gzip:   4.67 kB
+dist/assets/FounderDemo-888ccece.js                          25.15 kB │ gzip:   5.66 kB
+dist/assets/VenueHumidorOrderDetail-c187c29c.js              26.02 kB │ gzip:   4.48 kB
+dist/assets/VenueManagementCommandHub-977293f1.js            29.74 kB │ gzip:   5.69 kB
+dist/assets/BootConsole-ecdfb96e.js                          32.58 kB │ gzip:   6.79 kB
+dist/assets/VenueHumidorAdminProductForm-7d9ec883.js         35.92 kB │ gzip:   5.51 kB
+dist/assets/EntryWorkspace-ffab95a0.js                       37.95 kB │ gzip:   7.01 kB
+dist/assets/ModuleDeploymentCenter-7c4ac2cc.js               38.13 kB │ gzip:   8.69 kB
+dist/assets/VenueTestControl-ac73c7db.js                     55.37 kB │ gzip:   9.16 kB
+dist/assets/Admin-b2451c7c.js                                97.90 kB │ gzip:  16.93 kB
+dist/assets/index-e9c939c6.js                             5,391.36 kB │ gzip: 925.63 kB
+
+(!) Some chunks are larger than 500 kBs after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4m 30s

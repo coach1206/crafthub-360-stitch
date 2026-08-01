@@ -1,0 +1,1 @@
+Extracted 132 routes (full nested paths) from src/App.jsx lines 348-656

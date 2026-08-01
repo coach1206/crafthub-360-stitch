@@ -1,0 +1,24 @@
+── SmokeCraft React Router migration validator ──
+
+  OK    package.json declares react-router-dom ^7.x (target secure line)
+  OK    package.json does not declare a separate react-router dependency (single package)
+  OK    installed react-router-dom is 7.x
+  OK    installed react-router (transitive) is 7.x, matching react-router-dom
+  OK    no vulnerable 6.x react-router-dom remains installed anywhere
+  OK    only known/out-of-scope router advisory remains (RSC-mode CSRF, not applicable — this app uses no RSC/data routers)
+  OK    single router architecture: declarative BrowserRouter present
+  OK    no data-router APIs introduced (createBrowserRouter/RouterProvider) — architecture preserved as declarative
+  OK    no deprecated/removed v6-only router APIs remain
+  OK    canonical route registry present with expected route volume (>=250 <Route entries)
+  OK    a catch-all wildcard route exists
+  OK    wildcard route is the last <Route> registered at its nesting level (does not swallow earlier valid routes)
+  OK    legacy compatibility redirects present and use replace (no back-button loop)
+  OK    SmokeCraftSessionGuard still wraps session routes
+  OK    guard usage count did not drop to zero
+  OK    fresh-player closure script exists
+  OK    final gameplay acceptance script exists
+  OK    canonical route inventory script exists
+  OK    responsive route validator exists
+  OK    migration proof directory exists
+
+=== RESULT: PASS (0 checks failed) ===
