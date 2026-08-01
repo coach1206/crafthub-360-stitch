@@ -1,0 +1,424 @@
+{
+  "pass": 62,
+  "fail": 0,
+  "total": 62,
+  "results": [
+    {
+      "name": "Canonical spine has exactly 27 sessions across 6 phases (server-side VISIT_STRUCTURE; mandate says 7 — documented, pre-existing, verified discrepancy, not silently corrected)",
+      "ok": true
+    },
+    {
+      "name": "(1) A fresh guest identity is auto-issued by the real API on first contact (200, success)",
+      "ok": true
+    },
+    {
+      "name": "(1) Fresh guest starts at zero XP with no completed sessions",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'entry' (Welcome / orientation) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 2 humidor-match: real selection evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'humidor-match' (Choose Your Cigar) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 3 meet-your-cigar: real checkpoint evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'meet-your-cigar' (Meet Your Cigar) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 4 terroir: real checkpoint evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'terroir' (Terroir) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 5 format: real, correctly-ordered sequencing evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'format' (Construction Inspection) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 6 cut-toast-light: real, correctly-matched evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'cut-toast-light' (Choose Your Cut) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'lighting-tutorial' (Lighting Tutorial) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Sessions 8/9 first-third: real tasting-observation evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'first-third' (First Draw (covers merged S9)) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 10 flavor-memory: real, in-vocabulary hotspot evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'flavor-memory' (Flavor Memory Exercise) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 11 pairing-lab: real pairing-engine recommendation produced",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 11 pairing-lab: real pairing selection saved server-side",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'pairing-lab' (Suggested Pairings) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Sessions 12/13 second-third: real tasting-observation evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'second-third' (Flavor Evolution (covers merged S13)) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'mentor-commentary' (Mentor Commentary) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 15 knowledge-drop: real, correctly-answered quiz evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'knowledge-drop' (Knowledge Drop) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Sessions 16/17/18 final-third: real tasting-observation evidence accepted",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'final-third' (Flavor Finish (covers merged S17/S18)) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Sessions 19/20 scorecard: real 6-category evidence accepted, server computes overall",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'scorecard' (Rate Every Category (covers merged S20)) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'ai-summary' (Session Summary) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 22 pairing-recommendations: real second pairing recommendation produced",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'pairing-recommendations' (Personalized Pairing Recommendations) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 23 passport-stamp: server-computed eligibility from real completed sessions (not client-submitted)",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 23 passport-stamp: real stamp claim succeeds (server-owned Passport-360 stamp system)",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'passport-stamp' (Passport Stamp Animation) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'final-review' (Completed Scorecard) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'rewards' (Rewards and XP) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'achievements' (Achievements (shares Rewards.jsx)) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(2) Session 'session-complete' (Recommended Next Journey) completes through the real completion API",
+      "ok": true
+    },
+    {
+      "name": "(3) Final player-state read succeeds",
+      "ok": true
+    },
+    {
+      "name": "(3) All 22 distinct sessions show completed in the server's own ledger",
+      "ok": true
+    },
+    {
+      "name": "(3) No duplicate completion rows exist for any session id (idempotency held throughout the run)",
+      "ok": true
+    },
+    {
+      "name": "(3) Server-reported total XP (1175) exactly matches the sum of the server-owned reward table over all 22 completed session ids (expected 1175)",
+      "ok": true
+    },
+    {
+      "name": "(4) Real Passport-360 journey-completion stamp is recorded server-side after the full run",
+      "ok": true
+    },
+    {
+      "name": "(3) Journey shows 100% completion from the same completedSessions the ledger just verified",
+      "ok": true
+    },
+    {
+      "name": "(4) A real Golden Box competition exists to enter (admin-created fixture, same as every prior Golden Box package)",
+      "ok": true
+    },
+    {
+      "name": "(4) The same fresh player can create a real Golden Box entry",
+      "ok": true
+    },
+    {
+      "name": "(4) A real entry id was returned",
+      "ok": true
+    },
+    {
+      "name": "(4) The player builds a real, complete cigar entry (all 4 components) via the draft API",
+      "ok": true
+    },
+    {
+      "name": "(4) The complete entry submits successfully through the real submit API",
+      "ok": true
+    },
+    {
+      "name": "(4) A real admin account exists to run judging (fixture account already used by every prior Golden Box package)",
+      "ok": true
+    },
+    {
+      "name": "(4) A real distinct judge account exists",
+      "ok": true
+    },
+    {
+      "name": "(4) Admin assigns the real judge to the fresh player's submitted entry",
+      "ok": true
+    },
+    {
+      "name": "(4) The real judging rubric is served (server-owned, not client-fabricated)",
+      "ok": true
+    },
+    {
+      "name": "(4) The rubric returns at least one real, server-owned scoring criterion",
+      "ok": true
+    },
+    {
+      "name": "(4) The judge submits a real scorecard for the fresh player's entry",
+      "ok": true
+    },
+    {
+      "name": "(4) Admin finalizes real competition results",
+      "ok": true
+    },
+    {
+      "name": "(4) Admin issues real, server-computed awards from finalized results",
+      "ok": true
+    },
+    {
+      "name": "(4) With a single entrant, the fresh player's entry receives a real first_place award (no fabricated placement)",
+      "ok": true
+    },
+    {
+      "name": "(5) A different fresh guest never inherits this run's XP/completions (isolation held throughout)",
+      "ok": true
+    }
+  ],
+  "distinctSessionIds": [
+    "entry",
+    "humidor-match",
+    "meet-your-cigar",
+    "terroir",
+    "format",
+    "cut-toast-light",
+    "lighting-tutorial",
+    "first-third",
+    "flavor-memory",
+    "pairing-lab",
+    "second-third",
+    "mentor-commentary",
+    "knowledge-drop",
+    "final-third",
+    "scorecard",
+    "ai-summary",
+    "pairing-recommendations",
+    "passport-stamp",
+    "final-review",
+    "rewards",
+    "achievements",
+    "session-complete"
+  ],
+  "expectedXp": 1175,
+  "finalServerState": {
+    "xpTotal": 1175,
+    "completedSessions": [
+      {
+        "sessionId": "entry",
+        "xpAwarded": 0,
+        "completedAt": "2026-08-01T02:17:33.464Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "humidor-match",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.477Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "meet-your-cigar",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.488Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "terroir",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.498Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "format",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.509Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "cut-toast-light",
+        "xpAwarded": 50,
+        "completedAt": "2026-08-01T02:17:33.519Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "lighting-tutorial",
+        "xpAwarded": 0,
+        "completedAt": "2026-08-01T02:17:33.524Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "first-third",
+        "xpAwarded": 100,
+        "completedAt": "2026-08-01T02:17:33.533Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "flavor-memory",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.543Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "pairing-lab",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.567Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "second-third",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.575Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "mentor-commentary",
+        "xpAwarded": 0,
+        "completedAt": "2026-08-01T02:17:33.579Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "knowledge-drop",
+        "xpAwarded": 0,
+        "completedAt": "2026-08-01T02:17:33.587Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "final-third",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.599Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "scorecard",
+        "xpAwarded": 100,
+        "completedAt": "2026-08-01T02:17:33.606Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "ai-summary",
+        "xpAwarded": 0,
+        "completedAt": "2026-08-01T02:17:33.612Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "pairing-recommendations",
+        "xpAwarded": 0,
+        "completedAt": "2026-08-01T02:17:33.619Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "passport-stamp",
+        "xpAwarded": 75,
+        "completedAt": "2026-08-01T02:17:33.633Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "final-review",
+        "xpAwarded": 100,
+        "completedAt": "2026-08-01T02:17:33.639Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "rewards",
+        "xpAwarded": 50,
+        "completedAt": "2026-08-01T02:17:33.643Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "achievements",
+        "xpAwarded": 50,
+        "completedAt": "2026-08-01T02:17:33.647Z",
+        "sourceRoute": null
+      },
+      {
+        "sessionId": "session-complete",
+        "xpAwarded": 50,
+        "completedAt": "2026-08-01T02:17:33.652Z",
+        "sourceRoute": null
+      }
+    ],
+    "badges": null
+  },
+  "goldenBox": {
+    "competitionId": "248",
+    "entryId": "eb0a82d0-cdc2-4536-b346-f85b945f53fa",
+    "awardType": "first_place"
+  },
+  "capturedAt": "2026-08-01T02:17:33.990Z"
+}

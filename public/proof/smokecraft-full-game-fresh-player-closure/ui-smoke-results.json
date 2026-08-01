@@ -1,0 +1,44 @@
+{
+  "pass": 9,
+  "fail": 0,
+  "total": 9,
+  "results": [
+    {
+      "label": "Game start route (/smokecraft) renders for a genuinely fresh guest",
+      "ok": true
+    },
+    {
+      "label": "Real \"Explore as Guest\" click on Enroll navigates to Identity (real UI action, not a route jump)",
+      "ok": true
+    },
+    {
+      "label": "Real UI progression reaches Venue Selection",
+      "ok": true
+    },
+    {
+      "label": "Real UI progression reaches Welcome (Session 1) via genuine clicks, no localStorage seeding",
+      "ok": true
+    },
+    {
+      "label": "At least one later-phase sidebar destination is locked/disabled for a fresh Session-1 guest (later sessions are gated, not all pre-unlocked)",
+      "ok": true
+    },
+    {
+      "label": "Visiting a late-journey route directly as a fresh guest does not render a spoofed \"100% complete\" state",
+      "ok": true
+    },
+    {
+      "label": "Clicking \"Begin Experience\" on Welcome (real UI action) completes Session 1 and advances the journey",
+      "ok": true
+    },
+    {
+      "label": "After a hard reload, the UI still reflects progressed (Session-1-complete) state rather than resetting to a fresh Session 1",
+      "ok": true
+    },
+    {
+      "label": "The server's own player-state API (same browser session/cookie) independently confirms Session 1 (entry) is completed — UI is not disconnected from server truth",
+      "ok": true
+    }
+  ],
+  "capturedAt": "2026-08-01T02:16:49.171Z"
+}
