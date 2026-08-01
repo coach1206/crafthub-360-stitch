@@ -15,6 +15,7 @@ import * as adminCtrl from '../controllers/venueHumidorAdminController.js'
 import * as fulfillmentCtrl from '../controllers/venueHumidorFulfillmentController.js'
 import * as assistedSellingCtrl from '../controllers/venueHumidorAssistedSellingController.js'
 import * as mediaCtrl from '../controllers/venueHumidorMediaController.js'
+import * as paymentCtrl from '../controllers/venueHumidorPaymentController.js'
 
 const router = Router()
 
@@ -213,5 +214,19 @@ router.get('/venues/:venueId/media/missing-image-report', readLimiter, requireAu
 router.get('/venues/:venueId/media/master-catalog', readLimiter, requireAuth, requireVenueRead, mediaCtrl.handleListMasterCatalog)
 router.post('/venues/:venueId/media/products/:productId/assign-master', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, mediaCtrl.handleAssignMaster)
 router.get('/venues/:venueId/media/asset/:assetId/file', readLimiter, requireAuth, requireVenueRead, mediaCtrl.handleGetAssetFile)
+
+// ── Real Payment Gateway Integration (Production Package 2 of 7) —
+// staff/admin payment views, refunds, webhook-event audit trail,
+// dispute records, and manual reconciliation. Reuses the same
+// venue-staff RBAC tiers already established above — no parallel
+// authorization scheme. requireVenueRole(FULL_ACCESS_TYPES) on
+// refund/reconciliation: real-money reversal and state-repair actions
+// require manager/owner/admin, never plain 'staff'.
+router.get('/venues/:venueId/admin/payments', readLimiter, requireAuth, requireVenueRead, paymentCtrl.handleAdminListPayments)
+router.get('/venues/:venueId/admin/orders/:orderId/payment', readLimiter, requireAuth, requireVenueRead, fulfillmentOrderVenueMatch, paymentCtrl.handleAdminGetOrderPayment)
+router.post('/venues/:venueId/admin/orders/:orderId/refund', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), fulfillmentOrderVenueMatch, paymentCtrl.handleAdminRefund)
+router.get('/venues/:venueId/admin/payments/webhook-events', readLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), paymentCtrl.handleAdminListWebhookEvents)
+router.get('/venues/:venueId/admin/payments/disputes', readLimiter, requireAuth, requireVenueRead, paymentCtrl.handleAdminListDisputes)
+router.post('/venues/:venueId/admin/payments/reconcile', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), paymentCtrl.handleAdminRunReconciliation)
 
 export default router

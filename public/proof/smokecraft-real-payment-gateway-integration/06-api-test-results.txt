@@ -1,0 +1,50 @@
+[NOVEE OS DB] PostgreSQL connected ✓
+
+=== Real Payment Gateway Integration — API Tests ===
+
+  PASS  order created pending_payment
+  PASS  order total server-computed (subtotal+tax)
+  PASS  invalid venue rejected
+  PASS  payment-intent creation honestly 503s with no Stripe keys configured
+  PASS  publishable key status reports not configured
+
+--- Business logic (Stripe network mocked at adapter boundary only) ---
+
+  PASS  adapter reports mocked_adapter_boundary mode (honest, never claims live)
+  PASS  payment intent created with server-authoritative amount
+  PASS  payment intent starts requires_customer_action
+  PASS  client secret returned to client (never a secret key)
+  PASS  first dup-key call returns real intent (dedup by order re-use)
+  PASS  duplicate payment-intent request deduplicated, not a second PaymentIntent
+  PASS  cross-customer payment-intent creation denied
+  PASS  cross-venue payment-intent creation denied
+  PASS  invalid webhook signature rejected, never processed
+  PASS  payment_intent.succeeded webhook processed
+  PASS  order transitioned to completed by verified webhook (never client-declared)
+  PASS  inventory decremented via canonical inventoryService exactly once
+  PASS  payment_state transitioned to paid
+  PASS  duplicate webhook (same event id) deduplicated
+  PASS  inventory NOT decremented twice by duplicate webhook
+  PASS  out-of-order webhook safely ignored (already paid)
+  PASS  payment_state not regressed by out-of-order webhook
+  PASS  failed payment cancels order and releases hold
+  PASS  payment_state transitioned to failed
+  PASS  hold released after payment failure (available again)
+  PASS  oversell prevented at hold creation (insufficient_inventory)
+  PASS  full refund succeeds
+  PASS  payment_state transitioned to refunded
+  PASS  duplicate refund request deduplicated
+  PASS  refund exceeding remaining amount rejected
+  PASS  partial refund succeeds with correct amount
+  PASS  payment_state transitioned to partially_refunded
+  PASS  cancel-before-payment succeeds
+  PASS  reconciliation finds and repairs stale local state
+  PASS  reconciliation repair completes the order via the same canonical path
+  PASS  repeated reconciliation has no duplicate inventory effect
+  PASS  dispute recorded on webhook
+  PASS  payment_state reflects disputed
+  PASS  receipt available after paid+completed order
+  PASS  payment audit events recorded
+
+=== 40 passed, 0 failed ===
+

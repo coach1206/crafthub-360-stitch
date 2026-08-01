@@ -19,6 +19,7 @@ import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 import * as postPurchaseCtrl from '../controllers/venueHumidorPostPurchaseController.js'
 import * as recCtrl from '../controllers/venueHumidorRecommendationController.js'
 import * as mediaCtrl from '../controllers/venueHumidorMediaController.js'
+import * as paymentCtrl from '../controllers/venueHumidorPaymentController.js'
 
 const router = Router()
 
@@ -51,6 +52,15 @@ router.post('/venues/:venueId/checkout/quote', writeLimiter, checkoutCtrl.handle
 router.post('/venues/:venueId/checkout/orders', writeLimiter, checkoutCtrl.handleCreateOrder)
 router.get('/venues/:venueId/orders/:orderId', readLimiter, checkoutCtrl.handleGetOrder)
 router.post('/venues/:venueId/orders/:orderId/cancel', writeLimiter, checkoutCtrl.handleCustomerCancelOrder)
+
+// ── Real Payment Gateway Integration (Production Package 2 of 7) —
+// server-authoritative payment-intent creation against the ALREADY
+// server-computed order total; client never submits/confirms a paid
+// state. Publishable key status lets the client show an honest
+// "checkout unavailable" state instead of a broken form.
+router.get('/stripe/publishable-key-status', readLimiter, paymentCtrl.handleGetPublishableKeyStatus)
+router.post('/venues/:venueId/orders/:orderId/payment-intent', writeLimiter, paymentCtrl.handleCreatePaymentIntent)
+router.get('/venues/:venueId/orders/:orderId/payment-status', readLimiter, paymentCtrl.handleGetPaymentStatus)
 
 // ── Venue Humidor 1B-2B-4: customer order history, receipts, and
 // Passport acquisitions — cross-venue customer views (unlike the

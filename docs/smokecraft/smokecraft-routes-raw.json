@@ -195,6 +195,11 @@
     "elementRaw": "<VenueHumidorFulfillmentHistory />"
   },
   {
+    "fullPath": "admin/humidor/payments",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAdminPayments />"
+  },
+  {
     "fullPath": "admin/humidor/orders/:orderId/handoff",
     "isIndex": false,
     "elementRaw": "<VenueHumidorHandoff />"

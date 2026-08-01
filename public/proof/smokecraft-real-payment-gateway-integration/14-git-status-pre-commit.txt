@@ -1,0 +1,213 @@
+On branch recovery/smokecraft-codex-final
+Your branch is up to date with 'origin/recovery/smokecraft-codex-final'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json
+	modified:   docs/smokecraft/SMOKECRAFT_ROUTE_MATRIX_RAW.md
+	modified:   docs/smokecraft/smokecraft-routes-raw.json
+	modified:   package-lock.json
+	modified:   package.json
+	modified:   public/proof/smokecraft-holistic-fix-3/01-responsive-inventory.json
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/001-(smokecraft index).png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/002-welcome.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/003-enroll.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/004-venue-select.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/005-intake.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/006-entry.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/007-profile.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/008-education.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/009-mentors.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/010-humidor.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/011-light.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/012-complete.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/013-golden-box.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/014-golden-box_status.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/015-golden-box_competitions.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/016-golden-box_competitions__competitionId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/017-golden-box_entries__entryId_blend.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/018-golden-box_results__competitionId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/019-golden-box_judge.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/020-golden-box_judge_entries__entryId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/021-golden-box_mentor_entries__entryId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/022-golden-box_packaging-studio.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/023-golden-box_packaging-studio_new.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/024-golden-box_packaging-studio__designId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/025-golden-box_packaging-studio__designId_preview.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/026-golden-box_packaging-studio__designId_versions.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/027-golden-box_packaging-studio__designId_share.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/028-golden-box_packaging-review__shareToken.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/029-gold-box.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/030-venue-humidor.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/031-venue-humidor_checkout.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/032-venue-humidor_order__orderId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/033-venue-humidor__cigarId.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/034-admin_humidor.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/035-admin_humidor_new.png
+	modified:   public/proof/smokecraft-holistic-fix-3/screenshots/036-admin_humidor_inventory-events.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/037-admin_humidor_media.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/038-admin_humidor__cigarId_edit.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/039-admin_humidor_orders_history.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/040-admin_humidor_payments.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/041-admin_humidor_orders__orderId_handoff.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/042-admin_humidor_orders__orderId.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/043-admin_humidor_orders.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/044-orders__orderId_pickup.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/045-orders__orderId_receipt.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/046-orders__orderId.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/047-orders.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/048-passport_acquisitions__acquisitionId.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/049-passport_acquisitions.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/050-humidor_recommendations.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/051-humidor_pairing.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/052-admin_humidor_assisted-selling.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/053-art.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/054-mentor-selection.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/055-mentor.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/056-humidor-match.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/057-meet-your-cigar.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/058-terroir.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/059-format.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/060-shape-size-burn.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/061-cigar-gauge-guide.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/062-wrapper-strength.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/063-seed-soil.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/064-cut-toast-light.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/065-lighting-tutorial.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/066-first-third.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/067-flavor-memory.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/068-pairing-lab.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/069-request-purchase.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/070-second-third.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/071-mentor-commentary.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/072-knowledge-drop.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/073-knowledge-check-demo.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/074-mini-tasting-module.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/075-final-third.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/076-scorecard.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/077-smokecraft-challenge.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/078-challenge.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/079-second-humidor-match.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/080-mini-tasting.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/081-mini-tasting-round.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/082-ai-summary.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/083-pairing-recommendations.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/084-passport-stamp.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/085-connections.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/086-management-sync.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/087-management-sync_analytics.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/088-final-review.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/089-rewards.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/090-skill-tree.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/091-collections.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/092-challenge-hub.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/093-challenges_blend-fault-identification.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/094-filler-arrangement.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/095-session-complete.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/096-visit-complete.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/097-origins.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/098-curation.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/099-leaves.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/100-leaf-challenge.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/101-leaf-challenge-calculating.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/102-leaf-challenge-result.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/103-cultivation.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/104-blend.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/105-flavor-dna.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/106-pairing.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/107-available.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/108-assistant.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/109-pairing-mastery.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/110-vitola.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/111-identity.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/112-resume.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/113-leaderboard.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/114-rewards-center.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/115-account.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/116-event-challenge.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/117-how-it-works.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/118-demo-reset.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/119-session_start.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/120-guest-pass.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/121-demo.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/122-scan.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/123-passport.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/124-crafthub.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/125-menu.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/126-venue-commerce.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/127-order.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/128-ticket-tapper_staff-specials.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/129-cart.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/130-checkout.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/131-payment-success.png
+	new file:   public/proof/smokecraft-holistic-fix-3/screenshots/132-order-status.png
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/00-baseline.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/01-current-payment-audit.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/02-architecture-data-model-state-machine.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/03-idempotency-holds-webhooks-reconciliation.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/04-refunds-disputes-receipts-rbac-security.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/05-provider-test-mode-and-known-limitations.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/06-api-test-results.txt
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/07-customer-admin-interface.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/08-regression-log-index.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/09-build.log
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/10-browser-test-results.txt
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/11-fresh-player-closure.log
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/12-final-gameplay-acceptance.log
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/13-final-report.md
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/screenshots/admin-payments-dashboard.png
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/screenshots/checkout.png
+	new file:   public/proof/smokecraft-real-payment-gateway-integration/screenshots/order-confirmation-with-payment-panel.png
+	new file:   server/controllers/venueHumidorPaymentController.js
+	new file:   server/db/migrations/115_smokecraft_venue_humidor_real_payment_gateway.sql
+	new file:   server/db/rollbacks/115_smokecraft_venue_humidor_real_payment_gateway.rollback.sql
+	modified:   server/index.js
+	modified:   server/routes/venueHumidorCustomerRoutes.js
+	modified:   server/routes/venueHumidorRoutes.js
+	new file:   server/services/payments/stripeAdapter.js
+	new file:   server/services/venueHumidor/paymentService.js
+	modified:   server/services/venueHumidor/venueHumidorEventService.js
+	modified:   src/App.jsx
+	modified:   src/pages/smokecraft/venueHumidor/VenueHumidorOrderConfirmation.jsx
+	new file:   src/pages/smokecraft/venueHumidor/VenueHumidorPaymentPanel.jsx
+	new file:   src/pages/smokecraft/venueHumidor/admin/VenueHumidorAdminPayments.jsx
+	modified:   src/services/venueHumidor/venueHumidorAdminApiClient.js
+	modified:   src/services/venueHumidor/venueHumidorCustomerApiClient.js
+	new file:   verify-smokecraft-real-payment-gateway-api.mjs
+	new file:   verify-smokecraft-real-payment-gateway-browser.mjs
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/acceptance-run-output.json
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/01-welcome.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/02-venue-select.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/03-mentor-selection.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/04-humidor-match.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/05-first-third.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/06-scorecard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/07-rewards.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/08-passport.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/09-skill-tree.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/10-leaderboard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/11-golden-box-build.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/12-golden-box-competitions.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/13-golden-box-results.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/14-session-complete.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/15-rewards-live-data-check.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/16-session-complete-after-reload.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/01-welcome.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/06-scorecard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/07-rewards.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/11-golden-box-build.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/01-welcome.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/06-scorecard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/07-rewards.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/11-golden-box-build.png
+	modified:   public/proof/smokecraft-full-game-fresh-player-closure/fresh-player-run-output.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	docs/ui-ux-handoff/
+	public/proof/smokecraft-real-payment-gateway-integration/14-git-status-pre-commit.txt
+

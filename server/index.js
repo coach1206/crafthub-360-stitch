@@ -14,6 +14,7 @@ import path         from 'node:path'
 import fs           from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
+import { handleStripeWebhook } from './controllers/venueHumidorPaymentController.js'
 import healthRoutes          from './routes/healthRoutes.js'
 import sessionRoutes         from './routes/sessionRoutes.js'
 import passportRoutes        from './routes/passportRoutes.js'
@@ -230,6 +231,13 @@ app.use(cors({
   methods:     ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }))
 app.use(cookieParser())
+
+// ── Stripe webhook — MUST be mounted with the raw body, BEFORE the
+// global express.json() parser below, or signature verification
+// (which hashes the exact raw bytes Stripe signed) will always fail.
+// No other middleware may parse this route's body first.
+app.post('/api/smokecraft/venue-humidor/payments/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook)
+
 app.use(express.json({ limit: '1mb' }))
 app.use(express.urlencoded({ extended: true }))
 

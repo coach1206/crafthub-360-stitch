@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useSmokeCraftJourney } from '../../../context/SmokeCraftJourneyContext.jsx'
 import * as api from '../../../services/venueHumidor/venueHumidorCustomerApiClient.js'
 import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import VenueHumidorPaymentPanel from './VenueHumidorPaymentPanel.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -88,6 +89,10 @@ export default function VenueHumidorOrderConfirmation() {
             <div>Total: {fmtCents(order.total_cents)}</div>
             <div>Created: {order.created_at ? new Date(order.created_at).toLocaleString() : ''}</div>
           </div>
+
+          {order.status === 'pending_payment' && (
+            <VenueHumidorPaymentPanel venueId={venueId} orderId={orderId} onPaid={load} />
+          )}
 
           {order.status === 'pending_payment' && (
             <div>

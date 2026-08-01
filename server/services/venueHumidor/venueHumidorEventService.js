@@ -11,6 +11,10 @@ export const CANONICAL_VENUE_HUMIDOR_EVENT_TYPES = [
   'venue_humidor_payment_pending', 'venue_humidor_hold_converted',
   'venue_humidor_order_completed', 'venue_humidor_order_canceled',
   'venue_humidor_hold_released',
+  // Real Payment Gateway Integration — Production Package 2 of 7.
+  'venue_humidor_payment_intent_created', 'venue_humidor_payment_succeeded',
+  'venue_humidor_payment_failed', 'venue_humidor_payment_refunded',
+  'venue_humidor_payment_disputed',
 ]
 
 /**

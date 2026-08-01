@@ -115,6 +115,7 @@ const VenueHumidorAdminMedia = lazy(() => import('./pages/smokecraft/venueHumido
 const VenueHumidorOrderQueue = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorOrderQueue.jsx'))
 const VenueHumidorOrderDetail = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorOrderDetail.jsx'))
 const VenueHumidorFulfillmentHistory = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorFulfillmentHistory.jsx'))
+const VenueHumidorAdminPayments = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminPayments.jsx'))
 const VenueHumidorHandoff = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorHandoff.jsx'))
 const VenueHumidorPickup = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorPickup.jsx'))
 const VenueHumidorMyOrders = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorMyOrders.jsx'))
@@ -424,6 +425,10 @@ export default function App() {
                     queue. Completion/cancellation delegate solely to
                     checkoutService.completeOrder()/cancelOrder(). */}
                 <Route path="admin/humidor/orders/history"     element={<VenueHumidorFulfillmentHistory />} />
+                {/* Real Payment Gateway Integration — Production
+                    Package 2 of 7. Payments/refunds/webhook-events/
+                    disputes/reconciliation admin surface. */}
+                <Route path="admin/humidor/payments"           element={<VenueHumidorAdminPayments />} />
                 <Route path="admin/humidor/orders/:orderId/handoff" element={<VenueHumidorHandoff />} />
                 <Route path="admin/humidor/orders/:orderId"    element={<VenueHumidorOrderDetail />} />
                 <Route path="admin/humidor/orders"             element={<VenueHumidorOrderQueue />} />

@@ -1,0 +1,28 @@
+
+--- Viewport: handheld-portrait (390x844) ---
+
+  PASS  [handheld-portrait] real order created via API
+  PASS  [handheld-portrait] payment panel shows honest unavailable/loading state (no live Stripe keys) — got "unavailable"
+  PASS  [handheld-portrait] page never claims payment succeeded without server confirmation
+  PASS  [handheld-portrait] order status shown honestly as pending, not paid
+  PASS  [handheld-portrait] no uncaught page errors on checkout confirmation screen
+  PASS  [handheld-portrait] rapid double-click cancel is idempotent (order in single terminal state: cancelled)
+  PASS  [handheld-portrait] keyboard-focusable controls present on order/payment screen (2)
+  PASS  [handheld-portrait] cleared-session access shows an honest denial/expired/error state (never a fabricated success), with retry available
+  PASS  [handheld-portrait] offline hard-navigation fails safely at the network layer (expected browser behavior, not caught as an app crash)
+
+--- Viewport: desktop (1440x900) ---
+
+  PASS  [desktop] real order created via API
+  PASS  [desktop] payment panel shows honest unavailable/loading state (no live Stripe keys) — got "unavailable"
+  PASS  [desktop] page never claims payment succeeded without server confirmation
+  PASS  [desktop] order status shown honestly as pending, not paid
+  PASS  [desktop] no uncaught page errors on checkout confirmation screen
+  PASS  [desktop] rapid double-click cancel is idempotent (order in single terminal state: cancelled)
+  PASS  [desktop] keyboard-focusable controls present on order/payment screen (2)
+  PASS  [desktop] cleared-session access shows an honest denial/expired/error state (never a fabricated success), with retry available
+  PASS  [desktop] offline hard-navigation fails safely at the network layer (expected browser behavior, not caught as an app crash)
+  PASS  unauthenticated admin payments access does not leak payment data
+
+=== 19 passed, 0 failed ===
+

@@ -97,3 +97,15 @@ export const csvDryRun = (venueId, csv) => request(`/venues/${venueId}/media/csv
 export const csvImport = (venueId, csv) => request(`/venues/${venueId}/media/csv/import`, { method: 'POST', body: { csv } })
 export const getMissingImageReport = (venueId, filters) => request(`/venues/${venueId}/media/missing-image-report${toQuery(filters)}`)
 export const listMasterCatalog = (venueId, filters) => request(`/venues/${venueId}/media/master-catalog${toQuery(filters)}`)
+
+// ── Real Payment Gateway Integration (Production Package 2 of 7) —
+// staff/admin payment views, refunds, webhook-event audit, disputes,
+// and manual reconciliation. Same request()/RBAC conventions as
+// every other admin surface above.
+export const listPayments = (venueId, filters) => request(`/venues/${venueId}/admin/payments${toQuery(filters)}`)
+export const getOrderPayment = (venueId, orderId) => request(`/venues/${venueId}/admin/orders/${orderId}/payment`)
+export const refundOrderPayment = (venueId, orderId, { amountCents, reason, idempotencyKey }) =>
+  request(`/venues/${venueId}/admin/orders/${orderId}/refund`, { method: 'POST', body: { amountCents, reason, idempotencyKey } })
+export const listWebhookEvents = (venueId) => request(`/venues/${venueId}/admin/payments/webhook-events`)
+export const listDisputes = (venueId) => request(`/venues/${venueId}/admin/payments/disputes`)
+export const runPaymentReconciliation = (venueId) => request(`/venues/${venueId}/admin/payments/reconcile`, { method: 'POST' })

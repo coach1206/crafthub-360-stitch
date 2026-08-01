@@ -63,6 +63,11 @@ export const createOrder = (venueId, holdId, payload, idempotencyKey) => request
 export const getOrder = (venueId, orderId) => request(`/venues/${venueId}/orders/${orderId}`)
 export const cancelOrder = (venueId, orderId, idempotencyKey) => request(`/venues/${venueId}/orders/${orderId}/cancel`, { method: 'POST', body: { idempotencyKey } })
 
+// ── Real Payment Gateway Integration (Production Package 2 of 7) ──
+export const getStripePublishableKeyStatus = () => request(`/stripe/publishable-key-status`)
+export const createPaymentIntent = (venueId, orderId, idempotencyKey) => request(`/venues/${venueId}/orders/${orderId}/payment-intent`, { method: 'POST', body: { idempotencyKey } })
+export const getPaymentStatus = (venueId, orderId) => request(`/venues/${venueId}/orders/${orderId}/payment-status`)
+
 // Venue Humidor 1B-2B-4 — customer order history, receipts, Passport.
 export const listMyOrders = (filters) => request(`/orders${toQuery(filters)}`)
 export const getMyOrderDetail = (orderId) => request(`/orders/${orderId}`)
