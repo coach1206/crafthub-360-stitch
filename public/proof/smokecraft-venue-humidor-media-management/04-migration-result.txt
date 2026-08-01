@@ -1,0 +1,156 @@
+                                          Table "public.venue_cigar_media_master_catalog"
+      Column      |           Type           | Collation | Nullable |                           Default                            
+------------------+--------------------------+-----------+----------+--------------------------------------------------------------
+ id               | bigint                   |           | not null | nextval('venue_cigar_media_master_catalog_id_seq'::regclass)
+ master_image_id  | uuid                     |           | not null | gen_random_uuid()
+ brand            | text                     |           | not null | 
+ line             | text                     |           |          | 
+ vitola           | text                     |           |          | 
+ sku              | text                     |           |          | 
+ storage_provider | text                     |           | not null | 'local_dev_disk'::text
+ storage_key      | text                     |           | not null | 
+ mime_type        | text                     |           | not null | 
+ width            | integer                  |           | not null | 
+ height           | integer                  |           | not null | 
+ size_bytes       | integer                  |           | not null | 
+ checksum         | text                     |           | not null | 
+ source_type      | text                     |           | not null | 
+ source_name      | text                     |           |          | 
+ source_url       | text                     |           |          | 
+ rights_reference | text                     |           |          | 
+ approval_state   | text                     |           | not null | 'pending_review'::text
+ active_state     | text                     |           | not null | 'active'::text
+ approved_by      | text                     |           |          | 
+ approved_at      | timestamp with time zone |           |          | 
+ rejection_reason | text                     |           |          | 
+ created_by       | text                     |           | not null | 
+ created_at       | timestamp with time zone |           | not null | now()
+ updated_at       | timestamp with time zone |           | not null | now()
+Indexes:
+    "venue_cigar_media_master_catalog_pkey" PRIMARY KEY, btree (id)
+    "idx_vcmmc_brand_line_vitola" btree (brand, line, vitola)
+    "idx_vcmmc_checksum" UNIQUE, btree (checksum)
+    "idx_vcmmc_sku" btree (sku)
+    "venue_cigar_media_master_catalog_master_image_id_key" UNIQUE CONSTRAINT, btree (master_image_id)
+Check constraints:
+    "venue_cigar_media_master_catalog_active_state_check" CHECK (active_state = ANY (ARRAY['active'::text, 'retired'::text]))
+    "venue_cigar_media_master_catalog_approval_state_check" CHECK (approval_state = ANY (ARRAY['pending_review'::text, 'approved'::text, 'rejected'::text]))
+    "venue_cigar_media_master_catalog_source_type_check" CHECK (source_type = ANY (ARRAY['manufacturer_authorized'::text, 'distributor_authorized'::text, 'smokecraft_master_catalog'::text]))
+Referenced by:
+    TABLE "venue_cigar_media_assets" CONSTRAINT "venue_cigar_media_assets_master_image_id_fkey" FOREIGN KEY (master_image_id) REFERENCES venue_cigar_media_master_catalog(master_image_id)
+
+                                           Table "public.venue_cigar_media_assets"
+       Column        |           Type           | Collation | Nullable |                       Default                        
+---------------------+--------------------------+-----------+----------+------------------------------------------------------
+ id                  | bigint                   |           | not null | nextval('venue_cigar_media_assets_id_seq'::regclass)
+ asset_id            | uuid                     |           | not null | gen_random_uuid()
+ venue_id            | text                     |           | not null | 
+ product_id          | uuid                     |           |          | 
+ master_image_id     | uuid                     |           |          | 
+ scope               | text                     |           | not null | 
+ purpose             | text                     |           | not null | 
+ source_type         | text                     |           | not null | 
+ source_name         | text                     |           |          | 
+ source_url          | text                     |           |          | 
+ rights_reference    | text                     |           |          | 
+ storage_provider    | text                     |           | not null | 'local_dev_disk'::text
+ storage_key         | text                     |           | not null | 
+ original_filename   | text                     |           | not null | 
+ normalized_filename | text                     |           | not null | 
+ mime_type           | text                     |           | not null | 
+ width               | integer                  |           | not null | 
+ height              | integer                  |           | not null | 
+ size_bytes          | integer                  |           | not null | 
+ checksum            | text                     |           | not null | 
+ alt_text            | text                     |           |          | 
+ caption             | text                     |           |          | 
+ focal_point_x       | numeric(4,3)             |           |          | 0.5
+ focal_point_y       | numeric(4,3)             |           |          | 0.5
+ display_order       | integer                  |           | not null | 0
+ is_primary          | boolean                  |           | not null | false
+ approval_state      | text                     |           | not null | 'pending_review'::text
+ active_state        | text                     |           | not null | 'inactive'::text
+ rejection_reason    | text                     |           |          | 
+ retirement_reason   | text                     |           |          | 
+ review_date         | date                     |           |          | 
+ notes               | text                     |           |          | 
+ created_by          | text                     |           | not null | 
+ approved_by         | text                     |           |          | 
+ approved_at         | timestamp with time zone |           |          | 
+ retired_by          | text                     |           |          | 
+ retired_at          | timestamp with time zone |           |          | 
+ created_at          | timestamp with time zone |           | not null | now()
+ updated_at          | timestamp with time zone |           | not null | now()
+Indexes:
+    "venue_cigar_media_assets_pkey" PRIMARY KEY, btree (id)
+    "idx_vcma_checksum_venue" UNIQUE, btree (venue_id, checksum)
+    "idx_vcma_one_primary_per_product" UNIQUE, btree (product_id) WHERE is_primary = true AND active_state = 'active'::text AND scope = 'product'::text
+    "idx_vcma_product" btree (product_id)
+    "idx_vcma_public" btree (venue_id, approval_state, active_state)
+    "idx_vcma_venue" btree (venue_id)
+    "idx_vcma_venue_purpose" btree (venue_id, purpose)
+    "venue_cigar_media_assets_asset_id_key" UNIQUE CONSTRAINT, btree (asset_id)
+Check constraints:
+    "chk_vcma_scope_product" CHECK (scope = 'product'::text AND product_id IS NOT NULL OR scope = 'venue'::text AND product_id IS NULL)
+    "venue_cigar_media_assets_active_state_check" CHECK (active_state = ANY (ARRAY['active'::text, 'inactive'::text, 'retired'::text]))
+    "venue_cigar_media_assets_approval_state_check" CHECK (approval_state = ANY (ARRAY['uploaded'::text, 'processing'::text, 'pending_review'::text, 'approved'::text, 'rejected'::text, 'failed'::text]))
+    "venue_cigar_media_assets_purpose_check" CHECK (purpose = ANY (ARRAY['product_primary'::text, 'product_gallery'::text, 'product_thumbnail'::text, 'inventory_table'::text, 'browse_card'::text, 'detail_hero'::text, 'recommendation'::text, 'pairing'::text, 'passport_acquisition'::text, 'fulfillment'::text, 'receipt'::text, 'venue_hero'::text, 'venue_gallery'::text, 'empty_state'::text, 'error_fallback'::text, 'investor_demo'::text]))
+    "venue_cigar_media_assets_scope_check" CHECK (scope = ANY (ARRAY['product'::text, 'venue'::text]))
+    "venue_cigar_media_assets_source_type_check" CHECK (source_type = ANY (ARRAY['venue_uploaded_photography'::text, 'venue_uploaded_venue_photography'::text, 'manufacturer_authorized'::text, 'distributor_authorized'::text, 'smokecraft_master_catalog'::text, 'educational_graphic'::text, 'branded_placeholder'::text, 'generated_ui_overlay'::text]))
+Foreign-key constraints:
+    "venue_cigar_media_assets_master_image_id_fkey" FOREIGN KEY (master_image_id) REFERENCES venue_cigar_media_master_catalog(master_image_id)
+    "venue_cigar_media_assets_product_id_fkey" FOREIGN KEY (product_id) REFERENCES venue_cigar_products(product_id) ON DELETE CASCADE
+    "venue_cigar_media_assets_venue_id_fkey" FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE CASCADE
+
+                                         Table "public.venue_cigar_media_events"
+     Column     |           Type           | Collation | Nullable |                       Default                        
+----------------+--------------------------+-----------+----------+------------------------------------------------------
+ id             | bigint                   |           | not null | nextval('venue_cigar_media_events_id_seq'::regclass)
+ event_id       | uuid                     |           | not null | gen_random_uuid()
+ venue_id       | text                     |           | not null | 
+ asset_id       | uuid                     |           |          | 
+ product_id     | uuid                     |           |          | 
+ action         | text                     |           | not null | 
+ actor_id       | text                     |           | not null | 
+ actor_role     | text                     |           |          | 
+ before_summary | jsonb                    |           |          | 
+ after_summary  | jsonb                    |           |          | 
+ correlation_id | text                     |           | not null | 
+ created_at     | timestamp with time zone |           | not null | now()
+Indexes:
+    "venue_cigar_media_events_pkey" PRIMARY KEY, btree (id)
+    "idx_vcme_asset" btree (asset_id)
+    "idx_vcme_correlation" btree (correlation_id)
+    "idx_vcme_venue" btree (venue_id)
+    "venue_cigar_media_events_event_id_key" UNIQUE CONSTRAINT, btree (event_id)
+Check constraints:
+    "venue_cigar_media_events_action_check" CHECK (action = ANY (ARRAY['upload'::text, 'import'::text, 'approve'::text, 'reject'::text, 'assign'::text, 'primary_change'::text, 'ordering_change'::text, 'metadata_edit'::text, 'activate'::text, 'retire'::text, 'restore'::text, 'deletion_request'::text, 'provider_failure'::text]))
+Foreign-key constraints:
+    "venue_cigar_media_events_venue_id_fkey" FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE CASCADE
+
+                                        Table "public.venue_cigar_media_import_batches"
+    Column    |           Type           | Collation | Nullable |                           Default                            
+--------------+--------------------------+-----------+----------+--------------------------------------------------------------
+ id           | bigint                   |           | not null | nextval('venue_cigar_media_import_batches_id_seq'::regclass)
+ batch_id     | uuid                     |           | not null | gen_random_uuid()
+ venue_id     | text                     |           | not null | 
+ mode         | text                     |           | not null | 
+ status       | text                     |           | not null | 'completed'::text
+ total_rows   | integer                  |           | not null | 0
+ success_rows | integer                  |           | not null | 0
+ error_rows   | integer                  |           | not null | 0
+ row_results  | jsonb                    |           | not null | '[]'::jsonb
+ created_by   | text                     |           | not null | 
+ created_at   | timestamp with time zone |           | not null | now()
+Indexes:
+    "venue_cigar_media_import_batches_pkey" PRIMARY KEY, btree (id)
+    "idx_vcmib_venue" btree (venue_id)
+    "venue_cigar_media_import_batches_batch_id_key" UNIQUE CONSTRAINT, btree (batch_id)
+Check constraints:
+    "venue_cigar_media_import_batches_mode_check" CHECK (mode = ANY (ARRAY['dry_run'::text, 'import'::text]))
+    "venue_cigar_media_import_batches_status_check" CHECK (status = ANY (ARRAY['completed'::text, 'failed'::text]))
+Foreign-key constraints:
+    "venue_cigar_media_import_batches_venue_id_fkey" FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE CASCADE
+
+--- migration log ---
+[runMigrations] Applied: 114_smokecraft_venue_humidor_media.sql

@@ -18,6 +18,7 @@ import * as ctrl from '../controllers/venueHumidorCustomerController.js'
 import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 import * as postPurchaseCtrl from '../controllers/venueHumidorPostPurchaseController.js'
 import * as recCtrl from '../controllers/venueHumidorRecommendationController.js'
+import * as mediaCtrl from '../controllers/venueHumidorMediaController.js'
 
 const router = Router()
 
@@ -73,5 +74,12 @@ router.get('/recommendations/:productId/alternatives', readLimiter, recCtrl.hand
 router.post('/recommendations/preferences', writeLimiter, recCtrl.handleSavePreferences)
 router.get('/recommendations/preferences', readLimiter, recCtrl.handleGetMyPreferences)
 router.post('/recommendations/outcome', writeLimiter, recCtrl.handleRecordOutcome)
+
+// ── Public, customer-facing media retrieval — approved + active only,
+// ever. No auth/membership required (same public-browse posture as
+// /venues/:venueId/catalog above); private rights/notes fields are
+// never included (see mediaService.getPublicProductMedia).
+router.get('/venues/:venueId/products/:productId/media', readLimiter, mediaCtrl.handlePublicProductMedia)
+router.get('/venues/:venueId/media/asset/:assetId/file', readLimiter, mediaCtrl.handleGetPublicAssetFile)
 
 export default router

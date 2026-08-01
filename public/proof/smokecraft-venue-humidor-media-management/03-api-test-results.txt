@@ -1,0 +1,183 @@
+  PASS  Seed: product created for media tests
+
+── 1. Authorized upload / unauthorized denial / cross-venue denial ──
+  PASS  Authorized venue staff can upload a real product image
+  PASS  A user with no membership is denied upload (403)
+  PASS  A venue A staff member cannot upload to venue B (venue isolation, 403)
+
+── 2. File validation: invalid MIME, corrupt file, oversized file, duplicate ──
+  PASS  Non-image content (fake extension) is rejected by magic-byte sniffing
+  PASS  A corrupt/truncated file is rejected, not silently accepted
+  PASS  An oversized file is rejected (413)
+  PASS  Re-uploading the identical file is detected as a duplicate (409)
+
+── 3. Product assignment / invalid assignment ──
+  PASS  Second gallery image uploads successfully
+  PASS  Assigning an asset to a non-existent/foreign product is rejected (422)
+  PASS  Assigning an asset to the correct, owned product succeeds
+
+── 4. Approval / rejection ──
+  PASS  Staff (write-tier, not full-access) cannot approve their own upload (403)
+  PASS  A manager (full-access tier) can approve an asset
+  PASS  Rejecting without a reason is rejected (422)
+  PASS  Rejecting with a reason succeeds
+
+── 5. Set primary / prevent two primaries ──
+  PASS  Setting an approved asset as primary succeeds
+  PASS  Setting a REJECTED asset as primary is refused (409)
+  PASS  Exactly one active primary image exists for the product at the DB level
+
+── 6. Gallery reorder ──
+  PASS  Gallery reorder succeeds and reflects the new order
+
+── 7. Activate / retire ──
+  PASS  Retiring an asset succeeds
+  PASS  A retired asset is never left as the primary flag
+  PASS  A rejected (not-approved) asset cannot be activated (409)
+
+── 8. Import allowed URL / reject disallowed URL ──
+  PASS  Importing from a non-allowlisted domain is rejected (SSRF guard, 422)
+  PASS  Importing manufacturer-authorized media without a rights reference is rejected (422)
+
+── 9. CSV dry run / row errors ──
+  PASS  CSV dry-run validates a correct row without importing anything
+  PASS  CSV dry-run reports row-level errors (SKU mismatch, cross-venue) without partial corruption
+
+── 10. Missing-image report ──
+  PASS  Missing-image report is retrievable and flags the no-image product
+
+── 11. Public approved media / public rejection of unapproved media ──
+  PASS  Public product media endpoint returns the approved primary image
+  PASS  Public media response never exposes private rights/notes fields
+  PASS  A product with no approved media falls back to the branded placeholder, never an unrelated cigar
+
+============================================================
+RESULTS: 30 passed, 0 failed (30 total)
+============================================================
+{
+  "pass": 30,
+  "fail": 0,
+  "total": 30,
+  "results": [
+    {
+      "name": "Seed: product created for media tests",
+      "ok": true
+    },
+    {
+      "name": "Authorized venue staff can upload a real product image",
+      "ok": true
+    },
+    {
+      "name": "A user with no membership is denied upload (403)",
+      "ok": true
+    },
+    {
+      "name": "A venue A staff member cannot upload to venue B (venue isolation, 403)",
+      "ok": true
+    },
+    {
+      "name": "Non-image content (fake extension) is rejected by magic-byte sniffing",
+      "ok": true
+    },
+    {
+      "name": "A corrupt/truncated file is rejected, not silently accepted",
+      "ok": true
+    },
+    {
+      "name": "An oversized file is rejected (413)",
+      "ok": true
+    },
+    {
+      "name": "Re-uploading the identical file is detected as a duplicate (409)",
+      "ok": true
+    },
+    {
+      "name": "Second gallery image uploads successfully",
+      "ok": true
+    },
+    {
+      "name": "Assigning an asset to a non-existent/foreign product is rejected (422)",
+      "ok": true
+    },
+    {
+      "name": "Assigning an asset to the correct, owned product succeeds",
+      "ok": true
+    },
+    {
+      "name": "Staff (write-tier, not full-access) cannot approve their own upload (403)",
+      "ok": true
+    },
+    {
+      "name": "A manager (full-access tier) can approve an asset",
+      "ok": true
+    },
+    {
+      "name": "Rejecting without a reason is rejected (422)",
+      "ok": true
+    },
+    {
+      "name": "Rejecting with a reason succeeds",
+      "ok": true
+    },
+    {
+      "name": "Setting an approved asset as primary succeeds",
+      "ok": true
+    },
+    {
+      "name": "Setting a REJECTED asset as primary is refused (409)",
+      "ok": true
+    },
+    {
+      "name": "Exactly one active primary image exists for the product at the DB level",
+      "ok": true
+    },
+    {
+      "name": "Gallery reorder succeeds and reflects the new order",
+      "ok": true
+    },
+    {
+      "name": "Retiring an asset succeeds",
+      "ok": true
+    },
+    {
+      "name": "A retired asset is never left as the primary flag",
+      "ok": true
+    },
+    {
+      "name": "A rejected (not-approved) asset cannot be activated (409)",
+      "ok": true
+    },
+    {
+      "name": "Importing from a non-allowlisted domain is rejected (SSRF guard, 422)",
+      "ok": true
+    },
+    {
+      "name": "Importing manufacturer-authorized media without a rights reference is rejected (422)",
+      "ok": true
+    },
+    {
+      "name": "CSV dry-run validates a correct row without importing anything",
+      "ok": true
+    },
+    {
+      "name": "CSV dry-run reports row-level errors (SKU mismatch, cross-venue) without partial corruption",
+      "ok": true
+    },
+    {
+      "name": "Missing-image report is retrievable and flags the no-image product",
+      "ok": true
+    },
+    {
+      "name": "Public product media endpoint returns the approved primary image",
+      "ok": true
+    },
+    {
+      "name": "Public media response never exposes private rights/notes fields",
+      "ok": true
+    },
+    {
+      "name": "A product with no approved media falls back to the branded placeholder, never an unrelated cigar",
+      "ok": true
+    }
+  ]
+}

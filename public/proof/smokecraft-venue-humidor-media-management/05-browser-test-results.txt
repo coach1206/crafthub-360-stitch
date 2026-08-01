@@ -1,0 +1,106 @@
+
+── Admin media screen: empty state, upload flow (drag+picker), metadata entry, preview ──
+  PASS  Empty-state message shown before any image is uploaded
+  PASS  Preview-before-save shows the selected filename/size before upload is confirmed
+  PASS  Upload flow: success message shown only after server-confirmed persistence
+  PASS  Uploaded asset appears in the product gallery in pending_review state (moderation, not auto-published)
+
+── Approval state / primary selection ──
+  PASS  Approval state visibly updates to approved after staff action
+  PASS  Primary-selection control visibly sets the primary badge
+
+── Rejection reason (real prompt-driven flow) ──
+  PASS  Rejection reason is required and the rejected state is visibly reflected
+
+── Missing-image report ──
+  PASS  Missing-image report lists a product with no approved image, filterable by venue
+
+── Keyboard accessibility on core upload/approval controls ──
+  PASS  Alt-text field is keyboard-focusable
+  PASS  Tab order moves to the next interactive control (no keyboard trap)
+
+── Responsive: tablet + mobile viewports ──
+  PASS  No horizontal overflow at tablet-10in-landscape (1280x800)
+  PASS  No horizontal overflow at handheld-portrait (390x844)
+
+── Public browse rendering: approved image + product gallery ──
+  PASS  Public browse: approved product image is returned by the public media endpoint
+
+── Fallback behavior: product with no approved image gets the branded placeholder, never an unrelated cigar ──
+  PASS  Fallback: no-image product resolves to the branded SmokeCraft placeholder, never an unrelated cigar image
+
+── Broken-image recovery (fallback image element still renders without crashing the page) ──
+  PASS  Broken-image element does not crash the page (onerror handler pattern used by the gallery <img> tags)
+
+============================================================
+RESULTS: 15 passed, 0 failed (15 total)
+Console errors captured: 1
+============================================================
+Failed to load resource: the server responded with a status of 404 (Not Found) [http://localhost:5000/favicon.ico]
+{
+  "pass": 15,
+  "fail": 0,
+  "total": 15,
+  "results": [
+    {
+      "name": "Empty-state message shown before any image is uploaded",
+      "ok": true
+    },
+    {
+      "name": "Preview-before-save shows the selected filename/size before upload is confirmed",
+      "ok": true
+    },
+    {
+      "name": "Upload flow: success message shown only after server-confirmed persistence",
+      "ok": true
+    },
+    {
+      "name": "Uploaded asset appears in the product gallery in pending_review state (moderation, not auto-published)",
+      "ok": true
+    },
+    {
+      "name": "Approval state visibly updates to approved after staff action",
+      "ok": true
+    },
+    {
+      "name": "Primary-selection control visibly sets the primary badge",
+      "ok": true
+    },
+    {
+      "name": "Rejection reason is required and the rejected state is visibly reflected",
+      "ok": true
+    },
+    {
+      "name": "Missing-image report lists a product with no approved image, filterable by venue",
+      "ok": true
+    },
+    {
+      "name": "Alt-text field is keyboard-focusable",
+      "ok": true
+    },
+    {
+      "name": "Tab order moves to the next interactive control (no keyboard trap)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal overflow at tablet-10in-landscape (1280x800)",
+      "ok": true
+    },
+    {
+      "name": "No horizontal overflow at handheld-portrait (390x844)",
+      "ok": true
+    },
+    {
+      "name": "Public browse: approved product image is returned by the public media endpoint",
+      "ok": true
+    },
+    {
+      "name": "Fallback: no-image product resolves to the branded SmokeCraft placeholder, never an unrelated cigar image",
+      "ok": true
+    },
+    {
+      "name": "Broken-image element does not crash the page (onerror handler pattern used by the gallery <img> tags)",
+      "ok": true
+    }
+  ]
+}

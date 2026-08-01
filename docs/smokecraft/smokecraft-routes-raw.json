@@ -180,6 +180,11 @@
     "elementRaw": "<VenueHumidorAdminInventoryEvents />"
   },
   {
+    "fullPath": "admin/humidor/media",
+    "isIndex": false,
+    "elementRaw": "<VenueHumidorAdminMedia />"
+  },
+  {
     "fullPath": "admin/humidor/:cigarId/edit",
     "isIndex": false,
     "elementRaw": "<VenueHumidorAdminProductForm />"

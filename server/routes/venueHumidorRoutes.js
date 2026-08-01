@@ -14,6 +14,7 @@ import * as checkoutCtrl from '../controllers/venueHumidorCheckoutController.js'
 import * as adminCtrl from '../controllers/venueHumidorAdminController.js'
 import * as fulfillmentCtrl from '../controllers/venueHumidorFulfillmentController.js'
 import * as assistedSellingCtrl from '../controllers/venueHumidorAssistedSellingController.js'
+import * as mediaCtrl from '../controllers/venueHumidorMediaController.js'
 
 const router = Router()
 
@@ -187,5 +188,30 @@ router.post('/venues/:venueId/admin/orders/:orderId/expire', writeLimiter, requi
 router.post('/venues/:venueId/admin/assisted-selling/recommendations', readLimiter, requireAuth, requireVenueRead, assistedSellingCtrl.handleAssistedRecommendations)
 router.get('/venues/:venueId/admin/assisted-selling/alternatives/:productId', readLimiter, requireAuth, requireVenueRead, assistedSellingCtrl.handleAssistedAlternatives)
 router.post('/venues/:venueId/admin/assisted-selling/outcome', writeLimiter, requireAuth, requireVenueWrite, assistedSellingCtrl.handleRecordOutcome)
+
+// ── Media and Product Image Management — Production Package 1 of 7 ──
+// Write tier (owner/admin/manager/staff) may upload/import/assign/
+// reorder/edit own-venue media; mentor is read-only (never reaches a
+// write route below). Approve/reject/activate/retire/master-catalog
+// publishing require full access (owner/admin/manager) per mandate —
+// staff may not self-approve their own uploads.
+router.post('/venues/:venueId/media/upload-authorization', writeLimiter, requireAuth, requireVenueWrite, mediaCtrl.handleUploadAsset)
+router.get('/venues/:venueId/media', readLimiter, requireAuth, requireVenueRead, mediaCtrl.handleListVenueMedia)
+router.get('/venues/:venueId/media/products/:productId/gallery', readLimiter, requireAuth, requireVenueRead, productVenueMatch, mediaCtrl.handleListProductGallery)
+router.post('/venues/:venueId/media/:assetId/assign', writeLimiter, requireAuth, requireVenueWrite, mediaCtrl.handleAssignToProduct)
+router.patch('/venues/:venueId/media/:assetId/metadata', writeLimiter, requireAuth, requireVenueWrite, mediaCtrl.handleEditMetadata)
+router.post('/venues/:venueId/media/products/:productId/set-primary', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, mediaCtrl.handleSetPrimary)
+router.post('/venues/:venueId/media/products/:productId/reorder', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, mediaCtrl.handleReorderGallery)
+router.post('/venues/:venueId/media/:assetId/approve', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), mediaCtrl.handleApprove)
+router.post('/venues/:venueId/media/:assetId/reject', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), mediaCtrl.handleReject)
+router.post('/venues/:venueId/media/:assetId/activate', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), mediaCtrl.handleActivate)
+router.post('/venues/:venueId/media/:assetId/retire', writeLimiter, requireAuth, requireVenueWrite, mediaCtrl.handleRetire)
+router.post('/venues/:venueId/media/products/:productId/import-url', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, mediaCtrl.handleImportUrl)
+router.post('/venues/:venueId/media/csv/dry-run', writeLimiter, requireAuth, requireVenueWrite, mediaCtrl.handleCsvDryRun)
+router.post('/venues/:venueId/media/csv/import', writeLimiter, requireAuth, requireVenueRole(FULL_ACCESS_TYPES), mediaCtrl.handleCsvImport)
+router.get('/venues/:venueId/media/missing-image-report', readLimiter, requireAuth, requireVenueRead, mediaCtrl.handleMissingImageReport)
+router.get('/venues/:venueId/media/master-catalog', readLimiter, requireAuth, requireVenueRead, mediaCtrl.handleListMasterCatalog)
+router.post('/venues/:venueId/media/products/:productId/assign-master', writeLimiter, requireAuth, requireVenueWrite, productVenueMatch, mediaCtrl.handleAssignMaster)
+router.get('/venues/:venueId/media/asset/:assetId/file', readLimiter, requireAuth, requireVenueRead, mediaCtrl.handleGetAssetFile)
 
 export default router

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="SmokeCraft branded placeholder — real product photography pending">
+  <rect width="800" height="450" fill="#0b0f18"/>
+  <rect x="0" y="0" width="800" height="450" fill="none" stroke="#E9C176" stroke-opacity="0.35" stroke-width="2"/>
+  <g fill="none" stroke="#E9C176" stroke-width="2" opacity="0.65">
+    <ellipse cx="400" cy="225" rx="220" ry="46" />
+    <line x1="180" y1="225" x2="620" y2="225" />
+  </g>
+  <text x="400" y="245" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#E9C176">SmokeCraft</text>
+  <text x="400" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#e5e2e1" opacity="0.75">Photography pending approval</text>
+</svg>

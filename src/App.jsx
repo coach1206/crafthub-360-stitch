@@ -111,6 +111,7 @@ const VenueHumidorOrderConfirmation = lazy(() => import('./pages/smokecraft/venu
 const VenueHumidorAdminDashboard = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminDashboard.jsx'))
 const VenueHumidorAdminProductForm = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminProductForm.jsx'))
 const VenueHumidorAdminInventoryEvents = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminInventoryEvents.jsx'))
+const VenueHumidorAdminMedia = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminMedia.jsx'))
 const VenueHumidorOrderQueue = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorOrderQueue.jsx'))
 const VenueHumidorOrderDetail = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorOrderDetail.jsx'))
 const VenueHumidorFulfillmentHistory = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorFulfillmentHistory.jsx'))
@@ -416,6 +417,7 @@ export default function App() {
                 <Route path="admin/humidor"                    element={<VenueHumidorAdminDashboard />} />
                 <Route path="admin/humidor/new"                element={<VenueHumidorAdminProductForm />} />
                 <Route path="admin/humidor/inventory-events"   element={<VenueHumidorAdminInventoryEvents />} />
+                <Route path="admin/humidor/media"              element={<VenueHumidorAdminMedia />} />
                 <Route path="admin/humidor/:cigarId/edit"      element={<VenueHumidorAdminProductForm />} />
 
                 {/* Venue Humidor 1B-2B-2 — staff order and fulfillment

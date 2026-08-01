@@ -1,0 +1,102 @@
+
+── 1. Building demo player state (real API, full 27-session completion) ──
+
+PASS — Demo setup: session 'entry' (Welcome) completes
+PASS — Demo setup: session 'humidor-match' (Choose Your Cigar) completes
+PASS — Demo setup: session 'meet-your-cigar' (Meet Your Cigar) completes
+PASS — Demo setup: session 'terroir' (Terroir) completes
+PASS — Demo setup: session 'format' (Construction Inspection) completes
+PASS — Demo setup: session 'cut-toast-light' (Choose Your Cut) completes
+PASS — Demo setup: session 'lighting-tutorial' (Lighting Tutorial) completes
+PASS — Demo setup: session 'first-third' (First Draw) completes
+PASS — Demo setup: session 'flavor-memory' (Flavor Memory Exercise) completes
+PASS — Demo setup: session 'pairing-lab' (Suggested Pairings) completes
+PASS — Demo setup: session 'second-third' (Flavor Evolution) completes
+PASS — Demo setup: session 'mentor-commentary' (Mentor Commentary) completes
+PASS — Demo setup: session 'knowledge-drop' (Knowledge Drop) completes
+PASS — Demo setup: session 'final-third' (Flavor Finish) completes
+PASS — Demo setup: session 'scorecard' (Rate Every Category) completes
+PASS — Demo setup: session 'ai-summary' (Session Summary) completes
+PASS — Demo setup: session 'pairing-recommendations' (Personalized Pairing Recommendations) completes
+PASS — Demo setup: session 'passport-stamp' (Passport Stamp Animation) completes
+PASS — Demo setup: session 'final-review' (Completed Scorecard) completes
+PASS — Demo setup: session 'rewards' (Rewards and XP) completes
+PASS — Demo setup: session 'achievements' (Achievements) completes
+PASS — Demo setup: session 'session-complete' (Recommended Next Journey) completes
+PASS — Demo player fully completes the 22 distinct required sessions server-side
+
+Demo player final server XP: 1175, completions: 22
+
+
+── 2. Golden Box lifecycle for demo player (build -> submit -> judge -> finalize -> award) ──
+
+PASS — Golden Box competition fixture created (admin-created, same technique as every prior GB package)
+PASS — Demo player creates a real Golden Box entry
+PASS — Demo player builds a complete cigar entry via the draft API
+PASS — Entry submits successfully
+PASS — Real admin account logs in for judging
+PASS — Real distinct judge account logs in
+PASS — Admin assigns judge to entry
+PASS — Judge submits real scorecard
+PASS — Admin finalizes competition results
+PASS — Demo player entry receives a real server-computed award
+
+── 3. Investor demo-path visual walk (real Playwright browser, shared guest identity) ──
+
+PASS — Real server-issued guest cookie captured for browser reuse
+PASS — Real click on the app's own sanctioned investor Demo Experience control activates demo/navigation-unlock mode
+FAIL — Screen '01-welcome' @ desktop renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '01-welcome' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '01-welcome' @ tablet renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '01-welcome' @ tablet has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '01-welcome' @ mobile renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '01-welcome' @ mobile has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '02-venue-select' @ desktop renders without console errors or failed critical requests
+PASS — Screen '02-venue-select' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '03-mentor-selection' @ desktop renders without console errors or failed critical requests
+PASS — Screen '03-mentor-selection' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '04-humidor-match' @ desktop renders without console errors or failed critical requests
+PASS — Screen '04-humidor-match' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '05-first-third' @ desktop renders without console errors or failed critical requests
+PASS — Screen '05-first-third' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '06-scorecard' @ desktop renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '06-scorecard' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '06-scorecard' @ tablet renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '06-scorecard' @ tablet has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '06-scorecard' @ mobile renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '06-scorecard' @ mobile has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '07-rewards' @ desktop renders without console errors or failed critical requests
+PASS — Screen '07-rewards' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '07-rewards' @ tablet renders without console errors or failed critical requests
+PASS — Screen '07-rewards' @ tablet has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '07-rewards' @ mobile renders without console errors or failed critical requests
+PASS — Screen '07-rewards' @ mobile has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '08-passport' @ desktop renders without console errors or failed critical requests
+PASS — Screen '08-passport' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '09-skill-tree' @ desktop renders without console errors or failed critical requests
+PASS — Screen '09-skill-tree' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '10-leaderboard' @ desktop renders without console errors or failed critical requests
+PASS — Screen '10-leaderboard' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '11-golden-box-build' @ desktop renders without console errors or failed critical requests
+PASS — Screen '11-golden-box-build' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '11-golden-box-build' @ tablet renders without console errors or failed critical requests
+PASS — Screen '11-golden-box-build' @ tablet has at least one enabled, clickable primary control (not a dead screen)
+PASS — Screen '11-golden-box-build' @ mobile renders without console errors or failed critical requests
+PASS — Screen '11-golden-box-build' @ mobile has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '12-golden-box-competitions' @ desktop renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)","Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '12-golden-box-competitions' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '13-golden-box-results' @ desktop renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)","Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '13-golden-box-results' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+FAIL — Screen '14-session-complete' @ desktop renders without console errors or failed critical requests — {"consoleErrors":["Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"failedRequests":[]}
+PASS — Screen '14-session-complete' @ desktop has at least one enabled, clickable primary control (not a dead screen)
+
+── 4. UI vs server player-state agreement (live-data honesty) ──
+
+PASS — Rewards screen: same-session GET /api/smokecraft/player-state returns a real XP total
+PASS — Rewards screen UI displays the server's own XP total (1175) somewhere on the page — UI is not disconnected from server truth
+
+── 5. Completion persistence across reload ──
+
+PASS — Demo player completion state survives a hard reload (server-persisted, not client-memory-only)
+
+73 passed, 9 failed (of 82 total)

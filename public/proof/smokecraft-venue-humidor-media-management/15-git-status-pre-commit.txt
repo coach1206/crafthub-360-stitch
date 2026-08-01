@@ -1,0 +1,19 @@
+ M docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json
+ M docs/smokecraft/SMOKECRAFT_ROUTE_MATRIX_RAW.md
+ M docs/smokecraft/smokecraft-routes-raw.json
+ M public/proof/smokecraft-holistic-fix-3/01-responsive-inventory.json
+ M server/routes/venueHumidorCustomerRoutes.js
+ M server/routes/venueHumidorRoutes.js
+ M src/App.jsx
+ M src/pages/smokecraft/venueHumidor/admin/VenueHumidorAdminDashboard.jsx
+ M src/services/venueHumidor/venueHumidorAdminApiClient.js
+?? public/assets/venue-humidor/
+?? public/proof/smokecraft-venue-humidor-media-management/
+?? server/controllers/venueHumidorMediaController.js
+?? server/db/migrations/114_smokecraft_venue_humidor_media.sql
+?? server/db/rollbacks/114_smokecraft_venue_humidor_media.rollback.sql
+?? server/services/venueHumidor/mediaService.js
+?? src/pages/smokecraft/venueHumidor/admin/VenueHumidorAdminMedia.jsx
+?? verify-smokecraft-flavor-memory-handheld-retest.mjs
+?? verify-smokecraft-venue-humidor-media-1-api.mjs
+?? verify-smokecraft-venue-humidor-media-1-browser.mjs
