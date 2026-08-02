@@ -283,142 +283,142 @@
       {
         "sessionId": "entry",
         "xpAwarded": 0,
-        "completedAt": "2026-08-02T18:26:43.989Z",
+        "completedAt": "2026-08-02T18:53:21.642Z",
         "sourceRoute": null
       },
       {
         "sessionId": "humidor-match",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.073Z",
+        "completedAt": "2026-08-02T18:53:21.663Z",
         "sourceRoute": null
       },
       {
         "sessionId": "meet-your-cigar",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.092Z",
+        "completedAt": "2026-08-02T18:53:21.677Z",
         "sourceRoute": null
       },
       {
         "sessionId": "terroir",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.114Z",
+        "completedAt": "2026-08-02T18:53:21.689Z",
         "sourceRoute": null
       },
       {
         "sessionId": "format",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.130Z",
+        "completedAt": "2026-08-02T18:53:21.702Z",
         "sourceRoute": null
       },
       {
         "sessionId": "cut-toast-light",
         "xpAwarded": 50,
-        "completedAt": "2026-08-02T18:26:44.165Z",
+        "completedAt": "2026-08-02T18:53:21.716Z",
         "sourceRoute": null
       },
       {
         "sessionId": "lighting-tutorial",
         "xpAwarded": 0,
-        "completedAt": "2026-08-02T18:26:44.170Z",
+        "completedAt": "2026-08-02T18:53:21.723Z",
         "sourceRoute": null
       },
       {
         "sessionId": "first-third",
         "xpAwarded": 100,
-        "completedAt": "2026-08-02T18:26:44.181Z",
+        "completedAt": "2026-08-02T18:53:21.732Z",
         "sourceRoute": null
       },
       {
         "sessionId": "flavor-memory",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.194Z",
+        "completedAt": "2026-08-02T18:53:21.742Z",
         "sourceRoute": null
       },
       {
         "sessionId": "pairing-lab",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.274Z",
+        "completedAt": "2026-08-02T18:53:21.764Z",
         "sourceRoute": null
       },
       {
         "sessionId": "second-third",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.287Z",
+        "completedAt": "2026-08-02T18:53:21.774Z",
         "sourceRoute": null
       },
       {
         "sessionId": "mentor-commentary",
         "xpAwarded": 0,
-        "completedAt": "2026-08-02T18:26:44.294Z",
+        "completedAt": "2026-08-02T18:53:21.778Z",
         "sourceRoute": null
       },
       {
         "sessionId": "knowledge-drop",
         "xpAwarded": 0,
-        "completedAt": "2026-08-02T18:26:44.307Z",
+        "completedAt": "2026-08-02T18:53:21.791Z",
         "sourceRoute": null
       },
       {
         "sessionId": "final-third",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.318Z",
+        "completedAt": "2026-08-02T18:53:21.798Z",
         "sourceRoute": null
       },
       {
         "sessionId": "scorecard",
         "xpAwarded": 100,
-        "completedAt": "2026-08-02T18:26:44.331Z",
+        "completedAt": "2026-08-02T18:53:21.807Z",
         "sourceRoute": null
       },
       {
         "sessionId": "ai-summary",
         "xpAwarded": 0,
-        "completedAt": "2026-08-02T18:26:44.341Z",
+        "completedAt": "2026-08-02T18:53:21.813Z",
         "sourceRoute": null
       },
       {
         "sessionId": "pairing-recommendations",
         "xpAwarded": 0,
-        "completedAt": "2026-08-02T18:26:44.351Z",
+        "completedAt": "2026-08-02T18:53:21.821Z",
         "sourceRoute": null
       },
       {
         "sessionId": "passport-stamp",
         "xpAwarded": 75,
-        "completedAt": "2026-08-02T18:26:44.377Z",
+        "completedAt": "2026-08-02T18:53:21.839Z",
         "sourceRoute": null
       },
       {
         "sessionId": "final-review",
         "xpAwarded": 100,
-        "completedAt": "2026-08-02T18:26:44.384Z",
+        "completedAt": "2026-08-02T18:53:21.844Z",
         "sourceRoute": null
       },
       {
         "sessionId": "rewards",
         "xpAwarded": 50,
-        "completedAt": "2026-08-02T18:26:44.391Z",
+        "completedAt": "2026-08-02T18:53:21.850Z",
         "sourceRoute": null
       },
       {
         "sessionId": "achievements",
         "xpAwarded": 50,
-        "completedAt": "2026-08-02T18:26:44.397Z",
+        "completedAt": "2026-08-02T18:53:21.854Z",
         "sourceRoute": null
       },
       {
         "sessionId": "session-complete",
         "xpAwarded": 50,
-        "completedAt": "2026-08-02T18:26:44.405Z",
+        "completedAt": "2026-08-02T18:53:21.858Z",
         "sourceRoute": null
       }
     ],
     "badges": null
   },
   "goldenBox": {
-    "competitionId": "311",
-    "entryId": "98089075-eebf-4311-a29a-c4260e715223",
+    "competitionId": "319",
+    "entryId": "0ade4788-636d-4e4a-b0f4-2c64765a4dcd",
     "awardType": "first_place"
   },
-  "capturedAt": "2026-08-02T18:26:45.169Z"
+  "capturedAt": "2026-08-02T18:53:22.193Z"
 }

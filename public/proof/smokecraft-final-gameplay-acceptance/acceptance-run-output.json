@@ -1,6 +1,6 @@
 {
-  "pass": 71,
-  "fail": 11,
+  "pass": 82,
+  "fail": 0,
   "total": 82,
   "results": [
     {
@@ -177,8 +177,7 @@
     },
     {
       "label": "Screen '03-mentor-selection' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '03-mentor-selection' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -186,8 +185,7 @@
     },
     {
       "label": "Screen '04-humidor-match' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/assets/smokecraft/Humidor%20Match%201.png?v=51e3dbf — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '04-humidor-match' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -211,8 +209,7 @@
     },
     {
       "label": "Screen '06-scorecard' @ tablet renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/auth/me — net::ERR_ABORTED\",\"http://localhost:5050/assets/smokecraft/Scorecard.png?v=51e3dbf — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '06-scorecard' @ tablet has at least one enabled, clickable primary control (not a dead screen)",
@@ -220,8 +217,7 @@
     },
     {
       "label": "Screen '06-scorecard' @ mobile renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/smokecraft/player-state/tasting/scorecard/draft — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '06-scorecard' @ mobile has at least one enabled, clickable primary control (not a dead screen)",
@@ -253,8 +249,7 @@
     },
     {
       "label": "Screen '08-passport' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/assets/smokecraft/360%20PASSPORT%20%202.png?v=51e3dbf — net::ERR_ABORTED\",\"http://localhost:5050/fonts/montserrat-400.ttf — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '08-passport' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -262,8 +257,7 @@
     },
     {
       "label": "Screen '09-skill-tree' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/smokecraft/skill-tree/ — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '09-skill-tree' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -271,8 +265,7 @@
     },
     {
       "label": "Screen '10-leaderboard' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/smokecraft/player-state/leaderboard?limit=20&offset=0 — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/player-state/leaderboard?limit=20&offset=0 — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '10-leaderboard' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -280,8 +273,7 @@
     },
     {
       "label": "Screen '11-golden-box-build' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/fonts/montserrat-400.ttf — net::ERR_ABORTED\",\"http://localhost:5050/fonts/montserrat-700.ttf — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '11-golden-box-build' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -289,8 +281,7 @@
     },
     {
       "label": "Screen '11-golden-box-build' @ tablet renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/auth/me — net::ERR_ABORTED\",\"http://localhost:5050/fonts/montserrat-400.ttf — net::ERR_ABORTED\",\"http://localhost:5050/fonts/montserrat-700.ttf — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '11-golden-box-build' @ tablet has at least one enabled, clickable primary control (not a dead screen)",
@@ -306,8 +297,7 @@
     },
     {
       "label": "Screen '12-golden-box-competitions' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/smokecraft/golden-box/competitions — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/golden-box/competitions — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/player-state/journey-snapshot — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '12-golden-box-competitions' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -315,8 +305,7 @@
     },
     {
       "label": "Screen '13-golden-box-results' @ desktop renders without console errors or failed critical requests",
-      "ok": false,
-      "detail": "{\"consoleErrors\":[],\"failedRequests\":[\"http://localhost:5050/api/smokecraft/management-sync/guest-session — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/management-sync/guest-session — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/golden-box/xp/history — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/golden-box/competitions/316/results — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/player-state/journey-snapshot — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/golden-box/competitions/316/results — net::ERR_ABORTED\",\"http://localhost:5050/api/smokecraft/golden-box/xp/history — net::ERR_ABORTED\"]}"
+      "ok": true
     },
     {
       "label": "Screen '13-golden-box-results' @ desktop has at least one enabled, clickable primary control (not a dead screen)",
@@ -348,8 +337,8 @@
     "completedSessions": 22
   },
   "goldenBox": {
-    "competitionId": "316",
-    "entryId": "c5f91f93-629c-412e-aa76-119534640551",
+    "competitionId": "318",
+    "entryId": "2202b3c3-a849-463d-9c2f-75ad3a68a41c",
     "awardType": "first_place"
   },
   "screenConsoleAndNetwork": {
@@ -375,28 +364,12 @@
     },
     "03-mentor-selection@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/mentor-voice/preferences — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "04-humidor-match@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/assets/smokecraft/Humidor%20Match%201.png?v=51e3dbf — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "05-first-third@desktop": {
@@ -411,17 +384,12 @@
     },
     "06-scorecard@tablet": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/auth/me — net::ERR_ABORTED",
-        "http://localhost:5050/assets/smokecraft/Scorecard.png?v=51e3dbf — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "06-scorecard@mobile": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/smokecraft/player-state/tasting/scorecard/draft — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "07-rewards@desktop": {
@@ -441,42 +409,27 @@
     },
     "08-passport@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/assets/smokecraft/360%20PASSPORT%20%202.png?v=51e3dbf — net::ERR_ABORTED",
-        "http://localhost:5050/fonts/montserrat-400.ttf — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "09-skill-tree@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/smokecraft/skill-tree/ — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "10-leaderboard@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/smokecraft/player-state/leaderboard?limit=20&offset=0 — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/player-state/leaderboard?limit=20&offset=0 — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "11-golden-box-build@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/fonts/montserrat-400.ttf — net::ERR_ABORTED",
-        "http://localhost:5050/fonts/montserrat-700.ttf — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "11-golden-box-build@tablet": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/auth/me — net::ERR_ABORTED",
-        "http://localhost:5050/fonts/montserrat-400.ttf — net::ERR_ABORTED",
-        "http://localhost:5050/fonts/montserrat-700.ttf — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "11-golden-box-build@mobile": {
@@ -486,24 +439,12 @@
     },
     "12-golden-box-competitions@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/smokecraft/golden-box/competitions — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/golden-box/competitions — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/player-state/journey-snapshot — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "13-golden-box-results@desktop": {
       "consoleErrors": [],
-      "failedRequests": [
-        "http://localhost:5050/api/smokecraft/management-sync/guest-session — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/management-sync/guest-session — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/golden-box/xp/history — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/golden-box/competitions/316/results — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/player-state/journey-snapshot — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/golden-box/competitions/316/results — net::ERR_ABORTED",
-        "http://localhost:5050/api/smokecraft/golden-box/xp/history — net::ERR_ABORTED"
-      ],
+      "failedRequests": [],
       "navOk": true
     },
     "14-session-complete@desktop": {
@@ -512,5 +453,5 @@
       "navOk": true
     }
   },
-  "capturedAt": "2026-08-02T18:31:56.547Z"
+  "capturedAt": "2026-08-02T18:52:38.752Z"
 }
