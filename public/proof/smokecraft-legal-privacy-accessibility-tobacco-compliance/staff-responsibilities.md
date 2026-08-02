@@ -1,0 +1,5 @@
+# Staff / Venue Responsibilities
+
+Documented responsibilities: age verification at point of sale/fulfillment, accurate product/inventory representation, customer privacy (no unnecessary lookup of customer PII outside a support case), support escalation via the existing Package 5 support-case system, refund handling per existing checkout/payment rules, incident reporting via existing security-event/support-case infrastructure, no sale to a minor under any circumstance, and completion of policy training acknowledgement before performing age verification duties.
+
+**Real, working mechanism** (reuses Package 5's audit infrastructure per mandate instruction, not a parallel system): `staff_acknowledgements` table + `POST /api/compliance/staff-acknowledgements` — an authenticated staff member acknowledges a specific `policy_versions` row, timestamped, tied to `staff_id` and `role_at_ack`, and fires a `staff_acknowledgement` compliance-audit event. Tested live (see regression-results.md): an admin-role dev-header call successfully recorded an acknowledgement against the current terms policy version.

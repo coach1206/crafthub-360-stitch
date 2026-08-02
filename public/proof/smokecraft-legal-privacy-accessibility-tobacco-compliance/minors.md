@@ -1,0 +1,7 @@
+# Children / Minors
+
+- No child-directed marketing copy exists in the codebase (grepped SmokeCraft marketing/landing copy — content targets adult hobbyist/cigar-culture language, not youth-oriented imagery or language).
+- No underage account purchase path: tobacco purchase eligibility is gated by `evaluatePurchaseEligibility()` server-side (see `age-gating.md`) regardless of account type; there is no account role that bypasses this check.
+- No collection of child data without an approved basis: account creation has no age floor below the jurisdiction's `min_purchase_age` for purchase paths; educational/browsing content does not require an account.
+- Educational content vs. commerce eligibility: SmokeCraft's educational/gameplay content (cigar knowledge, pairing lessons) is reachable without tobacco-purchase eligibility; the purchase gate is enforced only at the commerce boundary (checkout), not at content-browsing boundary — this separation already exists structurally and this package does not weaken it.
+- **Documentation note on future youth products**: any future youth-oriented coding/education product (referenced in the mandate) must run on a separate codebase/brand/domain from SmokeCraft 360's tobacco commerce, with no shared account system, no shared marketing list, and no shared analytics identifiers. This is a documentation note only — no new product work was done in this pass.

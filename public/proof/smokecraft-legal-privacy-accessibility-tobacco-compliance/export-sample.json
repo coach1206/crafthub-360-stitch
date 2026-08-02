@@ -1,0 +1,87 @@
+{
+    "success": true,
+    "request": {
+        "id": 6,
+        "request_number": "SC-DR-1785693298798-927",
+        "subject_type": "account",
+        "subject_id": "proof-fake-customer",
+        "request_type": "export",
+        "status": "completed",
+        "identity_verified_at": "2026-08-02T17:54:58.817Z",
+        "deadline_at": "2026-09-01T17:54:58.798Z",
+        "retention_exceptions": null,
+        "preview_payload": null,
+        "result_payload": {
+            "subject": {
+                "id": "proof-fake-customer",
+                "type": "account"
+            },
+            "profile_note": "This export uses FAKE test-identity data generated for this compliance package proof run.",
+            "consent_history": [
+                {
+                    "analytics": true,
+                    "marketing": false,
+                    "preferences": true,
+                    "recorded_at": "2026-08-02T17:54:58.733Z",
+                    "withdrawn_at": null,
+                    "consent_version": "2026.08.0"
+                }
+            ],
+            "age_verifications": [
+                {
+                    "method": "self_attestation",
+                    "result": "approved",
+                    "expires_at": "2027-08-02T17:54:58.751Z",
+                    "verified_at": "2026-08-02T17:54:58.751Z",
+                    "jurisdiction_code": "US-DEFAULT"
+                }
+            ],
+            "policy_acceptances": [
+                {
+                    "locale": "en",
+                    "accepted_at": "2026-08-02T17:54:58.785Z",
+                    "policy_version_id": 3
+                }
+            ],
+            "export_generated_at": "2026-08-02T17:54:58.833Z"
+        },
+        "handled_by": "proof-fake-customer",
+        "completed_at": "2026-08-02T17:54:58.833Z",
+        "created_at": "2026-08-02T17:54:58.798Z",
+        "updated_at": "2026-08-02T17:54:58.833Z"
+    },
+    "export": {
+        "export_generated_at": "2026-08-02T17:54:58.833Z",
+        "subject": {
+            "type": "account",
+            "id": "proof-fake-customer"
+        },
+        "profile_note": "This export uses FAKE test-identity data generated for this compliance package proof run.",
+        "consent_history": [
+            {
+                "consent_version": "2026.08.0",
+                "preferences": true,
+                "analytics": true,
+                "marketing": false,
+                "recorded_at": "2026-08-02T17:54:58.733Z",
+                "withdrawn_at": null
+            }
+        ],
+        "policy_acceptances": [
+            {
+                "policy_version_id": 3,
+                "accepted_at": "2026-08-02T17:54:58.785Z",
+                "locale": "en"
+            }
+        ],
+        "age_verifications": [
+            {
+                "jurisdiction_code": "US-DEFAULT",
+                "method": "self_attestation",
+                "result": "approved",
+                "verified_at": "2026-08-02T17:54:58.751Z",
+                "expires_at": "2027-08-02T17:54:58.751Z"
+            }
+        ]
+    }
+}

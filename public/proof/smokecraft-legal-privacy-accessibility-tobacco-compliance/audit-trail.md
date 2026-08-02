@@ -1,0 +1,7 @@
+# Compliance Audit Trail
+
+`compliance_audit_events` (migration 117) is append-only — no application code path issues an `UPDATE` or `DELETE` against this table (grep-verified). Event types cover: `age_verification`, `terms_acceptance`, `privacy_acknowledgement`, `consent_change`, `policy_version_change` (reserved for future use), `jurisdiction_rule_change`, `data_export`, `data_deletion`, `data_correction` (reserved), `retention_override` (reserved), `staff_acknowledgement`, `warning_acknowledgement` (reserved), `media_rights_action`, `accessibility_issue_resolution`, `tobacco_purchase_denied`/`tobacco_purchase_approved`, `shipping_denied`.
+
+This reuses the existing `audit_logs` category-check pattern from Package 5/earlier phases (a new migration 118 extends the existing `audit_logs_action_category_check` constraint with `'COMPLIANCE'` for the `auditAction()` middleware calls on RBAC-sensitive routes) rather than building a second, parallel audit system — `compliance_audit_events` is the domain-specific event stream (subject/jurisdiction-scoped), and `audit_logs` (via `auditAction()` middleware) remains the general staff-action audit trail, exactly mirroring how Package 5's `support_case_actions` complements `audit_logs`.
+
+Live-tested count after the regression run in this pass: 30+ real audit rows were generated across age verification, consent changes, data-rights requests, jurisdiction updates, and media-rights takedown (see `regression-results.md`).

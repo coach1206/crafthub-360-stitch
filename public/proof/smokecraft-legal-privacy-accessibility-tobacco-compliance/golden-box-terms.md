@@ -1,0 +1,5 @@
+# Golden Box Terms (Documentation)
+
+Draft terms for user design submissions: submitter retains ownership of their submission; submitting grants SmokeCraft 360 a license to display/judge the submission within the platform; submissions must be original work; prohibited content (IP infringement, offensive content) is disqualifying; judging/scoring criteria and tie-handling are set by venue/platform rules; disqualification is at platform discretion for rule violations; use of submitted designs beyond in-platform display/judging (e.g. commercial production) is NOT guaranteed and requires separate agreement; removal requests are handled through the same takedown mechanism as media rights (`media_rights_review`); age eligibility for submission follows the same account-eligibility rules as the rest of the platform (no separate minor-eligible submission path exists).
+
+**COUNSEL-REVIEW FLAG**: if any Golden Box prize carries monetary value, this needs separate sweepstakes/contest legal review — flagged in `counsel-review-items.md`.

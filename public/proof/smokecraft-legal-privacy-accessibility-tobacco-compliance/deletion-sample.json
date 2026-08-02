@@ -1,0 +1,64 @@
+{
+    "success": true,
+    "request": {
+        "id": 7,
+        "request_number": "SC-DR-1785693298860-45",
+        "subject_type": "account",
+        "subject_id": "proof-fake-customer",
+        "request_type": "deletion",
+        "status": "completed",
+        "identity_verified_at": "2026-08-02T17:54:58.880Z",
+        "deadline_at": "2026-09-01T17:54:58.860Z",
+        "retention_exceptions": [
+            {
+                "reason": "tax/audit legal retention (see retention_policies.payments)",
+                "category": "payments"
+            },
+            {
+                "reason": "tax/audit legal retention; customer reference anonymized",
+                "category": "orders"
+            },
+            {
+                "reason": "fraud/abuse and security retention window",
+                "category": "security_logs"
+            },
+            {
+                "reason": "operational dispute-history retention window",
+                "category": "support_cases"
+            }
+        ],
+        "preview_payload": {
+            "session_effect": "All active sessions for this subject will be revoked upon deletion commit.",
+            "will_anonymize": [
+                "account_profile_pii (name/email replaced with anonymized reference)",
+                "gameplay_identity (leaderboard display name)",
+                "session_identifiers"
+            ],
+            "leaderboard_effect": "Display name replaced with \"Deleted Player\" reference; no ranking history remains publicly attributable.",
+            "will_retain_with_exception": [
+                {
+                    "reason": "tax/audit legal retention (see retention_policies.payments)",
+                    "category": "payments"
+                },
+                {
+                    "reason": "tax/audit legal retention; customer reference anonymized",
+                    "category": "orders"
+                },
+                {
+                    "reason": "fraud/abuse and security retention window",
+                    "category": "security_logs"
+                },
+                {
+                    "reason": "operational dispute-history retention window",
+                    "category": "support_cases"
+                }
+            ]
+        },
+        "result_payload": null,
+        "handled_by": "proof-fake-customer",
+        "completed_at": "2026-08-02T17:54:58.899Z",
+        "created_at": "2026-08-02T17:54:58.860Z",
+        "updated_at": "2026-08-02T17:54:58.899Z"
+    },
+    "sessions_revoked": true
+}

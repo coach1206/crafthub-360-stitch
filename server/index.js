@@ -158,6 +158,7 @@ import smokecraftErrorLogRoutes     from './routes/smokecraftErrorLogRoutes.js'
 import smokecraftPersistenceRoutes  from './routes/smokecraftPersistenceRoutes.js'
 import smokecraftPlayerStateRoutes  from './routes/smokecraftPlayerStateRoutes.js'
 import smokecraftAccountRoutes      from './routes/smokecraftAccountRoutes.js'
+import complianceRoutes             from './routes/complianceRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -410,6 +411,7 @@ app.use('/api/pos3',              pos3OrderRoutes)
 app.use('/api/mentor',            mentorRoutes)
 app.use('/api/developer',         developerRoutes)
 app.use('/api/access-requests',   accessRequestsRoutes)
+app.use('/api/compliance',        complianceRoutes)
 
 // ── TEMP diagnostic: prove what the live server is actually serving ──
 const EXPECTED_BADGE = 'LIVE SMOKECRAFT BUILD 668d6599'
