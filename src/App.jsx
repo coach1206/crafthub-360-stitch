@@ -8,6 +8,7 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 import PublicSessionNotice from './components/PublicSessionNotice.jsx'
 import BuildDiagnosticFooter from './components/system/BuildDiagnosticFooter.jsx'
 import BuildInfo from './pages/system/BuildInfo.jsx'
+import StatusPage from './pages/system/StatusPage.jsx'
 
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
@@ -326,6 +327,8 @@ export default function App() {
             <Route path="boot/console" element={<BootConsole />} />
             {/* Production Build Identity pass — non-sensitive deployment diagnostics, public (no dashboard/CLI needed to prove what Railway is serving) */}
             <Route path="system/build-info" element={<BuildInfo />} />
+            {/* Production Package 7 — practical-minimum public status page (publication to a public domain pending) */}
+            <Route path="status" element={<StatusPage />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />

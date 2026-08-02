@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
+import * as smokecraftManagementSyncService from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -21,12 +22,29 @@ export default function ManagementSync() {
   const navigate = useNavigate()
   const [done, setDone] = useState(false)
   const [syncActionState, setSyncActionState] = useState('idle') // idle | working | done | error
+  const [eatStatus, setEatStatus] = useState(null) // E.A.T. backend health — honest, never assumed
 
   const cigar   = journey.selectedCigar
   const pairing = journey.pairing
   const flavors = journey.flavorMemory?.selectedFlavors || []
 
   const hasRealVenue = !!(journey.selectedVenue && !journey.selectedVenue.skipped)
+
+  // E.A.T. backend health check — read-only, fire-and-forget, never blocks
+  // render or gameplay. Honestly reflects backend-connected vs local-only.
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const status = await smokecraftManagementSyncService.getManagementSyncStatus(
+          journey.selectedVenue?.id || null
+        )
+        setEatStatus(status)
+      } catch {
+        setEatStatus({ backendConnected: false })
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Explicit user action only — never triggered by mount/render/polling.
   // A guest without a real selected venue never reaches the server at
@@ -55,6 +73,31 @@ export default function ManagementSync() {
 
       const synced = await requestSync('venue_insights', serverJourneyId)
       setSyncActionState(synced.ok ? 'done' : 'error')
+
+      // E.A.T. live sync — genuinely separate from the venue-journey server
+      // above; fire-and-forget, never blocks the guest UI or reverses the
+      // venue-sync result already set. Failures degrade to local_fallback
+      // inside the service itself — SmokeCraft completion stays canonical.
+      smokecraftManagementSyncService.syncManagement({
+        venueId:             journey.selectedVenue.id,
+        guestId:             session?.guestId || session?.id || null,
+        smokecraftSessionId: serverJourneyId,
+        sessionStatus:       'completed',
+        completedRoute:      'management-sync',
+        completedSteps:      session?.completedSteps || [],
+        xpSummary:           { xp: session?.xp || 0 },
+        stampSummary:        session?.stamps || [],
+        tasteProfile:        { tasteTags: flavors },
+      }).then(res => setEatStatus(res)).catch(() => {})
+      smokecraftManagementSyncService.recordGuestActivity({
+        venueId:          journey.selectedVenue.id,
+        guestId:          session?.guestId || session?.id || null,
+        managerVisibility: true,
+      }).catch(() => {})
+      smokecraftManagementSyncService.createManagerAlertSync({
+        venueId:   journey.selectedVenue.id,
+        alertType: 'session_synced',
+      }).catch(() => {})
     } catch {
       setSyncActionState('error')
     }
@@ -171,6 +214,11 @@ export default function ManagementSync() {
               <span style={{ color: GOLD }}>
                 ✓ Synced to venue{managementSync.snapshotVersion ? ` — snapshot v${managementSync.snapshotVersion}` : ''}
               </span>
+            )}
+            {eatStatus && (
+              <div style={{ marginTop: 6, fontSize: '0.85em', color: eatStatus.backendConnected ? GOLD : 'rgba(229,226,225,0.45)' }}>
+                {eatStatus.backendConnected ? 'E.A.T. Backend Connected' : 'E.A.T. Local Fallback — no data leaves this device yet'}
+              </div>
             )}
           </div>
         )}

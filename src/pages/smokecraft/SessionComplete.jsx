@@ -5,6 +5,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { useDemoMode } from '../../context/DemoModeContext.jsx'
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
+import * as smokecraftManagementSyncService from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import TicketTapperSpecialsStrip from '../../components/smokecraft/TicketTapperSpecialsStrip.jsx'
@@ -125,6 +126,68 @@ export default function SessionComplete({ onBack, onComplete } = {}) {
       saveSnapshot({ ...mapJourneyToSnapshotPayload(journey), completionState: 'completed' })
         .then(() => completeOnServer())
         .catch(() => {})
+    }
+
+    // E.A.T. live sync (SC-D069 fix) — restores the canonical calls into
+    // the existing, already-functional eatSmokeCraftLiveSyncService via
+    // the smokecraftManagementSyncService client. Fire-and-forget async
+    // IIFE: never awaited by the render path, never blocks the guest
+    // screen, and any failure is caught silently and degrades to
+    // local_fallback inside the service itself. SmokeCraft session
+    // completion (XP/stamps above) is already committed locally before
+    // this runs and is never rolled back if E.A.T. sync fails.
+    if (!session.completedSteps.includes('session-complete')) {
+      const selectedCigar = journey?.selectedCigar || null
+      const venueId = (journey.selectedVenue && !journey.selectedVenue.skipped) ? journey.selectedVenue.id : null
+      const guestId = session?.guestId || session?.id || null
+      const completedSteps = session?.completedSteps || []
+      const xpSummary = { xp: session?.xp || 0 }
+      const stampSummary = session?.stamps || []
+      const tasteProfile = { tasteTags: journey?.flavorMemory?.selectedFlavors || [] }
+
+      ;(async () => {
+        try {
+          const syncResult = await smokecraftManagementSyncService.syncManagement({
+            venueId,
+            guestId,
+            smokecraftSessionId: managementSync.serverJourneyId || null,
+            sessionStatus:       'completed',
+            completedRoute:      'session-complete',
+            completedSteps,
+            xpSummary,
+            stampSummary,
+            tasteProfile,
+          })
+
+          await smokecraftManagementSyncService.recordGuestActivity({
+            venueId,
+            guestId,
+            managerVisibility: true,
+          })
+
+          await smokecraftManagementSyncService.createManagerAlertSync({
+            venueId,
+            alertType: 'session_completed',
+          })
+
+          if (selectedCigar) {
+            await smokecraftManagementSyncService.createInventorySignalSync({
+              venueId,
+              cigarReference: selectedCigar.id || selectedCigar.name || null,
+            })
+          }
+
+          await smokecraftManagementSyncService.writeEATSyncAuditEvent({
+            venueId,
+            guestId,
+            eventType: 'session_complete_sync',
+            backendConnected: !!syncResult?.backendConnected,
+          })
+        } catch {
+          // Honest degraded state, never surfaced as a false success to
+          // the guest, never rolls back gameplay completion above.
+        }
+      })()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

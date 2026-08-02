@@ -1,0 +1,56 @@
+On branch recovery/smokecraft-codex-final
+Your branch is up to date with 'origin/recovery/smokecraft-codex-final'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json
+	modified:   docs/smokecraft/SMOKECRAFT_ROUTE_MATRIX_RAW.md
+	modified:   public/handoff/SmokeCraft-POS360-EAT360-UIUX-Handoff.zip
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/acceptance-run-output.json
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/01-welcome.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/02-venue-select.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/03-mentor-selection.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/04-humidor-match.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/05-first-third.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/06-scorecard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/07-rewards.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/08-passport.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/09-skill-tree.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/10-leaderboard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/11-golden-box-build.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/12-golden-box-competitions.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/13-golden-box-results.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/14-session-complete.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/15-rewards-live-data-check.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/desktop/16-session-complete-after-reload.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/01-welcome.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/06-scorecard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/07-rewards.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/mobile/11-golden-box-build.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/01-welcome.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/06-scorecard.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/07-rewards.png
+	modified:   public/proof/smokecraft-final-gameplay-acceptance/screenshots/tablet/11-golden-box-build.png
+	modified:   public/proof/smokecraft-full-game-fresh-player-closure/fresh-player-run-output.json
+	modified:   public/proof/smokecraft-legal-privacy-accessibility-tobacco-compliance/eat-known-defect.md
+	modified:   public/proof/smokecraft-monitoring-backup-recovery-support/restore-validator-output.json
+	modified:   public/proof/smokecraft-production-infrastructure-deployment/deployment-smoke-test-results.json
+	modified:   public/proof/smokecraft-venue-humidor-media-management/screenshots/01-admin-media-empty-desktop.png
+	modified:   public/proof/smokecraft-venue-humidor-media-management/screenshots/02-admin-media-uploaded-desktop.png
+	modified:   public/proof/smokecraft-venue-humidor-media-management/screenshots/03-admin-media-approved-primary-desktop.png
+	modified:   public/proof/smokecraft-venue-humidor-media-management/screenshots/04-admin-media-handheld-portrait.png
+	modified:   public/proof/smokecraft-venue-humidor-media-management/screenshots/04-admin-media-tablet-10in-landscape.png
+	modified:   server/routes/healthRoutes.js
+	modified:   src/App.jsx
+	modified:   src/pages/smokecraft/ManagementSync.jsx
+	modified:   src/pages/smokecraft/SessionComplete.jsx
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	docs/ui-ux-handoff/smokecraft-pos360-eat360/21-PRODUCTION-PACKAGE-7-FINAL-CLOSURE.md
+	public/proof/smokecraft-final-production-launch-closure/
+	server/controllers/publicStatusController.js
+	src/pages/system/StatusPage.jsx
+
+no changes added to commit (use "git add" and/or "git commit -a")

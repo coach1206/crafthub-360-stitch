@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { getHealth, getVersion, getMetrics } from '../controllers/healthController.js'
 import { getLiveness, getReadiness, getMigrationState } from '../controllers/deploymentHealthController.js'
+import { getPublicStatus } from '../controllers/publicStatusController.js'
 import { requireAuth } from '../middleware/authMiddleware.js'
 import { requireAdmin } from '../middleware/roleMiddleware.js'
 
@@ -24,5 +25,11 @@ router.get('/health/migrations', getMigrationState)
 // Production Package 5 — admin-gated metrics snapshot (not public: could
 // reveal operational internals such as error rates / DB latency).
 router.get('/health/metrics',    requireAuth, requireAdmin, getMetrics)
+
+// Production Package 7 — practical-minimum public status summary.
+// Sensitive-field-stripped; honest degraded state; no live external
+// monitoring provider is connected in this environment (disclosed in
+// the payload itself).
+router.get('/status/public',     getPublicStatus)
 
 export default router

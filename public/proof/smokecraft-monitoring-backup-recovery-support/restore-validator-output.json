@@ -1,14 +1,14 @@
 {
-  "ranAt": "2026-08-02T18:55:20.420Z",
-  "finishedAt": "2026-08-02T18:55:51.596Z",
-  "artifactPath": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T18-55-20-476Z.dump",
+  "ranAt": "2026-08-02T19:07:49.981Z",
+  "finishedAt": "2026-08-02T19:08:15.219Z",
+  "artifactPath": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T19-07-50-041Z.dump",
   "testDbName": "crafthub_smokecraft_restore_test",
   "allPass": true,
   "checks": [
     {
       "name": "backup artifact exists",
       "pass": true,
-      "detail": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T18-55-20-476Z.dump"
+      "detail": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T19-07-50-041Z.dump"
     },
     {
       "name": "backup artifact is readable",
@@ -60,7 +60,7 @@
     {
       "name": "row count reconciles: golden_box_entries",
       "pass": true,
-      "detail": "source=531 restored=531"
+      "detail": "source=533 restored=533"
     },
     {
       "name": "row count reconciles: inventory_events",
@@ -85,12 +85,12 @@
     {
       "name": "golden box entries queryable post-restore",
       "pass": true,
-      "detail": "531 entries"
+      "detail": "533 entries"
     },
     {
       "name": "media/asset mapping table(s) present post-restore",
       "pass": true,
-      "detail": "media_rights_review,packaging_assets,packaging_asset_placements,smokecraft_content_media,venue_cigar_media_events"
+      "detail": "media_rights_review,packaging_assets,packaging_asset_placements,smokecraft_content_media,venue_cigar_media_import_batches"
     },
     {
       "name": "health-equivalent query succeeds against restored DB",
