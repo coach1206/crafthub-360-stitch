@@ -79,6 +79,34 @@ export function validateEnv() {
       errors.push('STRIPE_SECRET_KEY is set but uses a known-unsafe default or is shorter than the minimum safe length')
     if (process.env.STRIPE_WEBHOOK_SECRET && isUnsafeSecretValue(process.env.STRIPE_WEBHOOK_SECRET))
       errors.push('STRIPE_WEBHOOK_SECRET is set but uses a known-unsafe default or is shorter than the minimum safe length')
+
+    // Stripe live-vs-test key mismatch guard — production must not run on
+    // test-mode Stripe credentials without an explicit operator override.
+    if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY.startsWith('sk_test_') &&
+        process.env.ALLOW_STRIPE_TEST_IN_PRODUCTION !== 'true')
+      errors.push('STRIPE_SECRET_KEY is a test-mode key (sk_test_...) in production — set ALLOW_STRIPE_TEST_IN_PRODUCTION=true if this is intentional (e.g. pre-launch staging-as-production), otherwise use a live key')
+
+    // ── Production Package 4 — object storage / deployment-infra checks ──
+    if (process.env.STORAGE_PROVIDER === 'local' || !process.env.STORAGE_PROVIDER)
+      errors.push('STORAGE_PROVIDER is "local" (or unset) in production — production must use a real object-storage provider (r2/s3), not local-disk media persistence')
+    if (process.env.STORAGE_PROVIDER && process.env.STORAGE_PROVIDER !== 'local') {
+      if (!process.env.STORAGE_BUCKET) errors.push('STORAGE_BUCKET is not set in production')
+      if (!process.env.STORAGE_ACCESS_KEY_ID) errors.push('STORAGE_ACCESS_KEY_ID is not set in production')
+      if (!process.env.STORAGE_SECRET_ACCESS_KEY) errors.push('STORAGE_SECRET_ACCESS_KEY is not set in production')
+    }
+
+    const appUrl = process.env.APP_PUBLIC_URL
+    if (!appUrl) errors.push('APP_PUBLIC_URL is not set in production')
+    else if (!isValidHttpOrigin(appUrl) || !appUrl.startsWith('https://'))
+      errors.push('APP_PUBLIC_URL must be a valid https:// URL in production')
+
+    const supportedMajors = ['18', '20', '22']
+    const nodeMajor = process.versions.node.split('.')[0]
+    if (!supportedMajors.includes(nodeMajor))
+      errors.push(`Unsupported Node runtime major version "${nodeMajor}" — production requires one of: ${supportedMajors.join(', ')}`)
+
+    if (process.env.SESSION_SECRET && isUnsafeSecretValue(process.env.SESSION_SECRET) === false && process.env.SESSION_SECRET === process.env.JWT_SECRET)
+      errors.push('SESSION_SECRET must not equal JWT_SECRET — use independently generated secrets')
   }
 
   // ── Warnings in all environments ─────────────────────────────────────────

@@ -100,3 +100,15 @@ integration** in this same repo/branch. This documentation pass did not
 read, modify, or make claims about payment-gateway internals beyond what
 is already disclosed in existing proof packages (checkout/payments
 screens exist; payment logic itself is out of scope for this handoff).
+
+**Update (Production Package 4 — Production Infrastructure and
+Deployment):** the real payment-gateway integration referenced above is
+now complete (Production Package 2). Production deployment
+infrastructure — Dockerfile, CI/CD pipeline, environment-variable
+contract, startup validation, health/readiness endpoints, a real
+Cloudflare R2-compatible object-storage adapter, and a real Sharp-based
+image-resize pipeline — has now been implemented and locally verified
+(see `public/proof/smokecraft-production-infrastructure-deployment/`).
+Staging/production deployment itself has not been exercised — no cloud
+credentials exist in the sandbox that built it; see that proof
+directory's `staging-results.md` for the exact human setup checklist.

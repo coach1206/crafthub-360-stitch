@@ -1,0 +1,17 @@
+Real curl output against the locally-run production-mode server (port 3000),
+captured during this pass before the server was stopped:
+
+GET /api/health/live
+  200 {"success":true,"status":"alive",...}
+
+GET /api/health/ready  (honest 503 — no live DB/storage/payment creds in this sandbox)
+  503 {"success":false,"status":"not-ready","checks":{
+    "database":{"ok":false,"mode":"prototype"},
+    "objectStorage":{"ok":false,"provider":"r2","activated":true},
+    "paymentProvider":{"ok":false,"mode":"unconfigured"}}}
+
+GET /api/health/migrations
+  200 {"success":true,"migrationCount":114,"latestMigration":"115_smokecraft_venue_humidor_real_payment_gateway.sql"}
+
+Full check-by-check results: see deployment-smoke-test-results.json
+(written by scripts/verify-smokecraft-production-deployment.mjs's own run).

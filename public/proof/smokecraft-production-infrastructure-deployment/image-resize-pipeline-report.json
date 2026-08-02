@@ -1,0 +1,84 @@
+{
+  "source": "cigar-shape-size.png",
+  "original": {
+    "width": 1586,
+    "height": 992,
+    "format": "png",
+    "size": 1561943
+  },
+  "variants": {
+    "thumbnail": {
+      "width": 96,
+      "height": 60,
+      "format": "webp",
+      "size": 1242,
+      "checksum": "855b0fbbef28b95c2f73819a4836d0bf8044fee0a0a8e1dc44b545dc27ea5fee",
+      "file": "image-variants/thumbnail.webp"
+    },
+    "inventory-row": {
+      "width": 160,
+      "height": 100,
+      "format": "webp",
+      "size": 3026,
+      "checksum": "8478975ef598b9de774e6f8ec97b2bcb7817c8cd5edb3bd33ac671dd1598fd2d",
+      "file": "image-variants/inventory-row.webp"
+    },
+    "browse-card": {
+      "width": 400,
+      "height": 250,
+      "format": "webp",
+      "size": 14398,
+      "checksum": "d19b133279daf3bbdcc704adf4b6d671692c81655f5055333fd7ac82d68aeb24",
+      "file": "image-variants/browse-card.webp"
+    },
+    "mobile": {
+      "width": 480,
+      "height": 300,
+      "format": "webp",
+      "size": 19474,
+      "checksum": "cc90bb959179090453b9f23dd1eb8281631209f552f3dff4fb797c43145ac272",
+      "file": "image-variants/mobile.webp"
+    },
+    "tablet": {
+      "width": 768,
+      "height": 480,
+      "format": "webp",
+      "size": 41952,
+      "checksum": "bc5b91a9bbb9f83d6de76ed671664f266812db04902de40cedb42eef95179559",
+      "file": "image-variants/tablet.webp"
+    },
+    "product-hero": {
+      "width": 1024,
+      "height": 640,
+      "format": "webp",
+      "size": 68154,
+      "checksum": "a1beb143f7d4c5593cdc65a1b57052d68583b1b7993e98f3866f13b6a7bee960",
+      "file": "image-variants/product-hero.webp"
+    },
+    "desktop": {
+      "width": 1440,
+      "height": 901,
+      "format": "webp",
+      "size": 113856,
+      "checksum": "167584ca62563af76663e28dab2de1566e9eecd5838e8f73802ea62e3d85204b",
+      "file": "image-variants/desktop.webp"
+    },
+    "gallery": {
+      "width": 1920,
+      "height": 1201,
+      "format": "webp",
+      "size": 157154,
+      "checksum": "0875e6ba189e5cb69b264ca2c71aaeed04b971a69449b5ff93e29de5804c3305",
+      "file": "image-variants/gallery.webp"
+    },
+    "mobile-fallback": {
+      "width": 480,
+      "height": 300,
+      "format": "jpeg",
+      "size": 24319,
+      "checksum": "e69bd9f4fb2738755485e8555fe795ac38d809244bf88ce7897a78191e3f75bf",
+      "file": "image-variants/mobile-fallback.jpeg"
+    }
+  },
+  "failures": []
+}

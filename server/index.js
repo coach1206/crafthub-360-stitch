@@ -525,7 +525,7 @@ app.use((_req, res) => {
 app.use(errorHandler)
 
 // ── Start ─────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', async () => {
+const __httpServer = app.listen(PORT, '0.0.0.0', async () => {
   console.log(`\n🥃 NOVEE OS Backend — port ${PORT}`)
   console.log(`   Health:      http://localhost:${PORT}/api/health`)
   console.log(`   Auth:        http://localhost:${PORT}/api/auth/me`)
@@ -556,5 +556,31 @@ app.listen(PORT, '0.0.0.0', async () => {
   // Auto-Reset Scheduler — loads persisted schedule and arms the cron job
   initScheduler()
 })
+
+// Production Package 4 — graceful shutdown for container orchestrators.
+// SIGTERM (Docker/Railway/Fly stop) and SIGINT (Ctrl-C locally) both stop
+// accepting new connections, let in-flight requests finish, then exit.
+// A hard-exit timeout guards against a hung connection blocking shutdown.
+let __shuttingDown = false
+function gracefulShutdown(signal) {
+  if (__shuttingDown) return
+  __shuttingDown = true
+  console.log(`[shutdown] ${signal} received — closing HTTP server gracefully...`)
+  const forceExitTimer = setTimeout(() => {
+    console.error('[shutdown] graceful close timed out after 10s — forcing exit')
+    process.exit(1)
+  }, 10_000)
+  forceExitTimer.unref()
+  __httpServer.close((err) => {
+    if (err) {
+      console.error('[shutdown] error while closing server:', err.message)
+      process.exit(1)
+    }
+    console.log('[shutdown] HTTP server closed — exiting cleanly')
+    process.exit(0)
+  })
+}
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
+process.on('SIGINT',  () => gracefulShutdown('SIGINT'))
 
 export default app

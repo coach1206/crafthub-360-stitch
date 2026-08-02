@@ -1,0 +1,78 @@
+{
+  "target": "http://127.0.0.1:3000",
+  "timestamp": "2026-08-02T15:47:21.694Z",
+  "passCount": 14,
+  "total": 14,
+  "results": [
+    {
+      "name": "liveness /api/health/live",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "readiness /api/health/ready",
+      "ok": true,
+      "detail": "503 (expected in prototype-DB sandbox): {\"database\":{\"ok\":false,\"mode\":\"prototype\"},\"objectStorage\":{\"ok\":false,\"provider\":\"r2\",\"activated\":true},\"paymentProvider\":{\"ok\":false,\"mode\":\"unconfigured\"}}"
+    },
+    {
+      "name": "migration state /api/health/migrations",
+      "ok": true,
+      "detail": "114 migrations, latest=115_smokecraft_venue_humidor_real_payment_gateway.sql"
+    },
+    {
+      "name": "version/build identifier /api/version",
+      "ok": true,
+      "detail": "env=development commit=20d2a165dc1df3c1ce4d821f9ee23283e1589e03"
+    },
+    {
+      "name": "homepage loads",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Venue Humidor browse API responds",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Golden Box route API responds",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "POS360 route smoke",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "E.A.T. 360 route smoke",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "checkout route responds",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "webhook route rejects invalid Stripe signature",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "no dev stack traces on 404",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "image variant proof files exist (real Sharp pipeline output)",
+      "ok": true,
+      "detail": "9 variant files on disk"
+    },
+    {
+      "name": "build-manifest present (build/version identifier)",
+      "ok": true,
+      "detail": null
+    }
+  ]
+}

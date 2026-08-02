@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/validateSmokecraftAssets.mjs && node scripts/generateBuildManifest.mjs && node scripts/generateSmokecraftGameManifest.mjs && node scripts/validateSmokecraftManifest.mjs && node scripts/validateSmokecraftShellAdoption.mjs && node scripts/validateSmokecraftControlCoverage.mjs && node scripts/validateSmokecraftResponsive.mjs && node scripts/validateSmokecraftPlayerStateIntegrity.mjs && node scripts/validateSmokecraftAccountIntegrity.mjs && node scripts/validateSmokecraftGameplayIntegrity.mjs && node scripts/validateSmokecraftGameplayAuthority.mjs && node scripts/validateSmokecraftAlertPointerSafety.mjs && node scripts/validateSmokecraftTastingAuthority.mjs && node scripts/validateSmokecraftCultivatorAuthority.mjs && node scripts/validateSmokecraftCollectionsAuthority.mjs && node scripts/validateSmokecraftSkillTreeAuthority.mjs && node scripts/validateSmokecraftLeaderboardAuthority.mjs && node scripts/validateSmokecraftPairingEngineAuthority.mjs && node scripts/validateSmokecraftMentorGuidanceAuthority.mjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/stripProductionExcludedAssets.mjs",
     "preview": "vite preview",
     "start": "npm run build && node server/index.js",
     "server": "node server/index.js",
@@ -20,6 +20,9 @@
     "visual:dayone360": "node scripts/visualProof.js --family=dayone360",
     "visual:crafthub": "node scripts/visualProof.js --family=crafthub",
     "db:migrate": "node server/db/runMigrations.js",
+    "jobs:run": "node server/scripts/runScheduledJobs.mjs",
+    "images:pipeline-test": "node scripts/testImageResizePipeline.mjs",
+    "verify:production-deployment": "node scripts/verify-smokecraft-production-deployment.mjs",
     "db:seed": "node server/db/seeds/seedSmokecraftEducationalContent.mjs",
     "verify:pos360": "node server/scripts/verifyPos360PlatformLayer.js",
     "verify:database": "node server/scripts/verifyDatabaseFoundation.js",
@@ -116,6 +119,7 @@
     "verify:smokecraft-identity-live-buttons": "node server/scripts/verifySmokeCraftIdentityLiveButtons.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1101.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/utilities": "^3.2.2",
     "@stripe/stripe-js": "^9.12.1",
@@ -135,6 +139,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.18.2",
+    "sharp": "^0.35.3",
     "stripe": "^22.3.0",
     "tailwind-merge": "^1.13.0",
     "uuid": "^14.0.0"

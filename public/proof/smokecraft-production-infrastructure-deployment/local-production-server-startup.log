@@ -1,0 +1,24 @@
+[NOVEE OS DB] PostgreSQL unavailable — prototype mode active: connect ECONNREFUSED 127.0.0.1:5432
+[EnvValidator] ⚠  ELEVENLABS_API_KEY not set — mentor voice uses Web Speech API (prototype mode)
+
+🥃 NOVEE OS Backend — port 3000
+   Health:      http://localhost:3000/api/health
+   Auth:        http://localhost:3000/api/auth/me
+   Admin:       http://localhost:3000/api/admin/my-permissions
+   Mentor:      http://localhost:3000/api/mentor/profile
+   Developer:   http://localhost:3000/api/developer/health
+   POS3 Sync:   http://localhost:3000/api/pos3/sync/status
+   Mode:        production
+
+[proxy-diagnostic] environment          : production
+[proxy-diagnostic] trust proxy setting   : 1 (1 hop = Railway edge)
+[proxy-diagnostic] req.ip resolves from   : X-Forwarded-For (rightmost trusted hop)
+[proxy-diagnostic] rate limiter enabled   : yes (300/15m general, 20/15m auth)
+[proxy-diagnostic] X-Forwarded-For safe   : yes — express-rate-limit validator will not throw ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+
+[POS3Sync] Auto-sync started. Interval: 300s
+[resetScheduler] Auto-reset is disabled — no schedule active.
+[POS3Sync] Running startup sync for provider: prototype
+[POS3Sync] Sync complete — provider:prototype status:success orders:4 inventory:16 tables:13 staff:4
+[shutdown] SIGTERM received — closing HTTP server gracefully...
+[shutdown] HTTP server closed — exiting cleanly

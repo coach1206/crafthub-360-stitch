@@ -1,0 +1,2 @@
+production-deployment.yml: VALID YAML — 8 jobs: ['install-and-lint', 'validators', 'build', 'container-build', 'security-scan', 'migration-validation', 'deploy-staging', 'deploy-production']
+smokecraft-visual-proof.yml: VALID YAML (pre-existing, unmodified)
