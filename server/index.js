@@ -16,6 +16,8 @@ import { fileURLToPath } from 'node:url'
 
 import { handleStripeWebhook } from './controllers/venueHumidorPaymentController.js'
 import healthRoutes          from './routes/healthRoutes.js'
+import opsStatusRoutes       from './routes/opsStatusRoutes.js'
+import supportAdminRoutes    from './routes/supportAdminRoutes.js'
 import sessionRoutes         from './routes/sessionRoutes.js'
 import passportRoutes        from './routes/passportRoutes.js'
 import passport360SmokeCraftRoutes from './routes/passport360SmokeCraftRoutes.js'
@@ -343,6 +345,8 @@ app.use('/api/smokecraft/error-log',             smokecraftErrorLogRoutes)
 app.use('/api/modules/smokecraft/persistence',   smokecraftPersistenceRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
+app.use('/api/admin',             opsStatusRoutes)
+app.use('/api/support-admin',     supportAdminRoutes)
 app.use('/api/founder',           founderRoutes)
 app.use('/api/ranking',           rankingRoutes)
 app.use('/api/badges',            badgeRoutes)

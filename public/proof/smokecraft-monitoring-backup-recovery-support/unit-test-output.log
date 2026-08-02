@@ -1,0 +1,22 @@
+PASS: scrubs Stripe secret key
+PASS: scrubs Stripe webhook secret
+PASS: scrubs JWT-shaped token
+PASS: scrubs password field regardless of key casing
+PASS: scrubs nested DB connection string with credentials
+PASS: does NOT scrub allowlisted operational IDs
+PASS: correlation IDs are unique and prefixed
+{"timestamp":"2026-08-02T16:58:44.273Z","environment":"development","service":"smokecraft-360","severity":"info","event_type":"startup","route":"/x","correlation_id":"corr_1","venue_id":"v1"}
+PASS: logEvent emits required structured fields
+{"timestamp":"2026-08-02T16:58:44.274Z","environment":"development","service":"smokecraft-360","severity":"error","event_type":"db_failure","message":"connect failed for [redacted]host/db"}
+PASS: logEvent scrubs secrets even when logging a caught error message
+PASS: app_unavailable does not fire below minSamples in window
+PASS: app_unavailable fires at minSamples within window
+PASS: app_unavailable ignores samples outside the window (no noisy single-event alert)
+PASS: elevated_5xx_rate requires both sample count AND rate threshold
+PASS: duplicate_payment_anomaly fires on a single confirmed event (sev1, no dampening)
+PASS: every alert definition has severity/owner/channel
+PASS: unknown alert rule throws
+PASS: metrics: counters/gauges/histograms record and snapshot correctly
+
+17 test(s) passed
+RESULT: ALL MONITORING/RECOVERY/SUPPORT UNIT TESTS PASSED

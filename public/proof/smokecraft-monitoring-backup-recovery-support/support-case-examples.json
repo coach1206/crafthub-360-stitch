@@ -1,0 +1,31 @@
+[
+  {
+    "case_number": "SC-CASE-EXAMPLE-0001",
+    "customer_identifier": "fake.player@example.test",
+    "venue_id": "venue-demo-001",
+    "category": "passport",
+    "severity": "sev4",
+    "status": "resolved",
+    "assigned_owner": "support-staff-jane",
+    "related_session_id": "session-fake-abc123",
+    "description": "Customer reports missing Passport stamp after completing the humidor-match session.",
+    "resolution_code": "STAMP_BACKFILLED_AFTER_VERIFICATION",
+    "resolution_notes": "Verified session completion in server-side ledger, stamp was eligible but not yet synced. Re-ran passport sync for this guest session; stamp appeared correctly. No manual data edit was needed.",
+    "opened_by": "support-staff-jane"
+  },
+  {
+    "case_number": "SC-CASE-EXAMPLE-0002",
+    "customer_identifier": "fake.customer2@example.test",
+    "venue_id": "venue-demo-002",
+    "category": "refund",
+    "severity": "sev3",
+    "status": "closed",
+    "assigned_owner": "support-staff-mike",
+    "related_order_id": "order-fake-9981",
+    "related_payment_id": "pi_fake_0000000001",
+    "description": "Customer requests refund for a cigar that arrived damaged.",
+    "resolution_code": "REFUND_ISSUED_VIA_RECONCILIATION_TOOL",
+    "resolution_notes": "Refund processed through Package 2's canonical payment reconciliation tooling (not a manual edit). Confirmed in payment_audit_logs.",
+    "opened_by": "support-staff-mike"
+  }
+]

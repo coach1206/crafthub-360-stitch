@@ -1,0 +1,18 @@
+ M .gitignore
+ M server/controllers/healthController.js
+ M server/index.js
+ M server/routes/healthRoutes.js
+?? public/proof/smokecraft-monitoring-backup-recovery-support/
+?? scripts/backup-smokecraft-database.mjs
+?? scripts/test-smokecraft-monitoring-recovery-support.mjs
+?? scripts/test-smokecraft-support-admin-rbac.mjs
+?? scripts/validateSmokecraftMonitoringRecoverySupport.mjs
+?? scripts/verify-smokecraft-backup-restore.mjs
+?? server/controllers/opsStatusController.js
+?? server/controllers/supportAdminController.js
+?? server/db/migrations/116_smokecraft_monitoring_backup_support.sql
+?? server/lib/alertRules.mjs
+?? server/lib/metrics.mjs
+?? server/lib/structuredLogger.mjs
+?? server/routes/opsStatusRoutes.js
+?? server/routes/supportAdminRoutes.js

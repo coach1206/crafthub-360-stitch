@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { isDbAvailable } from '../db/connection.js'
+import { snapshot as metricsSnapshot } from '../lib/metrics.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST = path.resolve(__dirname, '../../dist')
@@ -52,4 +53,12 @@ export function getVersion(_req, res) {
     applicationVersion: manifest?.applicationVersion || null,
     manifestFound:      !!manifest,
   })
+}
+
+// Production Package 5 — lightweight in-app metrics snapshot.
+// Admin-gated (see healthRoutes.js) because counters/gauges can reveal
+// operational internals (error rates, DB latency) that should not be
+// publicly exposed per the mandate ("no sensitive infra details public").
+export function getMetrics(_req, res) {
+  res.json({ success: true, ...metricsSnapshot() })
 }

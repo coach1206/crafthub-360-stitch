@@ -1,0 +1,100 @@
+{
+  "ranAt": "2026-08-02T16:39:42.956Z",
+  "finishedAt": "2026-08-02T16:40:07.097Z",
+  "artifactPath": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T16-39-43-014Z.dump",
+  "testDbName": "crafthub_smokecraft_restore_test",
+  "allPass": true,
+  "checks": [
+    {
+      "name": "backup artifact exists",
+      "pass": true,
+      "detail": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T16-39-43-014Z.dump"
+    },
+    {
+      "name": "backup artifact is readable",
+      "pass": true
+    },
+    {
+      "name": "schema restores (tables present)",
+      "pass": true,
+      "detail": "1096 tables in restored DB"
+    },
+    {
+      "name": "migration version matches source",
+      "pass": true,
+      "detail": "source=116_smokecraft_monitoring_backup_support.sql restored=116_smokecraft_monitoring_backup_support.sql"
+    },
+    {
+      "name": "critical table present: passport_records",
+      "pass": true
+    },
+    {
+      "name": "critical table present: passport_stamps",
+      "pass": true
+    },
+    {
+      "name": "critical table present: golden_box_entries",
+      "pass": true
+    },
+    {
+      "name": "critical table present: inventory_events",
+      "pass": true
+    },
+    {
+      "name": "critical table present: venue_cigar_payment_intents",
+      "pass": true
+    },
+    {
+      "name": "critical table present: schema_migrations",
+      "pass": true
+    },
+    {
+      "name": "critical table present: support_cases",
+      "pass": true
+    },
+    {
+      "name": "row count reconciles: passport_records",
+      "pass": true,
+      "detail": "source=0 restored=0"
+    },
+    {
+      "name": "row count reconciles: golden_box_entries",
+      "pass": true,
+      "detail": "source=512 restored=512"
+    },
+    {
+      "name": "row count reconciles: inventory_events",
+      "pass": true,
+      "detail": "source=0 restored=0"
+    },
+    {
+      "name": "inventory ledger sum reconciles",
+      "pass": true,
+      "detail": "source=0 restored=0"
+    },
+    {
+      "name": "payment reference table queryable post-restore",
+      "pass": true,
+      "detail": "4 payment intents"
+    },
+    {
+      "name": "passport stamps have no orphaned passport_id (post-restore)",
+      "pass": true,
+      "detail": "orphans=0"
+    },
+    {
+      "name": "golden box entries queryable post-restore",
+      "pass": true,
+      "detail": "512 entries"
+    },
+    {
+      "name": "media/asset mapping table(s) present post-restore",
+      "pass": true,
+      "detail": "packaging_assets,smokecraft_content_media,venue_cigar_media_assets,venue_cigar_media_events,venue_cigar_media_master_catalog"
+    },
+    {
+      "name": "health-equivalent query succeeds against restored DB",
+      "pass": true
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 import { Router } from 'express'
-import { getHealth, getVersion } from '../controllers/healthController.js'
+import { getHealth, getVersion, getMetrics } from '../controllers/healthController.js'
 import { getLiveness, getReadiness, getMigrationState } from '../controllers/deploymentHealthController.js'
+import { requireAuth } from '../middleware/authMiddleware.js'
+import { requireAdmin } from '../middleware/roleMiddleware.js'
 
 const router = Router()
 
@@ -18,5 +20,9 @@ router.get('/version', getVersion)
 router.get('/health/live',       getLiveness)
 router.get('/health/ready',      getReadiness)
 router.get('/health/migrations', getMigrationState)
+
+// Production Package 5 — admin-gated metrics snapshot (not public: could
+// reveal operational internals such as error rates / DB latency).
+router.get('/health/metrics',    requireAuth, requireAdmin, getMetrics)
 
 export default router
