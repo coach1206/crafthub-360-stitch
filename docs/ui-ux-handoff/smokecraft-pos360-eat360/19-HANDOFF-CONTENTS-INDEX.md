@@ -73,6 +73,15 @@
   `src/components/pos3/shell/CommandAppShell.jsx`,
   `tailwind.config.js`
 
+## Production Package 6 Correction addition
+
+`20-COMPLIANCE-UI-PRODUCTION-PACKAGE-6-CORRECTION.md` — customer age-gate,
+Terms/Privacy/warning acceptance, consent preference center, data-rights
+requests, staff age-verification, and compliance-administration screens,
+plus the real server-side checkout eligibility enforcement they connect
+to (see `public/proof/smokecraft-legal-privacy-accessibility-tobacco-compliance/`
+docs 34-44 for full proof).
+
 ## Shareable package
 
 `public/handoff/SmokeCraft-POS360-EAT360-UIUX-Handoff.zip` — a zipped

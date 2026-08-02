@@ -107,6 +107,14 @@ const GoldenBoxHub = lazy(() => import('./pages/smokecraft/goldenBox/GoldenBoxHu
 const VenueHumidorBrowser = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorBrowser.jsx'))
 const VenueHumidorCigarDetail = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorCigarDetail.jsx'))
 const VenueHumidorCheckout = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorCheckout.jsx'))
+// Production Package 6 Correction — compliance UI surfaces (real,
+// backend-connected; never client-only eligibility).
+const ComplianceAgeGate = lazy(() => import('./pages/smokecraft/compliance/AgeGate.jsx'))
+const CompliancePolicyCenter = lazy(() => import('./pages/smokecraft/compliance/PolicyCenter.jsx'))
+const ComplianceConsentCenter = lazy(() => import('./pages/smokecraft/compliance/ConsentCenter.jsx'))
+const ComplianceDataRightsCenter = lazy(() => import('./pages/smokecraft/compliance/DataRightsCenter.jsx'))
+const ComplianceStaffAgeVerification = lazy(() => import('./pages/smokecraft/compliance/staff/StaffAgeVerification.jsx'))
+const ComplianceAdmin = lazy(() => import('./pages/smokecraft/compliance/admin/ComplianceAdmin.jsx'))
 const VenueHumidorOrderConfirmation = lazy(() => import('./pages/smokecraft/venueHumidor/VenueHumidorOrderConfirmation.jsx'))
 const VenueHumidorAdminDashboard = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminDashboard.jsx'))
 const VenueHumidorAdminProductForm = lazy(() => import('./pages/smokecraft/venueHumidor/admin/VenueHumidorAdminProductForm.jsx'))
@@ -412,6 +420,14 @@ export default function App() {
                 <Route path="venue-humidor/checkout"       element={<VenueHumidorCheckout />} />
                 <Route path="venue-humidor/order/:orderId" element={<VenueHumidorOrderConfirmation />} />
                 <Route path="venue-humidor/:cigarId"       element={<VenueHumidorCigarDetail />} />
+
+                {/* Production Package 6 Correction — compliance UI. */}
+                <Route path="compliance/age-gate"           element={<ComplianceAgeGate />} />
+                <Route path="compliance/policies"           element={<CompliancePolicyCenter />} />
+                <Route path="compliance/consent"            element={<ComplianceConsentCenter />} />
+                <Route path="compliance/data-rights"        element={<ComplianceDataRightsCenter />} />
+                <Route path="staff/compliance/age-verification" element={<ComplianceStaffAgeVerification />} />
+                <Route path="admin/compliance"              element={<ComplianceAdmin />} />
 
                 {/* Venue Humidor 1B-2B-1 — staff inventory administration.
                     Server-side RBAC on every route; no client-only gate. */}

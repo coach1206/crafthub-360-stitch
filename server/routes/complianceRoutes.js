@@ -15,9 +15,21 @@
 import { Router } from 'express'
 import { requireAuth, optionalAuth } from '../middleware/authMiddleware.js'
 import { requireManager, requireAdmin, auditAction } from '../middleware/roleMiddleware.js'
+import { attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity } from '../middleware/smokecraftGuestIdentity.js'
 import * as c from '../controllers/complianceController.js'
 
 const router = Router()
+
+// Production Package 6 Correction: every compliance route now also
+// resolves the caller's real SmokeCraft guest/user identity server-side
+// (same middleware Venue Humidor/Golden Box already use) so the customer
+// compliance UI can call GET /whoami for its own subjectType/subjectId
+// instead of ever reading the httpOnly guest-session cookie client-side —
+// the cookie is httpOnly specifically so client JS cannot read or forge it.
+router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
+
+// ── Caller identity (server-derived only — never client-submitted) ─
+router.get('/whoami', c.getWhoAmI)
 
 // ── Jurisdictions ──────────────────────────────────────────────
 router.get('/jurisdictions', c.listJurisdictions)

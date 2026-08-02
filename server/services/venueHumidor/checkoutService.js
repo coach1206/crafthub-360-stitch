@@ -11,9 +11,32 @@ import { getDb } from '../../db/connection.js'
 import { applyInventoryEvent, releaseHold } from './inventoryService.js'
 import { calculateOrderTax } from '../tax/taxCalculationEngine.js'
 import { recordVenueHumidorEvent } from './venueHumidorEventService.js'
+import { evaluateCheckoutEligibility } from '../../controllers/complianceController.js'
 
 export class CheckoutError extends Error {
   constructor(code) { super(code); this.code = code }
+}
+
+/**
+ * Production Package 6 Correction: derives the compliance subject identity
+ * and jurisdiction code from a checkout actorRef + venue row. actorRef is
+ * either "user:<id>" (authenticated) or a bare guest identity string.
+ * Jurisdiction is derived from the venue's US state; falls back to
+ * 'US-DEFAULT' if no state-specific jurisdiction is configured — matching
+ * the compliance_jurisdictions seed set up in Package 6.
+ */
+function complianceSubjectFromActorRef(actorRef) {
+  if (actorRef.startsWith('user:')) return { subjectType: 'user', subjectId: actorRef.slice(5) }
+  return { subjectType: 'guest', subjectId: actorRef }
+}
+
+async function deriveJurisdictionCode(client, venue) {
+  if (venue.state) {
+    const code = `US-${venue.state}`
+    const { rows } = await client.query(`SELECT code FROM compliance_jurisdictions WHERE code = $1`, [code])
+    if (rows.length) return code
+  }
+  return 'US-DEFAULT'
 }
 
 const UNIQUE_VIOLATION = '23505'
@@ -104,11 +127,23 @@ export async function getCheckoutQuote(venueId, holdId, actorRef, { tipCents = 0
 
   const fulfillmentSupport = await getFulfillmentSupport(venue)
 
+  // Server-authoritative eligibility PREVIEW (Production Package 6
+  // Correction) — same evaluator used at order-creation time, run here
+  // read-only so the checkout UI can show an honest pre-order compliance
+  // state (age-verification-required / terms-required / etc.) without the
+  // client ever being trusted to compute or submit that state itself.
+  const jurisdictionCode = await deriveJurisdictionCode(db, venue)
+  const { subjectType, subjectId } = complianceSubjectFromActorRef(actorRef)
+  const eligibility = await evaluateCheckoutEligibility({ subjectType, subjectId, jurisdictionCode })
+
   const quote = {
     venueId, holdId, productId: product.product_id, quantity: hold.quantity,
     product: { name: product.name, brand: product.brand, primaryImageUrl: product.primary_image_url, vitola: product.vitola },
     unitPriceCents: product.price_cents,
     subtotalCents, taxCents, serviceChargeCents, discountCents, tipCents: safeTipCents, totalCents,
+    complianceEligible: eligibility.eligible,
+    complianceState: eligibility.eligible ? 'eligible-for-checkout' : eligibility.reason,
+    jurisdictionCode,
     currency: 'USD',
     taxStatus: taxResult.ok ? taxResult.taxStatus : 'tax_config_required',
     holdExpiresAt: hold.expires_at,
@@ -136,10 +171,9 @@ export async function getCheckoutQuote(venueId, holdId, actorRef, { tipCents = 0
  * same idempotency key returns the original order, never duplicates.
  */
 export async function createOrderFromHold(venueId, holdId, actorRef, {
-  fulfillmentMethod, fulfillmentDetails, customerNotes, tipCents = 0, ageVerified, idempotencyKey,
+  fulfillmentMethod, fulfillmentDetails, customerNotes, tipCents = 0, idempotencyKey, locale = 'en',
 } = {}) {
   if (!idempotencyKey) throw new CheckoutError('idempotency_key_required')
-  if (!ageVerified) throw new CheckoutError('age_verification_required')
 
   const db = getDb()
   const { rows: preCheck } = await db.query(`SELECT * FROM venue_cigar_orders WHERE idempotency_key = $1`, [idempotencyKey])
@@ -150,6 +184,18 @@ export async function createOrderFromHold(venueId, holdId, actorRef, {
   if (!venue) throw new CheckoutError('no_active_venue')
   const fulfillmentSupport = await getFulfillmentSupport(venue)
   if (!fulfillmentMethod || !fulfillmentSupport[fulfillmentMethod]) throw new CheckoutError('unsupported_fulfillment_method')
+
+  // ── SERVER-AUTHORITATIVE compliance eligibility (Production Package 6
+  // Correction). Client-submitted "ageVerified"/eligibility booleans are
+  // NEVER trusted — this evaluator re-derives the subject identity and
+  // jurisdiction from the server-side actorRef + venue row and checks the
+  // real age_verification_records / policy_acceptances / jurisdiction rules.
+  // No hold is locked, no order row is written, and no payment intent can
+  // ever be created downstream when this check fails.
+  const jurisdictionCode = await deriveJurisdictionCode(db, venue)
+  const { subjectType, subjectId } = complianceSubjectFromActorRef(actorRef)
+  const eligibility = await evaluateCheckoutEligibility({ subjectType, subjectId, jurisdictionCode, fulfillmentMethod, locale })
+  if (!eligibility.eligible) throw new CheckoutError(eligibility.reason)
 
   const client = await db.connect()
   try {
@@ -189,7 +235,7 @@ export async function createOrderFromHold(venueId, holdId, actorRef, {
         [
           venueId, actorRef, generateOrderNumber(), holdId, paymentStatus, fulfillmentMethod,
           JSON.stringify(fulfillmentDetails || {}), customerNotes || null, subtotalCents, taxCents,
-          safeTipCents, totalCents, ageVerified, JSON.stringify({ name: product.name, brand: product.brand, vitola: product.vitola, priceCents: product.price_cents }),
+          safeTipCents, totalCents, true, JSON.stringify({ name: product.name, brand: product.brand, vitola: product.vitola, priceCents: product.price_cents }),
           idempotencyKey,
         ]
       )

@@ -33,6 +33,18 @@ async function recordAudit(eventType, { subjectType, subjectId, actorId, jurisdi
   logInfo('compliance_audit_event', { event_type: eventType, subject_id: subjectId, jurisdiction_code: jurisdictionCode })
 }
 
+// ── Caller identity (server-derived, Production Package 6 Correction) ───
+// Never trusts a client-submitted subjectType/subjectId — resolves it the
+// same way checkoutService.js does, from req.smokecraftIdentity (itself
+// only ever set by the server-verified guest-session JWT or a real
+// authenticated user session).
+export function getWhoAmI(req, res) {
+  if (!req.smokecraftIdentity) return res.status(401).json({ success: false, error: 'identity_required' })
+  const subjectType = req.smokecraftIdentity.type === 'user' ? 'user' : 'guest'
+  const subjectId = String(req.smokecraftIdentity.id)
+  res.json({ success: true, subjectType, subjectId })
+}
+
 // ── Jurisdictions ──────────────────────────────────────────────
 export async function listJurisdictions(req, res) {
   if (!requireDb(res)) return
@@ -176,6 +188,83 @@ export async function checkFulfillmentEligibility(req, res) {
     await recordAudit('shipping_denied', { jurisdictionCode, detail: { fulfillmentMethod } })
   }
   res.json({ success: true, allowed, fulfillmentMethod, jurisdictionCode })
+}
+
+/**
+ * Server-authoritative FULL checkout eligibility evaluator — the single
+ * function the Venue Humidor checkout path must call before an order, hold
+ * conversion, or payment intent may be created. Combines: jurisdiction
+ * support, age-verification validity, required Terms/Privacy/tobacco-warning
+ * acceptance (current versions), and fulfillment-method eligibility
+ * (shipping denied by default). Returns a specific denial reason from the
+ * fixed vocabulary the checkout controller maps to HTTP responses — never a
+ * generic failure — and NEVER trusts any client-supplied boolean.
+ */
+export async function evaluateCheckoutEligibility({ subjectType, subjectId, jurisdictionCode, fulfillmentMethod, locale = 'en' }) {
+  const jr = await query(`SELECT * FROM compliance_jurisdictions WHERE code = $1`, [jurisdictionCode])
+  if (!jr.rows.length || jr.rows[0].status !== 'active') {
+    return { eligible: false, reason: 'jurisdiction-unsupported' }
+  }
+  const j = jr.rows[0]
+  if (!j.tobacco_sales_allowed) return { eligible: false, reason: 'jurisdiction-unsupported' }
+
+  const ageEligibility = await evaluatePurchaseEligibility({ subjectType, subjectId, jurisdictionCode })
+  if (!ageEligibility.eligible) {
+    if (ageEligibility.reason === 'no_valid_age_verification') {
+      // distinguish "never verified" vs "verified but expired"
+      const anyRecord = await query(
+        `SELECT * FROM age_verification_records WHERE subject_type=$1 AND subject_id=$2 AND jurisdiction_code=$3
+         ORDER BY verified_at DESC LIMIT 1`,
+        [subjectType, subjectId, jurisdictionCode]
+      )
+      if (anyRecord.rows.length && anyRecord.rows[0].result === 'approved') {
+        return { eligible: false, reason: 'age-verification-expired' }
+      }
+      return { eligible: false, reason: 'age-verification-required' }
+    }
+    return { eligible: false, reason: 'jurisdiction-unsupported' }
+  }
+
+  // Required policy acceptances: current terms, privacy, and tobacco_warning
+  // versions (any jurisdiction-scoped OR global (NULL) current version).
+  const requiredTypes = [
+    { type: 'terms', reason: 'terms-acceptance-required' },
+    { type: 'privacy', reason: 'privacy-acknowledgement-required' },
+    { type: 'tobacco_warning', reason: 'warning-acknowledgement-required' },
+  ]
+  for (const { type, reason } of requiredTypes) {
+    const pv = await query(
+      `SELECT * FROM policy_versions WHERE policy_type=$1 AND is_current=true AND locale=$2
+         AND (jurisdiction_code IS NULL OR jurisdiction_code = $3)
+       ORDER BY jurisdiction_code NULLS LAST LIMIT 1`,
+      [type, locale, jurisdictionCode]
+    )
+    if (!pv.rows.length) continue // no current policy configured for this type/locale — nothing to enforce
+    const acc = await query(
+      `SELECT * FROM policy_acceptances WHERE subject_type=$1 AND subject_id=$2 AND policy_version_id=$3`,
+      [subjectType, subjectId, pv.rows[0].id]
+    )
+    if (!acc.rows.length) return { eligible: false, reason }
+  }
+
+  if (fulfillmentMethod) {
+    const map = {
+      shipping: j.shipping_allowed,
+      venue_pickup: j.venue_pickup_allowed,
+      in_venue: j.in_venue_allowed,
+      local_delivery: j.local_delivery_allowed,
+      counter_pickup: j.venue_pickup_allowed,
+      table_delivery: j.in_venue_allowed,
+      lounge_seat_delivery: j.in_venue_allowed,
+    }
+    const allowed = map[fulfillmentMethod]
+    if (allowed === false) {
+      const reason = fulfillmentMethod === 'shipping' ? 'shipping-prohibited' : 'fulfillment-method-prohibited'
+      return { eligible: false, reason }
+    }
+  }
+
+  return { eligible: true, reason: 'eligible', jurisdiction: j, ageVerification: ageEligibility.verification }
 }
 
 // ── Policy versions + acceptance ─────────────────────────────────

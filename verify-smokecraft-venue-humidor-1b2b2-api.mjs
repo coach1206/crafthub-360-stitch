@@ -37,10 +37,42 @@ function makeClient() {
       req.end()
     })
   }
-  return { get: (p) => request('GET', p), post: (p, b) => request('POST', p, b) }
+  return { get: (p) => request('GET', p), post: (p, b) => request('POST', p, b), get cookies() { return cookies } }
 }
 
 function sh(cmd) { return execSync(cmd, { encoding: 'utf8', env: process.env }) }
+
+// Production Package 6 Correction: checkout now requires real
+// server-verified compliance eligibility (age verification + current
+// Terms/Privacy/tobacco-warning acceptance) instead of a trusted client
+// boolean. Test fixtures must establish that real state before creating
+// an order, exactly as a real guest browser flow would via the compliance
+// UI.
+function decodeGuestSub(token) {
+  if (!token) return null
+  const parts = token.split('.')
+  if (parts.length < 2) return null
+  try { return JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8')).sub } catch { return null }
+}
+async function bootstrapCompliance(client, jurisdictionCode = 'US-DEFAULT') {
+  const guestSub = decodeGuestSub(client.cookies['smokecraft_guest_session'])
+  if (!guestSub) return null
+  await client.post('/api/compliance/age-verification', {
+    subjectType: 'guest', subjectId: guestSub, jurisdictionCode, method: 'self_attestation', declaredBirthdate: '1990-01-01',
+  })
+  const policies = await client.get('/api/compliance/policies?locale=en')
+  const current = (policies.body?.policies || []).filter(p => p.is_current &&
+    ['terms', 'privacy', 'tobacco_warning'].includes(p.policy_type) &&
+    (p.jurisdiction_code === null || p.jurisdiction_code === jurisdictionCode))
+  const seen = new Set()
+  for (const p of current) {
+    if (seen.has(p.policy_type)) continue
+    seen.add(p.policy_type)
+    await client.post('/api/compliance/policies/accept', { subjectType: 'guest', subjectId: guestSub, policyVersionId: p.id, locale: 'en' })
+  }
+  return guestSub
+}
+
 const rid = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 
 // counter_pickup requires real code verification before handoff.
@@ -78,6 +110,7 @@ async function main() {
     const pid = created.body.product.product_id
     // guest identity via /api/auth/me bootstrap (guest cookie auto-issued by smokecraftGuestIdentity middleware)
     await guest.get(`/api/smokecraft/venue-humidor/customer/venues/${venueId}`)
+    await bootstrapCompliance(guest)
     const hold = await guest.post(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/products/${pid}/stick-hold`, { idempotencyKey: `vh1b2b2-hold-${rid()}` })
     if (!hold.body?.hold) return null
     const holdId = hold.body.hold.hold_id

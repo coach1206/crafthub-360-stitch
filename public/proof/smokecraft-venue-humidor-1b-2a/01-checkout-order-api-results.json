@@ -1,7 +1,7 @@
 {
-  "pass": 30,
+  "pass": 31,
   "fail": 0,
-  "total": 30,
+  "total": 31,
   "results": [
     {
       "name": "Quote succeeds for a valid, owned, active hold",
@@ -72,7 +72,11 @@
       "ok": true
     },
     {
-      "name": "Order creation without age verification is honestly rejected",
+      "name": "Order creation without a real server-side age-verification record is honestly rejected regardless of a fabricated client ageVerified:true",
+      "ok": true
+    },
+    {
+      "name": "The hold used in the denied attempt is still active (no order/hold-conversion occurred on denial)",
       "ok": true
     },
     {

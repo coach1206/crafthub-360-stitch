@@ -37,10 +37,42 @@ function makeClient() {
       req.end()
     })
   }
-  return { get: (p) => request('GET', p), post: (p, b) => request('POST', p, b) }
+  return { get: (p) => request('GET', p), post: (p, b) => request('POST', p, b), get cookies() { return cookies } }
 }
 
 function sh(cmd) { return execSync(cmd, { encoding: 'utf8', env: process.env }) }
+
+// Production Package 6 Correction: checkout now requires real
+// server-verified compliance eligibility (age verification + current
+// Terms/Privacy/tobacco-warning acceptance) instead of a trusted client
+// boolean. Test fixtures must establish that real state before creating
+// an order, exactly as a real guest browser flow would via the compliance
+// UI.
+function decodeGuestSub(token) {
+  if (!token) return null
+  const parts = token.split('.')
+  if (parts.length < 2) return null
+  try { return JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8')).sub } catch { return null }
+}
+async function bootstrapCompliance(client, jurisdictionCode = 'US-DEFAULT') {
+  const guestSub = decodeGuestSub(client.cookies['smokecraft_guest_session'])
+  if (!guestSub) return null
+  await client.post('/api/compliance/age-verification', {
+    subjectType: 'guest', subjectId: guestSub, jurisdictionCode, method: 'self_attestation', declaredBirthdate: '1990-01-01',
+  })
+  const policies = await client.get('/api/compliance/policies?locale=en')
+  const current = (policies.body?.policies || []).filter(p => p.is_current &&
+    ['terms', 'privacy', 'tobacco_warning'].includes(p.policy_type) &&
+    (p.jurisdiction_code === null || p.jurisdiction_code === jurisdictionCode))
+  const seen = new Set()
+  for (const p of current) {
+    if (seen.has(p.policy_type)) continue
+    seen.add(p.policy_type)
+    await client.post('/api/compliance/policies/accept', { subjectType: 'guest', subjectId: guestSub, policyVersionId: p.id, locale: 'en' })
+  }
+  return guestSub
+}
+
 
 async function main() {
   const dbName = new URL(process.env.DATABASE_URL).pathname.replace(/^\//, '')
@@ -61,6 +93,7 @@ async function main() {
 
   const customer = makeClient()
   await customer.get('/api/smokecraft/venue-humidor/customer/venues/' + venueId) // establishes guest identity
+  await bootstrapCompliance(customer)
   const admin = makeClient()
   await admin.post('/api/auth/admin-login', { email: 'admin@novee.dev', pin: '9999' })
 
@@ -134,10 +167,17 @@ async function main() {
   const posOrder = await customer.post(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/checkout/orders`, { holdId: hold6, fulfillmentMethod: 'pos_tab_new', ageVerified: true, idempotencyKey: `vh1b2a-pos-${Date.now()}` })
   assert('Creating an order with an unsupported fulfillment method (new POS tab) is honestly rejected, never fabricated', posOrder.status === 409 && posOrder.body.error === 'unsupported_fulfillment_method')
 
-  console.log('\n── 7. Age verification required ──')
-  const hold7 = await newHold()
-  const noAgeOrder = await customer.post(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/checkout/orders`, { holdId: hold7, fulfillmentMethod: 'counter_pickup', ageVerified: false, idempotencyKey: `vh1b2a-noage-${Date.now()}` })
-  assert('Order creation without age verification is honestly rejected', noAgeOrder.status === 400 && noAgeOrder.body.error === 'age_verification_required')
+  console.log('\n── 7. Server-authoritative age/compliance verification required (Package 6 Correction) ──')
+  // A fresh guest with NO real age_verification_record and a client that
+  // fabricates ageVerified:true (the old, now-ignored client boolean) must
+  // still be denied — the server only trusts the real compliance records.
+  const unverifiedGuest = makeClient()
+  await unverifiedGuest.get('/api/smokecraft/venue-humidor/customer/venues/' + venueId)
+  const unverifiedHold = await unverifiedGuest.post(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/products/${productId}/stick-hold`, { idempotencyKey: `vh1b2a-unverified-hold-${Date.now()}-${Math.random()}` })
+  const noAgeOrder = await unverifiedGuest.post(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/checkout/orders`, { holdId: unverifiedHold.body.hold.hold_id, fulfillmentMethod: 'counter_pickup', ageVerified: true, idempotencyKey: `vh1b2a-noage-${Date.now()}` })
+  assert('Order creation without a real server-side age-verification record is honestly rejected regardless of a fabricated client ageVerified:true', noAgeOrder.status === 403 && noAgeOrder.body.error === 'age-verification-required')
+  const noAgeHoldCheck = await unverifiedGuest.post(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/checkout/quote`, { holdId: unverifiedHold.body.hold.hold_id })
+  assert('The hold used in the denied attempt is still active (no order/hold-conversion occurred on denial)', noAgeHoldCheck.status === 200 && noAgeHoldCheck.body.quote.complianceEligible === false && noAgeHoldCheck.body.quote.complianceState === 'age-verification-required')
 
   console.log('\n── 8. Staff-confirmed completion, inventory deducted exactly once ──')
   const beforeComplete = await customer.get(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/catalog/${productId}`)

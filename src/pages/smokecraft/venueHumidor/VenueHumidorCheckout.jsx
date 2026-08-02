@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useSmokeCraftJourney } from '../../../context/SmokeCraftJourneyContext.jsx'
 import * as api from '../../../services/venueHumidor/venueHumidorCustomerApiClient.js'
 import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { CHECKOUT_DENIAL_COPY, useLocale } from '../compliance/complianceUiKit.js'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -31,10 +32,10 @@ export default function VenueHumidorCheckout() {
   const [fulfillmentMethod, setFulfillmentMethod] = useState('counter_pickup')
   const [tableOrSeat, setTableOrSeat] = useState('')
   const [notes, setNotes] = useState('')
-  const [ageVerified, setAgeVerified] = useState(false)
   const [submitState, setSubmitState] = useState('idle')
   const [submitError, setSubmitError] = useState(null)
   const [countdown, setCountdown] = useState(null)
+  const locale = useLocale()
 
   async function load() {
     if (!venueId || !holdId) { setState('missing'); return }
@@ -76,8 +77,12 @@ export default function VenueHumidorCheckout() {
     setSubmitState('submitting')
     setSubmitError(null)
     const idempotencyKey = `gb-vh-checkout-${holdId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    // NOTE (Production Package 6 Correction): no client-side "ageVerified"
+    // boolean is submitted or trusted — eligibility is decided entirely
+    // server-side from real compliance records. This body field is now
+    // ignored by the server if present at all.
     const result = await api.createOrder(venueId, holdId, {
-      fulfillmentMethod, fulfillmentDetails: { tableOrSeat }, customerNotes: notes, ageVerified,
+      fulfillmentMethod, fulfillmentDetails: { tableOrSeat }, customerNotes: notes,
     }, idempotencyKey)
     if (!result.ok) { setSubmitState('failed'); setSubmitError(result.error); return }
     setSubmitState('submitted')
@@ -148,17 +153,37 @@ export default function VenueHumidorCheckout() {
 
               <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, marginBottom: 16 }}>
                 <p style={{ fontSize: 13, color: DANGER, margin: '0 0 8px' }}>{quote.paymentNote}</p>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 8, minHeight: 44, fontSize: 13 }}>
-                  <input type="checkbox" checked={ageVerified} onChange={e => setAgeVerified(e.target.checked)} />
-                  I confirm I am of legal age to purchase tobacco products.
-                </label>
+                {/* Production Package 6 Correction: honest, server-derived
+                    compliance state — never a client-side self-attest
+                    checkbox that would fake eligibility. quote.complianceState
+                    comes straight from the same evaluator checkout/orders
+                    enforces. */}
+                {quote.complianceEligible ? (
+                  <p role="status" data-checkout-compliance-state="eligible-for-checkout" style={{ fontSize: 13, color: OK }}>✓ Eligible for checkout (age-verified, policies accepted).</p>
+                ) : (
+                  <div role="alert" data-checkout-compliance-state={quote.complianceState} style={{ border: `1px solid ${DANGER}`, borderRadius: 8, padding: 10 }}>
+                    <p style={{ fontSize: 13, color: DANGER, margin: 0 }}>{(CHECKOUT_DENIAL_COPY[locale] || CHECKOUT_DENIAL_COPY.en)[quote.complianceState]?.title || 'Checkout not yet eligible'}</p>
+                    <p style={{ fontSize: 12, margin: '4px 0 8px' }}>{(CHECKOUT_DENIAL_COPY[locale] || CHECKOUT_DENIAL_COPY.en)[quote.complianceState]?.body || ''}</p>
+                    <button type="button" onClick={() => navigate(quote.complianceState === 'age-verification-required' || quote.complianceState === 'age-verification-expired'
+                        ? `/smokecraft/compliance/age-gate?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}&jurisdiction=${quote.jurisdictionCode || ''}`
+                        : `/smokecraft/compliance/policies?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}&jurisdiction=${quote.jurisdictionCode || ''}`)}
+                      style={{ minHeight: 44, padding: '8px 16px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit', fontSize: 13 }}>
+                      {(CHECKOUT_DENIAL_COPY[locale] || CHECKOUT_DENIAL_COPY.en)[quote.complianceState]?.cta || 'Resolve requirement'}
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <button type="button" disabled={!ageVerified || submitState === 'submitting'} onClick={handleSubmit}
-                style={{ minHeight: 44, width: '100%', padding: '12px 20px', borderRadius: 20, border: `1.5px solid ${ageVerified ? OK : BORDER}`, background: 'transparent', color: ageVerified ? OK : 'rgba(229,226,225,0.35)', cursor: ageVerified && submitState !== 'submitting' ? 'pointer' : 'not-allowed', fontFamily: 'inherit', fontSize: 15 }}>
+              <button type="button" disabled={!quote.complianceEligible || submitState === 'submitting'} onClick={handleSubmit}
+                data-checkout-place-order-state={!quote.complianceEligible ? 'blocked' : submitState}
+                style={{ minHeight: 44, width: '100%', padding: '12px 20px', borderRadius: 20, border: `1.5px solid ${quote.complianceEligible ? OK : BORDER}`, background: 'transparent', color: quote.complianceEligible ? OK : 'rgba(229,226,225,0.35)', cursor: quote.complianceEligible && submitState !== 'submitting' ? 'pointer' : 'not-allowed', fontFamily: 'inherit', fontSize: 15 }}>
                 {submitState === 'submitting' ? 'Placing Order…' : 'Place Order'}
               </button>
-              {submitState === 'failed' && <p role="alert" style={{ color: DANGER, fontSize: 12, marginTop: 8 }}>{submitError}</p>}
+              {submitState === 'failed' && (
+                <div role="alert" style={{ marginTop: 8 }}>
+                  <p style={{ color: DANGER, fontSize: 12, margin: 0 }}>{(CHECKOUT_DENIAL_COPY[locale] || CHECKOUT_DENIAL_COPY.en)[submitError]?.title || submitError}</p>
+                </div>
+              )}
             </>
           )}
         </div>

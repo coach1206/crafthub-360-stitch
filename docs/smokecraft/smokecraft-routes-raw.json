@@ -165,6 +165,36 @@
     "elementRaw": "<VenueHumidorCigarDetail />"
   },
   {
+    "fullPath": "compliance/age-gate",
+    "isIndex": false,
+    "elementRaw": "<ComplianceAgeGate />"
+  },
+  {
+    "fullPath": "compliance/policies",
+    "isIndex": false,
+    "elementRaw": "<CompliancePolicyCenter />"
+  },
+  {
+    "fullPath": "compliance/consent",
+    "isIndex": false,
+    "elementRaw": "<ComplianceConsentCenter />"
+  },
+  {
+    "fullPath": "compliance/data-rights",
+    "isIndex": false,
+    "elementRaw": "<ComplianceDataRightsCenter />"
+  },
+  {
+    "fullPath": "staff/compliance/age-verification",
+    "isIndex": false,
+    "elementRaw": "<ComplianceStaffAgeVerification />"
+  },
+  {
+    "fullPath": "admin/compliance",
+    "isIndex": false,
+    "elementRaw": "<ComplianceAdmin />"
+  },
+  {
     "fullPath": "admin/humidor",
     "isIndex": false,
     "elementRaw": "<VenueHumidorAdminDashboard />"

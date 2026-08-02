@@ -1,14 +1,14 @@
 {
-  "ranAt": "2026-08-02T17:27:03.717Z",
-  "finishedAt": "2026-08-02T17:27:28.772Z",
-  "artifactPath": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T17-27-03-789Z.dump",
+  "ranAt": "2026-08-02T18:32:13.625Z",
+  "finishedAt": "2026-08-02T18:32:45.710Z",
+  "artifactPath": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T18-32-13-682Z.dump",
   "testDbName": "crafthub_smokecraft_restore_test",
   "allPass": true,
   "checks": [
     {
       "name": "backup artifact exists",
       "pass": true,
-      "detail": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T17-27-03-789Z.dump"
+      "detail": "/home/user/crafthub-360-stitch/backups/smokecraft-2026-08-02T18-32-13-682Z.dump"
     },
     {
       "name": "backup artifact is readable",
@@ -17,12 +17,12 @@
     {
       "name": "schema restores (tables present)",
       "pass": true,
-      "detail": "1096 tables in restored DB"
+      "detail": "1107 tables in restored DB"
     },
     {
       "name": "migration version matches source",
       "pass": true,
-      "detail": "source=116_smokecraft_monitoring_backup_support.sql restored=116_smokecraft_monitoring_backup_support.sql"
+      "detail": "source=118_smokecraft_compliance_audit_category.sql restored=118_smokecraft_compliance_audit_category.sql"
     },
     {
       "name": "critical table present: passport_records",
@@ -60,7 +60,7 @@
     {
       "name": "row count reconciles: golden_box_entries",
       "pass": true,
-      "detail": "source=521 restored=521"
+      "detail": "source=528 restored=528"
     },
     {
       "name": "row count reconciles: inventory_events",
@@ -85,12 +85,12 @@
     {
       "name": "golden box entries queryable post-restore",
       "pass": true,
-      "detail": "521 entries"
+      "detail": "528 entries"
     },
     {
       "name": "media/asset mapping table(s) present post-restore",
       "pass": true,
-      "detail": "packaging_assets,smokecraft_content_media,venue_cigar_media_assets,venue_cigar_media_events,venue_cigar_media_master_catalog"
+      "detail": "media_rights_review,packaging_assets,packaging_asset_placements,smokecraft_content_media,venue_cigar_media_events"
     },
     {
       "name": "health-equivalent query succeeds against restored DB",

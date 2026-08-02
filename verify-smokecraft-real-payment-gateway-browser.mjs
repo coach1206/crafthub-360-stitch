@@ -69,6 +69,35 @@ async function run() {
     }, venueId)
     const orderId = await page.evaluate(async ({ venueId, productId }) => {
       await fetch(`/api/smokecraft/venue-humidor/customer/venues/${venueId}`, { credentials: 'include' })
+      // Production Package 6 Correction: checkout now requires real
+      // server-verified compliance eligibility. Bootstrap it via the real
+      // compliance API exactly as the age-gate/policy UI would. The guest
+      // identity is resolved via GET /api/compliance/whoami — the guest
+      // cookie is httpOnly BY DESIGN so client JS (this browser page
+      // included) can never read or forge it directly.
+      const whoRes = await fetch('/api/compliance/whoami', { credentials: 'include' })
+      const who = whoRes.ok ? await whoRes.json() : null
+      if (who?.success) {
+        const { subjectType, subjectId } = who
+        await fetch('/api/compliance/age-verification', {
+          method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subjectType, subjectId, jurisdictionCode: 'US-DEFAULT', method: 'self_attestation', declaredBirthdate: '1990-01-01' }),
+        })
+        const policiesRes = await fetch('/api/compliance/policies?locale=en', { credentials: 'include' })
+        const policiesBody = await policiesRes.json()
+        const current = (policiesBody.policies || []).filter(p => p.is_current &&
+          ['terms', 'privacy', 'tobacco_warning'].includes(p.policy_type) &&
+          (p.jurisdiction_code === null || p.jurisdiction_code === 'US-DEFAULT'))
+        const seenTypes = new Set()
+        for (const p of current) {
+          if (seenTypes.has(p.policy_type)) continue
+          seenTypes.add(p.policy_type)
+          await fetch('/api/compliance/policies/accept', {
+            method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ subjectType, subjectId, policyVersionId: p.id, locale: 'en' }),
+          })
+        }
+      }
       const holdRes = await fetch(`/api/smokecraft/venue-humidor/customer/venues/${venueId}/products/${productId}/stick-hold`, {
         method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quantity: 1, idempotencyKey: `browser-hold-${Date.now()}-${Math.random()}` }),

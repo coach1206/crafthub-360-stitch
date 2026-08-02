@@ -1,6 +1,6 @@
 {
-  "target": "http://127.0.0.1:3000",
-  "timestamp": "2026-08-02T17:25:59.957Z",
+  "target": "http://127.0.0.1:3001",
+  "timestamp": "2026-08-02T18:32:55.948Z",
   "passCount": 14,
   "total": 14,
   "results": [
@@ -17,12 +17,12 @@
     {
       "name": "migration state /api/health/migrations",
       "ok": true,
-      "detail": "115 migrations, latest=116_smokecraft_monitoring_backup_support.sql"
+      "detail": "117 migrations, latest=118_smokecraft_compliance_audit_category.sql"
     },
     {
       "name": "version/build identifier /api/version",
       "ok": true,
-      "detail": "env=development commit=143d8b546246bddc5ec69668d3ffbe92c6159069"
+      "detail": "env=development commit=c1631556788379ea4fb9ed5dedad479b149cea95"
     },
     {
       "name": "homepage loads",

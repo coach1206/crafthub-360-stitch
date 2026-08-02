@@ -5,7 +5,14 @@ function sendError(res, err, fallback = 400) {
     no_active_venue: 404, hold_not_found: 404, product_not_found: 404, order_not_found: 404,
     wrong_venue_hold: 403, wrong_user_hold: 403, order_not_owned: 403,
     unsupported_fulfillment_method: 409, order_not_completable: 409, order_already_refunded: 409,
-    idempotency_key_required: 400, age_verification_required: 400,
+    idempotency_key_required: 400,
+    // Server-authoritative compliance denial reasons (Production Package 6
+    // Correction) — specific, safe (no PII/verification internals leaked).
+    'age-verification-required': 403, 'age-verification-expired': 403,
+    'jurisdiction-unsupported': 403, 'terms-acceptance-required': 403,
+    'privacy-acknowledgement-required': 403, 'warning-acknowledgement-required': 403,
+    'fulfillment-method-prohibited': 409, 'shipping-prohibited': 409,
+    'staff-verification-required': 403,
   }
   const code = err.code || 'internal_error'
   let status = statusByCode[code] || fallback
@@ -32,9 +39,13 @@ export async function handleCreateOrder(req, res) {
   try {
     const ref = guestRef(req)
     if (!ref) return res.status(400).json({ success: false, error: 'identity_required' })
-    const { holdId, fulfillmentMethod, fulfillmentDetails, customerNotes, tipCents, ageVerified, idempotencyKey } = req.body
+    // NOTE: any client-submitted "ageVerified"/eligibility field is
+    // intentionally ignored — eligibility is re-derived server-side from
+    // age_verification_records/policy_acceptances/jurisdiction rules inside
+    // checkoutService.createOrderFromHold (Production Package 6 Correction).
+    const { holdId, fulfillmentMethod, fulfillmentDetails, customerNotes, tipCents, idempotencyKey, locale } = req.body
     const result = await checkoutService.createOrderFromHold(req.params.venueId, holdId, ref, {
-      fulfillmentMethod, fulfillmentDetails, customerNotes, tipCents: Number(tipCents) || 0, ageVerified: !!ageVerified, idempotencyKey,
+      fulfillmentMethod, fulfillmentDetails, customerNotes, tipCents: Number(tipCents) || 0, idempotencyKey, locale,
     })
     res.json({ success: true, ...result })
   } catch (err) { sendError(res, err, 500) }
