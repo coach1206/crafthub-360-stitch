@@ -1,6 +1,6 @@
 {
   "target": "http://127.0.0.1:3000",
-  "timestamp": "2026-08-02T16:19:40.260Z",
+  "timestamp": "2026-08-02T17:25:59.957Z",
   "passCount": 14,
   "total": 14,
   "results": [
@@ -12,17 +12,17 @@
     {
       "name": "readiness /api/health/ready",
       "ok": true,
-      "detail": "503 (expected in prototype-DB sandbox): {\"database\":{\"ok\":true,\"mode\":\"postgres\"},\"objectStorage\":{\"ok\":false,\"provider\":\"r2\",\"activated\":true},\"paymentProvider\":{\"ok\":false,\"mode\":\"unconfigured\"}}"
+      "detail": "db=postgres"
     },
     {
       "name": "migration state /api/health/migrations",
       "ok": true,
-      "detail": "114 migrations, latest=115_smokecraft_venue_humidor_real_payment_gateway.sql"
+      "detail": "115 migrations, latest=116_smokecraft_monitoring_backup_support.sql"
     },
     {
       "name": "version/build identifier /api/version",
       "ok": true,
-      "detail": "env=development commit=9edbc6c783f5f980dfacb78c774e5dcdc33084c4"
+      "detail": "env=development commit=143d8b546246bddc5ec69668d3ffbe92c6159069"
     },
     {
       "name": "homepage loads",

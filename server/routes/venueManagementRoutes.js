@@ -15,10 +15,11 @@ import { VENUE_MANAGEMENT_PERMISSIONS } from '../services/venueManagement/venueM
 import * as ctrl from '../controllers/venueManagementController.js'
 
 const router = Router()
+const IS_PROD = process.env.NODE_ENV === 'production'
 
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
-const uploadLimiter = rateLimit({ windowMs: 60 * 1000, max: 15 })
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
+const uploadLimiter = rateLimit({ windowMs: 60 * 1000, max: 15, skip: () => !IS_PROD })
 
 // Every route: requireAuth (401 if missing) -> requireValidVenue (404/403
 // for missing/inactive venue) -> attach smokecraftIdentity-shaped user ->

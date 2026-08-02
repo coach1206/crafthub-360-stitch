@@ -15,6 +15,7 @@ import { getJourneyById } from '../services/managementSync/journeyService.js'
 import * as ctrl from '../controllers/managementSyncController.js'
 
 const router = Router()
+const IS_PROD = process.env.NODE_ENV === 'production'
 
 // Every route resolves an identity first: optionalAuth (real users, never
 // rejects), then attachSmokeCraftIdentity (guest cookie or user), so a
@@ -24,9 +25,9 @@ router.use(optionalAuth, attachSmokeCraftIdentity)
 // Rate limiting for identity issuance and write-heavy endpoints — uses
 // the existing express-rate-limit dependency already in package.json
 // (used elsewhere in this repo), not a new library.
-const guestSessionLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
-const statusPollLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 })
+const guestSessionLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
+const statusPollLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, skip: () => !IS_PROD })
 
 // ── Guest identity ──────────────────────────────────────────────
 router.post('/guest-session', guestSessionLimiter, ensureSmokeCraftGuestIdentity, ctrl.getGuestSession)

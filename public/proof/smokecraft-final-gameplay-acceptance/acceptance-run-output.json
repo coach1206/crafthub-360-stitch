@@ -337,8 +337,8 @@
     "completedSessions": 22
   },
   "goldenBox": {
-    "competitionId": "300",
-    "entryId": "996b3a3a-2afc-48c2-a663-2852442b899d",
+    "competitionId": "310",
+    "entryId": "771aa083-da53-4981-8bc8-560ae7f97482",
     "awardType": "first_place"
   },
   "screenConsoleAndNetwork": {
@@ -453,5 +453,5 @@
       "navOk": true
     }
   },
-  "capturedAt": "2026-08-02T16:12:32.759Z"
+  "capturedAt": "2026-08-02T17:31:24.137Z"
 }

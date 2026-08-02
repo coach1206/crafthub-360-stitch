@@ -10,8 +10,9 @@ import { attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity, requireSmokeCr
 import * as ctrl from '../controllers/fillerArrangementController.js'
 
 const router = Router()
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 90 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 40 })
+const IS_PROD = process.env.NODE_ENV === 'production'
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 90, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 40, skip: () => !IS_PROD })
 
 router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
 

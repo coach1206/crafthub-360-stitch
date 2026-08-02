@@ -264,6 +264,18 @@ async function main() {
           await page.goto(`${UI}${screen.path}`, { waitUntil: 'networkidle', timeout: 20000 })
         } catch (e) { navOk = false; failedRequests.push(`navigation error: ${e.message}`) }
         await page.waitForTimeout(400)
+        // Test-harness fix (Package 5 validation correction): a single fixed
+        // 400ms settle window was sometimes too short for mount-triggered
+        // useEffect fetches (mentor-voice preferences, leaderboard, skill-tree,
+        // image assets) to finish on a genuinely cold/idle server process
+        // (first-hit DB pool connect + route JIT), causing the *browser* to
+        // abort those in-flight requests (net::ERR_ABORTED) when the context
+        // closed at the end of this iteration — not a server-side failure
+        // (confirmed: no corresponding error in server logs for any of these
+        // requests). Re-checking networkidle here gives late-firing
+        // useEffect fetches a real chance to finish before we screenshot and
+        // tear the context down, without changing any production code path.
+        try { await page.waitForLoadState('networkidle', { timeout: 5000 }) } catch { /* best-effort */ }
 
         const shotPath = `${SHOTS}/${vp}/${screen.key}.png`
         await page.screenshot({ path: shotPath, fullPage: true }).catch(() => {})

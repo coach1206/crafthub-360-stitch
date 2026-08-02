@@ -42,7 +42,19 @@ await check('readiness /api/health/ready', async () => {
 await check('migration state /api/health/migrations', async () => {
   const r = await get('/api/health/migrations')
   const body = await r.json()
-  return r.ok && body.migrationCount >= 100 && /115/.test(body.latestMigration || '') ? `${body.migrationCount} migrations, latest=${body.latestMigration}` : false
+  // Package 5 Validation Correction: this previously hardcoded a literal
+  // "115" substring match against `latestMigration`'s filename, which was
+  // only ever true while migration file 115_*.sql happened to be the
+  // newest. That's a stale, moving-target assertion — every future
+  // migration was guaranteed to eventually break it, even with zero
+  // functional regression (confirmed: migrationCount correctly reflects
+  // the real executed-migration count; the filename number is just an
+  // ordinal that keeps climbing). Replaced with a real invariant: the
+  // latest migration filename must be a well-formed, numbered .sql
+  // migration, and migrationCount must be sane and internally consistent
+  // with which and how many migrations have actually run.
+  const filenameOk = /^\d{3}_.+\.sql$/.test(body.latestMigration || '')
+  return r.ok && body.migrationCount >= 100 && filenameOk ? `${body.migrationCount} migrations, latest=${body.latestMigration}` : false
 })
 
 await check('version/build identifier /api/version', async () => {

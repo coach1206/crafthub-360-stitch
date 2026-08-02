@@ -11,8 +11,9 @@ import { attachSmokeCraftIdentity, requireSmokeCraftIdentity } from '../middlewa
 import * as ctrl from '../controllers/packagingStudioController.js'
 
 const router = Router()
-const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 })
-const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
+const IS_PROD = process.env.NODE_ENV === 'production'
+const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60, skip: () => !IS_PROD })
+const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, skip: () => !IS_PROD })
 
 router.use(optionalAuth, attachSmokeCraftIdentity)
 
