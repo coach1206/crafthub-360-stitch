@@ -1,6 +1,6 @@
 {
   "target": "http://127.0.0.1:3000",
-  "timestamp": "2026-08-02T15:47:21.694Z",
+  "timestamp": "2026-08-02T16:19:40.260Z",
   "passCount": 14,
   "total": 14,
   "results": [
@@ -12,7 +12,7 @@
     {
       "name": "readiness /api/health/ready",
       "ok": true,
-      "detail": "503 (expected in prototype-DB sandbox): {\"database\":{\"ok\":false,\"mode\":\"prototype\"},\"objectStorage\":{\"ok\":false,\"provider\":\"r2\",\"activated\":true},\"paymentProvider\":{\"ok\":false,\"mode\":\"unconfigured\"}}"
+      "detail": "503 (expected in prototype-DB sandbox): {\"database\":{\"ok\":true,\"mode\":\"postgres\"},\"objectStorage\":{\"ok\":false,\"provider\":\"r2\",\"activated\":true},\"paymentProvider\":{\"ok\":false,\"mode\":\"unconfigured\"}}"
     },
     {
       "name": "migration state /api/health/migrations",
@@ -22,7 +22,7 @@
     {
       "name": "version/build identifier /api/version",
       "ok": true,
-      "detail": "env=development commit=20d2a165dc1df3c1ce4d821f9ee23283e1589e03"
+      "detail": "env=development commit=9edbc6c783f5f980dfacb78c774e5dcdc33084c4"
     },
     {
       "name": "homepage loads",
