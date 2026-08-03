@@ -24,11 +24,24 @@
 // SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md) get their real, evidence-backed
 // classification filled in below in KNOWN_AUDITED.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { execSync } from 'node:child_process'
 
 const { SMOKECRAFT_SCREEN_MANIFEST } = await import('../src/constants/smokecraftScreenManifest.js')
 const { SC_ASSETS } = await import('../src/constants/smokecraftAssets.js')
 
-const rawRoutes = JSON.parse(readFileSync('docs/smokecraft/smokecraft-routes-raw.json', 'utf8'))
+const RAW_ROUTES_PATH = 'docs/smokecraft/smokecraft-routes-raw.json'
+
+// This file is a generated artifact (see scripts/smokecraftRouteInventory.mjs,
+// which parses the real route tree out of src/App.jsx). It must never be
+// treated as a hand-maintained source of truth. Build environments that don't
+// carry docs/ in their context (e.g. a Docker build with `docs` in
+// .dockerignore) won't have a pre-committed copy, so regenerate it here from
+// the real, canonical source rather than failing or fabricating route data.
+if (!existsSync(RAW_ROUTES_PATH)) {
+  execSync('node scripts/smokecraftRouteInventory.mjs', { stdio: 'inherit' })
+}
+
+const rawRoutes = JSON.parse(readFileSync(RAW_ROUTES_PATH, 'utf8'))
 
 function toFullRoute(fullPath) {
   if (fullPath === '(smokecraft index)') return '/smokecraft'
