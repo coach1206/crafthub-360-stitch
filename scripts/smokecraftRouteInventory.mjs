@@ -4,7 +4,7 @@
 // App.jsx programmatically (not hand-transcribed), tracking real JSX
 // nesting depth so full paths (e.g. /smokecraft/golden-box/status) are
 // reconstructed correctly rather than flattened incorrectly.
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 
 const src = readFileSync('src/App.jsx', 'utf8')
 const lines = src.split('\n')
@@ -94,5 +94,15 @@ const out = [
 ]
 
 writeFileSync('docs/smokecraft/SMOKECRAFT_ROUTE_MATRIX_RAW.md', out.join('\n'))
-writeFileSync('docs/smokecraft/smokecraft-routes-raw.json', JSON.stringify(routes, null, 2))
+
+// The JSON route inventory is a build-time-only generated artifact consumed
+// by generateSmokecraftGameManifest.mjs / validateSmokecraftManifest.mjs /
+// validateSmokecraftResponsive.mjs during `npm run build`. It lives under
+// generated/ (not docs/) specifically because .dockerignore excludes docs/
+// from the Docker build context — the raw route data must always be
+// re-derivable from source inside a container that never has docs/ at all,
+// not just re-derivable when the file happens to be missing from an
+// otherwise-present docs/ tree.
+mkdirSync('generated/smokecraft', { recursive: true })
+writeFileSync('generated/smokecraft/smokecraft-routes-raw.json', JSON.stringify(routes, null, 2))
 console.log(`Extracted ${routes.length} routes (full nested paths) from src/App.jsx lines ${startIdx + 1}-${endIdx + 1}`)

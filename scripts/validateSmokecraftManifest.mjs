@@ -22,7 +22,7 @@ console.log('\n=== SmokeCraft game-manifest / navigation / shell validation (Hol
 // 1. Regenerate the raw route inventory fresh (never trust a stale cached
 // copy) and confirm the manifest generator + this validator agree with it.
 execSync('node scripts/smokecraftRouteInventory.mjs', { stdio: 'pipe' })
-const rawRoutes = JSON.parse(readFileSync('docs/smokecraft/smokecraft-routes-raw.json', 'utf8'))
+const rawRoutes = JSON.parse(readFileSync('generated/smokecraft/smokecraft-routes-raw.json', 'utf8'))
 check('Route inventory regenerates without error', Array.isArray(rawRoutes) && rawRoutes.length > 0)
 
 // 2. Manifest file exists and its own recorded totals match the live route count.

@@ -29,14 +29,15 @@ import { execSync } from 'node:child_process'
 const { SMOKECRAFT_SCREEN_MANIFEST } = await import('../src/constants/smokecraftScreenManifest.js')
 const { SC_ASSETS } = await import('../src/constants/smokecraftAssets.js')
 
-const RAW_ROUTES_PATH = 'docs/smokecraft/smokecraft-routes-raw.json'
+const RAW_ROUTES_PATH = 'generated/smokecraft/smokecraft-routes-raw.json'
 
-// This file is a generated artifact (see scripts/smokecraftRouteInventory.mjs,
-// which parses the real route tree out of src/App.jsx). It must never be
-// treated as a hand-maintained source of truth. Build environments that don't
-// carry docs/ in their context (e.g. a Docker build with `docs` in
-// .dockerignore) won't have a pre-committed copy, so regenerate it here from
-// the real, canonical source rather than failing or fabricating route data.
+// This file is a build-time-only generated artifact (see
+// scripts/smokecraftRouteInventory.mjs, which parses the real route tree out
+// of src/App.jsx). It lives under generated/, not docs/, and is never
+// git-tracked, specifically because .dockerignore excludes docs/ from the
+// Docker build context — a Docker build stage never has a pre-existing copy
+// at all, so this must always regenerate it from the real, canonical source
+// rather than failing or fabricating route data.
 if (!existsSync(RAW_ROUTES_PATH)) {
   execSync('node scripts/smokecraftRouteInventory.mjs', { stdio: 'inherit' })
 }
