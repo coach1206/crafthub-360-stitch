@@ -93,6 +93,12 @@ const out = [
   '',
 ]
 
+// docs/smokecraft/ itself doesn't exist in a Docker build context (excluded
+// wholesale by .dockerignore), so this human-readable doc output — unlike
+// the machine-readable JSON below, which build scripts actually depend on
+// and which now lives outside docs/ for that same reason — needs its parent
+// directory created explicitly rather than assumed present.
+mkdirSync('docs/smokecraft', { recursive: true })
 writeFileSync('docs/smokecraft/SMOKECRAFT_ROUTE_MATRIX_RAW.md', out.join('\n'))
 
 // The JSON route inventory is a build-time-only generated artifact consumed
