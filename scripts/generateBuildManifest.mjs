@@ -8,7 +8,6 @@
 import fs from 'fs'
 import crypto from 'crypto'
 import path from 'path'
-import { execSync } from 'child_process'
 import { fileURLToPath } from 'url'
 import { BUILD_INFO } from '../src/generated/buildInfo.js'
 import { SC_ASSETS } from '../src/constants/smokecraftAssets.js'
@@ -16,17 +15,15 @@ import { SC_ASSETS } from '../src/constants/smokecraftAssets.js'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
 
-// buildInfo.js's Node-side fallback deliberately never shells out (it is
-// also bundled for the browser) — this Node-only script supplements it with
-// the same local `git rev-parse` last resort vite.config.js itself uses, so
-// this manifest and the actual browser bundle can never disagree.
-if (BUILD_INFO.commit === 'local') {
-  try { BUILD_INFO.commit = execSync('git rev-parse HEAD').toString().trim() } catch { /* stay 'local' */ }
-  BUILD_INFO.commitShort = BUILD_INFO.commit.slice(0, 7)
-  if (BUILD_INFO.assetVersion === 'local') BUILD_INFO.assetVersion = BUILD_INFO.commitShort
-}
-if (BUILD_INFO.branch === 'local') {
-  try { BUILD_INFO.branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim() } catch { /* stay 'local' */ }
+// buildInfo.js's Node-side fallback is env-var-only and never shells out to
+// git — production Docker build stages have no .git directory (excluded
+// from the build context via .dockerignore) and no git binary installed,
+// so a git fallback here would always fail loudly for no benefit. When
+// BUILD_INFO already resolved to 'local' (no RAILWAY_GIT_COMMIT_SHA /
+// VERCEL_GIT_COMMIT_SHA / GIT_COMMIT_SHA present), this manifest honestly
+// reflects that same 'local' identity rather than fabricating one.
+if (BUILD_INFO.commit === 'local' && BUILD_INFO.assetVersion === 'local') {
+  BUILD_INFO.assetVersion = BUILD_INFO.commitShort
 }
 
 const CRITICAL_KEYS = [

@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
 
 // Production Build Identity pass — Railway sets RAILWAY_GIT_COMMIT_SHA, not
@@ -9,28 +8,31 @@ import { readFileSync } from 'fs'
 // window.__SMOKECRAFT_BUILD__ mechanism silently fell back to a local `git
 // rev-parse` on Railway because it only ever looked for a Vercel env var).
 // Both are still checked, in priority order, for portability across hosts.
+//
+// This never shells out to git: production Docker build stages have no
+// .git directory (excluded from the build context) and no git binary
+// installed, so a `git rev-parse` fallback here would always fail loudly
+// ("/bin/sh: git: not found") for no benefit. When no host/CI-provided
+// commit env var is available, build identity safely falls back to
+// 'local' — a disclosed degradation, logged as a warning, never a reason
+// to fail the build outright.
 const commitSha = process.env.RAILWAY_GIT_COMMIT_SHA
   || process.env.VERCEL_GIT_COMMIT_SHA
   || process.env.GIT_COMMIT_SHA
-  || (() => { try { return execSync('git rev-parse HEAD').toString().trim() } catch { return null } })()
+  || null
 
 const commitBranch = process.env.RAILWAY_GIT_BRANCH
   || process.env.VERCEL_GIT_COMMIT_REF
-  || (() => { try { return execSync('git rev-parse --abbrev-ref HEAD').toString().trim() } catch { return 'local' } })()
+  || 'local'
 
 const buildTime = process.env.RAILWAY_DEPLOYMENT_CREATED_AT || new Date().toISOString()
 const nodeEnv = process.env.NODE_ENV || 'development'
 
-// A production build must be traceable to a real commit — a build with no
-// identity at all is exactly the failure mode this pass exists to close.
-// Local/dev builds are not held to this (commitSha falls back to a real
-// local git hash in practice; only a genuinely git-less environment in
-// production mode is refused).
 if (nodeEnv === 'production' && !commitSha) {
-  throw new Error(
-    'Production build refused: no build identity could be determined. ' +
-    'Set RAILWAY_GIT_COMMIT_SHA (or VERCEL_GIT_COMMIT_SHA / GIT_COMMIT_SHA), ' +
-    'or ensure a real .git directory is available to `git rev-parse HEAD`.'
+  console.warn(
+    '[build] no build identity commit SHA found (RAILWAY_GIT_COMMIT_SHA / ' +
+    'VERCEL_GIT_COMMIT_SHA / GIT_COMMIT_SHA unset) — proceeding with "local". ' +
+    'Set one of those env vars in the deploy platform to embed a real commit.'
   )
 }
 

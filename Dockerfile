@@ -16,6 +16,19 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
+
+# Build identity: passed through as Docker build args when the platform
+# provides them (Railway sets RAILWAY_GIT_COMMIT_SHA/RAILWAY_GIT_BRANCH),
+# so the app embeds a real commit when available. Neither vite.config.js
+# nor scripts/generateBuildManifest.mjs shells out to git — there is no
+# .git directory in this build context and no git binary in this image —
+# so an unset value here safely falls back to a disclosed "local" identity
+# rather than failing the build.
+ARG RAILWAY_GIT_COMMIT_SHA
+ARG RAILWAY_GIT_BRANCH
+ENV RAILWAY_GIT_COMMIT_SHA=${RAILWAY_GIT_COMMIT_SHA}
+ENV RAILWAY_GIT_BRANCH=${RAILWAY_GIT_BRANCH}
+
 RUN node scripts/generateBuildManifest.mjs || true
 RUN npm run build
 

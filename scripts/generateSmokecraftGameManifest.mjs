@@ -23,7 +23,7 @@
 // rule. Screens this operation HAS already deep-audited (see
 // SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md) get their real, evidence-backed
 // classification filled in below in KNOWN_AUDITED.
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 
 const { SMOKECRAFT_SCREEN_MANIFEST } = await import('../src/constants/smokecraftScreenManifest.js')
@@ -347,6 +347,11 @@ const output = {
   entries,
 }
 
+// Belt-and-suspenders: docs/smokecraft/ is normally created as a side
+// effect of the self-heal call above, but that only fires when the
+// generated/ route inventory itself was missing. Guard independently here
+// too, since docs/ never exists at all in a fresh Docker build context.
+mkdirSync('docs/smokecraft', { recursive: true })
 writeFileSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json', JSON.stringify(output, null, 2) + '\n')
 console.log(`Wrote docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json`)
 console.log(`Total routes: ${output.totalRoutes} (entry: ${output.totalEntryScreens}, curriculum: ${output.totalCurriculumSessions}, supporting: ${output.totalSupportingRoutes})`)
