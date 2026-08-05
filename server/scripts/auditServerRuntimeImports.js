@@ -40,6 +40,39 @@ const VALID_DB_EXPORTS = new Set(['getDb', 'isDbAvailable', 'query'])
 const SRC_RUNTIME_WHITELIST = ['config', 'constants', 'data', 'locales', 'modules', 'services', 'utils']
 let runtimeImportFailures = []
 
+// Resolve a relative import spec to a real file on disk, the way Node's ESM
+// loader would (exact spec, then + .js, then + /index.js). Returns the
+// resolved absolute path if found, else null.
+function resolveOnDisk(fileDir, spec) {
+  const candidates = [
+    resolve(fileDir, spec),
+    resolve(fileDir, spec + '.js'),
+    resolve(fileDir, spec, 'index.js'),
+  ]
+  for (const c of candidates) {
+    if (existsSync(c)) return c
+  }
+  return null
+}
+
+// Case-sensitive check: does the resolved path's actual on-disk casing match
+// the requested casing? macOS/most dev filesystems are case-insensitive, so
+// an import like './Foo.js' can silently resolve to './foo.js' locally and
+// then hard-fail with ERR_MODULE_NOT_FOUND on Linux/Docker.
+function caseMismatch(resolvedPath) {
+  let dir = dirname(resolvedPath)
+  let name = resolvedPath.slice(dir.length + 1)
+  try {
+    const entries = readdirSync(dir)
+    if (entries.includes(name)) return null // exact case present, fine
+    const ciMatch = entries.find(e => e.toLowerCase() === name.toLowerCase())
+    if (ciMatch) return ciMatch
+    return null
+  } catch {
+    return null
+  }
+}
+
 function checkRuntimeImportTargets(filePath, src) {
   const relPath = relative(ROOT, filePath)
   const fileDir = dirname(filePath)
@@ -59,10 +92,43 @@ function checkRuntimeImportTargets(filePath, src) {
       const topDir = relToRoot.split(sep)[1]
       if (!SRC_RUNTIME_WHITELIST.includes(topDir)) {
         runtimeImportFailures.push({ file: relPath, line: lineNum, issue: `imports from src/${topDir}/, which is NOT in the Dockerfile runtime stage's src/ whitelist (${SRC_RUNTIME_WHITELIST.join(', ')}) — will crash a built container with ERR_MODULE_NOT_FOUND`, raw: m[0].trim() })
+        continue
       }
     }
+
+    // JSON imports: confirm the literal file exists (with assert/with json
+    // clauses stripped off by the regex already, spec is just the path).
+    const isJson = spec.endsWith('.json')
+
+    const resolvedOnDisk = resolveOnDisk(fileDir, spec)
+    if (!resolvedOnDisk) {
+      runtimeImportFailures.push({ file: relPath, line: lineNum, issue: `resolved import target does not exist on disk: '${spec}' -> ${relToRoot} (typo, deleted file, or case mismatch)`, raw: m[0].trim() })
+      continue
+    }
+
+    const mismatch = caseMismatch(resolvedOnDisk)
+    if (mismatch) {
+      runtimeImportFailures.push({ file: relPath, line: lineNum, issue: `case-sensitive filename mismatch: import spec resolves to a name that only matches case-insensitively — real on-disk entry is '${mismatch}'. Works on case-insensitive dev filesystems (macOS/Windows), fails with ERR_MODULE_NOT_FOUND on Linux/Docker.`, raw: m[0].trim() })
+    }
+
+    if (isJson && !resolvedOnDisk.endsWith('.json')) {
+      // resolveOnDisk found a .js/index.js fallback for something spec'd as .json — inconsistent, flag it.
+      runtimeImportFailures.push({ file: relPath, line: lineNum, issue: `imports '${spec}' as JSON but the resolved on-disk file is not a literal .json file`, raw: m[0].trim() })
+    }
+  }
+
+  // Dynamic import() calls whose path is built from a template literal or
+  // string concatenation can't always be statically resolved — flag for
+  // manual review rather than silently skipping them.
+  const dynImportRe = /import\(\s*(`[^`]*\$\{[^}]*\}[^`]*`|[a-zA-Z_$][\w$]*\s*\+|[^)]*\+\s*[a-zA-Z_$])/g
+  let dm
+  while ((dm = dynImportRe.exec(src))) {
+    const lineNum = src.slice(0, dm.index).split('\n').length
+    dynamicImportWarnings.push({ file: relPath, line: lineNum, issue: `dynamic import() with a string-built/template-literal path — cannot be statically resolved, manual review required to confirm the target exists in the Docker runtime image`, raw: src.split('\n')[lineNum - 1].trim() })
   }
 }
+
+let dynamicImportWarnings = []
 
 
 let scanned = 0
@@ -137,12 +203,22 @@ walk(SERVER_DIR)
 console.log(`\nServer Runtime Import Audit`)
 console.log(`Files scanned: ${scanned}`)
 console.log(`Invalid db/connection.js imports found: ${failures.length}`)
-console.log(`Docker-runtime-scope import violations found: ${runtimeImportFailures.length}`)
+console.log(`Docker-runtime-scope import violations found (whitelist + on-disk existence + case-sensitivity + JSON): ${runtimeImportFailures.length}`)
+console.log(`Dynamic import() calls with non-static paths (manual-review warnings, non-blocking): ${dynamicImportWarnings.length}`)
+
+if (dynamicImportWarnings.length > 0) {
+  console.log('')
+  for (const w of dynamicImportWarnings) {
+    console.log(`  ⚠️  ${w.file}:${w.line}`)
+    console.log(`     ${w.issue}`)
+    console.log(`     Line: ${w.raw}`)
+  }
+}
 
 const allFailures = [...failures, ...runtimeImportFailures]
 
 if (allFailures.length === 0) {
-  console.log('\n✅ All server imports valid — no bad db/connection.js imports and no imports outside the Docker runtime copy scope.')
+  console.log('\n✅ All server imports valid — no bad db/connection.js imports, no imports outside the Docker runtime copy scope, no missing on-disk targets, no case mismatches.')
   process.exit(0)
 } else {
   console.log('')
