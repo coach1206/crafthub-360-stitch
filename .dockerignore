@@ -3,7 +3,20 @@ dist
 .git
 .github
 *.md
-docs
+!docs/smokecraft/*.md
+# docs/ is ~72MB, dominated by three large internal-only trees below (a
+# real, previously-found root cause: scripts/validateSmokecraftPlayerStateIntegrity.mjs
+# reads docs/smokecraft/SMOKECRAFT_STATE_OWNERSHIP_MAP.md as a build-blocking
+# check, and a blanket `docs` exclusion here made that file always ENOENT in
+# every Docker build, regardless of source-code correctness). Exclude the
+# three large, build-irrelevant subtrees explicitly instead of the whole
+# directory, so real, small, build-necessary documentation under docs/
+# (docs/smokecraft/ in particular) stays available in the build context —
+# a blanket parent-directory exclude can never be selectively re-included
+# by a later negation, so this must be scoped at the subdirectory level.
+docs/ui-ux-handoff
+docs/visual-proof
+docs/audits
 proof
 public/proof
 public/handoff
