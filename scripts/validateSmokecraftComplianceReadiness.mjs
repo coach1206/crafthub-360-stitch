@@ -70,35 +70,16 @@ check('purchase-eligibility and fulfillment-eligibility are reachable without st
 const serverIndex = fs.readFileSync('server/index.js', 'utf8')
 check('complianceRoutes mounted at /api/compliance', /app\.use\('\/api\/compliance',\s*complianceRoutes\)/.test(serverIndex))
 
-// 5. E.A.T. known-defect disclosure carried forward (not hidden, not fixed
-//    silently in this pass unless proven necessary for compliance admin).
-const proofDir = 'public/proof/smokecraft-legal-privacy-accessibility-tobacco-compliance'
-check('proof path exists', fs.existsSync(proofDir))
-check('E.A.T. known-defect doc exists and discloses 111/130', fs.existsSync(`${proofDir}/eat-known-defect.md`) &&
-  /111\s*\/\s*130/.test(fs.existsSync(`${proofDir}/eat-known-defect.md`) ? fs.readFileSync(`${proofDir}/eat-known-defect.md`, 'utf8') : ''))
-check('counsel-review-items doc exists (consolidated list for real lawyer review)', fs.existsSync(`${proofDir}/counsel-review-items.md`))
-check('final-report doc exists', fs.existsSync(`${proofDir}/final-report.md`))
-const a11yDocPath = `${proofDir}/accessibility-standard.md`
-const a11yDoc = fs.existsSync(a11yDocPath) ? fs.readFileSync(a11yDocPath, 'utf8') : ''
-check('accessibility standard doc exists and targets WCAG 2.2 AA readiness (not "certified")',
-  fs.existsSync(a11yDocPath) && /WCAG 2\.2/.test(a11yDoc) && !/is (certified|WCAG 2\.2 (Level )?AA certified)/i.test(a11yDoc))
-check('data-export sample doc exists (real FAKE-data export run)', fs.existsSync(`${proofDir}/export-sample.json`) || fs.existsSync(`${proofDir}/data-rights-workflow.md`))
-check('deletion sample doc exists (real FAKE-data deletion run)', fs.existsSync(`${proofDir}/deletion-sample.json`) || fs.existsSync(`${proofDir}/data-rights-workflow.md`))
-
-// 6. No legal text anywhere in the new proof docs / migration claims
-//    unqualified "fully compliant" / "legally approved" language.
-const bannedPhrases = [/fully legally compliant/i, /legally approved(?! pending)/i, /guarantees? compliance/i]
-let bannedFound = []
-if (fs.existsSync(proofDir)) {
-  for (const f of fs.readdirSync(proofDir)) {
-    const full = `${proofDir}/${f}`
-    if (fs.statSync(full).isFile() && (f.endsWith('.md') || f.endsWith('.json'))) {
-      const text = fs.readFileSync(full, 'utf8')
-      for (const re of bannedPhrases) if (re.test(text)) bannedFound.push(`${f}:${re}`)
-    }
-  }
-}
-check('no proof doc falsely claims full legal compliance or legal approval', bannedFound.length === 0, bannedFound.join(', '))
+// Proof-directory checks (E.A.T. known-defect disclosure, counsel-review
+// checklist, accessibility standard doc, data-rights samples, banned-phrase
+// scan) live in scripts/verifySmokecraftComplianceProof.mjs, run via
+// `npm run verify:smokecraft-compliance-proof` — not here. public/proof/ is
+// deliberately excluded from the production build context (.dockerignore),
+// so a build-blocking check that depends on it would fail every Docker
+// build for a reason having nothing to do with source-code/engineering
+// control correctness, which is what this script exists to gate. This
+// script covers only real source, schema, and route-wiring checks — all
+// of which are independent of public/proof and remain build-blocking.
 
 console.log(`\n=== RESULT: ${fail === 0 ? 'PASS' : 'FAIL'} (${fail} check${fail === 1 ? '' : 's'} failed) ===`)
 if (fail > 0) process.exit(1)

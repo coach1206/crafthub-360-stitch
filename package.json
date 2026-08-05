@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/validateSmokecraftAssets.mjs && node scripts/generateBuildManifest.mjs && node scripts/generateSmokecraftGameManifest.mjs && node scripts/validateSmokecraftManifest.mjs && node scripts/validateSmokecraftShellAdoption.mjs && node scripts/validateSmokecraftResponsive.mjs && node scripts/validateSmokecraftPlayerStateIntegrity.mjs && node scripts/validateSmokecraftAccountIntegrity.mjs && node scripts/validateSmokecraftGameplayIntegrity.mjs && node scripts/validateSmokecraftGameplayAuthority.mjs && node scripts/validateSmokecraftAlertPointerSafety.mjs && node scripts/validateSmokecraftTastingAuthority.mjs && node scripts/validateSmokecraftCultivatorAuthority.mjs && node scripts/validateSmokecraftCollectionsAuthority.mjs && node scripts/validateSmokecraftSkillTreeAuthority.mjs && node scripts/validateSmokecraftLeaderboardAuthority.mjs && node scripts/validateSmokecraftPairingEngineAuthority.mjs && node scripts/validateSmokecraftMentorGuidanceAuthority.mjs && node scripts/validateSmokecraftComplianceReadiness.mjs",
+    "prebuild": "node scripts/validateSmokecraftAssets.mjs && node scripts/generateBuildManifest.mjs && node scripts/generateSmokecraftGameManifest.mjs && node scripts/validateSmokecraftManifest.mjs && node scripts/validateSmokecraftShellAdoption.mjs && node scripts/validateSmokecraftPlayerStateIntegrity.mjs && node scripts/validateSmokecraftAccountIntegrity.mjs && node scripts/validateSmokecraftGameplayIntegrity.mjs && node scripts/validateSmokecraftGameplayAuthority.mjs && node scripts/validateSmokecraftAlertPointerSafety.mjs && node scripts/validateSmokecraftTastingAuthority.mjs && node scripts/validateSmokecraftCultivatorAuthority.mjs && node scripts/validateSmokecraftCollectionsAuthority.mjs && node scripts/validateSmokecraftSkillTreeAuthority.mjs && node scripts/validateSmokecraftLeaderboardAuthority.mjs && node scripts/validateSmokecraftPairingEngineAuthority.mjs && node scripts/validateSmokecraftMentorGuidanceAuthority.mjs && node scripts/validateSmokecraftComplianceReadiness.mjs",
     "build": "vite build && node scripts/stripProductionExcludedAssets.mjs",
     "preview": "vite preview",
     "start": "npm run build && node server/index.js",
@@ -110,6 +110,8 @@
     "verify:phase-e10-novee-os-final-go-live-gate": "node server/scripts/verifyPhaseE10NoveeOSFinalGoLiveGate.js",
     "verify:phase-f10-smokecraft-full-internal-experience": "node server/scripts/verifyPhaseF10SmokeCraftFullInternalExperience.js",
     "verify:control-coverage": "node scripts/validateSmokecraftControlCoverage.mjs",
+    "verify:smokecraft-responsive-proof": "node scripts/validateSmokecraftResponsive.mjs",
+    "verify:smokecraft-compliance-proof": "node scripts/verifySmokecraftComplianceProof.mjs",
     "verify:server-runtime-imports": "node server/scripts/auditServerRuntimeImports.js",
     "verify:server-module-load": "node server/scripts/verifyServerModuleLoad.js",
     "verify:migration-compatibility-039-072": "node server/scripts/verifyMigrationCompatibility039To072.js",
