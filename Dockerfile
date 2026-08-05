@@ -45,8 +45,25 @@ COPY --from=build /app/dist          ./dist
 COPY server ./server
 COPY package.json ./package.json
 
+# Shared server/frontend data and logic modules — many server/services/**
+# files import plain data/logic (never .jsx/React) out of these seven src/
+# subdirectories (real, audited via `npm run verify:server-runtime-imports`,
+# which now checks for exactly this class of gap). Copying just these
+# ~2.7MB of shared modules, not all of src/ (which also contains every React
+# page/component, unrelated to the server), is the smallest correct runtime
+# fix — cheaper and far lower-risk than rewriting 50+ import statements
+# across 40+ server files to point at a new server-owned location.
+COPY src/config ./src/config
+COPY src/constants ./src/constants
+COPY src/data ./src/data
+COPY src/locales ./src/locales
+COPY src/modules ./src/modules
+COPY src/services ./src/services
+COPY src/utils ./src/utils
+
 # No dev tools, no test/proof artifacts, no source maps of source code —
-# only the built dist/ output and the server runtime ship.
+# only the built dist/ output, the server runtime, and its shared src/
+# data/logic dependencies ship.
 RUN mkdir -p /app/server/_local_media_storage && chown -R smokecraft:smokecraft /app
 
 USER smokecraft
