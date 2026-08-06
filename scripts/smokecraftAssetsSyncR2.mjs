@@ -62,13 +62,33 @@ function contentType(filename) {
 
 async function main() {
   let adapter = null
+  let diagnostics = null
   if (mode !== '--dry-run') {
     adapter = await import('../server/services/venueManagement/objectStorageAdapter.js')
+    diagnostics = await import('../server/services/venueManagement/r2Diagnostics.js')
     const info = adapter.providerInfo()
     console.log('Provider info:', info)
     if (!info.activated && mode !== '--report') {
       console.error(`\n✖ R2 not activated (STORAGE_PROVIDER/STORAGE_BUCKET/credentials missing or STORAGE_PROVIDER=local). Cannot run mode ${mode} against a live bucket. Re-run with --dry-run, or set real credentials.`)
       process.exit(1)
+    }
+
+    // Real R2 preflight before ANY bulk upload/replace — the exact gate
+    // that would have caught the UnknownError root cause (an SDK/R2
+    // checksum-protocol mismatch, see objectStorageAdapter.js) before it
+    // burned through all 81 objects identically. --verify-only and
+    // --report don't write, so they skip this gate.
+    if (mode === '--upload-missing' || mode === '--replace-changed') {
+      console.log('\n── R2 preflight (write/read/delete a tiny diagnostic object) ──')
+      const preflight = await diagnostics.runR2Preflight()
+      if (!preflight.ok) {
+        console.error(`\n✖ R2 preflight FAILED at stage "${preflight.stage}" — aborting before any bulk upload.`)
+        console.error(`  Code: ${preflight.code}`)
+        console.error(`  Detail: ${JSON.stringify(preflight.detail, null, 2)}`)
+        console.error(`  Safe config: ${JSON.stringify(preflight.config, null, 2)}`)
+        process.exit(1)
+      }
+      console.log('  OK — preflight write/HEAD/read/delete/confirm-delete all succeeded. Proceeding with bulk sync.\n')
     }
   }
 
@@ -127,8 +147,23 @@ async function main() {
       console.log(`  ${existing ? 'REPLACED' : 'UPLOADED'} ${entry.assetId} -> ${objectKey} (etag ${put.etag})`)
     } catch (err) {
       results.failed++
-      results.entries.push({ assetId: entry.assetId, status: 'FAILED', objectKey, error: err.message })
-      console.log(`  FAILED   ${entry.assetId} — ${err.message}`)
+      // Real classification, not err.message alone — err.message is
+      // exactly what was collapsing every one of the 81 failures into
+      // the same useless "UnknownError" string. Capture everything the
+      // SDK actually exposes (error name/code, HTTP status, request ID,
+      // retryable) without ever printing a credential or signed request.
+      const classified = diagnostics.classifyR2Error(err)
+      results.entries.push({
+        assetId: entry.assetId, status: 'FAILED', objectKey,
+        failureCode: classified.failureCode,
+        safeMessage: classified.safeMessage,
+        errorName: classified.errorName,
+        errorCode: classified.errorCode,
+        httpStatus: classified.httpStatus,
+        requestId: classified.requestId,
+        retryable: classified.retryable,
+      })
+      console.log(`  FAILED   ${entry.assetId} — [${classified.failureCode}] ${classified.safeMessage} (name=${classified.errorName} code=${classified.errorCode} httpStatus=${classified.httpStatus} requestId=${classified.requestId} retryable=${classified.retryable})`)
     }
   }
 

@@ -80,6 +80,7 @@ COPY src/utils ./src/utils
 # public/proof/** — no browser-proof/QA screenshots ship here).
 COPY scripts/smokecraftAssetsSyncR2.mjs  ./scripts/smokecraftAssetsSyncR2.mjs
 COPY scripts/smokecraftAssetRegistry.mjs ./scripts/smokecraftAssetRegistry.mjs
+COPY scripts/smokecraftR2Diagnose.mjs    ./scripts/smokecraftR2Diagnose.mjs
 COPY public/assets/smokecraft            ./public/assets/smokecraft
 COPY public/assets/smokecraft-reference  ./public/assets/smokecraft-reference
 COPY public/smokecraft-visit-complete.png ./public/smokecraft-visit-complete.png

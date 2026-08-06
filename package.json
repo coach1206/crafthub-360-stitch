@@ -12,6 +12,7 @@
     "verify:static-gameplay": "node scripts/detectSmokecraftStaticGameplay.mjs",
     "smokecraft:assets:registry": "node scripts/smokecraftAssetRegistry.mjs",
     "smokecraft:assets:sync-r2": "node scripts/smokecraftAssetsSyncR2.mjs",
+    "smokecraft:r2:diagnose": "node scripts/smokecraftR2Diagnose.mjs",
     "preview": "vite preview",
     "start": "npm run build && node server/index.js",
     "server": "node server/index.js",

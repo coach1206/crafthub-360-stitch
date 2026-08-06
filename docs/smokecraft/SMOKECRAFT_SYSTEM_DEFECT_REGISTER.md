@@ -2230,3 +2230,74 @@ production build all re-run clean after every change in this pass.
 Readiness re-verified end-to-end: `degraded` / `R2_CONFIGURATION_MISSING`
 only, zero hard failure codes, `assetGovernance.ok: true` (85 SC_ASSETS
 entries, zero external/missing).
+
+## SmokeCraft R2 UnknownError root-cause repair
+
+Starting HEAD: `040a4337` (real Railway --upload-missing run: Scanned 81,
+Failed 81, every object failing identically with `UnknownError`).
+
+**Found and fixed SC-D071**: `server/services/venueManagement/objectStorageAdapter.js`'s
+S3Client construction never set `requestChecksumCalculation`/
+`responseChecksumValidation`, so `@aws-sdk/client-s3` (this repo pins
+3.1101.0, well past the ~3.729 version that changed these defaults to
+`'WHEN_SUPPORTED'`) advertises/expects the newer flexible-checksum
+trailer protocol on every request/response. Cloudflare R2 does not fully
+implement that protocol, so the SDK's own checksum-parsing middleware
+fails to parse R2's response and throws a generic `UnknownError` —
+never reaching R2's real error body — before this fix. All 81 objects
+failing identically with the exact same opaque message (not per-object
+credential/permission variation) is the diagnostic signature of this
+class of bug, not a per-request problem. Fixed by setting both to
+`'WHEN_REQUIRED'`, matching R2's actual S3-compatible behavior.
+
+Added `server/services/venueManagement/r2Diagnostics.js`:
+- `getSafeConfigReport()` — redacted config report (endpoint hostname,
+  region, bucket, key presence/length; never a credential value),
+  including real endpoint-format validation
+  (`https://<32-char-account-id>.r2.cloudflarestorage.com`) that would
+  have caught a public `*.r2.dev` URL or any other malformed endpoint
+  before ever attempting a request.
+- `classifyR2Error(err)` — real SDK-error classification (error name/
+  code, HTTP status, request ID, retryable) into 10 specific failure
+  codes (`R2_ENDPOINT_INVALID`, `R2_REGION_INVALID`,
+  `R2_CREDENTIALS_INVALID`, `R2_ACCESS_DENIED`, `R2_BUCKET_NOT_FOUND`,
+  `R2_SIGNATURE_MISMATCH`, `R2_NETWORK_FAILED`,
+  `R2_PREFLIGHT_WRITE_FAILED`, `R2_PREFLIGHT_READ_FAILED`,
+  `R2_PREFLIGHT_DELETE_FAILED`) instead of a bare `err.message`.
+- `runR2Preflight()` — real write -> HEAD -> read (full GetObject,
+  content-compared) -> delete -> confirm-delete of one tiny diagnostic
+  object under a dedicated `diagnostics/` prefix, never touching real
+  media.
+
+`scripts/smokecraftAssetsSyncR2.mjs` now runs this preflight
+automatically before `--upload-missing`/`--replace-changed` and aborts
+(exits 1, no uploads attempted) if it fails, and every per-object
+failure in bulk sync now reports the real classified failure code,
+safe message, error name/code, HTTP status, request ID, and retryable
+flag instead of a collapsed `UnknownError` string.
+
+Added `npm run smokecraft:r2:diagnose` (`scripts/smokecraftR2Diagnose.mjs`)
+— runs only the safe config report + preflight, no bulk operation.
+
+`scripts/verifySmokecraftR2Diagnostics.mjs`: 24/24 — real AWS SDK v3
+error shapes correctly classified (found and fixed one real
+misclassification bug in the process: a 403 `SignatureDoesNotMatch` was
+matching the generic `httpStatus === 403` branch before its own specific
+`errorCode` check — reordered so specific error codes are checked before
+generic HTTP-status fallbacks), config redaction verified (secret/key
+values never appear in the report), preflight correctly reports
+`R2_CONFIGURATION_MISSING` rather than a false pass when unconfigured,
+and bulk `--upload-missing` verified to abort with zero
+uploaded/replaced entries when R2 isn't activated.
+
+Dockerfile/production-container tooling updated to include the new
+`r2Diagnostics.js` and `smokecraftR2Diagnose.mjs` files;
+`scripts/verifyProductionContainerAssetSyncTooling.mjs` extended to
+check for both (10/10 checks pass).
+
+62/62 fresh-player journey, 85/85 static-gameplay detector, and the
+production build all re-run clean after this change. No live R2
+upload/HEAD/read/delete was performed in this sandbox — no credentials
+here; Railway production credential status is unverified from here.
+
+Highest SC-D number is now SC-D071.

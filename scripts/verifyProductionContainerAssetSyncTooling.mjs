@@ -25,6 +25,11 @@ console.log('── Production container: asset-sync-tooling presence gate\n')
 
 check('scripts/smokecraftAssetsSyncR2.mjs present', existsSync(resolve('scripts/smokecraftAssetsSyncR2.mjs')))
 check('scripts/smokecraftAssetRegistry.mjs present', existsSync(resolve('scripts/smokecraftAssetRegistry.mjs')))
+check('scripts/smokecraftR2Diagnose.mjs present', existsSync(resolve('scripts/smokecraftR2Diagnose.mjs')))
+check(
+  'server/services/venueManagement/r2Diagnostics.js present (R2 preflight/error-classification, imported by the sync command)',
+  existsSync(resolve('server/services/venueManagement/r2Diagnostics.js'))
+)
 check(
   'server/services/venueManagement/objectStorageAdapter.js present (the sync command\'s real R2 adapter import)',
   existsSync(resolve('server/services/venueManagement/objectStorageAdapter.js'))

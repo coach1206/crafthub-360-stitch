@@ -63,6 +63,22 @@ function client() {
     credentials: (ACCESS_KEY && SECRET_KEY)
       ? { accessKeyId: ACCESS_KEY, secretAccessKey: SECRET_KEY }
       : undefined,
+    // R2 UnknownError root cause (SmokeCraft R2 diagnostics pass): AWS SDK
+    // v3 (~3.729+, this repo pins 3.1101.0) defaults both of these to
+    // 'WHEN_SUPPORTED' — it advertises/expects flexible-checksum trailers
+    // (x-amz-checksum-*) on every request/response. Cloudflare R2 does not
+    // fully implement that newer protocol, so the SDK's own checksum
+    // middleware fails to parse R2's response and throws a generic,
+    // non-descriptive `UnknownError` instead of R2's real error — every
+    // single object failing identically with the same opaque message (not
+    // per-object credential/permission errors) is the exact signature of
+    // this, not a per-request problem. 'WHEN_REQUIRED' only applies
+    // checksums where the API mandates them, matching R2's actual
+    // S3-compatible behavior and letting real R2 error responses (auth,
+    // permissions, bucket-not-found, signature) reach this code instead
+    // of being swallowed.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
   })
   return _client
 }
