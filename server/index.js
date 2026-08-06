@@ -165,6 +165,7 @@ import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
 import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
 import { initScheduler }     from './services/resetScheduleService.js'
 import { validateEnv }        from './config/envValidator.js'
+import { runMigrations }      from './db/runMigrations.js'
 import rateLimit              from 'express-rate-limit'
 import { buildSecurityHeaders, permissionsPolicyHeader, noStoreForApi } from './config/securityHeaders.js'
 
@@ -530,7 +531,46 @@ app.use((_req, res) => {
 // ── Global error handler ──────────────────────────────────────
 app.use(errorHandler)
 
+// ── Startup migrations ───────────────────────────────────────
+// Emergency repair (Session 2 500s traced to tables — e.g.
+// smokecraft_tasting_drafts — that exist in this repo's migration
+// files but were never guaranteed to be applied to the real
+// production database, since `npm run db:migrate` was a manual,
+// separate step never wired into the Railway deploy/start path.
+// runMigrations() is idempotent (tracks applied migrations in
+// schema_migrations and skips anything already applied), so calling
+// it on every boot is safe and a no-op once the DB is caught up. It
+// never throws — it returns a status object even on failure — so we
+// still bound it with a timeout to guarantee boot can't hang forever
+// waiting on a stuck DB connection.
+const MIGRATION_TIMEOUT_MS = 30_000
+async function runStartupMigrations() {
+  try {
+    const timeout = new Promise((resolve) =>
+      setTimeout(() => resolve({ status: 'timeout', message: `Migrations did not complete within ${MIGRATION_TIMEOUT_MS}ms — continuing boot without blocking indefinitely.` }), MIGRATION_TIMEOUT_MS)
+    )
+    const result = await Promise.race([runMigrations(), timeout])
+    if (result.status === 'timeout') {
+      console.error(`[startup-migrations] ${result.message}`)
+    } else if (result.status === 'sync_required') {
+      console.error(`[startup-migrations] FAILED — a migration errored: ${result.message}. Server will continue booting (API routes may 500 until this is fixed), but this must be investigated.`)
+    } else {
+      console.log(`[startup-migrations] ${result.status}: ${result.message || ''}`)
+    }
+    return result
+  } catch (err) {
+    // Defensive — runMigrations() is designed to never throw, but a
+    // startup migration problem must never crash the whole process
+    // (that would take down an otherwise-healthy server for routes
+    // that don't touch the affected table).
+    console.error('[startup-migrations] Unexpected error running migrations:', err.message)
+    return { status: 'error', message: err.message }
+  }
+}
+
 // ── Start ─────────────────────────────────────────────────────
+await runStartupMigrations()
+
 const __httpServer = app.listen(PORT, '0.0.0.0', async () => {
   console.log(`\n🥃 NOVEE OS Backend — port ${PORT}`)
   console.log(`   Health:      http://localhost:${PORT}/api/health`)
