@@ -13,6 +13,7 @@ import { fetchTicketTapperSpecials } from '../../services/smokeCraftTicketTapper
 import { getActiveTicketTapperSpecials } from '../../utils/smokeCraftSpecialsEngine.js'
 import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftImageSurface from '../../components/smokecraft/SmokeCraftImageSurface.jsx'
 import { TOTAL_SESSIONS } from '../../constants/session.js'
 import {
   calculateRecommendations,
@@ -273,15 +274,13 @@ export default function SessionComplete({ onBack, onComplete } = {}) {
           names, XP, progress, or badge values baked into this artwork are
           layout reference only — every value shown below is live React
           content, never read from the image. */}
-      <div
-        role="img"
-        aria-label="SmokeCraft 360 — Recommended Next Journey"
-        style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.recommendedNextJourney})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
-          zIndex: 1,
-        }}
+      <SmokeCraftImageSurface
+        surface="cinematic-background"
+        src={SC_ASSETS.recommendedNextJourney}
+        alt="SmokeCraft 360 — Recommended Next Journey"
+        decorative
+        objectPosition="50% 30%"
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}
       />
 
       <header style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0', zIndex: 3 }}>

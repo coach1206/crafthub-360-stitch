@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftImageSurface from '../../components/smokecraft/SmokeCraftImageSurface.jsx'
 import { getRankFromXP } from '../../constants/session.js'
 import { calculateWinnerEligibility, getTopEligibleCategory, getWinnerProgress } from '../../services/smokecraft/smokeWinnerService.js'
 
@@ -130,15 +131,13 @@ export default function SmokeCraftChallenge() {
       fontFamily: 'Georgia, serif',
     }}>
       {/* Approved production visual, reused as-is as a decorative header band. */}
-      <div
-        role="img"
-        aria-label="SmokeCraft Challenge — Advanced Cigar Recognition"
-        style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.smokecraftChallenge})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
-          zIndex: 1,
-        }}
+      <SmokeCraftImageSurface
+        surface="cinematic-background"
+        src={SC_ASSETS.smokecraftChallenge}
+        alt="SmokeCraft Challenge — Advanced Cigar Recognition"
+        decorative
+        objectPosition="50% 30%"
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}
       />
 
       <header style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0', zIndex: 3 }}>

@@ -24,12 +24,22 @@
 //   'session-environment' 4 / 3  in-session environment/setting image
 //   'cigar-profile'      4 / 3   cigar / profile reference card
 //   'support-thumbnail'   1 / 1  small supporting thumbnail
-//   'educational'        4 / 3   educational illustration panel
+//   'educational'        4 / 3  educational illustration panel
+//   'cinematic-background' n/a  full-bleed decorative header/hero band —
+//                                fixed clamp() height instead of aspect-ratio,
+//                                with an optional gradient scrim overlay. Used
+//                                by full-screen session pages (AISummary,
+//                                LightingTutorial, KnowledgeDrop, MiniTasting,
+//                                SessionComplete, MentorCommentary,
+//                                EventChallenge, SmokeCraftChallenge) that
+//                                previously hand-rolled this exact pattern as
+//                                a raw inline backgroundImage div.
 //
-// Every surface: has a fixed aspect-ratio container (never image-driven
-// height), a real loading state, a real error state (never a silent blank
-// image), a mandatory alt text (decorative images must pass alt="" plus
-// aria-hidden explicitly, not omit it), and lazy loading by default.
+// Every surface: has a fixed aspect-ratio (or, for 'cinematic-background', a
+// fixed clamp() height) container (never image-driven height), a real
+// loading state, a real error state (never a silent blank image), a
+// mandatory alt text (decorative images must pass alt="" plus aria-hidden
+// explicitly, not omit it), and lazy loading by default.
 
 import { useState } from 'react'
 
@@ -58,8 +68,12 @@ export default function SmokeCraftImageSurface({
   className,
   style,
   children,
+  // 'cinematic-background' only:
+  height = 'clamp(90px,14vh,140px)',
+  overlay = 'linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92))',
 }) {
   const [status, setStatus] = useState('loading')
+  const isCinematic = surface === 'cinematic-background'
   const aspectRatio = SURFACE_ASPECT_RATIOS[surface] || SURFACE_ASPECT_RATIOS['cigar-profile']
 
   if (!decorative && !alt) {
@@ -74,9 +88,10 @@ export default function SmokeCraftImageSurface({
       className={className}
       style={{
         position: 'relative', width: '100%', maxWidth: maxWidth || '100%',
-        aspectRatio, overflow: 'hidden', borderRadius,
-        background: GLASS, border: `1px solid ${BORDER}`,
-        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        ...(isCinematic ? { height } : { aspectRatio, borderRadius }),
+        overflow: 'hidden',
+        background: GLASS, border: isCinematic ? 'none' : `1px solid ${BORDER}`,
+        boxShadow: isCinematic ? 'none' : '0 8px 24px rgba(0,0,0,0.5)',
         ...style,
       }}
     >
@@ -95,6 +110,9 @@ export default function SmokeCraftImageSurface({
             transition: 'opacity 0.25s',
           }}
         />
+      )}
+      {isCinematic && status !== 'error' && src && (
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: overlay }} />
       )}
       {status === 'loading' && src && (
         <div aria-live="polite" style={{

@@ -9,6 +9,7 @@ import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLe
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftImageSurface from '../../components/smokecraft/SmokeCraftImageSurface.jsx'
 
 const ENRICHMENT_15 = getEducationalEnrichment(15)
 
@@ -260,15 +261,13 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
       {/* Approved production visual, reused as a decorative header band —
           the per-topic images below (unchanged) remain the primary visual
           for each topic card. */}
-      <div
-        role="img"
-        aria-label="SmokeCraft Knowledge Drop"
-        style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.knowledgeDrop})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
-          zIndex: 1,
-        }}
+      <SmokeCraftImageSurface
+        surface="cinematic-background"
+        src={SC_ASSETS.knowledgeDrop}
+        alt="SmokeCraft Knowledge Drop"
+        decorative
+        objectPosition="50% 30%"
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}
       />
 
       <header style={{
