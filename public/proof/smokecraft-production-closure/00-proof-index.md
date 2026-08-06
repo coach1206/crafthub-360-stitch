@@ -159,3 +159,23 @@ credentials (`STORAGE_PROVIDER=local`), and Railway's production
 credential state is unverified from here — not claimed absent, just
 unverified. See `public/proof/smokecraft-asset-registry/` for the real
 generated registry, inventory report, and dry-run sync report.
+
+## Final media and stability closure update
+
+- External image defect (SmokeCraft's real, rendered `portraits` map):
+  fixed — 9 googleusercontent.com URLs replaced with one local approved
+  branded silhouette asset. `verifySmokecraftNoExternalImageUrls.mjs`
+  (3/3) now build-blocks any regression in SC_ASSETS, the `portraits`
+  map, or `connectionsData.js`.
+- `visitComplete`: confirmed never actually broken — a scan-path bug in
+  both asset-inventory tools, fixed generically in both.
+- 55/55 across 5 consecutive full sequential browser-proof runs.
+  `passport--tablet-landscape` (the prior flaky case) independently
+  re-run 10/10 clean.
+- Asset resolver built (`src/services/smokecraft/assetResolver.js`) and
+  wired into its first real consumer (`PassportConnections.jsx`). Full
+  repo-wide adoption across every image-surface component not completed
+  this pass.
+- R2 registry: 81/81 ACTIVE_APPROVED resolve cleanly in dry-run. No live
+  R2 upload/HEAD/read/delete performed — no credentials in this sandbox;
+  Railway production credential status remains unverified from here.

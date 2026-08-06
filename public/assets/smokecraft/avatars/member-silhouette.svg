@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192" role="img" aria-label="Member portrait not yet provided">
+  <rect width="192" height="192" rx="96" fill="#0d0d0d"/>
+  <rect x="1" y="1" width="190" height="190" rx="95" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.4"/>
+  <!-- Generic neutral person silhouette (head + shoulders), gold on dark to match the approved NOVEE/SmokeCraft palette. Not a real photo — a deliberate branded placeholder used wherever a real, approved, person-specific portrait has not been provided. -->
+  <circle cx="96" cy="76" r="34" fill="#C9A84C" opacity="0.85"/>
+  <path d="M40 168 C40 122 64 100 96 100 C128 100 152 122 152 168 Z" fill="#C9A84C" opacity="0.85"/>
+</svg>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import craftImages from '../../lib/craftImages.js'
+import { resolveSmokeCraftAssetUrl } from '../../services/smokecraft/assetResolver.js'
 import { CONNECTIONS, findConnection } from '../../data/connectionsData.js'
 import { verifyConnection, scanConnection, getPassport } from '../../api/passportConnectionsApi.js'
 import { triggerHaptic } from '../../utils/haptics.js'
@@ -26,7 +27,7 @@ const TABS = [
 /* ── Portrait ─────────────────────────────────────────────── */
 function Portrait({ portraitKey, name, size = 52, ring = false }) {
   const [err, setErr] = useState(false)
-  const src = craftImages.portraits[portraitKey] || craftImages.portraits.mentor
+  const src = resolveSmokeCraftAssetUrl('portraits.' + portraitKey) || resolveSmokeCraftAssetUrl('portraits.mentor')
   return (
     <div style={{ position:'relative', width:size, height:size, flexShrink:0 }}>
       {ring && (
@@ -254,7 +255,7 @@ function DetailModal({ person, muted, onClose, onViewPassport, onConnect }) {
     const k = e => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', k); return () => window.removeEventListener('keydown', k)
   }, [onClose])
-  const src = craftImages.portraits[person.portraitKey] || craftImages.portraits.mentor
+  const src = resolveSmokeCraftAssetUrl('portraits.' + person.portraitKey) || resolveSmokeCraftAssetUrl('portraits.mentor')
   return (
     <div style={{ position:'fixed', inset:0, zIndex:160, display:'flex', alignItems:'flex-end' }}>
       <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}

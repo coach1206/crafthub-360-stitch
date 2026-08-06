@@ -56,17 +56,32 @@ try { commitSha = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim() } 
 // Real production-reference map — the same source of truth
 // smokecraftAssetInventory.mjs cross-references against.
 const { SC_ASSETS } = await import('../src/constants/smokecraftAssets.js')
+// Every SC_ASSETS value is a repo-relative public/ path (e.g. either
+// '/assets/smokecraft/x.png' under the scanned roots below, OR a root-
+// level path like '/smokecraft-visit-complete.png' — confirmed: the
+// 'visitComplete' entry lives directly at public/, outside both
+// SCAN_ROOTS, which a prior version of this script mis-scanned as a
+// "broken reference" when it was really a scan-scope gap, not a missing
+// file). Resolve generically as 'public' + the decoded path, not just the
+// '/assets/' prefix, so every real reference is found regardless of which
+// directory it lives in.
 const usageByPath = new Map()
 for (const [key, val] of Object.entries(SC_ASSETS)) {
   if (typeof val !== 'string') continue
   const decoded = decodeURIComponent(val.split('?')[0])
-  const rel = decoded.replace(/^\/assets\//, 'public/assets/')
+  const rel = 'public' + decoded
   if (!usageByPath.has(rel)) usageByPath.set(rel, [])
   usageByPath.get(rel).push(key)
 }
 
 const allFiles = []
 for (const root of SCAN_ROOTS) walk(resolve(root), allFiles)
+// Union in every real SC_ASSETS-referenced file even if it lives outside
+// the directory roots above (e.g. public/ root-level files).
+for (const rel of usageByPath.keys()) {
+  const full = resolve(rel)
+  if (existsSync(full) && !allFiles.includes(full)) allFiles.push(full)
+}
 
 const registry = []
 const inventoryCounts = {}
@@ -136,7 +151,7 @@ const report = {
   unreferencedScAssetMapEntries: Object.entries(SC_ASSETS)
     .filter(([, val]) => typeof val === 'string')
     .filter(([, val]) => {
-      const decoded = decodeURIComponent(val.split('?')[0]).replace(/^\/assets\//, 'public/assets/')
+      const decoded = 'public' + decodeURIComponent(val.split('?')[0])
       return !allFiles.some(f => relative(ROOT, f) === decoded)
     })
     .map(([key]) => key),

@@ -1,7 +1,7 @@
 {
   "mode": "--dry-run",
-  "generatedAt": "2026-08-06T20:38:20.773Z",
-  "scanned": 79,
+  "generatedAt": "2026-08-06T22:28:57.000Z",
+  "scanned": 81,
   "missing": 0,
   "uploaded": 0,
   "skippedIdentical": 0,
@@ -640,6 +640,22 @@
       "checksum": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136",
       "checksumMatchesRegistry": true,
       "objectKey": "production/smokecraft/image/sc-format/v1/a7c1147e1b9b-smokecraft-vitola.png"
+    },
+    {
+      "assetId": "sc-memberAvatar",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/avatars/member-silhouette.svg",
+      "checksum": "2f7479bf3506e2058dc7f18fad7a55ebf98b774ed1412168a9cc0cc4e5e24dda",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-memberAvatar/v1/2f7479bf3506-member-silhouette.svg"
+    },
+    {
+      "assetId": "sc-visitComplete",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/smokecraft-visit-complete.png",
+      "checksum": "6df7a42a673d062d53a59e1abe78ea804b607e040ad33edd16aceb729580cb66",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-visitComplete/v1/6df7a42a673d-smokecraft-visit-complete.png"
     }
   ]
 }

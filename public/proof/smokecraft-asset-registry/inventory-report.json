@@ -1,22 +1,20 @@
 {
-  "generatedAt": "2026-08-06T20:38:09.332Z",
-  "gitCommitSha": "f0bf46344e45488d9dc9b0162249fc5dc764c0c6",
-  "scAssetsMapEntries": 84,
-  "filesScanned": 372,
+  "generatedAt": "2026-08-06T22:28:56.906Z",
+  "gitCommitSha": "1adea3a9c825fb1fffde691ab646fbce5b78bd42",
+  "scAssetsMapEntries": 85,
+  "filesScanned": 374,
   "scanRoots": [
     "public/assets/smokecraft",
     "public/assets/smokecraft-reference"
   ],
   "classificationCounts": {
     "APPROVED_SUPPORTING": 239,
-    "ACTIVE_APPROVED": 79,
+    "ACTIVE_APPROVED": 81,
     "STATIC_MOCKUP_NOT_FOR_PRODUCTION": 2,
     "ARCHIVE": 3,
     "REPLACE_WITH_CURRENT": 41,
     "RETIRED": 8
   },
   "duplicateChecksumGroups": 72,
-  "unreferencedScAssetMapEntries": [
-    "visitComplete"
-  ]
+  "unreferencedScAssetMapEntries": []
 }

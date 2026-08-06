@@ -2165,3 +2165,68 @@ sandbox; Railway production credential status is unverified from here,
 not asserted absent.
 
 Highest SC-D number is now SC-D070.
+
+## SmokeCraft final media and stability closure
+
+Starting HEAD: `1adea3a9` (55/55 achieved once, 4/5 stability, external
+image + broken asset reference known but unfixed, no resolver, R2
+groundwork only).
+
+**Fixed the real external-image defect**: `src/lib/craftImages.js`'s
+`portraits` map (mentor + member1-8 — the category SmokeCraft's Passport
+Connections screen renders through `portraitKey`, the real source of the
+`ERR_TUNNEL_CONNECTION_FAILED` browser-proof failure) hardcoded 9
+external `googleusercontent.com` AI-generated placeholder headshot URLs.
+No real, approved, person-specific photo exists for any of these — every
+"connection" in `src/data/connectionsData.js` is fixture/demo data
+(Rachel Kim, Marcus Bell, etc.), not real members. Replaced all 9 with
+one new local, approved, branded neutral silhouette asset
+(`public/assets/smokecraft/avatars/member-silhouette.svg`, registered in
+`SC_ASSETS.memberAvatar`) rather than substituting an unrelated stock
+photo for a specific person. `connectionsData.js`'s own unused `const C
+= <googleusercontent base>` (dead code, never referenced) removed.
+`craftImages.js`'s other categories (backgrounds/fallbacks/badges/beers/
+wines/events, used by WineCraft/BeerCraft/EAT/POS3, not SmokeCraft) still
+carry external URLs — real, pre-existing, explicitly out-of-scope debt
+for a SmokeCraft-focused pass, not silently hidden.
+
+Added `scripts/verifySmokecraftNoExternalImageUrls.mjs` (3/3, wired into
+`prebuild`) — a build-blocking gate scoped to exactly what SmokeCraft
+renders (`SC_ASSETS`, `craftImages.js`'s `portraits` map,
+`connectionsData.js`), so this class of defect cannot silently return in
+SmokeCraft's own image surfaces.
+
+**Fixed the `visitComplete` "broken reference"**: it was never actually
+broken — `public/smokecraft-visit-complete.png` exists on disk. Both
+`scripts/smokecraftAssetInventory.mjs` (pre-existing) and
+`scripts/smokecraftAssetRegistry.mjs` (this pass) had the same real bug:
+their SC_ASSETS-path-to-disk-path resolution only rewrote paths starting
+with `/assets/`, silently missing any root-level `public/` reference like
+this one. Fixed generically in both (`'public' + decodedPath`, not just
+the `/assets/` special case) — real root cause, not a asset-file fix,
+since no file was ever missing.
+
+**Real 55/55 stability, 5 consecutive full sequential runs**, plus a
+dedicated 10/10 isolated re-run of the previously-flaky
+`passport--tablet-landscape` case — all clean, zero external requests,
+zero console errors, zero HTTP failures.
+
+**Asset resolver built**: `src/services/smokecraft/assetResolver.js` —
+resolves an asset ID (never a raw URL) through R2 (tier 1, when
+configured/synchronized) -> GitHub-built fallback via `SC_ASSETS`/
+`craftImages` (tier 2, always available, real and tested) -> safe
+failure code (tier 3). Wired into `src/pages/passport/PassportConnections.jsx`'s
+`Portrait` component (both call sites) as the real first production
+consumer. Not yet applied repo-wide to every image-surface component —
+genuinely out of this pass's remaining time, not claimed done.
+
+**R2 registry re-verified**: 81/81 ACTIVE_APPROVED assets (up from 79 —
+`memberAvatar` + the corrected `visitComplete` both now resolve), 0
+missing, 0 checksum drift, dry-run clean, `--upload-missing` still
+correctly fails closed with no live credentials.
+
+62/62 fresh-player journey, 85/85 static-gameplay detector, and the real
+production build all re-run clean after every change in this pass.
+Readiness re-verified end-to-end: `degraded` / `R2_CONFIGURATION_MISSING`
+only, zero hard failure codes, `assetGovernance.ok: true` (85 SC_ASSETS
+entries, zero external/missing).

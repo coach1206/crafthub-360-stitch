@@ -2,10 +2,10 @@
 
 Every image file under `public/assets/smokecraft/` and `public/assets/smokecraft-reference/`, with dimensions and SHA-256 hash computed directly from the file on disk, cross-referenced against every `SC_ASSETS` key that references it. Generated at commit `d6469504a2a83ab4acfb27e89a25064d505d4d55`.
 
-**Total image files found: 372**
-**Files actively referenced by an SC_ASSETS key: 79**
+**Total image files found: 374**
+**Files actively referenced by an SC_ASSETS key: 81**
 **Files not referenced by any SC_ASSETS key (candidates for legacy/quarantine review): 293**
-**Actively-used PORTRAIT assets (candidates for "TABLET ASSET REPAIR REQUIRED"): 7**
+**Actively-used PORTRAIT assets (candidates for "TABLET ASSET REPAIR REQUIRED"): 8**
 **Duplicate-hash groups (identical bytes under different filenames): 72**
 
 ## Actively-used assets
@@ -91,6 +91,8 @@ Every image file under `public/assets/smokecraft/` and `public/assets/smokecraft
 | `public/assets/smokecraft-reference/approved/smokecraft-seed-soil.png` | terroirSoil | 1672 | 941 | landscape | 969c33f92f3a | 1549867 |
 | `public/assets/smokecraft-reference/approved/smokecraft-terroir.png` | terroir | 1086 | 1448 | portrait — **TABLET ASSET REPAIR REQUIRED** | e671a9a296f1 | 2035111 |
 | `public/assets/smokecraft-reference/approved/smokecraft-vitola.png` | format, knowledgeDropFermentation | 1586 | 992 | landscape | a7c1147e1b9b | 1561943 |
+| `public/assets/smokecraft/avatars/member-silhouette.svg` | memberAvatar | ? | ? | unknown | 2f7479bf3506 | 753 |
+| `public/smokecraft-visit-complete.png` | visitComplete | 1086 | 1448 | portrait — **TABLET ASSET REPAIR REQUIRED** | 6df7a42a673d | 1929254 |
 
 ## Duplicate-hash groups (identical file content under different names)
 

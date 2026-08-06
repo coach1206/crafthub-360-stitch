@@ -23,6 +23,13 @@ const REF = '/assets/smokecraft-reference/approved'
 const RAW = '/assets/smokecraft'
 
 export const SC_ASSETS = {
+  // Production Closure — approved local avatar replacing the external
+  // googleusercontent.com URLs formerly in src/lib/craftImages.js's
+  // `portraits` map (see that file for full detail). Registered here so
+  // the asset registry/R2 sync tooling covers it like every other
+  // approved SmokeCraft image.
+  memberAvatar:        '/assets/smokecraft/avatars/member-silhouette.svg',
+
   // S1 — Landing
   landing:             `${REF}/smokecraft-landing.png`,
 

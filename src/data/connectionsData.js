@@ -1,4 +1,10 @@
-const C = 'https://lh3.googleusercontent.com/aida-public/'
+// Production Closure — this file never actually used an external image
+// URL of its own (a `const C = <googleusercontent CDN base>` previously
+// declared here was dead code, referenced nowhere below). Every person's
+// portrait resolves through `portraitKey` -> src/lib/craftImages.js's
+// `portraits` map, which is what actually carried the external URLs
+// traced to the real ERR_TUNNEL_CONNECTION_FAILED browser-proof failure
+// — fixed there (see that file).
 
 export const CONNECTIONS = {
   bestMatches: [

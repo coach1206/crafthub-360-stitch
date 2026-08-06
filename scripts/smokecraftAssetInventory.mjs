@@ -3,7 +3,7 @@
 // Inventories every image under the SmokeCraft asset directories on disk,
 // cross-referenced against SC_ASSETS usage, real dimensions, and hash —
 // computed directly, not hand-transcribed.
-import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 
@@ -29,13 +29,21 @@ function walk(dir, out = []) {
 const files = DIRS.flatMap(d => walk(d))
 
 // Reverse-map SC_ASSETS values (decoded, without ?v= query) -> keys that use them.
+// Generic 'public' + path (not just the '/assets/' prefix) so a root-level
+// reference like visitComplete's '/smokecraft-visit-complete.png' resolves
+// correctly instead of silently falling outside every walked DIRS root and
+// misreporting as unused/missing (confirmed real bug, not a missing file).
 const usageByPath = new Map()
 for (const [key, val] of Object.entries(SC_ASSETS)) {
   if (typeof val !== 'string') continue
   const decoded = decodeURIComponent(val.split('?')[0])
-  const rel = decoded.replace(/^\/assets\//, 'public/assets/')
+  const rel = 'public' + decoded
   if (!usageByPath.has(rel)) usageByPath.set(rel, [])
   usageByPath.get(rel).push(key)
+}
+// Union in any SC_ASSETS-referenced file that lives outside DIRS entirely.
+for (const rel of usageByPath.keys()) {
+  if (existsSync(rel) && !files.includes(rel)) files.push(rel)
 }
 
 function dims(buf) {
