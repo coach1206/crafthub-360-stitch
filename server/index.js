@@ -166,6 +166,10 @@ import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
 import { initScheduler }     from './services/resetScheduleService.js'
 import { validateEnv }        from './config/envValidator.js'
 import { runMigrations }      from './db/runMigrations.js'
+import { verifySmokecraftSchema } from './db/verifySmokecraftSchema.js'
+import { getDb }              from './db/connection.js'
+import { setStartupState }    from './state/startupState.js'
+import smokecraftDiagnosticsRoutes from './routes/smokecraftDiagnosticsRoutes.js'
 import rateLimit              from 'express-rate-limit'
 import { buildSecurityHeaders, permissionsPolicyHeader, noStoreForApi } from './config/securityHeaders.js'
 
@@ -279,6 +283,7 @@ app.use('/api/pos360/smokecraft',      pos360SmokeCraftOrderBridgeRoutes)
 app.use('/api/ticket-tapper/promotions', ticketTapperPromotionRoutes)
 app.use('/api/smokecraft/management-sync', managementSyncRoutes)
 app.use('/api/smokecraft/player-state', smokecraftPlayerStateRoutes)
+app.use('/api/smokecraft/diagnostics', smokecraftDiagnosticsRoutes)
 app.use('/api/smokecraft/account', smokecraftAccountRoutes)
 app.use('/api/venue-management', venueManagementRoutes)
 app.use('/api/smokecraft/golden-box', goldenBoxRoutes)
@@ -531,45 +536,134 @@ app.use((_req, res) => {
 // ── Global error handler ──────────────────────────────────────
 app.use(errorHandler)
 
-// ── Startup migrations ───────────────────────────────────────
-// Emergency repair (Session 2 500s traced to tables — e.g.
-// smokecraft_tasting_drafts — that exist in this repo's migration
-// files but were never guaranteed to be applied to the real
-// production database, since `npm run db:migrate` was a manual,
-// separate step never wired into the Railway deploy/start path.
-// runMigrations() is idempotent (tracks applied migrations in
-// schema_migrations and skips anything already applied), so calling
-// it on every boot is safe and a no-op once the DB is caught up. It
-// never throws — it returns a status object even on failure — so we
-// still bound it with a timeout to guarantee boot can't hang forever
-// waiting on a stuck DB connection.
+// ── Startup migrations + schema verification (Truth Gate) ──────
+// Supersedes the prior emergency repair. That repair made migrations
+// run on boot but treated a FAILED required migration as non-fatal —
+// the server kept accepting traffic on a schema it knew was wrong,
+// which is exactly how Session 2 (GET /api/smokecraft/player-state/
+// tasting/humidor-match/draft) kept 500ing in production even after
+// migrations were wired into boot: a failed/incomplete migration run
+// left smokecraft_tasting_drafts (or a column on it) missing, and nothing
+// stopped the process from listening anyway.
+//
+// New contract:
+//   - Production (NODE_ENV=production): a failed required migration, a
+//     migration timeout, or a failed schema verification is FATAL —
+//     process.exit(1) before app.listen() is ever reached. Railway's
+//     deploy is health-check-gated on the process staying up, so a
+//     non-zero exit here surfaces as a failed deploy, not a silently
+//     broken one.
+//   - Development/test (NODE_ENV !== 'production'): the same checks run
+//     and log the same structured events, but failures are non-fatal —
+//     so a developer whose local Postgres isn't running yet, or who is
+//     mid-migration-authoring, is never blocked from booting the server
+//     for unrelated work.
+//
+// DATABASE_URL absence in production is already fatal at the top of this
+// file via validateEnv() (server/config/envValidator.js), which runs
+// BEFORE this block — so by the time we reach here in production,
+// DATABASE_URL is guaranteed to be set. That ordering is intentional:
+// validateEnv() is the top-level startup gate and must run first.
 const MIGRATION_TIMEOUT_MS = 30_000
+const IS_PROD_STARTUP = process.env.NODE_ENV === 'production'
+
+function structuredLog(event, fields = {}) {
+  // Structured, single-line JSON so Railway's log viewer (and any log
+  // aggregator) can filter/parse these without the owner needing to read
+  // free-text. Never includes DATABASE_URL, JWT_SECRET, or any other
+  // secret/connection-string value — only booleans, counts, and
+  // filenames.
+  console.log(JSON.stringify({ event, ts: new Date().toISOString(), ...fields }))
+}
+
 async function runStartupMigrations() {
+  const timeout = new Promise((resolve) =>
+    setTimeout(() => resolve({ status: 'timeout', message: `Migrations did not complete within ${MIGRATION_TIMEOUT_MS}ms.` }), MIGRATION_TIMEOUT_MS)
+  )
+  structuredLog('migration_start')
+  let result
   try {
-    const timeout = new Promise((resolve) =>
-      setTimeout(() => resolve({ status: 'timeout', message: `Migrations did not complete within ${MIGRATION_TIMEOUT_MS}ms — continuing boot without blocking indefinitely.` }), MIGRATION_TIMEOUT_MS)
-    )
-    const result = await Promise.race([runMigrations(), timeout])
-    if (result.status === 'timeout') {
-      console.error(`[startup-migrations] ${result.message}`)
-    } else if (result.status === 'sync_required') {
-      console.error(`[startup-migrations] FAILED — a migration errored: ${result.message}. Server will continue booting (API routes may 500 until this is fixed), but this must be investigated.`)
-    } else {
-      console.log(`[startup-migrations] ${result.status}: ${result.message || ''}`)
-    }
-    return result
+    result = await Promise.race([runMigrations(), timeout])
   } catch (err) {
-    // Defensive — runMigrations() is designed to never throw, but a
-    // startup migration problem must never crash the whole process
-    // (that would take down an otherwise-healthy server for routes
-    // that don't touch the affected table).
-    console.error('[startup-migrations] Unexpected error running migrations:', err.message)
-    return { status: 'error', message: err.message }
+    result = { status: 'error', message: err.message }
   }
+
+  if (result.status === 'timeout') {
+    structuredLog('migration_failed', { reason: 'timeout', message: result.message })
+  } else if (result.status === 'sync_required' || result.status === 'error') {
+    structuredLog('migration_failed', { reason: result.status, message: result.message, failedOn: result.failedOn || null })
+  } else if (result.status === 'database_required') {
+    // No DATABASE_URL / no DB connection module. In production this can
+    // only happen if envValidator somehow didn't run first (defensive —
+    // should be unreachable), so we still treat it as fatal in prod.
+    structuredLog('migration_failed', { reason: 'database_required', message: result.message })
+  } else {
+    for (const f of result.applied || []) structuredLog('migration_applied', { filename: f })
+    for (const f of result.skipped || []) structuredLog('migration_skipped', { filename: f })
+    structuredLog('migration_complete', {
+      applied: result.migrationsApplied ?? (result.applied || []).length,
+      skipped: result.migrationsSkipped ?? (result.skipped || []).length,
+    })
+  }
+  return result
+}
+
+function migrationSucceeded(result) {
+  return result.status === 'migration_applied' || result.status === 'migration_skipped'
+}
+
+async function runStartupSchemaVerification() {
+  let db = null
+  try {
+    db = getDb()
+  } catch {
+    db = null
+  }
+  const result = await verifySmokecraftSchema(db)
+  if (result.ok) {
+    structuredLog('schema_verification_complete', { checks: result.checks.length })
+  } else {
+    structuredLog('schema_verification_failed', {
+      failureCode: result.failureCode,
+      failedChecks: result.checks.filter(c => !c.ok).map(c => c.name),
+    })
+  }
+  return result
 }
 
 // ── Start ─────────────────────────────────────────────────────
-await runStartupMigrations()
+const __migrationResult = await runStartupMigrations()
+const __migrationOk = migrationSucceeded(__migrationResult)
+
+if (!__migrationOk && IS_PROD_STARTUP) {
+  console.error('[FATAL] Required database migrations did not complete successfully in production. Refusing to accept traffic on an unverified schema.')
+  process.exit(1)
+}
+if (!__migrationOk && !IS_PROD_STARTUP) {
+  console.warn('[startup-migrations] Non-fatal in development/test — continuing boot. This MUST be fixed before deploying to production.')
+}
+
+// Schema verification only makes sense once migrations at least attempted
+// to run against a real database; skip it cleanly when there is no
+// DATABASE_URL at all (pure prototype/offline dev mode).
+let __schemaResult = { ok: true, checks: [], failureCode: null }
+if (process.env.DATABASE_URL) {
+  __schemaResult = await runStartupSchemaVerification()
+  if (!__schemaResult.ok && IS_PROD_STARTUP) {
+    console.error(`[FATAL] SmokeCraft schema verification failed in production: ${__schemaResult.failureCode}. Refusing to accept traffic.`)
+    process.exit(1)
+  }
+  if (!__schemaResult.ok && !IS_PROD_STARTUP) {
+    console.warn(`[schema-verification] Non-fatal in development/test — continuing boot. failureCode=${__schemaResult.failureCode}`)
+  }
+} else {
+  structuredLog('schema_verification_complete', { skipped: true, reason: 'no_database_url' })
+}
+
+// Exposed for the readiness diagnostics endpoint so it can report the
+// exact startup-time result without re-running migrations on every
+// request.
+setStartupState({ migration: __migrationResult, schema: __schemaResult })
 
 const __httpServer = app.listen(PORT, '0.0.0.0', async () => {
   console.log(`\n🥃 NOVEE OS Backend — port ${PORT}`)

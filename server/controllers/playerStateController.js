@@ -15,6 +15,46 @@ function ownerGuestReference(identity) {
   return identity.type === 'user' ? `user:${identity.id}` : identity.id
 }
 
+// Truth Gate — Session 2 hardening. A generic kebab-case slug shape guard
+// for :activityKey on the tasting-draft routes. Not tied to any single
+// hardcoded activity list (new tasting activities are added over time),
+// but rejects anything that could not plausibly be a real activity key —
+// empty, overlong, or containing characters no real activityKey ever
+// uses — with a clear 400 instead of letting a malformed value reach the
+// database as a query parameter.
+const ACTIVITY_KEY_SLUG_RE = /^[a-z][a-z0-9-]{0,63}$/
+
+function isValidActivityKeySlug(activityKey) {
+  return typeof activityKey === 'string' && ACTIVITY_KEY_SLUG_RE.test(activityKey)
+}
+
+// Truth Gate — structured, secret-free server-side error logging for the
+// Session 2 (tasting draft) read/write path specifically, since this is
+// the exact endpoint the production incident traced to. One JSON line per
+// failure with everything needed to diagnose it from Railway logs alone:
+// request id, route, player-resolution status, session slug, a safe
+// database error category (never the raw SQL error message/stack, which
+// can include table/column names or fragments of query text).
+function safeDbErrorCategory(err) {
+  if (!err) return 'unknown'
+  if (err.code === 'database_unavailable') return 'database_unavailable'
+  if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT') return 'connection_failure'
+  if (typeof err.code === 'string' && /^[0-9A-Z]{5}$/.test(err.code)) return `postgres_${err.code}` // real Postgres SQLSTATE code, safe to expose (not a message)
+  return 'unexpected_defect'
+}
+
+function logSession2Failure({ req, route, playerResolutionStatus, sessionSlug, err }) {
+  console.error(JSON.stringify({
+    event: 'session2_tasting_draft_error',
+    requestId: req.id || req.headers['x-request-id'] || null,
+    route,
+    playerResolutionStatus,
+    sessionSlug,
+    dbErrorCategory: safeDbErrorCategory(err),
+    ts: new Date().toISOString(),
+  }))
+}
+
 function dbErrorResponse(res, err) {
   if (err.code === 'database_unavailable') return res.status(503).json({ success: false, error: 'database_unavailable' })
   return res.status(500).json({ success: false, error: 'internal_error' })
@@ -471,16 +511,33 @@ export async function handleSubmitBlend(req, res) {
 
 /** Holistic Fix 5A-3D: server-authoritative tasting draft read/write + completion. */
 export async function handleGetTastingDraft(req, res) {
+  const sessionSlug = req.params.activityKey
+  if (!isValidActivityKeySlug(sessionSlug)) {
+    return res.status(400).json({ success: false, error: 'invalid_session_slug' })
+  }
+  if (!req.smokecraftIdentity) {
+    logSession2Failure({ req, route: 'GET /tasting/:activityKey/draft', playerResolutionStatus: 'unresolved', sessionSlug, err: null })
+    return res.status(401).json({ success: false, error: 'unauthenticated' })
+  }
   try {
     const guestReference = ownerGuestReference(req.smokecraftIdentity)
-    const result = await getTastingDraft({ guestReference, activityKey: req.params.activityKey })
+    const result = await getTastingDraft({ guestReference, activityKey: sessionSlug })
+    // No saved draft yet is NOT an error — getTastingDraft() already
+    // returns a valid initialized draft ({}, version 0) for a brand-new
+    // player, so this 200 covers both "existing draft" and "freshly
+    // initialized draft" per the Truth Gate contract.
     res.json({ success: true, draftData: result.draftData, version: result.version, updatedAt: result.updatedAt })
   } catch (err) {
+    logSession2Failure({ req, route: 'GET /tasting/:activityKey/draft', playerResolutionStatus: 'resolved', sessionSlug, err })
     dbErrorResponse(res, err)
   }
 }
 
 export async function handleSaveTastingDraft(req, res) {
+  const sessionSlug = req.params.activityKey
+  if (!isValidActivityKeySlug(sessionSlug)) {
+    return res.status(400).json({ success: false, error: 'invalid_session_slug' })
+  }
   const { draftData, expectedVersion } = req.body || {}
   if (typeof draftData !== 'object' || draftData === null) {
     return res.status(400).json({ success: false, error: 'draft_data_object_required' })
@@ -488,9 +545,18 @@ export async function handleSaveTastingDraft(req, res) {
   if (typeof expectedVersion !== 'number' || expectedVersion < 0) {
     return res.status(400).json({ success: false, error: 'expected_version_required' })
   }
+  if (!req.smokecraftIdentity) {
+    logSession2Failure({ req, route: 'PUT /tasting/:activityKey/draft', playerResolutionStatus: 'unresolved', sessionSlug, err: null })
+    return res.status(401).json({ success: false, error: 'unauthenticated' })
+  }
   try {
+    // guestReference is always derived server-side from the verified
+    // identity, never from the request body — this is what prevents
+    // cross-player writes; saveTastingDraft() then upserts (ON CONFLICT)
+    // scoped to (guest_reference, activity_key), so a save is idempotent
+    // and safe to retry after a refresh.
     const guestReference = ownerGuestReference(req.smokecraftIdentity)
-    const result = await saveTastingDraft({ guestReference, activityKey: req.params.activityKey, draftData, expectedVersion })
+    const result = await saveTastingDraft({ guestReference, activityKey: sessionSlug, draftData, expectedVersion })
     if (result.ok === false) {
       const status = result.error === 'already_completed' ? 409 : 400
       return res.status(status).json({ success: false, error: result.error })
@@ -498,6 +564,7 @@ export async function handleSaveTastingDraft(req, res) {
     if (result.conflict) return res.status(409).json({ success: false, error: 'stale_version', current: result.current })
     res.json({ success: true, current: result.current })
   } catch (err) {
+    logSession2Failure({ req, route: 'PUT /tasting/:activityKey/draft', playerResolutionStatus: 'resolved', sessionSlug, err })
     dbErrorResponse(res, err)
   }
 }

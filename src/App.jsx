@@ -205,6 +205,7 @@ import GuestPass        from './pages/smokecraft/GuestPass.jsx'
 import Demo             from './pages/smokecraft/Demo.jsx'
 import Scan             from './pages/smokecraft/Scan.jsx'
 import FeatureFlagAdmin from './pages/smokecraft/FeatureFlagAdmin.jsx'
+const AdminReadiness = lazy(() => import('./pages/smokecraft/AdminReadiness.jsx'))
 import ErrorLogViewer  from './pages/smokecraft/ErrorLogViewer.jsx'
 import SignIn           from './pages/SignIn.jsx'
 
@@ -1132,6 +1133,19 @@ export default function App() {
                   demoBlocked
                 >
                   <FeatureFlagAdmin />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: admin+ — SmokeCraft production readiness (Truth Gate) ── */}
+              <Route path="smokecraft/admin/readiness" element={
+                <ProtectedRoute
+                  allowedRoles={['admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin Login"
+                  lockedMessage="SmokeCraft production readiness requires admin-level access or higher."
+                  demoBlocked
+                >
+                  <AdminReadiness />
                 </ProtectedRoute>
               } />
 
