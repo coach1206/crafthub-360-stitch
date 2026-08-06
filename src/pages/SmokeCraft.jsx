@@ -104,7 +104,7 @@ function SecondaryHotspot({ label, onClick, style }) {
         // usable without breaching the artwork. (The 72x72 rule asserted by
         // verify-smokecraft-tactile-haptic-interactions.mjs applies to
         // SmokeCraftTactileCard, not to these image-aligned hotspots.)
-        minHeight: 28,
+        minHeight: 44,
         whiteSpace: 'nowrap',
         ...style,
       }}

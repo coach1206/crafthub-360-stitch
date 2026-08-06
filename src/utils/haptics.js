@@ -32,6 +32,23 @@ const PATTERNS = {
 
 const GUEST_SESSION_KEY = 'novee_guest_session'
 
+// Browser vibration policy (Chrome et al.) blocks navigator.vibrate() until
+// the document has received a real user gesture (pointerdown/keydown/click),
+// logging "Blocked call to navigator.vibrate…" on every call before that —
+// including calls fired from a mount-time useEffect, which is exactly what
+// produced that console warning on SessionComplete's completion effect.
+// Track the first real gesture globally so triggerHaptic can silently no-op
+// (not warn, not throw) before one has happened, satisfying the same
+// fire-and-forget contract every existing call site already relies on.
+let hasUserGesture = false
+if (typeof document !== 'undefined') {
+  const markGesture = () => { hasUserGesture = true }
+  const opts = { capture: true, passive: true }
+  document.addEventListener('pointerdown', markGesture, opts)
+  document.addEventListener('keydown', markGesture, opts)
+  document.addEventListener('click', markGesture, opts)
+}
+
 function prefersReducedMotion() {
   try {
     return typeof window !== 'undefined'
@@ -57,15 +74,21 @@ function hapticsEnabledPreference() {
 
 /**
  * @param {'light' | 'medium' | 'heavy' | 'success' | 'warning'} type
+ * @returns {boolean} whether vibration actually fired — never throws, never
+ *   blocks the caller, safe to ignore at every existing fire-and-forget
+ *   call site.
  */
 export function triggerHaptic(type = 'light') {
-  if (typeof navigator === 'undefined' || !navigator.vibrate) return
-  if (prefersReducedMotion()) return
-  if (!hapticsEnabledPreference()) return
+  if (typeof navigator === 'undefined' || !navigator.vibrate) return false
+  if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return false
+  if (!hasUserGesture) return false
+  if (prefersReducedMotion()) return false
+  if (!hapticsEnabledPreference()) return false
   const pattern = PATTERNS[type] ?? PATTERNS.light
   try {
-    navigator.vibrate(pattern)
+    return navigator.vibrate(pattern) === true
   } catch {
-    // silently ignore on unsupported platforms
+    // silently ignore on unsupported platforms — never throws, never blocks gameplay
+    return false
   }
 }

@@ -90,8 +90,7 @@ export default function GoldenBox() {
           background: NAVY_PANEL, border: `1.5px solid ${GOLD}`, borderRadius: 999,
           color: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 'clamp(10px,0.9vw,14px)',
           cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'transparent',
-        }}
+          WebkitTapHighlightColor: 'transparent', minHeight: 44,}}
       >
         ← Back
       </button>
@@ -153,8 +152,7 @@ export default function GoldenBox() {
           color: acknowledged ? '#241605' : 'rgba(233,193,118,0.45)', border: `1.5px solid ${acknowledged ? 'transparent' : BORDER}`, borderRadius: 999,
           fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 'clamp(11px,1vw,15px)',
           letterSpacing: '0.03em', cursor: acknowledged ? 'pointer' : 'not-allowed',
-          pointerEvents: 'auto', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
-        }}
+          pointerEvents: 'auto', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', minHeight: 44,}}
       >
         Next: Mentor Selection →
       </button>

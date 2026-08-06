@@ -2007,3 +2007,48 @@ pass are newly-defined scope gaps (relative to a manifest this pass
 itself created), not previously-promised, now-broken behavior. Full
 findings: `public/proof/smokecraft-required-interaction-manifest-audit/15-final-audit-report.md`.
 Highest SC-D number remains SC-D066.
+
+## SmokeCraft Production Closure — 55-view touch proof and safe haptics
+
+Starting HEAD: `d0340434` (5-viewport touch browser proof).
+
+**Found and fixed SC-D067**: the 55-case viewport/touch browser proof
+(`public/proof/smokecraft-viewport-touch-proof/browser-proof.json`)
+recorded 33/55 passing. Root causes, both real:
+
+1. **Undersized touch targets (22 of 22 non-console failures).** Six
+   screens shipped interactive controls below the 44×44 CSS-px floor:
+   `VenueSelect.jsx`'s type-filter pills (padding-only sizing, no
+   floor), `WelcomeExperience.jsx`'s and `SmokeCraftPassport.jsx`'s
+   absolutely-positioned image-surface hotspot buttons (percentage-of-
+   artwork height/width with no px floor — e.g. `height: '4.4%'` ==
+   ~36px at 900px-tall viewports), `SmokeCraft.jsx`'s `SecondaryHotspot`
+   (an explicit `minHeight: 28` — a deliberate prior trade-off against
+   overlapping baked artwork, documented in-file — now raised to the 44px
+   floor, well short of the earlier `minHeight: 72` regression that
+   caused the overlap this file's own comment warns against), and
+   `GoldenBox.jsx`'s hotspots. Fix: every affected absolute-position
+   `<button>` now carries `minHeight: 44` (or, where the existing size
+   was itself percentage-based, `minHeight: 'max(44px, N%)'` /
+   `minWidth: 'max(44px, N%)'` via CSS `max()`), so the control grows to
+   the floor without breaking the image-aligned layout at any viewport.
+2. **`navigator.vibrate` browser-policy console warnings (all 5
+   `final-session` cases).** `SessionComplete.jsx`'s completion
+   `useEffect` called `triggerHaptic('success')` at mount time, before
+   any user gesture — Chrome's vibration policy silently blocks
+   `navigator.vibrate()` until a real gesture (pointerdown/keydown/click)
+   has reached the document, logging "Blocked call to navigator.vibrate…"
+   on every such call. Fix: `src/utils/haptics.js`'s `triggerHaptic` now
+   tracks the first real user gesture globally (via a
+   capture+passive document listener) and no-ops — returns `false`,
+   never warns, never throws — until one has occurred. Also added a
+   `document.visibilityState !== 'visible'` guard and made the function
+   return a real boolean (`true` only on an actual fired vibration),
+   per the safe-haptic-helper contract. Proven by
+   `scripts/verifySmokecraftSafeHaptics.mjs` (5/5): no vibration on
+   load, allowed after a real gesture, unsupported browsers stay safe,
+   a throwing/rejected `vibrate()` call never propagates, and
+   `prefers-reduced-motion` suppresses vibration even after a gesture.
+
+Static-gameplay detector re-run clean at 85/85 after these edits.
+Highest SC-D number is now SC-D067.

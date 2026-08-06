@@ -616,3 +616,13 @@ logic changed, no regression found (228 checks re-run clean). React
 Router remains a known, unresolved, documented dependency vulnerability
 pending a dedicated future major-version migration package. Full
 findings: `public/proof/smokecraft-production-hardening-phase-1/`.
+
+## SmokeCraft Production Closure — 55-view touch proof and safe haptics
+
+Touch-target and haptic-policy repair only — no route, screen, or
+feature changed. Fixed SC-D067 (undersized touch targets on six
+screens' image-surface hotspots, and mount-time `navigator.vibrate`
+calls that Chrome's vibration policy silently blocks and warns about).
+Static-gameplay detector re-run clean (85/85). Full findings in the
+System Defect Register above this entry and
+`public/proof/smokecraft-production-closure/`.

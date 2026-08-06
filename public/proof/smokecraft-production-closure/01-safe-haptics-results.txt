@@ -1,0 +1,9 @@
+── SmokeCraft safe-haptics verifier
+
+  OK    no vibration on page load (no gesture yet)
+  OK    vibration allowed after a real user gesture
+  OK    unsupported browser (no navigator.vibrate) stays safe, no throw
+  OK    a rejected/throwing vibrate() call does not throw
+  OK    prefers-reduced-motion suppresses vibration
+
+=== RESULT: PASS (0 checks failed) ===

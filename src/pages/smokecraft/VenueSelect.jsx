@@ -315,7 +315,7 @@ export default function VenueSelect() {
                     <button
                       type="button" aria-pressed={!typeFilter}
                       onClick={() => setTypeFilter(null)}
-                      style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${!typeFilter ? GOLD : 'rgba(229,226,225,0.25)'}`, background: !typeFilter ? 'rgba(233,193,118,0.15)' : 'transparent', color: !typeFilter ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
+                      style={{ padding: '5px 12px', minHeight: 44, minWidth: 44, borderRadius: 14, border: `1.5px solid ${!typeFilter ? GOLD : 'rgba(229,226,225,0.25)'}`, background: !typeFilter ? 'rgba(233,193,118,0.15)' : 'transparent', color: !typeFilter ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
                     >
                       All Types
                     </button>
@@ -323,7 +323,7 @@ export default function VenueSelect() {
                       <button
                         key={t} type="button" aria-pressed={typeFilter === t}
                         onClick={() => setTypeFilter(t)}
-                        style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${typeFilter === t ? GOLD : 'rgba(229,226,225,0.25)'}`, background: typeFilter === t ? 'rgba(233,193,118,0.15)' : 'transparent', color: typeFilter === t ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
+                        style={{ padding: '5px 12px', minHeight: 44, minWidth: 44, borderRadius: 14, border: `1.5px solid ${typeFilter === t ? GOLD : 'rgba(229,226,225,0.25)'}`, background: typeFilter === t ? 'rgba(233,193,118,0.15)' : 'transparent', color: typeFilter === t ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
                       >
                         {t}
                       </button>

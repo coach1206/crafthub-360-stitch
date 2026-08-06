@@ -267,20 +267,20 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
       <button
         type="button" aria-label="Back to Journey" data-testid="s1-back-to-journey"
         onClick={() => { triggerHaptic('light'); navigate('/smokecraft/resume') }}
-        style={{ position: 'absolute', left: '15.9%', top: '0.9%', width: '11.0%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+        style={{ position: 'absolute', left: '15.9%', top: '0.9%', width: '11.0%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
       />
       <button
         type="button" aria-label="Notifications" data-testid="s1-notifications" disabled
-        style={{ position: 'absolute', left: '84.3%', top: '0.9%', width: '2.8%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'default', pointerEvents: 'auto' }}
+        style={{ position: 'absolute', left: '84.3%', top: '0.9%', width: '2.8%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'default', pointerEvents: 'auto', minHeight: 44,}}
       />
       <button
         type="button" aria-label="Help" data-testid="s1-help" disabled
-        style={{ position: 'absolute', left: '88.1%', top: '0.9%', width: '2.8%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'default', pointerEvents: 'auto' }}
+        style={{ position: 'absolute', left: '88.1%', top: '0.9%', width: '2.8%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'default', pointerEvents: 'auto', minHeight: 44,}}
       />
       <button
         type="button" aria-label="Account" data-testid="s1-account"
         onClick={() => { triggerHaptic('light'); navigate('/smokecraft/identity') }}
-        style={{ position: 'absolute', left: '91.9%', top: '0.9%', width: '3.1%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+        style={{ position: 'absolute', left: '91.9%', top: '0.9%', width: '3.1%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
       />
 
       {SIDEBAR_ITEMS.map(item => (
@@ -291,14 +291,13 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
           style={{
             position: 'absolute', left: '1%', top: item.top, width: '13.1%', height: '4.4%',
             background: 'transparent', border: 'none', cursor: item.disabled ? 'default' : 'pointer',
-            pointerEvents: 'auto', touchAction: 'manipulation',
-          }}
+            pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
         />
       ))}
       <button
         type="button" aria-label="Sign out — return to SmokeCraft landing" data-testid="s1-sign-out"
         onClick={() => { triggerHaptic('medium'); navigate('/smokecraft') }}
-        style={{ position: 'absolute', left: '1%', top: '86.6%', width: '13.1%', height: '3.7%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+        style={{ position: 'absolute', left: '1%', top: '86.6%', width: '13.1%', height: '3.7%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
       />
 
       {BOTTOM_STRIP_ITEMS.map(item => (
@@ -307,8 +306,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
           onClick={() => { triggerHaptic('light'); navigate(item.route) }}
           style={{
             position: 'absolute', left: item.left, top: '93.0%', width: '12%', height: '7.0%',
-            background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
-          }}
+            background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
         />
       ))}
 
@@ -477,8 +475,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
           onClick={handleBegin}
           style={{
             position: 'absolute', left: '73.2%', top: '84.3%', width: '22.8%', height: '4.6%',
-            background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, pointerEvents: 'auto',
-          }}
+            background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, pointerEvents: 'auto', minHeight: 44,}}
         />
       )}
 

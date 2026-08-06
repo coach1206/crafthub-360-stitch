@@ -155,12 +155,12 @@ export default function SmokeCraftPassport() {
       <button
         type="button" aria-label="Full Guide" data-testid="passport-full-guide"
         onClick={() => { triggerHaptic('light'); navigate(PASSPORT_MODULE.HOW_IT_WORKS) }}
-        style={{ position: 'absolute', left: '74%', top: '30%', width: '9%', height: '4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+        style={{ position: 'absolute', left: '74%', top: '30%', width: '9%', height: '4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
       />
       <button
         type="button" aria-label="Directory — Verified members, brands and more" data-testid="passport-directory-row"
         onClick={() => { triggerHaptic('light'); navigate(PASSPORT_MODULE.DIRECTORY) }}
-        style={{ position: 'absolute', left: '4.8%', top: '88.7%', width: '89.7%', height: '10.6%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+        style={{ position: 'absolute', left: '4.8%', top: '88.7%', width: '89.7%', height: '10.6%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
       />
 
       {PASSPORT_ACTION_CARDS.map(card => (
@@ -171,8 +171,7 @@ export default function SmokeCraftPassport() {
           style={{
             position: 'absolute', left: card.left, top: '64.3%', width: '13.2%', height: '18.6%',
             background: 'transparent', border: 'none', cursor: card.disabled ? 'default' : 'pointer',
-            pointerEvents: 'auto', touchAction: 'manipulation',
-          }}
+            pointerEvents: 'auto', touchAction: 'manipulation', minHeight: 44,}}
         />
       ))}
 
@@ -187,7 +186,7 @@ export default function SmokeCraftPassport() {
         onClick={back}
         style={{
           position: 'absolute', left: '2.4%', top: '2.6%',
-          minWidth: '9.5%', minHeight: '5.0%',
+          minWidth: 'max(44px, 9.5%)', minHeight: 'max(44px, 5.0%)',
           padding: '0.6% 1.6%',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4em',
           background: 'linear-gradient(180deg, rgba(12,16,26,0.92), rgba(8,10,16,0.92))',
