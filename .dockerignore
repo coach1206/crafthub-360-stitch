@@ -41,6 +41,23 @@ final-acceptance.mjs
 *.png
 *.jpg
 *.jpeg
+# R2 sync deployment fix — scripts/smokecraftAssetsSyncR2.mjs needs the
+# real approved SmokeCraft source images present in the build context to
+# recompute checksums and upload them (its whole job). The blanket
+# *.png/*.jpg/*.jpeg exclusion above blocked every one of them from ever
+# reaching any Docker build stage, not just the runtime image — a real,
+# separate defect from the missing `COPY scripts` in the Dockerfile.
+# Re-include only the approved SmokeCraft asset trees (a directory-level
+# rule earlier in this file, `public/proof`, still excludes every
+# browser-proof/QA screenshot regardless of these negations — negation
+# patterns cannot resurrect files under an already-excluded directory).
+!public/assets/smokecraft/**/*.png
+!public/assets/smokecraft/**/*.jpg
+!public/assets/smokecraft/**/*.jpeg
+!public/assets/smokecraft-reference/**/*.png
+!public/assets/smokecraft-reference/**/*.jpg
+!public/assets/smokecraft-reference/**/*.jpeg
+!public/smokecraft-visit-complete.png
 npm-debug.log*
 .DS_Store
 server/_local_media_storage

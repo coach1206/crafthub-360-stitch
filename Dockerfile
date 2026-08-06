@@ -32,6 +32,14 @@ ENV RAILWAY_GIT_BRANCH=${RAILWAY_GIT_BRANCH}
 RUN node scripts/generateBuildManifest.mjs || true
 RUN npm run build
 
+# R2 sync deployment fix — generate the authoritative asset registry here,
+# in the build stage (full deps + the real approved image files present,
+# thanks to the .dockerignore negations above), so the runtime image can
+# COPY just the resulting registry.json below rather than needing all of
+# public/proof/** (which stays excluded — no screenshots or other proof
+# artifacts reach the runtime image because of this).
+RUN node scripts/smokecraftAssetRegistry.mjs
+
 # ---- runtime: minimal image, non-root user, prod deps + server + dist only ----
 FROM node:20-bookworm-slim AS runtime
 ENV NODE_ENV=production
@@ -60,6 +68,30 @@ COPY src/locales ./src/locales
 COPY src/modules ./src/modules
 COPY src/services ./src/services
 COPY src/utils ./src/utils
+
+# R2 sync deployment fix — `npm run smokecraft:assets:sync-r2` failed on
+# Railway with `Cannot find module '/app/scripts/smokecraftAssetsSyncR2.mjs'`
+# because this runtime stage never copied scripts/ at all. Copy only the
+# two scripts the sync command actually needs (not the whole scripts/
+# directory — that includes dozens of dev-only verify/capture/debug
+# tools with no place in a production runtime image), plus the real
+# approved source image trees those scripts hash and upload, plus the
+# one registry.json the build stage just generated above (not all of
+# public/proof/** — no browser-proof/QA screenshots ship here).
+COPY scripts/smokecraftAssetsSyncR2.mjs  ./scripts/smokecraftAssetsSyncR2.mjs
+COPY scripts/smokecraftAssetRegistry.mjs ./scripts/smokecraftAssetRegistry.mjs
+COPY public/assets/smokecraft            ./public/assets/smokecraft
+COPY public/assets/smokecraft-reference  ./public/assets/smokecraft-reference
+COPY public/smokecraft-visit-complete.png ./public/smokecraft-visit-complete.png
+COPY --from=build /app/public/proof/smokecraft-asset-registry/registry.json ./public/proof/smokecraft-asset-registry/registry.json
+COPY scripts/verifyProductionContainerAssetSyncTooling.mjs ./scripts/verifyProductionContainerAssetSyncTooling.mjs
+
+# Build-blocking validator (Part 5 of this fix) — fails the Docker build
+# itself if the sync command, its real import (the object-storage
+# adapter), or the registry it reads are missing from this exact runtime
+# image, so this class of deploy-time MODULE_NOT_FOUND can never reach
+# Railway silently again.
+RUN node scripts/verifyProductionContainerAssetSyncTooling.mjs
 
 # No dev tools, no test/proof artifacts, no source maps of source code —
 # only the built dist/ output, the server runtime, and its shared src/
