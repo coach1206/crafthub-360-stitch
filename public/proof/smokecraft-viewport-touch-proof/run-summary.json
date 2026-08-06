@@ -1,0 +1,32 @@
+{
+  "capturedAt": "2026-08-06T18:13:47.086Z",
+  "totalCombinations": 55,
+  "screenshotsCaptured": 55,
+  "combinationsPassed": 33,
+  "combinationsFailed": 22,
+  "playerProgress": {
+    "xpTotal": 1175,
+    "completedCount": 22
+  },
+  "demoActivated": true,
+  "viewports": [
+    "desktop",
+    "laptop",
+    "tablet-landscape",
+    "tablet-portrait",
+    "kiosk"
+  ],
+  "screens": [
+    "venue-select",
+    "welcome",
+    "session-1-start",
+    "humidor-match",
+    "meet-your-cigar",
+    "terroir",
+    "knowledge-drop",
+    "passport",
+    "final-session",
+    "golden-box",
+    "admin-readiness"
+  ]
+}

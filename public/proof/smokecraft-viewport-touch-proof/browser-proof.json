@@ -1,0 +1,1612 @@
+[
+  {
+    "filename": "venue-select--desktop.png",
+    "route": "/smokecraft/venue-select",
+    "screen": "venue-select",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 68.734375,
+      "height": 36
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "welcome--desktop.png",
+    "route": "/smokecraft/welcome",
+    "screen": "welcome",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 120.265625,
+      "height": 36.078125
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "session-1-start--desktop.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 331.1875,
+      "height": 51.6875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "humidor-match--desktop.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 596.15625,
+      "height": 99.671875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "meet-your-cigar--desktop.png",
+    "route": "/smokecraft/meet-your-cigar",
+    "screen": "meet-your-cigar",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 61.78125,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "terroir--desktop.png",
+    "route": "/smokecraft/terroir",
+    "screen": "terroir",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 72.625,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "knowledge-drop--desktop.png",
+    "route": "/smokecraft/knowledge-drop",
+    "screen": "knowledge-drop",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 73.84375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "passport--desktop.png",
+    "route": "/smokecraft/passport",
+    "screen": "passport",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 129.59375,
+      "height": 32.40625
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "final-session--desktop.png",
+    "route": "/smokecraft/session-complete",
+    "screen": "final-session",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 151.765625,
+      "height": 46
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "golden-box--desktop.png",
+    "route": "/smokecraft/golden-box",
+    "screen": "golden-box",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 92.203125,
+      "height": 45.890625
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "admin-readiness--desktop.png",
+    "route": "/smokecraft/admin/readiness",
+    "screen": "admin-readiness",
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 900,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 163.359375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "venue-select--laptop.png",
+    "route": "/smokecraft/venue-select",
+    "screen": "venue-select",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 68.734375,
+      "height": 36
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "welcome--laptop.png",
+    "route": "/smokecraft/welcome",
+    "screen": "welcome",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 108.53125,
+      "height": 32.546875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "session-1-start--laptop.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 271.390625,
+      "height": 42.359375
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "humidor-match--laptop.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 488.515625,
+      "height": 81.671875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "meet-your-cigar--laptop.png",
+    "route": "/smokecraft/meet-your-cigar",
+    "screen": "meet-your-cigar",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 61.78125,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "terroir--laptop.png",
+    "route": "/smokecraft/terroir",
+    "screen": "terroir",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 72.625,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "knowledge-drop--laptop.png",
+    "route": "/smokecraft/knowledge-drop",
+    "screen": "knowledge-drop",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 73.84375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "passport--laptop.png",
+    "route": "/smokecraft/passport",
+    "screen": "passport",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 106.1875,
+      "height": 26.5625
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "final-session--laptop.png",
+    "route": "/smokecraft/session-complete",
+    "screen": "final-session",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 151.765625,
+      "height": 46
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "golden-box--laptop.png",
+    "route": "/smokecraft/golden-box",
+    "screen": "golden-box",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 84.015625,
+      "height": 41.8125
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "admin-readiness--laptop.png",
+    "route": "/smokecraft/admin/readiness",
+    "screen": "admin-readiness",
+    "viewport": "laptop",
+    "width": 1180,
+    "height": 820,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1180,
+      "innerWidth": 1180
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 163.359375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "venue-select--tablet-landscape.png",
+    "route": "/smokecraft/venue-select",
+    "screen": "venue-select",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 68.734375,
+      "height": 36
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "welcome--tablet-landscape.png",
+    "route": "/smokecraft/welcome",
+    "screen": "welcome",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 100.890625,
+      "height": 30.265625
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "session-1-start--tablet-landscape.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 235.515625,
+      "height": 36.75
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "humidor-match--tablet-landscape.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 423.921875,
+      "height": 70.875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "meet-your-cigar--tablet-landscape.png",
+    "route": "/smokecraft/meet-your-cigar",
+    "screen": "meet-your-cigar",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 59.984375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "terroir--tablet-landscape.png",
+    "route": "/smokecraft/terroir",
+    "screen": "terroir",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 70.21875,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "knowledge-drop--tablet-landscape.png",
+    "route": "/smokecraft/knowledge-drop",
+    "screen": "knowledge-drop",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 71.375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "passport--tablet-landscape.png",
+    "route": "/smokecraft/passport",
+    "screen": "passport",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 92.15625,
+      "height": 23.046875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "final-session--tablet-landscape.png",
+    "route": "/smokecraft/session-complete",
+    "screen": "final-session",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 151.765625,
+      "height": 46
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "golden-box--tablet-landscape.png",
+    "route": "/smokecraft/golden-box",
+    "screen": "golden-box",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 77.8125,
+      "height": 38.734375
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "admin-readiness--tablet-landscape.png",
+    "route": "/smokecraft/admin/readiness",
+    "screen": "admin-readiness",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 163.359375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "venue-select--tablet-portrait.png",
+    "route": "/smokecraft/venue-select",
+    "screen": "venue-select",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 68.734375,
+      "height": 36
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "welcome--tablet-portrait.png",
+    "route": "/smokecraft/welcome",
+    "screen": "welcome",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 84.46875,
+      "height": 25.34375
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "session-1-start--tablet-portrait.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 176.625,
+      "height": 27.5625
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "humidor-match--tablet-portrait.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 317.9375,
+      "height": 53.15625
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "meet-your-cigar--tablet-portrait.png",
+    "route": "/smokecraft/meet-your-cigar",
+    "screen": "meet-your-cigar",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 56.890625,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "terroir--tablet-portrait.png",
+    "route": "/smokecraft/terroir",
+    "screen": "terroir",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 66.0625,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "knowledge-drop--tablet-portrait.png",
+    "route": "/smokecraft/knowledge-drop",
+    "screen": "knowledge-drop",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 67.109375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "passport--tablet-portrait.png",
+    "route": "/smokecraft/passport",
+    "screen": "passport",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 69.109375,
+      "height": 17.28125
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "final-session--tablet-portrait.png",
+    "route": "/smokecraft/session-complete",
+    "screen": "final-session",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 151.765625,
+      "height": 46
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "golden-box--tablet-portrait.png",
+    "route": "/smokecraft/golden-box",
+    "screen": "golden-box",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 58.359375,
+      "height": 29.046875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "admin-readiness--tablet-portrait.png",
+    "route": "/smokecraft/admin/readiness",
+    "screen": "admin-readiness",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 163.359375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "venue-select--kiosk.png",
+    "route": "/smokecraft/venue-select",
+    "screen": "venue-select",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "fail",
+    "touchTargetDetail": {
+      "width": 68.734375,
+      "height": 36
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "welcome--kiosk.png",
+    "route": "/smokecraft/welcome",
+    "screen": "welcome",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 146.65625,
+      "height": 44
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "session-1-start--kiosk.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 441.59375,
+      "height": 68.921875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "humidor-match--kiosk.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 735.59375,
+      "height": 123
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "meet-your-cigar--kiosk.png",
+    "route": "/smokecraft/meet-your-cigar",
+    "screen": "meet-your-cigar",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 61.78125,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "terroir--kiosk.png",
+    "route": "/smokecraft/terroir",
+    "screen": "terroir",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 72.625,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "knowledge-drop--kiosk.png",
+    "route": "/smokecraft/knowledge-drop",
+    "screen": "knowledge-drop",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 73.84375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "passport--kiosk.png",
+    "route": "/smokecraft/passport",
+    "screen": "passport",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 172.703125,
+      "height": 43.1875
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "final-session--kiosk.png",
+    "route": "/smokecraft/session-complete",
+    "screen": "final-session",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 151.765625,
+      "height": 46
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
+  },
+  {
+    "filename": "golden-box--kiosk.png",
+    "route": "/smokecraft/golden-box",
+    "screen": "golden-box",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 110.640625,
+      "height": 55.078125
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "admin-readiness--kiosk.png",
+    "route": "/smokecraft/admin/readiness",
+    "screen": "admin-readiness",
+    "viewport": "kiosk",
+    "width": 1920,
+    "height": 1080,
+    "touchEnabled": false,
+    "tapPerformed": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1920,
+      "innerWidth": 1920
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 163.359375,
+      "height": 42
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  }
+]
