@@ -74,6 +74,95 @@ function checkJourneyManifest() {
   return { ok: true, entryCount: entries.length }
 }
 
+// ASSET_GOVERNANCE (this pass) — runtime counterpart of
+// scripts/validateSmokecraftAssets.mjs. Re-checks the live SC_ASSETS
+// registry for external image URLs, non-repo-relative paths, and assets
+// missing from disk, so a deploy that somehow shipped without the build-time
+// validator having run still surfaces the exact same real failure on the
+// owner's readiness page instead of reporting healthy. UNAPPROVED_IMAGE_ASSET
+// covers "on disk but not repo-relative/registered correctly"; the paired
+// EXTERNAL_IMAGE_REFERENCE code is reported separately since it is a
+// materially different (and more severe) production-safety violation.
+const SC_ASSETS_PATH = path.resolve(__dirname, '../../src/constants/smokecraftAssets.js')
+const PUBLIC_DIR = path.resolve(__dirname, '../../public')
+async function checkAssetGovernance() {
+  let mod
+  try {
+    mod = await import(SC_ASSETS_PATH)
+  } catch {
+    return { ok: false, code: 'UNAPPROVED_IMAGE_ASSET', detail: 'SC_ASSETS registry failed to load.' }
+  }
+  const SC_ASSETS = mod.SC_ASSETS || {}
+  for (const [key, value] of Object.entries(SC_ASSETS)) {
+    if (value === null) continue
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(value)) {
+      return { ok: false, code: 'EXTERNAL_IMAGE_REFERENCE', detail: `SC_ASSETS.${key} references an external URL.` }
+    }
+    if (!value.startsWith('/')) {
+      return { ok: false, code: 'UNAPPROVED_IMAGE_ASSET', detail: `SC_ASSETS.${key} is not a repo-relative path.` }
+    }
+    const fsPath = path.join(PUBLIC_DIR, decodeURIComponent(value.split('?')[0]))
+    if (!fs.existsSync(fsPath)) {
+      return { ok: false, code: 'UNAPPROVED_IMAGE_ASSET', detail: `SC_ASSETS.${key} does not exist on disk.` }
+    }
+  }
+  return { ok: true, assetCount: Object.keys(SC_ASSETS).length }
+}
+
+// ROUTE_SEQUENCE_INVALID (this pass) — cross-checks the build-generated
+// journey manifest's route order against the canonical server-side
+// VISIT_STRUCTURE spine (src/constants/session.js) that
+// scripts/verify-smokecraft-full-game-fresh-player.mjs drives its 27-session
+// walkthrough from. Catches a manifest that has silently drifted from the
+// real session order (e.g. a hand-edit that re-ordered entries without
+// re-running the generator).
+const SESSION_CONST_PATH = path.resolve(__dirname, '../../src/constants/session.js')
+async function checkRouteSequence(manifest) {
+  if (!manifest?.ok) return { ok: false, code: 'ROUTE_SEQUENCE_INVALID', detail: 'Journey manifest itself is invalid; cannot verify sequence.' }
+  let entries
+  try {
+    entries = JSON.parse(fs.readFileSync(GAME_MANIFEST_PATH, 'utf8')).entries
+  } catch {
+    return { ok: false, code: 'ROUTE_SEQUENCE_INVALID', detail: 'Manifest unreadable.' }
+  }
+  let VISIT_STRUCTURE
+  try {
+    ;({ VISIT_STRUCTURE } = await import(SESSION_CONST_PATH))
+  } catch {
+    return { ok: false, code: 'ROUTE_SEQUENCE_INVALID', detail: 'Canonical session spine failed to load.' }
+  }
+  // Compare by ROUTE, not screenId — the manifest's screenId uses a
+  // "session-N" naming convention distinct from the canonical spine's
+  // completion ids, but both sides carry the real /smokecraft/... route,
+  // which is the actual thing a "hardcoded next/previous route" bug would
+  // corrupt. Manifest entries are pre-filtered to curriculum sessions
+  // (sessionNumber present) so entry/admin/commerce screens outside the
+  // 27-session spine don't produce false mismatches.
+  // The canonical spine legitimately repeats a route across consecutive
+  // merged sub-sessions (e.g. first-third appears twice for the merged
+  // S8/S9 tasting pair — see verify-smokecraft-full-game-fresh-player.mjs
+  // comments on "covers merged S9/S13/S17/S18/S20"). Collapse consecutive
+  // duplicates before comparing so that legitimate merging is never
+  // reported as a false route-order violation.
+  const canonicalRoutesRaw = []
+  for (const v of VISIT_STRUCTURE) for (const s of v.sessions) if (s.route) canonicalRoutesRaw.push(s.route)
+  const canonicalRoutes = canonicalRoutesRaw.filter((r, i) => r !== canonicalRoutesRaw[i - 1])
+  const manifestRoutes = entries
+    .filter(e => e.sessionNumber != null && typeof e.route === 'string')
+    .map(e => e.route)
+    .filter(r => canonicalRoutes.includes(r))
+  const filteredCanonical = canonicalRoutes.filter(r => manifestRoutes.includes(r))
+  if (manifestRoutes.length === 0) {
+    return { ok: false, code: 'ROUTE_SEQUENCE_INVALID', detail: 'No curriculum-session routes found in manifest to cross-check against the canonical spine.' }
+  }
+  for (let i = 0; i < manifestRoutes.length; i++) {
+    if (manifestRoutes[i] !== filteredCanonical[i]) {
+      return { ok: false, code: 'ROUTE_SEQUENCE_INVALID', detail: `Manifest route order diverges from canonical spine at position ${i} (manifest="${manifestRoutes[i]}", expected="${filteredCanonical[i]}").` }
+    }
+  }
+  return { ok: true, checkedCount: manifestRoutes.length }
+}
+
 // Probe guest_reference — never a real learner's identity. Fixed literal,
 // never derived from request input, so it cannot be used to enumerate or
 // disturb real player data. The write test below uses a distinct,
@@ -172,6 +261,8 @@ export async function handleReadinessCheck(req, res) {
   const session2Read = dbConnectivity.ok && tastingDraftTable.ok ? await checkSession2DraftRead(db) : { ok: false, code: 'SESSION2_DRAFT_READ_FAILED' }
   const session2Write = dbConnectivity.ok && tastingDraftTable.ok ? await checkSession2DraftWrite(db) : { ok: false, code: 'SESSION2_DRAFT_WRITE_FAILED' }
   const journeyManifest = checkJourneyManifest()
+  const assetGovernance = await checkAssetGovernance()
+  const routeSequence = await checkRouteSequence(journeyManifest)
 
   const checks = {
     databaseConnectivity: dbConnectivity,
@@ -184,6 +275,8 @@ export async function handleReadinessCheck(req, res) {
     session2DraftRead: session2Read,
     session2DraftWrite: session2Write,
     journeyManifest,
+    assetGovernance,
+    routeSequence,
   }
 
   // Hard failures — anything schema/db/session2-critical failing means the
@@ -197,6 +290,8 @@ export async function handleReadinessCheck(req, res) {
   if (!session2Read.ok) hardFailureCodes.push('SESSION2_DRAFT_READ_FAILED')
   if (!session2Write.ok) hardFailureCodes.push('SESSION2_DRAFT_WRITE_FAILED')
   if (!journeyManifest.ok) hardFailureCodes.push(journeyManifest.code)
+  if (!assetGovernance.ok) hardFailureCodes.push(assetGovernance.code)
+  if (!routeSequence.ok) hardFailureCodes.push(routeSequence.code)
 
   // Venue emptiness is a soft (degraded) failure — venue selection has an
   // explicit "Continue without venue" path (src/pages/smokecraft/

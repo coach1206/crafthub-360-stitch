@@ -283,142 +283,441 @@
       {
         "sessionId": "entry",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T08:53:45.355Z",
+        "completedAt": "2026-08-06T09:13:38.085Z",
         "sourceRoute": null
       },
       {
         "sessionId": "humidor-match",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:46.995Z",
+        "completedAt": "2026-08-06T09:13:38.626Z",
         "sourceRoute": null
       },
       {
         "sessionId": "meet-your-cigar",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:47.692Z",
+        "completedAt": "2026-08-06T09:13:38.749Z",
         "sourceRoute": null
       },
       {
         "sessionId": "terroir",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:47.711Z",
+        "completedAt": "2026-08-06T09:13:38.759Z",
         "sourceRoute": null
       },
       {
         "sessionId": "format",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:47.726Z",
+        "completedAt": "2026-08-06T09:13:38.879Z",
         "sourceRoute": null
       },
       {
         "sessionId": "cut-toast-light",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T08:53:47.740Z",
+        "completedAt": "2026-08-06T09:13:38.891Z",
         "sourceRoute": null
       },
       {
         "sessionId": "lighting-tutorial",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T08:53:47.746Z",
+        "completedAt": "2026-08-06T09:13:38.897Z",
         "sourceRoute": null
       },
       {
         "sessionId": "first-third",
         "xpAwarded": 100,
-        "completedAt": "2026-08-06T08:53:47.755Z",
+        "completedAt": "2026-08-06T09:13:38.907Z",
         "sourceRoute": null
       },
       {
         "sessionId": "flavor-memory",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:47.767Z",
+        "completedAt": "2026-08-06T09:13:38.917Z",
         "sourceRoute": null
       },
       {
         "sessionId": "pairing-lab",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:48.519Z",
+        "completedAt": "2026-08-06T09:13:38.935Z",
         "sourceRoute": null
       },
       {
         "sessionId": "second-third",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:48.529Z",
+        "completedAt": "2026-08-06T09:13:38.943Z",
         "sourceRoute": null
       },
       {
         "sessionId": "mentor-commentary",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T08:53:48.535Z",
+        "completedAt": "2026-08-06T09:13:38.947Z",
         "sourceRoute": null
       },
       {
         "sessionId": "knowledge-drop",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T08:53:48.543Z",
+        "completedAt": "2026-08-06T09:13:38.957Z",
         "sourceRoute": null
       },
       {
         "sessionId": "final-third",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:48.551Z",
+        "completedAt": "2026-08-06T09:13:38.965Z",
         "sourceRoute": null
       },
       {
         "sessionId": "scorecard",
         "xpAwarded": 100,
-        "completedAt": "2026-08-06T08:53:48.559Z",
+        "completedAt": "2026-08-06T09:13:38.974Z",
         "sourceRoute": null
       },
       {
         "sessionId": "ai-summary",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T08:53:48.565Z",
+        "completedAt": "2026-08-06T09:13:38.981Z",
         "sourceRoute": null
       },
       {
         "sessionId": "pairing-recommendations",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T08:53:48.571Z",
+        "completedAt": "2026-08-06T09:13:38.988Z",
         "sourceRoute": null
       },
       {
         "sessionId": "passport-stamp",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T08:53:50.102Z",
+        "completedAt": "2026-08-06T09:13:39.004Z",
         "sourceRoute": null
       },
       {
         "sessionId": "final-review",
         "xpAwarded": 100,
-        "completedAt": "2026-08-06T08:53:50.111Z",
+        "completedAt": "2026-08-06T09:13:39.008Z",
         "sourceRoute": null
       },
       {
         "sessionId": "rewards",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T08:53:50.116Z",
+        "completedAt": "2026-08-06T09:13:39.012Z",
         "sourceRoute": null
       },
       {
         "sessionId": "achievements",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T08:53:50.121Z",
+        "completedAt": "2026-08-06T09:13:39.016Z",
         "sourceRoute": null
       },
       {
         "sessionId": "session-complete",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T08:53:50.125Z",
+        "completedAt": "2026-08-06T09:13:39.021Z",
         "sourceRoute": null
       }
     ],
     "badges": null
   },
   "goldenBox": {
-    "competitionId": "322",
-    "entryId": "c3886c80-8710-4219-8a24-4ee5835cb119",
+    "competitionId": "324",
+    "entryId": "b483018d-63d8-4d6b-8680-1ba18ca12033",
     "awardType": "first_place"
   },
-  "capturedAt": "2026-08-06T08:53:55.679Z"
+  "journeyTrace": [
+    {
+      "orderIndex": 1,
+      "phase": 1,
+      "sessionId": "entry",
+      "route": "/smokecraft/welcome",
+      "nextRoute": "/smokecraft/humidor-match",
+      "xpAwarded": 0,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.085Z"
+    },
+    {
+      "orderIndex": 2,
+      "phase": 1,
+      "sessionId": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "nextRoute": "/smokecraft/meet-your-cigar",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.626Z"
+    },
+    {
+      "orderIndex": 3,
+      "phase": 1,
+      "sessionId": "meet-your-cigar",
+      "route": "/smokecraft/meet-your-cigar",
+      "nextRoute": "/smokecraft/terroir",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.749Z"
+    },
+    {
+      "orderIndex": 4,
+      "phase": 1,
+      "sessionId": "terroir",
+      "route": "/smokecraft/terroir",
+      "nextRoute": "/smokecraft/format",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.759Z"
+    },
+    {
+      "orderIndex": 5,
+      "phase": 1,
+      "sessionId": "format",
+      "route": "/smokecraft/format",
+      "nextRoute": "/smokecraft/cut-toast-light",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.879Z"
+    },
+    {
+      "orderIndex": 6,
+      "phase": 1,
+      "sessionId": "cut-toast-light",
+      "route": "/smokecraft/cut-toast-light",
+      "nextRoute": "/smokecraft/lighting-tutorial",
+      "xpAwarded": 50,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.891Z"
+    },
+    {
+      "orderIndex": 7,
+      "phase": 1,
+      "sessionId": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "nextRoute": "/smokecraft/first-third",
+      "xpAwarded": 0,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.897Z"
+    },
+    {
+      "orderIndex": 8,
+      "phase": 2,
+      "sessionId": "first-third",
+      "route": "/smokecraft/first-third",
+      "nextRoute": "/smokecraft/first-third",
+      "xpAwarded": 100,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.907Z"
+    },
+    {
+      "orderIndex": 9,
+      "phase": 2,
+      "sessionId": "first-third",
+      "route": "/smokecraft/first-third",
+      "nextRoute": "/smokecraft/flavor-memory",
+      "xpAwarded": 100,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.907Z"
+    },
+    {
+      "orderIndex": 10,
+      "phase": 2,
+      "sessionId": "flavor-memory",
+      "route": "/smokecraft/flavor-memory",
+      "nextRoute": "/smokecraft/pairing-lab",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.917Z"
+    },
+    {
+      "orderIndex": 11,
+      "phase": 2,
+      "sessionId": "pairing-lab",
+      "route": "/smokecraft/pairing-lab",
+      "nextRoute": "/smokecraft/second-third",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.935Z"
+    },
+    {
+      "orderIndex": 12,
+      "phase": 3,
+      "sessionId": "second-third",
+      "route": "/smokecraft/second-third",
+      "nextRoute": "/smokecraft/second-third",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.943Z"
+    },
+    {
+      "orderIndex": 13,
+      "phase": 3,
+      "sessionId": "second-third",
+      "route": "/smokecraft/second-third",
+      "nextRoute": "/smokecraft/mentor-commentary",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.943Z"
+    },
+    {
+      "orderIndex": 14,
+      "phase": 3,
+      "sessionId": "mentor-commentary",
+      "route": "/smokecraft/mentor-commentary",
+      "nextRoute": "/smokecraft/knowledge-drop",
+      "xpAwarded": 0,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.947Z"
+    },
+    {
+      "orderIndex": 15,
+      "phase": 3,
+      "sessionId": "knowledge-drop",
+      "route": "/smokecraft/knowledge-drop",
+      "nextRoute": "/smokecraft/final-third",
+      "xpAwarded": 0,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.957Z"
+    },
+    {
+      "orderIndex": 16,
+      "phase": 4,
+      "sessionId": "final-third",
+      "route": "/smokecraft/final-third",
+      "nextRoute": "/smokecraft/final-third",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.965Z"
+    },
+    {
+      "orderIndex": 17,
+      "phase": 4,
+      "sessionId": "final-third",
+      "route": "/smokecraft/final-third",
+      "nextRoute": "/smokecraft/final-third",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.965Z"
+    },
+    {
+      "orderIndex": 18,
+      "phase": 4,
+      "sessionId": "final-third",
+      "route": "/smokecraft/final-third",
+      "nextRoute": "/smokecraft/scorecard",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.965Z"
+    },
+    {
+      "orderIndex": 19,
+      "phase": 5,
+      "sessionId": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "nextRoute": "/smokecraft/scorecard",
+      "xpAwarded": 100,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.974Z"
+    },
+    {
+      "orderIndex": 20,
+      "phase": 5,
+      "sessionId": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "nextRoute": "/smokecraft/ai-summary",
+      "xpAwarded": 100,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.974Z"
+    },
+    {
+      "orderIndex": 21,
+      "phase": 6,
+      "sessionId": "ai-summary",
+      "route": "/smokecraft/ai-summary",
+      "nextRoute": "/smokecraft/pairing-recommendations",
+      "xpAwarded": 0,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.981Z"
+    },
+    {
+      "orderIndex": 22,
+      "phase": 6,
+      "sessionId": "pairing-recommendations",
+      "route": "/smokecraft/pairing-recommendations",
+      "nextRoute": "/smokecraft/passport-stamp",
+      "xpAwarded": 0,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:38.988Z"
+    },
+    {
+      "orderIndex": 23,
+      "phase": 6,
+      "sessionId": "passport-stamp",
+      "route": "/smokecraft/passport-stamp",
+      "nextRoute": "/smokecraft/final-review",
+      "xpAwarded": 75,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:39.004Z"
+    },
+    {
+      "orderIndex": 24,
+      "phase": 6,
+      "sessionId": "final-review",
+      "route": "/smokecraft/final-review",
+      "nextRoute": "/smokecraft/rewards",
+      "xpAwarded": 100,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:39.008Z"
+    },
+    {
+      "orderIndex": 25,
+      "phase": 6,
+      "sessionId": "rewards",
+      "route": "/smokecraft/rewards",
+      "nextRoute": "/smokecraft/rewards",
+      "xpAwarded": 50,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:39.012Z"
+    },
+    {
+      "orderIndex": 26,
+      "phase": 6,
+      "sessionId": "achievements",
+      "route": "/smokecraft/rewards",
+      "nextRoute": "/smokecraft/session-complete",
+      "xpAwarded": 50,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:39.016Z"
+    },
+    {
+      "orderIndex": 27,
+      "phase": 6,
+      "sessionId": "session-complete",
+      "route": "/smokecraft/session-complete",
+      "nextRoute": null,
+      "xpAwarded": 50,
+      "assetKey": null,
+      "serverConfirmedCompleted": true,
+      "completedAt": "2026-08-06T09:13:39.021Z"
+    }
+  ],
+  "capturedAt": "2026-08-06T09:13:39.472Z"
 }

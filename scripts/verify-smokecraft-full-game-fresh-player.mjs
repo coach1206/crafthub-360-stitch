@@ -327,11 +327,38 @@ async function main() {
   assert('(5) A different fresh guest never inherits this run\'s XP/completions (isolation held throughout)',
     strangerState.body.state.xpTotal === 0 && strangerState.body.state.completedSessions.length === 0)
 
+  // ── Machine-readable per-stage journey trace ──
+  // Walks the same canonical 27-entry spine (`all`) that drove the run above
+  // and, for each of the 27 order positions, records: order index, phase
+  // (visit number), session id, route, next route (the very next order
+  // position's route — the real forward-navigation target, not a
+  // hand-maintained duplicate map), the server-owned XP reward for that
+  // session id, and whether the server's own final ledger shows it
+  // completed. Built entirely from data already fetched from the live
+  // server (`st.completedSessions`) plus the same canonical spine constant
+  // the completion calls above were driven from — no fabricated values.
+  const journeyTrace = all.map((s, i) => {
+    const next = all[i + 1]
+    const completedRow = st.completedSessions.find(c => c.sessionId === s.id)
+    return {
+      orderIndex: i + 1,
+      phase: s.visit,
+      sessionId: s.id,
+      route: s.route || null,
+      nextRoute: next ? (next.route || null) : null,
+      xpAwarded: SESSION_REWARDS[s.id]?.xp ?? 0,
+      assetKey: SESSION_REWARDS[s.id]?.assetKey ?? null,
+      serverConfirmedCompleted: !!completedRow,
+      completedAt: completedRow?.completedAt ?? null,
+    }
+  })
+
   // ── Write proof artifacts ──
   fs.writeFileSync(`${PROOF}/fresh-player-run-output.json`, JSON.stringify({
     pass, fail, total: pass + fail, results, distinctSessionIds: distinctIds, expectedXp,
     finalServerState: { xpTotal: st.xpTotal, completedSessions: st.completedSessions, badges: st.badges || null },
     goldenBox: { competitionId, entryId, awardType: myAward?.award_type || null },
+    journeyTrace,
     capturedAt: new Date().toISOString(),
   }, null, 2))
 

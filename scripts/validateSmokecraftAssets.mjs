@@ -18,6 +18,7 @@ const { SC_ASSETS } = await import(path.join(root, 'src/constants/smokecraftAsse
 
 let failed = 0
 let checked = 0
+const seenValues = new Map()
 
 for (const [key, value] of Object.entries(SC_ASSETS)) {
   if (value === null) {
@@ -25,6 +26,32 @@ for (const [key, value] of Object.entries(SC_ASSETS)) {
     continue
   }
   checked++
+
+  // External URL check — no SmokeCraft asset may hotlink an external host.
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(value) && !value.startsWith('file://')) {
+    failed++
+    console.error(`FAIL  ${key}: external image URL is not allowed — ${value}`)
+    continue
+  }
+
+  // Non-repo-relative path check — every asset must be a root-relative
+  // public/ path (starts with "/"), never a bare relative or filesystem path.
+  if (!value.startsWith('/')) {
+    failed++
+    console.error(`FAIL  ${key}: not a repo-relative path (must start with "/") — ${value}`)
+    continue
+  }
+
+  // Duplicate asset-id sanity — two distinct SC_ASSETS keys should not be
+  // silently pointing at literally the same registry key twice (JS object
+  // literals can't produce duplicate keys, so this guards against the
+  // generator ever being changed to build SC_ASSETS from an array/map).
+  if (seenValues.has(key)) {
+    failed++
+    console.error(`FAIL  duplicate asset id "${key}" registered twice in SC_ASSETS`)
+  }
+  seenValues.set(key, value)
+
   const withoutQuery = value.split('?')[0]
   const decoded = decodeURIComponent(withoutQuery)
   const fsPath = path.join(root, 'public', decoded)
