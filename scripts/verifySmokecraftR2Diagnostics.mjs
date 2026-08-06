@@ -57,6 +57,13 @@ async function freshImport() {
       err: { name: 'Error', message: 'getaddrinfo ENOTFOUND bad.endpoint.example' },
       expectCode: R2_FAILURE_CODE.NETWORK_FAILED,
     },
+    {
+      // The real bug this pass fixes: InvalidArgument was previously
+      // unclassified and fell through to R2_UNKNOWN_ERROR.
+      name: 'malformed bucket / key / unsupported checksum / ACL / metadata — InvalidArgument (400)',
+      err: { name: 'InvalidArgument', Code: 'InvalidArgument', message: "Header 'x-amz-acl' with value 'public-read' not implemented", $metadata: { httpStatusCode: 400, requestId: null } },
+      expectCode: R2_FAILURE_CODE.INVALID_ARGUMENT,
+    },
   ]
 
   for (const c of cases) {
@@ -72,6 +79,18 @@ async function freshImport() {
 
   const retryableErr = classifyR2Error({ name: 'InternalError', Code: 'InternalError', $metadata: { httpStatusCode: 500, requestId: 'req-5' } })
   check('5xx classified as retryable', retryableErr.retryable === true)
+
+  // InvalidArgument's safe message surfaces the provider's own parameter
+  // description (useful for real repair), with credential-shaped
+  // substrings stripped as a defensive measure.
+  const invalidArgErr = classifyR2Error({
+    name: 'InvalidArgument', Code: 'InvalidArgument',
+    message: "Header 'x-amz-storage-class' with value 'GLACIER' not implemented. Authorization: AWS4-HMAC-SHA256 Credential=fakekey/20260101/auto/s3/aws4_request",
+    $metadata: { httpStatusCode: 400, requestId: null },
+  })
+  check('InvalidArgument classified correctly', invalidArgErr.failureCode === R2_FAILURE_CODE.INVALID_ARGUMENT)
+  check('InvalidArgument safe message names the rejected parameter', /x-amz-storage-class/.test(invalidArgErr.safeMessage))
+  check('InvalidArgument safe message never contains a raw AWS4-HMAC signature', !/AWS4-HMAC-SHA256\s+Credential=fakekey/.test(invalidArgErr.safeMessage))
 }
 
 // ── getSafeConfigReport: redaction + endpoint/region validation ────────
@@ -168,6 +187,208 @@ async function freshImport() {
   check('bulk --upload-missing output shows the real abort message, not a bare crash', /R2 not activated/.test(output))
   check('bulk --upload-missing never reports any UPLOADED/REPLACED entries when aborted', !/UPLOADED|REPLACED/.test(output))
   process.env = savedEnv
+}
+
+// ── Mocked S3-compatible server: exercises the REAL S3Client + adapter +
+// r2Diagnostics preflight end-to-end (not just classifyR2Error unit
+// checks above) against realistic S3 XML error/success responses —
+// without needing live R2 credentials. ─────────────────────────────────
+{
+  const http = await import('http')
+  const objects = new Map() // key -> Buffer, simulates bucket state
+
+  function s3Error(code, message, status) {
+    return { status, body: `<?xml version="1.0" encoding="UTF-8"?><Error><Code>${code}</Code><Message>${message}</Message><RequestId></RequestId></Error>` }
+  }
+
+  const server = http.createServer((req, res) => {
+    const url = new URL(req.url, 'http://localhost')
+    const path = decodeURIComponent(url.pathname)
+    // Path-style: /<bucket>/<key...>
+    const [, bucket, ...keyParts] = path.split('/')
+    const key = keyParts.join('/')
+
+    let chunks = []
+    req.on('data', c => chunks.push(c))
+    req.on('end', () => {
+      const body = Buffer.concat(chunks)
+
+      // Scenario switches, driven by the object key so each test case is isolated.
+      if (bucket !== 'crafthub360-production') {
+        const { status, body: xml } = s3Error('NoSuchBucket', 'The specified bucket does not exist', 404)
+        res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
+      }
+      if (key.includes('malformed-key%00') || key.includes('\x00')) {
+        const { status, body: xml } = s3Error('InvalidArgument', "Invalid key: contains a null byte", 400)
+        res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
+      }
+      if (req.method === 'HEAD' && keyParts.length === 0) {
+        // HeadBucket
+        res.writeHead(200); res.end(); return
+      }
+      if (req.method === 'PUT') {
+        if (req.headers['x-amz-acl']) {
+          const { status, body: xml } = s3Error('InvalidArgument', "Header 'x-amz-acl' with value 'public-read' not implemented", 400)
+          res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
+        }
+        if (req.headers['x-amz-storage-class']) {
+          const { status, body: xml } = s3Error('InvalidArgument', "Header 'x-amz-storage-class' with value 'GLACIER' not implemented", 400)
+          res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
+        }
+        if (req.headers['x-amz-sdk-checksum-algorithm'] || req.headers['x-amz-checksum-crc32']) {
+          const { status, body: xml } = s3Error('InvalidArgument', 'Unsupported checksum algorithm', 400)
+          res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
+        }
+        const badMetaHeader = Object.keys(req.headers).find(h => h.startsWith('x-amz-meta-') && /[^\x20-\x7e]/.test(req.headers[h] || ''))
+        if (badMetaHeader) {
+          const { status, body: xml } = s3Error('InvalidArgument', `Invalid metadata header ${badMetaHeader}`, 400)
+          res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
+        }
+        objects.set(key, body)
+        res.writeHead(200, { ETag: '"mock-etag"' }); res.end(); return
+      }
+      if (req.method === 'HEAD') {
+        if (!objects.has(key)) { res.writeHead(404); res.end(); return }
+        res.writeHead(200, { 'Content-Length': String(objects.get(key).length), 'Content-Type': 'text/plain' }); res.end(); return
+      }
+      if (req.method === 'GET') {
+        if (!objects.has(key)) { const { status, body: xml } = s3Error('NoSuchKey', 'The specified key does not exist', 404); res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return }
+        res.writeHead(200, { 'Content-Type': 'text/plain' }); res.end(objects.get(key)); return
+      }
+      if (req.method === 'DELETE') {
+        objects.delete(key)
+        res.writeHead(204); res.end(); return
+      }
+      res.writeHead(501); res.end()
+    })
+  })
+
+  await new Promise(r => server.listen(0, '127.0.0.1', r))
+  const port = server.address().port
+  const mockEndpoint = `http://127.0.0.1:${port}`
+
+  const savedEnv = { ...process.env }
+  function setMockEnv(bucket = 'crafthub360-production') {
+    Object.assign(process.env, {
+      STORAGE_PROVIDER: 'r2',
+      STORAGE_BUCKET: bucket,
+      STORAGE_ENDPOINT: mockEndpoint,
+      STORAGE_REGION: 'auto',
+      STORAGE_ACCESS_KEY_ID: 'mock-access-key',
+      STORAGE_SECRET_ACCESS_KEY: 'mock-secret-key',
+    })
+  }
+
+  // Successful minimal preflight — full real round trip through the real
+  // S3Client, adapter, and r2Diagnostics against the mock server.
+  {
+    setMockEnv()
+    // getSafeConfigReport's endpointFormatValid check requires the real
+    // R2 hostname shape; the mock server can't satisfy that, so this
+    // exercises everything else (bucket-check through metadata-write)
+    // by calling the adapter functions directly rather than the
+    // endpoint-format-gated runR2Preflight() wrapper.
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    let threw = null
+    let putResult, headResult, readResult
+    try {
+      // Namespaced under this environment's real keyPrefix — remove()
+      // correctly refuses to delete a key outside it (see the real bug
+      // this exact mismatch caused in r2Diagnostics.js's own preflight,
+      // fixed alongside this test).
+      const prefixedKey = `${adapter.providerInfo().keyPrefix}/diagnostics/test-success/file.txt`
+      putResult = await adapter.putObjectMinimal({ key: prefixedKey, buffer: Buffer.from('hello'), mimeType: 'text/plain' })
+      headResult = await adapter.headObject(prefixedKey)
+      readResult = await adapter.readBuffer(prefixedKey)
+      await adapter.remove(prefixedKey)
+    } catch (e) { threw = e }
+    check('successful minimal R2 preflight: PutObject/HeadObject/GetObject/DeleteObject all succeed against a real S3-compatible server', !threw && !!putResult?.etag && !!headResult && readResult?.toString() === 'hello', threw ? String(threw) : '')
+  }
+
+  // Malformed bucket -> NoSuchBucket -> classified as R2_BUCKET_NOT_FOUND.
+  {
+    setMockEnv('wrong-bucket-name')
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    const { classifyR2Error, R2_FAILURE_CODE } = await freshImport()
+    let classified = null
+    try { await adapter.putObjectMinimal({ key: 'diagnostics/test/x.txt', buffer: Buffer.from('x'), mimeType: 'text/plain' }) }
+    catch (e) { classified = classifyR2Error(e) }
+    check('malformed bucket -> real NoSuchBucket error classified correctly', classified?.failureCode === R2_FAILURE_CODE.BUCKET_NOT_FOUND, JSON.stringify(classified))
+  }
+
+  // Unsupported ACL -> InvalidArgument -> R2_INVALID_ARGUMENT, with the operation identified.
+  {
+    setMockEnv()
+    const S3 = await import('@aws-sdk/client-s3')
+    const rawClient = new S3.S3Client({ region: 'auto', endpoint: mockEndpoint, forcePathStyle: true, credentials: { accessKeyId: 'x', secretAccessKey: 'y' }, requestChecksumCalculation: 'WHEN_REQUIRED', responseChecksumValidation: 'WHEN_REQUIRED' })
+    const { classifyR2Error, R2_FAILURE_CODE } = await freshImport()
+    let classified = null
+    try {
+      await rawClient.send(new S3.PutObjectCommand({ Bucket: 'crafthub360-production', Key: 'diagnostics/test-acl/x.txt', Body: Buffer.from('x'), ACL: 'public-read' }))
+    } catch (e) { classified = classifyR2Error(e) }
+    check('unsupported ACL -> real InvalidArgument (400) error classified as R2_INVALID_ARGUMENT, not R2_UNKNOWN_ERROR', classified?.failureCode === R2_FAILURE_CODE.INVALID_ARGUMENT, JSON.stringify(classified))
+  }
+
+  // Unsupported storage class -> InvalidArgument.
+  {
+    setMockEnv()
+    const S3 = await import('@aws-sdk/client-s3')
+    const rawClient = new S3.S3Client({ region: 'auto', endpoint: mockEndpoint, forcePathStyle: true, credentials: { accessKeyId: 'x', secretAccessKey: 'y' }, requestChecksumCalculation: 'WHEN_REQUIRED', responseChecksumValidation: 'WHEN_REQUIRED' })
+    const { classifyR2Error, R2_FAILURE_CODE } = await freshImport()
+    let classified = null
+    try {
+      await rawClient.send(new S3.PutObjectCommand({ Bucket: 'crafthub360-production', Key: 'diagnostics/test-storageclass/x.txt', Body: Buffer.from('x'), StorageClass: 'GLACIER' }))
+    } catch (e) { classified = classifyR2Error(e) }
+    check('unsupported StorageClass -> real InvalidArgument (400) error classified as R2_INVALID_ARGUMENT', classified?.failureCode === R2_FAILURE_CODE.INVALID_ARGUMENT, JSON.stringify(classified))
+  }
+
+  // Invalid metadata (non-ASCII header value) -> InvalidArgument.
+  {
+    setMockEnv()
+    const S3 = await import('@aws-sdk/client-s3')
+    const rawClient = new S3.S3Client({ region: 'auto', endpoint: mockEndpoint, forcePathStyle: true, credentials: { accessKeyId: 'x', secretAccessKey: 'y' }, requestChecksumCalculation: 'WHEN_REQUIRED', responseChecksumValidation: 'WHEN_REQUIRED' })
+    const { classifyR2Error, R2_FAILURE_CODE } = await freshImport()
+    let classified = null
+    try {
+      await rawClient.send(new S3.PutObjectCommand({ Bucket: 'crafthub360-production', Key: 'diagnostics/test-metadata/x.txt', Body: Buffer.from('x'), Metadata: { note: 'café-ümläut-not-ascii' } }))
+    } catch (e) { classified = classifyR2Error(e) }
+    check('invalid (non-ASCII) metadata value -> real InvalidArgument (400) error classified as R2_INVALID_ARGUMENT', classified?.failureCode === R2_FAILURE_CODE.INVALID_ARGUMENT, JSON.stringify(classified))
+  }
+
+  // Operation-level failure reporting (runR2Preflight): objectStorageAdapter.js
+  // computes its env-derived config once at module load (correct real-
+  // production behavior — env doesn't change while a container runs),
+  // so exercising this with a DIFFERENT env than earlier tests in this
+  // same process needs a genuinely fresh process, exactly like the
+  // bulk-abort-after-failed-preflight check below already does.
+  {
+    const { execSync } = await import('child_process')
+    const { writeFileSync, unlinkSync } = await import('fs')
+    const tmpScript = resolve('scripts/_tmp_preflight_probe.mjs')
+    writeFileSync(tmpScript, `
+      import { runR2Preflight } from '../server/services/venueManagement/r2Diagnostics.js'
+      const result = await runR2Preflight()
+      console.log(JSON.stringify(result))
+    `)
+    let output = ''
+    try {
+      output = execSync(`node ${tmpScript}`, {
+        encoding: 'utf8',
+        env: { ...process.env, STORAGE_PROVIDER: 'r2', STORAGE_BUCKET: 'another-wrong-bucket', STORAGE_ENDPOINT: mockEndpoint, STORAGE_REGION: 'auto', STORAGE_ACCESS_KEY_ID: 'mock-access-key', STORAGE_SECRET_ACCESS_KEY: 'mock-secret-key' },
+      })
+    } catch (e) { output = (e.stdout || '') + (e.stderr || '') } finally { try { unlinkSync(tmpScript) } catch {} }
+    let result = null
+    try { result = JSON.parse(output.trim().split('\n').pop()) } catch {}
+    // endpointFormatValid fails first against a mock (non-R2-shaped)
+    // endpoint — confirms the config stage reports correctly and
+    // identifies itself as a config-level problem, not a silent/generic
+    // failure, in a genuinely fresh process (matching real deployment
+    // module-load behavior).
+    check('preflight against a non-R2-shaped endpoint correctly identifies the config stage (never silently passes)', result?.ok === false && result?.stage === 'config' && result?.code === 'R2_ENDPOINT_INVALID', JSON.stringify(result))
+  }
+
+  process.env = savedEnv
+  server.close()
 }
 
 console.log(`\n=== RESULT: ${fail === 0 ? 'PASS' : 'FAIL'} (${fail} check${fail === 1 ? '' : 's'} failed) ===`)

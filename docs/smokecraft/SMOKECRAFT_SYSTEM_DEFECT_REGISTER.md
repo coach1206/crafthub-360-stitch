@@ -2301,3 +2301,65 @@ upload/HEAD/read/delete was performed in this sandbox — no credentials
 here; Railway production credential status is unverified from here.
 
 Highest SC-D number is now SC-D071.
+
+## SmokeCraft R2 InvalidArgument (400) repair
+
+Starting HEAD: `eab8f0bc` (real Railway `smokecraft:r2:diagnose` run:
+reaches R2, fails with `InvalidArgument`/400, misclassified as the
+generic `R2_UNKNOWN_ERROR`).
+
+**Found and fixed SC-D072**: `classifyR2Error()` had no branch for
+`InvalidArgument` — it fell through every specific check to the final
+`UNKNOWN` default, which requires `!httpStatus` in its own guard, so a
+real, HTTP-400, real-error-code response was reported as the same
+generic `R2_UNKNOWN_ERROR` the prior pass fixed for a genuinely different
+root cause (an SDK checksum-protocol mismatch producing NO http status
+at all). Added `R2_INVALID_ARGUMENT` with a safe, redacted provider
+message extracted from the real error (parameter name, never a
+credential — a defensive redaction strips anything AWS4-HMAC/
+Authorization-shaped regardless).
+
+Rebuilt the preflight in `server/services/venueManagement/r2Diagnostics.js`
+as explicit, individually-named, individually-reported steps
+(bucket-check -> minimal PutObject -> HeadObject -> content-verified
+GetObject -> DeleteObject -> confirm-delete -> a separate metadata-
+carrying PutObject only attempted after the basic shape succeeds) so a
+failure always identifies the exact operation, not just "preflight
+failed". Added `putObjectMinimal()` to
+`objectStorageAdapter.js` — Bucket/Key/Body/ContentType only, no
+CacheControl/Metadata/ACL/StorageClass/explicit checksum — as the first
+write, so a failure there can only mean a fundamental problem, not an
+optional-parameter incompatibility.
+
+**Found and fixed SC-D073** (by this pass's own test suite, before ever
+reaching Railway again): the preflight's diagnostic keys
+(`diagnostics/r2-preflight/...`) never carried this environment's
+`KEY_PREFIX` namespace. `objectStorageAdapter.js`'s `remove()` has a
+real, correct safety guard refusing to delete any key outside that
+namespace — the preflight would have passed every stage up through
+delete, then failed there in real production every time, on a
+completely different opaque error. Same bug existed in
+`smokecraftDiagnosticsController.js`'s `checkR2Diagnostics()`. Fixed
+both to prefix diagnostic keys with `providerInfo().keyPrefix`.
+
+`scripts/verifySmokecraftR2Diagnostics.mjs`: 33/33 (up from 24) — added
+a real mock S3-compatible HTTP server (path-style, real S3 XML
+error/success bodies) that exercises the actual `@aws-sdk/client-s3`
+client + adapter + preflight end-to-end for: malformed bucket
+(NoSuchBucket), unsupported ACL, unsupported StorageClass, invalid
+(non-ASCII) metadata, and a full successful minimal preflight round
+trip — not just unit checks against constructed error objects. Also
+caught two real bugs in the test-writing process itself: (1) the
+KEY_PREFIX guard rejecting an unprefixed test key — this IS the SC-D073
+fix's own regression test; (2) `objectStorageAdapter.js` computes its
+env-derived config once at module load (correct real-deployment
+behavior — env doesn't change while a container runs) — a test that
+swaps `process.env` mid-process and expects a re-evaluated config needs
+a genuinely fresh subprocess, not a same-process env mutation.
+
+62/62 fresh-player journey, 85/85 static-gameplay detector, production
+build, and the R2 sync dry-run (81/81) all re-run clean. No live R2
+upload/HEAD/read/delete was performed in this sandbox — no credentials
+here; Railway production credential status is unverified from here.
+
+Highest SC-D number is now SC-D073.

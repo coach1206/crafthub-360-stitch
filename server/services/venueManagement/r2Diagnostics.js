@@ -12,7 +12,7 @@
  * Never logs a credential value, an Authorization header, or a signed
  * request — only hostnames, presence booleans, and lengths.
  */
-import { headObject, putObjectAtKey, remove, readBuffer } from './objectStorageAdapter.js'
+import { headObject, putObjectAtKey, putObjectMinimal, remove, readBuffer, healthCheck } from './objectStorageAdapter.js'
 import * as adapter from './objectStorageAdapter.js'
 
 export const R2_FAILURE_CODE = {
@@ -23,6 +23,7 @@ export const R2_FAILURE_CODE = {
   BUCKET_NOT_FOUND:        'R2_BUCKET_NOT_FOUND',
   SIGNATURE_MISMATCH:      'R2_SIGNATURE_MISMATCH',
   NETWORK_FAILED:          'R2_NETWORK_FAILED',
+  INVALID_ARGUMENT:        'R2_INVALID_ARGUMENT',
   PREFLIGHT_WRITE_FAILED:  'R2_PREFLIGHT_WRITE_FAILED',
   PREFLIGHT_READ_FAILED:   'R2_PREFLIGHT_READ_FAILED',
   PREFLIGHT_DELETE_FAILED: 'R2_PREFLIGHT_DELETE_FAILED',
@@ -30,6 +31,25 @@ export const R2_FAILURE_CODE = {
 }
 
 const ENDPOINT_RE = /^https:\/\/[a-z0-9]{32}\.r2\.cloudflarestorage\.com\/?$/i
+
+/**
+ * Strips anything that looks like a signed-request/auth artifact
+ * (Authorization headers, AWS4-HMAC signatures, X-Amz-Signature/
+ * X-Amz-Credential query params, access-key-id-shaped tokens) out of a
+ * raw provider error message before it's ever logged or returned. R2's
+ * InvalidArgument messages normally just name a rejected parameter
+ * (e.g. "Header 'x-amz-...' with value '...' not implemented"), which is
+ * safe on its own, but this is a defensive second layer, not a trust
+ * assumption.
+ */
+function redactProviderMessage(message) {
+  if (!message || typeof message !== 'string') return null
+  return message
+    .replace(/Authorization:\s*\S+/gi, 'Authorization: [redacted]')
+    .replace(/AWS4-HMAC-SHA256[^\s,;]*/gi, '[redacted-signature]')
+    .replace(/X-Amz-(Signature|Credential|Security-Token)=[^\s&]*/gi, 'X-Amz-$1=[redacted]')
+    .slice(0, 300)
+}
 
 /**
  * Safe, redacted configuration report. Never returns a credential value —
@@ -117,6 +137,17 @@ export function classifyR2Error(err) {
   } else if (httpStatus === 404 || /NotFound/i.test(String(errorCode))) {
     failureCode = R2_FAILURE_CODE.BUCKET_NOT_FOUND
     safeMessage = 'The bucket (or object) was not found at this endpoint.'
+  } else if (/InvalidArgument/i.test(String(errorCode))) {
+    // Real fix for the previous collapse-to-UnknownError bug: R2 rejected
+    // a specific request parameter (never the SDK failing to parse the
+    // response, unlike the earlier checksum-protocol UnknownError case —
+    // this one carries a real HTTP status and error code from R2 itself).
+    // The provider's own message names which parameter, and R2's
+    // InvalidArgument messages describe parameter names/values, not
+    // credentials — safe to surface, but still stripped of anything that
+    // looks like a signed-request/auth artifact as a defensive measure.
+    failureCode = R2_FAILURE_CODE.INVALID_ARGUMENT
+    safeMessage = redactProviderMessage(err?.message) || 'The storage provider rejected a request parameter as invalid.'
   } else if (/UnknownError/i.test(String(errorCode)) && !httpStatus) {
     // The exact signature this pass fixes at the client-construction
     // level (flexible-checksum mismatch) — still classified honestly if
@@ -146,13 +177,28 @@ async function attempt(fn, failureCodeOnError) {
 }
 
 /**
- * Real preflight: HEAD bucket reachability (via a HEAD on a diagnostics
- * key, which 404s harmlessly if the bucket is reachable — proving
- * connectivity/auth/endpoint are all correct before any bulk write),
- * upload a tiny diagnostic object, HEAD it, read it, delete it, confirm
- * deletion. Aborts (returns ok:false) at the first stage that fails,
- * with the real classified error attached — never continues to bulk
- * upload past a failed preflight.
+ * Real, step-level preflight — every stage is named and reported
+ * individually (client creation is implicit in each step's own attempt;
+ * a failure there surfaces as R2_NETWORK_FAILED/credentials on the
+ * bucket-check step, the first real network call) so a failure always
+ * identifies the EXACT operation that failed, never just "preflight
+ * failed": bucket-check -> minimal PutObject -> HeadObject -> GetObject
+ * (content-verified) -> DeleteObject -> confirm-delete -> a SEPARATE
+ * metadata-carrying PutObject (only attempted after the minimal shape
+ * above has already proven basic read/write/delete works, per the
+ * requirement that metadata compatibility be validated separately from
+ * the baseline operations).
+ *
+ * The first write deliberately uses putObjectMinimal (Bucket/Key/Body/
+ * ContentType only — no CacheControl/Metadata/ACL/StorageClass/explicit
+ * checksum) so a failure there can only mean a fundamental problem
+ * (endpoint/region/credentials/bucket), not an optional-parameter
+ * incompatibility — exactly the class of bug (an R2-incompatible
+ * request shape) this repair pass exists to stop guessing about.
+ *
+ * Aborts (returns ok:false) at the first stage that fails, with the
+ * real classified error and the safe argument names actually sent —
+ * never continues to bulk upload past a failed preflight.
  */
 export async function runR2Preflight() {
   const config = getSafeConfigReport()
@@ -166,26 +212,85 @@ export async function runR2Preflight() {
     return { ok: false, code: R2_FAILURE_CODE.REGION_INVALID, config, stage: 'config', detail: { safeMessage: `STORAGE_REGION should be "auto" for R2 — got "${config.region}"` } }
   }
 
-  const diagnosticKey = `diagnostics/r2-preflight/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.txt`
-  const payload = Buffer.from(`smokecraft R2 preflight ${new Date().toISOString()}`)
+  // Real bug found by this pass's own test suite: remove() refuses to
+  // delete any key outside this environment's KEY_PREFIX namespace (a
+  // real, correct safety guard against cross-environment deletes) — a
+  // diagnostic key that didn't carry that prefix would pass every
+  // preflight stage up through delete, then fail there in real
+  // production every single time. Every diagnostic key here MUST be
+  // namespaced the same way real production keys are.
+  const diagnosticKey = `${adapter.providerInfo().keyPrefix}/diagnostics/r2-preflight/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.txt`
+  const payload = Buffer.from(`smokecraft R2 preflight ${new Date().toISOString()}`, 'utf8')
 
-  const write = await attempt(() => putObjectAtKey({ key: diagnosticKey, buffer: payload, mimeType: 'text/plain', cacheControl: 'no-store' }), R2_FAILURE_CODE.PREFLIGHT_WRITE_FAILED)
-  if (!write.ok) return { ok: false, code: write.code, config, stage: 'write', detail: write.detail }
-
-  const head = await attempt(() => headObject(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_READ_FAILED)
-  if (!head.ok || !head.result) return { ok: false, code: head.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : head.code, config, stage: 'head', detail: head.ok ? { safeMessage: 'HEAD after PUT returned no object.' } : head.detail }
-
-  const read = await attempt(() => readBuffer(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_READ_FAILED)
-  if (!read.ok || !read.result || !Buffer.isBuffer(read.result) || !read.result.equals(payload)) {
-    return { ok: false, code: read.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : read.code, config, stage: 'read', detail: read.ok ? { safeMessage: 'Read-back content did not match what was written.' } : read.detail }
+  // 1. Bucket check — first real network call. A failure here (network,
+  // credentials, or bucket-not-found) means we never even reach an
+  // object-level operation.
+  const bucketCheck = await attempt(() => healthCheck(), R2_FAILURE_CODE.NETWORK_FAILED)
+  if (!bucketCheck.ok) return { ok: false, code: bucketCheck.code, config, stage: 'bucket-check', operation: 'HeadBucket', detail: bucketCheck.detail }
+  if (bucketCheck.result && bucketCheck.result.ok === false) {
+    const classified = bucketCheck.result.error ? classifyR2Error({ message: bucketCheck.result.error }) : null
+    return { ok: false, code: classified?.failureCode || R2_FAILURE_CODE.UNKNOWN, config, stage: 'bucket-check', operation: 'HeadBucket', detail: { safeMessage: bucketCheck.result.error || 'HeadBucket failed.' } }
   }
 
-  const del = await attempt(() => remove(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED)
-  if (!del.ok) return { ok: false, code: del.code, config, stage: 'delete', detail: del.detail }
+  // 2. Minimal PutObject — Bucket/Key/Body/ContentType ONLY.
+  const write = await attempt(
+    () => putObjectMinimal({ key: diagnosticKey, buffer: payload, mimeType: 'text/plain' }),
+    R2_FAILURE_CODE.PREFLIGHT_WRITE_FAILED
+  )
+  if (!write.ok) {
+    return {
+      ok: false, code: write.code, config, stage: 'write', operation: 'PutObject',
+      requestArgs: { bucket: config.bucket, key: redactKey(diagnosticKey), contentType: 'text/plain', endpointHostname: config.endpointHostname, region: config.region },
+      detail: write.detail,
+    }
+  }
 
+  // 3. HeadObject.
+  const head = await attempt(() => headObject(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_READ_FAILED)
+  if (!head.ok || !head.result) return { ok: false, code: head.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : head.code, config, stage: 'head', operation: 'HeadObject', detail: head.ok ? { safeMessage: 'HeadObject after PutObject returned no object.' } : head.detail }
+
+  // 4. GetObject — content-verified.
+  const read = await attempt(() => readBuffer(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_READ_FAILED)
+  if (!read.ok || !read.result || !Buffer.isBuffer(read.result) || !read.result.equals(payload)) {
+    return { ok: false, code: read.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : read.code, config, stage: 'read', operation: 'GetObject', detail: read.ok ? { safeMessage: 'Read-back content did not match what was written.' } : read.detail }
+  }
+
+  // 5. DeleteObject.
+  const del = await attempt(() => remove(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED)
+  if (!del.ok) return { ok: false, code: del.code, config, stage: 'delete', operation: 'DeleteObject', detail: del.detail }
+
+  // 6. Confirm deletion.
   const confirmGone = await attempt(() => headObject(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED)
-  if (!confirmGone.ok) return { ok: false, code: confirmGone.code, config, stage: 'confirm-delete', detail: confirmGone.detail }
-  if (confirmGone.result) return { ok: false, code: R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED, config, stage: 'confirm-delete', detail: { safeMessage: 'Diagnostic object still present after delete.' } }
+  if (!confirmGone.ok) return { ok: false, code: confirmGone.code, config, stage: 'confirm-delete', operation: 'HeadObject', detail: confirmGone.detail }
+  if (confirmGone.result) return { ok: false, code: R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED, config, stage: 'confirm-delete', operation: 'HeadObject', detail: { safeMessage: 'Diagnostic object still present after delete.' } }
+
+  // 7. Metadata validation — a SEPARATE PutObject, only attempted after
+  // every basic operation above has already succeeded, so a failure here
+  // is unambiguously about metadata/cache-control compatibility, not a
+  // fundamental connectivity/auth/bucket problem.
+  const metaKey = `${adapter.providerInfo().keyPrefix}/diagnostics/r2-preflight/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-meta.txt`
+  const metaWrite = await attempt(
+    () => putObjectAtKey({ key: metaKey, buffer: payload, mimeType: 'text/plain', cacheControl: 'no-store', metadata: { preflight: 'true' } }),
+    R2_FAILURE_CODE.PREFLIGHT_WRITE_FAILED
+  )
+  if (!metaWrite.ok) {
+    return {
+      ok: false, code: metaWrite.code, config, stage: 'metadata-write', operation: 'PutObject',
+      requestArgs: { bucket: config.bucket, key: redactKey(metaKey), contentType: 'text/plain', cacheControl: 'no-store', metadataKeys: ['checksum', 'preflight'], endpointHostname: config.endpointHostname, region: config.region },
+      detail: metaWrite.detail,
+    }
+  }
+  // Best-effort cleanup — not a preflight-failure condition on its own,
+  // the basic delete path above already proved DeleteObject works.
+  await remove(metaKey).catch(() => {})
 
   return { ok: true, config, stage: 'complete' }
+}
+
+/** Reduces a diagnostic object key to its directory structure and extension, dropping the random/timestamp filename — nothing sensitive in these keys either way, just a safety-by-default habit. */
+function redactKey(key) {
+  const lastSlash = key.lastIndexOf('/')
+  const dir = lastSlash >= 0 ? key.slice(0, lastSlash + 1) : ''
+  const ext = key.includes('.') ? key.slice(key.lastIndexOf('.')) : ''
+  return `${dir}[redacted]${ext}`
 }

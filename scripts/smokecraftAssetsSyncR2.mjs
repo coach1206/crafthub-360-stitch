@@ -82,8 +82,9 @@ async function main() {
       console.log('\n── R2 preflight (write/read/delete a tiny diagnostic object) ──')
       const preflight = await diagnostics.runR2Preflight()
       if (!preflight.ok) {
-        console.error(`\n✖ R2 preflight FAILED at stage "${preflight.stage}" — aborting before any bulk upload.`)
+        console.error(`\n✖ R2 preflight FAILED at stage "${preflight.stage}"${preflight.operation ? ` (operation: ${preflight.operation})` : ''} — aborting before any bulk upload.`)
         console.error(`  Code: ${preflight.code}`)
+        if (preflight.requestArgs) console.error(`  Request args (safe): ${JSON.stringify(preflight.requestArgs, null, 2)}`)
         console.error(`  Detail: ${JSON.stringify(preflight.detail, null, 2)}`)
         console.error(`  Safe config: ${JSON.stringify(preflight.config, null, 2)}`)
         process.exit(1)

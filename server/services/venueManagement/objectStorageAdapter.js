@@ -191,6 +191,31 @@ export async function putObjectAtKey({ key, buffer, mimeType, cacheControl, meta
   return { key, checksum, etag: res.ETag, versionId: res.VersionId || null, url: publicUrl(key) }
 }
 
+/**
+ * R2 InvalidArgument repair — the absolute minimal, most
+ * Cloudflare-R2-compatible PutObject shape: Bucket/Key/Body/ContentType
+ * only. No CacheControl, no custom Metadata, no ACL, no StorageClass, no
+ * explicit ChecksumAlgorithm. Used by r2Diagnostics.js's preflight as
+ * the FIRST write, deliberately excluding every optional parameter that
+ * could itself be the source of a 400 InvalidArgument, so a preflight
+ * failure here can only mean a genuinely fundamental problem (endpoint/
+ * region/credentials/bucket) — metadata/cache-control compatibility is
+ * validated separately, only after this minimal shape succeeds.
+ */
+export async function putObjectMinimal({ key, buffer, mimeType }) {
+  if (!isActivated()) {
+    throw new Error('objectStorageAdapter.putObjectMinimal: provider not activated (STORAGE_PROVIDER/STORAGE_BUCKET/credentials missing)')
+  }
+  const c = client()
+  const res = await c.send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: buffer,
+    ContentType: mimeType,
+  }))
+  return { key, etag: res.ETag, versionId: res.VersionId || null }
+}
+
 /** Readiness-check helper: verifies bucket reachability without transferring data. */
 export async function healthCheck() {
   if (!isActivated()) {

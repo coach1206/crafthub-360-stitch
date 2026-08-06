@@ -104,7 +104,13 @@ async function checkR2Diagnostics() {
   if (!info.activated) {
     return { ok: false, code: 'R2_CONFIGURATION_MISSING', provider: info.provider, bucket: info.bucket, detail: 'STORAGE_PROVIDER/STORAGE_BUCKET/credentials not fully configured — R2 is not wired in this environment.' }
   }
-  const diagnosticKey = `diagnostics/smokecraft-readiness/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.txt`
+  // Namespaced under this environment's keyPrefix — remove() refuses to
+  // delete any key outside it (a real, correct safety guard against
+  // cross-environment deletes), found by the R2 diagnostics test suite
+  // to be a real bug here and in r2Diagnostics.js's own preflight before
+  // this fix: an unprefixed diagnostic key would pass every stage up
+  // through delete, then fail there in real production every time.
+  const diagnosticKey = `${info.keyPrefix}/diagnostics/smokecraft-readiness/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.txt`
   const payload = Buffer.from(`smokecraft readiness diagnostic ${new Date().toISOString()}`)
   try {
     await adapter.putObjectAtKey({ key: diagnosticKey, buffer: payload, mimeType: 'text/plain', cacheControl: 'no-store' })
