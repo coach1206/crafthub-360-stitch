@@ -116,6 +116,23 @@ async function run() {
         navError = String(e)
       }
 
+      // Measure BEFORE the exploratory tap below — on screens where the
+      // first tappable element is itself a real navigation control (e.g.
+      // Admin Readiness's first link), tapping it navigates the page away
+      // and destroys this execution context out from under a subsequent
+      // page.evaluate() ("Execution context was destroyed, most likely
+      // because of a navigation"), silently producing a null overflow/
+      // touch-target reading — not a real overflow failure, a measurement-
+      // ordering bug in this script. The tap is only a touch-responsiveness
+      // smoke check, not a prerequisite for measurement, so it belongs
+      // after, not before.
+      const overflow = navError ? null : await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        innerWidth: window.innerWidth,
+      })).catch((e) => { if (process.env.DEBUG_CAPTURE) console.error('OVERFLOW EVAL ERROR', s.screen, vp.name, String(e)); return null })
+
+      const touchTargetDetail = navError ? null : await measureSmallestTarget(page).catch((e) => { if (process.env.DEBUG_CAPTURE) console.error('TOUCH EVAL ERROR', s.screen, vp.name, String(e)); return null })
+
       let tapPerformed = false
       if (vp.hasTouch && !navError) {
         try {
@@ -126,13 +143,6 @@ async function run() {
           }
         } catch {}
       }
-
-      const overflow = navError ? null : await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        innerWidth: window.innerWidth,
-      })).catch(() => null)
-
-      const touchTargetDetail = navError ? null : await measureSmallestTarget(page).catch(() => null)
 
       const filename = `${s.screen}--${vp.name}.png`
       let screenshotOk = false

@@ -1,2 +1,13 @@
 [phases.setup]
 nixPkgs = ["python3", "gcc", "gnumake"]
+
+# SC-D068 — make the production build command explicit rather than rely on
+# Nixpacks' auto-detected default. `npm run build` is itself now locked to
+# scripts/buildProduction.mjs (NODE_ENV=production, vite --mode production,
+# then a build-blocking scan that fails if any dev-only bundle marker is
+# found), so this is a belt-and-suspenders pin, not a second code path.
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm run server"

@@ -8,13 +8,7 @@ Every image file under `public/assets/smokecraft/` and `public/assets/smokecraft
 **Actively-used PORTRAIT assets (candidates for "TABLET ASSET REPAIR REQUIRED"): 7**
 **Duplicate-hash groups (identical bytes under different filenames): 72**
 
-> **Addendum (this pass, verified 2026-08-06):** a programmatic cross-check of every `SC_ASSETS` key in `src/constants/smokecraftAssets.js` (83 keys) against this document found 82 already covered and exactly one gap: `visitComplete` (`'/smokecraft-visit-complete.png'`). That file lives directly under `public/` (the site root), outside the `public/assets/smokecraft*` directories this document's generator scanned — hence the original miss. It is added below as file #80 with a hash computed directly from the file on disk. No other gap exists in either direction: no `SC_ASSETS` key references a missing file, and no external/non-repo-relative URL is present anywhere in `smokecraftAssets.js` (confirmed by regex scan of every string literal value).
-
 ## Actively-used assets
-
-| File | SC_ASSETS key(s) | Width | Height | Orientation | Hash (12) | Size (bytes) |
-|---|---|---|---|---|---|---|
-| `public/smokecraft-visit-complete.png` | visitComplete | 1086 | 1448 | portrait — **TABLET ASSET REPAIR REQUIRED** | 6df7a42a673d | 1929254 |
 
 | File | SC_ASSETS key(s) | Width | Height | Orientation | Hash (12) | Size (bytes) |
 |---|---|---|---|---|---|---|

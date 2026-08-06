@@ -10,6 +10,14 @@
     <meta name="apple-mobile-web-app-title" content="NOVEE" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/icons/novee-192.svg" />
+    <!-- Explicit favicon (SC-D070) — without this, every browser tab issues
+         its own implicit GET /favicon.ico on first navigation. No such file
+         ever existed in dist/, so every page load logged a real 404 console
+         error (measured: 3x on a single screen in the browser-proof
+         capture, once per new tab/page opened in the same browser context).
+         Reusing the existing approved NOVEE icon rather than adding a new
+         asset. -->
+    <link rel="icon" type="image/svg+xml" href="/icons/novee-192.svg" />
   </head>
   <body>
     <div id="root"></div>

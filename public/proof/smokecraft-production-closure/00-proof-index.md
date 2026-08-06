@@ -132,3 +132,30 @@ None of these three block the "Ready" bar and are not touch-target
 regressions of any fix made in this pass — they are pre-existing or
 harness-fidelity issues newly surfaced by actually re-running the proof
 for real. Honestly reported as open, not silently dropped.
+
+## Final closure update — real 55/55, permanent build lock, R2 groundwork
+
+**Browser proof: 55/55**, real, in the committed `browser-proof.json` and
+`run-summary.json`. Three root-caused fixes (favicon 404s, a
+measurement-ordering bug in the capture script itself, a checkbox
+touch-target false positive) — see the System Defect Register's SC-D070
+entry for full detail. Re-run 5 times total across this pass: 4/5 at
+55/55, 1/5 at 54/55 on a real but separate, network-dependent external-
+image-URL issue in `connectionsData.js` (flagged, not fixed — see below).
+
+**Build mode is now permanently locked**, not dependent on a human typing
+the right flags: `npm run build` → `scripts/buildProduction.mjs`
+(`NODE_ENV=production` + `vite build --mode production`, programmatic,
+cross-platform) → `scripts/verifyProductionBundleIsClean.mjs` (fails the
+build if any dev-only marker or abnormal bundle size is detected).
+Dockerfile and `nixpacks.toml` both resolve through this same script via
+`npm run build`.
+
+**R2**: real groundwork added (asset inventory + registry generator,
+dry-run-verified sync command, adapter extended with HEAD/put-at-key,
+a real readiness diagnostic wired end-to-end) — not "complete". No live
+R2 upload/HEAD/read/delete was performed; this sandbox has no
+credentials (`STORAGE_PROVIDER=local`), and Railway's production
+credential state is unverified from here — not claimed absent, just
+unverified. See `public/proof/smokecraft-asset-registry/` for the real
+generated registry, inventory report, and dry-run sync report.

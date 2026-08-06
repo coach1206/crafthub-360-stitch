@@ -2099,3 +2099,69 @@ detail. None are regressions of this or the prior pass's fixes.
 real server API, one fresh isolated guest, no shortcuts): **62/62 passed**.
 
 Highest SC-D number is now SC-D069.
+
+## SmokeCraft final production closure — 55/55, permanent build-mode lock, R2 groundwork
+
+Starting HEAD: `f0bf4634` (52/55, build-mode fix known but not permanently
+enforced, R2 not yet touched).
+
+**Found and fixed SC-D070**: three real, root-caused browser-proof bugs,
+closing the gap from 52/55 to a real 55/55:
+1. No explicit favicon `<link>` in `index.html` — every new tab/page issued
+   an implicit `GET /favicon.ico`, 404ing 3x on `venue-select--desktop`
+   (once per page opened in that browser context). Fixed: explicit
+   `<link rel="icon">` to the existing approved NOVEE icon.
+2. `scripts/captureSmokecraftViewportTouchProof.mjs` measured page
+   overflow/touch-targets AFTER performing its exploratory touch tap —
+   on `admin-readiness` (a real first-tappable-element being a navigation
+   link), the tap navigated the page away, destroying the execution
+   context mid-measurement (`page.evaluate: Execution context was
+   destroyed`), silently producing a null/failed reading. This was a
+   measurement-ordering bug in the test script, not an application
+   defect. Fixed by measuring before the tap.
+3. `GoldenBox.jsx`'s acknowledgment checkbox (16-20px) is not a real
+   defect — its true touch target is the enclosing `<label>` (native
+   HTML tap-anywhere-in-label-toggles-checkbox behavior). The capture
+   script's measurement now uses the label for checkbox/radio inputs.
+
+A genuine, separate, network-dependent finding (not fixed this pass):
+`src/data/connectionsData.js` hardcodes external `googleusercontent.com`
+avatar URLs for demo/connections fixture data, rendered on the Passport
+screen. One of five stability re-runs hit `ERR_TUNNEL_CONNECTION_FAILED`
+on this external dependency in this sandbox's network environment — a
+real instance of exactly the "no external image references" production
+standard being violated, flagged for a follow-up pass rather than
+patched blind under this pass's remaining time.
+
+**SC-D068 (permanent fix)**: `npm run build` now always routes through
+`scripts/buildProduction.mjs`, which forces `NODE_ENV=production` +
+`vite build --mode production` programmatically (no shell-specific
+syntax, no reliance on a human typing the right flags), then runs
+`scripts/verifyProductionBundleIsClean.mjs` — a build-blocking gate that
+fails the build if any dev-only bundle marker (e.g. DevRoleSwitcher) or
+an abnormally large main chunk is detected. Dockerfile and
+`nixpacks.toml` both resolve through the same locked `npm run build`.
+
+**R2 groundwork (Parts 4-11, not "complete")**: extended the existing
+real S3/R2-compatible adapter
+(`server/services/venueManagement/objectStorageAdapter.js`) with
+`headObject()`/`putObjectAtKey()` for deterministic-key GitHub-asset
+sync (no other code in that file touched). Added
+`scripts/smokecraftAssetInventory.mjs` (real scan: 425 image files
+across 4 SmokeCraft asset roots, classified against the real
+`SC_ASSETS` production-reference map — 79 ACTIVE_APPROVED, 262
+APPROVED_SUPPORTING, 41 REPLACE_WITH_CURRENT, 37 RETIRED, 3
+STATIC_MOCKUP_NOT_FOR_PRODUCTION, 3 ARCHIVE, 94 duplicate-checksum
+groups, 1 broken SC_ASSETS reference found: `visitComplete`) and
+`scripts/smokecraftAssetsSyncR2.mjs` (dry-run verified: 79/79 candidates
+resolve, 0 missing, 0 checksum drift; `--upload-missing` correctly
+fails closed with no live credentials rather than silently no-opping).
+Added a real `R2_CONFIGURATION_MISSING`-reporting diagnostic to
+`GET /api/smokecraft/diagnostics/readiness` (`checkR2Diagnostics()`) —
+verified end-to-end in this sandbox (correctly reports `degraded` +
+`R2_CONFIGURATION_MISSING`, not a fabricated pass). Real upload/HEAD/
+delete against a live bucket was not performed — no credentials in this
+sandbox; Railway production credential status is unverified from here,
+not asserted absent.
+
+Highest SC-D number is now SC-D070.

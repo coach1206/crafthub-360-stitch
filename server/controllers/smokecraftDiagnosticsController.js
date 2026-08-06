@@ -85,6 +85,44 @@ function checkJourneyManifest() {
 // materially different (and more severe) production-safety violation.
 const SC_ASSETS_PATH = path.resolve(__dirname, '../../src/constants/smokecraftAssets.js')
 const PUBLIC_DIR = path.resolve(__dirname, '../../public')
+// R2_* checks (SmokeCraft Production Closure, Part 11). Real, not
+// simulated: when the object-storage adapter is activated (STORAGE_PROVIDER
+// != local + bucket + credentials all present), this uploads a tiny
+// generated object under a diagnostics-only prefix, HEADs it, verifies its
+// metadata round-trips, deletes it, and confirms the delete — leaving
+// nothing behind and never touching real customer/venue media. When the
+// adapter is not activated, this reports R2_CONFIGURATION_MISSING as a
+// real (non-fabricated) status rather than pretending success.
+async function checkR2Diagnostics() {
+  let adapter
+  try {
+    adapter = await import('../services/venueManagement/objectStorageAdapter.js')
+  } catch (err) {
+    return { ok: false, code: 'R2_CONFIGURATION_MISSING', detail: `object-storage adapter failed to load: ${err.message}` }
+  }
+  const info = adapter.providerInfo()
+  if (!info.activated) {
+    return { ok: false, code: 'R2_CONFIGURATION_MISSING', provider: info.provider, bucket: info.bucket, detail: 'STORAGE_PROVIDER/STORAGE_BUCKET/credentials not fully configured — R2 is not wired in this environment.' }
+  }
+  const diagnosticKey = `diagnostics/smokecraft-readiness/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.txt`
+  const payload = Buffer.from(`smokecraft readiness diagnostic ${new Date().toISOString()}`)
+  try {
+    await adapter.putObjectAtKey({ key: diagnosticKey, buffer: payload, mimeType: 'text/plain', cacheControl: 'no-store' })
+    const head = await adapter.headObject(diagnosticKey)
+    if (!head) return { ok: false, code: 'R2_READ_FAILED', detail: 'HEAD after PUT returned no object.' }
+    await adapter.remove(diagnosticKey)
+    const postDeleteHead = await adapter.headObject(diagnosticKey)
+    if (postDeleteHead) return { ok: false, code: 'R2_DELETE_FAILED', detail: 'Object still present after delete.' }
+    return { ok: true, provider: info.provider, bucket: info.bucket }
+  } catch (err) {
+    const msg = err.message || String(err)
+    let code = 'R2_BUCKET_UNREACHABLE'
+    if (/credential|signature|forbidden|403/i.test(msg)) code = 'R2_CREDENTIALS_INVALID'
+    else if (/write|put/i.test(msg)) code = 'R2_WRITE_FAILED'
+    return { ok: false, code, detail: msg }
+  }
+}
+
 async function checkAssetGovernance() {
   let mod
   try {
@@ -263,6 +301,7 @@ export async function handleReadinessCheck(req, res) {
   const journeyManifest = checkJourneyManifest()
   const assetGovernance = await checkAssetGovernance()
   const routeSequence = await checkRouteSequence(journeyManifest)
+  const r2Diagnostics = await checkR2Diagnostics()
 
   const checks = {
     databaseConnectivity: dbConnectivity,
@@ -277,6 +316,7 @@ export async function handleReadinessCheck(req, res) {
     journeyManifest,
     assetGovernance,
     routeSequence,
+    r2Diagnostics,
   }
 
   // Hard failures — anything schema/db/session2-critical failing means the
@@ -299,6 +339,10 @@ export async function handleReadinessCheck(req, res) {
   // block the player journey or read as a system failure.
   const softFailureCodes = []
   if (venue.ok && venue.empty) softFailureCodes.push('VENUE_DATA_EMPTY')
+  // R2 not being configured is a real, honest DEGRADED signal (production
+  // media delivery isn't wired), not a hard journey-breaking failure — the
+  // app still fully functions on its existing local/GitHub-served assets.
+  if (!r2Diagnostics.ok) softFailureCodes.push(r2Diagnostics.code)
   if (venue.ok === false && venue.code) hardFailureCodes.push(venue.code === 'DATABASE_UNAVAILABLE' ? 'DATABASE_UNAVAILABLE' : venue.code)
 
   let overallStatus = 'ready'

@@ -8,12 +8,8 @@
     "height": 900,
     "touchEnabled": false,
     "tapPerformed": false,
-    "consoleErrorCount": 3,
-    "consoleErrors": [
-      "Failed to load resource: the server responded with a status of 404 (Not Found)",
-      "Failed to load resource: the server responded with a status of 404 (Not Found)",
-      "Failed to load resource: the server responded with a status of 404 (Not Found)"
-    ],
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -30,7 +26,7 @@
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "welcome--desktop.png",
@@ -923,7 +919,10 @@
       "innerWidth": 1024
     },
     "touchTargetResult": "pass",
-    "touchTargetDetail": null,
+    "touchTargetDetail": {
+      "width": 77.8125,
+      "height": 44
+    },
     "navError": null,
     "screenshotOk": true,
     "pass": true
@@ -943,13 +942,19 @@
     "httpFailureCount": 0,
     "httpFailures": [],
     "badImageRequests": [],
-    "overflowResult": "fail",
-    "overflowDetail": null,
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
     "touchTargetResult": "pass",
-    "touchTargetDetail": null,
+    "touchTargetDetail": {
+      "width": 294,
+      "height": 48
+    },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "venue-select--tablet-portrait.png",
@@ -972,7 +977,10 @@
       "innerWidth": 768
     },
     "touchTargetResult": "pass",
-    "touchTargetDetail": null,
+    "touchTargetDetail": {
+      "width": 93.6875,
+      "height": 44
+    },
     "navError": null,
     "screenshotOk": true,
     "pass": true
@@ -1230,7 +1238,10 @@
       "innerWidth": 768
     },
     "touchTargetResult": "pass",
-    "touchTargetDetail": null,
+    "touchTargetDetail": {
+      "width": 58.359375,
+      "height": 44
+    },
     "navError": null,
     "screenshotOk": true,
     "pass": true
@@ -1250,13 +1261,19 @@
     "httpFailureCount": 0,
     "httpFailures": [],
     "badImageRequests": [],
-    "overflowResult": "fail",
-    "overflowDetail": null,
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
     "touchTargetResult": "pass",
-    "touchTargetDetail": null,
+    "touchTargetDetail": {
+      "width": 294,
+      "height": 48
+    },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "venue-select--kiosk.png",

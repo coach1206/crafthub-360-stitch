@@ -23,7 +23,7 @@
  * staging upload can never collide with or overwrite production media.
  */
 import crypto from 'crypto'
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadBucketCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadBucketCommand, HeadObjectCommand } from '@aws-sdk/client-s3'
 
 const PROVIDER   = (process.env.STORAGE_PROVIDER || 'local').toLowerCase()
 const BUCKET     = process.env.STORAGE_BUCKET || ''
@@ -133,6 +133,46 @@ export async function readBuffer(storageKey) {
 export function publicUrl(storageKey) {
   if (CDN_URL) return `${CDN_URL.replace(/\/$/, '')}/${storageKey}`
   return `/api/venue-management/media/object/${encodeURIComponent(storageKey)}`
+}
+
+/**
+ * GitHub-to-R2 asset sync support (SmokeCraft production closure).
+ * These are deliberately generic — unlike upload() above (which owns its
+ * own venue-media key scheme and server-generated random object names),
+ * a GitHub-sourced asset's key is deterministic and computed by the
+ * caller (scripts/smokecraftAssetsSyncR2.mjs): the sync tool needs to
+ * put/HEAD an EXACT known key, not have one assigned to it.
+ */
+
+/** HEAD an object without downloading it. Returns null if it doesn't exist. */
+export async function headObject(storageKey) {
+  if (!isActivated()) return null
+  try {
+    const c = client()
+    const res = await c.send(new HeadObjectCommand({ Bucket: BUCKET, Key: storageKey }))
+    return { etag: res.ETag, contentType: res.ContentType, contentLength: res.ContentLength, metadata: res.Metadata || {}, versionId: res.VersionId || null }
+  } catch (err) {
+    if (err.name === 'NotFound' || err.$metadata?.httpStatusCode === 404) return null
+    throw err
+  }
+}
+
+/** Put an object at an EXACT, caller-computed key (not the random venue-media naming upload() uses). */
+export async function putObjectAtKey({ key, buffer, mimeType, cacheControl, metadata = {} }) {
+  if (!isActivated()) {
+    throw new Error('objectStorageAdapter.putObjectAtKey: provider not activated (STORAGE_PROVIDER/STORAGE_BUCKET/credentials missing)')
+  }
+  const checksum = crypto.createHash('sha256').update(buffer).digest('hex')
+  const c = client()
+  const res = await c.send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: buffer,
+    ContentType: mimeType,
+    CacheControl: cacheControl,
+    Metadata: { checksum, ...metadata },
+  }))
+  return { key, checksum, etag: res.ETag, versionId: res.VersionId || null, url: publicUrl(key) }
 }
 
 /** Readiness-check helper: verifies bucket reachability without transferring data. */

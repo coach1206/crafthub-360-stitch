@@ -1,0 +1,645 @@
+{
+  "mode": "--dry-run",
+  "generatedAt": "2026-08-06T20:38:20.773Z",
+  "scanned": 79,
+  "missing": 0,
+  "uploaded": 0,
+  "skippedIdentical": 0,
+  "replaced": 0,
+  "failed": 0,
+  "verified": 0,
+  "entries": [
+    {
+      "assetId": "sc-passportHub",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/360 PASSPORT  2.png",
+      "checksum": "82d0a8b82bf5978fab0235e17ce0f5fc8a97578863650f0c53c4da5682e94521",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-passportHub/v1/82d0a8b82bf5-360 PASSPORT  2.png"
+    },
+    {
+      "assetId": "sc-achievements",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/ACHIEVMENTS.png",
+      "checksum": "32e64aadd40d56102de3a4fb8667fe4c030d84c0377ff2f4b8b48a2d6191d24f",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-achievements/v1/32e64aadd40d-ACHIEVMENTS.png"
+    },
+    {
+      "assetId": "sc-aiSummary",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/AI SUMMARY.png",
+      "checksum": "1d05f50d0eb713605ccdab57acc5bb0004b114bc79f3b224772465d6e08c01e2",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-aiSummary/v1/1d05f50d0eb7-AI SUMMARY.png"
+    },
+    {
+      "assetId": "sc-craftHubVenueTable",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png",
+      "checksum": "5d54123996272daf1aceab35bdb39ae93b4acb0b1dfd788a32d0ab5669694ad5",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-craftHubVenueTable/v1/5d5412399627-CRAFTHUB 360. VENUE TABLE EXPERIENCE.png"
+    },
+    {
+      "assetId": "sc-cutToastLight",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/CUT  TOAST, & LIGHT.png",
+      "checksum": "09a4257a15bf400150f4e89df3ff91e7e3a7b057b17bbc8c7c3334eefddd4b43",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-cutToastLight/v1/09a4257a15bf-CUT  TOAST, & LIGHT.png"
+    },
+    {
+      "assetId": "sc-meetYourCigar",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png",
+      "checksum": "6fc13ac032af8e5f7c04e7e138a7aa0df31579dde1ab6cea2ca0be22418db6a4",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-meetYourCigar/v1/6fc13ac032af-DISOVER YOUR CIGAR PROFILE.png"
+    },
+    {
+      "assetId": "sc-eventChallenge",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/EVENT CHALLENGE 111.png",
+      "checksum": "5a713b8f52f6d470aa8c5333d125b0edb1c2f7bd9bdb852be661d3d417f992a8",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-eventChallenge/v1/5a713b8f52f6-EVENT CHALLENGE 111.png"
+    },
+    {
+      "assetId": "sc-finalReview",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/FINAL REVIEW.png",
+      "checksum": "df16f309ce138aa0cd9a2f6f950124e65dc705ed23134b3d2a4551979a7d607c",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-finalReview/v1/df16f309ce13-FINAL REVIEW.png"
+    },
+    {
+      "assetId": "sc-finalThird",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/FINAL THIRD.png",
+      "checksum": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-finalThird/v1/6ce38723011a-FINAL THIRD.png"
+    },
+    {
+      "assetId": "sc-firstThird",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/FIRST  THIRD1.png",
+      "checksum": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-firstThird/v1/18a997c3d1de-FIRST  THIRD1.png"
+    },
+    {
+      "assetId": "sc-flavorMemory",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/FLAVOR MEMORY.png",
+      "checksum": "297eb2b15d96a58dbda1ffa3878a962a33a0f242199a0595b655f2aeca71310d",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-flavorMemory/v1/297eb2b15d96-FLAVOR MEMORY.png"
+    },
+    {
+      "assetId": "sc-goldenBox",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/GOLDEN BOX RULES.png",
+      "checksum": "b6528da8ea98c615760dbb26899de184442834c1aabf431c34f43e623f78956b",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBox/v1/b6528da8ea98-GOLDEN BOX RULES.png"
+    },
+    {
+      "assetId": "sc-humidorMatch",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/Humidor Match 1.png",
+      "checksum": "63c6510b549a89cafb7e2b293afce68dcf2895830f9a0a52e2883be62a380c28",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-humidorMatch/v1/63c6510b549a-Humidor Match 1.png"
+    },
+    {
+      "assetId": "sc-identity",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/IDENTY.png",
+      "checksum": "006685040277d1cf4f1d00e9ed68d6d0d740e41900c12be0386298968dc0b5d4",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-identity/v1/006685040277-IDENTY.png"
+    },
+    {
+      "assetId": "sc-knowledgeCheck",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/KNOWLEDGE CHECK.png",
+      "checksum": "c5f10a91b1f84ab65a929c3c645ce3f499c388e2e03053bf621aca68e8f7db8c",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-knowledgeCheck/v1/c5f10a91b1f8-KNOWLEDGE CHECK.png"
+    },
+    {
+      "assetId": "sc-knowledgeDrop",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/KNOWLEDGE DROP.png",
+      "checksum": "27b3c600ed0be03eb1f8fdb4ad62e2ec274c3e3f24581f151ccca820529eff5f",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-knowledgeDrop/v1/27b3c600ed0b-KNOWLEDGE DROP.png"
+    },
+    {
+      "assetId": "sc-leaderboard",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/LEADERBOARD 111.png",
+      "checksum": "7120ab3ba5fd9a0b0c6a1f16946d1b8a4a90a398994f7422495cb47291ee13d0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-leaderboard/v1/7120ab3ba5fd-LEADERBOARD 111.png"
+    },
+    {
+      "assetId": "sc-lightingTutorial",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/LIGHTING TUTORIAL 1.png",
+      "checksum": "0b9e31a4821a686d547810cf8051b4d34f1c446ed97bf3a2fb79d5f9fa36000b",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-lightingTutorial/v1/0b9e31a4821a-LIGHTING TUTORIAL 1.png"
+    },
+    {
+      "assetId": "sc-managementSync",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/MANAGEMENT SYNC.png",
+      "checksum": "61176c3de34c1328832045a64f7f01ba0e815bf995863e591d2c116a3ffe8a11",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-managementSync/v1/61176c3de34c-MANAGEMENT SYNC.png"
+    },
+    {
+      "assetId": "sc-mentorCommentary",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/MENTOR :COMMENTARY.png",
+      "checksum": "3959f46c029b02968c26666ae68a6f03c1a0341917abe75207a891f917933e56",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-mentorCommentary/v1/3959f46c029b-MENTOR :COMMENTARY.png"
+    },
+    {
+      "assetId": "sc-mentorSelection",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/MENTOR SELECTION1.png",
+      "checksum": "e585d1c6e86c55a78906154526183c246878414f1a07aa21b510fd408fd9409d",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-mentorSelection/v1/e585d1c6e86c-MENTOR SELECTION1.png"
+    },
+    {
+      "assetId": "sc-miniTasting",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/Mini Tasting 11.png",
+      "checksum": "1b33e2a6013d7c188c5a7e7d2a28145842d7c016c3cd41d3153f1ba996325a8d",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-miniTasting/v1/1b33e2a6013d-Mini Tasting 11.png"
+    },
+    {
+      "assetId": "sc-pairingLab",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/PAIRING LAB1.png",
+      "checksum": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-pairingLab/v1/274fc143e8d5-PAIRING LAB1.png"
+    },
+    {
+      "assetId": "sc-passportStamp",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/PASSPORT STAMP.png",
+      "checksum": "4d9fb28ac0108a8d36f291abf53987125e3e8388f648a091cfacf9246f6f483a",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-passportStamp/v1/4d9fb28ac010-PASSPORT STAMP.png"
+    },
+    {
+      "assetId": "sc-requestPurchase",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/REQUEST PURCHASE.png",
+      "checksum": "99a1f540178420c2d5efe1e78883d2a3cf45068c2584e12a754bcdad0c1b7296",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-requestPurchase/v1/99a1f5401784-REQUEST PURCHASE.png"
+    },
+    {
+      "assetId": "sc-recommendedNextJourney",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/Recommend next journey.png",
+      "checksum": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-recommendedNextJourney/v1/2c5a402c0063-Recommend next journey.png"
+    },
+    {
+      "assetId": "sc-resume",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/Resume Your Journey.png",
+      "checksum": "a90b155341684f1d18bc9450b65097ca762dd4922dda454ad467a7c0b3ca07a5",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-resume/v1/a90b15534168-Resume Your Journey.png"
+    },
+    {
+      "assetId": "sc-secondThird",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/SECOND THIRD.png",
+      "checksum": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-secondThird/v1/0a8ec771f6bf-SECOND THIRD.png"
+    },
+    {
+      "assetId": "sc-seedSoil",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/SEED & SOIL.png",
+      "checksum": "79e80f71cf98390636f00e39146a46934ca3f281b7c4be66a92af25f84af834e",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-seedSoil/v1/79e80f71cf98-SEED & SOIL.png"
+    },
+    {
+      "assetId": "sc-sessionComplete",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/SESSION COMPLETE.png",
+      "checksum": "acadb974fe9d4c6aff0e8a1cc2ae9c45a679fd1f083650b346bec33ac30eafea",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-sessionComplete/v1/acadb974fe9d-SESSION COMPLETE.png"
+    },
+    {
+      "assetId": "sc-smokecraftChallenge",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/SMOKECRAFT CHALLENG.png",
+      "checksum": "dc1f7f8db1a7b868b4b6a91fff4475da07f983fbdc929d70a9545e0687f718db",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-smokecraftChallenge/v1/dc1f7f8db1a7-SMOKECRAFT CHALLENG.png"
+    },
+    {
+      "assetId": "sc-scorecard",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/Scorecard.png",
+      "checksum": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-scorecard/v1/a57797379759-Scorecard.png"
+    },
+    {
+      "assetId": "sc-venueSelect",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/Venue Selection 11.png",
+      "checksum": "b17463c6be5f9fa68837c73a20670a3a71f9075cabd9435a4af67888c7aa5b9e",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-venueSelect/v1/b17463c6be5f-Venue Selection 11.png"
+    },
+    {
+      "assetId": "sc-connections",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/cropped/connections-hero.jpg",
+      "checksum": "154c0b791884ff0b5b574a822f87a927b3e3defff25aac45cc7d86d199397de6",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-connections/v1/154c0b791884-connections-hero.jpg"
+    },
+    {
+      "assetId": "sc-goldenBoxBlendRevisionRound",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-blend-revision-round.png",
+      "checksum": "6c8075e46367ac83f20922eff0e6764a625fe22b00aa90426859512ffac51cfd",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxBlendRevisionRound/v1/6c8075e46367-golden-box-blend-revision-round.png"
+    },
+    {
+      "assetId": "sc-goldenBoxChallenge",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-challenge-alt.png",
+      "checksum": "ed2be9e23dd601eaf222296452c5068e87a95ce1441a97a6c36c56da00da12b0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxChallenge/v1/ed2be9e23dd6-golden-box-challenge-alt.png"
+    },
+    {
+      "assetId": "sc-goldenBoxFinalJudgingRubric",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-final-judging-rubric.png",
+      "checksum": "91b1a0eaa2f1933df2089956a22e2f80ed09a1566aac2c62673be886dc3d98b1",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxFinalJudgingRubric/v1/91b1a0eaa2f1-golden-box-final-judging-rubric.png"
+    },
+    {
+      "assetId": "sc-goldenBoxJudgingCriteria",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-judging-criteria.png",
+      "checksum": "7f9f53469ffd2775a9a815b2636db515470b9fb91315c42c60d7ff8c885a90c0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxJudgingCriteria/v1/7f9f53469ffd-golden-box-judging-criteria.png"
+    },
+    {
+      "assetId": "sc-goldenBoxMasterBlendingEducation",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-master-blending-education.png",
+      "checksum": "cbb115cf18fe76b7bbf205ad41fbbe110b4f401bbcf693461c5ee2bc1d2c2597",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxMasterBlendingEducation/v1/cbb115cf18fe-golden-box-master-blending-education.png"
+    },
+    {
+      "assetId": "sc-goldenBoxPairingDefense",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-pairing-defense.png",
+      "checksum": "aee92535647d3d39178d17ca783d5047f958b99709bbf4380c9cb4b76de01dc8",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxPairingDefense/v1/aee92535647d-golden-box-pairing-defense.png"
+    },
+    {
+      "assetId": "sc-goldenBoxPresentationRevision",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-presentation-revision-round.png",
+      "checksum": "da38ebd6bc8326f7c8ed23527214ad5765ce835e0f4ee79b8f1997891147043c",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxPresentationRevision/v1/da38ebd6bc83-golden-box-presentation-revision-round.png"
+    },
+    {
+      "assetId": "sc-goldenBoxScoringRounds",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/golden-box/golden-box-scoring-rounds.png",
+      "checksum": "8a0d0fa7dd61b854b271b07322f8a79ab56cb479c21ab92ee0513e64dbdfbf02",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-goldenBoxScoringRounds/v1/8a0d0fa7dd61-golden-box-scoring-rounds.png"
+    },
+    {
+      "assetId": "sc-rollingStepApplyBinder",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/apply-binder.png",
+      "checksum": "9484e6d2157f39808aa8c3c55c287a043e40dadbb17ffa43a06eb93d4d1e9d2a",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepApplyBinder/v1/9484e6d2157f-apply-binder.png"
+    },
+    {
+      "assetId": "sc-rollingStepApplyWrapper",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/apply-wrapper.png",
+      "checksum": "ae3c93a2e264a4aef0f38abf1e7232fe0dddce6ea9c3d7ab86fc9c7c6f9067ef",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepApplyWrapper/v1/ae3c93a2e264-apply-wrapper.png"
+    },
+    {
+      "assetId": "sc-rollingStepArrangeFiller",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/arrange-filler.png",
+      "checksum": "71a2be94b5fcdd838b3f94848323e794962faad5635481ce840596a763999c08",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepArrangeFiller/v1/71a2be94b5fc-arrange-filler.png"
+    },
+    {
+      "assetId": "sc-rollingStepConstructCap",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/construct-cap.png",
+      "checksum": "4b439fad9e3fd2b958b2753a3d2312408a5ffb5d1b38c4c7ed03aa2f1717bde6",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepConstructCap/v1/4b439fad9e3f-construct-cap.png"
+    },
+    {
+      "assetId": "sc-processingCuring",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/curing-process.png",
+      "checksum": "162e0f45d8269ef14987ef8d01203c92616b87b4ae49194fbdef22819c01c6e0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-processingCuring/v1/162e0f45d826-curing-process.png"
+    },
+    {
+      "assetId": "sc-processingFermentation",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/fermentation-process.png",
+      "checksum": "162e0f45d8269ef14987ef8d01203c92616b87b4ae49194fbdef22819c01c6e0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-processingFermentation/v1/162e0f45d826-fermentation-process.png"
+    },
+    {
+      "assetId": "sc-processingAging",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/final-resting-aging.png",
+      "checksum": "3ef85c80c24bd9490ee2e0cb1714c651df8a5d1b045e8e1424c13d87a6a764e3",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-processingAging/v1/3ef85c80c24b-final-resting-aging.png"
+    },
+    {
+      "assetId": "sc-rollingStepFinishFoot",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/finish-foot.png",
+      "checksum": "d1528e6159e5fe5857963029f5f37f5012798633975f716c9ff2bc2254bcdfe4",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepFinishFoot/v1/d1528e6159e5-finish-foot.png"
+    },
+    {
+      "assetId": "sc-rollingStepInspectAndDrawTest",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/inspect-and-draw-test.png",
+      "checksum": "94c263cf09bdab188df04939a5a7ccbec2266eed1a5d8b28b5d577847e98f7b4",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepInspectAndDrawTest/v1/94c263cf09bd-inspect-and-draw-test.png"
+    },
+    {
+      "assetId": "sc-rollingStepPrepareLeaves",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/leaf-comparison.png",
+      "checksum": "d1735908f1792e90cff36625589b16ec6f6c6bd2d8591badf945fd3b15e217a0",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepPrepareLeaves/v1/d1735908f179-leaf-comparison.png"
+    },
+    {
+      "assetId": "sc-rollingStepMoldOrPress",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/mold-or-press.png",
+      "checksum": "a966eda121cde52ea21c791fbec4f4f324eced7fb5202fc7bd1eca205b27962d",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepMoldOrPress/v1/a966eda121cd-mold-or-press.png"
+    },
+    {
+      "assetId": "sc-rollingStepRestAndBoxAge",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/rest-and-box-age.png",
+      "checksum": "79040091a97367bf333341232881677072fe1297dac3191a3ba1c7ce3109a8fa",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepRestAndBoxAge/v1/79040091a973-rest-and-box-age.png"
+    },
+    {
+      "assetId": "sc-rollingStepSelectBunching",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/select-bunching-method.png",
+      "checksum": "f4f68ea330e5dbce7052076388ba98d8ba5ca410df3646f483eb771999ed0b73",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rollingStepSelectBunching/v1/f4f68ea330e5-select-bunching-method.png"
+    },
+    {
+      "assetId": "sc-processingGrading",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/leaf-construction/sorting-and-grading.png",
+      "checksum": "8476a4a03cbd2265256dc3510e5f0380b3cb1992093e262801ca14288e70c14f",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-processingGrading/v1/8476a4a03cbd-sorting-and-grading.png"
+    },
+    {
+      "assetId": "sc-pairingRecommendations",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/personlized pairing 222.png",
+      "checksum": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-pairingRecommendations/v1/f060831b151c-personlized pairing 222.png"
+    },
+    {
+      "assetId": "sc-rewardCenter",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/rewards/Reward Center.png",
+      "checksum": "489ad9ca433454358545e762d1f7718295cfed4fc0c4230791d096fd114ffc30",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rewardCenter/v1/489ad9ca4334-Reward Center.png"
+    },
+    {
+      "assetId": "sc-session1",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session 1.png",
+      "checksum": "8394f96f915020c6630d2407518a3db1eea7e2c5d07dbdcbee1ffe4d6f2fd4e5",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-session1/v1/8394f96f9150-session 1.png"
+    },
+    {
+      "assetId": "sc-rewards",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session 25 rewards.png",
+      "checksum": "683892e9df2ca8193de4d469ccffc23570f9735d00a629244331471c9d1f88e8",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-rewards/v1/683892e9df2c-session 25 rewards.png"
+    },
+    {
+      "assetId": "sc-challengeHubBackground",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/Daily and weekly Challenge Hub.png",
+      "checksum": "c4bfa8794dc98a9a57121b6b8d4bb0ee1237cf56ed57f4f1c284086d9c6b9d40",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-challengeHubBackground/v1/c4bfa8794dc9-Daily and weekly Challenge Hub.png"
+    },
+    {
+      "assetId": "sc-howItWorksUser",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/HOW IT WORKS.png",
+      "checksum": "5c473e68e23210e45357e15d7d2089798593a471783cfe803dfdef67a5fb28ec",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-howItWorksUser/v1/5c473e68e232-HOW IT WORKS.png"
+    },
+    {
+      "assetId": "sc-blendFaultChallengeStep2",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/Mising Challenge Screen2.png",
+      "checksum": "4de76cd301f6bcce64fca4932add91ca280f7b9e589c377f7ee4c725b1b6878e",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-blendFaultChallengeStep2/v1/4de76cd301f6-Mising Challenge Screen2.png"
+    },
+    {
+      "assetId": "sc-blendFaultChallengeStep3",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/Missing Challenge Screen3.png",
+      "checksum": "d8277ff0bbf16339c37947af86d340741addd653d79a80a1a9566c48d739fcb3",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-blendFaultChallengeStep3/v1/d8277ff0bbf1-Missing Challenge Screen3.png"
+    },
+    {
+      "assetId": "sc-ringGaugeGuide",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/RING GAUGE GUIDE.png",
+      "checksum": "fa661125a1bc4115929584023093a46a527f0bd7b6291baa99439c9cbfafa24a",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-ringGaugeGuide/v1/fa661125a1bc-RING GAUGE GUIDE.png"
+    },
+    {
+      "assetId": "sc-collectionsCenterBackground",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/collection center.png",
+      "checksum": "56c6238e68fa7aac8d415d0d2d4834cb3cc34dcf0aafe0a89bc8d7ae6b399828",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-collectionsCenterBackground/v1/56c6238e68fa-collection center.png"
+    },
+    {
+      "assetId": "sc-fillerArrangementLesson",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/filler arrangement.png",
+      "checksum": "d9f0584eac6a04ba81d331bb8b70d7abcd83d19b53add36450311489d4471315",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-fillerArrangementLesson/v1/d9f0584eac6a-filler arrangement.png"
+    },
+    {
+      "assetId": "sc-blendFaultChallengeStep1",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/missing challenge Screen1.png",
+      "checksum": "c7d7007148096d304e5af083ffb09982065f5754d4fae5387b81ef1b8062045b",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-blendFaultChallengeStep1/v1/c7d700714809-missing challenge Screen1.png"
+    },
+    {
+      "assetId": "sc-skillTreeBackground",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/session-visuals/skill tree 1.png",
+      "checksum": "4647aa85e4a475741e020ef5deef8d583ae705e1a519ccb58e0eb9deec0cb0b4",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-skillTreeBackground/v1/4647aa85e4a4-skill tree 1.png"
+    },
+    {
+      "assetId": "sc-badgeLibrary",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft/smokecraft badges.png",
+      "checksum": "219b795ed9b316f4ce05eca7645adbd556abb56ff8c8ced244e8603af78d2c92",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-badgeLibrary/v1/219b795ed9b3-smokecraft badges.png"
+    },
+    {
+      "assetId": "sc-knowledgeDropFactory",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-flavor-dna.png",
+      "checksum": "4e37718020af7b7979356ba230ffa3520e1bee37046699db25631131a7346a79",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-knowledgeDropFactory/v1/4e37718020af-smokecraft-flavor-dna.png"
+    },
+    {
+      "assetId": "sc-enroll",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-guest-pass.png",
+      "checksum": "5c798061277c78b3e5192f2d58c670f0a1e124066986c957e9a2922cb6e04705",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-enroll/v1/5c798061277c-smokecraft-guest-pass.png"
+    },
+    {
+      "assetId": "sc-landing",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-landing.png",
+      "checksum": "f817ab40ad138135513ad70b395725c967cc15736086d127e7fddef107fc8d7c",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-landing/v1/f817ab40ad13-smokecraft-landing.png"
+    },
+    {
+      "assetId": "sc-knowledgeDropTobacco",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-origins.png",
+      "checksum": "c55cd4317e6cb64a4de8923ae04c614d30cb0d2c6fc5672fdfc632432e34dbeb",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-knowledgeDropTobacco/v1/c55cd4317e6c-smokecraft-origins.png"
+    },
+    {
+      "assetId": "sc-knowledgeDropAging",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-pairing-mastery.png",
+      "checksum": "d3230f96618f3841f3ebbb652a4885dc81663d4f6da3a1f75cb7b6322feee5f4",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-knowledgeDropAging/v1/d3230f96618f-smokecraft-pairing-mastery.png"
+    },
+    {
+      "assetId": "sc-secondHumidorMatch",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png",
+      "checksum": "ab189ae67ed1e8e492675c283f7921ee4ae4ad97abae51c3189ae750d93e161a",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-secondHumidorMatch/v1/ab189ae67ed1-smokecraft-second-humidor-match.png"
+    },
+    {
+      "assetId": "sc-terroirSoil",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-seed-soil.png",
+      "checksum": "969c33f92f3a6b4c53b95a69af15f16e47ab345c87c735e843cdc8475cc9cf98",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-terroirSoil/v1/969c33f92f3a-smokecraft-seed-soil.png"
+    },
+    {
+      "assetId": "sc-terroir",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-terroir.png",
+      "checksum": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-terroir/v1/e671a9a296f1-smokecraft-terroir.png"
+    },
+    {
+      "assetId": "sc-format",
+      "status": "CANDIDATE",
+      "repositoryPath": "public/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+      "checksum": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136",
+      "checksumMatchesRegistry": true,
+      "objectKey": "production/smokecraft/image/sc-format/v1/a7c1147e1b9b-smokecraft-vitola.png"
+    }
+  ]
+}
