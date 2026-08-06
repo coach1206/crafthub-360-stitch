@@ -53,6 +53,7 @@ function PrimaryHotspot({ label, onClick, style }) {
         // instead of growing the button past its approved bounds.
         whiteSpace: 'nowrap',
         padding: '0 6px',
+        minHeight: 44,
         ...style,
       }}
     >
@@ -144,6 +145,7 @@ function StaticHotspot({ label, onClick, style, shape = 'rect' }) {
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent',
         transition: 'background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
+        minHeight: 44,
         ...style,
       }}
     >

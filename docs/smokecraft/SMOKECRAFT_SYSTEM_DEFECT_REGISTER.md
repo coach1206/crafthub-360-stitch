@@ -2052,3 +2052,50 @@ recorded 33/55 passing. Root causes, both real:
 
 Static-gameplay detector re-run clean at 85/85 after these edits.
 Highest SC-D number is now SC-D067.
+
+## SmokeCraft Production Closure — real 55-case re-capture and 27-session verification
+
+Starting HEAD: `de68bdc7` (SC-D067 fix committed but not re-verified against
+a real browser capture).
+
+**Found and fixed SC-D068**: `npm run build` (plain `vite build`, no
+explicit `--mode production`) was silently producing a non-production
+bundle in this environment — 5.4MB main chunk including the dev-only
+`DevRoleSwitcher` toolbar (guarded by `import.meta.env.DEV`, which should
+be `false`/dead-code-eliminated in a real production build), live and
+interactive in the shipped `dist/`. This inflated the touch-target
+failure count in re-capture attempts with a control (`●Guest` role-switch
+pill, `~84×38`) that will not exist in a correctly production-built
+deploy. Fix: rebuild with `NODE_ENV=production npx vite build --mode
+production` — verified 0 occurrences of the dev toolbar's marker string
+in the resulting bundle, 3.1MB main chunk. **Railway's own build
+invocation needs independent confirmation that it resolves to production
+mode** — not proven from this sandbox; flagged for the owner in the final
+report rather than assumed either way.
+
+**Found and fixed SC-D069**: three additional real touch-target gaps
+beyond SC-D067's six screens, found via a real Playwright re-capture
+against the corrected production build with a real, server-progressed
+guest identity (`scripts/seedSmokecraftDemoGuestCookie.mjs` +
+`scripts/captureSmokecraftViewportTouchProof.mjs`):
+1. A shared `[aria-label="Back"]` hotspot under 44px at several viewports
+   across most image-surface screens — fixed with a global CSS floor in
+   `src/styles.css` (exact source component not pinned down in this
+   pass's budget).
+2. `SmokeCraft.jsx`'s `PrimaryHotspot`/`StaticHotspot` (landing screen
+   Start/Begin controls) had no `minHeight` floor — added.
+3. `GoldenBox.jsx`'s acknowledgment checkbox (16–20px) — not a real
+   defect: its native touch target is the enclosing `<label>`. The
+   capture script's touch-target measurement was corrected to measure
+   the label for checkbox/radio inputs instead of flagging a false
+   positive.
+
+Result: 52/55 (up from a real 33/55 at `d0340434`). 3 cases remain open
+and undiagnosed in this pass's remaining budget — see
+`public/proof/smokecraft-production-closure/00-proof-index.md` for exact
+detail. None are regressions of this or the prior pass's fixes.
+
+**27-session journey** (`scripts/verify-smokecraft-full-game-fresh-player.mjs`,
+real server API, one fresh isolated guest, no shortcuts): **62/62 passed**.
+
+Highest SC-D number is now SC-D069.

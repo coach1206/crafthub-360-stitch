@@ -1,14 +1,9 @@
 {
-  "capturedAt": "2026-08-06T18:13:47.086Z",
+  "capturedAt": "2026-08-06T20:07:43.737Z",
   "totalCombinations": 55,
   "screenshotsCaptured": 55,
-  "combinationsPassed": 33,
-  "combinationsFailed": 22,
-  "playerProgress": {
-    "xpTotal": 1175,
-    "completedCount": 22
-  },
-  "demoActivated": true,
+  "combinationsPassed": 52,
+  "combinationsFailed": 3,
   "viewports": [
     "desktop",
     "laptop",

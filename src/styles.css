@@ -1980,3 +1980,20 @@
     position: static !important;
   }
 }
+
+/* SmokeCraft production closure (SC-D067 follow-up) — a shared, real
+   production "Back" hotspot rendered across most /smokecraft image-surface
+   screens (Venue Select, Welcome, Humidor Match, Meet Your Cigar, Terroir,
+   Knowledge Drop, final session) measured under the 44x44 CSS-px touch-
+   target floor at every viewport (confirmed via a real Playwright capture
+   against the production build: 82x28 @1440w down to 70x25 @1024w). This
+   global floor is the safety net that applies regardless of which shared
+   layout component renders the control, so no future refactor of that
+   layout silently drops back below the floor.
+   `!important` justified: the control's own inline style sets an explicit
+   percentage-based width/height on a positioned hotspot, and a plain rule
+   would lose the cascade to that inline style. */
+[aria-label="Back"] {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}

@@ -8,8 +8,12 @@
     "height": 900,
     "touchEnabled": false,
     "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
+    "consoleErrorCount": 3,
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -19,10 +23,10 @@
       "scrollWidth": 1440,
       "innerWidth": 1440
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 68.734375,
-      "height": 36
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -48,14 +52,14 @@
       "scrollWidth": 1440,
       "innerWidth": 1440
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 120.265625,
-      "height": 36.078125
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "session-1-start--desktop.png",
@@ -79,8 +83,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 331.1875,
-      "height": 51.6875
+      "width": 230.390625,
+      "height": 48.453125
     },
     "navError": null,
     "screenshotOk": true,
@@ -108,8 +112,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 596.15625,
-      "height": 99.671875
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -137,8 +141,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 61.78125,
-      "height": 42
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -166,8 +170,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 72.625,
-      "height": 42
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -195,8 +199,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 73.84375,
-      "height": 42
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -222,14 +226,14 @@
       "scrollWidth": 1440,
       "innerWidth": 1440
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 129.59375,
-      "height": 32.40625
+      "width": 115.5625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "final-session--desktop.png",
@@ -240,11 +244,8 @@
     "height": 900,
     "touchEnabled": false,
     "tapPerformed": false,
-    "consoleErrorCount": 2,
-    "consoleErrors": [
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
-    ],
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -256,12 +257,12 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 151.765625,
-      "height": 46
+      "width": 82.34375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "golden-box--desktop.png",
@@ -314,8 +315,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 163.359375,
-      "height": 42
+      "width": 294,
+      "height": 48
     },
     "navError": null,
     "screenshotOk": true,
@@ -341,14 +342,14 @@
       "scrollWidth": 1180,
       "innerWidth": 1180
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 68.734375,
-      "height": 36
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "welcome--laptop.png",
@@ -370,14 +371,14 @@
       "scrollWidth": 1180,
       "innerWidth": 1180
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 108.53125,
-      "height": 32.546875
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "session-1-start--laptop.png",
@@ -401,8 +402,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 271.390625,
-      "height": 42.359375
+      "width": 188.796875,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -430,8 +431,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 488.515625,
-      "height": 81.671875
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -459,8 +460,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 61.78125,
-      "height": 42
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -488,8 +489,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 72.625,
-      "height": 42
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -517,8 +518,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 73.84375,
-      "height": 42
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -544,14 +545,14 @@
       "scrollWidth": 1180,
       "innerWidth": 1180
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 106.1875,
-      "height": 26.5625
+      "width": 95.4375,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "final-session--laptop.png",
@@ -562,11 +563,8 @@
     "height": 820,
     "touchEnabled": false,
     "tapPerformed": false,
-    "consoleErrorCount": 2,
-    "consoleErrors": [
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
-    ],
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -578,12 +576,12 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 151.765625,
-      "height": 46
+      "width": 75.015625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "golden-box--laptop.png",
@@ -608,7 +606,7 @@
     "touchTargetResult": "pass",
     "touchTargetDetail": {
       "width": 84.015625,
-      "height": 41.8125
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -636,8 +634,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 163.359375,
-      "height": 42
+      "width": 294,
+      "height": 48
     },
     "navError": null,
     "screenshotOk": true,
@@ -651,94 +649,7 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 1024,
-      "innerWidth": 1024
-    },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 68.734375,
-      "height": 36
-    },
-    "navError": null,
-    "screenshotOk": true,
-    "pass": false
-  },
-  {
-    "filename": "welcome--tablet-landscape.png",
-    "route": "/smokecraft/welcome",
-    "screen": "welcome",
-    "viewport": "tablet-landscape",
-    "width": 1024,
-    "height": 768,
-    "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 1024,
-      "innerWidth": 1024
-    },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 100.890625,
-      "height": 30.265625
-    },
-    "navError": null,
-    "screenshotOk": true,
-    "pass": false
-  },
-  {
-    "filename": "session-1-start--tablet-landscape.png",
-    "route": "/smokecraft",
-    "screen": "session-1-start",
-    "viewport": "tablet-landscape",
-    "width": 1024,
-    "height": 768,
-    "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 1024,
-      "innerWidth": 1024
-    },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 235.515625,
-      "height": 36.75
-    },
-    "navError": null,
-    "screenshotOk": true,
-    "pass": false
-  },
-  {
-    "filename": "humidor-match--tablet-landscape.png",
-    "route": "/smokecraft/humidor-match",
-    "screen": "humidor-match",
-    "viewport": "tablet-landscape",
-    "width": 1024,
-    "height": 768,
-    "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -752,8 +663,95 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 423.921875,
-      "height": 70.875
+      "width": 70.265625,
+      "height": 44
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "welcome--tablet-landscape.png",
+    "route": "/smokecraft/welcome",
+    "screen": "welcome",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 70.265625,
+      "height": 44
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "session-1-start--tablet-landscape.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 163.828125,
+      "height": 44
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "humidor-match--tablet-landscape.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "tablet-landscape",
+    "width": 1024,
+    "height": 768,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 1024,
+      "innerWidth": 1024
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 70.265625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -767,7 +765,7 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -781,8 +779,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 59.984375,
-      "height": 42
+      "width": 70.265625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -796,7 +794,7 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -810,8 +808,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 70.21875,
-      "height": 42
+      "width": 70.265625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -825,7 +823,7 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -839,8 +837,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 71.375,
-      "height": 42
+      "width": 70.265625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -866,14 +864,14 @@
       "scrollWidth": 1024,
       "innerWidth": 1024
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 92.15625,
-      "height": 23.046875
+      "width": 83.125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "final-session--tablet-landscape.png",
@@ -883,12 +881,9 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 2,
-    "consoleErrors": [
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
-    ],
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -900,12 +895,12 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 151.765625,
-      "height": 46
+      "width": 70.265625,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "golden-box--tablet-landscape.png",
@@ -915,7 +910,7 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -927,14 +922,11 @@
       "scrollWidth": 1024,
       "innerWidth": 1024
     },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 77.8125,
-      "height": 38.734375
-    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": null,
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "admin-readiness--tablet-landscape.png",
@@ -944,26 +936,20 @@
     "width": 1024,
     "height": 768,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
     "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 1024,
-      "innerWidth": 1024
-    },
+    "overflowResult": "fail",
+    "overflowDetail": null,
     "touchTargetResult": "pass",
-    "touchTargetDetail": {
-      "width": 163.359375,
-      "height": 42
-    },
+    "touchTargetDetail": null,
     "navError": null,
     "screenshotOk": true,
-    "pass": true
+    "pass": false
   },
   {
     "filename": "venue-select--tablet-portrait.png",
@@ -973,7 +959,7 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -985,14 +971,11 @@
       "scrollWidth": 768,
       "innerWidth": 768
     },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 68.734375,
-      "height": 36
-    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": null,
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "welcome--tablet-portrait.png",
@@ -1002,65 +985,7 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 768,
-      "innerWidth": 768
-    },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 84.46875,
-      "height": 25.34375
-    },
-    "navError": null,
-    "screenshotOk": true,
-    "pass": false
-  },
-  {
-    "filename": "session-1-start--tablet-portrait.png",
-    "route": "/smokecraft",
-    "screen": "session-1-start",
-    "viewport": "tablet-portrait",
-    "width": 768,
-    "height": 1024,
-    "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 768,
-      "innerWidth": 768
-    },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 176.625,
-      "height": 27.5625
-    },
-    "navError": null,
-    "screenshotOk": true,
-    "pass": false
-  },
-  {
-    "filename": "humidor-match--tablet-portrait.png",
-    "route": "/smokecraft/humidor-match",
-    "screen": "humidor-match",
-    "viewport": "tablet-portrait",
-    "width": 768,
-    "height": 1024,
-    "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -1074,8 +999,66 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 317.9375,
-      "height": 53.15625
+      "width": 93.6875,
+      "height": 44
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "session-1-start--tablet-portrait.png",
+    "route": "/smokecraft",
+    "screen": "session-1-start",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 122.875,
+      "height": 44
+    },
+    "navError": null,
+    "screenshotOk": true,
+    "pass": true
+  },
+  {
+    "filename": "humidor-match--tablet-portrait.png",
+    "route": "/smokecraft/humidor-match",
+    "screen": "humidor-match",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "pass",
+    "overflowDetail": {
+      "scrollWidth": 768,
+      "innerWidth": 768
+    },
+    "touchTargetResult": "pass",
+    "touchTargetDetail": {
+      "width": 93.6875,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1089,7 +1072,7 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -1103,8 +1086,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 56.890625,
-      "height": 42
+      "width": 93.6875,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1118,7 +1101,7 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -1132,8 +1115,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 66.0625,
-      "height": 42
+      "width": 93.6875,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1147,7 +1130,7 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -1161,8 +1144,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 67.109375,
-      "height": 42
+      "width": 93.6875,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1188,14 +1171,14 @@
       "scrollWidth": 768,
       "innerWidth": 768
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
       "width": 69.109375,
-      "height": 17.28125
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "final-session--tablet-portrait.png",
@@ -1205,12 +1188,9 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 2,
-    "consoleErrors": [
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
-    ],
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -1222,12 +1202,12 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 151.765625,
-      "height": 46
+      "width": 93.6875,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "golden-box--tablet-portrait.png",
@@ -1237,36 +1217,7 @@
     "width": 768,
     "height": 1024,
     "touchEnabled": true,
-    "tapPerformed": false,
-    "consoleErrorCount": 0,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
-    "overflowResult": "pass",
-    "overflowDetail": {
-      "scrollWidth": 768,
-      "innerWidth": 768
-    },
-    "touchTargetResult": "fail",
-    "touchTargetDetail": {
-      "width": 58.359375,
-      "height": 29.046875
-    },
-    "navError": null,
-    "screenshotOk": true,
-    "pass": false
-  },
-  {
-    "filename": "admin-readiness--tablet-portrait.png",
-    "route": "/smokecraft/admin/readiness",
-    "screen": "admin-readiness",
-    "viewport": "tablet-portrait",
-    "width": 768,
-    "height": 1024,
-    "touchEnabled": true,
-    "tapPerformed": false,
+    "tapPerformed": true,
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
@@ -1279,13 +1230,33 @@
       "innerWidth": 768
     },
     "touchTargetResult": "pass",
-    "touchTargetDetail": {
-      "width": 163.359375,
-      "height": 42
-    },
+    "touchTargetDetail": null,
     "navError": null,
     "screenshotOk": true,
     "pass": true
+  },
+  {
+    "filename": "admin-readiness--tablet-portrait.png",
+    "route": "/smokecraft/admin/readiness",
+    "screen": "admin-readiness",
+    "viewport": "tablet-portrait",
+    "width": 768,
+    "height": 1024,
+    "touchEnabled": true,
+    "tapPerformed": true,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "httpFailureCount": 0,
+    "httpFailures": [],
+    "badImageRequests": [],
+    "overflowResult": "fail",
+    "overflowDetail": null,
+    "touchTargetResult": "pass",
+    "touchTargetDetail": null,
+    "navError": null,
+    "screenshotOk": true,
+    "pass": false
   },
   {
     "filename": "venue-select--kiosk.png",
@@ -1307,14 +1278,14 @@
       "scrollWidth": 1920,
       "innerWidth": 1920
     },
-    "touchTargetResult": "fail",
+    "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 68.734375,
-      "height": 36
+      "width": 98.8125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "welcome--kiosk.png",
@@ -1338,7 +1309,7 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 146.65625,
+      "width": 98.8125,
       "height": 44
     },
     "navError": null,
@@ -1367,8 +1338,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 441.59375,
-      "height": 68.921875
+      "width": 307.1875,
+      "height": 64.609375
     },
     "navError": null,
     "screenshotOk": true,
@@ -1396,8 +1367,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 735.59375,
-      "height": 123
+      "width": 98.8125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1425,8 +1396,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 61.78125,
-      "height": 42
+      "width": 98.8125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1454,8 +1425,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 72.625,
-      "height": 42
+      "width": 98.8125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1483,8 +1454,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 73.84375,
-      "height": 42
+      "width": 98.8125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
@@ -1512,8 +1483,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 172.703125,
-      "height": 43.1875
+      "width": 130.90625,
+      "height": 49
     },
     "navError": null,
     "screenshotOk": true,
@@ -1528,11 +1499,8 @@
     "height": 1080,
     "touchEnabled": false,
     "tapPerformed": false,
-    "consoleErrorCount": 2,
-    "consoleErrors": [
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
-      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
-    ],
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
     "pageErrors": [],
     "httpFailureCount": 0,
     "httpFailures": [],
@@ -1544,12 +1512,12 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 151.765625,
-      "height": 46
+      "width": 98.8125,
+      "height": 44
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": false
+    "pass": true
   },
   {
     "filename": "golden-box--kiosk.png",
@@ -1602,8 +1570,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 163.359375,
-      "height": 42
+      "width": 294,
+      "height": 48
     },
     "navError": null,
     "screenshotOk": true,

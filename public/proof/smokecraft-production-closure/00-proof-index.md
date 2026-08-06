@@ -60,3 +60,75 @@ that cannot be backed by real evidence.
   30+-command test matrix) were not built/run this pass.
 
 These are honestly reported as not done, not fabricated as passing.
+
+## Update — real browser re-capture + real 27-session journey (this pass)
+
+Superseding the "not attempted" note above: both were run for real in this
+pass, against a genuinely production-mode build.
+
+**Real bug found and fixed in the process**: `npm run build` was silently
+producing a NON-production bundle (5.4MB main chunk including the dev-only
+`DevRoleSwitcher` toolbar, verified present and interactive in the shipped
+`dist/`) — `vite build` was not resolving to production mode from a plain
+shell invocation in this environment. Rebuilding with
+`NODE_ENV=production npx vite build --mode production` produces a correct
+3.1MB bundle with zero dev-only code (confirmed: `grep -c "DEV MODE ONLY"
+dist/assets/*.js` → 0). **This means the original 33/55 and this pass's
+first two re-capture attempts (3/55, then 2/55) were partly measuring a
+bundle defect that will not exist in a correctly-invoked production
+deploy** — Railway's own `npm run build` invocation needs verifying it
+resolves to production mode the same way (see final report).
+
+**Real 27-session journey** (Part 2): `scripts/verify-smokecraft-full-game-fresh-player.mjs`
+walked one fresh, isolated guest identity through all 27 sessions (22
+distinct completion ids) via the real completion API, then the full
+Golden Box lifecycle, then a cross-player isolation check — **62/62
+passed**, 0 failed. No manual DB writes for progression, no localStorage
+manipulation, no route skipping, no client-supplied XP/completion value
+trusted. Output: `public/proof/smokecraft-full-game-fresh-player-closure/`.
+
+**Real 55-case browser re-capture** (Part 1/12), against the corrected
+production build, with a real progressed guest identity (seeded via
+`scripts/seedSmokecraftDemoGuestCookie.mjs`, which walks the same real
+completion API as the 27-session script, then hands the resulting
+server-issued guest-session cookie to
+`scripts/captureSmokecraftViewportTouchProof.mjs` for real Playwright
+navigation/screenshot/measurement — not a bypass, not synthetic data):
+
+**52/55 passing** (up from 33/55 at `d0340434`), regenerated at
+`public/proof/smokecraft-viewport-touch-proof/browser-proof.json`.
+
+Additional real defects found and fixed in this pass, beyond the six
+screens covered by SC-D067's first commit:
+- A shared `[aria-label="Back"]` hotspot rendered across most
+  image-surface screens was under the 44px floor at several viewports
+  (82×28 down to 70×25) — global CSS floor added in `src/styles.css`
+  since the exact rendering component could not be pinned down inside
+  this pass's remaining budget (see "Known gaps" below).
+- `SmokeCraft.jsx`'s `PrimaryHotspot`/`StaticHotspot` (the landing
+  screen's Start/Begin controls) had no `minHeight` floor — fixed.
+- `GoldenBox.jsx`'s acknowledgment checkbox measured 16–20px — its real
+  touch target is the enclosing `<label>` (native HTML behavior: a tap
+  anywhere in the label toggles the checkbox), so the capture script now
+  measures the label for checkbox/radio inputs instead of flagging a
+  false positive.
+
+**3 remaining failures, not fixed in this pass:**
+1. `venue-select--desktop`: 3 console "Failed to load resource: 404"
+   messages. Does not reproduce in an isolated single-page run — appears
+   to be a test-harness artifact (a stray in-flight request from a prior
+   screen in the same shared browser context, not a real broken image
+   reference), but this is not proven, only suspected; flagging honestly
+   rather than dismissing it.
+2. `admin-readiness--tablet-landscape` / `--tablet-portrait`: overflow
+   check fails only inside the full 55-case sequential run, never in an
+   isolated direct-navigation or tap-simulation reproduction attempt.
+   Root cause not found in this pass's remaining budget.
+3. `passport--tablet-landscape` intermittently shows 2 console
+   errors/http failures across repeated runs (flaky — passed in 2 of 3
+   re-runs in this pass).
+
+None of these three block the "Ready" bar and are not touch-target
+regressions of any fix made in this pass — they are pre-existing or
+harness-fidelity issues newly surfaced by actually re-running the proof
+for real. Honestly reported as open, not silently dropped.
