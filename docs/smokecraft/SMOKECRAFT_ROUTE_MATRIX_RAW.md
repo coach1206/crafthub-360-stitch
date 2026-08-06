@@ -1,6 +1,6 @@
 # SmokeCraft Route Matrix (Prompt 1/2 — programmatically generated, full nested paths)
 
-Generated from `src/App.jsx` lines 359-675 (the `/smokecraft` parent route group) at commit `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7`, tracking real JSX nesting depth so full paths are reconstructed correctly (e.g. `golden-box/status` -> `/smokecraft/golden-box/status`), not just a flat list of relative path fragments.
+Generated from `src/App.jsx` lines 360-676 (the `/smokecraft` parent route group) at commit `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7`, tracking real JSX nesting depth so full paths are reconstructed correctly (e.g. `golden-box/status` -> `/smokecraft/golden-box/status`), not just a flat list of relative path fragments.
 
 **Total routes found in the /smokecraft group: 138**
 

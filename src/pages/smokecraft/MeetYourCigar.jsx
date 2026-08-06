@@ -6,6 +6,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import SmokeCraftImageSurface from '../../components/smokecraft/SmokeCraftImageSurface.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
@@ -87,7 +88,6 @@ export default function MeetYourCigar({ onBack, onComplete } = {}) {
   const savedViewed = journey.meetYourCigar?.viewedSections || []
   const [sectionId, setSectionId] = useState(null)
   const [viewedSections, setViewedSections] = useState(() => new Set(savedViewed))
-  const [imgStatus, setImgStatus] = useState('idle') // idle | loading | loaded | error
 
   const section = sectionId ? sections.find(s => s.id === sectionId) : null
   const allViewed = viewedSections.size === sections.length
@@ -142,10 +142,6 @@ export default function MeetYourCigar({ onBack, onComplete } = {}) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewedSections.size])
-
-  useEffect(() => {
-    setImgStatus('loading')
-  }, [])
 
   useEffect(() => {
     if (phase !== 'ready' || done || draftLocked) return
@@ -315,45 +311,12 @@ export default function MeetYourCigar({ onBack, onComplete } = {}) {
           )}
 
           {cigar && (
-            <div
-              aria-label="Cigar reference image"
-              style={{
-                background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-                minHeight: 'clamp(140px,20vh,200px)', overflow: 'hidden',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                position: 'relative',
-              }}
-            >
-              {imgStatus === 'error' ? (
-                <div style={{ padding: 24, textAlign: 'center' }}>
-                  <span style={{ fontSize: 28, color: GOLD_DIM }} aria-hidden="true">⚠</span>
-                  <p style={{ margin: '8px 0 0', fontSize: 12, color: 'rgba(229,226,225,0.5)' }}>
-                    Cigar image unavailable
-                  </p>
-                </div>
-              ) : (
-                <img
-                  src={SC_ASSETS.meetYourCigar}
-                  alt="Selected cigar reference"
-                  onLoad={() => setImgStatus('loaded')}
-                  onError={() => setImgStatus('error')}
-                  style={{
-                    width: '100%', height: '100%', maxHeight: 220,
-                    objectFit: 'cover', display: 'block',
-                    opacity: imgStatus === 'loaded' ? 1 : 0.15,
-                    transition: 'opacity 0.25s',
-                  }}
-                />
-              )}
-              {imgStatus === 'loading' && (
-                <div aria-live="polite" style={{
-                  position: 'absolute', fontSize: 12, color: 'rgba(229,226,225,0.5)',
-                  letterSpacing: '0.08em', textTransform: 'uppercase',
-                }}>
-                  Loading…
-                </div>
-              )}
-            </div>
+            <SmokeCraftImageSurface
+              surface="cigar-profile"
+              src={SC_ASSETS.meetYourCigar}
+              alt={`${cigar.name} reference image`}
+              style={{ minHeight: 'clamp(140px,20vh,200px)', maxHeight: 220 }}
+            />
           )}
 
           {section && (

@@ -21,6 +21,44 @@ const CREAM     = '#e5e2e1'
 const BORDER    = 'rgba(233,193,118,0.22)'
 const GLASS     = 'rgba(8,10,16,0.86)'
 
+// Venue Hero image surface — see the image-surface system in
+// SmokeCraftImageSurface.jsx. Not built on that shared component because
+// this surface's crop is a deliberate zoomed-in safe-zone (backgroundSize/
+// backgroundPosition into a larger source asset) rather than a plain
+// object-fit render; a hidden probe <img> still gives it a real error state.
+function VenueHeroSurface({ src }) {
+  const [errored, setErrored] = useState(false)
+  return (
+    <div
+      role="img"
+      aria-label="Cigar and whiskey — SmokeCraft Venue Selection"
+      style={{
+        width: '100%', maxWidth: 480, aspectRatio: '355 / 190', margin: '0 auto',
+        borderRadius: 12, boxShadow: '0 8px 24px rgba(0,0,0,0.5)', overflow: 'hidden',
+        position: 'relative',
+        background: GLASS, border: `1px solid ${BORDER}`,
+        backgroundImage: errored ? 'none' : `url(${src})`,
+        backgroundSize: '432.68% 538.95%', backgroundPosition: '67.32% 9.59%',
+      }}
+    >
+      <img
+        src={src}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        onError={() => setErrored(true)}
+        style={{ position: 'absolute', width: 1, height: 1, opacity: 0, pointerEvents: 'none' }}
+      />
+      {errored && (
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+          <span style={{ fontSize: 24, color: GOLD_DIM }} aria-hidden="true">⚠</span>
+          <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.5)' }}>Image unavailable</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function VenueCrest({ name, selected }) {
   return (
     <div
@@ -217,16 +255,14 @@ export default function VenueSelect() {
       }}>
         <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-          <div
-            role="img"
-            aria-label="Cigar and whiskey — SmokeCraft Venue Selection"
-            style={{
-              width: '100%', maxWidth: 480, aspectRatio: '355 / 190', margin: '0 auto',
-              borderRadius: 12, boxShadow: '0 8px 24px rgba(0,0,0,0.5)', overflow: 'hidden',
-              backgroundImage: `url(${SC_ASSETS.venueSelect})`,
-              backgroundSize: '432.68% 538.95%', backgroundPosition: '67.32% 9.59%',
-            }}
-          />
+          {/* Venue Hero (16:9-class) surface. The exact backgroundSize/
+              backgroundPosition crop below is an approved, deliberate
+              safe-zone selection from the source asset — preserved exactly
+              per the image-surface safety rule (layout controls the image,
+              never a destructive recrop). A hidden probe <img> gives this
+              surface a real error state (falls back to a plain panel if the
+              approved asset fails to load) without altering that crop. */}
+          <VenueHeroSurface src={SC_ASSETS.venueSelect} />
 
           {phase === 'loading' && (
             <div role="status" aria-live="polite" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>

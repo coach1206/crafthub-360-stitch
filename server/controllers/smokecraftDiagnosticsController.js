@@ -30,6 +30,7 @@ import { startupState } from '../state/startupState.js'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST = path.resolve(__dirname, '../../dist')
 const BUILD_MANIFEST_PATH = path.join(CLIENT_DIST, 'build-manifest.json')
+const GAME_MANIFEST_PATH = path.resolve(__dirname, '../../docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')
 
 function readBuildManifest() {
   try {
@@ -37,6 +38,40 @@ function readBuildManifest() {
   } catch {
     return null
   }
+}
+
+// JOURNEY_MANIFEST_INVALID (Phase 19) — a real, cheap, checkable structural
+// sanity check on the same build-generated canonical journey manifest that
+// scripts/validateSmokecraftManifest.mjs already enforces at build time
+// (see that script for the full, stricter check set). This is the runtime
+// counterpart: if a deploy somehow shipped without that build gate having
+// run (or the committed doc drifted from the shipped bundle), the owner's
+// readiness page still catches it instead of silently reporting healthy.
+// Deliberately re-reads the file fresh on every request rather than caching
+// it, so a redeploy is reflected immediately.
+function checkJourneyManifest() {
+  let manifest
+  try {
+    manifest = JSON.parse(fs.readFileSync(GAME_MANIFEST_PATH, 'utf8'))
+  } catch {
+    return { ok: false, code: 'JOURNEY_MANIFEST_INVALID', detail: 'SMOKECRAFT_GAME_MANIFEST.json missing or unreadable.' }
+  }
+  const entries = Array.isArray(manifest?.entries) ? manifest.entries : null
+  if (!entries || entries.length === 0) {
+    return { ok: false, code: 'JOURNEY_MANIFEST_INVALID', detail: 'Manifest has no entries.' }
+  }
+  if (typeof manifest.totalRoutes === 'number' && manifest.totalRoutes !== entries.length) {
+    return { ok: false, code: 'JOURNEY_MANIFEST_INVALID', detail: 'totalRoutes does not match entries length.' }
+  }
+  const ids = entries.map(e => e.screenId)
+  if (new Set(ids).size !== ids.length) {
+    return { ok: false, code: 'JOURNEY_MANIFEST_INVALID', detail: 'Duplicate screenId in manifest.' }
+  }
+  const badRoute = entries.find(e => typeof e.route !== 'string' || !e.route.startsWith('/smokecraft'))
+  if (badRoute) {
+    return { ok: false, code: 'JOURNEY_MANIFEST_INVALID', detail: 'Entry with missing/invalid route.' }
+  }
+  return { ok: true, entryCount: entries.length }
 }
 
 // Probe guest_reference — never a real learner's identity. Fixed literal,
@@ -136,6 +171,7 @@ export async function handleReadinessCheck(req, res) {
   const venue = dbConnectivity.ok ? await checkVenueReadiness(db) : { ok: false, code: 'DATABASE_UNAVAILABLE', activeVenueCount: 0 }
   const session2Read = dbConnectivity.ok && tastingDraftTable.ok ? await checkSession2DraftRead(db) : { ok: false, code: 'SESSION2_DRAFT_READ_FAILED' }
   const session2Write = dbConnectivity.ok && tastingDraftTable.ok ? await checkSession2DraftWrite(db) : { ok: false, code: 'SESSION2_DRAFT_WRITE_FAILED' }
+  const journeyManifest = checkJourneyManifest()
 
   const checks = {
     databaseConnectivity: dbConnectivity,
@@ -147,6 +183,7 @@ export async function handleReadinessCheck(req, res) {
     venueData: { ok: venue.ok, activeVenueCount: venue.activeVenueCount ?? 0, code: venue.code },
     session2DraftRead: session2Read,
     session2DraftWrite: session2Write,
+    journeyManifest,
   }
 
   // Hard failures — anything schema/db/session2-critical failing means the
@@ -159,6 +196,7 @@ export async function handleReadinessCheck(req, res) {
   if (!playerState.ok) hardFailureCodes.push('PLAYER_STATE_DEPENDENCY_FAILED')
   if (!session2Read.ok) hardFailureCodes.push('SESSION2_DRAFT_READ_FAILED')
   if (!session2Write.ok) hardFailureCodes.push('SESSION2_DRAFT_WRITE_FAILED')
+  if (!journeyManifest.ok) hardFailureCodes.push(journeyManifest.code)
 
   // Venue emptiness is a soft (degraded) failure — venue selection has an
   // explicit "Continue without venue" path (src/pages/smokecraft/
