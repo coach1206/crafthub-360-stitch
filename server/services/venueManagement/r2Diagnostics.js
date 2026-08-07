@@ -61,19 +61,21 @@ function redactProviderMessage(message) {
  * Railway's dashboard).
  */
 export function getSafeConfigReport() {
-  const provider = (process.env.STORAGE_PROVIDER || 'local').toLowerCase()
-  const bucket = process.env.STORAGE_BUCKET || ''
-  const endpoint = process.env.STORAGE_ENDPOINT || ''
-  const region = process.env.STORAGE_REGION || 'auto'
-  const accessKey = process.env.STORAGE_ACCESS_KEY_ID || ''
-  const secretKey = process.env.STORAGE_SECRET_ACCESS_KEY || ''
-
-  let endpointHostname = null
+  // Real bug fixed alongside the normalization repair: this used to
+  // re-read process.env.STORAGE_* directly, completely bypassing
+  // objectStorageAdapter.js's normalization (trim) — so this diagnostic
+  // report could show a value as present/correctly-shaped while the
+  // actual S3Client construction used a different, un-trimmed one.
+  // adapter.providerInfo() and adapter.getNormalizationReport() are the
+  // ONE source of truth for what's actually configured.
+  const info = adapter.providerInfo()
+  const norm = adapter.getNormalizationReport()
+  const provider = info.provider
+  const endpointHostname = info.endpointHostname
   let endpointFormatValid = false
   try {
-    if (endpoint) {
-      endpointHostname = new URL(endpoint).hostname
-      endpointFormatValid = provider !== 'r2' || ENDPOINT_RE.test(endpoint)
+    if (endpointHostname) {
+      endpointFormatValid = provider !== 'r2' || ENDPOINT_RE.test(`https://${endpointHostname}`)
     }
   } catch {
     endpointFormatValid = false
@@ -83,14 +85,25 @@ export function getSafeConfigReport() {
     provider,
     endpointHostname,
     endpointFormatValid,
-    endpointPresent: !!endpoint,
-    region,
-    regionValid: region === 'auto',
-    bucket: bucket || null,
-    accessKeyPresent: !!accessKey,
-    accessKeyLength: accessKey.length,
-    secretKeyPresent: !!secretKey,
-    secretKeyLength: secretKey.length,
+    endpointPresent: info.endpointConfigured,
+    region: info.region,
+    regionValid: info.region === 'auto',
+    bucket: info.bucket,
+    accessKeyPresent: norm.STORAGE_ACCESS_KEY_ID.normalizedLength > 0,
+    accessKeyLength: norm.STORAGE_ACCESS_KEY_ID.normalizedLength,
+    // Cloudflare R2 Access Key IDs are 32 characters — an informational
+    // flag, not a hard block (a legitimately different-length credential
+    // type should never be rejected outright), but exactly the signal
+    // that would have caught "33 chars, hadSurroundingWhitespace: true"
+    // immediately instead of the owner re-pasting the same value.
+    accessKeyLengthPlausible: norm.STORAGE_ACCESS_KEY_ID.normalizedLength === 0 || norm.STORAGE_ACCESS_KEY_ID.normalizedLength === 32,
+    secretKeyPresent: norm.STORAGE_SECRET_ACCESS_KEY.normalizedLength > 0,
+    secretKeyLength: norm.STORAGE_SECRET_ACCESS_KEY.normalizedLength,
+    // Credential-normalization diagnostic (never a credential value) —
+    // this is the exact evidence that would have shown
+    // STORAGE_ACCESS_KEY_ID's real length/whitespace problem instead of
+    // the owner re-pasting the same correct value repeatedly.
+    normalization: norm,
   }
 }
 

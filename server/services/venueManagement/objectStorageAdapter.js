@@ -25,14 +25,63 @@
 import crypto from 'crypto'
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadBucketCommand, HeadObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3'
 
-const PROVIDER   = (process.env.STORAGE_PROVIDER || 'local').toLowerCase()
-const BUCKET     = process.env.STORAGE_BUCKET || ''
-const KEY_PREFIX = process.env.STORAGE_KEY_PREFIX || (process.env.NODE_ENV === 'production' ? 'production' : 'staging')
-const REGION     = process.env.STORAGE_REGION || 'auto'
-const ENDPOINT   = process.env.STORAGE_ENDPOINT || '' // e.g. https://<accountid>.r2.cloudflarestorage.com
-const ACCESS_KEY = process.env.STORAGE_ACCESS_KEY_ID || ''
-const SECRET_KEY = process.env.STORAGE_SECRET_ACCESS_KEY || ''
-const CDN_URL    = process.env.STORAGE_CDN_URL || '' // public CDN domain in front of the bucket
+/**
+ * Credential normalization (R2 credential normalization fix). Real
+ * production incident: the owner repeatedly re-pasted a correct
+ * Cloudflare R2 Access Key ID into Railway, and the container runtime
+ * still presented it with one surrounding whitespace character —
+ * Railway's env-var UI/transport can introduce a stray leading/trailing
+ * space or newline that is invisible when copy-pasting but breaks a
+ * signature-based credential every time. `.trim()` ONLY strips
+ * leading/trailing whitespace — it never touches internal characters,
+ * so a credential that's legitimately supposed to contain no whitespace
+ * anywhere is unaffected either way, and this can never silently
+ * corrupt a value.
+ */
+function normalizeEnvString(raw) {
+  const value = raw ?? ''
+  const trimmed = value.trim()
+  return {
+    value: trimmed,
+    rawLength: value.length,
+    normalizedLength: trimmed.length,
+    hadSurroundingWhitespace: value.length !== trimmed.length,
+  }
+}
+
+const PROVIDER_N   = normalizeEnvString(process.env.STORAGE_PROVIDER)
+const BUCKET_N     = normalizeEnvString(process.env.STORAGE_BUCKET)
+const KEY_PREFIX_N = normalizeEnvString(process.env.STORAGE_KEY_PREFIX)
+const REGION_N      = normalizeEnvString(process.env.STORAGE_REGION)
+const ENDPOINT_N    = normalizeEnvString(process.env.STORAGE_ENDPOINT) // e.g. https://<accountid>.r2.cloudflarestorage.com
+const ACCESS_KEY_N  = normalizeEnvString(process.env.STORAGE_ACCESS_KEY_ID)
+const SECRET_KEY_N  = normalizeEnvString(process.env.STORAGE_SECRET_ACCESS_KEY)
+const CDN_URL_N     = normalizeEnvString(process.env.STORAGE_CDN_URL) // public CDN domain in front of the bucket
+
+const PROVIDER   = (PROVIDER_N.value || 'local').toLowerCase()
+const BUCKET     = BUCKET_N.value
+const KEY_PREFIX = KEY_PREFIX_N.value || (process.env.NODE_ENV === 'production' ? 'production' : 'staging')
+const REGION     = REGION_N.value || 'auto'
+const ENDPOINT   = ENDPOINT_N.value
+const ACCESS_KEY = ACCESS_KEY_N.value
+const SECRET_KEY = SECRET_KEY_N.value
+const CDN_URL    = CDN_URL_N.value
+
+/**
+ * Safe (no credential values) diagnostic showing exactly what
+ * normalization did to each configured value — this is the evidence
+ * that would have shown STORAGE_ACCESS_KEY_ID's real length/whitespace
+ * problem immediately instead of the owner re-pasting the same correct
+ * value repeatedly.
+ */
+export function getNormalizationReport() {
+  const fields = { STORAGE_PROVIDER: PROVIDER_N, STORAGE_BUCKET: BUCKET_N, STORAGE_KEY_PREFIX: KEY_PREFIX_N, STORAGE_REGION: REGION_N, STORAGE_ENDPOINT: ENDPOINT_N, STORAGE_ACCESS_KEY_ID: ACCESS_KEY_N, STORAGE_SECRET_ACCESS_KEY: SECRET_KEY_N, STORAGE_CDN_URL: CDN_URL_N }
+  const report = {}
+  for (const [name, n] of Object.entries(fields)) {
+    report[name] = { rawLength: n.rawLength, normalizedLength: n.normalizedLength, hadSurroundingWhitespace: n.hadSurroundingWhitespace }
+  }
+  return report
+}
 
 const EXT_BY_MIME = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
 
@@ -108,6 +157,8 @@ export function providerInfo() {
     bucket: BUCKET || null,
     keyPrefix: KEY_PREFIX,
     endpointConfigured: !!ENDPOINT,
+    endpointHostname: safeEndpointHostname(),
+    region: REGION,
     cdnConfigured: !!CDN_URL,
     activated: isActivated(),
   }

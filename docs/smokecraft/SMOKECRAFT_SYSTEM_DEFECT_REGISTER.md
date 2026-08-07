@@ -2431,3 +2431,63 @@ here; Railway production credential status remains unverified from
 here.
 
 Highest SC-D number is now SC-D074.
+
+## SmokeCraft R2 credential normalization
+
+Starting HEAD: `1fde840c`. Production evidence provided directly:
+`STORAGE_ACCESS_KEY_ID { length: 33, hasWhitespace: true }`,
+`STORAGE_SECRET_ACCESS_KEY { length: 64, hasWhitespace: false }` — the
+owner repeatedly re-pasted a correct Cloudflare R2 Access Key ID into
+Railway, and the container runtime kept presenting it with one
+surrounding whitespace character (Railway's env-var UI/transport can
+introduce a stray leading/trailing space or newline invisible when
+copy-pasting).
+
+**Found and fixed SC-D075**: none of `STORAGE_ACCESS_KEY_ID`,
+`STORAGE_SECRET_ACCESS_KEY`, `STORAGE_ENDPOINT`, `STORAGE_REGION`,
+`STORAGE_BUCKET`, `STORAGE_PROVIDER`, `STORAGE_KEY_PREFIX`, or
+`STORAGE_CDN_URL` were ever normalized before use in
+`objectStorageAdapter.js` — every one was read straight from
+`process.env` and used as-is to construct the `S3Client` and validate
+config. Added `normalizeEnvString()`, applied to all eight at module
+load, `.trim()` only (never touches internal characters — a credential
+that's legitimately supposed to contain no whitespace anywhere is
+unaffected either way). `client()`/`buildClient()` already referenced
+these values by their existing const names, so every S3Client
+construction path picks up the fix automatically with no separate
+"remember to trim before the client" step to forget.
+
+Added `getNormalizationReport()` — safe, non-secret diagnostic
+(`rawLength`/`normalizedLength`/`hadSurroundingWhitespace` per field,
+never a value) — this is the exact evidence that would have shown the
+33-char/whitespace problem on the first diagnose run instead of the
+owner re-pasting the same correct value repeatedly. Wired into
+`r2Diagnostics.js`'s `getSafeConfigReport()` (also fixed a related real
+bug found in the process: that function was independently re-reading
+raw, un-normalized `process.env.STORAGE_*` directly, bypassing the
+adapter's config entirely — now delegates to
+`adapter.providerInfo()`/`adapter.getNormalizationReport()`, the one
+source of truth). Added `accessKeyLengthPlausible` (informational,
+32-char Cloudflare R2 Access Key ID length check — never a hard block,
+since a legitimately different-length credential type must never be
+rejected outright).
+
+`scripts/verifySmokecraftR2Diagnostics.mjs`: 51/51 (up from 39) —
+leading space, trailing space (the exact 33-char real-world incident
+shape), trailing newline, tab, internal-character preservation, clean-
+value passthrough, and secret-redaction all proven directly against
+`getNormalizationReport()`'s real output in fresh subprocesses (env is
+read once at module load, matching real production — same pattern
+already established for every other env-sensitive test in this file).
+Fixing `getSafeConfigReport()`'s duplication broke 5 pre-existing
+same-process tests that mutated `process.env` mid-process and expected
+a live re-read; converted to the same fresh-subprocess pattern, which
+is itself a more accurate test of real deployment behavior.
+
+62/62 fresh-player journey, 85/85 static-gameplay detector, production
+build, and the R2 sync dry-run (81/81) all re-run clean. No live R2
+upload/HEAD/read/delete performed in this sandbox — no credentials
+here; Railway production credential status remains unverified from
+here.
+
+Highest SC-D number is now SC-D075.

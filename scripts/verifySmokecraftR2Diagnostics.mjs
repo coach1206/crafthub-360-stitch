@@ -94,65 +94,73 @@ async function freshImport() {
 }
 
 // ── getSafeConfigReport: redaction + endpoint/region validation ────────
+// objectStorageAdapter.js computes its env-derived config once at module
+// load (correct real-production behavior — env doesn't change while a
+// container runs), so each scenario below needs a genuinely fresh
+// process, exactly like the other module-caching-sensitive tests in
+// this file.
 {
-  const savedEnv = { ...process.env }
-  function setEnv(overrides) {
-    for (const k of ['STORAGE_PROVIDER', 'STORAGE_BUCKET', 'STORAGE_ENDPOINT', 'STORAGE_REGION', 'STORAGE_ACCESS_KEY_ID', 'STORAGE_SECRET_ACCESS_KEY']) delete process.env[k]
-    Object.assign(process.env, overrides)
+  const { execSync } = await import('child_process')
+  const { writeFileSync, unlinkSync } = await import('fs')
+  const tmpScript = resolve('scripts/_tmp_config_report_probe.mjs')
+  writeFileSync(tmpScript, `
+    import { getSafeConfigReport } from '../server/services/venueManagement/r2Diagnostics.js'
+    console.log(JSON.stringify(getSafeConfigReport()))
+  `)
+  function runWithEnv(env) {
+    let output = ''
+    try {
+      output = execSync(`node ${tmpScript}`, { encoding: 'utf8', env: { ...process.env, ...env } })
+    } catch (e) { output = (e.stdout || '') + (e.stderr || '') }
+    try { return JSON.parse(output.trim().split('\n').pop()) } catch { return null }
   }
 
   // Valid R2 config shape.
-  setEnv({
-    STORAGE_PROVIDER: 'r2',
-    STORAGE_BUCKET: 'crafthub360-production',
-    STORAGE_ENDPOINT: 'https://' + 'a'.repeat(32) + '.r2.cloudflarestorage.com',
-    STORAGE_REGION: 'auto',
-    STORAGE_ACCESS_KEY_ID: 'AKIA-fake-access-key-value',
-    STORAGE_SECRET_ACCESS_KEY: 'fake-secret-value-not-real',
-  })
   {
-    const { getSafeConfigReport } = await freshImport()
-    const report = getSafeConfigReport()
-    check('valid R2 endpoint format accepted', report.endpointFormatValid === true)
-    check('region "auto" accepted as valid', report.regionValid === true)
-    check('bucket name reported (not a secret)', report.bucket === 'crafthub360-production')
-    check('access key presence reported without value', report.accessKeyPresent === true && report.accessKeyLength > 0)
-    check('secret key presence reported without value', report.secretKeyPresent === true && report.secretKeyLength > 0)
+    const report = runWithEnv({
+      STORAGE_PROVIDER: 'r2',
+      STORAGE_BUCKET: 'crafthub360-production',
+      STORAGE_ENDPOINT: 'https://' + 'a'.repeat(32) + '.r2.cloudflarestorage.com',
+      STORAGE_REGION: 'auto',
+      STORAGE_ACCESS_KEY_ID: 'AKIA-fake-access-key-value',
+      STORAGE_SECRET_ACCESS_KEY: 'fake-secret-value-not-real',
+    })
+    check('valid R2 endpoint format accepted', report?.endpointFormatValid === true, JSON.stringify(report))
+    check('region "auto" accepted as valid', report?.regionValid === true)
+    check('bucket name reported (not a secret)', report?.bucket === 'crafthub360-production')
+    check('access key presence reported without value', report?.accessKeyPresent === true && report?.accessKeyLength > 0)
+    check('secret key presence reported without value', report?.secretKeyPresent === true && report?.secretKeyLength > 0)
     check('report never contains the literal secret value', JSON.stringify(report).indexOf('fake-secret-value-not-real') === -1)
     check('report never contains the literal access key value', JSON.stringify(report).indexOf('AKIA-fake-access-key-value') === -1)
   }
 
   // Malformed endpoint (public R2.dev URL mistakenly used as the S3 API endpoint).
-  setEnv({
-    STORAGE_PROVIDER: 'r2',
-    STORAGE_BUCKET: 'crafthub360-production',
-    STORAGE_ENDPOINT: 'https://pub-1234567890abcdef.r2.dev',
-    STORAGE_REGION: 'auto',
-    STORAGE_ACCESS_KEY_ID: 'x',
-    STORAGE_SECRET_ACCESS_KEY: 'y',
-  })
   {
-    const { getSafeConfigReport } = await freshImport()
-    const report = getSafeConfigReport()
-    check('malformed/public endpoint correctly flagged invalid', report.endpointFormatValid === false)
+    const report = runWithEnv({
+      STORAGE_PROVIDER: 'r2',
+      STORAGE_BUCKET: 'crafthub360-production',
+      STORAGE_ENDPOINT: 'https://pub-1234567890abcdef.r2.dev',
+      STORAGE_REGION: 'auto',
+      STORAGE_ACCESS_KEY_ID: 'x',
+      STORAGE_SECRET_ACCESS_KEY: 'y',
+    })
+    check('malformed/public endpoint correctly flagged invalid', report?.endpointFormatValid === false, JSON.stringify(report))
   }
 
   // Wrong region.
-  setEnv({
-    STORAGE_PROVIDER: 'r2',
-    STORAGE_BUCKET: 'crafthub360-production',
-    STORAGE_ENDPOINT: 'https://' + 'a'.repeat(32) + '.r2.cloudflarestorage.com',
-    STORAGE_REGION: 'us-east-1',
-    STORAGE_ACCESS_KEY_ID: 'x',
-    STORAGE_SECRET_ACCESS_KEY: 'y',
-  })
   {
-    const { getSafeConfigReport } = await freshImport()
-    const report = getSafeConfigReport()
-    check('non-"auto" region correctly flagged invalid for R2', report.regionValid === false)
+    const report = runWithEnv({
+      STORAGE_PROVIDER: 'r2',
+      STORAGE_BUCKET: 'crafthub360-production',
+      STORAGE_ENDPOINT: 'https://' + 'a'.repeat(32) + '.r2.cloudflarestorage.com',
+      STORAGE_REGION: 'us-east-1',
+      STORAGE_ACCESS_KEY_ID: 'x',
+      STORAGE_SECRET_ACCESS_KEY: 'y',
+    })
+    check('non-"auto" region correctly flagged invalid for R2', report?.regionValid === false, JSON.stringify(report))
   }
 
-  process.env = savedEnv
+  try { unlinkSync(tmpScript) } catch {}
 }
 
 // ── runR2Preflight: aborts cleanly (R2_CONFIGURATION_MISSING) when not activated ──
@@ -488,6 +496,105 @@ async function freshImport() {
 
   process.env = savedEnv
   server.close()
+}
+
+// ── Credential normalization: leading/trailing whitespace, newline, tab,
+// internal-character preservation, clean-value passthrough, secret
+// redaction. Real production incident this exists to prevent recurring:
+// Railway repeatedly presented STORAGE_ACCESS_KEY_ID with one
+// surrounding whitespace character despite the owner re-pasting the
+// correct value. Run in fresh subprocesses (module-load-once config,
+// same as every other env-sensitive test in this file). ────────────────
+{
+  const { execSync } = await import('child_process')
+  const { writeFileSync, unlinkSync } = await import('fs')
+  const tmpScript = resolve('scripts/_tmp_normalization_probe.mjs')
+  writeFileSync(tmpScript, `
+    import { getNormalizationReport } from '../server/services/venueManagement/objectStorageAdapter.js'
+    console.log(JSON.stringify(getNormalizationReport()))
+  `)
+  function runWithEnv(env) {
+    let output = ''
+    try {
+      output = execSync(`node ${tmpScript}`, { encoding: 'utf8', env: { ...process.env, ...env } })
+    } catch (e) { output = (e.stdout || '') + (e.stderr || '') }
+    try { return JSON.parse(output.trim().split('\n').pop()) } catch { return null }
+  }
+
+  const CLEAN_KEY = 'a'.repeat(32)
+  const CLEAN_SECRET = 'b'.repeat(64)
+
+  // Leading space.
+  {
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: ' ' + CLEAN_KEY })
+    const f = r?.STORAGE_ACCESS_KEY_ID
+    check('leading space is removed', f?.normalizedLength === CLEAN_KEY.length && f?.hadSurroundingWhitespace === true, JSON.stringify(f))
+  }
+  // Trailing space — the exact real-world incident shape (33 chars, one trailing space).
+  {
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: CLEAN_KEY + ' ' })
+    const f = r?.STORAGE_ACCESS_KEY_ID
+    check('trailing space is removed', f?.rawLength === 33 && f?.normalizedLength === 32 && f?.hadSurroundingWhitespace === true, JSON.stringify(f))
+  }
+  // Trailing newline (a common copy-paste/env-transport artifact).
+  {
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: CLEAN_KEY + '\n' })
+    const f = r?.STORAGE_ACCESS_KEY_ID
+    check('trailing newline is removed', f?.normalizedLength === CLEAN_KEY.length && f?.hadSurroundingWhitespace === true, JSON.stringify(f))
+  }
+  // Tab.
+  {
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: '\t' + CLEAN_KEY + '\t' })
+    const f = r?.STORAGE_ACCESS_KEY_ID
+    check('tab (leading and trailing) is removed', f?.normalizedLength === CLEAN_KEY.length && f?.hadSurroundingWhitespace === true, JSON.stringify(f))
+  }
+  // Internal characters preserved — a hyphen/space-shaped internal value must not be collapsed or altered.
+  {
+    const withInternalHyphens = 'ab-cd-ef-' + 'g'.repeat(23) // 32 chars total, internal hyphens
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: ' ' + withInternalHyphens + ' ' })
+    const f = r?.STORAGE_ACCESS_KEY_ID
+    check('internal characters (e.g. hyphens) are preserved, only surrounding whitespace stripped', f?.normalizedLength === withInternalHyphens.length, JSON.stringify(f))
+  }
+  // Valid clean credentials remain unchanged.
+  {
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: CLEAN_KEY, STORAGE_SECRET_ACCESS_KEY: CLEAN_SECRET })
+    const k = r?.STORAGE_ACCESS_KEY_ID
+    const s = r?.STORAGE_SECRET_ACCESS_KEY
+    check('valid clean Access Key ID is unchanged (no whitespace detected, length preserved)', k?.rawLength === 32 && k?.normalizedLength === 32 && k?.hadSurroundingWhitespace === false)
+    check('valid clean Secret Access Key is unchanged (no whitespace detected, length preserved)', s?.rawLength === 64 && s?.normalizedLength === 64 && s?.hadSurroundingWhitespace === false)
+  }
+  // Secrets are never logged — the normalization report carries only lengths/booleans, never values, for every field including the secret key.
+  {
+    const r = runWithEnv({ STORAGE_ACCESS_KEY_ID: ' ' + CLEAN_KEY + ' ', STORAGE_SECRET_ACCESS_KEY: ' ' + CLEAN_SECRET + ' ' })
+    const serialized = JSON.stringify(r)
+    check('normalization report never contains the access key value', serialized.indexOf(CLEAN_KEY) === -1)
+    check('normalization report never contains the secret key value', serialized.indexOf(CLEAN_SECRET) === -1)
+    check('normalization report exposes only rawLength/normalizedLength/hadSurroundingWhitespace fields', Object.keys(r.STORAGE_ACCESS_KEY_ID).sort().join(',') === 'hadSurroundingWhitespace,normalizedLength,rawLength')
+  }
+  // End-to-end: the real S3Client is actually constructed from the TRIMMED value, not the raw one — proven via getSafeConfigReport()'s accessKeyLength (which reads the normalized value used everywhere the client is built).
+  {
+    const tmpScript2 = resolve('scripts/_tmp_normalized_client_probe.mjs')
+    writeFileSync(tmpScript2, `
+      import { getSafeConfigReport } from '../server/services/venueManagement/r2Diagnostics.js'
+      console.log(JSON.stringify(getSafeConfigReport()))
+    `)
+    let output = ''
+    try {
+      output = execSync(`node ${tmpScript2}`, {
+        encoding: 'utf8',
+        env: { ...process.env, STORAGE_PROVIDER: 'r2', STORAGE_BUCKET: 'crafthub360-production', STORAGE_ENDPOINT: 'https://' + 'a'.repeat(32) + '.r2.cloudflarestorage.com', STORAGE_REGION: 'auto', STORAGE_ACCESS_KEY_ID: ' ' + CLEAN_KEY + ' ', STORAGE_SECRET_ACCESS_KEY: CLEAN_SECRET + '\n' },
+      })
+    } catch (e) { output = (e.stdout || '') + (e.stderr || '') } finally { try { unlinkSync(tmpScript2) } catch {} }
+    let report = null
+    try { report = JSON.parse(output.trim().split('\n').pop()) } catch {}
+    check(
+      'the value actually used everywhere the S3Client is constructed is the trimmed one (accessKeyLength reflects normalizedLength, not rawLength)',
+      report?.accessKeyLength === 32 && report?.accessKeyLengthPlausible === true,
+      JSON.stringify(report)
+    )
+  }
+
+  try { unlinkSync(tmpScript) } catch {}
 }
 
 console.log(`\n=== RESULT: ${fail === 0 ? 'PASS' : 'FAIL'} (${fail} check${fail === 1 ? '' : 's'} failed) ===`)
