@@ -1,0 +1,268 @@
+[
+  {
+    "index": 1,
+    "at": "2026-08-07T22:16:24.189Z",
+    "action": "goto /smokecraft/enroll (fresh, unseeded)",
+    "url": "http://localhost:3001/smokecraft/enroll"
+  },
+  {
+    "index": 2,
+    "at": "2026-08-07T22:16:25.227Z",
+    "action": "Explore as Guest",
+    "url": "http://localhost:3001/smokecraft/identity"
+  },
+  {
+    "index": 3,
+    "at": "2026-08-07T22:16:25.362Z",
+    "action": "Identity Begin",
+    "url": "http://localhost:3001/smokecraft/venue-select"
+  },
+  {
+    "index": 4,
+    "at": "2026-08-07T22:16:25.643Z",
+    "action": "Venue select + Continue",
+    "url": "http://localhost:3001/smokecraft/welcome"
+  },
+  {
+    "index": 5,
+    "at": "2026-08-07T22:16:27.307Z",
+    "action": "Welcome Begin Experience",
+    "url": "http://localhost:3001/smokecraft/golden-box"
+  },
+  {
+    "index": 6,
+    "at": "2026-08-07T22:16:29.934Z",
+    "action": "generic-advance on /smokecraft/golden-box",
+    "beforeUrl": "http://localhost:3001/smokecraft/golden-box",
+    "afterUrl": "http://localhost:3001/smokecraft/mentor-selection",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · production← BackYour Journey125 XPI have read, understood, and agree to follow the Golden Box Rules.Next: Mentor Selection → "
+  },
+  {
+    "index": 7,
+    "at": "2026-08-07T22:16:45.568Z",
+    "action": "generic-advance on /smokecraft/mentor-selection",
+    "beforeUrl": "http://localhost:3001/smokecraft/mentor-selection",
+    "afterUrl": "http://localhost:3001/smokecraft/seed-soil",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionSmokeCraft JourneyMentor SelectionSelect up to 2 master mentors from the world's great tobacco traditions. Each brings a legacy, growi"
+  },
+  {
+    "index": 8,
+    "at": "2026-08-07T22:16:49.236Z",
+    "action": "generic-advance on /smokecraft/seed-soil",
+    "beforeUrl": "http://localhost:3001/smokecraft/seed-soil",
+    "afterUrl": "http://localhost:3001/smokecraft/humidor-match",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productioniiiiiiiiTasting NotesTerroir, Anatomy & Quiz ▾← BackContinue to Humidor Match → "
+  },
+  {
+    "index": 9,
+    "at": "2026-08-07T22:17:02.002Z",
+    "action": "generic-advance on /smokecraft/humidor-match",
+    "beforeUrl": "http://localhost:3001/smokecraft/humidor-match",
+    "afterUrl": "http://localhost:3001/smokecraft/meet-your-cigar",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 1/6·Session 2/27Session PreparationLocal PreviewSession 2 of 27 · Phase 1 of 6Humidor MatchLearn how storage temperature, humidi"
+  },
+  {
+    "index": 10,
+    "at": "2026-08-07T22:17:06.088Z",
+    "action": "generic-advance on /smokecraft/meet-your-cigar",
+    "beforeUrl": "http://localhost:3001/smokecraft/meet-your-cigar",
+    "afterUrl": "http://localhost:3001/smokecraft/terroir",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 1/6·Session 3/27Session PreparationLocal PreviewSmokeCraft 360 — Meet Your CigarPadron 1964 SeriesBrandBlendWrapperBinderFillerF"
+  },
+  {
+    "index": 11,
+    "at": "2026-08-07T22:17:10.574Z",
+    "action": "generic-advance on /smokecraft/terroir",
+    "beforeUrl": "http://localhost:3001/smokecraft/terroir",
+    "afterUrl": "http://localhost:3001/smokecraft/format",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 1/6·Session 4/27Session PreparationLocal PreviewSmokeCraft 360 — TerroirExplore the TerroirCountryRegionSoilClimateGrowing Condi"
+  },
+  {
+    "index": 12,
+    "at": "2026-08-07T22:17:14.382Z",
+    "action": "generic-advance on /smokecraft/format",
+    "beforeUrl": "http://localhost:3001/smokecraft/format",
+    "afterUrl": "http://localhost:3001/smokecraft/request-purchase",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 1/6·Session 5/27Session PreparationLocal PreviewRequired: Order these shapes from shortest to longest burn time#1Gordo↑↓#2Corona"
+  },
+  {
+    "index": 13,
+    "at": "2026-08-07T22:17:17.991Z",
+    "action": "generic-advance on /smokecraft/request-purchase",
+    "beforeUrl": "http://localhost:3001/smokecraft/request-purchase",
+    "afterUrl": "http://localhost:3001/smokecraft/cut-toast-light",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionYour SelectionPadron 1964 SeriesOrigin: NicaraguaWrapper: Natural MaduroStrength: Medium-FullCocoa, earth, toasted nutsWhy This Match "
+  },
+  {
+    "index": 14,
+    "at": "2026-08-07T22:17:21.921Z",
+    "action": "generic-advance on /smokecraft/cut-toast-light",
+    "beforeUrl": "http://localhost:3001/smokecraft/cut-toast-light",
+    "afterUrl": "http://localhost:3001/smokecraft/lighting-tutorial",
+    "advanced": true,
+    "clickedPrimary": false,
+    "bodySnippet": " Build: local · productionPhase 1/6·Session 6/27Session PreparationLocal PreviewLearn Why ▼Required: Match each cut method to its characteristicStraight Cut— Se"
+  },
+  {
+    "index": 15,
+    "at": "2026-08-07T22:17:28.241Z",
+    "action": "generic-advance on /smokecraft/lighting-tutorial",
+    "beforeUrl": "http://localhost:3001/smokecraft/lighting-tutorial",
+    "afterUrl": "http://localhost:3001/smokecraft/first-third",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 1/6·Session 7/27Session PreparationLocal PreviewSmokeCraft 360 — Lighting TutorialToasting the FootStep 1 of 8 · 13% viewed🎞Dem"
+  },
+  {
+    "index": 16,
+    "at": "2026-08-07T22:17:31.852Z",
+    "action": "generic-advance on /smokecraft/first-third",
+    "beforeUrl": "http://localhost:3001/smokecraft/first-third",
+    "afterUrl": "http://localhost:3001/smokecraft/flavor-memory",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 2/6·Session 8/27First ThirdLocal PreviewFirst Third Observations✓ SavediContinue to Second Third → "
+  },
+  {
+    "index": 17,
+    "at": "2026-08-07T22:17:35.505Z",
+    "action": "generic-advance on /smokecraft/flavor-memory",
+    "beforeUrl": "http://localhost:3001/smokecraft/flavor-memory",
+    "afterUrl": "http://localhost:3001/smokecraft/pairing-lab",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 2/6·Session 10/27First ThirdLocal PreviewEarthWoodSpiceCocoaCoffeeSweetNutsFloralPerceptionSavedIntensity3Body3Strength3Personal"
+  },
+  {
+    "index": 18,
+    "at": "2026-08-07T22:17:39.229Z",
+    "action": "generic-advance on /smokecraft/pairing-lab",
+    "beforeUrl": "http://localhost:3001/smokecraft/pairing-lab",
+    "afterUrl": "http://localhost:3001/smokecraft/second-third",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 2/6·Session 11/27First ThirdLocal PreviewSmokeCraft 360 — Pairing LabCigar ProfileShapeRobustoToroChurchillFiguradoWrapperConnec"
+  },
+  {
+    "index": 19,
+    "at": "2026-08-07T22:17:42.751Z",
+    "action": "generic-advance on /smokecraft/second-third",
+    "beforeUrl": "http://localhost:3001/smokecraft/second-third",
+    "afterUrl": "http://localhost:3001/smokecraft/mentor-commentary",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 3/6·Session 12/27Second ThirdLocal PreviewSecond Third Observations✓ SavediContinue to Flavor Memory → "
+  },
+  {
+    "index": 20,
+    "at": "2026-08-07T22:17:46.323Z",
+    "action": "generic-advance on /smokecraft/mentor-commentary",
+    "beforeUrl": "http://localhost:3001/smokecraft/mentor-commentary",
+    "afterUrl": "http://localhost:3001/smokecraft/knowledge-drop",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 3/6·Session 14/27Second ThirdLocal PreviewSmokeCraft 360 — Mentor CommentaryDon AlejandroCommentary reviewed · Stage: Flavor Evo"
+  },
+  {
+    "index": 21,
+    "at": "2026-08-07T22:17:51.118Z",
+    "action": "generic-advance on /smokecraft/knowledge-drop",
+    "beforeUrl": "http://localhost:3001/smokecraft/knowledge-drop",
+    "afterUrl": "http://localhost:3001/smokecraft/final-third",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 3/6·Session 15/27Second ThirdLocal PreviewSmokeCraft 360 — Knowledge DropChoose a TopicTobaccoFermentationAgingFactory Story0 of"
+  },
+  {
+    "index": 22,
+    "at": "2026-08-07T22:17:54.625Z",
+    "action": "generic-advance on /smokecraft/final-third",
+    "beforeUrl": "http://localhost:3001/smokecraft/final-third",
+    "afterUrl": "http://localhost:3001/smokecraft/scorecard",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 4/6·Session 16/27Final ThirdLocal PreviewFinal Third Observations✓ SavediContinue to Scorecard → "
+  },
+  {
+    "index": 23,
+    "at": "2026-08-07T22:17:58.390Z",
+    "action": "generic-advance on /smokecraft/scorecard",
+    "beforeUrl": "http://localhost:3001/smokecraft/scorecard",
+    "afterUrl": "http://localhost:3001/smokecraft/ai-summary",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 5/6·Session 19/27ReflectionLocal Preview—— · —Rating CategoriesAppearanceColor, veins, oiliness, seam—/5ConstructionFeel, weight"
+  },
+  {
+    "index": 24,
+    "at": "2026-08-07T22:18:02.110Z",
+    "action": "generic-advance on /smokecraft/ai-summary",
+    "beforeUrl": "http://localhost:3001/smokecraft/ai-summary",
+    "afterUrl": "http://localhost:3001/smokecraft/pairing-recommendations",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 21/27ResultsLocal PreviewSmokeCraft 360 — Session SummaryYour Session SummaryRule-based summary generated from your "
+  },
+  {
+    "index": 25,
+    "at": "2026-08-07T22:18:08.115Z",
+    "action": "generic-advance on /smokecraft/pairing-recommendations",
+    "beforeUrl": "http://localhost:3001/smokecraft/pairing-recommendations",
+    "afterUrl": "http://localhost:3001/smokecraft/passport-stamp",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 22/27ResultsLocal PreviewSmokeCraft 360 — Personalized Pairing RecommendationsNot setMedium-FullRumNatural Maduro100"
+  },
+  {
+    "index": 26,
+    "at": "2026-08-07T22:18:10.738Z",
+    "action": "generic-advance on /smokecraft/passport-stamp",
+    "beforeUrl": "http://localhost:3001/smokecraft/passport-stamp",
+    "afterUrl": "http://localhost:3001/smokecraft/final-review",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 23/27ResultsLocal PreviewiClaim Your Stamp← BackContinue to Completed Scorecard → "
+  },
+  {
+    "index": 27,
+    "at": "2026-08-07T22:18:14.309Z",
+    "action": "generic-advance on /smokecraft/final-review",
+    "beforeUrl": "http://localhost:3001/smokecraft/final-review",
+    "afterUrl": "http://localhost:3001/smokecraft/rewards",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 24/27ResultsLocal PreviewiContinue to Rewards → "
+  },
+  {
+    "index": 28,
+    "at": "2026-08-07T22:18:17.313Z",
+    "action": "generic-advance on /smokecraft/rewards",
+    "beforeUrl": "http://localhost:3001/smokecraft/rewards",
+    "afterUrl": "http://localhost:3001/smokecraft/session-complete",
+    "advanced": true,
+    "clickedPrimary": true,
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 25/27ResultsLocal PreviewSmokeCraft 360 — Session 25 Rewardsserver182519001825—AficionadoHighest rank reachedNo venu"
+  },
+  {
+    "index": 29,
+    "at": "2026-08-07T22:18:17.313Z",
+    "action": "Reached Session Complete (S27) — natural end of numbered spine",
+    "url": "http://localhost:3001/smokecraft/session-complete"
+  }
+]

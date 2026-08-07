@@ -34,6 +34,26 @@ export default function SmokeCraftImageBoundsOverlay({ src, naturalW, naturalH, 
     return () => ro.disconnect()
   }, [naturalW, naturalH])
 
+  // Letterboxing fix (Full Real Browser Journey closure pass): when the
+  // container's aspect ratio diverges sharply from the source image's
+  // (chiefly tablet-portrait, 768x1024, against typically-landscape
+  // ~1.7:1 approved art), the contain-fit `scale` above is width-bound
+  // and leaves large flat-black top/bottom bars. Hotspot children are
+  // positioned as percentages of `bounds` (the exact rendered image
+  // rect) — so ANY change to the scale/offset math above would require
+  // re-deriving every existing hotspot's percentage coordinates across
+  // every image-shell screen, which is the real risk that made this
+  // defect deliberately deferred in the prior pass.
+  //
+  // This fix does not touch that math at all. It adds a second, purely
+  // decorative copy of the same image as a full-bleed, blurred,
+  // cover-fit backdrop UNDER the sharp contain-fit image — the same
+  // "blurred extension" treatment media players use for mismatched
+  // aspect content. The letterbox bars are no longer flat black; they
+  // show a soft, darkened continuation of the real photography. Zero
+  // hotspot coordinates change. Zero risk of misalignment.
+  const hasLetterbox = bounds && (bounds.offsetX > 4 || bounds.offsetY > 4)
+
   return (
     <div
       ref={containerRef}
@@ -45,6 +65,21 @@ export default function SmokeCraftImageBoundsOverlay({ src, naturalW, naturalH, 
         overflow: 'hidden',
       }}
     >
+      {hasLetterbox && (
+        <img
+          src={src}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center',
+            filter: 'blur(28px) brightness(0.45) saturate(1.1)',
+            transform: 'scale(1.15)', // hides the blur's own soft edge
+            display: 'block', userSelect: 'none', pointerEvents: 'none',
+          }}
+        />
+      )}
       <img
         src={src}
         alt={alt}
@@ -58,6 +93,7 @@ export default function SmokeCraftImageBoundsOverlay({ src, naturalW, naturalH, 
           display: 'block',
           userSelect: 'none',
           pointerEvents: 'none',
+          boxShadow: hasLetterbox ? '0 0 40px 8px rgba(0,0,0,0.6)' : 'none',
         }}
       />
       {bounds && (

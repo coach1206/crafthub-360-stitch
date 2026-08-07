@@ -155,6 +155,27 @@ export const SESSION_REWARDS = {
     sessionBadges: [SMOKECRAFT_BADGES.CUT_AND_LIGHT],
     unlockSignal: 'first-third',
   },
+  // Full Real Browser Journey closure pass defect fix (SC-D078): this
+  // entry, and 'mentor-commentary'/'knowledge-drop'/'ai-summary'/
+  // 'pairing-recommendations' below, were missing entirely — same defect
+  // class already documented above for meet-your-cigar/terroir
+  // (Required-Interaction Closure Package D). awardSessionRewards() hard-
+  // returns when getSessionRewards(sessionId) is null, so completing
+  // Lighting Tutorial (S7) through the real UI was a silent no-op:
+  // XP was never awarded, completedSteps never recorded 'lighting-tutorial',
+  // and every session after it (S8 onward) stayed permanently locked for a
+  // real player — even though the client-only 62/62 fresh-player suite
+  // never caught this, because it completes sessions via a separate,
+  // direct server completion endpoint that never reads this table.
+  // Confirmed via a real, fresh, browser-click walkthrough (not backend
+  // API calls) that reached this exact lock screen after fully completing
+  // the Lighting Tutorial wizard (8/8 steps viewed, Continue enabled and
+  // clicked) and surviving a hard page reload — ruling out a render race.
+  'lighting-tutorial': {
+    sessionNumber: null, visit: 4, xp: 75,
+    sessionBadges: [],
+    unlockSignal: 'first-third',
+  },
   'first-third': {
     sessionNumber: 12, visit: 4, xp: 100,
     sessionBadges: [SMOKECRAFT_BADGES.FIRST_THIRD],
@@ -166,6 +187,18 @@ export const SESSION_REWARDS = {
     sessionNumber: 13, visit: 5, xp: 75,
     sessionBadges: [SMOKECRAFT_BADGES.SECOND_THIRD],
     unlockSignal: 'flavor-memory',
+  },
+  // SC-D078 (see 'lighting-tutorial' above for the full defect writeup) —
+  // same missing-entry defect, same fix.
+  'mentor-commentary': {
+    sessionNumber: null, visit: 5, xp: 75,
+    sessionBadges: [],
+    unlockSignal: 'knowledge-drop',
+  },
+  'knowledge-drop': {
+    sessionNumber: null, visit: 5, xp: 75,
+    sessionBadges: [],
+    unlockSignal: 'visit-6',
   },
   'flavor-memory': {
     sessionNumber: 14, visit: 5, xp: 75,
@@ -205,6 +238,18 @@ export const SESSION_REWARDS = {
   // ── Visit 8 ────────────────────────────────────────────────────────────────
   'final-review': {
     sessionNumber: 20, visit: 8, xp: 100,
+    sessionBadges: [],
+    unlockSignal: 'passport-stamp',
+  },
+  // SC-D078 (see 'lighting-tutorial' above for the full defect writeup) —
+  // same missing-entry defect, same fix.
+  'ai-summary': {
+    sessionNumber: null, visit: 8, xp: 75,
+    sessionBadges: [],
+    unlockSignal: 'pairing-recommendations',
+  },
+  'pairing-recommendations': {
+    sessionNumber: null, visit: 8, xp: 75,
     sessionBadges: [],
     unlockSignal: 'passport-stamp',
   },
