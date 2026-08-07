@@ -22,11 +22,16 @@ console.log(JSON.stringify(config, null, 2))
 console.log('\nRunning preflight (write -> HEAD -> read -> delete -> confirm-delete of one tiny diagnostic object)...\n')
 const result = await runR2Preflight()
 
+if (result.steps) {
+  console.log('\nStep-by-step:')
+  for (const s of result.steps) console.log(`  ${s.ok ? '✓' : (s.attempted ? '✗' : '·')} ${s.stage}`)
+}
+
 if (result.ok) {
-  console.log('✅ Preflight PASSED — R2 is reachable, authenticated, and read/write/delete-capable at this configuration.')
+  console.log('\n✅ Preflight PASSED — R2 is reachable, authenticated, and read/write/delete-capable at this configuration.')
   process.exit(0)
 } else {
-  console.log(`✖ Preflight FAILED at stage "${result.stage}"${result.operation ? ` (operation: ${result.operation})` : ''}`)
+  console.log(`\n✖ Preflight FAILED at stage "${result.stage}"${result.operation ? ` (operation: ${result.operation})` : ''}`)
   console.log(`  Code: ${result.code}`)
   if (result.requestArgs) console.log(`  Request args (safe): ${JSON.stringify(result.requestArgs, null, 2)}`)
   console.log(`  Detail: ${JSON.stringify(result.detail, null, 2)}`)

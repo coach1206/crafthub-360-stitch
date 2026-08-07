@@ -2363,3 +2363,71 @@ upload/HEAD/read/delete was performed in this sandbox — no credentials
 here; Railway production credential status is unverified from here.
 
 Highest SC-D number is now SC-D073.
+
+## SmokeCraft R2 bucket-check repair
+
+Starting HEAD: `299634d0` (real Railway `smokecraft:r2:diagnose` run:
+reaches R2, fails at stage "bucket-check", operation HeadBucket,
+`R2_UNKNOWN_ERROR`/"UnknownError").
+
+**Found and fixed SC-D074**: `HeadBucketCommand` is an HTTP HEAD
+request, and HEAD responses can never carry a body by HTTP spec — so on
+ANY HeadBucket failure, AWS SDK v3 has no XML error body to parse and
+synthesizes the same low-information shape regardless of the real
+underlying cause. Confirmed directly by this pass's own test suite: even
+a mock server returning a real, well-formed `NoSuchBucket` 404 error
+body surfaces through `HeadBucketCommand` as a generic
+`name: NotFound, message: "UnknownError"` — genuinely indistinguishable
+from a broken connection, wrong credentials, or any other failure.
+HeadBucket was never a reliable diagnostic signal against R2 (or any
+S3-compatible provider) for this SDK — not a request-construction bug.
+
+Added `checkBucketAccess()` to `objectStorageAdapter.js`: tries
+`HeadBucketCommand` first (cheapest, works for the success case); on
+ANY failure, always falls back to `ListObjectsV2Command({ Bucket,
+MaxKeys: 1 })` — a GET, which DOES carry a real, body-bearing S3 error
+on failure — and trusts only that classification, recording
+HeadBucket's own (uninformative) result for visibility. Returns rich,
+safe diagnostic fields: `endpointHostname`, `bucket`, `region`,
+`forcePathStyle`, `resolvedRequestHostname` (computed, no live
+request), and the real classified error fields — never a credential
+value.
+
+Added `probeAddressingModes()` — diagnostic-only, tests both
+`forcePathStyle: true` and `false` against the real configured endpoint
+with a harmless `ListObjectsV2` call, reporting which actually works.
+Never used to pick a mode per real request; the deployed client stays
+on one deterministic mode (`forcePathStyle: true` for `STORAGE_PROVIDER=r2`,
+per Cloudflare's own S3-compatibility requirement that R2 does not
+support virtual-hosted-style addressing).
+
+Added `R2_BUCKET_CHECK_FAILED` and `R2_ADDRESSING_MODE_INVALID` failure
+codes. `runR2Preflight()` now reports every stage
+(bucket-check/write/head/read/delete/confirm-delete/metadata-write)
+individually via a `steps` array on every result (pass or fail), shown
+in both `npm run smokecraft:r2:diagnose` and the sync command's
+preflight-abort output.
+
+`scripts/verifySmokecraftR2Diagnostics.mjs`: 39/39 (up from 33) — new
+mock-server scenarios for HeadBucket-unclassified-failure->ListObjectsV2
+-fallback-succeeds (via a genuine abrupt socket-destroy, the most
+faithful reproduction of a real unparseable response), real
+bucket-not-found surfacing correctly through the fallback, a full
+successful preflight sequence, and addressing-mode probing. Iterating
+on these tests caught and fixed two more real issues before they could
+reach Railway again: the mock's own ListObjectsV2 routing (AWS SDK
+path-style list requests don't reliably include a trailing slash,
+so routing must check the joined key, not `keyParts.length`), and this
+module's `isClassified` heuristic initially treated ANY httpStatus as
+"real" — refined to distinguish a genuine parsed `<Code>` from an
+SDK-synthesized status, which led directly to the "always fall back on
+HeadBucket failure" design once it was clear HeadBucket can never
+provide a trustworthy classification on its own.
+
+62/62 fresh-player journey, 85/85 static-gameplay detector, production
+build, and the R2 sync dry-run (81/81) all re-run clean. No live R2
+upload/HEAD/read/delete performed in this sandbox — no credentials
+here; Railway production credential status remains unverified from
+here.
+
+Highest SC-D number is now SC-D074.

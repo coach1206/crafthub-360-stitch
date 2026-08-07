@@ -12,7 +12,7 @@
  * Never logs a credential value, an Authorization header, or a signed
  * request — only hostnames, presence booleans, and lengths.
  */
-import { headObject, putObjectAtKey, putObjectMinimal, remove, readBuffer, healthCheck } from './objectStorageAdapter.js'
+import { headObject, putObjectAtKey, putObjectMinimal, remove, readBuffer, checkBucketAccess } from './objectStorageAdapter.js'
 import * as adapter from './objectStorageAdapter.js'
 
 export const R2_FAILURE_CODE = {
@@ -24,6 +24,8 @@ export const R2_FAILURE_CODE = {
   SIGNATURE_MISMATCH:      'R2_SIGNATURE_MISMATCH',
   NETWORK_FAILED:          'R2_NETWORK_FAILED',
   INVALID_ARGUMENT:        'R2_INVALID_ARGUMENT',
+  BUCKET_CHECK_FAILED:     'R2_BUCKET_CHECK_FAILED',
+  ADDRESSING_MODE_INVALID: 'R2_ADDRESSING_MODE_INVALID',
   PREFLIGHT_WRITE_FAILED:  'R2_PREFLIGHT_WRITE_FAILED',
   PREFLIGHT_READ_FAILED:   'R2_PREFLIGHT_READ_FAILED',
   PREFLIGHT_DELETE_FAILED: 'R2_PREFLIGHT_DELETE_FAILED',
@@ -222,15 +224,50 @@ export async function runR2Preflight() {
   const diagnosticKey = `${adapter.providerInfo().keyPrefix}/diagnostics/r2-preflight/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.txt`
   const payload = Buffer.from(`smokecraft R2 preflight ${new Date().toISOString()}`, 'utf8')
 
-  // 1. Bucket check — first real network call. A failure here (network,
-  // credentials, or bucket-not-found) means we never even reach an
-  // object-level operation.
-  const bucketCheck = await attempt(() => healthCheck(), R2_FAILURE_CODE.NETWORK_FAILED)
-  if (!bucketCheck.ok) return { ok: false, code: bucketCheck.code, config, stage: 'bucket-check', operation: 'HeadBucket', detail: bucketCheck.detail }
-  if (bucketCheck.result && bucketCheck.result.ok === false) {
-    const classified = bucketCheck.result.error ? classifyR2Error({ message: bucketCheck.result.error }) : null
-    return { ok: false, code: classified?.failureCode || R2_FAILURE_CODE.UNKNOWN, config, stage: 'bucket-check', operation: 'HeadBucket', detail: { safeMessage: bucketCheck.result.error || 'HeadBucket failed.' } }
+  // Every stage name, reported separately whether it passed or the run
+  // stopped there — so a diagnose run always shows real step-by-step
+  // progress, not just a single pass/fail.
+  const ALL_STAGES = ['bucket-check', 'write', 'head', 'read', 'delete', 'confirm-delete', 'metadata-write']
+  const steps = []
+  function stepOk(stage) { steps.push({ stage, ok: true }) }
+  function stepsReport(failedStage) {
+    return ALL_STAGES.map(stage => ({ stage, ok: steps.some(s => s.stage === stage), attempted: stage === failedStage || steps.some(s => s.stage === stage) }))
   }
+
+  // 1. Bucket check — first real network call. checkBucketAccess() does
+  // NOT trust HeadBucket alone (R2 bucket-check repair): HeadBucket is an
+  // HTTP HEAD request, and HEAD responses can never carry a body by HTTP
+  // spec — so on ANY failure, the SDK has no XML error body to parse and
+  // synthesizes the same low-information shape regardless of the real
+  // cause (confirmed via this module's own test suite: even a real,
+  // server-sent NoSuchBucket 404 surfaces through HeadBucket as a
+  // generic `name: NotFound, message: "UnknownError"`, indistinguishable
+  // from a genuinely broken connection). checkBucketAccess() therefore
+  // ALWAYS falls back to ListObjectsV2 (MaxKeys:1, Cloudflare's own
+  // recommended bucket-access probe) on any HeadBucket failure — a GET,
+  // which DOES carry a real, body-bearing S3 error on failure — and
+  // trusts ONLY that classification, recording HeadBucket's own
+  // (uninformative) result for visibility only.
+  const bucketCheck = await attempt(() => checkBucketAccess(), R2_FAILURE_CODE.NETWORK_FAILED)
+  if (!bucketCheck.ok) {
+    return { ok: false, code: bucketCheck.code, config, stage: 'bucket-check', operation: 'HeadBucket', detail: bucketCheck.detail, steps: stepsReport('bucket-check') }
+  }
+  const bc = bucketCheck.result
+  if (!bc.ok) {
+    const classified = classifyR2Error({ name: bc.errorName, Code: bc.errorCode, message: bc.errorMessage, $metadata: { httpStatusCode: bc.httpStatus, requestId: bc.requestId } })
+    // A bucket-check failure that classifyR2Error can't pin to anything
+    // more specific than UNKNOWN is exactly the class this repair
+    // targets — report it as BUCKET_CHECK_FAILED (a real, named code)
+    // rather than the generic UNKNOWN one more time.
+    const code = classified.failureCode === R2_FAILURE_CODE.UNKNOWN ? R2_FAILURE_CODE.BUCKET_CHECK_FAILED : classified.failureCode
+    return {
+      ok: false, code, config, stage: 'bucket-check', operation: bc.method,
+      requestArgs: { bucket: bc.bucket, endpointHostname: bc.endpointHostname, region: bc.region, forcePathStyle: bc.forcePathStyle, resolvedRequestHostname: bc.resolvedRequestHostname },
+      detail: { errorName: bc.errorName, errorCode: bc.errorCode, httpStatus: bc.httpStatus, requestId: bc.requestId, safeMessage: classified.safeMessage, headBucketFailure: bc.headBucketFailure ? { errorCode: bc.headBucketFailure.errorCode, httpStatus: bc.headBucketFailure.httpStatus } : undefined },
+      steps: stepsReport('bucket-check'),
+    }
+  }
+  stepOk('bucket-check')
 
   // 2. Minimal PutObject — Bucket/Key/Body/ContentType ONLY.
   const write = await attempt(
@@ -242,27 +279,33 @@ export async function runR2Preflight() {
       ok: false, code: write.code, config, stage: 'write', operation: 'PutObject',
       requestArgs: { bucket: config.bucket, key: redactKey(diagnosticKey), contentType: 'text/plain', endpointHostname: config.endpointHostname, region: config.region },
       detail: write.detail,
+      steps: stepsReport('write'),
     }
   }
+  stepOk('write')
 
   // 3. HeadObject.
   const head = await attempt(() => headObject(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_READ_FAILED)
-  if (!head.ok || !head.result) return { ok: false, code: head.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : head.code, config, stage: 'head', operation: 'HeadObject', detail: head.ok ? { safeMessage: 'HeadObject after PutObject returned no object.' } : head.detail }
+  if (!head.ok || !head.result) return { ok: false, code: head.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : head.code, config, stage: 'head', operation: 'HeadObject', detail: head.ok ? { safeMessage: 'HeadObject after PutObject returned no object.' } : head.detail, steps: stepsReport('head') }
+  stepOk('head')
 
   // 4. GetObject — content-verified.
   const read = await attempt(() => readBuffer(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_READ_FAILED)
   if (!read.ok || !read.result || !Buffer.isBuffer(read.result) || !read.result.equals(payload)) {
-    return { ok: false, code: read.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : read.code, config, stage: 'read', operation: 'GetObject', detail: read.ok ? { safeMessage: 'Read-back content did not match what was written.' } : read.detail }
+    return { ok: false, code: read.ok ? R2_FAILURE_CODE.PREFLIGHT_READ_FAILED : read.code, config, stage: 'read', operation: 'GetObject', detail: read.ok ? { safeMessage: 'Read-back content did not match what was written.' } : read.detail, steps: stepsReport('read') }
   }
+  stepOk('read')
 
   // 5. DeleteObject.
   const del = await attempt(() => remove(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED)
-  if (!del.ok) return { ok: false, code: del.code, config, stage: 'delete', operation: 'DeleteObject', detail: del.detail }
+  if (!del.ok) return { ok: false, code: del.code, config, stage: 'delete', operation: 'DeleteObject', detail: del.detail, steps: stepsReport('delete') }
+  stepOk('delete')
 
   // 6. Confirm deletion.
   const confirmGone = await attempt(() => headObject(diagnosticKey), R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED)
-  if (!confirmGone.ok) return { ok: false, code: confirmGone.code, config, stage: 'confirm-delete', operation: 'HeadObject', detail: confirmGone.detail }
-  if (confirmGone.result) return { ok: false, code: R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED, config, stage: 'confirm-delete', operation: 'HeadObject', detail: { safeMessage: 'Diagnostic object still present after delete.' } }
+  if (!confirmGone.ok) return { ok: false, code: confirmGone.code, config, stage: 'confirm-delete', operation: 'HeadObject', detail: confirmGone.detail, steps: stepsReport('confirm-delete') }
+  if (confirmGone.result) return { ok: false, code: R2_FAILURE_CODE.PREFLIGHT_DELETE_FAILED, config, stage: 'confirm-delete', operation: 'HeadObject', detail: { safeMessage: 'Diagnostic object still present after delete.' }, steps: stepsReport('confirm-delete') }
+  stepOk('confirm-delete')
 
   // 7. Metadata validation — a SEPARATE PutObject, only attempted after
   // every basic operation above has already succeeded, so a failure here
@@ -278,13 +321,15 @@ export async function runR2Preflight() {
       ok: false, code: metaWrite.code, config, stage: 'metadata-write', operation: 'PutObject',
       requestArgs: { bucket: config.bucket, key: redactKey(metaKey), contentType: 'text/plain', cacheControl: 'no-store', metadataKeys: ['checksum', 'preflight'], endpointHostname: config.endpointHostname, region: config.region },
       detail: metaWrite.detail,
+      steps: stepsReport('metadata-write'),
     }
   }
   // Best-effort cleanup — not a preflight-failure condition on its own,
   // the basic delete path above already proved DeleteObject works.
   await remove(metaKey).catch(() => {})
+  stepOk('metadata-write')
 
-  return { ok: true, config, stage: 'complete' }
+  return { ok: true, config, stage: 'complete', steps: stepsReport(null) }
 }
 
 /** Reduces a diagnostic object key to its directory structure and extension, dropping the random/timestamp filename — nothing sensitive in these keys either way, just a safety-by-default habit. */

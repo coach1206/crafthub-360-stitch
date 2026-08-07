@@ -213,8 +213,9 @@ async function freshImport() {
     req.on('end', () => {
       const body = Buffer.concat(chunks)
 
+      const KNOWN_BUCKETS = new Set(['crafthub360-production', 'unclassified-headbucket-bucket'])
       // Scenario switches, driven by the object key so each test case is isolated.
-      if (bucket !== 'crafthub360-production') {
+      if (!KNOWN_BUCKETS.has(bucket)) {
         const { status, body: xml } = s3Error('NoSuchBucket', 'The specified bucket does not exist', 404)
         res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
       }
@@ -223,8 +224,25 @@ async function freshImport() {
         res.writeHead(status, { 'Content-Type': 'application/xml' }); res.end(xml); return
       }
       if (req.method === 'HEAD' && keyParts.length === 0) {
+        if (bucket === 'unclassified-headbucket-bucket') {
+          // Simulates the real AWS-SDK-v3-vs-R2 failure this pass fixes:
+          // HeadBucket gets no parseable S3-shaped response at all (no
+          // status line reaches the SDK as a real HTTP response) — an
+          // abrupt socket destroy is the most faithful way to produce a
+          // genuinely unclassified error (no $metadata, no XML <Code>)
+          // through a real Node HTTP client, exactly like the real
+          // opaque failure this bucket-check repair targets.
+          req.socket.destroy()
+          return
+        }
         // HeadBucket
         res.writeHead(200); res.end(); return
+      }
+      // ListObjectsV2 — any bucket-level GET (no object key) is a list call, never an object read. AWS SDK path-style requests may or may not include a trailing slash, so check the joined key, not keyParts.length.
+      if (req.method === 'GET' && key === '') {
+        res.writeHead(200, { 'Content-Type': 'application/xml' })
+        res.end('<?xml version="1.0" encoding="UTF-8"?><ListBucketResult><Name>' + bucket + '</Name><KeyCount>0</KeyCount></ListBucketResult>')
+        return
       }
       if (req.method === 'PUT') {
         if (req.headers['x-amz-acl']) {
@@ -385,6 +403,87 @@ async function freshImport() {
     // failure, in a genuinely fresh process (matching real deployment
     // module-load behavior).
     check('preflight against a non-R2-shaped endpoint correctly identifies the config stage (never silently passes)', result?.ok === false && result?.stage === 'config' && result?.code === 'R2_ENDPOINT_INVALID', JSON.stringify(result))
+  }
+
+  // ── R2 bucket-check repair: HeadBucket unclassified -> ListObjectsV2 fallback ──
+  {
+    setMockEnv('unclassified-headbucket-bucket')
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    const result = await adapter.checkBucketAccess()
+    check(
+      'HeadBucket unclassified failure correctly falls back to ListObjectsV2, which succeeds',
+      result.ok === true && result.method === 'ListObjectsV2 (HeadBucket fallback)' && !!result.headBucketFailure,
+      JSON.stringify(result)
+    )
+  }
+
+  // ── Real bucket-not-found surfaces correctly through the ListObjectsV2 fallback (HeadBucket errors carry no body by HTTP HEAD semantics, so the fallback's body-bearing error is what's trusted for classification) ──
+  {
+    setMockEnv('wrong-bucket-name')
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    const result = await adapter.checkBucketAccess()
+    check(
+      'bucket-not-found surfaces correctly through the ListObjectsV2 fallback with the real NoSuchBucket classification',
+      result.ok === false && result.method === 'ListObjectsV2 (HeadBucket fallback)' && result.errorCode === 'NoSuchBucket' && !!result.headBucketFailure,
+      JSON.stringify(result)
+    )
+  }
+
+  // ── Successful complete preflight sequence against the mock server ──
+  // Exercises every real step (bucket-check through metadata-write) via
+  // direct adapter calls — runR2Preflight() itself can't be used here
+  // since its config gate requires the real
+  // https://<32-char-id>.r2.cloudflarestorage.com hostname shape, which
+  // no local mock server can ever satisfy; that gate is exercised
+  // separately above ("non-R2-shaped endpoint" test).
+  {
+    setMockEnv('crafthub360-production')
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    let threw = null
+    const results = {}
+    try {
+      results.bucketCheck = await adapter.checkBucketAccess()
+      const key = `${adapter.providerInfo().keyPrefix}/diagnostics/test-full-sequence/file.txt`
+      const payload = Buffer.from('full sequence test')
+      results.write = await adapter.putObjectMinimal({ key, buffer: payload, mimeType: 'text/plain' })
+      results.head = await adapter.headObject(key)
+      results.read = await adapter.readBuffer(key)
+      await adapter.remove(key)
+      results.confirmDelete = await adapter.headObject(key)
+      const metaKey = `${adapter.providerInfo().keyPrefix}/diagnostics/test-full-sequence/meta.txt`
+      results.metadataWrite = await adapter.putObjectAtKey({ key: metaKey, buffer: payload, mimeType: 'text/plain', cacheControl: 'no-store', metadata: { preflight: 'true' } })
+      await adapter.remove(metaKey)
+    } catch (e) { threw = e }
+    check(
+      'successful complete preflight sequence (bucket-check through metadata-write) against a real S3-compatible mock server',
+      !threw
+        && results.bucketCheck?.ok === true
+        && !!results.write?.etag
+        && !!results.head
+        && results.read?.toString() === 'full sequence test'
+        && results.confirmDelete === null
+        && !!results.metadataWrite?.etag,
+      threw ? String(threw) : JSON.stringify(results)
+    )
+  }
+
+  // ── Addressing-mode probe: path-style succeeds against this path-style-only mock (virtual-hosted-style would resolve to a different, non-existent hostname and fail here — expected, this mock only understands path-style requests) ──
+  {
+    setMockEnv('crafthub360-production')
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    const probe = await adapter.probeAddressingModes()
+    check('addressing-mode probe: path-style succeeds against the real mock endpoint', probe.pathStyle?.ok === true, JSON.stringify(probe.pathStyle))
+    check('addressing-mode probe reports the selected production mode (path-style, per Cloudflare R2 requirements)', probe.selectedMode === 'path-style')
+  }
+
+  // ── Secret redaction: checkBucketAccess()/probeAddressingModes() safe fields never contain the real access key or secret ──
+  {
+    setMockEnv('crafthub360-production')
+    const adapter = await import(pathToFileURL(resolve('server/services/venueManagement/objectStorageAdapter.js')).href + `?t=${Date.now()}`)
+    const result = await adapter.checkBucketAccess()
+    const serialized = JSON.stringify(result)
+    check('checkBucketAccess() result never contains the configured access key', serialized.indexOf('mock-access-key') === -1)
+    check('checkBucketAccess() result never contains the configured secret key', serialized.indexOf('mock-secret-key') === -1)
   }
 
   process.env = savedEnv

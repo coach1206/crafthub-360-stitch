@@ -283,141 +283,141 @@
       {
         "sessionId": "entry",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T23:52:33.308Z",
+        "completedAt": "2026-08-07T00:14:34.038Z",
         "sourceRoute": null
       },
       {
         "sessionId": "humidor-match",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:34.672Z",
+        "completedAt": "2026-08-07T00:14:34.607Z",
         "sourceRoute": null
       },
       {
         "sessionId": "meet-your-cigar",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:34.948Z",
+        "completedAt": "2026-08-07T00:14:34.866Z",
         "sourceRoute": null
       },
       {
         "sessionId": "terroir",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:35.024Z",
+        "completedAt": "2026-08-07T00:14:34.883Z",
         "sourceRoute": null
       },
       {
         "sessionId": "format",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:35.038Z",
+        "completedAt": "2026-08-07T00:14:34.898Z",
         "sourceRoute": null
       },
       {
         "sessionId": "cut-toast-light",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T23:52:35.050Z",
+        "completedAt": "2026-08-07T00:14:34.913Z",
         "sourceRoute": null
       },
       {
         "sessionId": "lighting-tutorial",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T23:52:35.057Z",
+        "completedAt": "2026-08-07T00:14:34.920Z",
         "sourceRoute": null
       },
       {
         "sessionId": "first-third",
         "xpAwarded": 100,
-        "completedAt": "2026-08-06T23:52:35.066Z",
+        "completedAt": "2026-08-07T00:14:34.929Z",
         "sourceRoute": null
       },
       {
         "sessionId": "flavor-memory",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:35.077Z",
+        "completedAt": "2026-08-07T00:14:34.940Z",
         "sourceRoute": null
       },
       {
         "sessionId": "pairing-lab",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:35.982Z",
+        "completedAt": "2026-08-07T00:14:35.292Z",
         "sourceRoute": null
       },
       {
         "sessionId": "second-third",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:35.992Z",
+        "completedAt": "2026-08-07T00:14:35.304Z",
         "sourceRoute": null
       },
       {
         "sessionId": "mentor-commentary",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T23:52:35.998Z",
+        "completedAt": "2026-08-07T00:14:35.311Z",
         "sourceRoute": null
       },
       {
         "sessionId": "knowledge-drop",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T23:52:36.008Z",
+        "completedAt": "2026-08-07T00:14:35.323Z",
         "sourceRoute": null
       },
       {
         "sessionId": "final-third",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:36.019Z",
+        "completedAt": "2026-08-07T00:14:35.335Z",
         "sourceRoute": null
       },
       {
         "sessionId": "scorecard",
         "xpAwarded": 100,
-        "completedAt": "2026-08-06T23:52:36.028Z",
+        "completedAt": "2026-08-07T00:14:35.347Z",
         "sourceRoute": null
       },
       {
         "sessionId": "ai-summary",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T23:52:36.036Z",
+        "completedAt": "2026-08-07T00:14:35.353Z",
         "sourceRoute": null
       },
       {
         "sessionId": "pairing-recommendations",
         "xpAwarded": 0,
-        "completedAt": "2026-08-06T23:52:36.044Z",
+        "completedAt": "2026-08-07T00:14:35.362Z",
         "sourceRoute": null
       },
       {
         "sessionId": "passport-stamp",
         "xpAwarded": 75,
-        "completedAt": "2026-08-06T23:52:36.186Z",
+        "completedAt": "2026-08-07T00:14:35.793Z",
         "sourceRoute": null
       },
       {
         "sessionId": "final-review",
         "xpAwarded": 100,
-        "completedAt": "2026-08-06T23:52:36.193Z",
+        "completedAt": "2026-08-07T00:14:35.802Z",
         "sourceRoute": null
       },
       {
         "sessionId": "rewards",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T23:52:36.198Z",
+        "completedAt": "2026-08-07T00:14:35.810Z",
         "sourceRoute": null
       },
       {
         "sessionId": "achievements",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T23:52:36.204Z",
+        "completedAt": "2026-08-07T00:14:35.817Z",
         "sourceRoute": null
       },
       {
         "sessionId": "session-complete",
         "xpAwarded": 50,
-        "completedAt": "2026-08-06T23:52:36.209Z",
+        "completedAt": "2026-08-07T00:14:35.823Z",
         "sourceRoute": null
       }
     ],
     "badges": null
   },
   "goldenBox": {
-    "competitionId": "330",
-    "entryId": "ee55da6b-6af6-4c62-b2ab-4c804518e23a",
+    "competitionId": "331",
+    "entryId": "9b007230-1c4f-46b9-ae6f-f80d1b2ce27b",
     "awardType": "first_place"
   },
   "journeyTrace": [
@@ -430,7 +430,7 @@
       "xpAwarded": 0,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:33.308Z"
+      "completedAt": "2026-08-07T00:14:34.038Z"
     },
     {
       "orderIndex": 2,
@@ -441,7 +441,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:34.672Z"
+      "completedAt": "2026-08-07T00:14:34.607Z"
     },
     {
       "orderIndex": 3,
@@ -452,7 +452,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:34.948Z"
+      "completedAt": "2026-08-07T00:14:34.866Z"
     },
     {
       "orderIndex": 4,
@@ -463,7 +463,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.024Z"
+      "completedAt": "2026-08-07T00:14:34.883Z"
     },
     {
       "orderIndex": 5,
@@ -474,7 +474,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.038Z"
+      "completedAt": "2026-08-07T00:14:34.898Z"
     },
     {
       "orderIndex": 6,
@@ -485,7 +485,7 @@
       "xpAwarded": 50,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.050Z"
+      "completedAt": "2026-08-07T00:14:34.913Z"
     },
     {
       "orderIndex": 7,
@@ -496,7 +496,7 @@
       "xpAwarded": 0,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.057Z"
+      "completedAt": "2026-08-07T00:14:34.920Z"
     },
     {
       "orderIndex": 8,
@@ -507,7 +507,7 @@
       "xpAwarded": 100,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.066Z"
+      "completedAt": "2026-08-07T00:14:34.929Z"
     },
     {
       "orderIndex": 9,
@@ -518,7 +518,7 @@
       "xpAwarded": 100,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.066Z"
+      "completedAt": "2026-08-07T00:14:34.929Z"
     },
     {
       "orderIndex": 10,
@@ -529,7 +529,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.077Z"
+      "completedAt": "2026-08-07T00:14:34.940Z"
     },
     {
       "orderIndex": 11,
@@ -540,7 +540,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.982Z"
+      "completedAt": "2026-08-07T00:14:35.292Z"
     },
     {
       "orderIndex": 12,
@@ -551,7 +551,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.992Z"
+      "completedAt": "2026-08-07T00:14:35.304Z"
     },
     {
       "orderIndex": 13,
@@ -562,7 +562,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.992Z"
+      "completedAt": "2026-08-07T00:14:35.304Z"
     },
     {
       "orderIndex": 14,
@@ -573,7 +573,7 @@
       "xpAwarded": 0,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:35.998Z"
+      "completedAt": "2026-08-07T00:14:35.311Z"
     },
     {
       "orderIndex": 15,
@@ -584,7 +584,7 @@
       "xpAwarded": 0,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.008Z"
+      "completedAt": "2026-08-07T00:14:35.323Z"
     },
     {
       "orderIndex": 16,
@@ -595,7 +595,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.019Z"
+      "completedAt": "2026-08-07T00:14:35.335Z"
     },
     {
       "orderIndex": 17,
@@ -606,7 +606,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.019Z"
+      "completedAt": "2026-08-07T00:14:35.335Z"
     },
     {
       "orderIndex": 18,
@@ -617,7 +617,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.019Z"
+      "completedAt": "2026-08-07T00:14:35.335Z"
     },
     {
       "orderIndex": 19,
@@ -628,7 +628,7 @@
       "xpAwarded": 100,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.028Z"
+      "completedAt": "2026-08-07T00:14:35.347Z"
     },
     {
       "orderIndex": 20,
@@ -639,7 +639,7 @@
       "xpAwarded": 100,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.028Z"
+      "completedAt": "2026-08-07T00:14:35.347Z"
     },
     {
       "orderIndex": 21,
@@ -650,7 +650,7 @@
       "xpAwarded": 0,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.036Z"
+      "completedAt": "2026-08-07T00:14:35.353Z"
     },
     {
       "orderIndex": 22,
@@ -661,7 +661,7 @@
       "xpAwarded": 0,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.044Z"
+      "completedAt": "2026-08-07T00:14:35.362Z"
     },
     {
       "orderIndex": 23,
@@ -672,7 +672,7 @@
       "xpAwarded": 75,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.186Z"
+      "completedAt": "2026-08-07T00:14:35.793Z"
     },
     {
       "orderIndex": 24,
@@ -683,7 +683,7 @@
       "xpAwarded": 100,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.193Z"
+      "completedAt": "2026-08-07T00:14:35.802Z"
     },
     {
       "orderIndex": 25,
@@ -694,7 +694,7 @@
       "xpAwarded": 50,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.198Z"
+      "completedAt": "2026-08-07T00:14:35.810Z"
     },
     {
       "orderIndex": 26,
@@ -705,7 +705,7 @@
       "xpAwarded": 50,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.204Z"
+      "completedAt": "2026-08-07T00:14:35.817Z"
     },
     {
       "orderIndex": 27,
@@ -716,8 +716,8 @@
       "xpAwarded": 50,
       "assetKey": null,
       "serverConfirmedCompleted": true,
-      "completedAt": "2026-08-06T23:52:36.209Z"
+      "completedAt": "2026-08-07T00:14:35.823Z"
     }
   ],
-  "capturedAt": "2026-08-06T23:52:42.342Z"
+  "capturedAt": "2026-08-07T00:14:39.117Z"
 }

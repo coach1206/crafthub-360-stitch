@@ -81,6 +81,10 @@ async function main() {
     if (mode === '--upload-missing' || mode === '--replace-changed') {
       console.log('\n── R2 preflight (write/read/delete a tiny diagnostic object) ──')
       const preflight = await diagnostics.runR2Preflight()
+      if (preflight.steps) {
+        console.log('Step-by-step:')
+        for (const s of preflight.steps) console.log(`  ${s.ok ? '✓' : (s.attempted ? '✗' : '·')} ${s.stage}`)
+      }
       if (!preflight.ok) {
         console.error(`\n✖ R2 preflight FAILED at stage "${preflight.stage}"${preflight.operation ? ` (operation: ${preflight.operation})` : ''} — aborting before any bulk upload.`)
         console.error(`  Code: ${preflight.code}`)
