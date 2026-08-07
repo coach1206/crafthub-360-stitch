@@ -117,26 +117,17 @@ async function solveScorecard(page) {
     const alreadySet = await dot.getAttribute('aria-pressed').catch(() => 'false')
     if (alreadySet === 'true') continue
     await dot.scrollIntoViewIfNeeded().catch(() => {})
-    await dot.click({ timeout: 2000, force: true }).catch(() => {})
+    // Plain, real, non-forced click — the Scorecard panel-overlap defect
+    // that previously required a force-click + in-page dispatch fallback
+    // here is now fixed at the source (Scorecard.jsx's Rating Categories
+    // panel is height-bounded so it can no longer visually overlap the
+    // Personal Notes panel). No workaround needed.
+    await dot.click({ timeout: 2000 }).catch(() => {})
     await page.waitForTimeout(100)
-    // Real-browser layout can leave a later element (e.g. an overlapping
-    // panel) stacked on top of this one at its exact pixel location, in
-    // which case even a force-click's native hit-test lands on the
-    // wrong element and the handler never fires. Verify, and if still
-    // unset, dispatch the click directly on the element in-page — this
-    // is the same click the browser would deliver, it just bypasses the
-    // pointer/hit-testing entirely, so it only masks a real layout
-    // defect if one exists (flagged in the report either way, not
-    // silently normalized).
-    const stillUnset = (await dot.getAttribute('aria-pressed').catch(() => 'false')) !== 'true'
-    if (stillUnset) {
-      await dot.evaluate(el => el.click()).catch(() => {})
-      await page.waitForTimeout(100)
-    }
   }
 }
 
-async function genericAdvance(page, { screenshotName, label }) {
+export async function genericAdvance(page, { screenshotName, label }) {
   const beforeUrl = page.url()
 
   if (/\/smokecraft\/format$/.test(beforeUrl)) {

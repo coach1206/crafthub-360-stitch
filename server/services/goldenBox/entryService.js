@@ -7,6 +7,7 @@ import { getDb } from '../../db/connection.js'
 import { logActivity } from './activityLogService.js'
 import { transitionEntry } from './lifecycleService.js'
 import { recordGoldenBoxEvent } from './goldenBoxEventService.js'
+import { evaluateEligibility } from './eligibilityService.js'
 
 export class EntryError extends Error {
   constructor(code) { super(code); this.code = code }
@@ -27,6 +28,28 @@ export async function createEntry(competitionId, identity, actorId) {
     [competitionId, identity.guestReference]
   )
   if (existing[0]) return existing[0]
+
+  // UI Handoff Closure gate: eligibilityService.evaluateEligibility()
+  // already existed as a real, rule-driven check (required_sessions,
+  // min_xp, required_badge, etc.) — but it was only ever wired to a
+  // separate, informational "check eligibility" endpoint the UI calls to
+  // decide whether to SHOW the entry button. createEntry itself never
+  // called it, so a direct API call could create a real competition
+  // entry regardless of eligibility, bypassing the whole point of
+  // configuring rules (e.g. "must complete Session 27 first"). Confirmed
+  // live: a completely fresh guest (0 sessions) received HTTP 201.
+  // Fixed by enforcing the same evaluation here, at the one place an
+  // entry actually gets created — competitions with zero configured
+  // rules remain eligible-by-design (unchanged, documented behavior;
+  // this is what every existing fixture, including the fresh-player
+  // suite's own competition, already relies on), so no passing test's
+  // fixture needed to change.
+  const eligibility = await evaluateEligibility(competitionId, identity)
+  if (!eligibility.eligible) {
+    const err = new EntryError('not_eligible')
+    err.eligibility = eligibility
+    throw err
+  }
 
   const client = await db.connect()
   try {

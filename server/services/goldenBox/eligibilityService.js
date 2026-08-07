@@ -24,6 +24,27 @@ async function evaluateRule(rule, identity) {
         ? { pass: true, reason: 'all_required_sessions_completed' }
         : { pass: false, reason: `missing_sessions:${missing.join(',')}` }
     }
+    // UI Handoff Closure gate: a real, direct rule against the actual
+    // 27-session spine's own completion ledger
+    // (smokecraft_session_completions — the same table
+    // playerStateService.js writes on every real session completion),
+    // rather than 'required_sessions' above, which reads a separate,
+    // optional venue Management Sync journey table that most guests
+    // (no real venue selected) never populate at all. Used to require
+    // Session 27 ('session-complete') before Golden Box entry.
+    case 'required_completion_keys': {
+      const required = config.completionKeys || []
+      if (required.length === 0) return { pass: true, reason: 'no_completion_keys_required' }
+      const { rows } = await db.query(
+        `SELECT DISTINCT session_id FROM smokecraft_session_completions WHERE guest_reference = $1`,
+        [identity.guestReference]
+      )
+      const completed = rows.map(r => r.session_id)
+      const missing = required.filter(id => !completed.includes(id))
+      return missing.length === 0
+        ? { pass: true, reason: 'all_required_completion_keys_present' }
+        : { pass: false, reason: `missing_completion_keys:${missing.join(',')}` }
+    }
     case 'min_xp': {
       const balance = await getXpBalance(identity)
       return balance >= (config.minXp || 0)

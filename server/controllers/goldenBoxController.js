@@ -13,7 +13,7 @@ import { transitionCompetition } from '../services/goldenBox/lifecycleService.js
 function sendError(res, err, fallback = 400) {
   const statusByCode = {
     record_not_found: 404, entry_not_found: 404, competition_not_found: 404,
-    transaction_not_found: 404, recipe_private: 403, judge_not_assigned: 403,
+    transaction_not_found: 404, recipe_private: 403, judge_not_assigned: 403, not_eligible: 403,
     entry_locked_cannot_edit: 409, duplicate_submission: 409, submission_closed: 409,
     scorecard_already_submitted: 409, invalid_scope: 400, guest_reference_required: 400,
     identity_required: 400, idempotency_key_required: 400,

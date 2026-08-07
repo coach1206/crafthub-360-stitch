@@ -322,18 +322,39 @@ export default function Scorecard({ onBack, onComplete } = {}) {
           </div>
         )}
 
-        {/* ── Category ratings ── */}
+        {/* ── Category ratings ──
+            Root cause of the "Pairing Match" click-interception defect:
+            this panel's height was implicit (content-driven), while the
+            Personal Notes panel below it was independently pinned to a
+            fixed `top: 62%` with no coordination between the two. At
+            real-world viewport/content combinations, 6 rating rows +
+            header + overall-score summary rendered taller than the 49%
+            of container height available between top:13% and top:62%,
+            so the last row ("Pairing Match", 6th of 6) fell inside the
+            same screen region the Personal Notes panel (later in DOM
+            order, so visually on top) occupies — its pointer events
+            landed on the notes panel, not the rating dots underneath.
+            Fixed with two independent, redundant guards: (1) a hard
+            `maxHeight` + internal scroll on this panel so it can never
+            visually extend into the notes panel's region regardless of
+            viewport/content, and (2) tightened row spacing so scrolling
+            is never actually needed at any of the 5 supported
+            viewports. Personal Notes' own `top` is unchanged — fixing
+            the panel that was overflowing, not moving the one that
+            wasn't, keeps this a minimal, targeted change. */}
         <div style={{
           position: 'absolute',
           left: '6%', top: '13%',
           width: '54%',
+          maxHeight: '46%',
+          overflowY: 'auto',
           ...glassStyle({ padding: '10px 14px', pointerEvents: 'auto' }),
         }}>
-          <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 8 }}>
+          <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 6 }}>
             Rating Categories
           </div>
           {CATEGORIES.map(cat => (
-            <div key={cat.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 8, gap: 8 }}>
+            <div key={cat.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 5, gap: 8 }}>
               <div style={{ width: 105, flexShrink: 0 }}>
                 <div style={{ color: 'rgba(229,226,225,0.9)', fontSize: 'clamp(10px,0.95vw,12px)', fontFamily: 'Georgia, serif', fontWeight: 600 }}>{cat.label}</div>
                 <div style={{ color: 'rgba(229,226,225,0.38)', fontSize: 'clamp(8px,0.72vw,9px)', fontFamily: 'Georgia, serif' }}>{cat.hint}</div>

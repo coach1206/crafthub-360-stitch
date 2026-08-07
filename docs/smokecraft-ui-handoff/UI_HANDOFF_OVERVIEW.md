@@ -1,5 +1,7 @@
 # SmokeCraft 360 — UI Developer Handoff Overview
 
+**Start here: `SMOKECRAFT_UI_HANDOFF_BASELINE.md`** — states the exact verified commit, 0 known canonical blockers, and every test gate this baseline passed.
+
 This package documents the complete, verified, canonical SmokeCraft 360 experience so a UI developer can improve its presentation without reverse-engineering the app or accidentally breaking gameplay logic.
 
 **Source of truth for everything in this package**: `src/constants/session.js` (`VISIT_STRUCTURE`, `ENTRY_LAYER_SCREENS`, `SUPPORTING_MODULES`), `src/constants/smokecraftScreenManifest.js`, `src/constants/smokecraftComponentRegistry.js`. The JSON files in this folder (`ASSET_MAP.json`, `SCREEN_MANIFEST.json`, `ROUTE_TO_COMPONENT_MAP.json`) are generated directly from that code (`scripts/generateSmokecraftUiHandoffJson.mjs`) — regenerate them after any source change rather than hand-editing.
