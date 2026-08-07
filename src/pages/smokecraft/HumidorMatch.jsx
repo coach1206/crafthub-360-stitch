@@ -7,6 +7,7 @@ import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
+import { resolveSmokeCraftAsset } from '../../services/smokecraft/assetResolver.js'
 
 const ENRICHMENT_2 = getEducationalEnrichment(2)
 
@@ -67,6 +68,52 @@ const CIGAR_PRESETS = [
   { name: 'My Father Le Bijou',   origin: 'Nicaragua',          wrapper: 'San Andrés',      strength: 'Full',        body: 'Full',   tastingProfile: 'Dark earth, pepper, dried fruit' },
   { name: 'Cohiba Siglo VI',      origin: 'Dominican Republic', wrapper: 'Ecuador Natural', strength: 'Medium',      body: 'Medium', tastingProfile: 'Floral, cedar, subtle pepper' },
 ]
+
+// Premium presentation (Canonical Journey Recovery Part 4): a real,
+// governed, approved supporting photograph as a decorative header banner
+// only — resolved through resolveSmokeCraftAsset (R2 first, approved
+// repository fallback second, safe branded failure third, per asset
+// governance). This is never a surface controls are drawn on top of and
+// never carries baked text/buttons/state — every control on this screen
+// remains real DOM below it. Same error-safe pattern as VenueSelect.jsx's
+// VenueHeroSurface.
+function HumidorHeroImage() {
+  const [errored, setErrored] = useState(false)
+  const resolved = resolveSmokeCraftAsset('humidorMatchHero')
+  const src = resolved.ok ? resolved.url : null
+  if (!src || errored) {
+    return (
+      <div
+        role="img"
+        aria-label="Cigar humidor — SmokeCraft Humidor Match"
+        style={{
+          width: '100%', aspectRatio: '16 / 6', borderRadius: 14,
+          marginBottom: 18, background: 'linear-gradient(135deg, rgba(233,193,118,0.10), rgba(11,15,24,0.9))',
+          border: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        <span style={{ fontSize: 12, color: GOLD_DIM }} aria-hidden="true">Image unavailable</span>
+      </div>
+    )
+  }
+  return (
+    <div
+      role="img"
+      aria-label="Cigar humidor — SmokeCraft Humidor Match"
+      style={{
+        width: '100%', aspectRatio: '16 / 6', borderRadius: 14, marginBottom: 18,
+        overflow: 'hidden', position: 'relative', border: `1px solid ${BORDER}`,
+        boxShadow: '0 8px 28px rgba(0,0,0,0.45)',
+      }}
+    >
+      <img
+        src={src} alt="" aria-hidden="true" loading="lazy" onError={() => setErrored(true)}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%', display: 'block' }}
+      />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(6,8,12,0.15) 0%, rgba(6,8,12,0.75) 100%)' }} />
+    </div>
+  )
+}
 
 function Stepper({ label, value, unit, onDec, onInc, min, max }) {
   return (
@@ -297,21 +344,23 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
     <>
       <div style={{ maxWidth: 1080, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', paddingBottom: 110 }}>
 
+        <HumidorHeroImage />
+
         {/* ── Instructional header (Part 3) — concise, premium, real DOM ── */}
         <div style={{
           background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-          padding: 'clamp(14px,2.5vw,22px)', marginBottom: 20,
+          padding: 'clamp(16px,2.8vw,26px)', marginBottom: 22,
         }}>
-          <div style={{ fontSize: 11, color: GOLD_DIM, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>
+          <div style={{ fontSize: 11, color: GOLD_DIM, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 700 }}>
             Session 2 of {TOTAL_SESSIONS} · Phase 1 of {TOTAL_VISITS}
           </div>
-          <h1 style={{ margin: '0 0 8px', fontSize: 'clamp(20px,2.6vw,28px)', color: CREAM, fontFamily: 'Georgia, serif' }}>
+          <h1 style={{ margin: '0 0 10px', fontSize: 'clamp(22px,2.8vw,30px)', color: CREAM, fontFamily: 'Georgia, serif', letterSpacing: '0.01em' }}>
             Humidor Match
           </h1>
-          <p style={{ margin: '0 0 12px', fontSize: 13, lineHeight: 1.5, color: 'rgba(229,226,225,0.75)' }}>
+          <p style={{ margin: '0 0 14px', fontSize: 13.5, lineHeight: 1.6, color: 'rgba(229,226,225,0.78)', maxWidth: 620 }}>
             Learn how storage temperature, humidity, airflow, and sealing affect a cigar before it's ever smoked.
           </p>
-          <ol style={{ margin: 0, padding: '0 0 0 18px', fontSize: 12.5, lineHeight: 1.9, color: 'rgba(229,226,225,0.65)' }}>
+          <ol style={{ margin: 0, padding: '0 0 0 18px', fontSize: 12.5, lineHeight: 2, color: 'rgba(229,226,225,0.65)' }}>
             <li>Choose one storage environment below.</li>
             <li>Adjust or review its temperature, humidity, seal, and airflow.</li>
             <li>Apply the settings.</li>
@@ -447,7 +496,7 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
         onPrimary={handleContinue}
         primaryDisabled={done}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft')}
+        onSecondary={() => navigate(-1)}
       />
     </>
   )

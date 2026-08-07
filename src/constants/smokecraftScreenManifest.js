@@ -90,7 +90,25 @@ export const SMOKECRAFT_SCREEN_MANIFEST = [
       // Overriding the completion route here (rather than bending the
       // linear nextScreenId chain used for guard/back-nav purposes)
       // preserves that approved navigation exactly.
-      nextRouteOverride: s.session === 5 ? '/smokecraft/request-purchase' : null,
+      //
+      // Canonical Journey Recovery (SC-D077): Welcome (S1) approved flow
+      // forwards into Golden Box Rules -> Mentor Selection -> Seed & Soil
+      // (SUPPORTING_MODULES, session.js — a real, already-built, already-
+      // wired chain that already forwards on to Humidor Match itself) —
+      // not straight to S2. This manifest's auto-derived `nextScreenId`
+      // (session-1 -> session-2) is correct for guard/back-nav purposes
+      // (it still reflects the true spine order) but was, until this fix,
+      // ALSO the route `completeSmokeCraftScreen()` used to send a real
+      // player after Welcome's "Begin Experience" button — silently
+      // overriding WelcomeExperience.jsx's own `navigate(NAV.GOLDEN_BOX)`
+      // call via the `onComplete` prop SmokeCraftScreenRenderer passes it.
+      // This was the actual root cause of "Golden Box/Mentor/Seed & Soil
+      // are being skipped" — a second, independent next-route authority
+      // that the in-component navigate() call could never reach, because
+      // `onComplete` (when present) always short-circuits before it.
+      nextRouteOverride: s.session === 5 ? '/smokecraft/request-purchase'
+        : s.session === 1 ? '/smokecraft/golden-box'
+        : null,
       directAccessAllowed: false,
       reviewAllowed: true,
     }

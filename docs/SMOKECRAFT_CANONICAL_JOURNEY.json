@@ -1,0 +1,370 @@
+{
+  "generatedAt": "2026-08-07T16:43:42.731Z",
+  "generatedBy": "scripts/generateSmokecraftCanonicalJourneyJson.mjs (source: src/constants/session.js)",
+  "totalSessions": 27,
+  "totalPhases": 6,
+  "entryLayer": [
+    {
+      "id": "launch",
+      "route": "/smokecraft",
+      "label": "Launch",
+      "implemented": true
+    },
+    {
+      "id": "sign-in",
+      "route": "/smokecraft/enroll",
+      "label": "Sign In / Guest Mode",
+      "implemented": true
+    },
+    {
+      "id": "venue-select",
+      "route": "/smokecraft/venue-select",
+      "label": "Venue Selection",
+      "implemented": true
+    },
+    {
+      "id": "personal-dashboard",
+      "route": "/smokecraft/identity",
+      "label": "Personal Dashboard",
+      "implemented": true
+    },
+    {
+      "id": "resume",
+      "route": "/smokecraft/resume",
+      "label": "Resume or Start New Journey",
+      "implemented": true
+    }
+  ],
+  "recoveredOpeningChain": [
+    {
+      "id": "entry",
+      "route": "/smokecraft/welcome",
+      "label": "Welcome to Today's Experience",
+      "spine": true,
+      "session": 1
+    },
+    {
+      "id": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "label": "Gold Box Rules",
+      "spine": false,
+      "note": "supporting module, now wired into the primary forward path (Canonical Journey Recovery, SC-D077)"
+    },
+    {
+      "id": "mentor",
+      "route": "/smokecraft/mentor-selection",
+      "label": "Mentor Selection",
+      "spine": false,
+      "note": "supporting module, now wired into the primary forward path (Canonical Journey Recovery, SC-D077)"
+    },
+    {
+      "id": "seed-soil",
+      "route": "/smokecraft/seed-soil",
+      "label": "Seed & Soil",
+      "spine": false,
+      "note": "supporting module, now wired into the primary forward path (Canonical Journey Recovery, SC-D077)"
+    },
+    {
+      "id": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "label": "Choose Your Cigar",
+      "spine": true,
+      "session": 2
+    }
+  ],
+  "spine": [
+    {
+      "visit": 1,
+      "title": "Session Preparation",
+      "sessions": [
+        {
+          "session": 1,
+          "id": "entry",
+          "route": "/smokecraft/welcome",
+          "label": "Welcome to Today’s Experience"
+        },
+        {
+          "session": 2,
+          "id": "humidor-match",
+          "route": "/smokecraft/humidor-match",
+          "label": "Choose Your Cigar"
+        },
+        {
+          "session": 3,
+          "id": "meet-your-cigar",
+          "route": "/smokecraft/meet-your-cigar",
+          "label": "Meet Your Cigar"
+        },
+        {
+          "session": 4,
+          "id": "terroir",
+          "route": "/smokecraft/terroir",
+          "label": "Terroir"
+        },
+        {
+          "session": 5,
+          "id": "format",
+          "route": "/smokecraft/format",
+          "label": "Construction Inspection"
+        },
+        {
+          "session": 6,
+          "id": "cut-toast-light",
+          "route": "/smokecraft/cut-toast-light",
+          "label": "Choose Your Cut"
+        },
+        {
+          "session": 7,
+          "id": "lighting-tutorial",
+          "route": "/smokecraft/lighting-tutorial",
+          "label": "Lighting Tutorial"
+        }
+      ],
+      "badges": [
+        "Cigar Selected Badge",
+        "Terroir Badge",
+        "Cut & Light Badge"
+      ]
+    },
+    {
+      "visit": 2,
+      "title": "First Third",
+      "sessions": [
+        {
+          "session": 8,
+          "id": "first-third",
+          "route": "/smokecraft/first-third",
+          "label": "First Draw"
+        },
+        {
+          "session": 9,
+          "id": "first-third",
+          "route": "/smokecraft/first-third",
+          "label": "Flavor Discovery",
+          "mergedInto": 8
+        },
+        {
+          "session": 10,
+          "id": "flavor-memory",
+          "route": "/smokecraft/flavor-memory",
+          "label": "Flavor Memory Exercise"
+        },
+        {
+          "session": 11,
+          "id": "pairing-lab",
+          "route": "/smokecraft/pairing-lab",
+          "label": "Suggested Pairings"
+        }
+      ],
+      "badges": [
+        "First Third Badge",
+        "Flavor Memory Badge",
+        "Pairing Explorer Badge"
+      ]
+    },
+    {
+      "visit": 3,
+      "title": "Second Third",
+      "sessions": [
+        {
+          "session": 12,
+          "id": "second-third",
+          "route": "/smokecraft/second-third",
+          "label": "Flavor Evolution"
+        },
+        {
+          "session": 13,
+          "id": "second-third",
+          "route": "/smokecraft/second-third",
+          "label": "Construction Check",
+          "mergedInto": 12
+        },
+        {
+          "session": 14,
+          "id": "mentor-commentary",
+          "route": "/smokecraft/mentor-commentary",
+          "label": "Mentor Commentary"
+        },
+        {
+          "session": 15,
+          "id": "knowledge-drop",
+          "route": "/smokecraft/knowledge-drop",
+          "label": "Knowledge Drop"
+        }
+      ],
+      "badges": [
+        "Second Third Badge",
+        "Mentor Commentary Badge",
+        "Knowledge Drop Badge"
+      ]
+    },
+    {
+      "visit": 4,
+      "title": "Final Third",
+      "sessions": [
+        {
+          "session": 16,
+          "id": "final-third",
+          "route": "/smokecraft/final-third",
+          "label": "Flavor Finish"
+        },
+        {
+          "session": 17,
+          "id": "final-third",
+          "route": "/smokecraft/final-third",
+          "label": "Strength Progression",
+          "mergedInto": 16
+        },
+        {
+          "session": 18,
+          "id": "final-third",
+          "route": "/smokecraft/final-third",
+          "label": "Overall Experience Notes",
+          "mergedInto": 16
+        }
+      ],
+      "badges": [
+        "Final Third Badge"
+      ]
+    },
+    {
+      "visit": 5,
+      "title": "Reflection",
+      "sessions": [
+        {
+          "session": 19,
+          "id": "scorecard",
+          "route": "/smokecraft/scorecard",
+          "label": "Rate Every Category"
+        },
+        {
+          "session": 20,
+          "id": "scorecard",
+          "route": "/smokecraft/scorecard",
+          "label": "Personal Notes",
+          "mergedInto": 19
+        }
+      ],
+      "badges": [
+        "SmokeCraft Scorecard Badge"
+      ]
+    },
+    {
+      "visit": 6,
+      "title": "Results",
+      "sessions": [
+        {
+          "session": 21,
+          "id": "ai-summary",
+          "route": "/smokecraft/ai-summary",
+          "label": "AI Summary"
+        },
+        {
+          "session": 22,
+          "id": "pairing-recommendations",
+          "route": "/smokecraft/pairing-recommendations",
+          "label": "Personalized Pairing Recommendations"
+        },
+        {
+          "session": 23,
+          "id": "passport-stamp",
+          "route": "/smokecraft/passport-stamp",
+          "label": "Passport Stamp Animation"
+        },
+        {
+          "session": 24,
+          "id": "final-review",
+          "route": "/smokecraft/final-review",
+          "label": "Completed Scorecard"
+        },
+        {
+          "session": 25,
+          "id": "rewards",
+          "route": "/smokecraft/rewards",
+          "label": "Rewards and XP"
+        },
+        {
+          "session": 26,
+          "id": "achievements",
+          "route": "/smokecraft/rewards",
+          "label": "Achievements",
+          "sharedComponent": "/smokecraft/rewards"
+        },
+        {
+          "session": 27,
+          "id": "session-complete",
+          "route": "/smokecraft/session-complete",
+          "label": "Recommended Next Journey"
+        }
+      ],
+      "badges": [
+        "SmokeCraft Passport Stamp",
+        "Passport Connections Access",
+        "VIP Candidate Signal",
+        "Next SmokeCraft Season"
+      ]
+    }
+  ],
+  "supportingModules": [
+    {
+      "id": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "label": "Gold Box Rules",
+      "requires": "entry"
+    },
+    {
+      "id": "mentor",
+      "route": "/smokecraft/mentor-selection",
+      "label": "Mentor Selection",
+      "requires": "entry"
+    },
+    {
+      "id": "seed-soil",
+      "route": "/smokecraft/seed-soil",
+      "label": "Seed & Soil",
+      "requires": "mentor"
+    },
+    {
+      "id": "wrapper-strength",
+      "route": "/smokecraft/wrapper-strength",
+      "label": "Wrapper / Strength Education",
+      "requires": "format"
+    },
+    {
+      "id": "request-purchase",
+      "route": "/smokecraft/request-purchase",
+      "label": "Request / Purchase",
+      "requires": "humidor-match"
+    },
+    {
+      "id": "smokecraft-challenge",
+      "route": "/smokecraft/smokecraft-challenge",
+      "label": "SmokeCraft Challenge",
+      "requires": "scorecard"
+    },
+    {
+      "id": "second-humidor-match",
+      "route": "/smokecraft/second-humidor-match",
+      "label": "Second Humidor Match",
+      "requires": "scorecard"
+    },
+    {
+      "id": "mini-tasting",
+      "route": "/smokecraft/mini-tasting",
+      "label": "Mini Tasting Round",
+      "requires": "scorecard"
+    },
+    {
+      "id": "connections",
+      "route": "/smokecraft/connections",
+      "label": "360 Passport Connections",
+      "requires": "passport-stamp"
+    },
+    {
+      "id": "management-sync",
+      "route": "/smokecraft/management-sync",
+      "label": "Venue / Management Sync",
+      "requires": "passport-stamp"
+    }
+  ]
+}

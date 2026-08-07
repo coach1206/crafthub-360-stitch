@@ -214,7 +214,22 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
       return
     }
     if (!completed) awardSessionRewards('entry')
-    navigate('/smokecraft/humidor-match')
+    // Canonical Journey Recovery: this was a hardcoded jump straight to
+    // Humidor Match (S2), which silently skipped three real, fully-built,
+    // fully-wired screens — Golden Box Rules -> Mentor Selection -> Seed &
+    // Soil — that already exist, already connect to each other
+    // (GoldenBox.jsx -> NAV.MENTOR, Mentor.jsx -> /smokecraft/seed-soil,
+    // SeedSoil.jsx -> /smokecraft/humidor-match, all confirmed live and
+    // guard-satisfied once 'entry' is complete, per
+    // docs/SMOKECRAFT_AUTHORITATIVE_ROUTE_GRAPH.md) and were only ever
+    // reachable via optional side-nav, never from the primary "Begin
+    // Experience" path a real player actually takes. This is the exact
+    // "designed screens now being skipped" defect the owner reported.
+    // TOTAL_SESSIONS/VISIT_STRUCTURE numbering is unchanged — these remain
+    // supporting modules, not renumbered spine sessions — only the primary
+    // forward path now actually enters the chain that was already built
+    // for it, instead of bypassing it.
+    navigate(NAV.GOLDEN_BOX)
   }
 
   const identityName = journey.identity?.preferredName || journey.identity?.fullName || null

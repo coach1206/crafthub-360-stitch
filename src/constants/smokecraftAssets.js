@@ -75,8 +75,16 @@ export const SC_ASSETS = {
   // S8 — Pairing Lab — raw full composition takes precedence
   pairingLab:          `${RAW}/PAIRING%20LAB1.png`,
 
-  // S9 — Humidor Match — raw full composition takes precedence
+  // S9 — Humidor Match — raw full composition takes precedence. Kept here
+  // for resolver/registry completeness only — Canonical Journey Recovery
+  // pass rebuilt HumidorMatch.jsx as real live DOM and no longer renders
+  // this baked mockup at all (it contained fake baked "Active" state; see
+  // SC-D076). Do not reintroduce it as this screen's UI.
   humidorMatch:        `${RAW}/Humidor%20Match%201.png`,
+  // Supporting decorative header photography only (approved, cropped, no
+  // baked UI/text/buttons) — used as a real <img> banner above the live
+  // controls, never as a surface controls are drawn on top of.
+  humidorMatchHero:    `${CROPPED}/humidor-match-hero.jpg`,
 
   // S10 — Request Purchase — raw full composition takes precedence
   requestPurchase:     `${RAW}/REQUEST%20PURCHASE.png`,

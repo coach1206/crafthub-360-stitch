@@ -2577,3 +2577,113 @@ position. Screenshots saved to
 `public/proof/smokecraft-humidor-match-live-proof/`.
 
 Highest SC-D number is now SC-D076.
+
+## SmokeCraft canonical journey recovery: restore intended opening sequence
+
+Owner reported that previously-designed opening screens — Golden Rules,
+Mentor, and other onboarding/gameplay screens — were being skipped or
+placed incorrectly, and explicitly required the real sequence be
+forensically recovered from repository/Git history, not supplied from
+memory or invented.
+
+**Recovery (Part 1 evidence, not memory)**: `docs/SMOKECRAFT_LOCKED_JOURNEY_SEQUENCE.md`
+and `docs/SMOKECRAFT_AUTHORITATIVE_ROUTE_GRAPH.md` (both pre-existing,
+from earlier passes) already documented and had already built a real,
+fully-wired chain — Golden Box Rules -> Mentor Selection -> Seed & Soil
+-> Humidor Match — with each screen's own `navigate()` call correctly
+pointing to the next. "Golden Rules" is `/smokecraft/golden-box`'s Golden
+Box Rules/acknowledgement screen (confirmed via `git show` on the Phase 7
+Golden Box proof manifest, which independently mapped "Golden Box rules"
+to this exact screen). This chain was real and reachable — just never
+entered by an actual playthrough.
+
+**Found and fixed SC-D077 (two independent causes, both fixed)**:
+
+1. `WelcomeExperience.jsx`'s own `handleBegin()` (the real Session 1
+   "Begin Experience" button) had been hardcoded to
+   `navigate('/smokecraft/humidor-match')` since the screen was first
+   built (`Package N`, predating the Golden Box/Mentor/Seed & Soil chain
+   built in a later pass) — jumping straight past all three. Fixed to
+   `navigate(NAV.GOLDEN_BOX)`.
+2. **The actual authority a real player's click obeys is not the
+   in-component `navigate()` call at all** — `SmokeCraftScreenRenderer.jsx`
+   passes every curriculum screen an `onComplete` prop that, when present,
+   always short-circuits before a component's own `navigate()` runs.
+   `onComplete` resolves its target from
+   `smokecraftCompletionService.completeSmokeCraftScreen()`, which reads
+   `smokecraftScreenManifest.js`'s auto-derived `nextScreenId` — for
+   session-1, mechanically computed as "the next entry in the flat
+   VISIT_STRUCTURE array" (i.e., session-2/Humidor Match), entirely blind
+   to Golden Box/Mentor/Seed & Soil since they aren't spine sessions. Fix
+   #1 alone was therefore dead code — verified directly: after fix #1
+   only, a real Playwright click on "Begin Experience" still landed on
+   `/smokecraft/humidor-match`. Root cause #2 fixed via the manifest's
+   existing `nextRouteOverride` mechanism (the same mechanism already
+   used for Format/S5 -> Request-Purchase): added
+   `s.session === 1 ? '/smokecraft/golden-box' : null`.
+
+Also fixed `HumidorMatch.jsx`'s hardcoded Back button (previously
+`navigate('/smokecraft')`, skipping the entire recovered chain on the way
+back) to `navigate(-1)`, matching the pattern already used by
+GoldenBox/Mentor/SeedSoil.
+
+**Confirmed NOT a numbering/ordering defect**: `TOTAL_SESSIONS=27`,
+`TOTAL_VISITS=6`, and every session's own number/id/route were already
+correct. Golden Box/Mentor/Seed & Soil remain supporting modules outside
+the 27-count (an explicit, previously-made design decision, re-confirmed
+here rather than silently overturned) — the fix is two navigation-target
+corrections, not a restructuring.
+
+**Part 4 — Humidor Match visual improvement**: added a real, governed
+decorative header banner (`HumidorHeroImage`, resolved via
+`resolveSmokeCraftAsset('humidorMatchHero')` — R2 first, approved
+repository fallback second, safe branded failure third) using an
+already-approved, previously-unused supporting photograph
+(`public/assets/smokecraft/cropped/humidor-match-hero.jpg`,
+`APPROVED_SUPPORTING` in the asset registry) — pure decoration, never a
+surface controls are drawn on top of. Refined header/instructional
+spacing and typography. No baked controls reintroduced.
+
+**Part 5 — static-gameplay audit**: `docs/SMOKECRAFT_STATIC_SCREEN_AUDIT.md`
+(new) classifies all 85 `src/pages/smokecraft/*.jsx` files. Zero
+`STATIC MOCKUP DEFECT` findings remain (the one from SC-D076 was already
+fixed and is re-verified clean here).
+
+**Part 10 — build-blocking lock**: new
+`scripts/verifySmokecraftCanonicalJourneyLock.mjs` (14/14) asserts the
+recovered chain's source-level forward targets (including the manifest
+`nextRouteOverride`, the mechanism that actually controls real-player
+navigation), asserts `HumidorMatch.jsx` never reintroduces the baked
+mockup, and asserts session numbering is unchanged. Wired into
+`npm run prebuild` (build-blocking) alongside the pre-existing
+static-gameplay detector, which was itself not previously build-blocking
+— fixed as part of this pass. New
+`docs/SMOKECRAFT_CANONICAL_JOURNEY.md`/`.json` (the JSON generated
+directly from `src/constants/session.js` via new
+`scripts/generateSmokecraftCanonicalJourneyJson.mjs`, so it can never
+hand-drift from the code that enforces it).
+
+**Part 7/8 — real end-to-end proof**: new
+`scripts/proveSmokecraftCanonicalOpeningSequence.mjs` drives a real,
+fresh, unseeded browser session through real clicks only — no direct URL
+jumping past a screen, no DB/localStorage completion injection, no skip
+flags — Enroll -> Identity -> Venue Select -> Welcome -> **Golden Box
+Rules -> Mentor Selection -> Seed & Soil** -> Humidor Match -> Meet Your
+Cigar, recording a full route trace
+(`public/proof/smokecraft-canonical-opening-sequence-recovery/route-trace.json`)
+and screenshots at every step. Confirmed: Welcome's real "Begin
+Experience" button now lands on Golden Box Rules (previously landed
+directly on Humidor Match); Humidor Match shows "Session 2 of 27 · Phase
+1 of 6" with no baked "STEP 6 OF 17"; the real "ACTIVE" badge appears
+only after a real click; Continue lands on Meet Your Cigar showing
+"Session 3 of 27". Additional real-click captures at
+desktop/tablet-landscape/tablet-portrait/kiosk for both Golden Box Rules
+and Humidor Match.
+
+62/62 fresh-player journey, 19/19 Humidor Match regression, 85/85
+static-gameplay detector, 14/14 canonical journey lock, 55/55 viewport
+touch proof (previously 54/55 — the one prior unrelated `passport`
+failure is now also clean), and a full production build (clean-bundle
+gate) all re-run clean on the final state.
+
+Highest SC-D number is now SC-D077.

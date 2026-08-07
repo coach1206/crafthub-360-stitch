@@ -1,0 +1,75 @@
+[
+  {
+    "step": "goto /smokecraft/enroll (fresh, no seeded server state, no cookie)",
+    "at": "2026-08-07T17:30:30.803Z"
+  },
+  {
+    "step": "screen: Enroll (Guest Pass)",
+    "url": "http://localhost:3001/smokecraft/enroll",
+    "at": "2026-08-07T17:30:31.914Z"
+  },
+  {
+    "step": "real click: Explore as Guest -> landed on Identity",
+    "url": "http://localhost:3001/smokecraft/identity",
+    "at": "2026-08-07T17:30:32.292Z"
+  },
+  {
+    "step": "real click: Identity Begin -> landed on Venue Select",
+    "url": "http://localhost:3001/smokecraft/venue-select",
+    "at": "2026-08-07T17:30:32.775Z"
+  },
+  {
+    "step": "real click: select venue + Continue -> landed on Welcome (S1)",
+    "url": "http://localhost:3001/smokecraft/welcome",
+    "at": "2026-08-07T17:30:33.254Z"
+  },
+  {
+    "step": "Welcome S1 labels",
+    "hasSession1": true,
+    "hasPhase1": true,
+    "at": "2026-08-07T17:30:34.374Z"
+  },
+  {
+    "step": "real click: Begin Experience -> landed on Golden Box Rules (RECOVERED — previously skipped straight to Humidor Match)",
+    "url": "http://localhost:3001/smokecraft/golden-box",
+    "at": "2026-08-07T17:30:35.756Z"
+  },
+  {
+    "step": "real click: acknowledge rules + Continue -> landed on Mentor Selection",
+    "url": "http://localhost:3001/smokecraft/mentor-selection",
+    "at": "2026-08-07T17:30:36.908Z"
+  },
+  {
+    "step": "real click: choose a mentor + Continue -> landed on Seed & Soil",
+    "url": "http://localhost:3001/smokecraft/seed-soil",
+    "at": "2026-08-07T17:30:38.101Z"
+  },
+  {
+    "step": "real click: Seed & Soil selection + Continue -> landed on Humidor Match (S2)",
+    "url": "http://localhost:3001/smokecraft/humidor-match",
+    "at": "2026-08-07T17:30:39.304Z"
+  },
+  {
+    "step": "Humidor Match labels",
+    "hasSession2of27": true,
+    "hasPhase1of6": true,
+    "noFakeStep6of17": true,
+    "at": "2026-08-07T17:30:40.073Z"
+  },
+  {
+    "step": "Humidor Match: real ACTIVE badge appears only after real selection",
+    "showsActive": true,
+    "at": "2026-08-07T17:30:40.526Z"
+  },
+  {
+    "step": "real click: Continue -> landed on Meet Your Cigar (S3) — canonical next screen",
+    "url": "http://localhost:3001/smokecraft/meet-your-cigar",
+    "at": "2026-08-07T17:30:40.957Z"
+  },
+  {
+    "step": "Meet Your Cigar labels",
+    "hasSession3of27": true,
+    "hasPhase1of6": true,
+    "at": "2026-08-07T17:30:41.705Z"
+  }
+]
