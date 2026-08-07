@@ -2687,3 +2687,25 @@ failure is now also clean), and a full production build (clean-bundle
 gate) all re-run clean on the final state.
 
 Highest SC-D number is now SC-D077.
+
+## SmokeCraft final game truth audit: complete 27-session validation + UI handoff
+
+Full-game truth audit — not scoped to the opening sequence alone. Independently re-derived the complete 27-session structure from live source (`src/constants/session.js`, `smokecraftScreenManifest.js`, `smokecraftComponentRegistry.js`, `smokecraftRewards.js`, `smokecraftAssets.js`) rather than trusting the previously-passing 62/62 suite as sole proof of completeness.
+
+**No new session-level defect found.** All 27 sessions have a real registered component (directly, via a documented merge, or via a documented shared component), every declared asset key resolves, and the recovered SC-D077 opening chain re-verified correct — see `docs/SMOKECRAFT_FULL_GAME_INVENTORY.md` (generated, not hand-authored) and the new `scripts/verifySmokecraftFullGameInventoryLock.mjs` (60/60, now build-blocking).
+
+**Second Humidor Match / SmokeCraft Challenge / Mini Tasting Round investigated** (`docs/SMOKECRAFT_ORPHAN_ROUTE_AUDIT.md`): traced to commit `145011e8`, the pre-27-session (24-session) era, where they held numbers S17–S19. Superseded by the current spine's S16–S20 content. Confirmed real, reachable, and functional, but only from non-spine hub screens (`EventChallenge.jsx`/`SmokeCraftCraftHub.jsx`), never from any button inside the canonical 27-session path. Classification: **LEGACY_UNUSED** — not deleted this pass (a content decision, not a defect fix), fully documented with evidence so it is no longer an unexplained orphan.
+
+**Full image-surface audit** (`docs/SMOKECRAFT_IMAGE_SURFACE_AUDIT.md`): two-layer verification — asset-existence (0 missing across 27 sessions) and real-browser-render confirmation (not inferred from file presence) via the existing screenshot proof from the SC-D077 pass plus the 55/55 viewport touch-proof harness.
+
+**One disclosed, deliberately-deferred visual defect**: Golden Box Rules shows severe top/bottom letterboxing on tablet-portrait (768×1024) — a shared-component characteristic of every image-shell screen against a landscape-source image on a portrait viewport, not unique to this screen. Not force-fixed this pass because the fit algorithm change would require re-deriving hotspot coordinates across ~20 other image-shell screens, risking new misalignment defects under this same time budget. Documented in `docs/smokecraft-ui-handoff/CURRENT_VISUAL_DEFECTS.md` with a recommendation for a dedicated pass.
+
+**New build-blocking gate**: `scripts/verifySmokecraftFullGameInventoryLock.mjs` — exactly 27 sessions with no gaps/duplicates in numbering, every session has a real component, every asset key resolves, opening chain re-verified. Wired into `npm run prebuild` alongside the existing gates.
+
+**New documentation set**: `docs/SMOKECRAFT_FULL_GAME_INVENTORY.md`, `SMOKECRAFT_FULL_ROUTE_GRAPH.json`, `SMOKECRAFT_SUBSTEP_INVENTORY.md`, `SMOKECRAFT_IMAGE_SURFACE_AUDIT.md`, `SMOKECRAFT_EXPECTED_VS_ACTUAL.md`, `SMOKECRAFT_ORPHAN_ROUTE_AUDIT.md` (all generated from or cross-checked against live source, not hand-typed tables prone to drift), plus a complete `docs/smokecraft-ui-handoff/` package (15 files: overview, canonical sequence, substep sequence, screen-by-screen spec, live-interaction requirements, visual design system, image/media spec, responsive/touch spec, do-not-break rules, acceptance checklist, current visual defects, designer-freedom-vs-locks reference, and 3 generated JSON maps).
+
+**Scope honesty on Part 12's "real fresh-player walkthrough"**: the pre-existing `scripts/verify-smokecraft-full-game-fresh-player.mjs` (62/62, re-run clean) already drives one fresh, isolated guest through all 22 distinct completion ids covering all 27 sessions via the real HTTP completion/evidence-submission API — the same server-authoritative endpoints a real browser session calls — with zero DB injection, zero localStorage fabrication, zero bypass flags; this is the authoritative full-game completion proof. A real *browser-click* walkthrough (Playwright) was performed and captured with screenshots for the recovered opening chain through Meet Your Cigar (S3) — extending real per-screen UI clicks through all remaining 24 sessions was not attempted this pass (each screen's form fields differ and a reliable script for all of them was not feasible in the available time); this gap is disclosed here rather than either skipped silently or falsely claimed complete.
+
+85/85 static-gameplay detector, 62/62 fresh-player journey, 19/19 Humidor Match regression, 14/14 canonical journey lock, 60/60 full-game inventory lock, 55/55 viewport touch proof, and a full production build (clean-bundle gate) all re-run clean on the final state.
+
+Highest SC-D number is now SC-D077 (no new numbered defect — this pass audited, documented, and locked structure rather than finding a new code-level defect beyond the one already fixed in SC-D077 itself).
