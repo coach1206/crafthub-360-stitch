@@ -1,9 +1,9 @@
 {
-  "capturedAt": "2026-08-06T22:28:49.793Z",
+  "capturedAt": "2026-08-07T09:53:55.190Z",
   "totalCombinations": 55,
   "screenshotsCaptured": 55,
-  "combinationsPassed": 55,
-  "combinationsFailed": 0,
+  "combinationsPassed": 54,
+  "combinationsFailed": 1,
   "viewports": [
     "desktop",
     "laptop",

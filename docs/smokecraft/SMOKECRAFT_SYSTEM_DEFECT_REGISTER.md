@@ -2491,3 +2491,89 @@ here; Railway production credential status remains unverified from
 here.
 
 Highest SC-D number is now SC-D075.
+
+## SmokeCraft Humidor Match sequence + gameplay blocker emergency fix
+
+Owner-reported live production defect, verified by screenshot: at
+`/smokecraft/humidor-match` ("PHASE 1/6, SESSION 2/27, STEP 6 OF 17,
+Humidor Match"), the screen visibly showed "Virtual Humidor = Active"
+while pressing "CONTINUE TO MEET YOUR CIGAR" produced "Select a storage
+environment before continuing."
+
+**Found and fixed SC-D076**: `HumidorMatch.jsx` rendered its entire
+visible surface as an approved-looking AI-generated mockup PNG
+(`Humidor Match 1.png`) via `SmokeCraftImageBoundsOverlay`, with only
+transparent, percentage-positioned hotspot `<button>`s as the real
+interactive layer. Direct pixel inspection of that PNG confirmed it
+contained baked, permanent artwork for: the "STEP 6 OF 17" progress bar,
+all three environment cards including a permanent "Virtual Humidor ●
+Active" badge, a fake "LIVE CONTROL / SELECTED ENVIRONMENT: Virtual
+Humidor / SYNCED" side panel with fake temp/humidity/toggles, and fake
+"CONTINUE →" / "← BACK" / "✓ APPLY SETTINGS" buttons. The client-side
+`selectedEnv` React state and the Continue-button validation were never
+actually out of sync with each other — both always read the same
+`selectedEnv` variable — the baked artwork was simply lying to the
+player about what `selectedEnv` currently held, always showing "Active"
+regardless of whether a real (invisible) hotspot had ever been tapped.
+
+Canonical-position cross-check (`src/constants/session.js`
+`VISIT_STRUCTURE`): Humidor Match is genuinely session 2 of 27, phase 1
+of 6 — the visible "PHASE 1/6, SESSION 2/27" labels were correct. The
+canonical screen before Humidor Match is Welcome (session 1,
+`/smokecraft/welcome`); the canonical screen after is Meet Your Cigar
+(session 3, `/smokecraft/meet-your-cigar` — already the correct
+`handleContinue()` navigation target, no route-order bug existed).
+"STEP 6 OF 17" was never real progression metadata; it was decorative
+text baked into the mockup, unrelated to the real 27-session spine, and
+is gone along with the rest of the baked artwork.
+
+Fix: replaced the baked-mockup-plus-invisible-hotspot rendering with
+real, live DOM for every interactive element (environment radio-group
+cards, temperature/humidity steppers, seal/airflow toggles, Apply
+Settings, cigar picker, feedback banner, Continue/Back) — every visible
+state is now driven directly by the same React state read by
+progression validation, which makes the visible-state/validated-state
+agreement structural rather than coincidental. Added a concise
+PURPOSE/ACTION/GOAL instructional block at the top of the screen
+(storage temperature/humidity/airflow/sealing explanation + 4-step
+action list). `handleContinue()`'s guard message changed from "Select a
+storage environment before continuing." to "Choose a storage
+environment to continue." — same fail-closed guard, run before any
+completion/navigation call, just no longer contradicted by the visuals
+around it. `pickEnv()` now also resets temp/humidity to the newly
+selected zone's defaults. Removed the screen's own second
+`SmokeCraftScreenShell` wrap (the route already wraps every screen via
+`SmokeCraftScreenRenderer`'s own `mode="live"` shell — this screen now
+only renders its own loading/error states on top of that, matching the
+already-established single-shell pattern used elsewhere).
+
+New `scripts/verifySmokecraftHumidorMatchRegression.mjs` (19/19):
+canonical spine position, no-selection block-with-message, all three
+environment ids are real/selectable/persisted (Virtual Humidor
+completes; Dry Box/Travel Case are real, accepted attempts that
+correctly require retry, matching the server-authoritative
+"correct environment" rule — not a regression of this fix), draft
+persistence, Apply-Settings-does-not-clear-selection, refresh restores
+the saved selection, completion occurs exactly once (a duplicate
+completion attempt does not double-award XP), canonical next-session id
+is `meet-your-cigar`, and no baked-mockup rendering or the old
+misleading error message remain in the file.
+
+62/62 fresh-player journey, 85/85 static-gameplay detector (HumidorMatch.jsx
+now passes as real, non-baked gameplay), and a full production build
+(`npm run build` — clean-bundle gate passed) all re-run clean.
+Real Playwright browser proof captured against the rebuilt production
+bundle at all 5 supported viewports
+(desktop/laptop/tablet-landscape/tablet-portrait/kiosk): 54/55 pass —
+the sole unrelated pre-existing failure is on the `passport` screen, out
+of this fix's scope. A separate full real-interaction walkthrough
+(enroll → identity → venue-select → welcome → Begin Experience →
+Humidor Match) proved live, in this exact order: no environment shows
+"Active" before selection; selecting Virtual Humidor immediately shows a
+real "ACTIVE" badge; Apply Settings preserves the selection; Continue
+succeeds exactly once and lands on the real Meet Your Cigar screen
+showing "SESSION 3/27, PHASE 1/6" — the correct canonical next
+position. Screenshots saved to
+`public/proof/smokecraft-humidor-match-live-proof/`.
+
+Highest SC-D number is now SC-D076.

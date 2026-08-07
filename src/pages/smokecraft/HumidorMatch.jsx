@@ -3,37 +3,58 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const ENRICHMENT_2 = getEducationalEnrichment(2)
 
-const NAT_W = 1672
-const NAT_H = 941
+// SmokeCraft Humidor Match — Emergency Repair.
+//
+// ROOT CAUSE of the production defect ("Virtual Humidor = Active" visibly
+// shown, but Continue said "Select a storage environment before
+// continuing."): this screen previously rendered an approved-looking
+// mockup PNG (Humidor Match 1.png) as its entire visible surface — every
+// card, the "Active" badge, the Continue/Back/Apply Settings buttons, the
+// toggles, and a "STEP 6 OF 17" progress bar were BAKED PIXELS from an
+// old AI-generated design mockup, permanently showing "Virtual Humidor
+// Active" regardless of real state. The real interactive layer was a set
+// of invisible, transparent hotspot buttons positioned on top of that
+// artwork. A player never had to click anything to SEE "Active" — the
+// artwork always said that — so pressing the real (invisible) Continue
+// hotspot with no real selection made correctly failed client-side
+// validation, producing a screen that looked selected and said it
+// wasn't. The client-side selection state (`selectedEnv`) and the
+// Continue validation were never actually out of sync with each other —
+// both always read the same `selectedEnv` — the artwork was lying to the
+// player about what `selectedEnv` was.
+//
+// Fix: replace the baked-mockup + invisible-hotspot rendering with real,
+// live DOM — every card, control, badge, and button below is real React
+// state and a real element. The lounge photography is gone from this
+// screen entirely (it added no functional value and was the source of
+// the defect); the navy/charcoal/champagne-gold identity is preserved
+// via SmokeCraftScreenShell's `mode="live"` contract (already the
+// established pattern for real-DOM SmokeCraft screens).
+//
+// "STEP 6 OF 17" was never real progression metadata — it was decorative
+// text baked into that same mockup, unrelated to the canonical 27-session
+// spine (src/constants/session.js: session 2 of 27, phase 1 of 6 — the
+// exact values SmokeCraftLessonInfoButton below already renders from the
+// real manifest). It is gone along with the rest of the baked artwork.
 
-const GOLD = '#E9C176'
-// Root-cause fix: this panel sits over a baked "Live Control" panel already
-// drawn into the approved image. A non-opaque background (previously
-// rgba(5,5,5,0.92)) let ~8% of the baked pixels bleed through, producing a
-// ghosted double-text effect. Must be fully opaque — same class of bug
-// found and fixed on Golden Box's masks earlier this session.
-const PANEL = {
-  background: '#050505',
-  border: '1px solid rgba(233,193,118,0.28)',
-  borderRadius: 8,
-  position: 'absolute',
-  boxSizing: 'border-box',
-  fontFamily: 'Georgia, serif',
-}
+const GOLD    = '#E9C176'
+const GOLD_DIM = 'rgba(233,193,118,0.55)'
+const CREAM   = '#e5e2e1'
+const BORDER  = 'rgba(233,193,118,0.22)'
+const GLASS   = 'rgba(233,193,118,0.06)'
+const GLASS_ACTIVE = 'rgba(233,193,118,0.12)'
 
 const HUMIDOR_ZONES = [
-  { id: 'virtual_humidor', label: 'Virtual Humidor', x: 18.7, y: 24.3, w: 41.4, h: 12.3 },
-  { id: 'dry_box',         label: 'Dry Box',         x: 18.7, y: 39.5, w: 41.4, h: 12.7 },
-  { id: 'travel_case',     label: 'Travel Case',     x: 18.7, y: 54.9, w: 41.4, h: 12.6 },
+  { id: 'virtual_humidor', label: 'Virtual Humidor', desc: 'Classic humidor conditions for optimal balance.', temp: 70, humidity: 70, badge: 'Climate-controlled' },
+  { id: 'dry_box',         label: 'Dry Box',         desc: 'Tighter draw, slower burn — ideal for long-term rest.', temp: 68, humidity: 62, badge: 'Passive storage' },
+  { id: 'travel_case',     label: 'Travel Case',     desc: 'Sealed environment for field conditions.', temp: 69, humidity: 65, badge: 'Sealed, no climate control' },
 ]
 
 const CIGAR_PRESETS = [
@@ -47,71 +68,62 @@ const CIGAR_PRESETS = [
   { name: 'Cohiba Siglo VI',      origin: 'Dominican Republic', wrapper: 'Ecuador Natural', strength: 'Medium',      body: 'Medium', tastingProfile: 'Floral, cedar, subtle pepper' },
 ]
 
-const CIGAR_LAYOUT = CIGAR_PRESETS.map((c, i) => ({
-  ...c,
-  x: 1.5 + (i % 4) * 24.5,
-  y: i < 4 ? 71.0 : 83.0,
-  w: 23.0,
-  h: 9.5,
-}))
-
 function Stepper({ label, value, unit, onDec, onInc, min, max }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-      <span style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.6)', width: 62, flexShrink: 0 }}>{label}</span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+      <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', width: 90, flexShrink: 0 }}>{label}</span>
       <button
-        type="button"
-        aria-label={`Decrease ${label}`}
+        type="button" aria-label={`Decrease ${label}`}
         onClick={() => { triggerHaptic('light'); onDec() }}
         disabled={value <= min}
         style={{
-          width: 20, height: 20, borderRadius: 4,
-          border: '1px solid rgba(233,193,118,0.4)', background: 'transparent',
+          width: 44, height: 44, borderRadius: 8,
+          border: `1px solid ${GOLD_DIM}`, background: 'transparent',
           color: GOLD, cursor: value <= min ? 'not-allowed' : 'pointer',
-          fontSize: 14, lineHeight: 1, padding: 0, outline: 'none',
-          opacity: value <= min ? 0.4 : 1,
+          fontSize: 18, lineHeight: 1, padding: 0, outline: 'none',
+          opacity: value <= min ? 0.4 : 1, touchAction: 'manipulation',
         }}
       >−</button>
-      <span style={{ fontSize: 'clamp(9px,0.8vw,11px)', color: GOLD, fontWeight: 700, minWidth: 38, textAlign: 'center' }}>
+      <span style={{ fontSize: 15, color: GOLD, fontWeight: 700, minWidth: 56, textAlign: 'center' }}>
         {value}{unit}
       </span>
       <button
-        type="button"
-        aria-label={`Increase ${label}`}
+        type="button" aria-label={`Increase ${label}`}
         onClick={() => { triggerHaptic('light'); onInc() }}
         disabled={value >= max}
         style={{
-          width: 20, height: 20, borderRadius: 4,
-          border: '1px solid rgba(233,193,118,0.4)', background: 'transparent',
+          width: 44, height: 44, borderRadius: 8,
+          border: `1px solid ${GOLD_DIM}`, background: 'transparent',
           color: GOLD, cursor: value >= max ? 'not-allowed' : 'pointer',
-          fontSize: 14, lineHeight: 1, padding: 0, outline: 'none',
-          opacity: value >= max ? 0.4 : 1,
+          fontSize: 18, lineHeight: 1, padding: 0, outline: 'none',
+          opacity: value >= max ? 0.4 : 1, touchAction: 'manipulation',
         }}
       >+</button>
     </div>
   )
 }
 
-function Toggle({ label, value, onChange }) {
+function Toggle({ label, sub, value, onChange }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-      <span style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.6)' }}>{label}</span>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, minHeight: 44 }}>
+      <div>
+        <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.85)' }}>{label}</div>
+        {sub && <div style={{ fontSize: 10, color: 'rgba(229,226,225,0.45)' }}>{sub}</div>}
+      </div>
       <button
-        type="button"
-        role="switch"
-        aria-checked={value}
-        aria-label={label}
+        type="button" role="switch" aria-checked={value} aria-label={label}
         onClick={() => { triggerHaptic('light'); onChange(!value) }}
         style={{
-          width: 36, height: 18, borderRadius: 9,
-          border: `1px solid ${value ? GOLD : 'rgba(233,193,118,0.3)'}`,
-          background: value ? 'rgba(233,193,118,0.2)' : 'transparent',
+          width: 48, height: 28, borderRadius: 14, flexShrink: 0,
+          border: `1px solid ${value ? GOLD : GOLD_DIM}`,
+          background: value ? 'rgba(233,193,118,0.22)' : 'transparent',
           cursor: 'pointer', outline: 'none', position: 'relative', padding: 0,
+          touchAction: 'manipulation',
         }}
       >
         <span style={{
-          position: 'absolute', top: 2, left: value ? 18 : 2,
-          width: 12, height: 12, borderRadius: '50%',
+          position: 'absolute', top: 3, left: value ? 22 : 3,
+          width: 20, height: 20, borderRadius: '50%',
           background: value ? GOLD : 'rgba(229,226,225,0.4)',
           transition: 'left 0.15s, background 0.15s',
         }} />
@@ -127,16 +139,8 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
   const { journey, setSelectedCigar } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  // Load from canonical journey state
   const savedCigar = journey.selectedCigar
 
-  // Required-Interaction Closure Package C: the environment zone
-  // selection below (Virtual Humidor / Dry Box / Travel Case) is the
-  // real, server-evaluated "image-based selection" interaction for this
-  // session — the server independently knows which of the three is the
-  // factually correct climate-controlled storage choice. The rest of
-  // this screen's rich simulation (temp/humidity/seal/airflow, cigar
-  // picker) is unchanged and still persisted locally as before.
   const [phase, setPhase] = useState('loading')
   const [draftVersion, setDraftVersion] = useState(0)
   const [selectedEnv,   setSelectedEnv]   = useState(null)
@@ -204,12 +208,13 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
     }
   }, [selectedCigar, selectedEnv, temp, humidity, sealOn, airflowOn]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  function pickEnv(envId) {
+  function pickEnv(zone) {
     triggerHaptic('light')
-    const next = envId === selectedEnv ? null : envId
+    const next = zone.id === selectedEnv ? null : zone.id
     setSelectedEnv(next)
     setFeedback(null)
     if (applyStatus === 'applied') setApplyStatus('idle')
+    if (next) { setTemp(zone.temp); setHumidity(zone.humidity) }
   }
 
   function pickCigar(cigar) {
@@ -220,22 +225,21 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
 
   function handleApply() {
     triggerHaptic('medium')
-    // Persist settings through journey context (done via useEffect above)
+    // Apply Settings must never clear the selected environment — it only
+    // confirms the current temp/humidity/seal/airflow values, which are
+    // already persisted via the useEffect above regardless of this click.
     setApplyStatus('applied')
   }
 
   async function handleContinue() {
     if (done) return
     if (!selectedEnv) {
-      setFeedback({ correct: false, message: 'Select a storage environment before continuing.' })
+      setFeedback({ correct: false, message: 'Choose a storage environment to continue.' })
       return
     }
     setDone(true)
     triggerHaptic('medium')
 
-    // Required-Interaction Closure Package C: the server independently
-    // evaluates which environment is the factually correct climate-
-    // controlled storage choice — never a client-trusted claim.
     const result = await submitSelectionAttempt('humidor-match', { selectedId: selectedEnv })
     if (!result.ok) {
       setDone(false)
@@ -266,18 +270,23 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
     navigate('/smokecraft/meet-your-cigar')
   }
 
+  // Rendered inside SmokeCraftScreenRenderer's own `mode="live"`
+  // SmokeCraftScreenShell (App.jsx routes /smokecraft/humidor-match
+  // through SmokeCraftScreenRenderer screenId="session-2", which already
+  // wraps every screen it renders) — no second shell wrap here, just the
+  // loading/error states this screen needs on top of that.
   if (phase === 'loading') {
     return (
-      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="status" aria-live="polite" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
         Loading…
       </div>
     )
   }
   if (phase === 'error') {
     return (
-      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="alert" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, minHeight: '60vh', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
         <p style={{ margin: 0 }}>Something went wrong loading this session.</p>
-        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 44 }}>
           Retry
         </button>
       </div>
@@ -286,119 +295,152 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
 
   return (
     <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.humidorMatch}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Humidor Match — Select Your Cigar"
-      >
-        {/* Nav mask — covers image-drawn navigation */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
-          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+      <div style={{ maxWidth: 1080, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', paddingBottom: 110 }}>
 
-        {HUMIDOR_ZONES.map(zone => {
-          const active = selectedEnv === zone.id
-          return (
-            <button
-              key={zone.id}
-              type="button"
-              aria-label={`${zone.label}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => pickEnv(zone.id)}
-              style={{
-                position: 'absolute', left: `${zone.x}%`, top: `${zone.y}%`,
-                width: `${zone.w}%`, height: `${zone.h}%`,
-                pointerEvents: 'auto', background: 'transparent',
-                border: `2.5px solid ${active ? GOLD : 'transparent'}`,
-                borderRadius: 4, cursor: 'pointer', boxSizing: 'border-box', padding: 0, outline: 'none',
-              }}
-            >
-              {active && (
-                <span style={{ position: 'absolute', top: 4, right: 6, fontSize: 'clamp(9px,1.2vw,14px)',
-                  fontWeight: 700, color: GOLD, lineHeight: 1, pointerEvents: 'none' }}>✓</span>
-              )}
-            </button>
-          )
-        })}
-
-        {/* Environment controls panel */}
-        <div style={{ ...PANEL, left: '63%', top: '22%', width: '34%', height: '46%',
-          padding: 'clamp(6px,1vw,14px)', pointerEvents: 'auto' }}>
-          <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.55)',
-            letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>
-            ◦ Manual Mode — No Hardware Connected
+        {/* ── Instructional header (Part 3) — concise, premium, real DOM ── */}
+        <div style={{
+          background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
+          padding: 'clamp(14px,2.5vw,22px)', marginBottom: 20,
+        }}>
+          <div style={{ fontSize: 11, color: GOLD_DIM, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Session 2 of {TOTAL_SESSIONS} · Phase 1 of {TOTAL_VISITS}
           </div>
-          {selectedEnv && (
-            <div style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: GOLD, fontWeight: 700, marginBottom: 10, letterSpacing: '0.04em' }}>
-              {HUMIDOR_ZONES.find(z => z.id === selectedEnv)?.label}
-            </div>
-          )}
-          <Stepper label="Temperature" value={temp} unit="°F" min={60} max={80}
-            onDec={() => setTemp(v => Math.max(60, v - 1))} onInc={() => setTemp(v => Math.min(80, v + 1))} />
-          <Stepper label="Humidity" value={humidity} unit="%" min={55} max={80}
-            onDec={() => setHumidity(v => Math.max(55, v - 1))} onInc={() => setHumidity(v => Math.min(80, v + 1))} />
-          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', margin: '10px 0 8px' }} />
-          <Toggle label="Seal" value={sealOn} onChange={setSealOn} />
-          <Toggle label="Airflow" value={airflowOn} onChange={setAirflowOn} />
-          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', margin: '10px 0 8px' }} />
+          <h1 style={{ margin: '0 0 8px', fontSize: 'clamp(20px,2.6vw,28px)', color: CREAM, fontFamily: 'Georgia, serif' }}>
+            Humidor Match
+          </h1>
+          <p style={{ margin: '0 0 12px', fontSize: 13, lineHeight: 1.5, color: 'rgba(229,226,225,0.75)' }}>
+            Learn how storage temperature, humidity, airflow, and sealing affect a cigar before it's ever smoked.
+          </p>
+          <ol style={{ margin: 0, padding: '0 0 0 18px', fontSize: 12.5, lineHeight: 1.9, color: 'rgba(229,226,225,0.65)' }}>
+            <li>Choose one storage environment below.</li>
+            <li>Adjust or review its temperature, humidity, seal, and airflow.</li>
+            <li>Apply the settings.</li>
+            <li>Continue.</li>
+          </ol>
+        </div>
+
+        {/* ── Environment cards — real selection, real "Active" state ── */}
+        <div role="radiogroup" aria-label="Storage environment" style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
+          {HUMIDOR_ZONES.map(zone => {
+            const active = selectedEnv === zone.id
+            return (
+              <button
+                key={zone.id}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                aria-label={`${zone.label}${active ? ' (selected)' : ''}`}
+                onClick={() => pickEnv(zone)}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+                  textAlign: 'left', width: '100%', minHeight: 72,
+                  padding: 'clamp(12px,1.8vw,18px)', borderRadius: 10,
+                  background: active ? GLASS_ACTIVE : GLASS,
+                  border: `1.5px solid ${active ? GOLD : BORDER}`,
+                  cursor: 'pointer', outline: 'none', touchAction: 'manipulation',
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                    <span style={{ fontSize: 15, fontWeight: 700, color: CREAM }}>{zone.label}</span>
+                    {active && (
+                      <span style={{ fontSize: 10, fontWeight: 700, color: '#0a0603', background: GOLD, borderRadius: 10, padding: '2px 8px', letterSpacing: '0.04em' }}>
+                        ACTIVE
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)' }}>{zone.desc}</div>
+                </div>
+                <div style={{ flexShrink: 0, textAlign: 'right', fontSize: 11, color: GOLD_DIM }}>
+                  {zone.temp}°F · {zone.humidity}% RH
+                </div>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* ── Environment controls — only meaningful once an environment is selected ── */}
+        <div style={{
+          background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
+          padding: 'clamp(14px,2.5vw,20px)', marginBottom: 20,
+          opacity: selectedEnv ? 1 : 0.5,
+        }}>
+          <div style={{ fontSize: 11, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>
+            {selectedEnv ? `Adjusting: ${HUMIDOR_ZONES.find(z => z.id === selectedEnv)?.label}` : 'Select an environment to adjust its settings'}
+          </div>
+          <fieldset disabled={!selectedEnv} style={{ border: 'none', padding: 0, margin: 0 }}>
+            <Stepper label="Temperature" value={temp} unit="°F" min={60} max={80}
+              onDec={() => setTemp(v => Math.max(60, v - 1))} onInc={() => setTemp(v => Math.min(80, v + 1))} />
+            <Stepper label="Humidity" value={humidity} unit="%" min={55} max={80}
+              onDec={() => setHumidity(v => Math.max(55, v - 1))} onInc={() => setHumidity(v => Math.min(80, v + 1))} />
+            <div style={{ borderTop: `1px solid ${BORDER}`, margin: '12px 0' }} />
+            <Toggle label="Seal" sub="Maintains stable humidity" value={sealOn} onChange={setSealOn} />
+            <Toggle label="Airflow" sub="Balances circulation" value={airflowOn} onChange={setAirflowOn} />
+          </fieldset>
           <button
             type="button"
             aria-label="Apply humidor settings"
             onClick={handleApply}
+            disabled={!selectedEnv}
             style={{
-              width: '100%', padding: '5px 0', borderRadius: 5,
+              width: '100%', minHeight: 48, marginTop: 14, borderRadius: 8,
               border: `1px solid ${applyStatus === 'applied' ? 'rgba(233,193,118,0.5)' : GOLD}`,
-              background: applyStatus === 'applied' ? 'rgba(233,193,118,0.12)' : 'rgba(233,193,118,0.08)',
-              color: GOLD, fontSize: 'clamp(8px,0.72vw,10px)', fontFamily: 'Georgia, serif',
-              fontWeight: 700, letterSpacing: '0.05em', cursor: 'pointer', outline: 'none',
+              background: applyStatus === 'applied' ? 'rgba(233,193,118,0.14)' : 'rgba(233,193,118,0.08)',
+              color: GOLD, fontSize: 13, fontFamily: 'Georgia, serif', fontWeight: 700,
+              letterSpacing: '0.05em', cursor: selectedEnv ? 'pointer' : 'not-allowed',
+              outline: 'none', opacity: selectedEnv ? 1 : 0.5, touchAction: 'manipulation',
             }}
           >
             {applyStatus === 'applied' ? '✓ Settings Applied' : 'Apply Settings'}
           </button>
         </div>
 
-        {CIGAR_LAYOUT.map(cigar => {
-          const active = selectedCigar?.name === cigar.name
-          return (
-            <button
-              key={cigar.name}
-              type="button"
-              aria-label={`${cigar.name}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => pickCigar(cigar)}
-              style={{
-                position: 'absolute', left: `${cigar.x}%`, top: `${cigar.y}%`,
-                width: `${cigar.w}%`, height: `${cigar.h}%`,
-                pointerEvents: 'auto', background: 'transparent',
-                border: `2px solid ${active ? GOLD : 'transparent'}`,
-                borderRadius: 4, cursor: 'pointer', boxSizing: 'border-box', outline: 'none',
-              }}
-            >
-              {active && (
-                <span style={{ position: 'absolute', top: 3, right: 5, fontSize: 'clamp(8px,0.9vw,11px)',
-                  fontWeight: 700, color: GOLD, lineHeight: 1, pointerEvents: 'none' }}>✓</span>
-              )}
-            </button>
-          )
-        })}
-      </SmokeCraftImageBoundsOverlay>
+        {/* ── Cigar picker — compact real chip grid ── */}
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 11, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+            Choose a cigar for this session (optional)
+          </div>
+          <div role="radiogroup" aria-label="Cigar selection" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8 }}>
+            {CIGAR_PRESETS.map(cigar => {
+              const active = selectedCigar?.name === cigar.name
+              return (
+                <button
+                  key={cigar.name}
+                  type="button" role="radio" aria-checked={active}
+                  aria-label={`${cigar.name}${active ? ' (selected)' : ''}`}
+                  onClick={() => pickCigar(cigar)}
+                  style={{
+                    textAlign: 'left', minHeight: 48, padding: '8px 10px', borderRadius: 8,
+                    background: active ? GLASS_ACTIVE : 'transparent',
+                    border: `1.5px solid ${active ? GOLD : BORDER}`,
+                    color: active ? GOLD : 'rgba(229,226,225,0.75)',
+                    fontSize: 11.5, cursor: 'pointer', outline: 'none', touchAction: 'manipulation',
+                  }}
+                >
+                  {cigar.name}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {feedback && (
+          <div role="alert" style={{
+            marginBottom: 90,
+            background: feedback.correct ? 'rgba(20,90,50,0.9)' : 'rgba(120,20,20,0.9)',
+            border: `1px solid ${feedback.correct ? 'rgba(150,255,180,0.5)' : 'rgba(255,150,150,0.5)'}`,
+            borderRadius: 8, padding: '10px 14px', color: feedback.correct ? '#d6ffe4' : '#ffdada',
+            fontSize: 13, fontFamily: 'Georgia, serif',
+          }}>
+            {feedback.message}
+          </div>
+        )}
+      </div>
 
       <SmokeCraftLessonInfoButton
         sessionNumber={2} totalSessions={TOTAL_SESSIONS} phase={1} totalPhases={TOTAL_VISITS}
         title="Choose Your Cigar" whyItMatters={ENRICHMENT_2?.whyItMatters} goldenBox={ENRICHMENT_2?.goldenBox}
       />
-
-      {feedback && (
-        <div role="alert" style={{
-          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
-          background: feedback.correct ? 'rgba(20,90,50,0.9)' : 'rgba(120,20,20,0.9)',
-          border: `1px solid ${feedback.correct ? 'rgba(150,255,180,0.5)' : 'rgba(255,150,150,0.5)'}`,
-          borderRadius: 6, padding: '6px 10px', color: feedback.correct ? '#d6ffe4' : '#ffdada',
-          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
-        }}>
-          {feedback.message}
-        </div>
-      )}
 
       <SmokeCraftNavBar
         primary={done ? 'Checking…' : 'Continue to Meet Your Cigar →'}

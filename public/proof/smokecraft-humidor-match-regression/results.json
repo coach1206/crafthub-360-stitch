@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-08-07T09:52:15.366Z",
+  "pass": 19,
+  "fail": 0,
+  "total": 19,
+  "results": [
+    {
+      "name": "(9/10) Canonical spine contains humidor-match as session 2 of 27, phase 1 of 6",
+      "ok": true
+    },
+    {
+      "name": "(9) Canonical next session after humidor-match is 'meet-your-cigar' (matches HumidorMatch.jsx navigate() target)",
+      "ok": true
+    },
+    {
+      "name": "(1) Continue blocks with a clear message when no environment is selected (source-verified guard)",
+      "ok": true
+    },
+    {
+      "name": "(1b) The blocking guard sits before any completion/navigation call (no bypass)",
+      "ok": true
+    },
+    {
+      "name": "(2-4) Environment 'virtual_humidor' selection is a real, accepted attempt (persists — proves no baked/fake UI)",
+      "ok": true
+    },
+    {
+      "name": "(2-4) Environment 'virtual_humidor' completion outcome matches server-authoritative correctness (expected to progress)",
+      "ok": true
+    },
+    {
+      "name": "(2-4) Environment 'dry_box' selection is a real, accepted attempt (persists — proves no baked/fake UI)",
+      "ok": true
+    },
+    {
+      "name": "(2-4) Environment 'dry_box' completion outcome matches server-authoritative correctness (expected to require retry, same as the live \"Not quite\" path)",
+      "ok": true
+    },
+    {
+      "name": "(2-4) Environment 'travel_case' selection is a real, accepted attempt (persists — proves no baked/fake UI)",
+      "ok": true
+    },
+    {
+      "name": "(2-4) Environment 'travel_case' completion outcome matches server-authoritative correctness (expected to require retry, same as the live \"Not quite\" path)",
+      "ok": true
+    },
+    {
+      "name": "(5) Draft save persists the selected environment server-side",
+      "ok": true
+    },
+    {
+      "name": "(5) Draft read-back reflects the exact selection just saved (visible state === validated state)",
+      "ok": true
+    },
+    {
+      "name": "(6) A second draft save (Apply Settings path) does not clear the selection",
+      "ok": true
+    },
+    {
+      "name": "(7) Reloading the draft (refresh) restores the same previously-saved selection",
+      "ok": true
+    },
+    {
+      "name": "(8) Selection evidence for completion-once test is accepted",
+      "ok": true
+    },
+    {
+      "name": "(8) First completion call succeeds",
+      "ok": true
+    },
+    {
+      "name": "(8) A duplicate completion attempt does not double-award XP (completes exactly once)",
+      "ok": true
+    },
+    {
+      "name": "No baked-mockup <img>/background-image rendering remains in HumidorMatch.jsx",
+      "ok": true
+    },
+    {
+      "name": "Old, misleading error message ('Select a storage environment before continuing.') no longer present",
+      "ok": true
+    }
+  ]
+}

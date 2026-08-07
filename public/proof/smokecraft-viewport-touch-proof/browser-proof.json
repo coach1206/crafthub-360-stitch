@@ -852,9 +852,19 @@
     "consoleErrorCount": 0,
     "consoleErrors": [],
     "pageErrors": [],
-    "httpFailureCount": 0,
-    "httpFailures": [],
-    "badImageRequests": [],
+    "httpFailureCount": 1,
+    "httpFailures": [
+      {
+        "url": "http://localhost:3001/passport-hero.png",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
+    "badImageRequests": [
+      {
+        "url": "http://localhost:3001/passport-hero.png",
+        "failure": "net::ERR_ABORTED"
+      }
+    ],
     "overflowResult": "pass",
     "overflowDetail": {
       "scrollWidth": 1024,
@@ -867,7 +877,7 @@
     },
     "navError": null,
     "screenshotOk": true,
-    "pass": true
+    "pass": false
   },
   {
     "filename": "final-session--tablet-landscape.png",
