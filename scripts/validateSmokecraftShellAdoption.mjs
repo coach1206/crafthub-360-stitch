@@ -117,7 +117,18 @@ const ASSET_LOCKS = [
   { file: 'src/pages/smokecraft/SmokeCraftPassport.jsx', key: 'SC_ASSETS.passportHub' },
   { file: 'src/pages/smokecraft/SmokeCraftCraftHub.jsx', key: 'SC_ASSETS.craftHubVenueTable' },
   { file: 'src/pages/smokecraft/Rewards.jsx', key: 'SC_ASSETS.rewards' },
-  { file: 'src/pages/smokecraft/GoldenBox.jsx', key: 'SC_ASSETS.goldenBox' },
+  // GoldenBox.jsx intentionally removed from this lock (Live Production
+  // Player-Experience Repair pass): the screen was rebuilt as real live
+  // DOM (mode="live", same pattern as HumidorMatch/SC-D076) after three
+  // large baked-artwork regions were confirmed to be masked-blank
+  // production content ("YOUR COMMITMENT"/"VENUE SETTINGS"/"GUEST
+  // AGREEMENTS" panels neutralized to empty voids, not filled) — a real
+  // static-shell defect, not a false positive. It no longer references
+  // SC_ASSETS.goldenBox at all; every real, approved piece of copy from
+  // that composite (Golden Principles, Quick Rule Reminders, Rule
+  // Acknowledgement, Consequences of Misconduct, The Right Way to Enjoy,
+  // Golden Tip) is now real DOM text, transcribed from the same approved
+  // source image rather than rendered as its pixels.
 ]
 for (const a of ASSET_LOCKS) {
   const src = readFileSync(a.file, 'utf8')

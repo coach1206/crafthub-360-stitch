@@ -282,8 +282,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 92.203125,
-      "height": 45.890625
+      "width": 93.84375,
+      "height": 46
     },
     "navError": null,
     "screenshotOk": true,
@@ -601,8 +601,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 84.015625,
-      "height": 44
+      "width": 93.84375,
+      "height": 46
     },
     "navError": null,
     "screenshotOk": true,
@@ -920,8 +920,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 77.8125,
-      "height": 44
+      "width": 93.84375,
+      "height": 46
     },
     "navError": null,
     "screenshotOk": true,
@@ -1239,8 +1239,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 58.359375,
-      "height": 44
+      "width": 93.84375,
+      "height": 46
     },
     "navError": null,
     "screenshotOk": true,
@@ -1558,8 +1558,8 @@
     },
     "touchTargetResult": "pass",
     "touchTargetDetail": {
-      "width": 110.640625,
-      "height": 55.078125
+      "width": 93.84375,
+      "height": 46
     },
     "navError": null,
     "screenshotOk": true,

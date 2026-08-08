@@ -10,7 +10,7 @@ For each screen below: purpose, player instruction, required interaction, mentor
 Purpose: orientation, set expectations for the session ahead. Instruction: read the welcome copy, press Begin Experience. Interaction: one real Continue action (no form). Mentor: none at this screen (mentor is chosen next, in the recovered opening chain). Desktop/tablet/kiosk: image-shell layout, sidebar/bottom-nav persist at all sizes — verify no clipping (see `RESPONSIVE_AND_TOUCH_SPEC.md`).
 
 ## Golden Box Rules (opening chain, supporting)
-Purpose: house rules/etiquette before real gameplay begins. Instruction: read the 5 Golden Principles, acknowledge via the real checkbox. Interaction: checkbox (real, gates Continue) + Continue button. Mentor: none. Known issue: severe top/bottom letterboxing on tablet-portrait — see `CURRENT_VISUAL_DEFECTS.md`.
+Purpose: house rules/etiquette before real gameplay begins. Real live DOM (rebuilt SC-D079 — was previously an image-shell screen with 3 large blank masked panels). Content: The Golden Principles (5 items), Quick Rule Reminders (4), Consequences of Misconduct, Rule Acknowledgement, The Right Way to Enjoy (5 steps), Golden Tip. Interaction: checkbox (real, gates Continue) + Continue button. Mentor: none. No known visual defects.
 
 ## Mentor Selection (opening chain, supporting)
 Purpose: pick up to 2 mentors whose voice/philosophy will color later commentary. Instruction: browse cards, tap to select (up to 2), Continue. Interaction: real `aria-pressed` selectable cards + voice preview buttons. Mentor: this **is** the mentor system's entry point — every card is a real mentor profile, not decoration.
