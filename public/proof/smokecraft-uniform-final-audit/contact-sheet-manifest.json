@@ -1,0 +1,11 @@
+{
+  "totalSheets": 5,
+  "outputs": [
+    "public/proof/smokecraft-uniform-final-audit/SMOKECRAFT_UNIFORM_FINAL_AUDIT_01.png",
+    "public/proof/smokecraft-uniform-final-audit/SMOKECRAFT_UNIFORM_FINAL_AUDIT_02.png",
+    "public/proof/smokecraft-uniform-final-audit/SMOKECRAFT_UNIFORM_FINAL_AUDIT_03.png",
+    "public/proof/smokecraft-uniform-final-audit/SMOKECRAFT_UNIFORM_FINAL_AUDIT_04.png",
+    "public/proof/smokecraft-uniform-final-audit/SMOKECRAFT_UNIFORM_FINAL_AUDIT_05.png"
+  ],
+  "indexOut": "public/proof/smokecraft-uniform-final-audit/SMOKECRAFT_UNIFORM_FINAL_INDEX.png"
+}

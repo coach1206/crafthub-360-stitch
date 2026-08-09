@@ -128,18 +128,24 @@ export default function ManagementSync() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Georgia, serif' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 18, fontFamily: 'Georgia, serif' }}>
 
-
-        <header>
-          <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-            SmokeCraft 360 — Supporting Module
+        <div style={{
+          borderRadius: 14, border: `1px solid ${BORDER}`, padding: 'clamp(20px,3.4vw,32px)',
+          background: 'radial-gradient(120% 140% at 15% 20%, rgba(233,193,118,0.14), rgba(6,8,12,0.4) 60%), linear-gradient(135deg, rgba(233,193,118,0.06), rgba(11,15,24,0.9))',
+          display: 'flex', alignItems: 'center', gap: 18,
+        }}>
+          <span style={{ fontSize: 40, lineHeight: 1 }} aria-hidden="true">🔗</span>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              SmokeCraft 360 — Supporting Module
+            </div>
+            <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(24px,3.4vw,34px)', color: CREAM }}>Management Sync</h1>
+            <p style={{ margin: 0, fontSize: 'clamp(13px,1.4vw,15px)', color: 'rgba(229,226,225,0.65)', lineHeight: 1.55, maxWidth: 640 }}>
+              Sync this journey's cigar, pairing, and flavor selections into venue operations.
+            </p>
           </div>
-          <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(24px,3.4vw,34px)', color: CREAM }}>Management Sync</h1>
-          <p style={{ margin: 0, fontSize: 'clamp(13px,1.4vw,15px)', color: 'rgba(229,226,225,0.65)', lineHeight: 1.55, maxWidth: 640 }}>
-            Sync this journey's cigar, pairing, and flavor selections into venue operations.
-          </p>
-        </header>
+        </div>
 
         {/* Journey Sync Status — real per-field cards, honest "Not recorded" for anything not captured. */}
         <section style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
