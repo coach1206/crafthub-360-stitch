@@ -8,7 +8,6 @@ import * as smokecraftManagementSyncService from '../../modules/smokecraft/servi
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftSupportingHero from '../../components/smokecraft/SmokeCraftSupportingHero.jsx'
 
 const GOLD   = '#E9C176'
 const GOLD_DIM = 'rgba(233,193,118,0.55)'
@@ -131,7 +130,6 @@ export default function ManagementSync() {
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Georgia, serif' }}>
 
-        <SmokeCraftSupportingHero label="Management Sync" />
 
         <header>
           <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>

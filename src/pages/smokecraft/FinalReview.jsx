@@ -5,7 +5,6 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftSupportingHero from '../../components/smokecraft/SmokeCraftSupportingHero.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
@@ -105,7 +104,6 @@ export default function FinalReview({ onBack, onComplete } = {}) {
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 18, fontFamily: 'Georgia, serif' }}>
 
-        <SmokeCraftSupportingHero label="Final Review" />
 
         <header>
           <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>

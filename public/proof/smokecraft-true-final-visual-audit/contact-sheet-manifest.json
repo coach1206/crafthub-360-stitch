@@ -1,0 +1,11 @@
+{
+  "totalSheets": 5,
+  "outputs": [
+    "public/proof/smokecraft-true-final-visual-audit/SMOKECRAFT_TRUE_FINAL_VISUAL_AUDIT_01.png",
+    "public/proof/smokecraft-true-final-visual-audit/SMOKECRAFT_TRUE_FINAL_VISUAL_AUDIT_02.png",
+    "public/proof/smokecraft-true-final-visual-audit/SMOKECRAFT_TRUE_FINAL_VISUAL_AUDIT_03.png",
+    "public/proof/smokecraft-true-final-visual-audit/SMOKECRAFT_TRUE_FINAL_VISUAL_AUDIT_04.png",
+    "public/proof/smokecraft-true-final-visual-audit/SMOKECRAFT_TRUE_FINAL_VISUAL_AUDIT_05.png"
+  ],
+  "indexOut": "public/proof/smokecraft-true-final-visual-audit/SMOKECRAFT_TRUE_FINAL_VISUAL_INDEX.png"
+}
