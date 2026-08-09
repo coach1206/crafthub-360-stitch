@@ -6,10 +6,8 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
-import SmokeCraftImageSurface from '../../components/smokecraft/SmokeCraftImageSurface.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const ENRICHMENT_3 = getEducationalEnrichment(3)
 
@@ -313,13 +311,35 @@ export default function MeetYourCigar({ onBack, onComplete } = {}) {
             </div>
           )}
 
+          {/* SC-D080 fix (approved-media slot, Part 4): no dedicated Meet
+              Your Cigar photography exists anywhere in the repository
+              (public/assets/smokecraft/ and its cigars/ subfolder both
+              checked). Rather than keep reusing Humidor Match's photography
+              under a different screen's heading — still not the correct
+              approved asset for this screen — this is now an honest,
+              reserved-dimension media slot, matching the same disclosed
+              pattern already used on Lighting Tutorial. Wiring the real
+              approved asset later is a one-line change (replace this block
+              with <SmokeCraftImageSurface surface="cigar-profile"
+              src={SC_ASSETS.meetYourCigar} .../>) — no game logic changes. */}
           {cigar && (
-            <SmokeCraftImageSurface
-              surface="cigar-profile"
-              src={SC_ASSETS.meetYourCigar}
-              alt={`${cigar.name} reference image`}
-              style={{ minHeight: 'clamp(140px,20vh,200px)', maxHeight: 220 }}
-            />
+            <div
+              aria-label={`${cigar.name} reference image — pending approved photography`}
+              style={{
+                minHeight: 'clamp(140px,20vh,200px)', maxHeight: 220,
+                background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: 8, padding: 20, boxSizing: 'border-box',
+              }}
+            >
+              <span style={{ fontSize: 30, color: GOLD_DIM, lineHeight: 1 }} aria-hidden="true">🚬</span>
+              <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', letterSpacing: '0.06em', textTransform: 'uppercase', textAlign: 'center' }}>
+                {cigar.name} — reference image
+              </span>
+              <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.3)', textAlign: 'center' }}>
+                Dedicated photography pending owner approval
+              </span>
+            </div>
           )}
 
           {section && (

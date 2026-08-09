@@ -269,6 +269,15 @@ export default function PairingLab({ onBack, onComplete } = {}) {
           <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 3 }}>
             Pairing Choices
           </div>
+          {/* SC-D082 fix: the ONLY control that actually selected a pairing
+              type was the invisible PAIRING_ZONES hotspot layer below,
+              transparent and positioned to match a baked image's icons — a
+              real player has no visible way to make this real selection. A
+              real, visible chip group (same pattern as every other selector
+              on this screen) now drives the same `pairingTypes` state. */}
+          <div style={{ marginBottom: 3 }}>
+            <SelectorGroup title="Pairing Type" options={PAIRING_TYPES} field="pairingTypes" multi={true} />
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 10 }}>
             <SelectorGroup title="Flavor Notes" options={FLAVOR_NOTES}  field="flavorNotes"  multi={true}  />
             <SelectorGroup title="Pairing Goal" options={PAIRING_GOALS} field="pairingGoal"  multi={false} />

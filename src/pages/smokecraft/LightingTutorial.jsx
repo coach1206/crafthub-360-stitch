@@ -269,26 +269,12 @@ export default function LightingTutorial({ onBack, onComplete } = {}) {
       }}>
         <div style={{ maxWidth: 720, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-          {/* Educational image/video area — honest placeholder, no fabricated imagery */}
-          <div
-            aria-label="Educational demonstration area"
-            style={{
-              background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-              minHeight: 'clamp(140px,22vh,220px)', display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', gap: 8, padding: 20,
-              boxSizing: 'border-box',
-            }}
-          >
-            <span style={{ fontSize: 34, color: GOLD_DIM, lineHeight: 1 }} aria-hidden="true">🎞</span>
-            <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase', textAlign: 'center' }}>
-              Demonstration video — {step.title}
-            </span>
-            <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.3)', textAlign: 'center' }}>
-              Media pending production upload
-            </span>
-          </div>
-
-          {/* Tutorial text */}
+          {/* SC-D084 fix (Part 5): the tutorial's real, complete instruction
+              is the primary experience — it now leads visually instead of
+              a placeholder box. Reserved video slot moved below, shrunk,
+              and reworded so "no video yet" doesn't read as the screen's
+              main content; progression was never blocked by it either
+              way (Next Step only depends on step navigation, not media). */}
           <div style={{
             background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
             padding: 'clamp(16px,2.4vw,24px)',
@@ -299,6 +285,23 @@ export default function LightingTutorial({ onBack, onComplete } = {}) {
             }}>
               {step.body}
             </p>
+          </div>
+
+          {/* Reserved approved-media slot — honest, secondary, non-blocking.
+              Wiring real video later is a one-line swap for this block. */}
+          <div
+            aria-label="Reserved demonstration video slot — not yet available"
+            style={{
+              background: 'rgba(233,193,118,0.04)', border: `1px dashed ${BORDER}`, borderRadius: 12,
+              minHeight: 'clamp(80px,10vh,110px)', display: 'flex', flexDirection: 'row',
+              alignItems: 'center', gap: 12, padding: '14px 18px',
+              boxSizing: 'border-box',
+            }}
+          >
+            <span style={{ fontSize: 22, color: GOLD_DIM, lineHeight: 1, flexShrink: 0 }} aria-hidden="true">🎞</span>
+            <span style={{ fontSize: 11.5, color: 'rgba(229,226,225,0.4)', lineHeight: 1.5 }}>
+              Demonstration video for "{step.title}" — reserved slot, approved footage not yet supplied.
+            </span>
           </div>
 
           {/* Mentor tip */}

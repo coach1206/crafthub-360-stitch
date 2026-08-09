@@ -144,14 +144,10 @@ export default function ManagementSync() {
           {flavors.length > 0 && <span>{flavors.join(', ')}</span>}
         </div>
 
-        {/* Honest disclosure for Management Insights / Venue Operations
-            Impact — venue-wide AGGREGATE analytics (top pairing, most
-            selected cigar, satisfaction trend) genuinely have no backend
-            yet (Package D scope, see SMOKECRAFT_MANAGEMENT_SYNC_
-            DESTINATION_AUDIT.md) — this text is unchanged and still
-            accurate. Sync Activity (this single journey's own sync
-            record), however, is now real when a venue is selected — see
-            the status row below, populated from Package B's real API. */}
+        {/* Honest disclosure for Management Insights — venue-wide AGGREGATE
+            analytics (top pairing, most selected cigar, satisfaction trend)
+            genuinely have no backend yet (Package D scope, see
+            SMOKECRAFT_MANAGEMENT_SYNC_DESTINATION_AUDIT.md). */}
         <div style={{
           position: 'absolute',
           left: '61%', top: '32.5%', width: '37%',
@@ -162,20 +158,39 @@ export default function ManagementSync() {
           Venue-wide aggregate insights are not connected yet — this venue analytics backend has not been built.
         </div>
 
-        {/* Real, honest single-journey sync status — server-authoritative
-            once populated, never fabricated. No venue selected -> no
-            control is shown at all (matches "do not create a journey
-            merely because a venue was selected"). */}
-        {hasRealVenue && (
+        {/* SC-D083 fix: the lower ~45% of the approved MANAGEMENT SYNC.png
+            composite is a fully baked mock dashboard — Venue Operations
+            Impact cards, a Sync Activity table, a Command Hub panel — none
+            of it backed by any real data or control. A real player could
+            never interact with or trust any of it. Rather than leave that
+            fake chrome visible (or invent fake data to fill it), an opaque
+            panel now replaces it with one honest, real section that
+            clearly separates what's live today (this journey's own sync
+            status) from what's a real, disclosed future feature — matching
+            the same "mask + honest real content" pattern used to fix the
+            Golden Box Rules blank-panel defect (SC-D079). */}
+        <div style={{
+          position: 'absolute', left: '5%', top: '54%', width: '90%', height: '43%',
+          background: '#0b0f18', borderRadius: 10, border: '1px solid rgba(233,193,118,0.22)',
+          padding: 'clamp(14px,2vw,22px)', overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+          fontFamily: 'Georgia, serif',
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+            Available Now
+          </div>
+
+          {/* Real, honest single-journey sync status — server-authoritative
+              once populated, never fabricated. No venue selected -> no
+              control is shown at all (matches "do not create a journey
+              merely because a venue was selected"). */}
+          {hasRealVenue ? (
           <div
             role="status"
             aria-live="polite"
             aria-atomic="true"
             style={{
-              position: 'absolute',
-              left: '11%', top: '68%', width: '78%',
-              fontFamily: 'Georgia, serif', fontSize: 'clamp(9px,0.85vw,12px)',
-              color: 'rgba(229,226,225,0.65)', lineHeight: 1.6,
+              fontFamily: 'Georgia, serif', fontSize: 'clamp(10px,0.95vw,13px)',
+              color: 'rgba(229,226,225,0.75)', lineHeight: 1.6, marginBottom: 18,
             }}
           >
             {syncActionState === 'idle' && managementSync.syncStatus !== 'completed' && (
@@ -221,7 +236,32 @@ export default function ManagementSync() {
               </div>
             )}
           </div>
-        )}
+          ) : (
+            <div style={{ fontSize: 'clamp(10px,0.95vw,13px)', color: 'rgba(229,226,225,0.5)', fontStyle: 'italic', marginBottom: 18 }}>
+              Select a venue earlier in your journey to sync this session.
+            </div>
+          )}
+
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10, borderTop: '1px solid rgba(233,193,118,0.15)', paddingTop: 14 }}>
+            Coming In A Future Update
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10 }}>
+            {[
+              'Venue Operations Impact (inventory, staff, revenue signals)',
+              'Management Insights (top pairing, most-selected cigar, satisfaction trend)',
+              'Sync Activity Log (multi-session history)',
+              'Command Hub (analytics, reports, operational tools)',
+            ].map(label => (
+              <div key={label} style={{
+                background: 'rgba(233,193,118,0.05)', border: '1px dashed rgba(233,193,118,0.25)',
+                borderRadius: 8, padding: '10px 12px', fontSize: 'clamp(9px,0.82vw,11.5px)',
+                color: 'rgba(229,226,225,0.5)', lineHeight: 1.4,
+              }}>
+                {label}
+              </div>
+            ))}
+          </div>
+        </div>
       </SmokeCraftScreenShell>
 
       <SmokeCraftNavBar

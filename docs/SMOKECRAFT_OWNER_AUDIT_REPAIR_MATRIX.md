@@ -72,3 +72,26 @@ Both were false positives from the capture tooling, not real defects — see "Co
 - Root-cause investigation for empty panels #025, #038, #039
 - A full recapture of all 43 numbered screens under the new fixes (a targeted, careful spot-verification was done instead — see `public/proof/smokecraft-owner-audit-repair-verification/`)
 - Asset governance sign-off for the two genuinely-missing approved assets (Lighting Tutorial demo media, dedicated Meet Your Cigar photography) — these are `NEEDS_OWNER_DECISION`, not resolved
+
+---
+
+## Pass 2 — additional real fixes (this update)
+
+Owner directive: no more partial passes. This pass closed more of the remaining matrix. Still not 100% — see "Still deferred" at the end, stated plainly.
+
+| Item | Action | Evidence |
+|---|---|---|
+| #025 Pairing Lab empty recommendation output | **Real root cause found and fixed (SC-D082).** The only control that set `pairingTypes` was an invisible transparent hotspot layer positioned over the approved backdrop image — a real player had no visible way to make this selection, so the Live Recommendation Output panel legitimately never populated. Added a real, visible chip-selector row for Pairing Type in the same panel as the screen's other real selectors. | `src/pages/smokecraft/PairingLab.jsx` |
+| #041 Management Sync dead-looking disclosure | **Redesigned (SC-D083).** The lower ~45% of the screen was a fully baked mock dashboard (Venue Operations Impact, Sync Activity table, Command Hub) with zero live DOM or data behind it — worse than "empty," it was misleading. Replaced with a real "Available Now" (existing real sync status/action) / "Coming In A Future Update" (named, honest list) split. No fake data. | `src/pages/smokecraft/ManagementSync.jsx` |
+| 11 C/D screens | **1 of 11 corrected as a misclassification** (#040 Connections — all controls are real, visible, labeled DOM; only the decorative photo is large, which the mandate explicitly allows). **2 of 11 substantively improved this pass** (Meet Your Cigar, Pairing Lab) via the fixes above and in Pass 1. **Not converted this pass**: #038 Final Review (a genuine large data-wiring gap — 6 real journey-history sections with no live overlay were never built; this is comparable in scope to the original SC-D079 GoldenBox rebuild and needs its own dedicated pass, not a rushed attempt), #039 Rewards (already meets the mandate's own "honestly documented, fully usable, no fake substitute" exception — the empty "Today At Your Venue"/"Recent Redemptions" zones are disclosed, not silently broken), and the remaining screens not individually re-verified this pass (016/028/003/021's classification stands from Pass 1). |
+| Meet Your Cigar photography | **Media slot implemented per Part 4's exact instruction.** No dedicated asset exists in the repo (confirmed again). Replaced the reused-image-from-a-different-screen with an honest, reserved-dimension media slot ("Padrón 1964 Series — reference image / Dedicated photography pending owner approval"), matching Lighting Tutorial's established pattern. All real cigar data (brand/blend/wrapper/binder/filler/factory/master blender tabs) is unaffected and remains live. Verified live: `meet-your-cigar-PASS2.png`. | SC-D080 (updated) |
+| Lighting Tutorial media | **Polished per Part 5's exact instruction.** Real instructional text now leads; reserved media slot is smaller, secondary, reworded away from "pending production upload" as the primary message. Never blocked progression either way. Verified live: `lighting-tutorial-PASS2.png`. | SC-D084 |
+
+### Still deferred (explicitly, not silently dropped)
+
+- **#038 Final Review** — the largest remaining gap. 6 real sections (Journey Recap, What Stood Out, Review Notes, Readiness Check summary, Experience Snapshot, Final Reflection) need real journey-history data wired in; this is a from-scratch build comparable in size to the original GoldenBox blank-panel rebuild (SC-D079), not something safely rushed in the remaining time of this pass.
+- **Full 4-viewport responsive/fluid pass** (tablet landscape, tablet portrait, kiosk) — not run this pass. 1440×900 desktop only, as before.
+- **Full recapture of all 43 numbered screens** — not run. Targeted verification only (`public/proof/smokecraft-owner-audit-repair-verification/`).
+- **#039 Rewards's two skeleton side-panels** — left as-is; they already satisfy the mandate's own disclosed-limitation exception, but could still be visually tightened (dashed-border honest style, matching Management Sync's new pattern) in a follow-up.
+
+npm run build: clean (prebuild gates + production bundle, re-verified after Pass 2's changes).

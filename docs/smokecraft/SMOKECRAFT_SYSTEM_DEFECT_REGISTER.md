@@ -2765,3 +2765,29 @@ Highest SC-D number is now SC-D079.
 **Fix**: all three now default to their first section/topic id, so real content renders immediately on load, matching how a player actually reads the page top-to-bottom. No data model or completion-tracking logic was touched — only the initial `useState` value.
 
 Highest SC-D number is now SC-D081.
+
+---
+
+## SC-D082 — Pairing Lab pairing-type selection had no visible control
+
+`PairingLab.jsx`'s ONLY control that actually set `sel.pairingTypes` (the state the real recommendation engine keys off) was `PAIRING_ZONES`, a set of transparent, absolutely-positioned hotspot buttons laid over the approved backdrop image, tuned to match icon positions baked into that image. A real player has no visible cue that this region is interactive — the visible "Pairing Guide" cards elsewhere on the screen are purely informational, not the real control. This is the exact "transparent hotspot over a screenshot != live UI" anti-pattern.
+
+**Fix**: added a real, visible `SelectorGroup` chip row ("Pairing Type") in the same "Pairing Choices" panel as the screen's other real selectors (Flavor Notes, Pairing Goal), wired to the same `pairingTypes` state. The original hotspot layer was left in place (harmless, same state, no regression risk) but is no longer the only way to make this selection.
+
+## SC-D083 — Management Sync's lower ~45% was a fully baked mock dashboard
+
+The approved `MANAGEMENT SYNC.png` composite's lower half (Venue Operations Impact cards, a Sync Activity table, a Command Hub panel) had zero live DOM behind it — a real player could see fake dashboard chrome (inventory/staff/revenue cards, a sync log table, "Open Command Hub") that did nothing and reflected no real data.
+
+**Fix**: an opaque panel now replaces that region with one honest section — "Available Now" (the screen's existing real single-journey sync status/button, unchanged) and a clearly separated "Coming In A Future Update" list naming the specific unbuilt features, instead of leaving misleading baked fake-functional chrome visible. No data was fabricated.
+
+## SC-D084 — Lighting Tutorial's honest media placeholder read as the primary experience
+
+The reserved demonstration-video area was full-height and positioned first, ahead of the real instructional text, so a player's first impression was "this is broken/empty" rather than "here is the real lesson."
+
+**Fix**: reordered so the real instruction text leads; the reserved media slot is now smaller, positioned second, and reworded to read as a disclosed future-media slot rather than a dominant "pending" block. No progression logic was touched (it never blocked Next Step either way).
+
+## Corrected classifications (evidence, not defects)
+
+- **#040 Connections** was flagged STATIC_SHELL in the complete visual inspection. On code inspection, every control (7 share-channel buttons) is real, visible, labeled DOM with real `onClick`/`aria-pressed` state — not baked into the image. The large photo is legitimately decorative-only (no functional UI baked into it). Reclassified **B — live DOM + approved supporting image**, not C.
+
+Highest SC-D number is now SC-D084.
