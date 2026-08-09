@@ -1,0 +1,1362 @@
+[
+  {
+    "n": 1,
+    "name": "Launch",
+    "route": "/smokecraft",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 9,
+    "offscreenHorizontal": 0,
+    "filename": "001-desktop.png"
+  },
+  {
+    "n": 2,
+    "name": "Enroll",
+    "route": "/smokecraft/enroll",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "002-desktop.png"
+  },
+  {
+    "n": 3,
+    "name": "Identity",
+    "route": "/smokecraft/identity",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 11,
+    "offscreenHorizontal": 0,
+    "filename": "003-desktop.png"
+  },
+  {
+    "n": 4,
+    "name": "Venue Select",
+    "route": "/smokecraft/venue-select",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 419,
+    "offscreenHorizontal": 0,
+    "filename": "004-desktop.png"
+  },
+  {
+    "n": 6,
+    "name": "Welcome",
+    "route": "/smokecraft/welcome",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "006-desktop.png"
+  },
+  {
+    "n": 7,
+    "name": "Golden Box Rules",
+    "route": "/smokecraft/golden-box",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "007-desktop.png"
+  },
+  {
+    "n": 9,
+    "name": "Mentor Selection",
+    "route": "/smokecraft/mentor-selection",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 26,
+    "offscreenHorizontal": 0,
+    "filename": "009-desktop.png"
+  },
+  {
+    "n": 10,
+    "name": "Seed & Soil",
+    "route": "/smokecraft/seed-soil",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "010-desktop.png"
+  },
+  {
+    "n": 11,
+    "name": "Humidor Match",
+    "route": "/smokecraft/humidor-match",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "011-desktop.png"
+  },
+  {
+    "n": 14,
+    "name": "Meet Your Cigar",
+    "route": "/smokecraft/meet-your-cigar",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "014-desktop.png"
+  },
+  {
+    "n": 16,
+    "name": "Terroir",
+    "route": "/smokecraft/terroir",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "016-desktop.png"
+  },
+  {
+    "n": 17,
+    "name": "Format",
+    "route": "/smokecraft/format",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "017-desktop.png"
+  },
+  {
+    "n": 19,
+    "name": "Request/Purchase",
+    "route": "/smokecraft/request-purchase",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "019-desktop.png"
+  },
+  {
+    "n": 20,
+    "name": "Cut Toast Light",
+    "route": "/smokecraft/cut-toast-light",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "020-desktop.png"
+  },
+  {
+    "n": 21,
+    "name": "Lighting Tutorial",
+    "route": "/smokecraft/lighting-tutorial",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "021-desktop.png"
+  },
+  {
+    "n": 22,
+    "name": "First Third",
+    "route": "/smokecraft/first-third",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "022-desktop.png"
+  },
+  {
+    "n": 23,
+    "name": "Flavor Memory",
+    "route": "/smokecraft/flavor-memory",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "023-desktop.png"
+  },
+  {
+    "n": 24,
+    "name": "Pairing Lab",
+    "route": "/smokecraft/pairing-lab",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "024-desktop.png"
+  },
+  {
+    "n": 26,
+    "name": "Second Third",
+    "route": "/smokecraft/second-third",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "026-desktop.png"
+  },
+  {
+    "n": 27,
+    "name": "Mentor Commentary",
+    "route": "/smokecraft/mentor-commentary",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "027-desktop.png"
+  },
+  {
+    "n": 28,
+    "name": "Knowledge Drop",
+    "route": "/smokecraft/knowledge-drop",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "028-desktop.png"
+  },
+  {
+    "n": 29,
+    "name": "Final Third",
+    "route": "/smokecraft/final-third",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "029-desktop.png"
+  },
+  {
+    "n": 30,
+    "name": "Scorecard",
+    "route": "/smokecraft/scorecard",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "030-desktop.png"
+  },
+  {
+    "n": 32,
+    "name": "SmokeCraft Challenge",
+    "route": "/smokecraft/smokecraft-challenge",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "032-desktop.png"
+  },
+  {
+    "n": 33,
+    "name": "Second Humidor Match",
+    "route": "/smokecraft/second-humidor-match",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "033-desktop.png"
+  },
+  {
+    "n": 34,
+    "name": "Mini Tasting Round",
+    "route": "/smokecraft/mini-tasting",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "034-desktop.png"
+  },
+  {
+    "n": 35,
+    "name": "AI Summary",
+    "route": "/smokecraft/ai-summary",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "035-desktop.png"
+  },
+  {
+    "n": 36,
+    "name": "Pairing Recommendations",
+    "route": "/smokecraft/pairing-recommendations",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "036-desktop.png"
+  },
+  {
+    "n": 37,
+    "name": "Passport Stamp",
+    "route": "/smokecraft/passport-stamp",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "037-desktop.png"
+  },
+  {
+    "n": 38,
+    "name": "Final Review",
+    "route": "/smokecraft/final-review",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "038-desktop.png"
+  },
+  {
+    "n": 39,
+    "name": "Rewards",
+    "route": "/smokecraft/rewards",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "039-desktop.png"
+  },
+  {
+    "n": 40,
+    "name": "Connections",
+    "route": "/smokecraft/connections",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "040-desktop.png"
+  },
+  {
+    "n": 41,
+    "name": "Management Sync",
+    "route": "/smokecraft/management-sync",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "041-desktop.png"
+  },
+  {
+    "n": 42,
+    "name": "Session Complete",
+    "route": "/smokecraft/session-complete",
+    "viewport": "desktop",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "042-desktop.png"
+  },
+  {
+    "n": 1,
+    "name": "Launch",
+    "route": "/smokecraft",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 9,
+    "offscreenHorizontal": 0,
+    "filename": "001-tablet-landscape.png"
+  },
+  {
+    "n": 2,
+    "name": "Enroll",
+    "route": "/smokecraft/enroll",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "002-tablet-landscape.png"
+  },
+  {
+    "n": 3,
+    "name": "Identity",
+    "route": "/smokecraft/identity",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 11,
+    "offscreenHorizontal": 0,
+    "filename": "003-tablet-landscape.png"
+  },
+  {
+    "n": 4,
+    "name": "Venue Select",
+    "route": "/smokecraft/venue-select",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 419,
+    "offscreenHorizontal": 0,
+    "filename": "004-tablet-landscape.png"
+  },
+  {
+    "n": 6,
+    "name": "Welcome",
+    "route": "/smokecraft/welcome",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "006-tablet-landscape.png"
+  },
+  {
+    "n": 7,
+    "name": "Golden Box Rules",
+    "route": "/smokecraft/golden-box",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "007-tablet-landscape.png"
+  },
+  {
+    "n": 9,
+    "name": "Mentor Selection",
+    "route": "/smokecraft/mentor-selection",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 26,
+    "offscreenHorizontal": 0,
+    "filename": "009-tablet-landscape.png"
+  },
+  {
+    "n": 10,
+    "name": "Seed & Soil",
+    "route": "/smokecraft/seed-soil",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "010-tablet-landscape.png"
+  },
+  {
+    "n": 11,
+    "name": "Humidor Match",
+    "route": "/smokecraft/humidor-match",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "011-tablet-landscape.png"
+  },
+  {
+    "n": 14,
+    "name": "Meet Your Cigar",
+    "route": "/smokecraft/meet-your-cigar",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "014-tablet-landscape.png"
+  },
+  {
+    "n": 16,
+    "name": "Terroir",
+    "route": "/smokecraft/terroir",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "016-tablet-landscape.png"
+  },
+  {
+    "n": 17,
+    "name": "Format",
+    "route": "/smokecraft/format",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "017-tablet-landscape.png"
+  },
+  {
+    "n": 19,
+    "name": "Request/Purchase",
+    "route": "/smokecraft/request-purchase",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "019-tablet-landscape.png"
+  },
+  {
+    "n": 20,
+    "name": "Cut Toast Light",
+    "route": "/smokecraft/cut-toast-light",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "020-tablet-landscape.png"
+  },
+  {
+    "n": 21,
+    "name": "Lighting Tutorial",
+    "route": "/smokecraft/lighting-tutorial",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "021-tablet-landscape.png"
+  },
+  {
+    "n": 22,
+    "name": "First Third",
+    "route": "/smokecraft/first-third",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "022-tablet-landscape.png"
+  },
+  {
+    "n": 23,
+    "name": "Flavor Memory",
+    "route": "/smokecraft/flavor-memory",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "023-tablet-landscape.png"
+  },
+  {
+    "n": 24,
+    "name": "Pairing Lab",
+    "route": "/smokecraft/pairing-lab",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "024-tablet-landscape.png"
+  },
+  {
+    "n": 26,
+    "name": "Second Third",
+    "route": "/smokecraft/second-third",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "026-tablet-landscape.png"
+  },
+  {
+    "n": 27,
+    "name": "Mentor Commentary",
+    "route": "/smokecraft/mentor-commentary",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "027-tablet-landscape.png"
+  },
+  {
+    "n": 28,
+    "name": "Knowledge Drop",
+    "route": "/smokecraft/knowledge-drop",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "028-tablet-landscape.png"
+  },
+  {
+    "n": 29,
+    "name": "Final Third",
+    "route": "/smokecraft/final-third",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "029-tablet-landscape.png"
+  },
+  {
+    "n": 30,
+    "name": "Scorecard",
+    "route": "/smokecraft/scorecard",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "030-tablet-landscape.png"
+  },
+  {
+    "n": 32,
+    "name": "SmokeCraft Challenge",
+    "route": "/smokecraft/smokecraft-challenge",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "032-tablet-landscape.png"
+  },
+  {
+    "n": 33,
+    "name": "Second Humidor Match",
+    "route": "/smokecraft/second-humidor-match",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "033-tablet-landscape.png"
+  },
+  {
+    "n": 34,
+    "name": "Mini Tasting Round",
+    "route": "/smokecraft/mini-tasting",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "034-tablet-landscape.png"
+  },
+  {
+    "n": 35,
+    "name": "AI Summary",
+    "route": "/smokecraft/ai-summary",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "035-tablet-landscape.png"
+  },
+  {
+    "n": 36,
+    "name": "Pairing Recommendations",
+    "route": "/smokecraft/pairing-recommendations",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "036-tablet-landscape.png"
+  },
+  {
+    "n": 37,
+    "name": "Passport Stamp",
+    "route": "/smokecraft/passport-stamp",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "037-tablet-landscape.png"
+  },
+  {
+    "n": 38,
+    "name": "Final Review",
+    "route": "/smokecraft/final-review",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "038-tablet-landscape.png"
+  },
+  {
+    "n": 39,
+    "name": "Rewards",
+    "route": "/smokecraft/rewards",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "039-tablet-landscape.png"
+  },
+  {
+    "n": 40,
+    "name": "Connections",
+    "route": "/smokecraft/connections",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "040-tablet-landscape.png"
+  },
+  {
+    "n": 41,
+    "name": "Management Sync",
+    "route": "/smokecraft/management-sync",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "041-tablet-landscape.png"
+  },
+  {
+    "n": 42,
+    "name": "Session Complete",
+    "route": "/smokecraft/session-complete",
+    "viewport": "tablet-landscape",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "042-tablet-landscape.png"
+  },
+  {
+    "n": 1,
+    "name": "Launch",
+    "route": "/smokecraft",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 9,
+    "offscreenHorizontal": 0,
+    "filename": "001-tablet-portrait.png"
+  },
+  {
+    "n": 2,
+    "name": "Enroll",
+    "route": "/smokecraft/enroll",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "002-tablet-portrait.png"
+  },
+  {
+    "n": 3,
+    "name": "Identity",
+    "route": "/smokecraft/identity",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 11,
+    "offscreenHorizontal": 0,
+    "filename": "003-tablet-portrait.png"
+  },
+  {
+    "n": 4,
+    "name": "Venue Select",
+    "route": "/smokecraft/venue-select",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 419,
+    "offscreenHorizontal": 0,
+    "filename": "004-tablet-portrait.png"
+  },
+  {
+    "n": 6,
+    "name": "Welcome",
+    "route": "/smokecraft/welcome",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "006-tablet-portrait.png"
+  },
+  {
+    "n": 7,
+    "name": "Golden Box Rules",
+    "route": "/smokecraft/golden-box",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "007-tablet-portrait.png"
+  },
+  {
+    "n": 9,
+    "name": "Mentor Selection",
+    "route": "/smokecraft/mentor-selection",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 26,
+    "offscreenHorizontal": 0,
+    "filename": "009-tablet-portrait.png"
+  },
+  {
+    "n": 10,
+    "name": "Seed & Soil",
+    "route": "/smokecraft/seed-soil",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "010-tablet-portrait.png"
+  },
+  {
+    "n": 11,
+    "name": "Humidor Match",
+    "route": "/smokecraft/humidor-match",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "011-tablet-portrait.png"
+  },
+  {
+    "n": 14,
+    "name": "Meet Your Cigar",
+    "route": "/smokecraft/meet-your-cigar",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "014-tablet-portrait.png"
+  },
+  {
+    "n": 16,
+    "name": "Terroir",
+    "route": "/smokecraft/terroir",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "016-tablet-portrait.png"
+  },
+  {
+    "n": 17,
+    "name": "Format",
+    "route": "/smokecraft/format",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "017-tablet-portrait.png"
+  },
+  {
+    "n": 19,
+    "name": "Request/Purchase",
+    "route": "/smokecraft/request-purchase",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "019-tablet-portrait.png"
+  },
+  {
+    "n": 20,
+    "name": "Cut Toast Light",
+    "route": "/smokecraft/cut-toast-light",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "020-tablet-portrait.png"
+  },
+  {
+    "n": 21,
+    "name": "Lighting Tutorial",
+    "route": "/smokecraft/lighting-tutorial",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "021-tablet-portrait.png"
+  },
+  {
+    "n": 22,
+    "name": "First Third",
+    "route": "/smokecraft/first-third",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "022-tablet-portrait.png"
+  },
+  {
+    "n": 23,
+    "name": "Flavor Memory",
+    "route": "/smokecraft/flavor-memory",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "023-tablet-portrait.png"
+  },
+  {
+    "n": 24,
+    "name": "Pairing Lab",
+    "route": "/smokecraft/pairing-lab",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "024-tablet-portrait.png"
+  },
+  {
+    "n": 26,
+    "name": "Second Third",
+    "route": "/smokecraft/second-third",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "026-tablet-portrait.png"
+  },
+  {
+    "n": 27,
+    "name": "Mentor Commentary",
+    "route": "/smokecraft/mentor-commentary",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "027-tablet-portrait.png"
+  },
+  {
+    "n": 28,
+    "name": "Knowledge Drop",
+    "route": "/smokecraft/knowledge-drop",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "028-tablet-portrait.png"
+  },
+  {
+    "n": 29,
+    "name": "Final Third",
+    "route": "/smokecraft/final-third",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "029-tablet-portrait.png"
+  },
+  {
+    "n": 30,
+    "name": "Scorecard",
+    "route": "/smokecraft/scorecard",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "030-tablet-portrait.png"
+  },
+  {
+    "n": 32,
+    "name": "SmokeCraft Challenge",
+    "route": "/smokecraft/smokecraft-challenge",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "032-tablet-portrait.png"
+  },
+  {
+    "n": 33,
+    "name": "Second Humidor Match",
+    "route": "/smokecraft/second-humidor-match",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "033-tablet-portrait.png"
+  },
+  {
+    "n": 34,
+    "name": "Mini Tasting Round",
+    "route": "/smokecraft/mini-tasting",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "034-tablet-portrait.png"
+  },
+  {
+    "n": 35,
+    "name": "AI Summary",
+    "route": "/smokecraft/ai-summary",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "035-tablet-portrait.png"
+  },
+  {
+    "n": 36,
+    "name": "Pairing Recommendations",
+    "route": "/smokecraft/pairing-recommendations",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "036-tablet-portrait.png"
+  },
+  {
+    "n": 37,
+    "name": "Passport Stamp",
+    "route": "/smokecraft/passport-stamp",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "037-tablet-portrait.png"
+  },
+  {
+    "n": 38,
+    "name": "Final Review",
+    "route": "/smokecraft/final-review",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "038-tablet-portrait.png"
+  },
+  {
+    "n": 39,
+    "name": "Rewards",
+    "route": "/smokecraft/rewards",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "039-tablet-portrait.png"
+  },
+  {
+    "n": 40,
+    "name": "Connections",
+    "route": "/smokecraft/connections",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "040-tablet-portrait.png"
+  },
+  {
+    "n": 41,
+    "name": "Management Sync",
+    "route": "/smokecraft/management-sync",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "041-tablet-portrait.png"
+  },
+  {
+    "n": 42,
+    "name": "Session Complete",
+    "route": "/smokecraft/session-complete",
+    "viewport": "tablet-portrait",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "042-tablet-portrait.png"
+  },
+  {
+    "n": 1,
+    "name": "Launch",
+    "route": "/smokecraft",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 9,
+    "offscreenHorizontal": 0,
+    "filename": "001-kiosk.png"
+  },
+  {
+    "n": 2,
+    "name": "Enroll",
+    "route": "/smokecraft/enroll",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "002-kiosk.png"
+  },
+  {
+    "n": 3,
+    "name": "Identity",
+    "route": "/smokecraft/identity",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 11,
+    "offscreenHorizontal": 0,
+    "filename": "003-kiosk.png"
+  },
+  {
+    "n": 4,
+    "name": "Venue Select",
+    "route": "/smokecraft/venue-select",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 419,
+    "offscreenHorizontal": 0,
+    "filename": "004-kiosk.png"
+  },
+  {
+    "n": 6,
+    "name": "Welcome",
+    "route": "/smokecraft/welcome",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "006-kiosk.png"
+  },
+  {
+    "n": 7,
+    "name": "Golden Box Rules",
+    "route": "/smokecraft/golden-box",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 3,
+    "offscreenHorizontal": 0,
+    "filename": "007-kiosk.png"
+  },
+  {
+    "n": 9,
+    "name": "Mentor Selection",
+    "route": "/smokecraft/mentor-selection",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 26,
+    "offscreenHorizontal": 0,
+    "filename": "009-kiosk.png"
+  },
+  {
+    "n": 10,
+    "name": "Seed & Soil",
+    "route": "/smokecraft/seed-soil",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "010-kiosk.png"
+  },
+  {
+    "n": 11,
+    "name": "Humidor Match",
+    "route": "/smokecraft/humidor-match",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "011-kiosk.png"
+  },
+  {
+    "n": 14,
+    "name": "Meet Your Cigar",
+    "route": "/smokecraft/meet-your-cigar",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "014-kiosk.png"
+  },
+  {
+    "n": 16,
+    "name": "Terroir",
+    "route": "/smokecraft/terroir",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "016-kiosk.png"
+  },
+  {
+    "n": 17,
+    "name": "Format",
+    "route": "/smokecraft/format",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "017-kiosk.png"
+  },
+  {
+    "n": 19,
+    "name": "Request/Purchase",
+    "route": "/smokecraft/request-purchase",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "019-kiosk.png"
+  },
+  {
+    "n": 20,
+    "name": "Cut Toast Light",
+    "route": "/smokecraft/cut-toast-light",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "020-kiosk.png"
+  },
+  {
+    "n": 21,
+    "name": "Lighting Tutorial",
+    "route": "/smokecraft/lighting-tutorial",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "021-kiosk.png"
+  },
+  {
+    "n": 22,
+    "name": "First Third",
+    "route": "/smokecraft/first-third",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "022-kiosk.png"
+  },
+  {
+    "n": 23,
+    "name": "Flavor Memory",
+    "route": "/smokecraft/flavor-memory",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "023-kiosk.png"
+  },
+  {
+    "n": 24,
+    "name": "Pairing Lab",
+    "route": "/smokecraft/pairing-lab",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "024-kiosk.png"
+  },
+  {
+    "n": 26,
+    "name": "Second Third",
+    "route": "/smokecraft/second-third",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "026-kiosk.png"
+  },
+  {
+    "n": 27,
+    "name": "Mentor Commentary",
+    "route": "/smokecraft/mentor-commentary",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "027-kiosk.png"
+  },
+  {
+    "n": 28,
+    "name": "Knowledge Drop",
+    "route": "/smokecraft/knowledge-drop",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "028-kiosk.png"
+  },
+  {
+    "n": 29,
+    "name": "Final Third",
+    "route": "/smokecraft/final-third",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "029-kiosk.png"
+  },
+  {
+    "n": 30,
+    "name": "Scorecard",
+    "route": "/smokecraft/scorecard",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "030-kiosk.png"
+  },
+  {
+    "n": 32,
+    "name": "SmokeCraft Challenge",
+    "route": "/smokecraft/smokecraft-challenge",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "032-kiosk.png"
+  },
+  {
+    "n": 33,
+    "name": "Second Humidor Match",
+    "route": "/smokecraft/second-humidor-match",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "033-kiosk.png"
+  },
+  {
+    "n": 34,
+    "name": "Mini Tasting Round",
+    "route": "/smokecraft/mini-tasting",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "034-kiosk.png"
+  },
+  {
+    "n": 35,
+    "name": "AI Summary",
+    "route": "/smokecraft/ai-summary",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "035-kiosk.png"
+  },
+  {
+    "n": 36,
+    "name": "Pairing Recommendations",
+    "route": "/smokecraft/pairing-recommendations",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "036-kiosk.png"
+  },
+  {
+    "n": 37,
+    "name": "Passport Stamp",
+    "route": "/smokecraft/passport-stamp",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "037-kiosk.png"
+  },
+  {
+    "n": 38,
+    "name": "Final Review",
+    "route": "/smokecraft/final-review",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "038-kiosk.png"
+  },
+  {
+    "n": 39,
+    "name": "Rewards",
+    "route": "/smokecraft/rewards",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "039-kiosk.png"
+  },
+  {
+    "n": 40,
+    "name": "Connections",
+    "route": "/smokecraft/connections",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "040-kiosk.png"
+  },
+  {
+    "n": 41,
+    "name": "Management Sync",
+    "route": "/smokecraft/management-sync",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 29,
+    "offscreenHorizontal": 0,
+    "filename": "041-kiosk.png"
+  },
+  {
+    "n": 42,
+    "name": "Session Complete",
+    "route": "/smokecraft/session-complete",
+    "viewport": "kiosk",
+    "overflow": false,
+    "controlCount": 1,
+    "offscreenHorizontal": 0,
+    "filename": "042-kiosk.png"
+  }
+]
