@@ -55,10 +55,17 @@ export const SC_ASSETS = {
   // S4 — Mentor Selection
   mentorSelection:     `${RAW}/MENTOR%20SELECTION1.png`,
 
-  // Meet Your Cigar — dedicated approved asset (root-cause production fix:
-  // this previously reused the Humidor Match image, causing Meet Your Cigar
-  // and Humidor Match to render the same photography).
-  meetYourCigar:       `${RAW}/DISOVER%20YOUR%20CIGAR%20PROFILE.png`,
+  // Meet Your Cigar — SC-D080 fix: the prior mapping (`DISOVER YOUR CIGAR
+  // PROFILE.png`) is the Launch/CraftHub dashboard screenshot, not Meet
+  // Your Cigar photography — confirmed by rendering it live (owner visual
+  // audit #014/#015, WRONG_IMAGE). No dedicated Meet Your Cigar asset
+  // exists in the repository (checked public/assets/smokecraft/ and its
+  // cigars/ subfolder) — reverting to the last known-honest placeholder
+  // (Humidor Match's approved photography, openly reused, not invented)
+  // until real dedicated Meet Your Cigar photography is produced.
+  // NEEDS_OWNER_DECISION: commission or approve dedicated Meet Your Cigar
+  // photography (Padron 1964 Series-appropriate cigar/lounge imagery).
+  meetYourCigar:       `${RAW}/Humidor%20Match%201.png`,
 
   // Mentor Commentary — approved production asset (production image audit).
   mentorCommentary:    `${RAW}/MENTOR%20:COMMENTARY.png`,

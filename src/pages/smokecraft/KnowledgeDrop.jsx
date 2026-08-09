@@ -104,7 +104,10 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
   const savedViewed = journey.knowledgeDrop?.viewedTopics || []
   const savedScore  = journey.knowledgeDrop?.quizScore ?? null
 
-  const [topicId, setTopicId]     = useState(null)
+  // SC-D081: defaulted to null, so a normal player landed on an
+  // almost-entirely-empty viewport ("Select a topic above…") until they
+  // clicked a tab. Default to the first topic instead.
+  const [topicId, setTopicId]     = useState(TOPICS[0]?.id ?? null)
   const [viewedTopics, setViewedTopics] = useState(() => new Set(savedViewed))
   const [imgStatus, setImgStatus] = useState('idle') // idle | loading | loaded | error
   const [quizOpen, setQuizOpen]   = useState(false)

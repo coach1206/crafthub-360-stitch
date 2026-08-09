@@ -94,7 +94,12 @@ export default function Terroir({ onBack, onComplete } = {}) {
   }, [])
 
   const savedViewed = journey.terroir?.viewedSections || []
-  const [sectionId, setSectionId]   = useState(null)
+  // SC-D081: defaulted to null, so a normal player landed on an almost-
+  // entirely-empty viewport ("Select a section above…") until they clicked
+  // a tab — real content existed but nothing was shown by default. Default
+  // to the first section instead, matching how a real player actually reads
+  // the page top-to-bottom.
+  const [sectionId, setSectionId]   = useState(SECTIONS[0]?.id ?? null)
   const [viewedSections, setViewedSections] = useState(() => new Set(savedViewed))
   const [imgStatus, setImgStatus]   = useState('idle') // idle | loading | loaded | error
 

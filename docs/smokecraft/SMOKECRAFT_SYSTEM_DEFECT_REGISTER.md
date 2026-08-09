@@ -2747,3 +2747,21 @@ A survey of the remaining recovered-opening-chain and spine screenshots (Seed & 
 Re-ran clean on the final state: 85/85 static-gameplay detector, 85/85 blank-panel detector, 62/62 fresh-player journey, 19/19 Humidor Match regression, 10/10 Golden Box gating regression, 14/14 canonical journey lock, 60/60 full-game inventory lock, 31/31 full-browser-journey coverage, 68/68 Golden Box Rules regression, 55/55 viewport touch proof, full production build (clean-bundle gate).
 
 Highest SC-D number is now SC-D079.
+
+---
+
+## SC-D080 — Meet Your Cigar wrong-image asset mapping
+
+`src/constants/smokecraftAssets.js`'s `meetYourCigar` key resolved to `DISOVER%20YOUR%20CIGAR%20PROFILE.png` — the Launch/CraftHub dashboard screenshot, not Meet Your Cigar content. Confirmed live via the owner's complete visual inspection (screens #014/#015, flagged WRONG_IMAGE) and via git history: a prior commit's message claimed this was "a dedicated approved asset (root-cause production fix)" but the file it points to is factually the wrong screen. No dedicated Meet Your Cigar photography exists anywhere in `public/assets/smokecraft/` (including its `cigars/` subfolder) — checked exhaustively, not assumed.
+
+**Fix**: reverted to the prior, honestly-disclosed placeholder (reusing Humidor Match's approved photography, via code comment, not invented) until real dedicated photography is produced. Verified live post-fix (`public/proof/smokecraft-owner-audit-repair-verification/meet-your-cigar-AFTER-FIX.png`) — the Launch-screen image no longer renders on Meet Your Cigar.
+
+**Open**: NEEDS_OWNER_DECISION — commission or approve dedicated Meet Your Cigar (Padrón 1964 Series) photography.
+
+## SC-D081 — Terroir / Knowledge Drop / Meet Your Cigar tab-content defaulted to empty
+
+`Terroir.jsx`, `KnowledgeDrop.jsx`, and `MeetYourCigar.jsx` all defaulted their active-tab/section state to `null`, so a real player landed on an almost-entirely-empty viewport ("Select a section/topic above to begin…") until they clicked a tab — flagged EMPTY_PANEL on the owner's complete visual inspection (#016, #028, and contributing to #014/#015's overall poor first impression).
+
+**Fix**: all three now default to their first section/topic id, so real content renders immediately on load, matching how a player actually reads the page top-to-bottom. No data model or completion-tracking logic was touched — only the initial `useState` value.
+
+Highest SC-D number is now SC-D081.

@@ -86,7 +86,10 @@ export default function MeetYourCigar({ onBack, onComplete } = {}) {
   const sections = buildSections(cigar)
 
   const savedViewed = journey.meetYourCigar?.viewedSections || []
-  const [sectionId, setSectionId] = useState(null)
+  // SC-D081: defaulted to null, so a normal player landed on an
+  // almost-entirely-empty content panel until they clicked a tab.
+  // Default to the first section instead.
+  const [sectionId, setSectionId] = useState(sections[0]?.id ?? null)
   const [viewedSections, setViewedSections] = useState(() => new Set(savedViewed))
 
   const section = sectionId ? sections.find(s => s.id === sectionId) : null
