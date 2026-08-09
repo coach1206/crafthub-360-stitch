@@ -1,37 +1,37 @@
 [
   {
     "index": 1,
-    "at": "2026-08-09T13:14:57.597Z",
+    "at": "2026-08-09T13:25:32.909Z",
     "action": "goto /smokecraft/enroll (fresh, unseeded)",
     "url": "http://localhost:3001/smokecraft/enroll"
   },
   {
     "index": 2,
-    "at": "2026-08-09T13:14:58.939Z",
+    "at": "2026-08-09T13:25:34.054Z",
     "action": "Explore as Guest",
     "url": "http://localhost:3001/smokecraft/identity"
   },
   {
     "index": 3,
-    "at": "2026-08-09T13:14:59.228Z",
+    "at": "2026-08-09T13:25:34.205Z",
     "action": "Identity Begin",
     "url": "http://localhost:3001/smokecraft/venue-select"
   },
   {
     "index": 4,
-    "at": "2026-08-09T13:14:59.518Z",
+    "at": "2026-08-09T13:25:34.499Z",
     "action": "Venue select + Continue",
     "url": "http://localhost:3001/smokecraft/welcome"
   },
   {
     "index": 5,
-    "at": "2026-08-09T13:15:01.177Z",
+    "at": "2026-08-09T13:25:36.157Z",
     "action": "Welcome Begin Experience",
     "url": "http://localhost:3001/smokecraft/golden-box"
   },
   {
     "index": 6,
-    "at": "2026-08-09T13:15:03.790Z",
+    "at": "2026-08-09T13:25:38.801Z",
     "action": "generic-advance on /smokecraft/golden-box",
     "beforeUrl": "http://localhost:3001/smokecraft/golden-box",
     "afterUrl": "http://localhost:3001/smokecraft/mentor-selection",
@@ -41,7 +41,7 @@
   },
   {
     "index": 7,
-    "at": "2026-08-09T13:15:19.408Z",
+    "at": "2026-08-09T13:25:54.416Z",
     "action": "generic-advance on /smokecraft/mentor-selection",
     "beforeUrl": "http://localhost:3001/smokecraft/mentor-selection",
     "afterUrl": "http://localhost:3001/smokecraft/seed-soil",
@@ -51,7 +51,7 @@
   },
   {
     "index": 8,
-    "at": "2026-08-09T13:15:23.075Z",
+    "at": "2026-08-09T13:25:58.089Z",
     "action": "generic-advance on /smokecraft/seed-soil",
     "beforeUrl": "http://localhost:3001/smokecraft/seed-soil",
     "afterUrl": "http://localhost:3001/smokecraft/humidor-match",
@@ -61,7 +61,7 @@
   },
   {
     "index": 9,
-    "at": "2026-08-09T13:15:35.822Z",
+    "at": "2026-08-09T13:26:10.854Z",
     "action": "generic-advance on /smokecraft/humidor-match",
     "beforeUrl": "http://localhost:3001/smokecraft/humidor-match",
     "afterUrl": "http://localhost:3001/smokecraft/meet-your-cigar",
@@ -71,7 +71,7 @@
   },
   {
     "index": 10,
-    "at": "2026-08-09T13:15:39.956Z",
+    "at": "2026-08-09T13:26:15.032Z",
     "action": "generic-advance on /smokecraft/meet-your-cigar",
     "beforeUrl": "http://localhost:3001/smokecraft/meet-your-cigar",
     "afterUrl": "http://localhost:3001/smokecraft/terroir",
@@ -81,7 +81,7 @@
   },
   {
     "index": 11,
-    "at": "2026-08-09T13:15:44.389Z",
+    "at": "2026-08-09T13:26:19.561Z",
     "action": "generic-advance on /smokecraft/terroir",
     "beforeUrl": "http://localhost:3001/smokecraft/terroir",
     "afterUrl": "http://localhost:3001/smokecraft/format",
@@ -91,7 +91,7 @@
   },
   {
     "index": 12,
-    "at": "2026-08-09T13:15:48.180Z",
+    "at": "2026-08-09T13:26:23.359Z",
     "action": "generic-advance on /smokecraft/format",
     "beforeUrl": "http://localhost:3001/smokecraft/format",
     "afterUrl": "http://localhost:3001/smokecraft/request-purchase",
@@ -101,7 +101,7 @@
   },
   {
     "index": 13,
-    "at": "2026-08-09T13:15:51.801Z",
+    "at": "2026-08-09T13:26:27.035Z",
     "action": "generic-advance on /smokecraft/request-purchase",
     "beforeUrl": "http://localhost:3001/smokecraft/request-purchase",
     "afterUrl": "http://localhost:3001/smokecraft/cut-toast-light",
@@ -111,7 +111,7 @@
   },
   {
     "index": 14,
-    "at": "2026-08-09T13:15:55.764Z",
+    "at": "2026-08-09T13:26:31.018Z",
     "action": "generic-advance on /smokecraft/cut-toast-light",
     "beforeUrl": "http://localhost:3001/smokecraft/cut-toast-light",
     "afterUrl": "http://localhost:3001/smokecraft/lighting-tutorial",
@@ -121,7 +121,7 @@
   },
   {
     "index": 15,
-    "at": "2026-08-09T13:16:02.105Z",
+    "at": "2026-08-09T13:26:37.398Z",
     "action": "generic-advance on /smokecraft/lighting-tutorial",
     "beforeUrl": "http://localhost:3001/smokecraft/lighting-tutorial",
     "afterUrl": "http://localhost:3001/smokecraft/first-third",
@@ -131,7 +131,7 @@
   },
   {
     "index": 16,
-    "at": "2026-08-09T13:16:05.990Z",
+    "at": "2026-08-09T13:26:41.092Z",
     "action": "generic-advance on /smokecraft/first-third",
     "beforeUrl": "http://localhost:3001/smokecraft/first-third",
     "afterUrl": "http://localhost:3001/smokecraft/flavor-memory",
@@ -141,7 +141,7 @@
   },
   {
     "index": 17,
-    "at": "2026-08-09T13:16:10.221Z",
+    "at": "2026-08-09T13:26:44.778Z",
     "action": "generic-advance on /smokecraft/flavor-memory",
     "beforeUrl": "http://localhost:3001/smokecraft/flavor-memory",
     "afterUrl": "http://localhost:3001/smokecraft/pairing-lab",
@@ -151,7 +151,7 @@
   },
   {
     "index": 18,
-    "at": "2026-08-09T13:16:13.963Z",
+    "at": "2026-08-09T13:26:48.539Z",
     "action": "generic-advance on /smokecraft/pairing-lab",
     "beforeUrl": "http://localhost:3001/smokecraft/pairing-lab",
     "afterUrl": "http://localhost:3001/smokecraft/second-third",
@@ -161,7 +161,7 @@
   },
   {
     "index": 19,
-    "at": "2026-08-09T13:16:17.598Z",
+    "at": "2026-08-09T13:26:52.143Z",
     "action": "generic-advance on /smokecraft/second-third",
     "beforeUrl": "http://localhost:3001/smokecraft/second-third",
     "afterUrl": "http://localhost:3001/smokecraft/mentor-commentary",
@@ -171,7 +171,7 @@
   },
   {
     "index": 20,
-    "at": "2026-08-09T13:16:21.275Z",
+    "at": "2026-08-09T13:26:55.828Z",
     "action": "generic-advance on /smokecraft/mentor-commentary",
     "beforeUrl": "http://localhost:3001/smokecraft/mentor-commentary",
     "afterUrl": "http://localhost:3001/smokecraft/knowledge-drop",
@@ -181,7 +181,7 @@
   },
   {
     "index": 21,
-    "at": "2026-08-09T13:16:26.210Z",
+    "at": "2026-08-09T13:27:00.747Z",
     "action": "generic-advance on /smokecraft/knowledge-drop",
     "beforeUrl": "http://localhost:3001/smokecraft/knowledge-drop",
     "afterUrl": "http://localhost:3001/smokecraft/final-third",
@@ -191,7 +191,7 @@
   },
   {
     "index": 22,
-    "at": "2026-08-09T13:16:29.820Z",
+    "at": "2026-08-09T13:27:04.339Z",
     "action": "generic-advance on /smokecraft/final-third",
     "beforeUrl": "http://localhost:3001/smokecraft/final-third",
     "afterUrl": "http://localhost:3001/smokecraft/scorecard",
@@ -201,7 +201,7 @@
   },
   {
     "index": 23,
-    "at": "2026-08-09T13:16:33.741Z",
+    "at": "2026-08-09T13:27:08.232Z",
     "action": "generic-advance on /smokecraft/scorecard",
     "beforeUrl": "http://localhost:3001/smokecraft/scorecard",
     "afterUrl": "http://localhost:3001/smokecraft/ai-summary",
@@ -211,7 +211,7 @@
   },
   {
     "index": 24,
-    "at": "2026-08-09T13:16:37.534Z",
+    "at": "2026-08-09T13:27:12.010Z",
     "action": "generic-advance on /smokecraft/ai-summary",
     "beforeUrl": "http://localhost:3001/smokecraft/ai-summary",
     "afterUrl": "http://localhost:3001/smokecraft/pairing-recommendations",
@@ -221,7 +221,7 @@
   },
   {
     "index": 25,
-    "at": "2026-08-09T13:16:43.554Z",
+    "at": "2026-08-09T13:27:18.053Z",
     "action": "generic-advance on /smokecraft/pairing-recommendations",
     "beforeUrl": "http://localhost:3001/smokecraft/pairing-recommendations",
     "afterUrl": "http://localhost:3001/smokecraft/passport-stamp",
@@ -231,7 +231,7 @@
   },
   {
     "index": 26,
-    "at": "2026-08-09T13:16:46.204Z",
+    "at": "2026-08-09T13:27:20.529Z",
     "action": "generic-advance on /smokecraft/passport-stamp",
     "beforeUrl": "http://localhost:3001/smokecraft/passport-stamp",
     "afterUrl": "http://localhost:3001/smokecraft/final-review",
@@ -241,27 +241,27 @@
   },
   {
     "index": 27,
-    "at": "2026-08-09T13:16:49.891Z",
+    "at": "2026-08-09T13:27:24.190Z",
     "action": "generic-advance on /smokecraft/final-review",
     "beforeUrl": "http://localhost:3001/smokecraft/final-review",
     "afterUrl": "http://localhost:3001/smokecraft/rewards",
     "advanced": true,
     "clickedPrimary": true,
-    "bodySnippet": " Build: local · productionPhase 6/6·Session 24/27ResultsLocal PreviewiContinue to Rewards → "
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 24/27ResultsLocal PreviewSmokeCraft 360 — Final ReviewReview the journey before the final stampTake a moment to revi"
   },
   {
     "index": 28,
-    "at": "2026-08-09T13:16:52.957Z",
+    "at": "2026-08-09T13:27:27.260Z",
     "action": "generic-advance on /smokecraft/rewards",
     "beforeUrl": "http://localhost:3001/smokecraft/rewards",
     "afterUrl": "http://localhost:3001/smokecraft/session-complete",
     "advanced": true,
     "clickedPrimary": true,
-    "bodySnippet": " Build: local · productionPhase 6/6·Session 25/27ResultsLocal PreviewSmokeCraft 360 — Session 25 Rewardsserver182519001825—AficionadoHighest rank reachedNo venu"
+    "bodySnippet": " Build: local · productionPhase 6/6·Session 25/27ResultsLocal PreviewSmokeCraft 360 — Session 25 Rewardsserver172519001725—AficionadoHighest rank reachedNo venu"
   },
   {
     "index": 29,
-    "at": "2026-08-09T13:16:52.957Z",
+    "at": "2026-08-09T13:27:27.260Z",
     "action": "Reached Session Complete (S27) — natural end of numbered spine",
     "url": "http://localhost:3001/smokecraft/session-complete"
   }
