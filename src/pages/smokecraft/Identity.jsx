@@ -1,97 +1,59 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { VISIT_STRUCTURE } from '../../constants/session.js'
+import {
+  GOLD,
+  GOLD_DIM,
+  CREAM,
+  BORDER,
+  GLASS,
+  heroBannerStyle,
+  pageShellStyle,
+  cardStyle,
+  sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
 
 /**
- * Identity — /smokecraft/identity  (Entry layer E4, NOT a curriculum session)
+ * Identity — /smokecraft/identity
  *
- * FINAL APPROVED SHELLS PASS — this file replaces the hand-built two-column
- * CSS dashboard that the immediately-prior pass disclosed as still using the
- * decorative/cropped pattern.
+ * Live-DOM migration.
+ * The previous implementation rendered the complete IDENTY.png production
+ * screen as the functional shell and positioned form controls/navigation as
+ * percentage-based overlays. That created the two-generation split and made
+ * the baked image responsible for layout, labels, cards and navigation.
  *
- * What was wrong
- * --------------
- * The approved asset IDENTY.png (1672 x 941) is a complete production screen:
- * its own sidebar, its own "LET'S GET TO KNOW YOU" form with SEVEN empty
- * fields and a BEGIN MY JOURNEY button, its own BACK / "NEXT: GOLDEN BOX
- * RULES" controls, and — critically — a right-hand column of DELIBERATELY
- * BLANK frames (JOURNEY PROGRESS, YOUR QUICK STATS, INSIGHTS & ANALYTICS,
- * YOUR JOURNEYS). It is the single best-prepared asset in the whole set: the
- * owner already exported it with empty value zones.
+ * This implementation keeps all behavior in real DOM:
+ * - blank-by-default identity form
+ * - validation and debounced journey autosave
+ * - enroll gate
+ * - real semantic navigation
+ * - account-level summary cards
+ * - responsive tablet-first layout
  *
- * The removed layout used that screen as a `background-size: cover,
- * 334.40% 294.06%` CROP of just the portrait region — i.e. it threw away the
- * entire approved composition and kept a photographic detail as decoration,
- * then rebuilt the form, the journey nav, and four dashboard cards in
- * Claude-authored CSS beneath it.
- *
- * What was removed
- * ----------------
- *   - the cropped `backgroundImage` portrait tile;
- *   - the duplicate "SmokeCraft 360 — Personal Dashboard" eyebrow and the
- *     duplicate "Begin Your Journey" <h1> (the approved image carries its own
- *     "IDENTITY" wordmark);
- *   - the entire generic <main> grid: the hand-built journey <nav> panel and
- *     the four glass-card panels (Journey Progress / Quick Stats / Insights &
- *     Analytics / Your Journeys);
- *   - the SmokeCraftNavBar (the approved image has its own BACK and
- *     "NEXT: GOLDEN BOX RULES" controls).
- *
- * Deliberately NOT re-rendered
- * ----------------------------
- * The mandate for this screen is explicit: remove prior journey history,
- * stale XP, old cigar, dashboard cards, analytics, and preselected options.
- * The approved image's right-hand column is blank BY DESIGN, so the honest
- * conversion is to leave those frames blank rather than to refill them with
- * account-level state on an entry-layer identity form. No XP, no badge count,
- * no rank, no past-journey list and no analytics is rendered on this screen.
- * That is why there is no overlay at all over the right column.
- *
- * Data logic PRESERVED EXACTLY (visual shell only was at fault)
- * ------------------------------------------------------------
- *   - blank-by-default fields (EMPTY) and the `journey.identity` reset fix
- *     from the earlier pass — `useState(() => journey.identity ? {...EMPTY,
- *     ...journey.identity} : {...EMPTY})` is carried over verbatim, so a
- *     reset journey yields empty fields and no name (e.g. "Greg Guy") can
- *     survive from a prior journey;
- *   - the explicit enroll gate (Identity shares the guard's Session 2
- *     checkpoint with Enroll);
- *   - validateForm, live errors, touched-state, aria-invalid/role=alert;
- *   - the debounced autosave through setIdentity;
- *   - awardSessionRewards('enroll') then navigate('/smokecraft/golden-box');
- *   - triggerHaptic on every control; keyboard access via real <button>,
- *     <input> and <select> elements with visible focus rings.
- *
- * No option is preselected: every <select> starts on its empty "" option.
+ * No baked screenshot UI or click hotspot is used by this screen.
  */
 
-const NAT_W = 1672
-const NAT_H = 941
-
-const GOLD   = '#E9C176'
-const BORDER = 'rgba(233,193,118,0.32)'
-
 const EXPERIENCE_LEVELS = [
-  { id: 'beginner',    label: 'New to Cigars' },
-  { id: 'occasional',  label: 'Occasional Smoker' },
-  { id: 'enthusiast',  label: 'Regular Enthusiast' },
+  { id: 'beginner', label: 'New to Cigars' },
+  { id: 'occasional', label: 'Occasional Smoker' },
+  { id: 'enthusiast', label: 'Regular Enthusiast' },
   { id: 'connoisseur', label: 'Experienced Connoisseur' },
-  { id: 'expert',      label: 'Expert / Sommelier Level' },
+  { id: 'expert', label: 'Expert / Sommelier Level' },
 ]
 
 const FOCUS_AREAS = [
-  { id: 'flavor',     label: 'Flavor Discovery' },
-  { id: 'pairing',    label: 'Food & Drink Pairing' },
-  { id: 'origins',    label: 'Origins & Terroir' },
-  { id: 'technique',  label: 'Rolling & Technique' },
+  { id: 'flavor', label: 'Flavor Discovery' },
+  { id: 'pairing', label: 'Food & Drink Pairing' },
+  { id: 'origins', label: 'Origins & Terroir' },
+  { id: 'technique', label: 'Rolling & Technique' },
   { id: 'collection', label: 'Building a Collection' },
-  { id: 'social',     label: 'Social Experience' },
+  { id: 'social', label: 'Social Experience' },
 ]
 
 const COUNTRIES = [
@@ -101,153 +63,117 @@ const COUNTRIES = [
 ]
 
 const EMPTY = {
-  fullName: '', email: '', preferredName: '', birthDate: '',
-  country: '', experienceLevel: '', focusArea: '',
+  fullName: '',
+  email: '',
+  preferredName: '',
+  birthDate: '',
+  country: '',
+  experienceLevel: '',
+  focusArea: '',
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// Every route the registry actually declares — a sidebar hotspot is only
-// rendered when its route genuinely exists, so this screen can never invent
-// a destination.
 const REGISTERED_ROUTES = new Set(
   VISIT_STRUCTURE.flatMap(v => v.sessions.map(s => s.route)).filter(Boolean)
 )
 
 const SESSION_BY_ROUTE = (() => {
-  const m = new Map()
-  for (const v of VISIT_STRUCTURE) for (const s of v.sessions) if (s.route && !m.has(s.route)) m.set(s.route, s)
-  return m
+  const map = new Map()
+  for (const visit of VISIT_STRUCTURE) {
+    for (const session of visit.sessions) {
+      if (session.route && !map.has(session.route)) map.set(session.route, session)
+    }
+  }
+  return map
 })()
 
-// The approved image's OWN sidebar items, in its own order, at its own
-// coordinates. Each maps to a route the registry already declares.
-const SIDEBAR = [
-  { route: '/smokecraft/identity',         top: '15.4%' },
-  { route: '/smokecraft/golden-box',       top: '23.2%' },
-  { route: '/smokecraft/mentor-selection', top: '31.0%' },
-  { route: '/smokecraft/pairing-lab',      top: '38.8%' },
-  { route: '/smokecraft/humidor-match',    top: '46.6%' },
-  { route: '/smokecraft/request-purchase', top: '54.4%' },
-  { route: '/smokecraft/cut-toast-light',  top: '62.2%' },
-  { route: '/smokecraft/first-third',      top: '70.0%' },
+const JOURNEY_LINKS = [
+  { route: '/smokecraft/identity', label: 'Identity' },
+  { route: '/smokecraft/golden-box', label: 'Golden Box' },
+  { route: '/smokecraft/mentor-selection', label: 'Mentor' },
+  { route: '/smokecraft/pairing-lab', label: 'Pairing Lab' },
+  { route: '/smokecraft/humidor-match', label: 'Humidor Match' },
+  { route: '/smokecraft/request-purchase', label: 'Request / Purchase' },
+  { route: '/smokecraft/cut-toast-light', label: 'Cut, Toast & Light' },
+  { route: '/smokecraft/first-third', label: 'First Third' },
 ]
-const SIDEBAR_ITEM = { left: '0.5%', width: '8.6%', height: '7.0%' }
 
-// The approved form's own seven fields + its BEGIN MY JOURNEY button.
-const FIELD_X = { left: '12.3%', width: '23.1%' }
-const FIELD_H = '3.4%'
-const FIELD_TOP = {
-  fullName:        '28.0%',
-  email:           '31.9%',
-  preferredName:   '35.8%',
-  birthDate:       '39.6%',
-  country:         '43.6%',
-  experienceLevel: '47.5%',
-  focusArea:       '51.4%',
-}
-const BEGIN_BTN = { left: '12.3%', top: '55.7%', width: '23.1%', height: '3.7%' }
-
-// The approved image's own BACK and "NEXT: GOLDEN BOX RULES" controls.
-const BACK_BTN = { left: '72.6%', top: '2.3%',  width: '8.0%',  height: '4.5%' }
-const NEXT_BTN = { left: '73.1%', top: '94.0%', width: '24.6%', height: '4.6%' }
-
-// Live inputs sit on the image's own empty field slots. Opaque so the baked
-// placeholder text underneath can never bleed through the live value.
-const INPUT = {
-  position: 'absolute',
+const inputStyle = {
+  width: '100%',
+  minHeight: 48,
+  boxSizing: 'border-box',
   background: '#0d1420',
   border: `1px solid ${BORDER}`,
-  borderRadius: 6,
-  color: '#e5e2e1',
+  borderRadius: 9,
+  color: CREAM,
   fontFamily: 'Georgia, serif',
-  fontSize: 'clamp(9px,0.95vw,15px)',
-  padding: '0 2.2%',
-  boxSizing: 'border-box',
+  fontSize: 'clamp(14px,1.35vw,16px)',
+  padding: '0 14px',
   outline: 'none',
-  pointerEvents: 'auto',
-  WebkitAppearance: 'none',
   colorScheme: 'dark',
 }
 
-const HOTSPOT = {
-  position: 'absolute',
-  background: 'transparent',
-  border: '1.5px solid transparent',
-  borderRadius: 6,
-  cursor: 'pointer',
-  pointerEvents: 'auto',
-  touchAction: 'manipulation',
-  WebkitTapHighlightColor: 'transparent',
-}
-
 function validateForm(form) {
-  const e = {}
-  if (!form.fullName.trim()) e.fullName = 'Full name is required'
-  if (!form.experienceLevel) e.experienceLevel = 'Please select your experience level'
-  if (form.email.trim() && !EMAIL_RE.test(form.email.trim())) e.email = 'Enter a valid email address'
+  const errors = {}
+  if (!form.fullName.trim()) errors.fullName = 'Full name is required'
+  if (!form.experienceLevel) errors.experienceLevel = 'Please select your experience level'
+  if (form.email.trim() && !EMAIL_RE.test(form.email.trim())) errors.email = 'Enter a valid email address'
   if (form.birthDate) {
-    const d = new Date(form.birthDate)
+    const date = new Date(form.birthDate)
     const now = new Date()
-    if (Number.isNaN(d.getTime()) || d > now) {
-      e.birthDate = 'Enter a valid birth date'
+    if (Number.isNaN(date.getTime()) || date > now) {
+      errors.birthDate = 'Enter a valid birth date'
     } else {
-      const age = (now - d) / (1000 * 60 * 60 * 24 * 365.25)
-      if (age < 13 || age > 120) e.birthDate = 'Enter a valid birth date'
+      const age = (now - date) / (1000 * 60 * 60 * 24 * 365.25)
+      if (age < 13 || age > 120) errors.birthDate = 'Enter a valid birth date'
     }
   }
-  return e
+  return errors
 }
 
 export default function Identity() {
+  const navigate = useNavigate()
   const { awardSessionRewards, session } = useGuestSession()
   const { currentAllowed, isDemoMode, completedSessions } = useSmokeCraftProgress()
   const { journey, setIdentity } = useSmokeCraftJourney()
-  const navigate = useNavigate()
 
-  // PRESERVED: blank-by-default + the journey.identity reset fix.
   const [form, setForm] = useState(() => journey.identity ? { ...EMPTY, ...journey.identity } : { ...EMPTY })
-  const [errors, setErrors] = useState({})
   const [touched, setTouched] = useState({})
   const [submitting, setSubmitting] = useState(false)
-  const [saveStatus, setSaveStatus] = useState('idle') // idle | saving | saved
+  const [saveStatus, setSaveStatus] = useState('idle')
   const initialized = useRef(false)
 
-  // PRESERVED: Identity shares the guard's Session 2 numeric checkpoint with
-  // Enroll, so the guard alone can't tell them apart. Enroll is the
-  // authoritative Session 2 screen; Identity is only reachable after it.
   useEffect(() => {
     if (!isDemoMode && !session.completedSteps.includes('enroll')) {
       navigate('/smokecraft/enroll', { replace: true })
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // PRESERVED: debounced autosave through the canonical setIdentity.
   useEffect(() => {
-    if (!initialized.current) { initialized.current = true; return }
+    if (!initialized.current) {
+      initialized.current = true
+      return
+    }
     setSaveStatus('saving')
     setIdentity(form)
-    const t = setTimeout(() => setSaveStatus('saved'), 300)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setSaveStatus('saved'), 300)
+    return () => clearTimeout(timer)
   }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const liveErrors = useMemo(() => validateForm(form), [form])
+  const errors = useMemo(() => validateForm(form), [form])
 
   function set(field, value) {
     setForm(prev => ({ ...prev, [field]: value }))
     setTouched(prev => ({ ...prev, [field]: true }))
   }
 
-  function handleBlur(field) {
-    setTouched(prev => ({ ...prev, [field]: true }))
-    setErrors(liveErrors)
-  }
-
   function handleBegin() {
-    const e = validateForm(form)
-    setErrors(e)
     setTouched({ fullName: true, experienceLevel: true, email: true, birthDate: true })
-    if (Object.keys(e).length > 0) { triggerHaptic('error'); return }
+    if (Object.keys(errors).length > 0) {
+      triggerHaptic('error')
+      return
+    }
     if (submitting) return
     setSubmitting(true)
     triggerHaptic('medium')
@@ -255,211 +181,199 @@ export default function Identity() {
     navigate('/smokecraft/venue-select')
   }
 
-  const firstError = touched.fullName && liveErrors.fullName ? liveErrors.fullName
-    : touched.experienceLevel && liveErrors.experienceLevel ? liveErrors.experienceLevel
-    : touched.email && liveErrors.email ? liveErrors.email
-    : touched.birthDate && liveErrors.birthDate ? liveErrors.birthDate
-    : null
+  const firstError = touched.fullName && errors.fullName
+    ? errors.fullName
+    : touched.experienceLevel && errors.experienceLevel
+      ? errors.experienceLevel
+      : touched.email && errors.email
+        ? errors.email
+        : touched.birthDate && errors.birthDate
+          ? errors.birthDate
+          : null
 
-  function focusRing(e, on) { e.currentTarget.style.borderColor = on ? GOLD : BORDER }
-  function hotspotRing(e, on) { e.currentTarget.style.borderColor = on ? GOLD : 'transparent' }
-
-  function textField(field, type, label, top, extra = {}) {
-    const invalid = Boolean(touched[field] && liveErrors[field])
+  function fieldLabel(text, required = false) {
     return (
-      <input
-        id={`id-${field}`}
-        data-testid={`identity-${field}`}
-        type={type}
-        aria-label={label}
-        aria-invalid={invalid}
-        aria-required={field === 'fullName' ? 'true' : undefined}
-        value={form[field]}
-        onChange={e => set(field, e.target.value)}
-        onBlur={() => handleBlur(field)}
-        style={{
-          ...INPUT, ...FIELD_X, top, height: FIELD_H,
-          borderColor: invalid ? '#e05a5a' : BORDER,
-          ...extra,
-        }}
-        onFocus={e => { if (!invalid) focusRing(e, true) }}
-      />
+      <span style={{ display: 'block', marginBottom: 7, fontSize: 12, color: GOLD_DIM, fontWeight: 700, letterSpacing: '0.06em' }}>
+        {text}{required ? ' *' : ''}
+      </span>
     )
   }
 
-  function selectField(field, label, top, placeholder, options) {
-    const invalid = Boolean(touched[field] && liveErrors[field])
+  function textField(field, type, label, required = false) {
+    const invalid = Boolean(touched[field] && errors[field])
     return (
-      <select
-        id={`id-${field}`}
-        data-testid={`identity-${field}`}
-        aria-label={label}
-        aria-invalid={invalid}
-        value={form[field]}
-        onChange={e => { triggerHaptic('light'); set(field, e.target.value) }}
-        onBlur={() => handleBlur(field)}
-        style={{
-          ...INPUT, ...FIELD_X, top, height: FIELD_H,
-          borderColor: invalid ? '#e05a5a' : BORDER,
-          color: form[field] ? '#e5e2e1' : 'rgba(229,226,225,0.55)',
-          cursor: 'pointer',
-        }}
-        onFocus={e => { if (!invalid) focusRing(e, true) }}
-      >
-        {/* No preselected option — the empty value is always the default. */}
-        <option value="">{placeholder}</option>
-        {options.map(o => <option key={o.id ?? o} value={o.id ?? o}>{o.label ?? o}</option>)}
-      </select>
+      <label style={{ display: 'block' }}>
+        {fieldLabel(label, required)}
+        <input
+          data-testid={`identity-${field}`}
+          type={type}
+          aria-invalid={invalid}
+          aria-required={required ? 'true' : undefined}
+          value={form[field]}
+          onChange={event => set(field, event.target.value)}
+          onBlur={() => setTouched(prev => ({ ...prev, [field]: true }))}
+          style={{ ...inputStyle, borderColor: invalid ? '#e05a5a' : BORDER }}
+          onFocus={event => { event.currentTarget.style.borderColor = GOLD }}
+        />
+        {invalid && <span role="alert" style={{ display: 'block', marginTop: 6, color: '#e77878', fontSize: 12 }}>{errors[field]}</span>}
+      </label>
+    )
+  }
+
+  function selectField(field, label, placeholder, options, required = false) {
+    const invalid = Boolean(touched[field] && errors[field])
+    return (
+      <label style={{ display: 'block' }}>
+        {fieldLabel(label, required)}
+        <select
+          data-testid={`identity-${field}`}
+          aria-invalid={invalid}
+          aria-required={required ? 'true' : undefined}
+          value={form[field]}
+          onChange={event => { triggerHaptic('light'); set(field, event.target.value) }}
+          onBlur={() => setTouched(prev => ({ ...prev, [field]: true }))}
+          style={{ ...inputStyle, cursor: 'pointer', borderColor: invalid ? '#e05a5a' : BORDER }}
+        >
+          <option value="">{placeholder}</option>
+          {options.map(option => (
+            <option key={option.id ?? option} value={option.id ?? option}>{option.label ?? option}</option>
+          ))}
+        </select>
+        {invalid && <span role="alert" style={{ display: 'block', marginTop: 6, color: '#e77878', fontSize: 12 }}>{errors[field]}</span>}
+      </label>
     )
   }
 
   return (
-        <SmokeCraftScreenShell
-      mode="image-shell"
-      status="ready"
-      imageProps={{ src: SC_ASSETS.identity, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft 360 — Identity", bottomOffset: 0 }}
-    >
-      {/* Single accessible title — the approved image carries the visible
-          "IDENTITY" wordmark, so no duplicate heading is drawn. */}
-      <h1 style={{
-        position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
-        overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
-      }}>SmokeCraft 360 — Identity</h1>
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{
+            width: 58,
+            height: 58,
+            borderRadius: '50%',
+            display: 'grid',
+            placeItems: 'center',
+            border: `1px solid ${BORDER}`,
+            background: 'rgba(233,193,118,0.08)',
+            color: GOLD,
+            fontSize: 26,
+            fontWeight: 700,
+          }}>I</div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              SmokeCraft 360 — Personal Dashboard
+            </div>
+            <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(26px,3.4vw,36px)', color: CREAM }}>Identity</h1>
+            <p style={{ margin: 0, fontSize: 'clamp(13px,1.4vw,16px)', color: 'rgba(229,226,225,0.68)', lineHeight: 1.55, maxWidth: 720 }}>
+              Set up this journey around your experience and interests. Your selections stay editable and are saved as you go.
+            </p>
+          </div>
+        </div>
 
-      {/* ── The approved form's own seven empty fields, now live ────────── */}
-      {textField('fullName',      'text',  'Full Name',                FIELD_TOP.fullName)}
-      {textField('email',         'email', 'Email Address',            FIELD_TOP.email)}
-      {textField('preferredName', 'text',  'Preferred Name (optional)', FIELD_TOP.preferredName)}
-      {textField('birthDate',     'date',  'Birth Date (optional)',    FIELD_TOP.birthDate)}
-      {selectField('country',         'Country',               FIELD_TOP.country,         'Country',               COUNTRIES)}
-      {selectField('experienceLevel', 'Cigar Experience Level', FIELD_TOP.experienceLevel, 'Cigar Experience Level', EXPERIENCE_LEVELS)}
-      {selectField('focusArea',       'What excites you most?', FIELD_TOP.focusArea,       'What excites you most?', FOCUS_AREAS)}
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.45fr) minmax(280px, .8fr)', gap: 'clamp(16px,2.2vw,24px)', alignItems: 'start' }}>
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,28px)' }}>
+            <div style={sectionLabelStyle}>Let’s get to know you</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(235px, 1fr))', gap: '18px 16px', marginTop: 16 }}>
+              {textField('fullName', 'text', 'Full Name', true)}
+              {textField('email', 'email', 'Email Address')}
+              {textField('preferredName', 'text', 'Preferred Name')}
+              {textField('birthDate', 'date', 'Birth Date')}
+              {selectField('country', 'Country', 'Select country', COUNTRIES)}
+              {selectField('experienceLevel', 'Cigar Experience Level', 'Select experience level', EXPERIENCE_LEVELS, true)}
+              {selectField('focusArea', 'What excites you most?', 'Select focus area', FOCUS_AREAS)}
+            </div>
 
-      {/* Validation + save status, in the blank gutter beside the form */}
-      <div
-        role={firstError ? 'alert' : 'status'}
-        aria-live="polite"
-        data-testid="identity-status"
-        style={{
-          position: 'absolute', left: '12.3%', top: '60.0%', width: '23.1%',
-          fontFamily: 'Georgia, serif', fontSize: 'clamp(8px,0.8vw,12px)',
-          color: firstError ? '#e05a5a' : GOLD, pointerEvents: 'none',
-        }}
-      >
-        {firstError || (saveStatus === 'saved' ? '✓ Saved' : '')}
+            <div role={firstError ? 'alert' : 'status'} aria-live="polite" data-testid="identity-status" style={{ minHeight: 20, marginTop: 16, fontSize: 12.5, color: firstError ? '#e77878' : GOLD }}>
+              {firstError || (saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? '✓ Saved' : '')}
+            </div>
+
+            <button
+              type="button"
+              data-testid="identity-begin"
+              onClick={handleBegin}
+              disabled={submitting}
+              style={{
+                minHeight: 52,
+                marginTop: 8,
+                padding: '0 22px',
+                borderRadius: 10,
+                border: `1px solid ${GOLD}`,
+                background: submitting ? 'rgba(233,193,118,0.12)' : 'rgba(233,193,118,0.18)',
+                color: CREAM,
+                fontFamily: 'Georgia, serif',
+                fontSize: 15,
+                fontWeight: 700,
+                cursor: submitting ? 'default' : 'pointer',
+              }}
+            >
+              {submitting ? 'Opening Journey…' : 'Begin My Journey →'}
+            </button>
+          </section>
+
+          <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <section style={{ ...cardStyle, padding: 18 }}>
+              <div style={sectionLabelStyle}>Quick Stats</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10, marginTop: 14 }}>
+                {[
+                  ['XP', session?.xp || 0],
+                  ['Badges', session?.stamps?.length || session?.badges?.length || 0],
+                  ['Journeys', journey.previousCompletedJourneys?.length || 0],
+                ].map(([label, value]) => (
+                  <div key={label} style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 'clamp(18px,2vw,24px)', color: GOLD, fontWeight: 700 }}>{value}</div>
+                    <div style={{ fontSize: 10.5, color: 'rgba(229,226,225,.52)', marginTop: 4 }}>{label}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section style={{ ...cardStyle, padding: 18 }}>
+              <div style={sectionLabelStyle}>Journey</div>
+              <nav aria-label="SmokeCraft journey shortcuts" style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
+                {JOURNEY_LINKS.filter(item => item.route === '/smokecraft/identity' || REGISTERED_ROUTES.has(item.route)).map(item => {
+                  const sessionMeta = SESSION_BY_ROUTE.get(item.route)
+                  const done = sessionMeta ? completedSessions?.includes(sessionMeta.session) : false
+                  const isCurrent = currentAllowed?.route === item.route
+                  const unlocked = item.route === '/smokecraft/identity' || isDemoMode || done || isCurrent
+                  return (
+                    <button
+                      key={item.route}
+                      type="button"
+                      disabled={!unlocked}
+                      aria-current={isCurrent ? 'step' : undefined}
+                      onClick={() => { triggerHaptic('light'); navigate(item.route) }}
+                      style={{
+                        minHeight: 46,
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: '0 13px',
+                        borderRadius: 8,
+                        border: `1px solid ${isCurrent ? GOLD : BORDER}`,
+                        background: isCurrent ? 'rgba(233,193,118,.12)' : GLASS,
+                        color: unlocked ? CREAM : 'rgba(229,226,225,.28)',
+                        fontFamily: 'Georgia, serif',
+                        cursor: unlocked ? 'pointer' : 'not-allowed',
+                      }}
+                    >
+                      {item.label}{done ? '  ✓' : ''}
+                    </button>
+                  )
+                })}
+              </nav>
+            </section>
+          </aside>
+        </div>
+
+        <div style={{ height: 90 }} aria-hidden="true" />
       </div>
 
-      {/* ── The approved "BEGIN MY JOURNEY" button, now live ────────────── */}
-      <button
-        type="button"
-        data-testid="identity-begin"
-        onClick={handleBegin}
-        disabled={submitting}
-        style={{
-          ...HOTSPOT, ...BEGIN_BTN,
-          border: '1.5px solid transparent',
-        }}
-        aria-label="Begin my journey"
-        onMouseEnter={e => hotspotRing(e, true)} onMouseLeave={e => hotspotRing(e, false)}
-        onFocus={e => hotspotRing(e, true)} onBlur={e => hotspotRing(e, false)}
+      <SmokeCraftNavBar
+        primary={submitting ? 'Opening Journey…' : 'Continue to Venue Selection →'}
+        onPrimary={handleBegin}
+        secondary="← Back"
+        onSecondary={() => { triggerHaptic('light'); navigate('/smokecraft/enroll') }}
       />
-
-      {/* ── The approved image's own BACK control ───────────────────────── */}
-      <button
-        type="button"
-        data-testid="identity-back"
-        aria-label="Go back"
-        onClick={() => { triggerHaptic('light'); navigate('/smokecraft/enroll') }}
-        style={{ ...HOTSPOT, ...BACK_BTN }}
-        onMouseEnter={e => hotspotRing(e, true)} onMouseLeave={e => hotspotRing(e, false)}
-        onFocus={e => hotspotRing(e, true)} onBlur={e => hotspotRing(e, false)}
-      />
-
-      {/* ── The approved image's own "NEXT: GOLDEN BOX RULES" control ───── */}
-      <button
-        type="button"
-        data-testid="identity-next"
-        aria-label="Continue to Venue Selection"
-        onClick={handleBegin}
-        style={{ ...HOTSPOT, ...NEXT_BTN }}
-        onMouseEnter={e => hotspotRing(e, true)} onMouseLeave={e => hotspotRing(e, false)}
-        onFocus={e => hotspotRing(e, true)} onBlur={e => hotspotRing(e, false)}
-      />
-
-      {/* SC-D088 fix: the approved image's right-hand column (Journey
-          Progress / Quick Stats / Insights & Analytics / Your Journeys) was
-          left intentionally blank to avoid leaking a PRIOR journey's stale
-          progress into a fresh identity form (the real defect that
-          motivated the original blank-by-design decision). Real
-          ACCOUNT-level data — XP/rank and prior-completed-journey count —
-          is not per-journey progress and carries no staleness risk, so it
-          now fills these zones instead of leaving them empty. No current-
-          journey session data (cigar, mentor, in-progress steps) is shown
-          here — that constraint is preserved exactly. */}
-      <div style={{
-        position: 'absolute', left: '68.5%', top: '6%', width: '30%', height: '18%',
-        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
-        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
-        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
-      }}>
-        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Account</span>
-        <span style={{ fontSize: 'clamp(13px,1.3vw,18px)', color: GOLD, fontWeight: 700 }}>{session?.xp || 0} XP</span>
-      </div>
-      <div style={{
-        position: 'absolute', left: '68.5%', top: '25.5%', width: '30%', height: '18%',
-        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
-        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
-        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
-      }}>
-        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Badges Earned</span>
-        <span style={{ fontSize: 'clamp(13px,1.3vw,18px)', color: GOLD, fontWeight: 700 }}>{session?.stamps?.length || session?.badges?.length || 0}</span>
-      </div>
-      <div style={{
-        position: 'absolute', left: '68.5%', top: '45%', width: '30%', height: '20%',
-        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
-        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
-        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
-      }}>
-        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Completed Journeys</span>
-        <span style={{ fontSize: 'clamp(13px,1.3vw,18px)', color: GOLD, fontWeight: 700 }}>{journey.previousCompletedJourneys?.length || 0}</span>
-      </div>
-      <div style={{
-        position: 'absolute', left: '68.5%', top: '67%', width: '30%', height: '25%',
-        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
-        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
-        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
-      }}>
-        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Ready To Begin</span>
-        <span style={{ fontSize: 'clamp(10.5px,1vw,13px)', color: 'rgba(229,226,225,0.7)', lineHeight: 1.4 }}>A fresh journey starts once you continue below.</span>
-      </div>
-
-      {/* ── The approved sidebar's own items, gated by real progress ────── */}
-      {SIDEBAR.filter(item => item.route === '/smokecraft/identity' || REGISTERED_ROUTES.has(item.route)).map(item => {
-        const s = SESSION_BY_ROUTE.get(item.route)
-        const done = s ? completedSessions?.includes(s.session) : false
-        const isCurrent = currentAllowed?.route === item.route
-        const unlocked = item.route === '/smokecraft/identity' || isDemoMode || done || isCurrent
-        if (!unlocked) return null
-        return (
-          <button
-            key={item.route}
-            type="button"
-            data-testid={`identity-nav-${item.route.split('/').pop()}`}
-            aria-label={s?.label || 'Identity'}
-            aria-current={isCurrent ? 'step' : undefined}
-            onClick={() => { triggerHaptic('light'); navigate(item.route) }}
-            style={{ ...HOTSPOT, ...SIDEBAR_ITEM, top: item.top }}
-            onMouseEnter={e => hotspotRing(e, true)} onMouseLeave={e => hotspotRing(e, false)}
-            onFocus={e => hotspotRing(e, true)} onBlur={e => hotspotRing(e, false)}
-          />
-        )
-      })}
-
-      {/* The approved image's right-hand column (JOURNEY PROGRESS / YOUR QUICK
-          STATS / INSIGHTS & ANALYTICS / YOUR JOURNEYS) is intentionally left
-          exactly as exported — blank. See this file's header: no XP, rank,
-          badge count, analytics or prior-journey history belongs on the
-          entry-layer identity form. */}
     </SmokeCraftScreenShell>
   )
 }
