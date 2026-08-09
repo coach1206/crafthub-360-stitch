@@ -8,6 +8,7 @@ import * as smokecraftManagementSyncService from '../../modules/smokecraft/servi
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftSupportingHero from '../../components/smokecraft/SmokeCraftSupportingHero.jsx'
 
 const GOLD   = '#E9C176'
 const GOLD_DIM = 'rgba(233,193,118,0.55)'
@@ -130,12 +131,14 @@ export default function ManagementSync() {
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Georgia, serif' }}>
 
+        <SmokeCraftSupportingHero label="Management Sync" />
+
         <header>
           <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             SmokeCraft 360 — Supporting Module
           </div>
-          <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(22px,3vw,30px)', color: CREAM }}>Management Sync</h1>
-          <p style={{ margin: 0, fontSize: 'clamp(12px,1.3vw,14px)', color: 'rgba(229,226,225,0.6)', lineHeight: 1.5 }}>
+          <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(24px,3.4vw,34px)', color: CREAM }}>Management Sync</h1>
+          <p style={{ margin: 0, fontSize: 'clamp(13px,1.4vw,15px)', color: 'rgba(229,226,225,0.65)', lineHeight: 1.55, maxWidth: 640 }}>
             Sync this journey's cigar, pairing, and flavor selections into venue operations.
           </p>
         </header>

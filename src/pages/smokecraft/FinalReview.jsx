@@ -5,6 +5,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftSupportingHero from '../../components/smokecraft/SmokeCraftSupportingHero.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
@@ -104,12 +105,14 @@ export default function FinalReview({ onBack, onComplete } = {}) {
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 18, fontFamily: 'Georgia, serif' }}>
 
+        <SmokeCraftSupportingHero label="Final Review" />
+
         <header>
           <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             SmokeCraft 360 — Final Review
           </div>
-          <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(22px,3vw,32px)', color: CREAM }}>Review the journey before the final stamp</h1>
-          <p style={{ margin: 0, fontSize: 'clamp(12px,1.3vw,14px)', color: 'rgba(229,226,225,0.6)', lineHeight: 1.5 }}>
+          <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(24px,3.4vw,34px)', color: CREAM }}>Review the journey before the final stamp</h1>
+          <p style={{ margin: 0, fontSize: 'clamp(13px,1.4vw,15px)', color: 'rgba(229,226,225,0.65)', lineHeight: 1.55, maxWidth: 680 }}>
             Take a moment to revisit your key insights, reflections, and experience. Confirm everything feels right before you stamp your passport and continue this chapter.
           </p>
         </header>

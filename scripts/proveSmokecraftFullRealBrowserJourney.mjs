@@ -381,4 +381,10 @@ async function main() {
   console.log('Unique URLs visited:', new Set(seenUrls).size)
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+// Guarded: this file is also imported by other scripts purely for
+// `genericAdvance` — without this guard, every such import silently
+// re-ran this entire full journey as a wasteful (and, under load,
+// crash-prone) side effect.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(e => { console.error(e); process.exit(1) })
+}

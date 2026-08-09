@@ -323,22 +323,35 @@ export default function MeetYourCigar({ onBack, onComplete } = {}) {
               with <SmokeCraftImageSurface surface="cigar-profile"
               src={SC_ASSETS.meetYourCigar} .../>) — no game logic changes. */}
           {cigar && (
-            <div
-              aria-label={`${cigar.name} reference image — pending approved photography`}
-              style={{
-                minHeight: 'clamp(140px,20vh,200px)', maxHeight: 220,
-                background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                gap: 8, padding: 20, boxSizing: 'border-box',
-              }}
-            >
-              <span style={{ fontSize: 30, color: GOLD_DIM, lineHeight: 1 }} aria-hidden="true">🚬</span>
-              <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', letterSpacing: '0.06em', textTransform: 'uppercase', textAlign: 'center' }}>
-                {cigar.name} — reference image
-              </span>
-              <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.3)', textAlign: 'center' }}>
-                Dedicated photography pending owner approval
-              </span>
+            <div style={{
+              display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16,
+              background: 'linear-gradient(135deg, rgba(233,193,118,0.09), rgba(11,15,24,0.85))',
+              border: `1px solid ${BORDER}`, borderRadius: 12, padding: '18px 22px',
+            }}>
+              {/* Premium cigar-identity composition (Part 5): the live
+                  data itself is the visual focal point — brand, wrapper,
+                  strength — not a placeholder box. */}
+              <div style={{ flex: '1 1 260px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <span style={{ fontSize: 10.5, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase' }}>This Session's Cigar</span>
+                <span style={{ fontSize: 'clamp(18px,2vw,24px)', color: CREAM, fontWeight: 700 }}>{cigar.name}</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
+                  {cigar.wrapper && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '3px 10px' }}>{cigar.wrapper}</span>}
+                  {cigar.strength && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '3px 10px' }}>{cigar.strength}</span>}
+                  {cigar.origin && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '3px 10px' }}>{cigar.origin}</span>}
+                </div>
+              </div>
+              {/* Reserved photography slot — secondary, does not dominate. */}
+              <div
+                aria-label={`${cigar.name} reference image — pending approved photography`}
+                style={{
+                  flex: '0 0 auto', width: 96, height: 96, borderRadius: 10,
+                  border: `1px dashed ${BORDER}`, display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(0,0,0,0.2)',
+                }}
+              >
+                <span style={{ fontSize: 20, color: GOLD_DIM, lineHeight: 1 }} aria-hidden="true">🚬</span>
+                <span style={{ fontSize: 8.5, color: 'rgba(229,226,225,0.35)', textAlign: 'center', lineHeight: 1.3, padding: '0 6px' }}>Photo pending</span>
+              </div>
             </div>
           )}
 
