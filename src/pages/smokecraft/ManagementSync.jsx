@@ -8,12 +8,7 @@ import * as smokecraftManagementSyncService from '../../modules/smokecraft/servi
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-
-const GOLD   = '#E9C176'
-const GOLD_DIM = 'rgba(233,193,118,0.55)'
-const CREAM  = '#e5e2e1'
-const BORDER = 'rgba(233,193,118,0.22)'
-const GLASS  = 'rgba(233,193,118,0.06)'
+import { GOLD, GOLD_DIM, CREAM, BORDER, GLASS, heroBannerStyle, pageShellStyle } from '../../constants/smokecraftLiveScreenTokens.js'
 
 /**
  * Management Sync — /smokecraft/management-sync (supporting, post-Passport
@@ -128,13 +123,9 @@ export default function ManagementSync() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 18, fontFamily: 'Georgia, serif' }}>
+      <div style={pageShellStyle}>
 
-        <div style={{
-          borderRadius: 14, border: `1px solid ${BORDER}`, padding: 'clamp(20px,3.4vw,32px)',
-          background: 'radial-gradient(120% 140% at 15% 20%, rgba(233,193,118,0.14), rgba(6,8,12,0.4) 60%), linear-gradient(135deg, rgba(233,193,118,0.06), rgba(11,15,24,0.9))',
-          display: 'flex', alignItems: 'center', gap: 18,
-        }}>
+        <div style={heroBannerStyle}>
           <span style={{ fontSize: 40, lineHeight: 1 }} aria-hidden="true">🔗</span>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>

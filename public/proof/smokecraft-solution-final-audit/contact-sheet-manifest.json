@@ -1,0 +1,11 @@
+{
+  "totalSheets": 5,
+  "outputs": [
+    "public/proof/smokecraft-solution-final-audit/SMOKECRAFT_UNIFIED_SYSTEM_FINAL_01.png",
+    "public/proof/smokecraft-solution-final-audit/SMOKECRAFT_UNIFIED_SYSTEM_FINAL_02.png",
+    "public/proof/smokecraft-solution-final-audit/SMOKECRAFT_UNIFIED_SYSTEM_FINAL_03.png",
+    "public/proof/smokecraft-solution-final-audit/SMOKECRAFT_UNIFIED_SYSTEM_FINAL_04.png",
+    "public/proof/smokecraft-solution-final-audit/SMOKECRAFT_UNIFIED_SYSTEM_FINAL_05.png"
+  ],
+  "indexOut": "public/proof/smokecraft-solution-final-audit/SMOKECRAFT_UNIFIED_SYSTEM_FINAL_INDEX.png"
+}
