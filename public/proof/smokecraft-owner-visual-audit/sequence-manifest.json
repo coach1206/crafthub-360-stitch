@@ -1,0 +1,302 @@
+[
+  {
+    "n": 1,
+    "session": null,
+    "phase": null,
+    "name": "Launch",
+    "route": "/smokecraft",
+    "filename": "001-launch.png",
+    "actualUrl": "/smokecraft",
+    "note": ""
+  },
+  {
+    "n": 2,
+    "session": null,
+    "phase": null,
+    "name": "Enroll (Sign In / Guest Mode)",
+    "route": "/smokecraft/enroll",
+    "filename": "002-enroll-sign-in-guest-mode.png",
+    "actualUrl": "/smokecraft/enroll",
+    "note": ""
+  },
+  {
+    "n": 3,
+    "session": null,
+    "phase": null,
+    "name": "Identity (Personal Dashboard)",
+    "route": "/smokecraft/identity",
+    "filename": "003-identity-personal-dashboard.png",
+    "actualUrl": "/smokecraft/identity",
+    "note": ""
+  },
+  {
+    "n": 4,
+    "session": null,
+    "phase": null,
+    "name": "Venue Select",
+    "route": "/smokecraft/venue-select",
+    "filename": "004-venue-select.png",
+    "actualUrl": "/smokecraft/venue-select",
+    "note": ""
+  },
+  {
+    "n": 5,
+    "session": null,
+    "phase": null,
+    "name": "Resume (returning-guest entry-layer screen)",
+    "route": "/smokecraft/resume",
+    "filename": "005-resume-returning-guest-entry-layer-scree.png",
+    "actualUrl": "/smokecraft",
+    "note": "Reached via direct navigation — informational entry-layer screen for returning guests, not part of a fresh first-time player's forward click path."
+  },
+  {
+    "n": 6,
+    "session": 1,
+    "phase": 1,
+    "name": "Welcome to Today's Experience",
+    "route": "/smokecraft/welcome",
+    "filename": "006-welcome-to-today-s-experience.png",
+    "actualUrl": "/smokecraft/welcome",
+    "note": ""
+  },
+  {
+    "n": 7,
+    "session": null,
+    "phase": null,
+    "name": "Golden Box Rules (opening chain)",
+    "route": "/smokecraft/golden-box",
+    "filename": "007-golden-box-rules-opening-chain.png",
+    "actualUrl": "/smokecraft/golden-box",
+    "note": ""
+  },
+  {
+    "n": 8,
+    "session": null,
+    "phase": null,
+    "name": "Mentor Selection (opening chain)",
+    "route": "/smokecraft/mentor-selection",
+    "filename": "008-mentor-selection-opening-chain.png",
+    "actualUrl": "/smokecraft/mentor-selection",
+    "note": ""
+  },
+  {
+    "n": 9,
+    "session": null,
+    "phase": null,
+    "name": "Seed & Soil (opening chain)",
+    "route": "/smokecraft/seed-soil",
+    "filename": "009-seed-soil-opening-chain.png",
+    "actualUrl": "/smokecraft/seed-soil",
+    "note": ""
+  },
+  {
+    "n": 10,
+    "session": 2,
+    "phase": 1,
+    "name": "Choose Your Cigar (Humidor Match)",
+    "route": "/smokecraft/humidor-match",
+    "filename": "010-choose-your-cigar-humidor-match.png",
+    "actualUrl": "/smokecraft/humidor-match",
+    "note": ""
+  },
+  {
+    "n": 11,
+    "session": 3,
+    "phase": 1,
+    "name": "Meet Your Cigar",
+    "route": "/smokecraft/meet-your-cigar",
+    "filename": "011-meet-your-cigar.png",
+    "actualUrl": "/smokecraft/meet-your-cigar",
+    "note": ""
+  },
+  {
+    "n": 12,
+    "session": 4,
+    "phase": 1,
+    "name": "Terroir",
+    "route": "/smokecraft/terroir",
+    "filename": "012-terroir.png",
+    "actualUrl": "/smokecraft/terroir",
+    "note": ""
+  },
+  {
+    "n": 13,
+    "session": 5,
+    "phase": 1,
+    "name": "Construction Inspection (Format)",
+    "route": "/smokecraft/format",
+    "filename": "013-construction-inspection-format.png",
+    "actualUrl": "/smokecraft/format",
+    "note": ""
+  },
+  {
+    "n": 14,
+    "session": null,
+    "phase": null,
+    "name": "Request / Purchase (supporting)",
+    "route": "/smokecraft/request-purchase",
+    "filename": "014-request-purchase-supporting.png",
+    "actualUrl": "/smokecraft/request-purchase",
+    "note": ""
+  },
+  {
+    "n": 15,
+    "session": 6,
+    "phase": 1,
+    "name": "Choose Your Cut",
+    "route": "/smokecraft/cut-toast-light",
+    "filename": "015-choose-your-cut.png",
+    "actualUrl": "/smokecraft/cut-toast-light",
+    "note": ""
+  },
+  {
+    "n": 16,
+    "session": 7,
+    "phase": 1,
+    "name": "Lighting Tutorial",
+    "route": "/smokecraft/lighting-tutorial",
+    "filename": "016-lighting-tutorial.png",
+    "actualUrl": "/smokecraft/lighting-tutorial",
+    "note": ""
+  },
+  {
+    "n": 17,
+    "session": "8/9",
+    "phase": 2,
+    "name": "First Draw / Flavor Discovery (merged)",
+    "route": "/smokecraft/first-third",
+    "filename": "017-first-draw-flavor-discovery-merged.png",
+    "actualUrl": "/smokecraft/first-third",
+    "note": ""
+  },
+  {
+    "n": 18,
+    "session": 10,
+    "phase": 2,
+    "name": "Flavor Memory Exercise",
+    "route": "/smokecraft/flavor-memory",
+    "filename": "018-flavor-memory-exercise.png",
+    "actualUrl": "/smokecraft/flavor-memory",
+    "note": ""
+  },
+  {
+    "n": 19,
+    "session": 11,
+    "phase": 2,
+    "name": "Suggested Pairings (Pairing Lab)",
+    "route": "/smokecraft/pairing-lab",
+    "filename": "019-suggested-pairings-pairing-lab.png",
+    "actualUrl": "/smokecraft/pairing-lab",
+    "note": ""
+  },
+  {
+    "n": 20,
+    "session": "12/13",
+    "phase": 3,
+    "name": "Flavor Evolution / Construction Check (merged)",
+    "route": "/smokecraft/second-third",
+    "filename": "020-flavor-evolution-construction-check-merg.png",
+    "actualUrl": "/smokecraft/second-third",
+    "note": ""
+  },
+  {
+    "n": 21,
+    "session": 14,
+    "phase": 3,
+    "name": "Mentor Commentary",
+    "route": "/smokecraft/mentor-commentary",
+    "filename": "021-mentor-commentary.png",
+    "actualUrl": "/smokecraft/second-third",
+    "note": ""
+  },
+  {
+    "n": 22,
+    "session": 15,
+    "phase": 3,
+    "name": "Knowledge Drop",
+    "route": "/smokecraft/knowledge-drop",
+    "filename": "022-knowledge-drop.png",
+    "actualUrl": "/smokecraft/knowledge-drop",
+    "note": ""
+  },
+  {
+    "n": 23,
+    "session": "16/17/18",
+    "phase": 4,
+    "name": "Flavor Finish / Strength Progression / Overall Notes (merged)",
+    "route": "/smokecraft/final-third",
+    "filename": "023-flavor-finish-strength-progression-overa.png",
+    "actualUrl": "/smokecraft/final-third",
+    "note": ""
+  },
+  {
+    "n": 24,
+    "session": "19/20",
+    "phase": 5,
+    "name": "Rate Every Category / Personal Notes (Scorecard, merged)",
+    "route": "/smokecraft/scorecard",
+    "filename": "024-rate-every-category-personal-notes-score.png",
+    "actualUrl": "/smokecraft/scorecard",
+    "note": ""
+  },
+  {
+    "n": 25,
+    "session": 21,
+    "phase": 6,
+    "name": "AI Summary",
+    "route": "/smokecraft/ai-summary",
+    "filename": "025-ai-summary.png",
+    "actualUrl": "/smokecraft/ai-summary",
+    "note": ""
+  },
+  {
+    "n": 26,
+    "session": 22,
+    "phase": 6,
+    "name": "Personalized Pairing Recommendations",
+    "route": "/smokecraft/pairing-recommendations",
+    "filename": "026-personalized-pairing-recommendations.png",
+    "actualUrl": "/smokecraft/pairing-recommendations",
+    "note": ""
+  },
+  {
+    "n": 27,
+    "session": 23,
+    "phase": 6,
+    "name": "Passport Stamp Animation",
+    "route": "/smokecraft/passport-stamp",
+    "filename": "027-passport-stamp-animation.png",
+    "actualUrl": "/smokecraft/passport-stamp",
+    "note": ""
+  },
+  {
+    "n": 28,
+    "session": 24,
+    "phase": 6,
+    "name": "Completed Scorecard (Final Review)",
+    "route": "/smokecraft/final-review",
+    "filename": "028-completed-scorecard-final-review.png",
+    "actualUrl": "/smokecraft/final-review",
+    "note": ""
+  },
+  {
+    "n": 29,
+    "session": "25/26",
+    "phase": 6,
+    "name": "Rewards and XP / Achievements (merged)",
+    "route": "/smokecraft/rewards",
+    "filename": "029-rewards-and-xp-achievements-merged.png",
+    "actualUrl": "/smokecraft/rewards",
+    "note": ""
+  },
+  {
+    "n": 30,
+    "session": 27,
+    "phase": 6,
+    "name": "Recommended Next Journey (Session Complete)",
+    "route": "/smokecraft/session-complete",
+    "filename": "030-recommended-next-journey-session-complet.png",
+    "actualUrl": "/smokecraft/session-complete",
+    "note": ""
+  }
+]
