@@ -3,27 +3,35 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import {
+  GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
+
+/**
+ * Second Third — /smokecraft/second-third (Session 12/13)
+ *
+ * TWO-GENERATION MIGRATION — same conversion as First Third: replaces
+ * SmokeCraftImageBoundsOverlay (6 observation zones drawn into the baked
+ * image) with the shared live-DOM card system. No decorative image is
+ * used, matching the Format/First Third precedent. All logic preserved
+ * verbatim.
+ */
 
 const ENRICHMENT_12 = getEducationalEnrichment(12)
 
-const NAT_W = 1672
-const NAT_H = 941
-
-const GOLD = '#E9C176'
-
-const EXPLORE_ZONES = [
-  { id: 'Flavor Development', x:  3.0, y: 25.1, w: 14.5, h: 11.0 },
-  { id: 'Body Evolution',     x: 19.0, y: 25.1, w: 14.5, h: 11.0 },
-  { id: 'Aroma Depth',        x: 35.0, y: 25.1, w: 14.5, h: 11.0 },
-  { id: 'Burn Stability',     x: 51.0, y: 25.1, w: 14.5, h: 11.0 },
-  { id: 'Smoke Texture',      x: 67.0, y: 25.1, w: 14.5, h: 11.0 },
-  { id: 'Complexity Shift',   x: 83.0, y: 25.1, w: 14.5, h: 11.0 },
+const EXPLORE_ITEMS = [
+  { id: 'Flavor Development', icon: '🍯', desc: 'How the flavor profile is shifting from the opening third.' },
+  { id: 'Body Evolution',     icon: '⚖️', desc: 'Whether the body is building, holding, or easing.' },
+  { id: 'Aroma Depth',        icon: '🌫️', desc: 'How the aroma has deepened or changed character.' },
+  { id: 'Burn Stability',     icon: '🔥', desc: 'Whether the burn line is staying even.' },
+  { id: 'Smoke Texture',      icon: '💨', desc: 'The density and feel of the smoke itself.' },
+  { id: 'Complexity Shift',   icon: '🎯', desc: 'Any new layers or notes joining the profile.' },
 ]
 
 const ACTIVITY_KEY = 'second-third'
@@ -174,16 +182,16 @@ export default function SecondThird({ onBack, onComplete } = {}) {
 
   if (phase === 'loading') {
     return (
-      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'grid', placeItems: 'center', background: '#050505', color: 'rgba(229,226,225,.7)', fontFamily: 'Georgia, serif' }}>
         Loading your saved observations…
       </div>
     )
   }
   if (phase === 'error') {
     return (
-      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif' }}>
         <p style={{ margin: 0 }}>Something went wrong loading your saved observations.</p>
-        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+        <button type="button" onClick={handleRetryLoad} style={{ minHeight: 44, padding: '0 18px', borderRadius: 20, border: `1px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer' }}>
           Retry
         </button>
       </div>
@@ -191,67 +199,64 @@ export default function SecondThird({ onBack, onComplete } = {}) {
   }
 
   return (
-    <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.secondThird}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Second Third — Flavor Development"
-      >
-        {/* Nav mask */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
-          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
+          <div>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Second Third</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Flavor Development</h1>
+            <p style={{ margin: 0, maxWidth: 760, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+              The middle third is where most cigars show their true character. Note how the profile is evolving from the opening third.
+            </p>
+          </div>
+        </div>
 
-        {EXPLORE_ZONES.map(zone => {
-          const active = checked.includes(zone.id)
-          return (
-            <button
-              key={zone.id}
-              type="button"
-              aria-label={`${zone.id}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => toggleItem(zone.id)}
-              style={{
-                position: 'absolute', left: `${zone.x}%`, top: `${zone.y}%`,
-                width: `${zone.w}%`, height: `${zone.h}%`,
-                pointerEvents: 'auto', background: 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
-                borderRadius: 4, cursor: 'pointer', boxSizing: 'border-box', padding: 0, outline: 'none',
-              }}
-            >
-              {active && (
-                <span style={{ position: 'absolute', top: 4, right: 5, fontSize: 'clamp(9px,1.2vw,14px)',
-                  fontWeight: 700, color: GOLD, lineHeight: 1, pointerEvents: 'none' }}>✓</span>
-              )}
-            </button>
-          )
-        })}
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Select your observations</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginTop: 14 }}>
+            {EXPLORE_ITEMS.map(item => {
+              const active = checked.includes(item.id)
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={`${item.id}${active ? ' (selected)' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => toggleItem(item.id)}
+                  style={{
+                    minHeight: 120, padding: 16, textAlign: 'left', borderRadius: 12,
+                    border: `1px solid ${active ? GOLD : BORDER}`,
+                    background: active ? 'rgba(233,193,118,.12)' : GLASS,
+                    color: CREAM, cursor: 'pointer', fontFamily: 'Georgia, serif',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 22 }} aria-hidden="true">{item.icon}</span>
+                    {active && <span style={{ color: GOLD, fontWeight: 700 }}>✓</span>}
+                  </div>
+                  <div style={{ color: GOLD, fontWeight: 700, marginTop: 10, fontSize: 15 }}>{item.id}</div>
+                  <p style={{ margin: '6px 0 0', color: 'rgba(229,226,225,.58)', fontSize: 12.5, lineHeight: 1.4 }}>{item.desc}</p>
+                </button>
+              )
+            })}
+          </div>
+        </section>
 
-        {/* Notes panel */}
-        <div style={{
-          position: 'absolute', left: '3%', top: '80%', width: '94%', height: '16%',
-          background: '#050505', border: '1px solid rgba(233,193,118,0.22)', // was rgba(...,0.88), fixed
-          borderRadius: 5, boxSizing: 'border-box',
-          padding: 'clamp(4px,0.7vw,8px) clamp(6px,0.9vw,12px)',
-          display: 'flex', flexDirection: 'column', gap: 3, pointerEvents: 'auto', zIndex: 3,
-        }}>
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)',
-              textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'Georgia, serif' }}>
-              Second Third Observations
-            </span>
+            <div style={sectionLabelStyle}>Second Third Observations</div>
             <button
               type="button"
               aria-label="Save draft"
               onClick={handleSaveDraft}
               disabled={phase !== 'ready' || done}
               style={{
-                padding: '2px 8px', borderRadius: 4,
-                border: `1px solid ${saveStatus === 'saved' ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.3)'}`,
+                minHeight: 36, padding: '4px 14px', borderRadius: 8,
+                border: `1px solid ${saveStatus === 'saved' ? GOLD : BORDER}`,
                 background: 'transparent',
-                color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.45)',
-                fontSize: 'clamp(7px,0.58vw,8px)', fontFamily: 'Georgia, serif',
-                cursor: 'pointer', outline: 'none',
+                color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.55)',
+                fontSize: 12, fontFamily: 'Georgia, serif', cursor: 'pointer',
               }}
             >
               {saveStatus === 'saving' && 'Saving…'}
@@ -266,36 +271,40 @@ export default function SecondThird({ onBack, onComplete } = {}) {
             onChange={e => setNotes(e.target.value)}
             placeholder="How did the cigar evolve? Body, flavors, burn behavior…"
             aria-label="Second third personal notes"
+            rows={4}
             style={{
-              flex: 1, resize: 'none', background: 'transparent',
-              border: 'none', outline: 'none', color: 'rgba(229,226,225,0.8)',
-              fontSize: 'clamp(8px,0.72vw,10px)', fontFamily: 'Georgia, serif', lineHeight: 1.4,
+              width: '100%', boxSizing: 'border-box', marginTop: 12, resize: 'vertical',
+              background: '#0d1420', border: `1px solid ${BORDER}`, borderRadius: 8,
+              color: 'rgba(229,226,225,0.85)', fontSize: 13.5, fontFamily: 'Georgia, serif',
+              lineHeight: 1.5, padding: 12, outline: 'none',
             }}
           />
-        </div>
-      </SmokeCraftImageBoundsOverlay>
+        </section>
+
+        {submitError && (
+          <div role="alert" style={{
+            borderRadius: 9, padding: 12, border: '1px solid rgba(255,150,150,.45)',
+            background: 'rgba(120,20,20,.35)', color: '#ffdada', fontSize: 13,
+          }}>
+            {submitError}
+          </div>
+        )}
+
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
 
       <SmokeCraftLessonInfoButton
         sessionNumber={12} totalSessions={TOTAL_SESSIONS} phase={3} totalPhases={TOTAL_VISITS}
         title="Flavor Evolution" whyItMatters={ENRICHMENT_12?.whyItMatters} goldenBox={ENRICHMENT_12?.goldenBox}
       />
 
-      {submitError && (
-        <div role="alert" style={{
-          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
-          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
-          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
-          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
-        }}>
-          {submitError}
-        </div>
-      )}
-
       <SmokeCraftNavBar
         primary={done ? 'Saving…' : 'Continue to Flavor Memory →'}
         onPrimary={handleContinue}
         primaryDisabled={done}
+        secondary="← Back"
+        onSecondary={onBack || (() => navigate(-1))}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }

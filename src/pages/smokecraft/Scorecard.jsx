@@ -6,22 +6,43 @@ import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourn
 import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
 import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import {
+  GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
+
+/**
+ * Scorecard — /smokecraft/scorecard (Session 19/20)
+ *
+ * TWO-GENERATION MIGRATION — replaces SmokeCraftImageBoundsOverlay (this
+ * screen was already almost entirely real DOM controls, just positioned
+ * as percentage overlays on a baked background image) with the shared
+ * live-DOM card system. No image asset is used, matching the Format /
+ * Thirds precedent.
+ *
+ * IMPORTANT: this screen was previously root-caused (see prior defect
+ * history) as never actually broken — the real blocker was Final Third
+ * silently requiring a flavor selection. Every rating control below
+ * keeps its exact `aria-label="Rate ${label} ${n} out of 5..."` pattern
+ * so existing capture/verification scripts (which target
+ * `button[aria-label*="Rate ${cat} 4"]`) continue to work unchanged.
+ * The prior fixed-position layout bug that could let the Personal Notes
+ * panel visually cover the last rating row cannot recur in a normal
+ * document-flow layout — categories and notes are now separate stacked
+ * sections, never overlapping regions.
+ *
+ * All logic preserved verbatim: server-authoritative draft load/retry,
+ * debounced autosave with 409-conflict adoption, setCategory/setMeta/
+ * setNotes, handleSaveDraft, submitScorecardEvidence-gated
+ * handleContinue, management-sync snapshot save.
+ */
 
 const ENRICHMENT_19 = getEducationalEnrichment(19)
-
-const NAT_W = 1448
-const NAT_H = 1086
-
-const GOLD = '#E9C176'
-const DARK = '#0a0603'
-const GLASS = '#050505' // was rgba(5,5,5,0.88) — non-opaque bg let baked image content bleed through, fixed
-const BORDER = 'rgba(233,193,118,0.28)'
 
 const CATEGORIES = [
   { id: 'appearance',   label: 'Appearance',   hint: 'Color, veins, oiliness, seam' },
@@ -60,8 +81,8 @@ function calcOverall(cats) {
 
 function RatingDots({ value, onChange, label }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-      <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.55)', width: 26, flexShrink: 0, fontFamily: 'Georgia, serif' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.55)', width: 32, flexShrink: 0, fontFamily: 'Georgia, serif' }}>
         {value !== null && value !== undefined ? `${value}/5` : '—/5'}
       </span>
       {[1, 2, 3, 4, 5].map(n => (
@@ -72,9 +93,10 @@ function RatingDots({ value, onChange, label }) {
           aria-pressed={value === n}
           onClick={() => { triggerHaptic('light'); onChange(n === value ? null : n) }}
           style={{
-            width: 20, height: 20,
+            width: 28, height: 28,
+            minWidth: 28, minHeight: 28,
             borderRadius: '50%',
-            border: `2px solid ${n <= (value || 0) ? GOLD : 'rgba(233,193,118,0.3)'}`,
+            border: `2px solid ${n <= (value || 0) ? GOLD : BORDER}`,
             background: n <= (value || 0) ? GOLD : 'transparent',
             cursor: 'pointer',
             padding: 0,
@@ -94,15 +116,11 @@ export default function Scorecard({ onBack, onComplete } = {}) {
   const navigate = useNavigate()
 
   const smokeCraft  = session?.smokeCraft || {}
-  const currentXP   = session?.xp || 0
-  const currentRank = session?.rank || getRankFromXP(currentXP).name
-  const stepsCount  = session?.completedSteps?.length || 0
   const cigarDetails = readCigarDetails(smokeCraft, journey)
   const pairingDetails = smokeCraft?.pairingSelections || null
 
   const firstThird  = smokeCraft?.firstThird  || null
   const secondThird = smokeCraft?.secondThird  || null
-  const finalThird  = journey.finalThird || null
 
   // Required-Interaction Closure Package B: the server-authoritative
   // scorecard draft (smokecraft_tasting_drafts, activityKey='scorecard'
@@ -263,25 +281,18 @@ export default function Scorecard({ onBack, onComplete } = {}) {
   const overall    = calcOverall(sc.categories)
   const filledCount = Object.values(sc.categories).filter(v => v !== null).length
 
-  const glassStyle = (extra = {}) => ({
-    background: GLASS,
-    border: `1px solid ${BORDER}`,
-    borderRadius: 8,
-    ...extra,
-  })
-
   if (phase === 'loading') {
     return (
-      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'grid', placeItems: 'center', background: '#050505', color: 'rgba(229,226,225,.7)', fontFamily: 'Georgia, serif' }}>
         Loading your saved scorecard…
       </div>
     )
   }
   if (phase === 'error') {
     return (
-      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif' }}>
         <p style={{ margin: 0 }}>Something went wrong loading your saved scorecard.</p>
-        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+        <button type="button" onClick={handleRetryLoad} style={{ minHeight: 44, padding: '0 18px', borderRadius: 20, border: `1px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer' }}>
           Retry
         </button>
       </div>
@@ -289,240 +300,160 @@ export default function Scorecard({ onBack, onComplete } = {}) {
   }
 
   return (
-    <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.scorecard}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Scorecard — Your Complete Cigar Review"
-      >
-        {/* Nav mask */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
-          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
-
-        {/* ── Cigar summary strip ── */}
-        {cigarDetails && (
-          <div style={{
-            position: 'absolute',
-            left: '6%', top: '4%',
-            width: '88%',
-            ...glassStyle({ padding: '7px 12px', display: 'flex', gap: 16, alignItems: 'center', pointerEvents: 'none' }),
-          }}>
-            <span style={{ color: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 'clamp(11px,1.05vw,14px)', whiteSpace: 'nowrap' }}>
-              {cigarDetails.name}
-            </span>
-            <span style={{ color: 'rgba(229,226,225,0.5)', fontSize: 'clamp(9px,0.82vw,11px)', fontFamily: 'Georgia, serif' }}>
-              {cigarDetails.country} · {cigarDetails.type}
-            </span>
-            {overall !== null && (
-              <span style={{ marginLeft: 'auto', color: GOLD, fontWeight: 700, fontSize: 'clamp(12px,1.15vw,16px)', fontFamily: 'Georgia, serif', whiteSpace: 'nowrap' }}>
-                Overall: {overall}/5
-              </span>
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>📋</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Scorecard</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Your Complete Cigar Review</h1>
+            {cigarDetails && (
+              <p style={{ margin: 0, color: 'rgba(229,226,225,.75)', fontSize: 'clamp(13px,1.4vw,15px)' }}>
+                <strong style={{ color: GOLD }}>{cigarDetails.name}</strong> — {cigarDetails.country} · {cigarDetails.type}
+              </p>
             )}
           </div>
-        )}
-
-        {/* ── Category ratings ──
-            Root cause of the "Pairing Match" click-interception defect:
-            this panel's height was implicit (content-driven), while the
-            Personal Notes panel below it was independently pinned to a
-            fixed `top: 62%` with no coordination between the two. At
-            real-world viewport/content combinations, 6 rating rows +
-            header + overall-score summary rendered taller than the 49%
-            of container height available between top:13% and top:62%,
-            so the last row ("Pairing Match", 6th of 6) fell inside the
-            same screen region the Personal Notes panel (later in DOM
-            order, so visually on top) occupies — its pointer events
-            landed on the notes panel, not the rating dots underneath.
-            Fixed with two independent, redundant guards: (1) a hard
-            `maxHeight` + internal scroll on this panel so it can never
-            visually extend into the notes panel's region regardless of
-            viewport/content, and (2) tightened row spacing so scrolling
-            is never actually needed at any of the 5 supported
-            viewports. Personal Notes' own `top` is unchanged — fixing
-            the panel that was overflowing, not moving the one that
-            wasn't, keeps this a minimal, targeted change. */}
-        <div style={{
-          position: 'absolute',
-          left: '6%', top: '13%',
-          width: '54%',
-          maxHeight: '46%',
-          overflowY: 'auto',
-          ...glassStyle({ padding: '10px 14px', pointerEvents: 'auto' }),
-        }}>
-          <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 6 }}>
-            Rating Categories
-          </div>
-          {CATEGORIES.map(cat => (
-            <div key={cat.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 5, gap: 8 }}>
-              <div style={{ width: 105, flexShrink: 0 }}>
-                <div style={{ color: 'rgba(229,226,225,0.9)', fontSize: 'clamp(10px,0.95vw,12px)', fontFamily: 'Georgia, serif', fontWeight: 600 }}>{cat.label}</div>
-                <div style={{ color: 'rgba(229,226,225,0.38)', fontSize: 'clamp(8px,0.72vw,9px)', fontFamily: 'Georgia, serif' }}>{cat.hint}</div>
-              </div>
-              <RatingDots
-                label={cat.label}
-                value={sc.categories[cat.id]}
-                onChange={val => setCategory(cat.id, val)}
-              />
-            </div>
-          ))}
           {overall !== null && (
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${BORDER}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ color: 'rgba(229,226,225,0.6)', fontSize: 10, fontFamily: 'Georgia, serif' }}>{filledCount}/6 categories rated</span>
-                <span style={{ color: GOLD, fontWeight: 700, fontSize: 'clamp(12px,1.1vw,15px)', fontFamily: 'Georgia, serif' }}>{overall}/5</span>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: 11, color: GOLD_DIM, textTransform: 'uppercase', letterSpacing: '.08em' }}>Overall</div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: GOLD }}>{overall}/5</div>
+            </div>
+          )}
+        </div>
+
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Rating Categories</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 12 }}>
+            {CATEGORIES.map(cat => (
+              <div key={cat.id} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 14, justifyContent: 'space-between' }}>
+                <div style={{ minWidth: 160 }}>
+                  <div style={{ color: CREAM, fontSize: 14, fontFamily: 'Georgia, serif', fontWeight: 700 }}>{cat.label}</div>
+                  <div style={{ color: 'rgba(229,226,225,0.42)', fontSize: 11.5, fontFamily: 'Georgia, serif' }}>{cat.hint}</div>
+                </div>
+                <RatingDots label={cat.label} value={sc.categories[cat.id]} onChange={val => setCategory(cat.id, val)} />
               </div>
-              <div style={{ height: 3, background: 'rgba(233,193,118,0.15)', borderRadius: 2, marginTop: 5 }}>
+            ))}
+          </div>
+          {overall !== null && (
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ color: 'rgba(229,226,225,0.6)', fontSize: 12.5 }}>{filledCount}/6 categories rated</span>
+                <span style={{ color: GOLD, fontWeight: 700, fontSize: 15 }}>{overall}/5</span>
+              </div>
+              <div style={{ height: 4, background: 'rgba(233,193,118,0.15)', borderRadius: 2, marginTop: 8 }}>
                 <div style={{ height: '100%', width: `${(overall / 5) * 100}%`, background: GOLD, borderRadius: 2 }} />
               </div>
             </div>
           )}
-        </div>
+        </section>
 
-        {/* ── Session meta ── */}
-        <div style={{
-          position: 'absolute',
-          left: '62%', top: '13%',
-          width: '32%',
-          ...glassStyle({ padding: '10px 12px', pointerEvents: 'auto' }),
-        }}>
-          <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 8 }}>
-            Session Details
-          </div>
-          {[
-            { key: 'durationMinutes', label: 'Duration (min)', placeholder: 'e.g. 60', max: 240 },
-            { key: 'puffCount',       label: 'Puff Count',     placeholder: 'approx.', max: 500 },
-            { key: 'relightCount',    label: 'Relights',       placeholder: '0',       max: 20  },
-          ].map(({ key, label, placeholder, max }) => (
-            <label key={key} style={{ display: 'block', marginBottom: 8 }}>
-              <div style={{ color: 'rgba(229,226,225,0.65)', fontSize: 10, fontFamily: 'Georgia, serif', marginBottom: 3 }}>{label}</div>
-              <input
-                type="number"
-                min={0}
-                max={max}
-                placeholder={placeholder}
-                value={sc.meta[key] ?? ''}
-                onChange={e => setMeta(key, e.target.value === '' ? null : parseInt(e.target.value, 10))}
-                style={{
-                  width: '100%', boxSizing: 'border-box',
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(233,193,118,0.28)',
-                  borderRadius: 4, color: '#e5e2e1',
-                  fontSize: 'clamp(11px,1.0vw,13px)',
-                  padding: '5px 8px',
-                  fontFamily: 'Georgia, serif',
-                  outline: 'none',
-                }}
-              />
-            </label>
-          ))}
-          {pairingDetails?.length > 0 && (
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${BORDER}` }}>
-              <div style={{ color: 'rgba(233,193,118,0.55)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 3 }}>Pairing</div>
-              <div style={{ color: GOLD, fontSize: 10, fontFamily: 'Georgia, serif' }}>{pairingDetails.join(' + ')}</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Session Details</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
+              {[
+                { key: 'durationMinutes', label: 'Duration (min)', placeholder: 'e.g. 60', max: 240 },
+                { key: 'puffCount',       label: 'Puff Count',     placeholder: 'approx.', max: 500 },
+                { key: 'relightCount',    label: 'Relights',       placeholder: '0',       max: 20  },
+              ].map(({ key, label, placeholder, max }) => (
+                <label key={key} style={{ display: 'block' }}>
+                  <div style={{ color: 'rgba(229,226,225,0.65)', fontSize: 12, fontFamily: 'Georgia, serif', marginBottom: 5 }}>{label}</div>
+                  <input
+                    type="number"
+                    min={0}
+                    max={max}
+                    placeholder={placeholder}
+                    value={sc.meta[key] ?? ''}
+                    onChange={e => setMeta(key, e.target.value === '' ? null : parseInt(e.target.value, 10))}
+                    style={{
+                      width: '100%', boxSizing: 'border-box', minHeight: 40,
+                      background: '#0d1420', border: `1px solid ${BORDER}`,
+                      borderRadius: 6, color: CREAM, fontSize: 13.5,
+                      padding: '8px 10px', fontFamily: 'Georgia, serif', outline: 'none',
+                    }}
+                  />
+                </label>
+              ))}
             </div>
-          )}
-        </div>
+            {pairingDetails?.length > 0 && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={{ color: GOLD_DIM, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Pairing</div>
+                <div style={{ color: GOLD, fontSize: 13 }}>{pairingDetails.join(' + ')}</div>
+              </div>
+            )}
+            {(firstThird?.notesSelected?.length > 0 || secondThird?.notesSelected?.length > 0) && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}`, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {firstThird?.notesSelected?.length > 0 && (
+                  <div>
+                    <div style={{ color: GOLD_DIM, fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase' }}>First Third</div>
+                    <div style={{ color: 'rgba(229,226,225,0.7)', fontSize: 12 }}>{firstThird.notesSelected.join(' · ')}</div>
+                  </div>
+                )}
+                {secondThird?.notesSelected?.length > 0 && (
+                  <div>
+                    <div style={{ color: GOLD_DIM, fontSize: 10.5, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Second Third</div>
+                    <div style={{ color: 'rgba(229,226,225,0.7)', fontSize: 12 }}>{secondThird.notesSelected.join(' · ')}</div>
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
 
-        {/* ── Personal notes ── */}
-        <div style={{
-          position: 'absolute',
-          left: '6%', top: '62%',
-          width: '88%',
-          ...glassStyle({ padding: '10px 12px', pointerEvents: 'auto' }),
-        }}>
-          <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 6 }}>
-            Final Impressions &amp; Personal Notes
-          </div>
-          <textarea
-            aria-label="Personal tasting notes"
-            placeholder="Describe your overall experience, standout moments, and what you would order again…"
-            value={sc.personalNotes}
-            onChange={e => setNotes(e.target.value)}
-            rows={3}
-            style={{
-              width: '100%', boxSizing: 'border-box',
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(233,193,118,0.22)',
-              borderRadius: 4,
-              color: '#e5e2e1',
-              fontSize: 'clamp(11px,1.0vw,13px)',
-              padding: '8px 10px',
-              fontFamily: 'Georgia, serif',
-              resize: 'none',
-              outline: 'none',
-              lineHeight: 1.5,
-            }}
-          />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 }}>
-            <button
-              type="button"
-              onClick={handleSaveDraft}
-              disabled={phase !== 'ready' || done || draftLocked}
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Final Impressions &amp; Personal Notes</div>
+            <textarea
+              aria-label="Personal tasting notes"
+              placeholder="Describe your overall experience, standout moments, and what you would order again…"
+              value={sc.personalNotes}
+              onChange={e => setNotes(e.target.value)}
+              rows={5}
               style={{
-                background: 'transparent',
-                border: `1px solid ${BORDER}`,
-                borderRadius: 4,
-                color: GOLD,
-                fontSize: 10,
-                fontFamily: 'Georgia, serif',
-                padding: '5px 12px',
-                cursor: 'pointer',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
+                width: '100%', boxSizing: 'border-box', marginTop: 10, resize: 'vertical',
+                background: '#0d1420', border: `1px solid ${BORDER}`, borderRadius: 8,
+                color: CREAM, fontSize: 13.5, fontFamily: 'Georgia, serif',
+                padding: 12, outline: 'none', lineHeight: 1.5,
               }}
-            >
-              Save Draft
-            </button>
-            {saveStatus === 'saving' && <span style={{ color: 'rgba(229,226,225,0.5)', fontSize: 10, fontFamily: 'Georgia, serif' }}>Saving…</span>}
-            {saveStatus === 'saved' && <span style={{ color: GOLD, fontSize: 10, fontFamily: 'Georgia, serif' }}>✓ Saved</span>}
-            {sc.savedAt && saveStatus === 'idle' && (
-              <span style={{ color: 'rgba(229,226,225,0.32)', fontSize: 9, fontFamily: 'Georgia, serif' }}>
-                Saved {new Date(sc.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            )}
-          </div>
+            />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                disabled={phase !== 'ready' || done || draftLocked}
+                style={{
+                  minHeight: 36, background: 'transparent', border: `1px solid ${BORDER}`,
+                  borderRadius: 6, color: GOLD, fontSize: 11.5, fontFamily: 'Georgia, serif',
+                  padding: '6px 14px', cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase',
+                }}
+              >
+                Save Draft
+              </button>
+              {saveStatus === 'saving' && <span style={{ color: 'rgba(229,226,225,0.5)', fontSize: 11.5 }}>Saving…</span>}
+              {saveStatus === 'saved' && <span style={{ color: GOLD, fontSize: 11.5 }}>✓ Saved</span>}
+              {sc.savedAt && saveStatus === 'idle' && (
+                <span style={{ color: 'rgba(229,226,225,0.32)', fontSize: 11 }}>
+                  Saved {new Date(sc.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              )}
+            </div>
+          </section>
         </div>
 
-        {/* ── Tasting history strip ── */}
-        {(firstThird?.notesSelected?.length > 0 || secondThird?.notesSelected?.length > 0) && (
-          <div style={{
-            position: 'absolute',
-            left: '6%', top: '84%',
-            width: '88%',
-            ...glassStyle({ padding: '7px 12px', display: 'flex', gap: 20, pointerEvents: 'none' }),
+        {submitError && (
+          <div role="alert" style={{
+            borderRadius: 9, padding: 12, border: '1px solid rgba(255,150,150,.45)',
+            background: 'rgba(120,20,20,.35)', color: '#ffdada', fontSize: 13,
           }}>
-            {firstThird?.notesSelected?.length > 0 && (
-              <div>
-                <div style={{ color: 'rgba(233,193,118,0.5)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}>First Third</div>
-                <div style={{ color: 'rgba(229,226,225,0.7)', fontSize: 10, fontFamily: 'Georgia, serif' }}>{firstThird.notesSelected.join(' · ')}</div>
-              </div>
-            )}
-            {secondThird?.notesSelected?.length > 0 && (
-              <div>
-                <div style={{ color: 'rgba(233,193,118,0.5)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}>Second Third</div>
-                <div style={{ color: 'rgba(229,226,225,0.7)', fontSize: 10, fontFamily: 'Georgia, serif' }}>{secondThird.notesSelected.join(' · ')}</div>
-              </div>
-            )}
+            {submitError}
           </div>
         )}
-      </SmokeCraftImageBoundsOverlay>
+
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
 
       <SmokeCraftLessonInfoButton
         sessionNumber={19} totalSessions={TOTAL_SESSIONS} phase={5} totalPhases={TOTAL_VISITS}
         title="Rate Every Category" whyItMatters={ENRICHMENT_19?.whyItMatters} goldenBox={ENRICHMENT_19?.goldenBox}
       />
-
-      {submitError && (
-        <div role="alert" style={{
-          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
-          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
-          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
-          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
-        }}>
-          {submitError}
-        </div>
-      )}
 
       <SmokeCraftNavBar
         primary={done ? 'Continuing…' : 'Continue to AI Summary →'}
@@ -531,6 +462,6 @@ export default function Scorecard({ onBack, onComplete } = {}) {
         secondary="← Back"
         onSecondary={onBack || (() => navigate('/smokecraft/final-third'))}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }

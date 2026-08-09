@@ -5,27 +5,27 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import {
+  GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
 
-const NAT_W = 1672
-const NAT_H = 941
+/**
+ * Request / Purchase — /smokecraft/request-purchase (supporting)
+ *
+ * TWO-GENERATION MIGRATION — replaces SmokeCraftScreenShell
+ * mode="image-shell" (2 ordering-path hotspots positioned over baked
+ * artwork, plus two real-DOM panels already floating on top of it) with
+ * the shared live-DOM card system. No decorative image is used, matching
+ * the Format/Thirds/Scorecard precedent.
+ *
+ * All logic preserved verbatim: togglePath/toggleAddon, the
+ * setRequestPurchase autosave effect, handleSaveDraft, handleContinue.
+ */
 
-const GOLD = '#E9C176'
-// Root-cause fix: non-opaque background let baked image panels bleed
-// through, producing a ghosted double-text effect (same class of bug
-// found and fixed on Golden Box / Humidor Match this session).
-const PANEL = {
-  background: '#050505',
-  border: '1px solid rgba(233,193,118,0.28)',
-  borderRadius: 8,
-  position: 'absolute',
-  boxSizing: 'border-box',
-  fontFamily: 'Georgia, serif',
-}
-
-const ORDERING_ZONES = [
-  { id: 'self',  label: 'Self-Order',              x: 43.8, y: 68.5, w: 19.0, h: 18.3 },
-  { id: 'staff', label: 'Request Staff Assistance', x: 63.6, y: 68.5, w: 19.0, h: 18.3 },
+const ORDERING_PATHS = [
+  { id: 'self',  label: 'Self-Order',              icon: '🧾', desc: "Order directly from tonight's cigar menu on your own." },
+  { id: 'staff', label: 'Request Staff Assistance', icon: '🙋', desc: 'A staff member will come help finalize your order.' },
 ]
 
 const ADDON_OPTS = [
@@ -85,201 +85,163 @@ export default function RequestPurchase() {
     navigate('/smokecraft/cut-toast-light')
   }
 
+  const whyThisMatch = cigar
+    ? (cigar.strength === 'Full' || cigar.strength === 'Medium-Full'
+        ? 'Bold strength calls for a rich complement — dark chocolate or aged spirit pairs clean and balances the pepper.'
+        : cigar.strength === 'Mild' || cigar.strength === 'Mild-Medium'
+        ? 'Lighter body allows delicate pairings to shine — cream, honey notes, or a smooth coffee enhance without overpowering.'
+        : 'A medium-strength profile pairs versatile — coffee, chocolate, or a smooth whiskey all make strong matches.')
+    : null
+
   return (
-    <>
-            <SmokeCraftScreenShell
-        mode="image-shell"
-        status="ready"
-        imageProps={{ src: SC_ASSETS.requestPurchase, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft Request Purchase — Choose Your Ordering Path" }}
-      >
-        {/* Cigar & pairing recommendation panel — left side */}
-        <div style={{
-          ...PANEL,
-          left: '7.66%', top: '35.92%', width: '43.96%', height: '26.78%', // exact-measured bounds of approved panels A+B+C (Matched Cigar/Pairing/Why This Match Works), source 1672x941 y:338-590 x:128-822
-          padding: 'clamp(6px,1vw,14px)', overflowY: 'auto',
-          pointerEvents: 'auto',
-        }}>
-          <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-            Your Selection
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>🛎️</div>
+          <div>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Request / Purchase</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Choose Your Ordering Path</h1>
+            <p style={{ margin: 0, maxWidth: 760, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+              Ready to finalize your selection? Order it yourself or ask a staff member to help you place it.
+            </p>
           </div>
-
-          {cigar ? (
-            <>
-              <div style={{ fontSize: 'clamp(9px,0.9vw,12px)', color: GOLD, fontWeight: 700, marginBottom: 4 }}>
-                {cigar.name}
-              </div>
-              <div style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.65)', marginBottom: 2 }}>
-                Origin: {cigar.origin}
-              </div>
-              <div style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.65)', marginBottom: 2 }}>
-                Wrapper: {cigar.wrapper}
-              </div>
-              <div style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.65)', marginBottom: 8 }}>
-                Strength: {cigar.strength}
-              </div>
-              {cigar.tastingProfile && (
-                <div style={{ fontSize: 'clamp(7px,0.65vw,9px)', color: 'rgba(229,226,225,0.5)', fontStyle: 'italic', marginBottom: 8 }}>
-                  {cigar.tastingProfile}
-                </div>
-              )}
-            </>
-          ) : (
-            <div style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.35)', fontStyle: 'italic', marginBottom: 8 }}>
-              No cigar selected yet
-            </div>
-          )}
-
-          {pairing && (
-            <>
-              <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', marginBottom: 6 }} />
-              <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
-                Recommended Pairing
-              </div>
-              <div style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: GOLD, marginBottom: 4 }}>
-                {typeof pairing === 'object' ? (pairing.pairingType || pairing.label || JSON.stringify(pairing)) : pairing}
-              </div>
-            </>
-          )}
-
-          {cigar && (
-            <>
-              <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', marginBottom: 6, marginTop: 4 }} />
-              <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
-                Why This Match Works
-              </div>
-              <div style={{ fontSize: 'clamp(7px,0.65vw,9px)', color: 'rgba(229,226,225,0.6)', lineHeight: 1.4 }}>
-                {cigar.strength === 'Full' || cigar.strength === 'Medium-Full'
-                  ? 'Bold strength calls for a rich complement — dark chocolate or aged spirit pairs clean and balances the pepper.'
-                  : cigar.strength === 'Mild' || cigar.strength === 'Mild-Medium'
-                  ? 'Lighter body allows delicate pairings to shine — cream, honey notes, or a smooth coffee enhance without overpowering.'
-                  : 'A medium-strength profile pairs versatile — coffee, chocolate, or a smooth whiskey all make strong matches.'}
-              </div>
-            </>
-          )}
         </div>
 
-        {/* Add-on options panel — right side */}
-        <div style={{
-          ...PANEL,
-          left: '52.81%', top: '35.92%', width: '43.96%', height: '26.78%', // exact-measured bounds, source x:850-1618 y:338-590, tiles flush against the left panel with a small gap, no leftover baked edge
-          padding: 'clamp(6px,1vw,14px)', overflowY: 'auto',
-          pointerEvents: 'auto',
-        }}>
-          <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
-            Add to Your Order
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Ordering Path</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14, marginTop: 12 }}>
+            {ORDERING_PATHS.map(zone => {
+              const active = orderPath === zone.id
+              return (
+                <button
+                  key={zone.id}
+                  type="button"
+                  aria-label={`${zone.label}${active ? ' (selected)' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => togglePath(zone.id)}
+                  style={{
+                    minHeight: 110, padding: 16, textAlign: 'left', borderRadius: 12,
+                    border: `1px solid ${active ? GOLD : BORDER}`,
+                    background: active ? 'rgba(233,193,118,.12)' : GLASS,
+                    color: CREAM, cursor: 'pointer', fontFamily: 'Georgia, serif',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 22 }} aria-hidden="true">{zone.icon}</span>
+                    {active && <span style={{ color: GOLD, fontWeight: 700 }}>✓</span>}
+                  </div>
+                  <div style={{ color: GOLD, fontWeight: 700, marginTop: 10, fontSize: 15 }}>{zone.label}</div>
+                  <p style={{ margin: '6px 0 0', color: 'rgba(229,226,225,.58)', fontSize: 12.5, lineHeight: 1.4 }}>{zone.desc}</p>
+                </button>
+              )
+            })}
           </div>
+        </section>
 
-          {ADDON_OPTS.map(opt => {
-            const active = addons.includes(opt.id)
-            return (
-              <button
-                key={opt.id}
-                type="button"
-                aria-label={opt.label}
-                aria-pressed={active}
-                onClick={() => toggleAddon(opt.id)}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Your Selection</div>
+            {cigar ? (
+              <>
+                <div style={{ fontSize: 16, color: GOLD, fontWeight: 700, marginTop: 8 }}>{cigar.name}</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.65)', marginTop: 6 }}>Origin: {cigar.origin}</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.65)' }}>Wrapper: {cigar.wrapper}</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.65)' }}>Strength: {cigar.strength}</div>
+                {cigar.tastingProfile && (
+                  <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', fontStyle: 'italic', marginTop: 8 }}>{cigar.tastingProfile}</div>
+                )}
+              </>
+            ) : (
+              <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.35)', fontStyle: 'italic', marginTop: 8 }}>No cigar selected yet</div>
+            )}
+
+            {pairing && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Recommended Pairing</div>
+                <div style={{ fontSize: 13, color: GOLD }}>
+                  {typeof pairing === 'object' ? (pairing.pairingType || pairing.label || JSON.stringify(pairing)) : pairing}
+                </div>
+              </div>
+            )}
+
+            {cigar && whyThisMatch && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Why This Match Works</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.6)', lineHeight: 1.5 }}>{whyThisMatch}</div>
+              </div>
+            )}
+          </section>
+
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Add to Your Order</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
+              {ADDON_OPTS.map(opt => {
+                const active = addons.includes(opt.id)
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    aria-label={opt.label}
+                    aria-pressed={active}
+                    onClick={() => toggleAddon(opt.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, minHeight: 44,
+                      width: '100%', padding: '8px 12px', borderRadius: 8,
+                      border: `1px solid ${active ? GOLD : BORDER}`,
+                      background: active ? 'rgba(233,193,118,0.08)' : 'transparent',
+                      cursor: 'pointer', outline: 'none', textAlign: 'left',
+                    }}
+                  >
+                    <span style={{
+                      width: 18, height: 18, borderRadius: 4, flexShrink: 0,
+                      border: `1.5px solid ${active ? GOLD : BORDER}`,
+                      background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {active && <span style={{ fontSize: 11, color: GOLD, lineHeight: 1 }}>✓</span>}
+                    </span>
+                    <span style={{ fontSize: 13, color: active ? GOLD : CREAM, fontFamily: 'Georgia, serif' }}>{opt.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+              <div style={sectionLabelStyle}>Special Notes</div>
+              <textarea
+                value={notes}
+                onChange={e => setNotes(e.target.value)}
+                placeholder="Preferences, restrictions, or special requests…"
+                aria-label="Special notes for your order"
+                rows={3}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  width: '100%', marginBottom: 6,
-                  padding: '4px 6px', borderRadius: 5,
-                  border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
+                  width: '100%', boxSizing: 'border-box', marginTop: 8,
+                  background: '#0d1420', border: `1px solid ${BORDER}`,
+                  borderRadius: 8, padding: 10, color: CREAM,
+                  fontSize: 13, fontFamily: 'Georgia, serif', lineHeight: 1.5,
+                  resize: 'vertical', outline: 'none',
+                }}
+              />
+              <button
+                type="button"
+                aria-label="Save draft"
+                onClick={handleSaveDraft}
+                style={{
+                  marginTop: 10, minHeight: 36, padding: '6px 14px', borderRadius: 8,
+                  border: `1px solid ${saveStatus === 'saved' ? GOLD : BORDER}`,
                   background: 'transparent',
-                  cursor: 'pointer', outline: 'none',
-                  textAlign: 'left',
+                  color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.55)',
+                  fontSize: 12, fontFamily: 'Georgia, serif', cursor: 'pointer',
                 }}
               >
-                <span style={{
-                  width: 14, height: 14, borderRadius: 3, flexShrink: 0,
-                  border: `1.5px solid ${active ? GOLD : 'rgba(233,193,118,0.35)'}`,
-                  background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {active && <span style={{ fontSize: 9, color: GOLD, lineHeight: 1 }}>✓</span>}
-                </span>
-                <span style={{
-                  fontSize: 'clamp(8px,0.72vw,10px)',
-                  color: active ? GOLD : 'rgba(229,226,225,0.7)',
-                  fontFamily: 'Georgia, serif',
-                }}>
-                  {opt.label}
-                </span>
+                {saveStatus === 'saved' ? '✓ Draft Saved' : 'Save Draft'}
               </button>
-            )
-          })}
-
-          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', margin: '8px 0 6px' }} />
-
-          <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
-            Special Notes
-          </div>
-          <textarea
-            value={notes}
-            onChange={e => setNotes(e.target.value)}
-            placeholder="Preferences, restrictions, or special requests…"
-            aria-label="Special notes for your order"
-            rows={3}
-            style={{
-              width: '100%', boxSizing: 'border-box',
-              background: 'rgba(229,226,225,0.04)',
-              border: '1px solid rgba(233,193,118,0.2)',
-              borderRadius: 4, padding: '4px 6px',
-              color: 'rgba(229,226,225,0.82)',
-              fontSize: 'clamp(7px,0.65vw,9px)',
-              fontFamily: 'Georgia, serif', lineHeight: 1.5,
-              resize: 'none', outline: 'none',
-            }}
-          />
-          <button
-            type="button"
-            aria-label="Save draft"
-            onClick={handleSaveDraft}
-            style={{
-              marginTop: 5, padding: '3px 10px', borderRadius: 4,
-              border: `1px solid ${saveStatus === 'saved' ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.3)'}`,
-              background: 'transparent',
-              color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.5)',
-              fontSize: 'clamp(7px,0.6vw,9px)', fontFamily: 'Georgia, serif',
-              cursor: 'pointer', outline: 'none',
-            }}
-          >
-            {saveStatus === 'saved' ? '✓ Draft Saved' : 'Save Draft'}
-          </button>
+            </div>
+          </section>
         </div>
 
-        {/* Ordering path selectors */}
-        {ORDERING_ZONES.map(zone => {
-          const active = orderPath === zone.id
-          return (
-            <button
-              key={zone.id}
-              type="button"
-              aria-label={`${zone.label}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => togglePath(zone.id)}
-              style={{
-                position: 'absolute',
-                left: `${zone.x}%`, top: `${zone.y}%`,
-                width: `${zone.w}%`, height: `${zone.h}%`,
-                pointerEvents: 'auto',
-                background: 'transparent',
-                border: `2px solid ${active ? GOLD : 'transparent'}`,
-                borderRadius: 4,
-                cursor: 'pointer',
-                boxSizing: 'border-box',
-                outline: 'none',
-              }}
-            >
-              {active && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 5,
-                  fontSize: 'clamp(9px,1.1vw,13px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
-              )}
-            </button>
-          )
-        })}
-      </SmokeCraftScreenShell>
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
 
       <SmokeCraftNavBar
         primary="Continue to Cut, Toast & Light →"
@@ -287,6 +249,6 @@ export default function RequestPurchase() {
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }

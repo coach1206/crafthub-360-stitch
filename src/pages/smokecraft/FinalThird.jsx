@@ -3,40 +3,60 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import {
+  GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
+
+/**
+ * Final Third — /smokecraft/final-third (Session 16/17/18)
+ *
+ * TWO-GENERATION MIGRATION — replaces SmokeCraftImageBoundsOverlay (4
+ * focus-card zones + 10 flavor-note zones drawn into the baked image)
+ * with the shared live-DOM card system already established across
+ * Format / First Third / Second Third. No decorative image used, same
+ * as those precedents.
+ *
+ * IMPORTANT: this is the screen root-caused earlier in this project as
+ * the real reason Scorecard capture automation appeared to fail —
+ * handleContinue() requires at least one selected note (flavor or
+ * focus) or it silently blocks with an inline error. Every flavor
+ * button below keeps its exact `aria-label="${label} flavor"` and
+ * `data-flavor={id}` attributes so existing capture/verification
+ * scripts (which target `button[aria-label="Earth flavor"]`) continue
+ * to work unchanged.
+ *
+ * All logic preserved verbatim: splitNotes/combinedNotesForSave,
+ * server-authoritative draft load/retry, debounced autosave with
+ * 409-conflict adoption, toggleFlavor/toggleFocus, and the
+ * submitTastingObservation-gated handleContinue.
+ */
 
 const ENRICHMENT_16 = getEducationalEnrichment(16)
 
-const NAT_W = 1448
-const NAT_H = 1086
-
-const GOLD = '#E9C176'
-
-// Section 1 — 4 focus cards (stacked vertically, y≈29.4–51.4%)
-const FOCUS_ZONES = [
-  { id: 'aroma-strength',   label: 'Aroma Strength',   x: 10.0, y: 29.4, w: 80.0, h: 4.8 },
-  { id: 'flavor-intensity', label: 'Flavor Intensity', x: 10.0, y: 35.2, w: 80.0, h: 4.8 },
-  { id: 'burn-quality',     label: 'Burn Quality',     x: 10.0, y: 41.0, w: 80.0, h: 4.8 },
-  { id: 'aftertaste',       label: 'Aftertaste',       x: 10.0, y: 46.8, w: 80.0, h: 4.8 },
+const FOCUS_ITEMS = [
+  { id: 'aroma-strength',   label: 'Aroma Strength',   icon: '👃' },
+  { id: 'flavor-intensity', label: 'Flavor Intensity',  icon: '🔥' },
+  { id: 'burn-quality',     label: 'Burn Quality',      icon: '📏' },
+  { id: 'aftertaste',       label: 'Aftertaste',        icon: '👅' },
 ]
 
-// Section 2 — 10 flavor note cards (2 rows of 5)
-const FLAVOR_ZONES = [
-  { id: 'earth',   label: 'Earth',   x: 10.0, y: 57.0, w: 15.0, h: 7.0 },
-  { id: 'leather', label: 'Leather', x: 26.5, y: 57.0, w: 15.0, h: 7.0 },
-  { id: 'wood',    label: 'Wood',    x: 43.0, y: 57.0, w: 15.0, h: 7.0 },
-  { id: 'spice',   label: 'Spice',   x: 59.5, y: 57.0, w: 15.0, h: 7.0 },
-  { id: 'coffee',  label: 'Coffee',  x: 76.0, y: 57.0, w: 14.0, h: 7.0 },
-  { id: 'cocoa',   label: 'Cocoa',   x: 10.0, y: 65.5, w: 15.0, h: 7.0 },
-  { id: 'sweet',   label: 'Sweet',   x: 26.5, y: 65.5, w: 15.0, h: 7.0 },
-  { id: 'creamy',  label: 'Creamy',  x: 43.0, y: 65.5, w: 15.0, h: 7.0 },
-  { id: 'nuts',    label: 'Nuts',    x: 59.5, y: 65.5, w: 15.0, h: 7.0 },
-  { id: 'floral',  label: 'Floral',  x: 76.0, y: 65.5, w: 14.0, h: 7.0 },
+const FLAVOR_ITEMS = [
+  { id: 'earth',   label: 'Earth' },
+  { id: 'leather', label: 'Leather' },
+  { id: 'wood',    label: 'Wood' },
+  { id: 'spice',   label: 'Spice' },
+  { id: 'coffee',  label: 'Coffee' },
+  { id: 'cocoa',   label: 'Cocoa' },
+  { id: 'sweet',   label: 'Sweet' },
+  { id: 'creamy',  label: 'Creamy' },
+  { id: 'nuts',    label: 'Nuts' },
+  { id: 'floral',  label: 'Floral' },
 ]
 
 const EMPTY = { selectedFlavors: [], focusSelected: [], savedAt: null }
@@ -44,11 +64,11 @@ const ACTIVITY_KEY = 'final-third'
 
 // The server's tasting-draft vocabulary for final-third is one combined
 // notesSelected array — split back into the two client-side groups
-// (flavor-wheel ids vs. focus-card ids) using FLAVOR_ZONES membership,
+// (flavor-wheel ids vs. focus-card ids) using FLAVOR_ITEMS membership,
 // mirroring the same split the server enforces during evidence
 // submission (see tastingObservationService.js VALID_NOTE_IDS).
 function splitNotes(notesSelected) {
-  const flavorIds = new Set(FLAVOR_ZONES.map(z => z.id))
+  const flavorIds = new Set(FLAVOR_ITEMS.map(z => z.id))
   const selectedFlavors = notesSelected.filter(id => flavorIds.has(id))
   const focusSelected = notesSelected.filter(id => !flavorIds.has(id))
   return { selectedFlavors, focusSelected }
@@ -146,6 +166,26 @@ export default function FinalThird({ onBack, onComplete } = {}) {
     }))
   }
 
+  function handleSaveDraft() {
+    if (phase !== 'ready' || done || draftLocked) return
+    triggerHaptic('light')
+    setSaveStatus('saving')
+    saveTastingDraft(ACTIVITY_KEY, { notesSelected: combinedNotesForSave, personalNotes }, draftVersion).then(result => {
+      if (result.alreadyCompleted) { setSaveStatus('idle'); setDraftLocked(true); return }
+      if (result.conflict) {
+        const { selectedFlavors, focusSelected } = splitNotes(result.current.draftData?.notesSelected || [])
+        setFt(prev => ({ ...prev, selectedFlavors, focusSelected }))
+        setPersonalNotes(result.current.draftData?.personalNotes || '')
+        setDraftVersion(result.current.version)
+        setSaveStatus('conflict')
+        return
+      }
+      if (!result.ok) { setSaveStatus('error'); return }
+      setDraftVersion(result.current.version)
+      setSaveStatus('saved')
+    })
+  }
+
   async function handleContinue() {
     if (done) return
     const combinedNotes = [...ft.selectedFlavors, ...(ft.focusSelected || [])]
@@ -196,148 +236,106 @@ export default function FinalThird({ onBack, onComplete } = {}) {
 
   if (phase === 'loading') {
     return (
-      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'grid', placeItems: 'center', background: '#050505', color: 'rgba(229,226,225,.7)', fontFamily: 'Georgia, serif' }}>
         Loading your saved observations…
       </div>
     )
   }
   if (phase === 'error') {
     return (
-      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
+      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: '#050505', color: 'rgba(229,170,100,0.9)', fontFamily: 'Georgia, serif' }}>
         <p style={{ margin: 0 }}>Something went wrong loading your saved observations.</p>
-        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+        <button type="button" onClick={handleRetryLoad} style={{ minHeight: 44, padding: '0 18px', borderRadius: 20, border: `1px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer' }}>
           Retry
         </button>
       </div>
     )
   }
 
-  function handleSaveDraft() {
-    if (phase !== 'ready' || done || draftLocked) return
-    triggerHaptic('light')
-    setSaveStatus('saving')
-    saveTastingDraft(ACTIVITY_KEY, { notesSelected: combinedNotesForSave, personalNotes }, draftVersion).then(result => {
-      if (result.alreadyCompleted) { setSaveStatus('idle'); setDraftLocked(true); return }
-      if (result.conflict) {
-        const { selectedFlavors, focusSelected } = splitNotes(result.current.draftData?.notesSelected || [])
-        setFt(prev => ({ ...prev, selectedFlavors, focusSelected }))
-        setPersonalNotes(result.current.draftData?.personalNotes || '')
-        setDraftVersion(result.current.version)
-        setSaveStatus('conflict')
-        return
-      }
-      if (!result.ok) { setSaveStatus('error'); return }
-      setDraftVersion(result.current.version)
-      setSaveStatus('saved')
-    })
-  }
-
   return (
-    <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.finalThird}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Final Third — Complete Your Tasting Journey"
-      >
-        {/* Nav mask */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
-          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>🏁</div>
+          <div>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Final Third</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Complete Your Tasting Journey</h1>
+            <p style={{ margin: 0, maxWidth: 760, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+              This is where the cigar reveals its finish. Rate how the experience closed, then select every flavor note you picked up along the way.
+            </p>
+          </div>
+        </div>
 
-        {/* Section 1: focus cards */}
-        {FOCUS_ZONES.map(zone => {
-          const active = (ft.focusSelected || []).includes(zone.id)
-          return (
-            <button
-              key={zone.id}
-              type="button"
-              aria-label={`${zone.label}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => toggleFocus(zone.id)}
-              style={{
-                position: 'absolute',
-                left: `${zone.x}%`, top: `${zone.y}%`,
-                width: `${zone.w}%`, height: `${zone.h}%`,
-                pointerEvents: 'auto',
-                background: 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
-                borderRadius: 3,
-                cursor: 'pointer',
-                boxSizing: 'border-box',
-                padding: 0,
-              }}
-            >
-              {active && (
-                <span style={{
-                  position: 'absolute', top: 2, right: 6,
-                  fontSize: 'clamp(9px,1.0vw,12px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
-              )}
-            </button>
-          )
-        })}
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Closing Impressions</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginTop: 12 }}>
+            {FOCUS_ITEMS.map(item => {
+              const active = (ft.focusSelected || []).includes(item.id)
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={`${item.label}${active ? ' (selected)' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => toggleFocus(item.id)}
+                  style={{
+                    minHeight: 68, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10,
+                    borderRadius: 10, border: `1px solid ${active ? GOLD : BORDER}`,
+                    background: active ? 'rgba(233,193,118,.12)' : GLASS,
+                    color: CREAM, cursor: 'pointer', fontFamily: 'Georgia, serif', textAlign: 'left',
+                  }}
+                >
+                  <span style={{ fontSize: 20 }} aria-hidden="true">{item.icon}</span>
+                  <span style={{ flex: 1, fontWeight: 700, color: active ? GOLD : CREAM, fontSize: 13.5 }}>{item.label}</span>
+                  {active && <span style={{ color: GOLD, fontWeight: 700 }}>✓</span>}
+                </button>
+              )
+            })}
+          </div>
+        </section>
 
-        {/* Section 2: flavor note cards */}
-        {FLAVOR_ZONES.map(zone => {
-          const active = ft.selectedFlavors.includes(zone.id)
-          return (
-            <button
-              key={zone.id}
-              type="button"
-              aria-label={`${zone.label} flavor${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              data-flavor={zone.id}
-              onClick={() => toggleFlavor(zone.id)}
-              style={{
-                position: 'absolute',
-                left: `${zone.x}%`, top: `${zone.y}%`,
-                width: `${zone.w}%`, height: `${zone.h}%`,
-                pointerEvents: 'auto',
-                background: 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
-                borderRadius: 4,
-                cursor: 'pointer',
-                boxSizing: 'border-box',
-                padding: 0,
-              }}
-            >
-              {active && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 5,
-                  fontSize: 'clamp(9px,1.0vw,12px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
-              )}
-            </button>
-          )
-        })}
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Flavor Notes — select every note you picked up</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 10, marginTop: 12 }}>
+            {FLAVOR_ITEMS.map(item => {
+              const active = ft.selectedFlavors.includes(item.id)
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={`${item.label} flavor${active ? ' (selected)' : ''}`}
+                  aria-pressed={active}
+                  data-flavor={item.id}
+                  onClick={() => toggleFlavor(item.id)}
+                  style={{
+                    minHeight: 56, padding: '10px 8px', borderRadius: 10,
+                    border: `1px solid ${active ? GOLD : BORDER}`,
+                    background: active ? 'rgba(233,193,118,.14)' : GLASS,
+                    color: active ? GOLD : CREAM, cursor: 'pointer', fontFamily: 'Georgia, serif',
+                    fontWeight: 700, fontSize: 13, textAlign: 'center',
+                  }}
+                >
+                  {active ? '✓ ' : ''}{item.label}
+                </button>
+              )
+            })}
+          </div>
+        </section>
 
-        {/* Notes panel */}
-        <div style={{
-          position: 'absolute', left: '3%', top: '75%', width: '94%', height: '10%',
-          background: '#050505', border: '1px solid rgba(233,193,118,0.22)',
-          borderRadius: 5, boxSizing: 'border-box',
-          padding: 'clamp(4px,0.7vw,8px) clamp(6px,0.9vw,12px)',
-          display: 'flex', flexDirection: 'column', gap: 3, pointerEvents: 'auto', zIndex: 3,
-        }}>
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)',
-              textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'Georgia, serif' }}>
-              Final Third Observations
-            </span>
+            <div style={sectionLabelStyle}>Final Third Observations</div>
             <button
               type="button"
               aria-label="Save draft"
               onClick={handleSaveDraft}
               disabled={phase !== 'ready' || done}
               style={{
-                padding: '2px 8px', borderRadius: 4,
-                border: `1px solid ${saveStatus === 'saved' ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.3)'}`,
+                minHeight: 36, padding: '4px 14px', borderRadius: 8,
+                border: `1px solid ${saveStatus === 'saved' ? GOLD : BORDER}`,
                 background: 'transparent',
-                color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.45)',
-                fontSize: 'clamp(7px,0.58vw,8px)', fontFamily: 'Georgia, serif',
-                cursor: 'pointer', outline: 'none',
+                color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.55)',
+                fontSize: 12, fontFamily: 'Georgia, serif', cursor: 'pointer',
               }}
             >
               {saveStatus === 'saving' && 'Saving…'}
@@ -352,36 +350,40 @@ export default function FinalThird({ onBack, onComplete } = {}) {
             onChange={e => setPersonalNotes(e.target.value)}
             placeholder="Final impressions, aftertaste, would you smoke again…"
             aria-label="Final third personal notes"
+            rows={4}
             style={{
-              flex: 1, resize: 'none', background: 'transparent',
-              border: 'none', outline: 'none', color: 'rgba(229,226,225,0.8)',
-              fontSize: 'clamp(8px,0.72vw,10px)', fontFamily: 'Georgia, serif', lineHeight: 1.4,
+              width: '100%', boxSizing: 'border-box', marginTop: 12, resize: 'vertical',
+              background: '#0d1420', border: `1px solid ${BORDER}`, borderRadius: 8,
+              color: 'rgba(229,226,225,0.85)', fontSize: 13.5, fontFamily: 'Georgia, serif',
+              lineHeight: 1.5, padding: 12, outline: 'none',
             }}
           />
-        </div>
-      </SmokeCraftImageBoundsOverlay>
+        </section>
+
+        {submitError && (
+          <div role="alert" style={{
+            borderRadius: 9, padding: 12, border: '1px solid rgba(255,150,150,.45)',
+            background: 'rgba(120,20,20,.35)', color: '#ffdada', fontSize: 13,
+          }}>
+            {submitError}
+          </div>
+        )}
+
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
 
       <SmokeCraftLessonInfoButton
         sessionNumber={16} totalSessions={TOTAL_SESSIONS} phase={4} totalPhases={TOTAL_VISITS}
         title="Flavor Finish" whyItMatters={ENRICHMENT_16?.whyItMatters} goldenBox={ENRICHMENT_16?.goldenBox}
       />
 
-      {submitError && (
-        <div role="alert" style={{
-          position: 'absolute', left: '3%', bottom: '17%', width: '94%', zIndex: 4,
-          background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)',
-          borderRadius: 6, padding: '6px 10px', color: '#ffdada',
-          fontSize: 'clamp(9px,0.8vw,11px)', fontFamily: 'Georgia, serif',
-        }}>
-          {submitError}
-        </div>
-      )}
-
       <SmokeCraftNavBar
         primary={done ? 'Saving…' : 'Continue to Scorecard →'}
         onPrimary={handleContinue}
         primaryDisabled={done}
+        secondary="← Back"
+        onSecondary={onBack || (() => navigate(-1))}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }
