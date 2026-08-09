@@ -450,12 +450,40 @@ export default function Rewards({ onBack, onComplete } = {}) {
           </div>
         </div>
 
-        {/* Real content panel — the reward-category cards, "Today at Your
-            Venue", and "Recent Redemptions" zones are covered by one honest
-            panel (no real venue reward catalog exists to populate them),
-            hosting the actual real XP breakdown / rank-milestone claims /
-            earned-badges functionality that already existed on this
-            screen — preserved exactly, only repositioned. */}
+        {/* SC-D089 fix: the Loyalty Tier panel above only covered y:35%-
+            54.1% of the right column — the approved image's "Today At Your
+            Venue" and "Recent Redemptions" zones below it (y:54%-93%) had
+            no overlay at all, leaving their baked empty dashed boxes
+            visible with zero real content. Both concepts (venue-specific
+            offers, redemption history) genuinely require a venue reward
+            catalog that does not exist in this build — same honest
+            limitation already disclosed in the panel below — so this
+            covers that remaining region with one clearly-labeled,
+            honest "coming soon" panel instead of leaving it looking dead. */}
+        <div style={{
+          position: 'absolute', left: '73.6%', top: '55%', width: '24.9%', height: '38%',
+          background: NAVY_DEEP, borderRadius: 8, padding: 'clamp(10px,1.4vw,16px)',
+          display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto',
+        }}>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Today At Your Venue</div>
+            <div style={{ fontSize: 10.5, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic', lineHeight: 1.4 }}>
+              Venue-specific offers require a connected reward catalog — not available in this build yet.
+            </div>
+          </div>
+          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', paddingTop: 10 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Recent Redemptions</div>
+            <div style={{ fontSize: 10.5, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic', lineHeight: 1.4 }}>
+              Redemption history requires a connected reward catalog — not available in this build yet.
+            </div>
+          </div>
+        </div>
+
+        {/* Real content panel — the reward-category cards zone is covered
+            by one honest panel (no real venue reward catalog exists to
+            populate it), hosting the actual real XP breakdown / rank-
+            milestone claims / earned-badges functionality that already
+            existed on this screen — preserved exactly, only repositioned. */}
         <div style={{
           position: 'absolute', left: '16.4%', top: '35%', width: '58%', height: '58%',
           overflowY: 'auto', WebkitOverflowScrolling: 'touch',

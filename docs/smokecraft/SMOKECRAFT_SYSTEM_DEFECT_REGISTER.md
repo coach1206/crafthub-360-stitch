@@ -2791,3 +2791,37 @@ The reserved demonstration-video area was full-height and positioned first, ahea
 - **#040 Connections** was flagged STATIC_SHELL in the complete visual inspection. On code inspection, every control (7 share-channel buttons) is real, visible, labeled DOM with real `onClick`/`aria-pressed` state — not baked into the image. The large photo is legitimately decorative-only (no functional UI baked into it). Reclassified **B — live DOM + approved supporting image**, not C.
 
 Highest SC-D number is now SC-D084.
+
+---
+
+## SC-D086 — Mini Tasting Round (#034) was a fully baked mock screen with a CTA collision
+
+`MiniTastingRound.jsx` rendered `SC_ASSETS.miniTasting` as a `SmokeCraftAssetScreen classification="DECORATIVE_BACKGROUND"` full-bleed image, mislabeled — the image is baked with a complete mock interface (3 cigar comparison cards, Select buttons, a "What To Expect" panel, a baked "Begin Mini Tasting" button), none of it real or clickable. The one real control (NavBar's "Complete Tasting Round") visually collided with the baked "Begin Mini Tasting" button underneath.
+
+**Fix**: rebuilt as real live DOM (`mode="live"`) showing the journey's actual selected cigar/wrapper/flavor notes and a real "What To Expect" panel, no invented second/third comparison cigar (this build does not track a real 3-cigar flight). Verified live post-fix.
+
+## SC-D087 — Management Sync's upper stat-box region was still baked/empty (finishes SC-D083)
+
+SC-D083 (prior pass) replaced the lower ~45% of the image-shell with an honest real panel, but the upper ~54% (4 stat boxes, sync-status text) was still the original baked, empty MANAGEMENT SYNC.png composite.
+
+**Fix**: converted the entire screen to real live DOM (`mode="live"`, no baked image at all) — a real "Journey Sync Status" card row (cigar/pairing/XP/flavor notes) replaces the baked stat boxes. Verified live post-fix: real values render (e.g. "Padron 1964 Series", "1900" XP), "E.A.T. Backend Connected" status shown.
+
+## SC-D088 — Identity's right-hand column (Journey Progress / Quick Stats / Insights & Analytics / Your Journeys) left visibly dead
+
+The blank-by-design decision (see Identity.jsx's own prior header comment) correctly avoided leaking stale PER-JOURNEY data into a fresh identity form, but left the entire right column looking like an empty, unfinished shell — real ACCOUNT-level data (XP, badge count, prior-completed-journey count) that carries no staleness risk was never used to fill it.
+
+**Fix**: added 4 real, opaque-backed panels showing real account-level data (Account XP, Badges Earned, Completed Journeys, a real "Ready To Begin" note) — no current-journey session data is shown, preserving the original anti-staleness constraint exactly. Verified live post-fix (rebuilt + recaptured from a fresh production build): panels now show real filled content over solid backgrounds, not baked skeleton bars.
+
+## SC-D089 — Rewards' "Today At Your Venue" / "Recent Redemptions" zones were uncovered baked skeletons
+
+The Loyalty Tier panel only covered y:35%-54% of the right column; the approved image's "Today At Your Venue" and "Recent Redemptions" zones below it (y:54%-93%) had no overlay, leaving baked empty dashed boxes visible.
+
+**Fix**: added a real, honest panel covering that region, clearly stating both features require a venue reward catalog that does not exist in this build yet — same disclosed-limitation pattern as the panel below it, not a fabricated data fill.
+
+## Golden Box Competitions Hub (#043) — test-data cleanup
+
+The real "Open For Entry" competition list contained 316 QA/regression-test competition records (`created_by = 'test-admin'`, titles like "Golden Box Gating Regression", "No Rules Competition") left over from this session's own automated test runs, polluting what a real player would see.
+
+**Fix**: archived all `test-admin`-created competitions (`status = 'archived'`) via a direct, scoped, reversible database update — no schema change, no code change. Verified live post-fix: the hub now shows an honest empty state ("No competitions are open for entry right now").
+
+Highest SC-D number is now SC-D089.

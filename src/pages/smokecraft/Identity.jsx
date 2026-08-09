@@ -386,6 +386,53 @@ export default function Identity() {
         onFocus={e => hotspotRing(e, true)} onBlur={e => hotspotRing(e, false)}
       />
 
+      {/* SC-D088 fix: the approved image's right-hand column (Journey
+          Progress / Quick Stats / Insights & Analytics / Your Journeys) was
+          left intentionally blank to avoid leaking a PRIOR journey's stale
+          progress into a fresh identity form (the real defect that
+          motivated the original blank-by-design decision). Real
+          ACCOUNT-level data — XP/rank and prior-completed-journey count —
+          is not per-journey progress and carries no staleness risk, so it
+          now fills these zones instead of leaving them empty. No current-
+          journey session data (cigar, mentor, in-progress steps) is shown
+          here — that constraint is preserved exactly. */}
+      <div style={{
+        position: 'absolute', left: '68.5%', top: '6%', width: '30%', height: '18%',
+        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
+        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
+        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
+      }}>
+        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Account</span>
+        <span style={{ fontSize: 'clamp(13px,1.3vw,18px)', color: GOLD, fontWeight: 700 }}>{session?.xp || 0} XP</span>
+      </div>
+      <div style={{
+        position: 'absolute', left: '68.5%', top: '25.5%', width: '30%', height: '18%',
+        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
+        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
+        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
+      }}>
+        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Badges Earned</span>
+        <span style={{ fontSize: 'clamp(13px,1.3vw,18px)', color: GOLD, fontWeight: 700 }}>{session?.stamps?.length || session?.badges?.length || 0}</span>
+      </div>
+      <div style={{
+        position: 'absolute', left: '68.5%', top: '45%', width: '30%', height: '20%',
+        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
+        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
+        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
+      }}>
+        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Completed Journeys</span>
+        <span style={{ fontSize: 'clamp(13px,1.3vw,18px)', color: GOLD, fontWeight: 700 }}>{journey.previousCompletedJourneys?.length || 0}</span>
+      </div>
+      <div style={{
+        position: 'absolute', left: '68.5%', top: '67%', width: '30%', height: '25%',
+        background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8,
+        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, padding: '0 4%',
+        boxSizing: 'border-box', fontFamily: 'Georgia, serif',
+      }}>
+        <span style={{ fontSize: 'clamp(8px,0.75vw,10px)', color: 'rgba(229,226,225,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Ready To Begin</span>
+        <span style={{ fontSize: 'clamp(10.5px,1vw,13px)', color: 'rgba(229,226,225,0.7)', lineHeight: 1.4 }}>A fresh journey starts once you continue below.</span>
+      </div>
+
       {/* ── The approved sidebar's own items, gated by real progress ────── */}
       {SIDEBAR.filter(item => item.route === '/smokecraft/identity' || REGISTERED_ROUTES.has(item.route)).map(item => {
         const s = SESSION_BY_ROUTE.get(item.route)

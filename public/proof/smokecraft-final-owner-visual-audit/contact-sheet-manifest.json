@@ -1,0 +1,11 @@
+{
+  "totalSheets": 5,
+  "outputs": [
+    "public/proof/smokecraft-final-owner-visual-audit/SMOKECRAFT_FINAL_OWNER_VISUAL_AUDIT_01.png",
+    "public/proof/smokecraft-final-owner-visual-audit/SMOKECRAFT_FINAL_OWNER_VISUAL_AUDIT_02.png",
+    "public/proof/smokecraft-final-owner-visual-audit/SMOKECRAFT_FINAL_OWNER_VISUAL_AUDIT_03.png",
+    "public/proof/smokecraft-final-owner-visual-audit/SMOKECRAFT_FINAL_OWNER_VISUAL_AUDIT_04.png",
+    "public/proof/smokecraft-final-owner-visual-audit/SMOKECRAFT_FINAL_OWNER_VISUAL_AUDIT_05.png"
+  ],
+  "indexOut": "public/proof/smokecraft-final-owner-visual-audit/SMOKECRAFT_FINAL_OWNER_VISUAL_INDEX.png"
+}

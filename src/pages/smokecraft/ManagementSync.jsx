@@ -8,13 +8,27 @@ import * as smokecraftManagementSyncService from '../../modules/smokecraft/servi
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
-const NAT_W = 1448
-const NAT_H = 1086
+const GOLD   = '#E9C176'
+const GOLD_DIM = 'rgba(233,193,118,0.55)'
+const CREAM  = '#e5e2e1'
+const BORDER = 'rgba(233,193,118,0.22)'
+const GLASS  = 'rgba(233,193,118,0.06)'
 
-const GOLD = '#E9C176'
-
+/**
+ * Management Sync — /smokecraft/management-sync (supporting, post-Passport
+ * Stamp)
+ *
+ * SC-D087 rebuild (finishes SC-D083) — this screen was still `mode=
+ * "image-shell"` on the approved MANAGEMENT SYNC.png composite: its upper
+ * ~54% (4 stat boxes — Journey Sync Status, Data Shared, Guest Impact
+ * Score, Venue Benefit — plus a "WAS SYNCED" text row) was baked with
+ * empty value zones and only a handful of floating text overlays, no real
+ * card structure. SC-D083 (previous pass) already replaced the lower ~45%
+ * with a real, honest Available-Now/Coming-Soon panel; this pass converts
+ * the ENTIRE screen to real live DOM (`mode="live"`, no baked image at
+ * all) so nothing baked-but-empty remains anywhere on the page.
+ */
 export default function ManagementSync() {
   const { awardSessionRewards, session } = useGuestSession()
   const { journey } = useSmokeCraftJourney()
@@ -47,8 +61,6 @@ export default function ManagementSync() {
   }, [])
 
   // Explicit user action only — never triggered by mount/render/polling.
-  // A guest without a real selected venue never reaches the server at
-  // all (honest — matches the "no venue" disclosure already in place).
   async function handleSyncToVenue() {
     if (!hasRealVenue || syncActionState === 'working') return
     setSyncActionState('working')
@@ -74,10 +86,6 @@ export default function ManagementSync() {
       const synced = await requestSync('venue_insights', serverJourneyId)
       setSyncActionState(synced.ok ? 'done' : 'error')
 
-      // E.A.T. live sync — genuinely separate from the venue-journey server
-      // above; fire-and-forget, never blocks the guest UI or reverses the
-      // venue-sync result already set. Failures degrade to local_fallback
-      // inside the service itself — SmokeCraft completion stays canonical.
       smokecraftManagementSyncService.syncManagement({
         venueId:             journey.selectedVenue.id,
         guestId:             session?.guestId || session?.id || null,
@@ -111,87 +119,64 @@ export default function ManagementSync() {
     navigate('/smokecraft/session-complete')
   }
 
-  return (
-    <>
-            <SmokeCraftScreenShell
-        mode="image-shell"
-        status="ready"
-        imageProps={{ src: SC_ASSETS.managementSync, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft Management Sync — Session Summary" }}
-      >
-        {/* Journey data in the summary zone — left was 5%, inside the
-            baked sidebar icon column (0-9.2%), causing the XP badge to
-            render floating over the nav icons. Moved to align with the
-            approved "Journey Sync Status" field row (starts ~10.6%). */}
-        <div style={{
-          position: 'absolute',
-          left: '11%', top: '30%',
-          width: '55%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '2%',
-          pointerEvents: 'none',
-          fontFamily: 'Georgia, serif',
-          fontWeight: 600,
-          color: GOLD,
-          letterSpacing: '0.03em',
-          userSelect: 'none',
-          fontSize: 'clamp(10px,1.1vw,15px)',
-          lineHeight: 1.4,
-        }}>
-          {cigar?.name   && <span>{cigar.name}</span>}
-          {pairing?.recommendation && <span>{pairing.recommendation}</span>}
-          {session?.xp   > 0 && <span>{session.xp} XP</span>}
-          {flavors.length > 0 && <span>{flavors.join(', ')}</span>}
-        </div>
+  const summaryStats = [
+    { label: 'Cigar', value: cigar?.name || null },
+    { label: 'Pairing', value: pairing?.recommendation || null },
+    { label: 'XP Earned', value: session?.xp > 0 ? String(session.xp) : null },
+    { label: 'Flavor Notes', value: flavors.length > 0 ? flavors.join(', ') : null },
+  ]
 
-        {/* Honest disclosure for Management Insights — venue-wide AGGREGATE
-            analytics (top pairing, most selected cigar, satisfaction trend)
-            genuinely have no backend yet (Package D scope, see
-            SMOKECRAFT_MANAGEMENT_SYNC_DESTINATION_AUDIT.md). */}
-        <div style={{
-          position: 'absolute',
-          left: '61%', top: '32.5%', width: '37%',
-          pointerEvents: 'none', fontFamily: 'Georgia, serif',
-          fontSize: 'clamp(9px,0.85vw,12px)', color: 'rgba(229,226,225,0.45)',
-          lineHeight: 1.5, fontStyle: 'italic',
-        }}>
+  return (
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Georgia, serif' }}>
+
+        <header>
+          <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            SmokeCraft 360 — Supporting Module
+          </div>
+          <h1 style={{ margin: '4px 0 6px', fontSize: 'clamp(22px,3vw,30px)', color: CREAM }}>Management Sync</h1>
+          <p style={{ margin: 0, fontSize: 'clamp(12px,1.3vw,14px)', color: 'rgba(229,226,225,0.6)', lineHeight: 1.5 }}>
+            Sync this journey's cigar, pairing, and flavor selections into venue operations.
+          </p>
+        </header>
+
+        {/* Journey Sync Status — real per-field cards, honest "Not recorded" for anything not captured. */}
+        <section style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+            Journey Sync Status
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
+            {summaryStats.map(s => (
+              <div key={s.label} style={{ background: '#0b0f18', border: `1px solid ${BORDER}`, borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>{s.label}</div>
+                <div style={{ fontSize: 12.5, color: s.value ? CREAM : 'rgba(229,226,225,0.35)', fontStyle: s.value ? 'normal' : 'italic' }}>{s.value || 'Not recorded'}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Honest disclosure — venue-wide AGGREGATE analytics (top pairing,
+            most selected cigar, satisfaction trend) genuinely have no
+            backend yet (Package D scope, see SMOKECRAFT_MANAGEMENT_SYNC_
+            DESTINATION_AUDIT.md). */}
+        <div style={{ fontSize: 'clamp(10px,0.95vw,12px)', color: 'rgba(229,226,225,0.4)', fontStyle: 'italic', lineHeight: 1.5 }}>
           Venue-wide aggregate insights are not connected yet — this venue analytics backend has not been built.
         </div>
 
-        {/* SC-D083 fix: the lower ~45% of the approved MANAGEMENT SYNC.png
-            composite is a fully baked mock dashboard — Venue Operations
-            Impact cards, a Sync Activity table, a Command Hub panel — none
-            of it backed by any real data or control. A real player could
-            never interact with or trust any of it. Rather than leave that
-            fake chrome visible (or invent fake data to fill it), an opaque
-            panel now replaces it with one honest, real section that
-            clearly separates what's live today (this journey's own sync
-            status) from what's a real, disclosed future feature — matching
-            the same "mask + honest real content" pattern used to fix the
-            Golden Box Rules blank-panel defect (SC-D079). */}
-        <div style={{
-          position: 'absolute', left: '5%', top: '54%', width: '90%', height: '43%',
-          background: '#0b0f18', borderRadius: 10, border: '1px solid rgba(233,193,118,0.22)',
-          padding: 'clamp(14px,2vw,22px)', overflowY: 'auto', WebkitOverflowScrolling: 'touch',
-          fontFamily: 'Georgia, serif',
-        }}>
+        <section style={{ background: '#0b0f18', borderRadius: 10, border: `1px solid ${BORDER}`, padding: 'clamp(14px,2vw,22px)' }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
             Available Now
           </div>
 
           {/* Real, honest single-journey sync status — server-authoritative
               once populated, never fabricated. No venue selected -> no
-              control is shown at all (matches "do not create a journey
-              merely because a venue was selected"). */}
+              control is shown at all. */}
           {hasRealVenue ? (
           <div
             role="status"
             aria-live="polite"
             aria-atomic="true"
-            style={{
-              fontFamily: 'Georgia, serif', fontSize: 'clamp(10px,0.95vw,13px)',
-              color: 'rgba(229,226,225,0.75)', lineHeight: 1.6, marginBottom: 18,
-            }}
+            style={{ fontSize: 'clamp(10px,0.95vw,13px)', color: 'rgba(229,226,225,0.75)', lineHeight: 1.6, marginBottom: 18 }}
           >
             {syncActionState === 'idle' && managementSync.syncStatus !== 'completed' && (
               <button
@@ -261,8 +246,10 @@ export default function ManagementSync() {
               </div>
             ))}
           </div>
-        </div>
-      </SmokeCraftScreenShell>
+        </section>
+
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
 
       <SmokeCraftNavBar
         primary={done ? 'Continuing…' : 'Complete SmokeCraft Journey →'}
@@ -270,6 +257,6 @@ export default function ManagementSync() {
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }
