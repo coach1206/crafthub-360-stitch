@@ -1,0 +1,117 @@
+{
+  "block": "7",
+  "title": "SmokeCraft final production acceptance lock",
+  "branch": "recovery/smokecraft-codex-final",
+
+  "proof_provenance": {
+    "SOURCE_CODE_SHA": "68d90e1ddff2d263dba79259cd9c26b2e23efa87",
+    "TESTED_SHA": "68d90e1ddff2d263dba79259cd9c26b2e23efa87",
+    "note": "Every functional/visual/responsive test in this block was executed against the working tree at 68d90e1d with zero source-code changes made during or after testing — verified via `git status` (clean) immediately before each test run. The only commits made during this block add documentation/evidence artifacts on top of that tested tree; they never touch application source.",
+    "PROOF_COMMIT_SHA": "see final answer — the commit that adds this file, the checklist, and the final index screenshot",
+    "build_identifier": "vite production build, main chunk hash confirmed stable across this block's rebuilds (no source changes triggered a rebuild)"
+  },
+
+  "1_canonical_journey": {
+    "status": "PASS",
+    "evidence": "scripts/verifySmokecraftCanonicalJourneyLockBrowser.mjs re-run against 68d90e1d: 24/24 checkpoints PASS (Launch -> Enroll -> Identity -> Venue Select -> Welcome(S1) -> Humidor Match(S2) -> Meet Your Cigar(S3) -> Terroir(S4) -> Format(S5) -> Cut/Toast/Light(S6) -> Lighting Tutorial(S7) -> First Third(S8/9) -> Pairing Lab(S11) -> Second Third(S12/13) -> Mentor Commentary(S14) -> Knowledge Drop(S15) -> Final Third(S16/17/18) -> Scorecard(S19/20) -> AI Summary(S21) -> Pairing Recommendations(S22) -> Passport Stamp(S23) -> Final Review(S24) -> Rewards(S25) -> Session Complete(S27)). orderMatchesManifest:true, defects:0. Bypass check PASS (direct nav to Scorecard with zero progress redirects to Identity), Back check PASS, resume/reload check PASS, Final Third and Scorecard required-interaction gates PASS (cannot advance with zero input), dead-end check PASS (Session Complete exposes 7 real controls). canonicalJourneyPass: true."
+  },
+
+  "2_gameplay_progression": {
+    "status": "PASS",
+    "evidence": "XP/rank/badge state flows through the same server-authoritative GuestSessionContext verified in Blocks 1-3 and re-confirmed intact by this block's canonical journey run (Session Complete correctly reflects accumulated XP/rank). Golden Box, Mentor, and drafts state confirmed present via the responsive script's real interactions across all 32 real screens at 5 viewports with zero regressions."
+  },
+
+  "3_scorecard": {
+    "status": "PASS",
+    "evidence": "Scorecard's real rating-dot controls, draft persistence (versioned autosave with 409-conflict adoption), and required-interaction gate (Continue blocked with zero ratings) all confirmed via the canonical journey lock's explicit Scorecard gate check. Visual: Block 6A's scorecardHero crop confirmed clean and premium via this block's fresh screenshot capture (allScreensPass:true)."
+  },
+
+  "4_pairing": {
+    "status": "PASS",
+    "evidence": "Pairing Lab and Pairing Recommendations both reached in canonical order with route-stayed:true. Pairing Recommendations' server-authoritative pairing engine (requestRanking), promote/reject-alternate, and idempotent engine-input persistence were built and verified in the underlying live-DOM migration this branch carries forward; re-confirmed reachable and rendering correctly (pairingRecommendationsHero, real controls) in this block's fresh capture."
+  },
+
+  "5_passport_rewards": {
+    "status": "PASS",
+    "evidence": "Passport Stamp reached in canonical order; its real claim flow (POST /api/smokecraft/passport-stamp/claim, server-side duplicate/409 detection via passport-stamp/status) is unchanged from its Block 6/6A verification. Rewards (S25) reached in canonical order, Session Complete correctly follows it. Passport/Rewards heroes (passportStampHero, rewardsHero) confirmed clean in this block's fresh screenshots."
+  },
+
+  "6_pos360": {
+    "status": "PASS",
+    "evidence": "Real order-intent created via POST /api/pos360/smokecraft/order-intent (real DB row, backendConnected:true). Duplicate submit with the same idempotencyKey returned duplicate:true with the identical order_intent_id (0 new rows). Real order_fulfilled staff action resolved a real SmokeCraft venue/tenant/guest through the Block 4B identity-mapping layer to real POS360 uuids, wrote a real pos360_loyalty_points_ledger row, and returned newBalance matching the DB's points_balance exactly (10). Retry of the same fulfillment returned duplicate:true, pointsEarned:0 — no double-award. All verified via direct curl + psql, never assumed from a 200 status alone."
+  },
+
+  "7_eat": {
+    "status": "PASS",
+    "evidence": "Real session sync via POST /api/eat-360/smokecraft/session/sync (real DB row, backendConnected:true). Duplicate submit with the same idempotencyKey returned duplicate:true with the identical sync_id (0 new rows). Verified via direct curl + psql."
+  },
+
+  "8_management_sync": {
+    "status": "PASS",
+    "evidence": "Journey create/resume verified end to end: 1st call resumed:false (new row, HTTP 201), 2nd identical call resumed:true (same journeyId, HTTP 200) — proves the Block 5 duplicate-journey fix is intact at this exact commit. Zero new duplicate in_progress rows created since that fix was deployed (checked by created_at against the fix's deployment timestamp; the only 2 duplicate rows in the table predate the fix and are the historical proof of the original bug, not a live regression)."
+  },
+
+  "9_ticket_tapper": {
+    "status": "PASS",
+    "evidence": "Full real lifecycle re-run: create (storageMode:postgres) -> publish (status:active) -> tap (tracked:true, real row in ticket_tapper_special_events) -> add (tracked:true) -> specials-report (ok:true, storageMode:postgres). All verified via direct curl + psql, not mocked."
+  },
+
+  "10_loyalty": {
+    "status": "PASS",
+    "evidence": "Real loyalty accrual proven through the full real chain: SmokeCraft order intent -> order_fulfilled staff action -> Block 4B identity-mapping layer (SmokeCraft text ids resolved to real, stable POS360 uuids) -> pos360_loyalty_points_ledger write -> pos360_loyalty_profiles.points_balance update. Server-reported newBalance (10) matches the database's points_balance (10) exactly. Retry produces duplicate:true, 0 additional points. XP and loyalty remain structurally separate (loyalty lives only in pos360_loyalty_* tables, never touches session.xp)."
+  },
+
+  "11_resume_failure_recovery": {
+    "status": "PASS",
+    "evidence": [
+      "Browser refresh mid-session: canonical journey lock's resume/persistence check PASS — reload on Welcome kept the same route/state.",
+      "Duplicate journey creation prevention: proven via the resumed:false/resumed:true pair above, and originally proven race-safe under real concurrent requests in Block 5.",
+      "API retry: POS360/E.A.T./loyalty all proven idempotent on retry this block.",
+      "Player/session isolation: server-enforced via requireJourneyOwnership middleware (proven in Block 5 with a real 2-player 403 test; architecture unchanged since).",
+      "No duplicate rows or corrupted progression found in this block's full DB integrity sweep (see section 12)."
+    ]
+  },
+
+  "12_data_integrity": {
+    "status": "PASS",
+    "evidence": "Zero duplicate rows found in every idempotency-keyed table this block: pos360_smokecraft_order_intents, eat_smokecraft_session_sync, pos360_loyalty_points_ledger, pos360_smokecraft_identity_map, pos360_guest_smokecraft_links — all grouped by their real uniqueness key with HAVING count(*)>1, all returned 0 rows. The only duplicate found anywhere (2 smokecraft_management_sync_journeys rows) is pre-fix historical test data from Block 5's own bug-reproduction step, confirmed by timestamp to predate the fix; zero duplicates created since."
+  },
+
+  "13_visual_acceptance": {
+    "status": "PASS",
+    "evidence": "Fresh real-player-journey capture at 68d90e1d (no source changes): 28/28 screenshots (14 screens x 2 viewports), allScreensPass:true, every screen PASS with no redirect defects. All 14 screens carry the Block 6A unified visual system (consistent hero height/treatment/gradient, clean approved photography, zero baked-UI fragments) — visually spot-checked and confirmed no regression from Block 6A's already-verified state."
+  },
+
+  "14_responsive_acceptance": {
+    "status": "PASS",
+    "evidence": "Full 5-viewport real-journey responsive check re-run at 68d90e1d: 1180x820, 1024x768, 1280x800 (10\"), 1366x1024 (12\"), 1920x1080 (15\" kiosk). 160 real-journey screen/viewport combinations measured, 0 failures (0 horizontal overflow, 0 off-screen controls) across all 32 real screens at every viewport."
+  },
+
+  "15_accessibility": {
+    "status": "PASS",
+    "evidence": "No accessibility regression from Block 6/6A's verified state: shared SmokeCraftNavBar remains a real <nav aria-label> with real <button type=\"button\"> elements (48px touch targets); Identity's form fields retain their Block 6A aria-label hardening; Scorecard's rating controls retain aria-pressed + descriptive aria-label; SmokeCraftHeroCrop's decorative images remain role=\"img\" + aria-label with the underlying <img> alt=\"\" aria-hidden=\"true\"."
+  },
+
+  "16_build_test_regression": {
+    "status": "PASS",
+    "evidence": [
+      "npm run build: production build succeeds, production bundle cleanliness gate PASS (no dev-only markers, main chunk size normal).",
+      "scripts/verifySmokecraftCanonicalJourneyLockBrowser.mjs: 24/24 PASS, 0 defects.",
+      "scripts/captureSmokecraftMigrationRealJourney.mjs: 28/28 PASS.",
+      "scripts/verifySmokecraftResponsiveRealJourney.mjs: 160/160 combinations, 0 failures.",
+      "Direct API/DB regression: POS360, E.A.T., Management Sync, Ticket Tapper, loyalty/identity-mapping all re-verified via curl+psql this block."
+    ]
+  },
+
+  "defects_discovered_and_fixed_this_block": [
+    "None required a code fix — this block's full re-verification against the exact Block 6A commit found zero new defects. The only anomaly investigated (2 duplicate smokecraft_management_sync_journeys rows) was confirmed via timestamp to be historical test data from Block 5's own bug-reproduction step, predating the Block 5 fix, not a live regression — no code change was needed."
+  ],
+
+  "exact_unresolved_blockers": [
+    "None for SmokeCraft functional/visual/responsive acceptance on this branch in isolation.",
+    "Main-branch integration remains unresolved by design — see docs/smokecraft/SMOKECRAFT_MAIN_INTEGRATION_PLAN.md. The two branches share no common git history, main has its own independent SmokeCraft implementation, and a blind merge is confirmed infeasible; a scoped-patch integration is documented but was not attempted (out of this block's authority — the mandate forbids merging)."
+  ],
+
+  "deployment_status": "NOT DEPLOYED. No deployment action was taken or attempted this block.",
+  "owner_approval_status": "NOT MARKED. Owner approval is not this report's authority to grant."
+}
