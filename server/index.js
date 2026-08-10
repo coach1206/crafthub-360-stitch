@@ -55,6 +55,8 @@ import managementSyncRoutes              from './routes/managementSyncRoutes.js'
 import smokecraftTicketTapperSpecialsRoutes from './routes/smokecraftTicketTapperSpecialsRoutes.js'
 import smokecraftVenueCommerceRoutes        from './routes/smokecraftVenueCommerceRoutes.js'
 import smokecraftPlayerStateRoutes          from './routes/smokecraftPlayerStateRoutes.js'
+import smokecraftPairingRoutes              from './routes/smokecraftPairingRoutes.js'
+import passport360SyncRoutes                from './routes/passport360SyncRoutes.js'
 import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
@@ -140,6 +142,11 @@ app.use('/api/smokecraft/venue-commerce',  smokecraftVenueCommerceRoutes)
 // genuine missing-route blocker found and fixed during Block 8 self-QA
 // (Humidor Match could not advance past S2 without it).
 app.use('/api/smokecraft/player-state',    smokecraftPlayerStateRoutes)
+// Genuine missing-route blocker found and fixed during Block 8 self-QA
+// rerun 2: FlavorMemory's handleContinue() calls both of these before
+// it will navigate past S10 — journey was stuck at flavor-memory.
+app.use('/api/modules/smokecraft/pairing', smokecraftPairingRoutes)
+app.use('/api/passport-360/sync',          passport360SyncRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)
