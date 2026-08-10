@@ -29,9 +29,19 @@ const visited = [] // { route, expectedRoute, matched }
 const defects = []
 const notes = []
 
+// Trailing slash is not a route difference — '/smokecraft' and
+// '/smokecraft/' are the same canonical route to the browser/router.
+// Normalize both sides before comparing so a trailing-slash artifact of
+// the initial page load doesn't register as a false ORDER MISMATCH. The
+// app's actual routes are untouched — this only affects how the test
+// compares two path strings.
+function normalizePath(p) {
+  return p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p
+}
+
 function assertRoute(page, expectedRoute, label) {
   const actual = new URL(page.url()).pathname
-  const matched = actual === expectedRoute
+  const matched = normalizePath(actual) === normalizePath(expectedRoute)
   visited.push({ label, expectedRoute, actualRoute: actual, matched })
   if (!matched) {
     defects.push(`ORDER MISMATCH at "${label}": expected ${expectedRoute}, got ${actual}`)
