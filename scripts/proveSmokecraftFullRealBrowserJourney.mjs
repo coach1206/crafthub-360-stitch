@@ -318,7 +318,12 @@ async function main() {
 
   await page.fill('input[aria-label="Full Name"]', 'Full Journey Proof')
   await page.selectOption('select[aria-label="Cigar Experience Level"]', { index: 1 })
-  await page.click('[data-testid="identity-begin"]')
+  // Stale selector fix (Phase 3 regression): Identity's own page-local
+  // "Begin My Journey" button (data-testid="identity-begin") was removed
+  // in an earlier documented pass — the real Continue control is now the
+  // shared SmokeCraftNavBar's primary button, same fix already applied
+  // in verifySmokecraftCanonicalJourneyLockBrowser.mjs.
+  await page.click('button:has-text("Continue to Venue Selection")')
   await page.waitForURL('**/smokecraft/venue-select', { timeout: 10000 })
   record({ action: 'Identity Begin', url: page.url() })
   await page.waitForLoadState('networkidle')
