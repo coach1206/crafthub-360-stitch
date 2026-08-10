@@ -208,6 +208,7 @@ export default function Identity() {
         <input
           data-testid={`identity-${field}`}
           type={type}
+          aria-label={label}
           aria-invalid={invalid}
           aria-required={required ? 'true' : undefined}
           value={form[field]}
@@ -228,6 +229,7 @@ export default function Identity() {
         {fieldLabel(label, required)}
         <select
           data-testid={`identity-${field}`}
+          aria-label={label}
           aria-invalid={invalid}
           aria-required={required ? 'true' : undefined}
           value={form[field]}
