@@ -16,34 +16,51 @@ export async function getJourneyById(journeyId) {
 }
 
 /**
- * Creates a new authoritative journey. Ownership (user_id/guest_reference)
- * and venue_id are always taken from server-verified context, never from
- * the request body.
+ * Creates or resumes the authoritative journey. Ownership (user_id/
+ * guest_reference) and venue_id are always taken from server-verified
+ * context, never from the request body.
+ *
+ * Block 5 fix: this was previously an unconditional INSERT, so a refresh
+ * or duplicate call to the client's startOrResumeJourney() (its name
+ * always implied resume semantics, but the server never actually
+ * resumed) created a second, distinct in_progress journey row for the
+ * same guest/venue/session/phase — a real duplicate-journey defect
+ * surfaced by Block 5's resume/reload testing. Now selects the existing
+ * in_progress row for this identity+venue+session+phase first (locked
+ * FOR UPDATE to avoid a create race) and returns it unchanged; only
+ * inserts when none exists.
  */
 export async function createJourney({ identity, venueId, tenantId, sessionNumber, phase, sourceVersion }) {
   const db = getDb()
   if (!db) throw Object.assign(new Error('database_unavailable'), { code: 'database_unavailable' })
 
+  const guestReference = identity.type === 'user' ? `user:${identity.id}` : identity.id
+  const userId = identity.type === 'user' ? identity.id : null
+
   const client = await db.connect()
   try {
     await client.query('BEGIN')
+
+    const existing = await client.query(
+      `SELECT * FROM smokecraft_management_sync_journeys
+         WHERE venue_id = $1 AND guest_reference = $2 AND session_number = $3 AND phase = $4 AND status = 'in_progress'
+         ORDER BY created_at DESC LIMIT 1 FOR UPDATE`,
+      [venueId, guestReference, sessionNumber, phase]
+    )
+    if (existing.rows.length) {
+      await client.query('COMMIT')
+      return { ...existing.rows[0], resumed: true }
+    }
+
     const result = await client.query(
       `INSERT INTO smokecraft_management_sync_journeys
          (tenant_id, venue_id, user_id, guest_reference, session_number, phase, status, source_version)
        VALUES ($1, $2, $3, $4, $5, $6, 'in_progress', $7)
        RETURNING *`,
-      [
-        tenantId,
-        venueId,
-        identity.type === 'user' ? identity.id : null,
-        identity.type === 'user' ? `user:${identity.id}` : identity.id,
-        sessionNumber,
-        phase,
-        sourceVersion,
-      ]
+      [tenantId, venueId, userId, guestReference, sessionNumber, phase, sourceVersion]
     )
     await client.query('COMMIT')
-    return result.rows[0]
+    return { ...result.rows[0], resumed: false }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     throw err

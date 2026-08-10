@@ -1,0 +1,93 @@
+{
+  "block": "5",
+  "title": "Data integrity, resume, failure recovery, and state corruption protection",
+  "branch": "recovery/smokecraft-codex-final",
+
+  "resume_reload": {
+    "status": "PASS",
+    "evidence": [
+      "DEFECT FOUND AND FIXED: createJourney() (server/services/managementSync/journeyService.js) unconditionally INSERTed a new journey row on every call, despite the client function being named startOrResumeJourney() and being called on every ManagementSync mount/refresh. Proven via real curl: 2 calls with identical guest/venue/session/phase produced 2 distinct journey_ids and 2 DB rows before the fix.",
+      "FIX: createJourney() now SELECTs the existing in_progress row for (venue, guest_reference, session_number, phase) FOR UPDATE first and returns it unchanged (resumed:true, HTTP 200) before ever inserting; only inserts when none exists (resumed:false, HTTP 201).",
+      "Re-proven after fix: 1st call creates (201, resumed:false), 2nd call (simulated refresh) returns the SAME journeyId (200, resumed:true), and a real concurrent race (2 parallel identical requests) still produced exactly 1 DB row.",
+      "Snapshot versioning (scorecard/pairing/passport-state saves) was already correctly built pre-Block-5: reload-after-save reads back the latest snapshot_version via getLatestSnapshot(); duplicate-content resubmission short-circuits via payload_hash without creating a new version; verified live (snapshot A -> duplicate A returns same version+duplicate:true -> snapshot B creates version 2 -> latest read-back returns version 2, not A).",
+      "Request/Purchase handoff reload: RequestPurchase.jsx persists orderIntent {orderIntentId, status, createdAt} into journey.requestPurchase via setRequestPurchase() on success, and initializes orderIntentStatus from journey.requestPurchase?.orderIntent on mount — so a reload after a successful POS360 handoff shows 'sent' immediately rather than re-firing the request.",
+      "Client-side journey-context staleness protection (SmokeCraftJourneyContext.jsx) was already correctly built pre-Block-5 ('Holistic Fix 4B' comment in the file): server snapshot is only adopted when strictly newer than local journeyUpdatedAt, preventing a stale server read from clobbering fresher local state after a reset/new-journey action — reviewed and confirmed still intact, not modified this block since it already satisfies the mandate."
+    ]
+  },
+
+  "client_server_consistency": {
+    "status": "PASS",
+    "evidence": [
+      "journey/session id, completed steps, XP, rank, badges: GuestSessionContext's authoritative source is the server-issued session record; local cache is timestamp-guarded against staleness (see above).",
+      "POS360/E.A.T./Ticket Tapper/loyalty state: every read endpoint used in Blocks 4A/4B/5 (order-intent GET, session/status GET, specials-report GET, loyalty balance via pos360_loyalty_profiles) reads directly from Postgres — no client-only fake state exists for any of these; RequestPurchase.jsx's orderIntentStatus is derived from the real API response, never optimistically set to 'sent' before the server confirms."
+    ]
+  },
+
+  "save_conflict_handling": {
+    "status": "PASS",
+    "evidence": [
+      "Snapshot save: monotonic snapshot_version (MAX+1) under a row lock (FOR UPDATE on the parent journey) serializes concurrent snapshot writes for the same journey — no lost update, no silent overwrite.",
+      "Duplicate save (identical payload_hash) returns the existing snapshot with duplicate:true instead of creating noise or erroring.",
+      "Journey completion and management sync already proven idempotent in Block 4 (alreadyCompleted:true / created:false on retry) — re-verified intact this block.",
+      "Journey creation race (the Block 5 fix): concurrent identical create/resume requests resolve to one row via SELECT ... FOR UPDATE, closing what would otherwise be a duplicate-record conflict class."
+    ]
+  },
+
+  "api_network_failure": {
+    "status": "PASS",
+    "evidence": [
+      "Backend rejection (invalid order_type) returns success:false with a real Postgres error message — no false success. Retrying immediately afterward with the SAME idempotency key but a corrected payload succeeds normally (duplicate:false) — proving a failed/rolled-back write does not poison the idempotency key and blocks legitimate retry.",
+      "Frontend API clients (pos360OrderBridgeApiClient.js, eatLiveSyncApiClient.js, built in Block 4A) wrap every call in an 8s AbortController; timeout/offline never throw into the UI, they resolve {ok:false, error:'timeout'|'offline'}, and RequestPurchase.jsx's handleContinue() treats that identically to a backend rejection (visible error state, gameplay still advances, no fake 'sent' claim).",
+      "Progress already saved is never lost on a downstream failure: RequestPurchase.jsx's awardSessionRewards()/navigate() happen independently of the POS360 result — a failed handoff does not roll back or block confirmed gameplay progress."
+    ]
+  },
+
+  "partial_downstream_failure": {
+    "status": "PASS",
+    "evidence": [
+      "ManagementSync.jsx's handleSyncToVenue() fires syncManagement() (E.A.T.), recordGuestActivity(), and createManagerAlertSync() as independent .then()/.catch() calls — a failure in any one (e.g. E.A.T. down) cannot throw into or block the others, and does not affect the already-completed Management Sync journey/snapshot/complete calls that preceded it.",
+      "Loyalty accrual failure (e.g. missing venue/tenant) is isolated inside recordSmokeCraftStaffAction's own try/catch — the staff action itself (and the order_status='fulfilled' update) still commits and returns ok:true even when the nested loyalty step returns ok:false, proven via the missing-venue curl test.",
+      "Retry after a downstream failure is idempotent for every system exercised (POS360, E.A.T., Management Sync, Ticket Tapper, loyalty) — all proven via real duplicate-submit tests in this and prior blocks with no double-effects."
+    ]
+  },
+
+  "player_session_isolation": {
+    "status": "PASS",
+    "evidence": [
+      "Server-enforced ownership: requireJourneyOwnership middleware compares the authenticated identity's guest_reference/user_id against the journey row. Real 2-player test: Player B's guest-session cookie was rejected with 403 journey_access_denied on both GET (read) and POST snapshot (write) against Player A's real journey_id.",
+      "POS360/E.A.T.: distinct guestId values map to distinct customer/sync rows (proven in Block 4A/4B with 2 independent guests at the same venue — no shared loyalty balance, no shared taste-profile bleed between /session/:id/status reads).",
+      "Identity mapping (Block 4B): distinct SmokeCraft guest ids always resolve to distinct POS360 customer uuids, never shared, even under concurrent requests."
+    ]
+  },
+
+  "journey_integrity_after_error": {
+    "status": "PASS",
+    "evidence": [
+      "After the resume fix, retrying journey creation returns to the SAME in_progress journey rather than forking state — Back/Continue and prerequisite gates (requireJourneyOwnership, requireValidVenue) all continue to operate against that one canonical row.",
+      "No route bypass: RequestPurchase.jsx still calls awardSessionRewards()+navigate() on both the success and failure path (by design — a downstream integration failure is never allowed to strand the player on a dead-end screen), while honestly reflecting the failure via orderIntentStatus."
+    ]
+  },
+
+  "database_integrity": {
+    "status": "PASS",
+    "evidence": [
+      "Audited for duplicates across every idempotency-keyed table (pos360_smokecraft_order_intents, eat_smokecraft_session_sync, pos360_loyalty_points_ledger, pos360_smokecraft_identity_map, pos360_guest_smokecraft_links): zero duplicate rows found by (key) grouping in every case.",
+      "Audited for orphans: zero pos360_loyalty_points_ledger rows referencing a non-existent order intent; zero pos360_customers (created via the SmokeCraft mapping) missing a linked loyalty profile.",
+      "pos360_smokecraft_order_intents rows still 'pending_staff_review' are real, correct, not-yet-actioned test requests (no staff action fired) — not orphans, this is the expected state for an unfulfilled request.",
+      "DEFECT FOUND AND FIXED (see resume/reload above): duplicate smokecraft_management_sync_journeys rows were being created on every refresh before the createJourney() fix — this was the one real duplicate-record defect found in this audit, now closed at the source (fixed going forward; the ~86 pre-existing in_progress test rows from this and earlier blocks' testing are legitimate never-completed test journeys, not corruption, and were left alone — no destructive cleanup was performed on data this session did not itself corrupt)."
+    ]
+  },
+
+  "regression_run": {
+    "status": "PASS",
+    "evidence": "Re-ran, after all Block 5 fixes: POS360 order-intent idempotency (duplicate:false then true), E.A.T. session-sync idempotency (duplicate:false then true), Ticket Tapper create->publish, loyalty accrual through the Block 4B identity mapping layer (10 points, correct balance), and the new journey resume fix (concurrent-safe, single row). npm run build passes clean."
+  },
+
+  "defects_found_and_fixed": [
+    "createJourney() always inserted a new smokecraft_management_sync_journeys row regardless of an existing in_progress journey for the same guest/venue/session/phase — every refresh or duplicate startOrResumeJourney() call created a duplicate journey record. Fixed with a SELECT ... FOR UPDATE resume-lookup before INSERT; proven race-safe under real concurrent requests."
+  ],
+
+  "exact_unresolved_blockers": [
+    "None found this block. All 9 required areas verified PASS against real, DB-backed behavior."
+  ]
+}

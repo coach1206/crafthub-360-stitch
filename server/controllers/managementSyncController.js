@@ -25,8 +25,8 @@ function safeJourneyProjection(journey) {
   // Never return raw internal fields the client shouldn't see (none are
   // currently sensitive on this table, but this projection is the
   // deliberate boundary point so future columns don't leak by default).
-  const { journey_id, venue_id, session_number, phase, status, started_at, completed_at } = journey
-  return { journeyId: journey_id, venueId: venue_id, sessionNumber: session_number, phase, status, startedAt: started_at, completedAt: completed_at }
+  const { journey_id, venue_id, session_number, phase, status, started_at, completed_at, resumed } = journey
+  return { journeyId: journey_id, venueId: venue_id, sessionNumber: session_number, phase, status, startedAt: started_at, completedAt: completed_at, ...(resumed !== undefined ? { resumed } : {}) }
 }
 
 export async function getGuestSession(req, res) {
@@ -46,7 +46,7 @@ export async function handleCreateJourney(req, res) {
       phase: req.body.phase,
       sourceVersion: req.body.sourceVersion,
     })
-    res.status(201).json({ success: true, journey: safeJourneyProjection(journey) })
+    res.status(journey.resumed ? 200 : 201).json({ success: true, journey: safeJourneyProjection(journey) })
   } catch (err) {
     res.status(err.code === 'database_unavailable' ? 503 : 500).json({ success: false, error: err.code === 'database_unavailable' ? 'database_unavailable' : 'internal_error' })
   }
