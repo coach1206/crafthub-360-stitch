@@ -1,0 +1,85 @@
+{
+  "block": "6A",
+  "title": "SmokeCraft visual consistency repair",
+  "branch": "recovery/smokecraft-codex-final",
+
+  "audit_before_fix": [
+    { "screen": "Identity", "classification_before": "PARTIAL VISUAL TREATMENT — narrow raw-mockup zoom-crop" },
+    { "screen": "Seed & Soil", "classification_before": "COMPLETE (already clean raw crop)" },
+    { "screen": "Format", "classification_before": "STRIPPED / IMAGE-FREE" },
+    { "screen": "Cut / Toast / Light", "classification_before": "PARTIAL VISUAL TREATMENT — raw-mockup zoom-crop" },
+    { "screen": "First Third", "classification_before": "COMPLETE (already clean raw crop)" },
+    { "screen": "Second Third", "classification_before": "COMPLETE (already clean raw crop)" },
+    { "screen": "Final Third", "classification_before": "STRIPPED / IMAGE-FREE" },
+    { "screen": "Scorecard", "classification_before": "STRIPPED / IMAGE-FREE" },
+    { "screen": "Request / Purchase", "classification_before": "PARTIAL VISUAL TREATMENT — raw-mockup zoom-crop" },
+    { "screen": "Pairing Recommendations", "classification_before": "STRIPPED / IMAGE-FREE" },
+    { "screen": "Passport Stamp", "classification_before": "STRIPPED / IMAGE-FREE" },
+    { "screen": "Connections", "classification_before": "COMPLETE (already clean pre-cropped hero)" },
+    { "screen": "Rewards", "classification_before": "STRIPPED / IMAGE-FREE" },
+    { "screen": "Second Humidor Match", "classification_before": "STRIPPED / IMAGE-FREE" }
+  ],
+  "root_cause": "Block 6 used two different techniques with no shared standard: a small set of screens got a hand-tuned zoom-crop of the RAW baked-mockup composition (risky, inconsistent framing), while every screen where that technique bled baked text was simply left with no image at all (per Block 6's own fallback rule) — correct individually, but the two outcomes look like different products side by side.",
+  "fix_applied": "Discovered public/assets/smokecraft/cropped/ already contains genuinely pre-cropped, dedicated hero photography for nearly every SmokeCraft screen (used previously only by HumidorMatch.jsx and Connections.jsx) — these are real, already-approved assets, not the raw baked mockups, so they carry zero text-bleed risk and need no manual zoom-crop guessing. Registered 9 new SC_ASSETS keys pointing at these files, verified each one visually before wiring, then applied the identical SmokeCraftHeroCrop component (same height, same gradient scrim, same aria pattern) to all 14 screens — upgrading the 3 screens that had a raw-mockup crop and adding a hero to the 7 that had none.",
+
+  "screen_1_visual_consistency": {
+    "status": "PASS",
+    "evidence": "All 14 screens now render a hero image of identical height (clamp(84px,13vw,150px)), identical border/radius/shadow/gradient treatment, via the same SmokeCraftHeroCrop component. Verified via real screenshots of every screen: docs/visual-proof/migration/*.png."
+  },
+
+  "bad_crop_baked_ui_fragments_remaining": 0,
+
+  "screens_using_clean_approved_imagery": [
+    "Identity (identityHero — discover-profile-hero.jpg)",
+    "Seed & Soil (seedSoil — raw-mockup crop, previously verified clean)",
+    "Format (formatHero — format-master-tip-v2.jpg)",
+    "Cut / Toast / Light (cutToastLightHero — cut-toast-light-hero.jpg)",
+    "First Third (firstThird — raw-mockup crop, previously verified clean)",
+    "Second Third (secondThird — raw-mockup crop, previously verified clean)",
+    "Final Third (finalThirdHero — final-third-bg.jpg)",
+    "Scorecard (scorecardHero — scorecard-hero.jpg)",
+    "Request / Purchase (requestPurchaseHero — request-purchase-hero.jpg)",
+    "Pairing Recommendations (pairingRecommendationsHero — pairing-lab-hero.jpg)",
+    "Passport Stamp (passportStampHero — passport-stamp-hero.jpg)",
+    "Connections (connectionsHero — connections-hero.jpg, unchanged from Block 6)",
+    "Second Humidor Match (secondHumidorMatchHero — humidor-match-hero.jpg)"
+  ],
+
+  "screens_using_approved_alternate_supporting_imagery": [
+    "Rewards (rewardsHero — golden-box-hero-v2.jpg, reused from the Golden Box screen's approved photography since no dedicated Rewards-hero crop exists — a real, already-approved, on-theme premium cigar-box asset, not invented artwork)"
+  ],
+
+  "responsive_5viewport": {
+    "status": "PASS",
+    "evidence": "Fixed scripts/verifySmokecraftResponsiveRealJourney.mjs's two stale selectors (Identity's removed 'Begin My Journey' page-local button, now uses the real shared-NavBar 'Continue to Venue Selection' control) and updated its viewport list to the mandate's exact required sizes. Re-ran the full real-journey check at all 5: 1180x820, 1024x768, 1280x800 (10in), 1366x1024 (12in), 1920x1080 (15in kiosk). Result: 160 real-journey screen/viewport combinations measured, 0 failures (0 horizontal overflow, 0 off-screen controls) across all 32 real screens per viewport."
+  },
+
+  "real_dom_preserved": {
+    "status": "PASS",
+    "evidence": "No component was reverted to image-shell mode. Every restored/added hero is a purely decorative background band (role=\"img\", aria-hidden underlying <img>, gradient scrim) rendered above ordinary in-flow live-DOM cards — never a surface controls are drawn on top of. All real controls (rating dots, toggle cards, form inputs, Continue/Back buttons) verified unchanged and functional via the real-journey capture script (allScreensPass:true, route-stayed:true on every screen)."
+  },
+
+  "full_functional_regression": {
+    "status": "PASS",
+    "evidence": [
+      "POS360 order-intent idempotency: duplicate:false then duplicate:true.",
+      "E.A.T. session-sync idempotency: duplicate:false then duplicate:true.",
+      "Loyalty accrual through the Block 4B identity-mapping layer: 10 points earned, balance matches.",
+      "Management Sync journey resume (Block 5 fix): 1st call resumed:false, 2nd call resumed:true.",
+      "Ticket Tapper create->publish: ok:true.",
+      "DB integrity: zero duplicate rows in any idempotency-keyed table (order intents, session sync, identity map).",
+      "npm run build passes clean after every source change this block."
+    ]
+  },
+
+  "defects_found_and_fixed": [
+    "7 of 14 screens had zero decorative imagery while the other 7 had a hand-cropped raw mockup — an inconsistent, two-tier visual system. Fixed by discovering and wiring the already-existing, already-approved pre-cropped hero photography (public/assets/smokecraft/cropped/) uniformly across all 14 screens.",
+    "3 screens' original raw-mockup zoom-crops were replaced with their dedicated pre-cropped equivalent for a more consistent finish (Identity, Cut/Toast/Light, Request/Purchase).",
+    "Passport Stamp's first hero crop attempt (bgPosition center 20%) landed on a too-dark, underwhelming region of its source photo — caught via real screenshot comparison against the other 13 screens, repositioned to center 32% to surface the branded passport/crest imagery.",
+    "The Block 6 responsive script's two stale selectors (a removed Identity button, and viewport sizes not matching the mandate) were fixed rather than left as an open item."
+  ],
+
+  "exact_unresolved_blockers": [
+    "None. All 10 numbered requirements verified PASS against real screenshots and a real 5-viewport, 160-combination automated check."
+  ]
+}
