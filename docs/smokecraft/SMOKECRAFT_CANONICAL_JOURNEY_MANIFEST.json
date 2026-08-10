@@ -1,0 +1,416 @@
+{
+  "generatedAt": "2026-08-10T15:19:35.939Z",
+  "generatedBy": "scripts/generateCanonicalJourneyManifest.mjs (derived directly from src/constants/session.js)",
+  "totalPhases": 6,
+  "totalSessions": 27,
+  "entryLayer": [
+    {
+      "id": "launch",
+      "route": "/smokecraft",
+      "label": "Launch",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "sign-in",
+      "route": "/smokecraft/enroll",
+      "label": "Sign In / Guest Mode",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "personal-dashboard",
+      "route": "/smokecraft/identity",
+      "label": "Personal Dashboard",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "venue-select",
+      "route": "/smokecraft/venue-select",
+      "label": "Venue Selection",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "resume",
+      "route": "/smokecraft/resume",
+      "label": "Resume or Start New Journey",
+      "implemented": true,
+      "kind": "entry-layer",
+      "nonLinear": true,
+      "note": "Reached only by a returning guest from its own entry point, not traversed mid-sequence by a fresh player."
+    }
+  ],
+  "spine": [
+    {
+      "session": 1,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "entry",
+      "route": "/smokecraft/welcome",
+      "label": "Welcome to Today’s Experience",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 2,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "label": "Choose Your Cigar",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 3,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "meet-your-cigar",
+      "route": "/smokecraft/meet-your-cigar",
+      "label": "Meet Your Cigar",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 4,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "terroir",
+      "route": "/smokecraft/terroir",
+      "label": "Terroir",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 5,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "format",
+      "route": "/smokecraft/format",
+      "label": "Construction Inspection",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 6,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "cut-toast-light",
+      "route": "/smokecraft/cut-toast-light",
+      "label": "Choose Your Cut",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 7,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "id": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "label": "Lighting Tutorial",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 8,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "id": "first-third",
+      "route": "/smokecraft/first-third",
+      "label": "First Draw",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 9,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "id": "first-third",
+      "route": "/smokecraft/first-third",
+      "label": "Flavor Discovery",
+      "mergedInto": 8,
+      "kind": "spine-session"
+    },
+    {
+      "session": 10,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "id": "flavor-memory",
+      "route": "/smokecraft/flavor-memory",
+      "label": "Flavor Memory Exercise",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 11,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "id": "pairing-lab",
+      "route": "/smokecraft/pairing-lab",
+      "label": "Suggested Pairings",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 12,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "id": "second-third",
+      "route": "/smokecraft/second-third",
+      "label": "Flavor Evolution",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 13,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "id": "second-third",
+      "route": "/smokecraft/second-third",
+      "label": "Construction Check",
+      "mergedInto": 12,
+      "kind": "spine-session"
+    },
+    {
+      "session": 14,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "id": "mentor-commentary",
+      "route": "/smokecraft/mentor-commentary",
+      "label": "Mentor Commentary",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 15,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "id": "knowledge-drop",
+      "route": "/smokecraft/knowledge-drop",
+      "label": "Knowledge Drop",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 16,
+      "phase": 4,
+      "phaseTitle": "Final Third",
+      "id": "final-third",
+      "route": "/smokecraft/final-third",
+      "label": "Flavor Finish",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 17,
+      "phase": 4,
+      "phaseTitle": "Final Third",
+      "id": "final-third",
+      "route": "/smokecraft/final-third",
+      "label": "Strength Progression",
+      "mergedInto": 16,
+      "kind": "spine-session"
+    },
+    {
+      "session": 18,
+      "phase": 4,
+      "phaseTitle": "Final Third",
+      "id": "final-third",
+      "route": "/smokecraft/final-third",
+      "label": "Overall Experience Notes",
+      "mergedInto": 16,
+      "kind": "spine-session"
+    },
+    {
+      "session": 19,
+      "phase": 5,
+      "phaseTitle": "Reflection",
+      "id": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "label": "Rate Every Category",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 20,
+      "phase": 5,
+      "phaseTitle": "Reflection",
+      "id": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "label": "Personal Notes",
+      "mergedInto": 19,
+      "kind": "spine-session"
+    },
+    {
+      "session": 21,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "ai-summary",
+      "route": "/smokecraft/ai-summary",
+      "label": "AI Summary",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 22,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "pairing-recommendations",
+      "route": "/smokecraft/pairing-recommendations",
+      "label": "Personalized Pairing Recommendations",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 23,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "passport-stamp",
+      "route": "/smokecraft/passport-stamp",
+      "label": "Passport Stamp Animation",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 24,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "final-review",
+      "route": "/smokecraft/final-review",
+      "label": "Completed Scorecard",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 25,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "rewards",
+      "route": "/smokecraft/rewards",
+      "label": "Rewards and XP",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 26,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "achievements",
+      "route": "/smokecraft/rewards",
+      "label": "Achievements",
+      "mergedInto": null,
+      "kind": "spine-session"
+    },
+    {
+      "session": 27,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "id": "session-complete",
+      "route": "/smokecraft/session-complete",
+      "label": "Recommended Next Journey",
+      "mergedInto": null,
+      "kind": "spine-session"
+    }
+  ],
+  "supportingModules": [
+    {
+      "id": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "label": "Gold Box Rules",
+      "requires": "entry",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "mentor",
+      "route": "/smokecraft/mentor-selection",
+      "label": "Mentor Selection",
+      "requires": "entry",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "seed-soil",
+      "route": "/smokecraft/seed-soil",
+      "label": "Seed & Soil",
+      "requires": "mentor",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "wrapper-strength",
+      "route": "/smokecraft/wrapper-strength",
+      "label": "Wrapper / Strength Education",
+      "requires": "format",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "request-purchase",
+      "route": "/smokecraft/request-purchase",
+      "label": "Request / Purchase",
+      "requires": "humidor-match",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "smokecraft-challenge",
+      "route": "/smokecraft/smokecraft-challenge",
+      "label": "SmokeCraft Challenge",
+      "requires": "scorecard",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "second-humidor-match",
+      "route": "/smokecraft/second-humidor-match",
+      "label": "Second Humidor Match",
+      "requires": "scorecard",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "mini-tasting",
+      "route": "/smokecraft/mini-tasting",
+      "label": "Mini Tasting Round",
+      "requires": "scorecard",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "connections",
+      "route": "/smokecraft/connections",
+      "label": "360 Passport Connections",
+      "requires": "passport-stamp",
+      "kind": "supporting-module"
+    },
+    {
+      "id": "management-sync",
+      "route": "/smokecraft/management-sync",
+      "label": "Venue / Management Sync",
+      "requires": "passport-stamp",
+      "kind": "supporting-module"
+    }
+  ],
+  "canonicalRouteOrder": [
+    "/smokecraft",
+    "/smokecraft/enroll",
+    "/smokecraft/identity",
+    "/smokecraft/venue-select",
+    "/smokecraft/welcome",
+    "/smokecraft/humidor-match",
+    "/smokecraft/meet-your-cigar",
+    "/smokecraft/terroir",
+    "/smokecraft/format",
+    "/smokecraft/cut-toast-light",
+    "/smokecraft/lighting-tutorial",
+    "/smokecraft/first-third",
+    "/smokecraft/flavor-memory",
+    "/smokecraft/pairing-lab",
+    "/smokecraft/second-third",
+    "/smokecraft/mentor-commentary",
+    "/smokecraft/knowledge-drop",
+    "/smokecraft/final-third",
+    "/smokecraft/scorecard",
+    "/smokecraft/ai-summary",
+    "/smokecraft/pairing-recommendations",
+    "/smokecraft/passport-stamp",
+    "/smokecraft/final-review",
+    "/smokecraft/rewards",
+    "/smokecraft/session-complete"
+  ]
+}

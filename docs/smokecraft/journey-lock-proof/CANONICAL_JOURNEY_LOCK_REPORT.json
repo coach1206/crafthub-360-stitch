@@ -1,0 +1,189 @@
+{
+  "generatedAt": "2026-08-10T15:22:06.520Z",
+  "sha": "b8a1dfc506c700e43ed71de677233b60f1b37446",
+  "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
+  "expectedOrderFromManifest": [
+    "/smokecraft",
+    "/smokecraft/enroll",
+    "/smokecraft/identity",
+    "/smokecraft/venue-select",
+    "/smokecraft/welcome",
+    "/smokecraft/humidor-match",
+    "/smokecraft/meet-your-cigar",
+    "/smokecraft/terroir",
+    "/smokecraft/format",
+    "/smokecraft/cut-toast-light",
+    "/smokecraft/lighting-tutorial",
+    "/smokecraft/first-third",
+    "/smokecraft/flavor-memory",
+    "/smokecraft/pairing-lab",
+    "/smokecraft/second-third",
+    "/smokecraft/mentor-commentary",
+    "/smokecraft/knowledge-drop",
+    "/smokecraft/final-third",
+    "/smokecraft/scorecard",
+    "/smokecraft/ai-summary",
+    "/smokecraft/pairing-recommendations",
+    "/smokecraft/passport-stamp",
+    "/smokecraft/final-review",
+    "/smokecraft/rewards",
+    "/smokecraft/session-complete"
+  ],
+  "visitedCheckpoints": [
+    {
+      "label": "Launch",
+      "expectedRoute": "/smokecraft",
+      "actualRoute": "/smokecraft",
+      "matched": true
+    },
+    {
+      "label": "Enroll",
+      "expectedRoute": "/smokecraft/enroll",
+      "actualRoute": "/smokecraft/enroll",
+      "matched": true
+    },
+    {
+      "label": "Identity",
+      "expectedRoute": "/smokecraft/identity",
+      "actualRoute": "/smokecraft/identity",
+      "matched": true
+    },
+    {
+      "label": "Venue Select",
+      "expectedRoute": "/smokecraft/venue-select",
+      "actualRoute": "/smokecraft/venue-select",
+      "matched": true
+    },
+    {
+      "label": "Welcome (S1)",
+      "expectedRoute": "/smokecraft/welcome",
+      "actualRoute": "/smokecraft/welcome",
+      "matched": true
+    },
+    {
+      "label": "Humidor Match (S2)",
+      "expectedRoute": "/smokecraft/humidor-match",
+      "actualRoute": "/smokecraft/humidor-match",
+      "matched": true
+    },
+    {
+      "label": "Meet Your Cigar (S3)",
+      "expectedRoute": "/smokecraft/meet-your-cigar",
+      "actualRoute": "/smokecraft/meet-your-cigar",
+      "matched": true
+    },
+    {
+      "label": "Terroir (S4)",
+      "expectedRoute": "/smokecraft/terroir",
+      "actualRoute": "/smokecraft/terroir",
+      "matched": true
+    },
+    {
+      "label": "Format (S5)",
+      "expectedRoute": "/smokecraft/format",
+      "actualRoute": "/smokecraft/format",
+      "matched": true
+    },
+    {
+      "label": "Cut, Toast & Light (S6)",
+      "expectedRoute": "/smokecraft/cut-toast-light",
+      "actualRoute": "/smokecraft/cut-toast-light",
+      "matched": true
+    },
+    {
+      "label": "Lighting Tutorial (S7)",
+      "expectedRoute": "/smokecraft/lighting-tutorial",
+      "actualRoute": "/smokecraft/lighting-tutorial",
+      "matched": true
+    },
+    {
+      "label": "First Third (S8/9)",
+      "expectedRoute": "/smokecraft/first-third",
+      "actualRoute": "/smokecraft/first-third",
+      "matched": true
+    },
+    {
+      "label": "Pairing Lab (S11)",
+      "expectedRoute": "/smokecraft/pairing-lab",
+      "actualRoute": "/smokecraft/pairing-lab",
+      "matched": true
+    },
+    {
+      "label": "Second Third (S12/13)",
+      "expectedRoute": "/smokecraft/second-third",
+      "actualRoute": "/smokecraft/second-third",
+      "matched": true
+    },
+    {
+      "label": "Mentor Commentary (S14)",
+      "expectedRoute": "/smokecraft/mentor-commentary",
+      "actualRoute": "/smokecraft/mentor-commentary",
+      "matched": true
+    },
+    {
+      "label": "Knowledge Drop (S15)",
+      "expectedRoute": "/smokecraft/knowledge-drop",
+      "actualRoute": "/smokecraft/knowledge-drop",
+      "matched": true
+    },
+    {
+      "label": "Final Third (S16/17/18)",
+      "expectedRoute": "/smokecraft/final-third",
+      "actualRoute": "/smokecraft/final-third",
+      "matched": true
+    },
+    {
+      "label": "Scorecard (S19/20)",
+      "expectedRoute": "/smokecraft/scorecard",
+      "actualRoute": "/smokecraft/scorecard",
+      "matched": true
+    },
+    {
+      "label": "AI Summary (S21)",
+      "expectedRoute": "/smokecraft/ai-summary",
+      "actualRoute": "/smokecraft/ai-summary",
+      "matched": true
+    },
+    {
+      "label": "Pairing Recommendations (S22)",
+      "expectedRoute": "/smokecraft/pairing-recommendations",
+      "actualRoute": "/smokecraft/pairing-recommendations",
+      "matched": true
+    },
+    {
+      "label": "Passport Stamp (S23)",
+      "expectedRoute": "/smokecraft/passport-stamp",
+      "actualRoute": "/smokecraft/passport-stamp",
+      "matched": true
+    },
+    {
+      "label": "Final Review (S24)",
+      "expectedRoute": "/smokecraft/final-review",
+      "actualRoute": "/smokecraft/final-review",
+      "matched": true
+    },
+    {
+      "label": "Rewards (S25)",
+      "expectedRoute": "/smokecraft/rewards",
+      "actualRoute": "/smokecraft/rewards",
+      "matched": true
+    },
+    {
+      "label": "Session Complete (S27)",
+      "expectedRoute": "/smokecraft/session-complete",
+      "actualRoute": "/smokecraft/session-complete",
+      "matched": true
+    }
+  ],
+  "orderMatches": true,
+  "defects": [],
+  "notes": [
+    "Bypass check PASS: direct nav to /smokecraft/scorecard with zero progress redirected to /smokecraft/identity.",
+    "Back check PASS on Venue Select: http://localhost:3001/smokecraft/venue-select -> http://localhost:3001/smokecraft/identity.",
+    "Resume/persistence check PASS: reload on Welcome kept the same route.",
+    "Final Third gate check PASS: Continue did not advance with zero selection.",
+    "Scorecard gate check PASS: Continue did not advance with zero ratings.",
+    "Dead-end check PASS: Session Complete exposes 9 visible controls."
+  ],
+  "canonicalJourneyPass": true
+}
