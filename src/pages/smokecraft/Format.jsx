@@ -19,6 +19,7 @@ import {
   cardStyle,
   sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
 const ENRICHMENT_5 = getEducationalEnrichment(5)
 
@@ -172,13 +173,7 @@ export default function Format({ onBack, onComplete } = {}) {
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
-          {/* Block 6, Part C: SC_ASSETS.format (smokecraft-vitola.png) is a
-              near-fully-baked UI mockup with no sufficiently large clean
-              photographic region to crop (only a small ~130x72px ashtray
-              thumbnail, too small to enlarge without visible pixelation).
-              Per the mandate's own instruction — "if clean extraction is
-              not practical, keep the asset out rather than reintroducing
-              fake UI" — this screen intentionally has no hero image. */}
+        <SmokeCraftHeroCrop assetKey="formatHero" label="A cigar and lighter, ready to smoke" bgPosition="center" bgSize="cover" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>📏</div>
             <div>

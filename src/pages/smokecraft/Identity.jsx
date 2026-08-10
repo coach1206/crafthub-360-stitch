@@ -250,7 +250,7 @@ export default function Identity() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="identity" label="A guest enjoying a cigar in a lounge setting" bgPosition="56% 10%" bgSize="270%" />
+        <SmokeCraftHeroCrop assetKey="identityHero" label="A curated humidor with cigars and a whiskey pour" bgPosition="center 45%" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{
             width: 58,

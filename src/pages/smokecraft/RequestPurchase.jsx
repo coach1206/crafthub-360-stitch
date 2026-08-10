@@ -152,7 +152,7 @@ export default function RequestPurchase() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="requestPurchase" label="Cigars, whiskey, and lounge companions" bgPosition="78% 0%" bgSize="260%" />
+        <SmokeCraftHeroCrop assetKey="requestPurchaseHero" label="Cigars, whiskey, and lounge companions" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🛎️</div>
           <div>

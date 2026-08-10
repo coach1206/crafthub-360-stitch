@@ -15,6 +15,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
 /**
  * Scorecard — /smokecraft/scorecard (Session 19/20)
@@ -310,12 +311,7 @@ export default function Scorecard({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-          {/* Block 6, Part C: SC_ASSETS.scorecard is a heavily-baked UI
-              mockup — every large region tested still bled baked text/
-              panel chrome into the crop window across multiple attempts.
-              Per the mandate's own instruction — "if clean extraction is
-              not practical, keep the asset out rather than reintroducing
-              fake UI" — this screen intentionally has no hero image. */}
+        <SmokeCraftHeroCrop assetKey="scorecardHero" label="A cigar resting on a tasting table" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>📋</div>
           <div style={{ flex: 1 }}>

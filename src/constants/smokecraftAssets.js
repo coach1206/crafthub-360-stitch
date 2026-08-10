@@ -22,6 +22,13 @@ const REF = '/assets/smokecraft-reference/approved'
 // ── Raw approved uploads (2026-07-11 — newest, highest priority) ───────────
 const RAW = '/assets/smokecraft'
 
+// ── Pre-cropped clean hero photography (Block 6A visual consistency pass) ──
+// These already-approved files live in public/assets/smokecraft/cropped/ —
+// genuinely clean, dedicated crops (no baked UI/text/buttons), distinct from
+// the RAW full-composition mockups above. Used as decorative hero bands via
+// SmokeCraftHeroCrop with bgSize="cover" (no zoom-crop guessing needed —
+// these are already framed).
+
 export const SC_ASSETS = {
   // Production Closure — approved local avatar replacing the external
   // googleusercontent.com URLs formerly in src/lib/craftImages.js's
@@ -92,6 +99,16 @@ export const SC_ASSETS = {
   // baked UI/text/buttons) — used as a real <img> banner above the live
   // controls, never as a surface controls are drawn on top of.
   humidorMatchHero:    `${CROPPED}/humidor-match-hero.jpg`,
+  secondHumidorMatchHero: `${CROPPED}/humidor-match-hero.jpg`,
+  identityHero:        `${CROPPED}/discover-profile-hero.jpg`,
+  formatHero:          `${CROPPED}/format-master-tip-v2.jpg`,
+  cutToastLightHero:   `${CROPPED}/cut-toast-light-hero.jpg`,
+  finalThirdHero:      `${CROPPED}/final-third-bg.jpg`,
+  scorecardHero:       `${CROPPED}/scorecard-hero.jpg`,
+  requestPurchaseHero: `${CROPPED}/request-purchase-hero.jpg`,
+  pairingRecommendationsHero: `${CROPPED}/pairing-lab-hero.jpg`,
+  passportStampHero:   `${CROPPED}/passport-stamp-hero.jpg`,
+  rewardsHero:         `${CROPPED}/golden-box-hero-v2.jpg`,
 
   // S10 — Request Purchase — raw full composition takes precedence
   requestPurchase:     `${RAW}/REQUEST%20PURCHASE.png`,

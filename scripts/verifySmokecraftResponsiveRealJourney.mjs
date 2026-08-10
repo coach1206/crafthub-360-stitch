@@ -12,11 +12,14 @@ const BASE = process.env.BASE_URL || 'http://localhost:3001'
 const OUT = 'public/proof/smokecraft-responsive-verification'
 mkdirSync(OUT, { recursive: true })
 
+// Block 6A: aligned to the mandate's exact required sizes — the two
+// mandated capture sizes plus one representative 10"/12"/15"-kiosk size.
 const VIEWPORTS = [
-  { name: 'desktop',          width: 1440, height: 900,  hasTouch: false },
-  { name: 'tablet-landscape', width: 1024, height: 768,  hasTouch: true },
-  { name: 'tablet-portrait',  width: 768,  height: 1024, hasTouch: true },
-  { name: 'kiosk',            width: 1920, height: 1080, hasTouch: false },
+  { name: 'primary-1180x820',   width: 1180, height: 820,  hasTouch: true },
+  { name: 'secondary-1024x768', width: 1024, height: 768,  hasTouch: true },
+  { name: 'tablet-10in',        width: 1280, height: 800,  hasTouch: true },
+  { name: 'tablet-12in',        width: 1366, height: 1024, hasTouch: true },
+  { name: 'kiosk-15in',         width: 1920, height: 1080, hasTouch: false },
 ]
 
 async function measure(page) {
@@ -58,7 +61,11 @@ async function runJourney(browser, vp) {
   results.push(await capture(page, vp, 3, 'Identity'))
   await page.fill('input[aria-label="Full Name"]', 'Responsive Real Journey')
   await page.selectOption('select[aria-label="Cigar Experience Level"]', { index: 1 })
-  await page.click('[data-testid="identity-begin"]')
+  // Block 6A fix: Identity's own "Begin My Journey" page-local button was
+  // removed in an earlier documented pass — the real Continue control now
+  // lives in the shared SmokeCraftNavBar (primary="Continue to Venue
+  // Selection →"), same as every other live-DOM SmokeCraft screen.
+  await page.click('button:has-text("Continue to Venue Selection")')
   await page.waitForURL('**/smokecraft/venue-select', { timeout: 10000 })
   await page.waitForLoadState('networkidle')
   results.push(await capture(page, vp, 4, 'Venue Select'))

@@ -13,6 +13,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
 const ENRICHMENT_23 = getEducationalEnrichment(23)
 
@@ -177,13 +178,7 @@ export default function PassportStamp({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-          {/* Block 6, Part C: SC_ASSETS.passportStamp is a heavily-baked
-              UI mockup — every large region tested (including a tight
-              360%-zoom crop) still bled baked title/badge text into the
-              crop window. Per the mandate's own instruction — "if clean
-              extraction is not practical, keep the asset out rather than
-              reintroducing fake UI" — this screen intentionally has no
-              hero image. */}
+        <SmokeCraftHeroCrop assetKey="passportStampHero" label="A SmokeCraft 360 passport and earned stamps" bgPosition="center 20%" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 44 }}>🛂</div>
           <div>

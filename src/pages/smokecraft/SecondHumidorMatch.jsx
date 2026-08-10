@@ -9,6 +9,7 @@ import {
   GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
 /**
  * Second Humidor Match — /smokecraft/second-humidor-match (supporting)
@@ -40,12 +41,7 @@ export default function SecondHumidorMatch() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-          {/* Block 6, Part C: SC_ASSETS.secondHumidorMatch is a heavily-baked UI
-              mockup — every large region tested still bled baked text/
-              panel chrome into the crop window across multiple attempts.
-              Per the mandate's own instruction — "if clean extraction is
-              not practical, keep the asset out rather than reintroducing
-              fake UI" — this screen intentionally has no hero image. */}
+        <SmokeCraftHeroCrop assetKey="secondHumidorMatchHero" label="A curated humidor of premium cigars" bgPosition="center 30%" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
           <div>
