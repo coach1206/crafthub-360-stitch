@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T21:09:34.870Z",
-  "sha": "c728d7cf3689d1f72678d019ba1aedfcaeaa449f",
+  "generatedAt": "2026-08-10T21:17:10.889Z",
+  "sha": "1f6dce425ee11053f60f906524ba27e0b6b5b976",
   "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
   "expectedOrderFromManifest": [
     "/smokecraft",
