@@ -14,7 +14,7 @@
 import { chromium } from 'playwright'
 import { mkdirSync, writeFileSync } from 'fs'
 
-const BASE = 'http://localhost:3001'
+const BASE = 'http://localhost:3002'
 const OUT = 'public/proof/smokecraft-full-real-browser-journey'
 mkdirSync(OUT, { recursive: true })
 
