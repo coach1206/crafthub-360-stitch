@@ -50,6 +50,12 @@ function buildEngineContext(journey) {
     ...(pairing.flavorNotes || []),
   ])
   return {
+    // Block 8 self-QA fix: pairingType was never included here, so every
+    // call to the server-authoritative /rank and /recommend endpoints
+    // 400'd with pairing_type_required — phase could never reach 'ready'
+    // and Continue stayed disabled forever. pairing.pairingType is set by
+    // Pairing Lab (S11); default to the first of pairingTypes if present.
+    pairingType: pairing.pairingType || (pairing.pairingTypes && pairing.pairingTypes[0]) || null,
     cigarShape: pairing.cigarShape || journey.format?.label || null,
     wrapper: pairing.wrapper || cigar.wrapper || null,
     origin: pairing.origin || cigar.origin || null,
