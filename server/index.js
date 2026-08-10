@@ -57,6 +57,7 @@ import smokecraftVenueCommerceRoutes        from './routes/smokecraftVenueCommer
 import smokecraftPlayerStateRoutes          from './routes/smokecraftPlayerStateRoutes.js'
 import smokecraftPairingRoutes              from './routes/smokecraftPairingRoutes.js'
 import passport360SyncRoutes                from './routes/passport360SyncRoutes.js'
+import pairingEngineRoutes                  from './routes/pairingEngineRoutes.js'
 import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
@@ -147,6 +148,10 @@ app.use('/api/smokecraft/player-state',    smokecraftPlayerStateRoutes)
 // it will navigate past S10 — journey was stuck at flavor-memory.
 app.use('/api/modules/smokecraft/pairing', smokecraftPairingRoutes)
 app.use('/api/passport-360/sync',          passport360SyncRoutes)
+// Genuine missing-route blocker found and fixed during Block 8 self-QA
+// rerun 3: PairingRecommendations never reaches phase==='ready' (its
+// Continue gate) without this — journey was stuck at pairing-recommendations.
+app.use('/api/smokecraft/pairing-engine',  pairingEngineRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

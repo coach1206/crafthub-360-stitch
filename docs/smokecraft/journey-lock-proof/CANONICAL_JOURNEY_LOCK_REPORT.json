@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T20:44:45.068Z",
-  "sha": "31654ffb72857e54021ff5f1ac9332d39c9b405a",
+  "generatedAt": "2026-08-10T20:52:00.713Z",
+  "sha": "74851eaab9bfb8a4685dd09d5a5c6b4e83f5aa3d",
   "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
   "expectedOrderFromManifest": [
     "/smokecraft",
@@ -105,91 +105,83 @@
     {
       "label": "Pairing Lab (S11)",
       "expectedRoute": "/smokecraft/pairing-lab",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/pairing-lab",
+      "matched": true
     },
     {
       "label": "Second Third (S12/13)",
       "expectedRoute": "/smokecraft/second-third",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/second-third",
+      "matched": true
     },
     {
       "label": "Mentor Commentary (S14)",
       "expectedRoute": "/smokecraft/mentor-commentary",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/mentor-commentary",
+      "matched": true
     },
     {
       "label": "Knowledge Drop (S15)",
       "expectedRoute": "/smokecraft/knowledge-drop",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/knowledge-drop",
+      "matched": true
     },
     {
       "label": "Final Third (S16/17/18)",
       "expectedRoute": "/smokecraft/final-third",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/final-third",
+      "matched": true
     },
     {
       "label": "Scorecard (S19/20)",
       "expectedRoute": "/smokecraft/scorecard",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/scorecard",
+      "matched": true
     },
     {
       "label": "AI Summary (S21)",
       "expectedRoute": "/smokecraft/ai-summary",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/ai-summary",
+      "matched": true
     },
     {
       "label": "Pairing Recommendations (S22)",
       "expectedRoute": "/smokecraft/pairing-recommendations",
-      "actualRoute": "/smokecraft/flavor-memory",
-      "matched": false
+      "actualRoute": "/smokecraft/pairing-recommendations",
+      "matched": true
     },
     {
       "label": "Passport Stamp (S23)",
       "expectedRoute": "/smokecraft/passport-stamp",
-      "actualRoute": "/smokecraft/flavor-memory",
+      "actualRoute": "/smokecraft/pairing-recommendations",
       "matched": false
     },
     {
       "label": "Final Review (S24)",
       "expectedRoute": "/smokecraft/final-review",
-      "actualRoute": "/smokecraft/flavor-memory",
+      "actualRoute": "/smokecraft/pairing-recommendations",
       "matched": false
     },
     {
       "label": "Rewards (S25)",
       "expectedRoute": "/smokecraft/rewards",
-      "actualRoute": "/smokecraft/flavor-memory",
+      "actualRoute": "/smokecraft/pairing-recommendations",
       "matched": false
     },
     {
       "label": "Session Complete (S27)",
       "expectedRoute": "/smokecraft/session-complete",
-      "actualRoute": "/smokecraft/flavor-memory",
+      "actualRoute": "/smokecraft/pairing-recommendations",
       "matched": false
     }
   ],
   "orderMatches": false,
   "defects": [
     "ORDER MISMATCH at \"Launch\": expected /smokecraft, got /smokecraft/",
-    "ORDER MISMATCH at \"Pairing Lab (S11)\": expected /smokecraft/pairing-lab, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Second Third (S12/13)\": expected /smokecraft/second-third, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Mentor Commentary (S14)\": expected /smokecraft/mentor-commentary, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Knowledge Drop (S15)\": expected /smokecraft/knowledge-drop, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Final Third (S16/17/18)\": expected /smokecraft/final-third, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Scorecard (S19/20)\": expected /smokecraft/scorecard, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"AI Summary (S21)\": expected /smokecraft/ai-summary, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Pairing Recommendations (S22)\": expected /smokecraft/pairing-recommendations, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Passport Stamp (S23)\": expected /smokecraft/passport-stamp, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Final Review (S24)\": expected /smokecraft/final-review, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Rewards (S25)\": expected /smokecraft/rewards, got /smokecraft/flavor-memory",
-    "ORDER MISMATCH at \"Session Complete (S27)\": expected /smokecraft/session-complete, got /smokecraft/flavor-memory"
+    "ORDER MISMATCH at \"Passport Stamp (S23)\": expected /smokecraft/passport-stamp, got /smokecraft/pairing-recommendations",
+    "ORDER MISMATCH at \"Final Review (S24)\": expected /smokecraft/final-review, got /smokecraft/pairing-recommendations",
+    "ORDER MISMATCH at \"Rewards (S25)\": expected /smokecraft/rewards, got /smokecraft/pairing-recommendations",
+    "ORDER MISMATCH at \"Session Complete (S27)\": expected /smokecraft/session-complete, got /smokecraft/pairing-recommendations"
   ],
   "notes": [
     "Bypass check PASS: direct nav to /smokecraft/scorecard with zero progress redirected to /smokecraft/identity.",
@@ -197,7 +189,7 @@
     "Resume/persistence check PASS: reload on Welcome kept the same route.",
     "Final Third gate check PASS: Continue did not advance with zero selection.",
     "Scorecard gate check PASS: Continue did not advance with zero ratings.",
-    "Dead-end check PASS: Session Complete exposes 10 visible controls."
+    "Dead-end check PASS: Session Complete exposes 5 visible controls."
   ],
   "canonicalJourneyPass": false
 }
