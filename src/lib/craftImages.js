@@ -1,4 +1,7 @@
 const C = 'https://lh3.googleusercontent.com/aida-public/'
+// Production Closure — approved, local, branded neutral avatar (see the
+// `portraits` map below for why this replaces external URLs there).
+const AVATAR = '/assets/smokecraft/avatars/member-silhouette.svg'
 
 export const craftImages = {
   backgrounds: {
@@ -60,16 +63,27 @@ export const craftImages = {
     sassicaia:  C + 'AB6AXuBChsiFnTvnyOgSUpMyb4bHIgSDdIDhtpVEibdxcWU0oqYOeuVhtcpaQzJvQfET3Dl4wY9hl8p0fpXwW4XrqkFuv9HW2neJbZUZKfMZGQCfkXjs_fRdITEoj5UvPENLQzNGUUM_RBaDeiJ-jn_US4q1RIfcVoAzzXno57Z3KAEbJOV54Ym7cFmm9S_sigXryY_V0GkHk1A-cDY_EY3FBroW7N8DIF1iWCMn_WfRHq2S5Z-vavYMLfgkOelI1guIV4t6T3wFJJYPkZ8',
   },
 
+  // Production Closure — these were external googleusercontent.com URLs
+  // (AI-generated placeholder headshots, never real approved member
+  // photos). Real defect: one hit ERR_TUNNEL_CONNECTION_FAILED in a
+  // browser-proof run (external, network-dependent, and outside the
+  // asset-registry/R2 governance system entirely). No real, approved,
+  // person-specific photo exists for any of these fixture "connections"
+  // (src/data/connectionsData.js's Rachel Kim / Marcus Bell / etc. are
+  // demo fixture people, not real members), so every entry now points to
+  // one local, approved, branded neutral silhouette
+  // (public/assets/smokecraft/avatars/member-silhouette.svg) rather than
+  // substituting an unrelated stock photo for a specific person.
   portraits: {
-    mentor:   C + 'AB6AXuAb_QZr6Rcm5yAhoSToxjFZlKstPP_xnANgwmcyebOi0hM07Oc1SIX0GSF_Syk0jBYjnBOFZH6USUIgzjk5Z2IvBbJ9KPe7FZxm4Nr2zEfiUD3pj5SrHSrKTqrHnHZ7b6_PXBFAEA-POR-ylC-x_OD_RU-x7tqzqgVYZKxSV18uwF4EjoMgLf5YAXyaknUAZVGRjIiijHuUWkG5-_gH_xsHMhYlP-2-aGuwZuieceSWjeP3c4o-xgWwVNQCED0_lt1MLIpgq51Vx_g',
-    member1:  C + 'AB6AXuCq4_EpkSpYVcHVlVxnKXJacUbdRmQWEovF-KvyMHM6dJqnGjPivNcRVqPojva00dcFw-6BVVfhI1gFLcaSclOfplLXr3i6MUVX4P-hkoIEfJTKgiHqRbMzmwdN_3t5yChLEGMio7Do167r-rCSqyVByUbYjQFGK9oISPUctIdJqwIGb-QKw2h3XuvSYjbpmyaRpt-JnoQzW41fw_DgeBRzjFoBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo',
-    member2:  C + 'AB6AXuBibwIn3K4im-7feOc6MbE0qrLgoKLyluRCrG3hjStuvfdpV18KH3A62G-Qz_6SVfNrj8RmOIz4hgjZbsiGf5vrfo17Uf0QYtARmYGCz3AONU-8UZEcE8OSFgxjJwc2qzjNic1fMb52TVcCBU_2QQ-yDTSHGdEzFFXRQYmR_R8lGcWMHEeM5hpoR4wpZFsjtro1GAI7dOrXg5xHk9gr32bXN3Vbzy7Ng-LmBNF7rU_vEhH3psYZXs9IvOT6qmbzmAV5Jtgn4Cdo8XQ',
-    member3:  C + 'AB6AXuD7VKTY8DSDP4GuM4QjYR6EUZ4LubDo2yCakN2HYV6KyES6tx4THIbwtZKTJGP7jwwJa0Y6Mpwe7t4lB4Z6ZrtkphJapCLIUjlAPK5yHz-y4rHZPgVcmGAqu2dBojUcETurbHllrTS7OdYNtG59QmMelXGI4jLltYxca6qYZFERSoyNOPC51Er70AmYxHA9cNjDpdI-4qDJHTY_Buz0AhxIxquJ5jyxJLlm9k4VqSjh11zr9yTQ5djQ81CEGXwI41JwzsUu5pAUzB4',
-    member4:  C + 'AB6AXuAjHHIqUqm4IOBASD9e2CFzmQ4Vt8WRSqfeXFt8t_1i2pPsfxMn84WFBCXRIk_Bd1AjSxcXHBCeNc41pSby-goSyKfSuQe5AOAaLaBlpi6JnD_7fhr1sPy6VbWBiTzmjmFzEwjw8z5kQIVkiKACQgwi-HzB-sAbPIleq_5tachES6TA9xVwf7i_1v1HOewxIVMzGkOsmiCHglJ001ONH5Cj1WC3TTNUZGDRHqfeKBppL49vwAMhY09pzWoCB-KDVF6TYDa-xhKCOS8',
-    member5:  C + 'AB6AXuDN-VSDDSik_99uYcdNQK9qplzBEeBHFI5GylQ4yLuTVURyE09ShNJzs5TFDa5QWyyJqQjK9XXkZtTSgGc3zY8-pfx1LHbrOayvxB1x5xOIbt0i472thBGJ6WOX3Jl2NwrYJNbGUYOeMCs-mohmkNWfHVU7VLntJ1SjdlDhqth5FyEiWKPI00krkamgowHVvovuXEXO1EBTHCDeFDRxeFFSoRI5OGRdtY96RyQbRrtNMWUqWI7x4AuazZYNAIqroB1vsEBlsjx7su8',
-    member6:  C + 'AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
-    member7:  C + 'AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo',
-    member8:  C + 'AB6AXuBChsiFnTvnyOgSUpMyb4bHIgSDdIDhtpVEibdxcWU0oqYOeuVhtcpaQzJvQfET3Dl4wY9hl8p0fpXwW4XrqkFuv9HW2neJbZUZKfMZGQCfkXjs_fRdITEoj5UvPENLQzNGUUM_RBaDeiJ-jn_US4q1RIfcVoAzzXno57Z3KAEbJOV54Ym7cFmm9S_sigXryY_V0GkHk1A-cDY_EY3FBroW7N8DIF1iWCMn_WfRHq2S5Z-vavYMLfgkOelI1guIV4t6T3wFJJYPkZ8',
+    mentor:   AVATAR,
+    member1:  AVATAR,
+    member2:  AVATAR,
+    member3:  AVATAR,
+    member4:  AVATAR,
+    member5:  AVATAR,
+    member6:  AVATAR,
+    member7:  AVATAR,
+    member8:  AVATAR,
   },
 
   events: {

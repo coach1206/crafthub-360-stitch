@@ -1,44 +1,212 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { injectScTouchStyles, hapticTap } from '../../utils/scTouch.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { RANKS, getRankFromXP } from '../../constants/session.js'
+import { getLeaderboardSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 
-const ANIM = `
-  @keyframes sc-lb-fadein { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:none } }
-  @keyframes sc-lb-glow { 0%,100%{box-shadow:0 0 0 0 rgba(233,193,118,0)} 50%{box-shadow:0 0 0 5px rgba(233,193,118,0.2)} }
-`
+/**
+ * Leaderboard — /smokecraft/leaderboard (also /grand-lounge-ranking, /leaderboard)
+ *
+ * FINAL APPROVED SHELLS PASS — this file replaces the hand-built CSS layout
+ * that the immediately-prior pass explicitly disclosed as unfinished:
+ *
+ *   "Leaderboard.jsx (Rankings) is still a hand-built CSS layout. The approved
+ *    LEADERBOARD 111.png is used only as a ~14vh decorative header band ...
+ *    the approved image is not yet the visual foundation of this screen."
+ *
+ * It now is. The approved image renders intact at its true 1538x1022 aspect
+ * ratio via SmokeCraftImageBoundsOverlay (object-fit:contain semantics), and
+ * every baked placeholder is covered by an OPAQUE overlay carrying the user's
+ * real saved value — the same technique Format.jsx and the prior pass's
+ * HowItWorks.jsx fix already use.
+ *
+ * What was removed
+ * ----------------
+ *   - the `clamp(90px,14vh,140px)` decorative header band using the approved
+ *     image as a cropped `background-size: cover` strip;
+ *   - the entire generic dark <header>/<main> dashboard rendered beneath it
+ *     (duplicate "Leaderboard" title, glass-card filter panel, glass-card
+ *     entry list, honest-boundary card);
+ *   - the SmokeCraftNavBar whose primary control was permanently
+ *     `primaryDisabled` (the "disabled-looking bottom control").
+ *
+ * Baked values occluded (they are fabricated placeholders in the approved file)
+ * ---------------------------------------------------------------------------
+ *   sidebar : "YOUR NAME", "Aficionado Level 4", "12,450 XP", the photo circle
+ *   table   : all 7 fabricated competitor rows — JAMES CARTER / 18,750 XP,
+ *             SOFIA MARTINEZ, MICHAEL TORRES, DAVID NGUYEN,
+ *             ALEXANDER JOHNSON, ISABELLA ROSS, WILLIAM ANDERSON
+ *   strip   : "12", the stock portrait, "4,250 XP", "Enthusiast", "5", "750 XP"
+ *
+ * No competitor is ever invented to refill the occluded table. This build has
+ * no shared ranking source (smokeLeaderboardService.getLeaderboardSnapshot
+ * returns `communityEntries: []` by construction), so the table zone shows the
+ * current user's own real standing and states plainly that shared rankings are
+ * unavailable.
+ *
+ * All real behaviour from the removed layout is carried forward unchanged:
+ * scope / time-range / tier filters and their session persistence, refresh +
+ * staleness, offline detection, and buildCurrentUserEntry's canonical reads.
+ * The filters now live on the approved image's OWN tab row and venue
+ * dropdown instead of a separate React filter panel.
+ */
 
-function usePress(onTap) {
-  const [pressed, setPressed] = useState(false)
+const NAT_W = 1538
+const NAT_H = 1022
+
+const GOLD   = '#E9C176'
+const CREAM  = '#e5e2e1'
+const PANEL  = '#080c14'
+
+// System Audit Prompt 3 (SC-D010) — pixel-calibrated positions for the
+// approved image's baked sidebar rows (from 1538x1022 LEADERBOARD 111.png).
+// LEADERBOARD itself is the current page and is intentionally excluded
+// (its baked highlight reflects real navigation state, not a false default).
+// Holistic Fix 2 — migrated off local hardcoded route literals onto the
+// one shared smokecraftNavigationRegistry. Destinations unchanged from the
+// SC-D010 fix; only the source of truth moved.
+const SIDEBAR_ITEMS = [
+  { key: 'lounge',     label: 'Back to SmokeCraft landing', route: NAV.LOUNGE,     top: '33.8%' },
+  { key: 'journey',    label: 'Journey',                     route: NAV.JOURNEY,    top: '38.4%' },
+  { key: 'cigars',     label: 'Cigars',                      route: NAV.CIGARS,     top: '43.0%' },
+  { key: 'challenges', label: 'Challenges',                  route: NAV.CHALLENGES, top: '47.6%' },
+  { key: 'events',     label: 'Events',                      route: NAV.EVENTS,     top: '52.2%' },
+  { key: 'rewards',    label: 'Rewards',                     route: NAV.REWARDS,    top: '61.3%' },
+  { key: 'passport',   label: 'Passport',                    route: NAV.PASSPORT,   top: '65.9%' },
+  { key: 'settings',   label: 'Settings (not yet available)', route: null, top: '70.6%', disabled: true },
+]
+
+// Opaque — must fully occlude the baked pixels underneath, never sit
+// translucently on top of them (see Format.jsx's PANEL rationale).
+const OPAQUE = {
+  position: 'absolute',
+  background: PANEL,
+  display: 'flex',
+  alignItems: 'center',
+  fontFamily: 'Georgia, serif',
+  pointerEvents: 'none',
+  overflow: 'hidden',
+}
+
+// Percentage coordinates measured against the approved image's own layout.
+const ZONES = {
+  avatar:      { left: '3.4%',  top: '4.6%',  width: '6.9%',  height: '10.4%' },
+  name:        { left: '1.8%',  top: '17.0%', width: '12.2%', height: '3.0%' },
+  tier:        { left: '1.8%',  top: '20.3%', width: '12.2%', height: '2.9%' },
+  xp:          { left: '1.8%',  top: '24.0%', width: '12.2%', height: '4.2%' },
+  table:       { left: '16.4%', top: '29.2%', width: '78.9%', height: '48.4%' },
+  rankNum:     { left: '18.6%', top: '83.2%', width: '5.2%',  height: '6.0%' },
+  rankAvatar:  { left: '24.8%', top: '81.6%', width: '6.4%',  height: '8.8%' },
+  points:      { left: '33.4%', top: '85.2%', width: '8.4%',  height: '3.8%' },
+  nextRank:    { left: '44.8%', top: '85.2%', width: '6.8%',  height: '3.4%' },
+  nextLevel:   { left: '52.8%', top: '82.8%', width: '4.6%',  height: '6.4%' },
+  toNext:      { left: '61.5%', top: '85.2%', width: '5.6%',  height: '3.4%' },
+}
+
+// The approved image's own tab row and venue dropdown.
+const TABS = {
+  row:      { top: '20.6%', height: '4.9%' },
+  topAf:    { left: '16.4%', width: '16.3%' },
+  thisMonth:{ left: '32.7%', width: '15.4%' },
+  thisWeek: { left: '48.1%', width: '15.3%' },
+  allTime:  { left: '63.4%', width: '15.3%' },
+  venues:   { left: '82.6%', width: '12.7%' },
+}
+
+const TIME_RANGES = [
+  { id: 'weekly',   label: 'This Week',  ms: 7 * 24 * 60 * 60 * 1000 },
+  { id: 'monthly',  label: 'This Month', ms: 30 * 24 * 60 * 60 * 1000 },
+  { id: 'all-time', label: 'All Time',   ms: null },
+]
+
+const PAGE_SIZE = 20
+
+function initials(name) {
+  if (!name) return '?'
+  return name.trim().split(/\s+/).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('')
+}
+
+function formatTimestamp(ts) {
+  if (!ts) return null
+  try { return new Date(ts).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) } catch { return null }
+}
+
+/**
+ * Builds the current guest's leaderboard entry from real, already-canonical
+ * data only — session (GuestSessionContext) + journey (SmokeCraftJourneyContext).
+ * Never fabricates other players; the community board stays honestly empty
+ * until a real shared backend exists (see smokeLeaderboardService.js).
+ *
+ * Carried forward verbatim from the removed layout — this logic was correct.
+ */
+function buildCurrentUserEntry(session, journey) {
+  const xp = session?.xp || 0
+  const tier = getRankFromXP(xp)
+  const displayName = journey.identity?.preferredName || session?.profile?.nickname || 'Guest'
+  const isAnonymous = displayName === 'Guest'
+
+  const completedJourneys = (journey.previousCompletedJourneys?.length || 0)
+    + (session?.completedSteps?.includes('session-complete') ? 1 : 0)
+
+  const passportStamps = journey.passportStamp?.stamped ? 1 : 0
+
+  const achievements = journey.achievements?.earned ? Object.keys(journey.achievements.earned).length : 0
+
+  const kc = session?.smokeCraft?.knowledgeChecks || {}
+  const quizEntries = Object.values(kc)
+  const quizScore = quizEntries.reduce((sum, q) => sum + (q.score || 0), 0)
+  const quizTotal = quizEntries.reduce((sum, q) => sum + (q.total || 0), 0)
+
   return {
-    pressed,
-    onPointerDown: () => { hapticTap('light'); setPressed(true) },
-    onPointerUp:   () => { setPressed(false); onTap?.() },
-    onPointerLeave: () => setPressed(false),
-    onPointerCancel: () => setPressed(false),
+    id: session?.sessionId || 'you',
+    isCurrentUser: true,
+    displayName,
+    isAnonymous,
+    xp,
+    tier: tier.name,
+    tierColor: tier.color,
+    completedJourneys,
+    passportStamps,
+    achievements,
+    quizScore,
+    quizTotal,
+    challengePoints: null, // no real challenge-scoring source exists — honestly absent, never fabricated
+    venue: journey.selectedVenue?.name || null,
+    lastActivityAt: journey.journeyUpdatedAt || null,
   }
 }
 
-function NavBtn({ label, onTap }) {
-  const { pressed, ...handlers } = usePress(onTap)
+function Occlude({ zone, children, testid, style }) {
+  return <div data-testid={testid} style={{ ...OPAQUE, ...zone, ...style }}>{children}</div>
+}
+
+function Tab({ zone, active, label, onClick, testid }) {
   return (
     <button
-      aria-label={label}
-      {...handlers}
+      type="button"
+      data-testid={testid}
+      aria-pressed={active}
+      onClick={onClick}
       style={{
-        flex: 1, padding: '10px 0', minHeight: 48,
-        background: pressed ? 'rgba(233,193,118,0.15)' : 'rgba(0,0,0,0.55)',
-        border: '1px solid rgba(233,193,118,0.25)',
-        borderRadius: '10px', cursor: 'pointer', touchAction: 'manipulation',
-        backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
-        outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
-        transform: pressed ? 'scale(0.94)' : 'scale(1)',
-        transition: pressed ? 'transform 0.06s ease' : 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)',
-        fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)',
-        letterSpacing: '0.12em', textTransform: 'uppercase',
-        color: pressed ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.6)',
-        fontWeight: 600,
+        position: 'absolute',
+        left: zone.left, width: zone.width, top: TABS.row.top, height: TABS.row.height,
+        background: active ? 'linear-gradient(180deg, #F3D48E, #C79A4B)' : PANEL,
+        color: active ? '#241605' : 'rgba(229,226,225,0.72)',
+        border: active ? 'none' : '1px solid rgba(233,193,118,0.22)',
+        fontFamily: 'Georgia, serif',
+        fontWeight: active ? 700 : 400,
+        fontSize: 'clamp(9px,1.02vw,15px)',
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        cursor: 'pointer',
+        pointerEvents: 'auto',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent',
       }}
     >
       {label}
@@ -47,158 +215,408 @@ function NavBtn({ label, onTap }) {
 }
 
 export default function Leaderboard() {
+  const { session, update } = useGuestSession()
+  const { journey } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const { session } = useGuestSession()
 
-  useEffect(() => { injectScTouchStyles() }, [])
+  const prefs = session?.smokeCraft?.leaderboardPrefs || {}
 
-  const guest = {
-    initials: session?.guestName
-      ? session.guestName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-      : 'SG',
-    name: session?.guestName || 'Smoke Guest',
-    rank: session?.rank || 'New Guest',
-    xp: session?.xp ?? 0,
-    status: session?.status || 'Just Started',
+  const [phase, setPhase] = useState('loading') // loading | error | ready
+  const [scope, setScope] = useState(prefs.scope || 'global')
+  const [timeRange, setTimeRange] = useState(prefs.timeRange || 'all-time')
+  const [tierFilter, setTierFilter] = useState(prefs.tierFilter ?? null)
+  const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
+  const [refreshing, setRefreshing] = useState(false)
+
+  useEffect(() => {
+    const on = () => setIsOffline(false)
+    const off = () => setIsOffline(true)
+    window.addEventListener('online', on)
+    window.addEventListener('offline', off)
+    return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const t = setTimeout(() => setPhase('ready'), 200)
+      return () => clearTimeout(t)
+    } catch {
+      setPhase('error')
+    }
+  }, [])
+
+  // Persist filter selections to the existing canonical session record — no
+  // new storage key, reusing the same free-form smokeCraft bucket already
+  // used elsewhere (e.g. Package O's knowledgeChecks).
+  useEffect(() => {
+    if (phase !== 'ready') return
+    const p = session?.smokeCraft?.leaderboardPrefs
+    if (p?.scope === scope && p?.timeRange === timeRange && p?.tierFilter === tierFilter) return
+    update(prev => ({
+      ...prev,
+      smokeCraft: {
+        ...prev.smokeCraft,
+        leaderboardPrefs: { ...(prev.smokeCraft?.leaderboardPrefs || {}), scope, timeRange, tierFilter },
+      },
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, scope, timeRange, tierFilter])
+
+  // Holistic Fix 5A: getLeaderboardSnapshot is now async (fetches the
+  // real server leaderboard). Holistic Fix 5A-3H: it now ALSO fetches
+  // real player-state for the current guest — this screen previously
+  // rendered its "You" row and rank strip from the local
+  // GuestSessionContext mirror only, and never rendered the fetched
+  // community entries at all (a real, found "screen bypasses
+  // authoritative data" defect). Default state below matches the honest
+  // 'loading' shape until the real fetch resolves.
+  const [snapshot, setSnapshot] = useState({
+    currentPlayer: null, communityEntries: [], communityStatus: 'loading', communityMessage: 'Loading shared rankings…', limit: PAGE_SIZE, offset: 0,
+  })
+  const [pageOffset, setPageOffset] = useState(0)
+  const venueId = scope === 'venue' ? (journey.selectedVenue?.id || null) : null
+
+  useEffect(() => {
+    let cancelled = false
+    setSnapshot(prev => ({ ...prev, communityStatus: 'loading', communityMessage: 'Loading shared rankings…' }))
+    getLeaderboardSnapshot(session, { venueId, offset: pageOffset, limit: PAGE_SIZE }).then(result => { if (!cancelled) setSnapshot(result) })
+    return () => { cancelled = true }
+  }, [session, venueId, pageOffset])
+
+  // Reset to page 1 whenever the venue scope changes — an offset carried
+  // over from a different scope would silently show the wrong page.
+  useEffect(() => { setPageOffset(0) }, [venueId])
+
+  const currentEntry = useMemo(() => buildCurrentUserEntry(session, journey), [session, journey])
+
+  // The real community entries returned by the server (never fabricated,
+  // never a client-computed total) — a tier filter is the only
+  // client-side narrowing applied, since rankLabel is the one per-entry
+  // field the public payload actually carries; time-range filtering has
+  // no honest effect on this real list (the server does not return a
+  // per-entry timestamp) and is intentionally not applied here.
+  const filteredEntries = useMemo(() => {
+    if (!tierFilter) return snapshot.communityEntries
+    return snapshot.communityEntries.filter(e => e.rankLabel === tierFilter)
+  }, [snapshot.communityEntries, tierFilter])
+
+  function handleRefresh() {
+    triggerHaptic('light')
+    setRefreshing(true)
+    const now = Date.now()
+    update(prev => ({
+      ...prev,
+      smokeCraft: {
+        ...prev.smokeCraft,
+        leaderboardPrefs: { ...(prev.smokeCraft?.leaderboardPrefs || {}), lastRefreshedAt: now },
+      },
+    }))
+    // Holistic Fix 5A-3H: a real live-screen refresh — re-fetches the
+    // authoritative server leaderboard + player-state (previously this
+    // button only updated a local "last refreshed" timestamp and never
+    // actually re-fetched anything).
+    getLeaderboardSnapshot(session, { venueId, offset: pageOffset, limit: PAGE_SIZE }).then(setSnapshot).finally(() => setRefreshing(false))
   }
 
-  const handleStartProfile = useCallback(() => {
-    hapticTap('medium')
-    navigate('/smokecraft/identity')
-  }, [navigate])
+  function handleRetry() {
+    triggerHaptic('light')
+    setPhase('loading')
+    setTimeout(() => setPhase('ready'), 200)
+  }
 
-  const handleViewChallenge = useCallback(() => {
-    hapticTap('light')
-    navigate('/smokecraft/event-challenge')
-  }, [navigate])
+  const lastRefreshedAt = session?.smokeCraft?.leaderboardPrefs?.lastRefreshedAt || null
+  const isStale = lastRefreshedAt ? (Date.now() - lastRefreshedAt) > (24 * 60 * 60 * 1000) : false
 
-  const handleStartSession = useCallback(() => {
-    hapticTap('medium')
-    navigate('/smokecraft/identity')
-  }, [navigate])
-
-  const handleBack = useCallback(() => {
-    hapticTap('light')
-    navigate('/smokecraft')
-  }, [navigate])
+  // Holistic Fix 5A-3H: prefer the real server-authoritative XP/rank
+  // (snapshot.currentPlayer, sourced from fetchPlayerState()) — the local
+  // currentEntry mirror is used only as a fallback before the first real
+  // fetch resolves, never as the value actually displayed once real data
+  // is available.
+  const authoritativeXp = snapshot.currentPlayer?.isServerAuthoritative ? snapshot.currentPlayer.xp : currentEntry.xp
+  const rank = getRankFromXP(authoritativeXp)
+  const nextTier = RANKS.find(r => r.minXP > authoritativeXp) || null
+  const myLeaderboardEntry = snapshot.communityEntries.find(e => e.isCurrentUser) || null
 
   return (
-    <SmokeCraftAssetScreen
-      src="/assets/smokecraft-reference/approved/batch-22/NEW DEMO LOUNG RANKING.png"
-      alt="SmokeCraft Lounge Rankings"
-      objectPosition="center top"
+    <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.leaderboard, naturalW: NAT_W, naturalH: NAT_H, alt: 'SmokeCraft 360 — Leaderboard', bottomOffset: 0 }}
     >
-      <style>{ANIM}</style>
+      {/* Single accessible page title. The approved image carries the visible
+          "LEADERBOARD" wordmark, so this is visually hidden — no duplicate. */}
+      <h1 style={{
+        position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+        overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+      }}>SmokeCraft 360 — Leaderboard</h1>
 
-      {/* Live guest badge — top right */}
-      <div style={{
-        position: 'absolute', top: '4%', right: '4%',
-        display: 'flex', alignItems: 'center', gap: '10px',
-        background: 'rgba(5,3,1,0.75)', backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(233,193,118,0.3)',
-        borderRadius: '40px', padding: '8px 16px',
-        animation: 'sc-lb-fadein 0.5s ease forwards',
-        pointerEvents: 'none',
-      }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: '50%',
-          background: 'linear-gradient(135deg,rgba(233,193,118,0.35),rgba(201,168,76,0.2))',
-          border: '1.5px solid rgba(233,193,118,0.6)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'Georgia,serif', fontSize: 12, fontWeight: 700,
-          color: 'rgba(233,193,118,0.95)',
-        }}>
-          {guest.initials}
-        </div>
-        <div>
-          <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.2vw,11px)', color: 'rgba(233,193,118,0.9)', fontWeight: 600, letterSpacing: '0.08em' }}>
-            {guest.name}
-          </div>
-          <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(7px,0.9vw,9px)', color: 'rgba(233,193,118,0.5)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-            {guest.rank} · {guest.xp.toLocaleString()} XP
-          </div>
-        </div>
-      </div>
+      {/* ── Baked sidebar identity chip ─────────────────────────────────── */}
+      <Occlude zone={ZONES.avatar} style={{ borderRadius: '50%', justifyContent: 'center', border: `1.5px solid ${GOLD}` }}>
+        <span data-testid="lb-avatar-initials" style={{ fontSize: 'clamp(11px,1.4vw,20px)', fontWeight: 700, color: GOLD }}>
+          {initials(currentEntry.displayName)}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.name} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-name" style={{ fontSize: 'clamp(9px,1.1vw,16px)', fontWeight: 700, color: CREAM, letterSpacing: '0.05em' }}>
+          {currentEntry.isAnonymous ? 'GUEST' : currentEntry.displayName.toUpperCase()}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.tier} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-tier" style={{ fontSize: 'clamp(8px,0.95vw,14px)', color: GOLD }}>
+          {rank.name}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.xp} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-xp" style={{ fontSize: 'clamp(11px,1.45vw,21px)', color: GOLD }}>
+          {authoritativeXp.toLocaleString()} XP
+        </span>
+      </Occlude>
 
-      {/* Bottom action panel */}
-      <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0, height: '38%',
-        background: 'linear-gradient(180deg,rgba(5,3,1,0) 0%,rgba(5,3,1,0.88) 18%,rgba(5,3,1,0.97) 100%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
-        padding: '0 5% 80px', pointerEvents: 'none',
-        gap: '10px',
-      }}>
-        {/* Status line */}
-        <div style={{
-          fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)',
-          letterSpacing: '0.2em', textTransform: 'uppercase',
-          color: 'rgba(233,193,118,0.5)', marginBottom: 4,
-          animation: 'sc-lb-fadein 0.5s 0.1s ease both',
-        }}>
-          {guest.status}
-        </div>
+      {/* ── Live filters on the approved image's own tab row ─────────────── */}
+      <Tab
+        testid="lb-tab-top" zone={TABS.topAf} label="Top Aficionados"
+        active={!tierFilter}
+        onClick={() => { triggerHaptic('light'); setTierFilter(null) }}
+      />
+      <Tab
+        testid="lb-tab-month" zone={TABS.thisMonth} label="This Month"
+        active={timeRange === 'monthly'}
+        onClick={() => { triggerHaptic('light'); setTimeRange('monthly') }}
+      />
+      <Tab
+        testid="lb-tab-week" zone={TABS.thisWeek} label="This Week"
+        active={timeRange === 'weekly'}
+        onClick={() => { triggerHaptic('light'); setTimeRange('weekly') }}
+      />
+      <Tab
+        testid="lb-tab-alltime" zone={TABS.allTime} label="All Time"
+        active={timeRange === 'all-time'}
+        onClick={() => { triggerHaptic('light'); setTimeRange('all-time') }}
+      />
 
-        {/* Action buttons row */}
-        <div style={{
-          display: 'flex', gap: '8px', width: '100%', maxWidth: 480,
+      {/* Venue / global scope — the approved image's own "ALL VENUES" control */}
+      <select
+        data-testid="lb-scope"
+        aria-label="Leaderboard venue scope"
+        value={scope}
+        onChange={e => { triggerHaptic('light'); setScope(e.target.value) }}
+        style={{
+          position: 'absolute',
+          left: TABS.venues.left, width: TABS.venues.width, top: TABS.row.top, height: TABS.row.height,
+          background: PANEL, color: CREAM, border: `1px solid ${GOLD}`, borderRadius: 4,
+          fontFamily: 'Georgia, serif', fontSize: 'clamp(9px,1.0vw,14px)',
+          padding: '0 6px', cursor: 'pointer', pointerEvents: 'auto',
+          WebkitTapHighlightColor: 'transparent',
+        }}
+      >
+        <option value="global">All Venues</option>
+        <option value="venue">{currentEntry.venue || 'My Venue'}</option>
+      </select>
+
+      {/* ── Baked 7-row competitor table, fully occluded ─────────────────── */}
+      <Occlude
+        zone={ZONES.table}
+        testid="lb-table"
+        style={{
+          flexDirection: 'column', alignItems: 'stretch', justifyContent: 'flex-start',
+          border: '1px solid rgba(233,193,118,0.22)', borderRadius: 6,
+          padding: 'clamp(6px,1.1vw,16px)', gap: 'clamp(4px,0.7vw,10px)',
           pointerEvents: 'auto',
-          animation: 'sc-lb-fadein 0.5s 0.15s ease both',
-        }}>
-          <NavBtn label="Start Session" onTap={handleStartSession} />
-          <NavBtn label="View Challenge" onTap={handleViewChallenge} />
-        </div>
+        }}
+      >
+        {phase === 'loading' && (
+          <div role="status" aria-live="polite" style={{ margin: 'auto', textAlign: 'center', color: 'rgba(229,226,225,0.7)', fontSize: 'clamp(10px,1.1vw,15px)' }}>
+            Loading leaderboard…
+          </div>
+        )}
 
-        {/* Primary CTA */}
-        <StartProfileButton onTap={handleStartProfile} />
+        {phase === 'error' && (
+          <div style={{ margin: 'auto', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 10px', fontSize: 'clamp(10px,1.1vw,15px)', color: 'rgba(229,170,100,0.9)' }}>
+              Something went wrong loading the leaderboard.
+            </p>
+            <button type="button" onClick={handleRetry} style={{
+              background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD,
+              fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', minHeight: 40,
+            }}>Retry</button>
+          </div>
+        )}
 
-        {/* Back link */}
+        {phase === 'ready' && (
+          <>
+            {isOffline && (
+              <div style={{ fontSize: 'clamp(8px,0.85vw,12px)', color: 'rgba(229,226,225,0.6)' }}>
+                Offline: showing your locally saved data.
+              </div>
+            )}
+            {!isOffline && isStale && (
+              <div style={{ fontSize: 'clamp(8px,0.85vw,12px)', color: 'rgba(229,170,100,0.85)' }}>
+                Data may be stale — last refreshed {formatTimestamp(lastRefreshedAt)}.
+              </div>
+            )}
+
+            {filteredEntries.length === 0 ? (
+              <div data-testid="lb-empty" style={{ margin: 'auto', textAlign: 'center', fontSize: 'clamp(10px,1.05vw,15px)', color: 'rgba(229,226,225,0.6)' }}>
+                No entries match the current filters{scope === 'venue' ? ' — select a venue to see venue rankings.' : '.'}
+              </div>
+            ) : (
+              <div role="list" aria-label="Leaderboard rankings" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {filteredEntries.map(e => (
+                  <div
+                    key={e.position} role="listitem" data-testid="lb-row"
+                    aria-current={e.isCurrentUser ? 'true' : undefined}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 'clamp(6px,1vw,14px)',
+                      padding: 'clamp(5px,0.8vw,12px) clamp(8px,1.2vw,18px)',
+                      background: 'rgba(233,193,118,0.12)',
+                      border: `1.5px solid ${GOLD}`, borderRadius: 8,
+                    }}
+                  >
+                    <span style={{ fontSize: 'clamp(11px,1.3vw,19px)', fontWeight: 700, color: GOLD, width: '6%' }}>{e.position}</span>
+                    <span aria-hidden="true" style={{
+                      width: 'clamp(22px,2.6vw,40px)', height: 'clamp(22px,2.6vw,40px)', borderRadius: '50%',
+                      background: 'rgba(233,193,118,0.15)', border: `1.5px solid ${GOLD}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 'clamp(9px,1vw,14px)', fontWeight: 700, color: GOLD, flexShrink: 0,
+                    }}>{initials(e.displayName)}</span>
+                    <span style={{ flex: 1, minWidth: 0, fontSize: 'clamp(10px,1.15vw,17px)', fontWeight: 700, color: CREAM }}>
+                      {e.displayName}
+                      {e.isCurrentUser && (
+                        <span style={{ marginLeft: 6, fontSize: 'clamp(8px,0.8vw,11px)', color: GOLD, border: `1px solid ${GOLD}`, borderRadius: 8, padding: '0 5px' }}>You</span>
+                      )}
+                    </span>
+                    <span style={{ fontSize: 'clamp(9px,1vw,14px)', color: 'rgba(229,226,225,0.7)', width: '18%' }}>{e.rankLabel}</span>
+                    <span style={{ fontSize: 'clamp(10px,1.2vw,18px)', color: GOLD, width: '16%', textAlign: 'right' }}>{e.xpTotal.toLocaleString()} XP</span>
+                    <span style={{ fontSize: 'clamp(8px,0.85vw,12px)', color: 'rgba(229,226,225,0.5)', width: '16%', textAlign: 'right' }}>
+                      {e.badgeCount} badges
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Holistic Fix 5A-3H: pagination over the real server list
+                (real LIMIT/OFFSET, not a client-side slice of an
+                over-fetched array). */}
+            {snapshot.communityStatus === 'ready' && (snapshot.offset > 0 || snapshot.communityEntries.length === PAGE_SIZE) && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 'clamp(8px,0.85vw,12px)' }}>
+                <button type="button" data-testid="lb-page-prev" disabled={pageOffset === 0}
+                  onClick={() => { triggerHaptic('light'); setPageOffset(o => Math.max(0, o - PAGE_SIZE)) }}
+                  style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 14, color: GOLD, opacity: pageOffset === 0 ? 0.4 : 1, cursor: pageOffset === 0 ? 'default' : 'pointer', padding: '4px 10px', fontFamily: 'inherit' }}>
+                  ← Prev
+                </button>
+                <button type="button" data-testid="lb-page-next" disabled={snapshot.communityEntries.length < PAGE_SIZE}
+                  onClick={() => { triggerHaptic('light'); setPageOffset(o => o + PAGE_SIZE) }}
+                  style={{ background: 'transparent', border: `1px solid ${GOLD}`, borderRadius: 14, color: GOLD, opacity: snapshot.communityEntries.length < PAGE_SIZE ? 0.4 : 1, cursor: snapshot.communityEntries.length < PAGE_SIZE ? 'default' : 'pointer', padding: '4px 10px', fontFamily: 'inherit' }}>
+                  Next →
+                </button>
+              </div>
+            )}
+
+            {/* Holistic Fix 5A: a real server-authoritative leaderboard
+                now exists (see smokeLeaderboardService.js). This
+                boundary message reflects its real status honestly
+                (loading/ready/empty/error/offline). Holistic Fix 5A-3H:
+                the table above now renders the real fetched entries
+                directly (previously fetched but never rendered). */}
+            <div data-testid="lb-shared-unavailable" style={{
+              marginTop: 'auto', fontSize: 'clamp(8px,0.88vw,13px)',
+              color: 'rgba(229,226,225,0.55)', lineHeight: 1.4,
+            }}>
+              {snapshot.communityStatus === 'ready'
+                ? `Shared leaderboard: ${snapshot.communityMessage}`
+                : `Shared rankings ${snapshot.communityStatus === 'loading' ? 'loading' : 'unavailable'}. ${snapshot.communityMessage}`}
+            </div>
+          </>
+        )}
+      </Occlude>
+
+      {/* ── Baked "YOUR RANK" strip values ───────────────────────────────── */}
+      <Occlude zone={ZONES.rankNum} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-your-rank" style={{ fontSize: 'clamp(13px,1.8vw,26px)', color: GOLD }}>
+          {/* Holistic Fix 5A-3H: the real leaderboard position for this
+              page, from the server response — honestly '—' (not
+              fabricated as "1") when the guest isn't ranked yet or isn't
+              on the currently-loaded page. */}
+          {myLeaderboardEntry ? myLeaderboardEntry.position : '—'}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.rankAvatar} style={{ borderRadius: '50%', justifyContent: 'center', border: `1.5px solid ${GOLD}` }}>
+        <span aria-hidden="true" style={{ fontSize: 'clamp(10px,1.2vw,18px)', fontWeight: 700, color: GOLD }}>
+          {initials(currentEntry.displayName)}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.points} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-your-points" style={{ fontSize: 'clamp(11px,1.4vw,20px)', color: GOLD }}>
+          {authoritativeXp.toLocaleString()} XP
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.nextRank} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-next-rank" style={{ fontSize: 'clamp(9px,1.05vw,16px)', color: CREAM }}>
+          {nextTier ? nextTier.name : 'Top rank'}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.nextLevel} style={{ borderRadius: '50%', justifyContent: 'center' }}>
+        <span aria-hidden="true" style={{ fontSize: 'clamp(10px,1.3vw,19px)', color: GOLD }}>
+          {nextTier ? RANKS.indexOf(nextTier) + 1 : '—'}
+        </span>
+      </Occlude>
+      <Occlude zone={ZONES.toNext} style={{ justifyContent: 'center' }}>
+        <span data-testid="lb-to-next" style={{ fontSize: 'clamp(9px,1.1vw,16px)', color: GOLD }}>
+          {nextTier ? `${(nextTier.minXP - authoritativeXp).toLocaleString()} XP` : '—'}
+        </span>
+      </Occlude>
+
+      {/* ── Live control over the baked "VIEW FULL LEADERBOARD" button.
+             Replaces the removed permanently-disabled nav-bar primary. ──── */}
+      <button
+        type="button"
+        data-testid="lb-refresh"
+        onClick={handleRefresh}
+        style={{
+          position: 'absolute', left: '76.8%', top: '83.2%', width: '17.7%', height: '6.4%',
+          background: `linear-gradient(180deg, #F3D48E, ${GOLD})`,
+          color: '#241605', border: 'none', borderRadius: 6,
+          fontFamily: 'Georgia, serif', fontWeight: 700,
+          fontSize: 'clamp(9px,1.05vw,15px)', letterSpacing: '0.06em', textTransform: 'uppercase',
+          cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
+        }}
+      >
+        {refreshing ? 'Refreshing…' : 'Refresh Rankings'}
+      </button>
+
+      {/* ── Live controls over the approved sidebar's baked items ──────────
+          System Audit Prompt 3 (SC-D010): previously only "LOUNGE" had a
+          live control — the other 8 baked labels (JOURNEY, CIGARS,
+          CHALLENGES, EVENTS, LEADERBOARD, REWARDS, PASSPORT, SETTINGS) were
+          DEAD VISUAL CONTROLS. LEADERBOARD itself is the current page (its
+          baked highlight is honest, not a false default) so it gets no
+          separate control. SETTINGS has no real SmokeCraft settings screen
+          to route to (only unrelated POS3/E.A.T. settings exist) — it is
+          wired as a real, focusable button with an honest "not yet
+          available" accessible name rather than either a silent dead
+          hotspot or a route that doesn't actually exist. */}
+      {SIDEBAR_ITEMS.map(item => (
         <button
-          aria-label="Back to SmokeCraft"
-          onPointerDown={() => hapticTap('light')}
-          onClick={handleBack}
+          key={item.key}
+          type="button"
+          aria-label={item.label}
+          data-testid={`lb-sidebar-${item.key}`}
+          disabled={item.disabled}
+          onClick={item.disabled ? undefined : () => { triggerHaptic('light'); navigate(item.route) }}
           style={{
-            background: 'transparent', border: 'none', cursor: 'pointer',
-            fontFamily: 'Georgia,serif', fontSize: 'clamp(7px,0.9vw,9px)',
-            letterSpacing: '0.14em', textTransform: 'uppercase',
-            color: 'rgba(233,193,118,0.35)', pointerEvents: 'auto',
-            outline: 'none', WebkitTapHighlightColor: 'transparent',
-            padding: '4px 8px', touchAction: 'manipulation',
+            position: 'absolute', left: '2.0%', top: item.top, width: '11.6%', height: '4.6%',
+            background: 'transparent', border: '1.5px solid transparent', borderRadius: 6,
+            cursor: item.disabled ? 'default' : 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
           }}
-        >
-          ← Back to SmokeCraft
-        </button>
-      </div>
-    </SmokeCraftAssetScreen>
-  )
-}
-
-function StartProfileButton({ onTap }) {
-  const [pressed, setPressed] = useState(false)
-  return (
-    <button
-      aria-label="Start Your SmokeCraft Profile"
-      onPointerDown={() => { hapticTap('medium'); setPressed(true) }}
-      onPointerUp={() => { setPressed(false); onTap?.() }}
-      onPointerLeave={() => setPressed(false)}
-      onPointerCancel={() => setPressed(false)}
-      style={{
-        width: '100%', maxWidth: 480, padding: '3.5% 0', minHeight: 64,
-        background: 'linear-gradient(135deg,rgba(233,193,118,0.28),rgba(201,168,76,0.18))',
-        border: '1.5px solid rgba(233,193,118,0.75)',
-        borderRadius: '12px', cursor: 'pointer', pointerEvents: 'auto',
-        touchAction: 'manipulation', backdropFilter: 'blur(6px)',
-        WebkitBackdropFilter: 'blur(6px)', outline: 'none',
-        WebkitTapHighlightColor: 'transparent', userSelect: 'none',
-        transform: pressed ? 'scale(0.95)' : 'scale(1)',
-        boxShadow: pressed ? '0 0 0 3px rgba(233,193,118,0.35)' : 'none',
-        transition: pressed ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)',
-        animation: 'sc-lb-glow 2.8s ease-in-out infinite',
-        fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)',
-        letterSpacing: '0.2em', textTransform: 'uppercase',
-        color: 'rgba(233,193,118,0.95)', fontWeight: 600,
-      }}
-    >
-      Start Your SmokeCraft Profile →
-    </button>
+          onMouseEnter={e => { if (!item.disabled) e.currentTarget.style.borderColor = GOLD }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
+          onFocus={e => { if (!item.disabled) e.currentTarget.style.borderColor = GOLD }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
+        />
+      ))}
+    </SmokeCraftScreenShell>
   )
 }

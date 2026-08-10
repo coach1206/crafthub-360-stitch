@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { SmokeCraftBottomNav } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { SMOKECRAFT_EXTERNAL_DESTINATIONS as EXT, SMOKECRAFT_PASSPORT_MODULE_DESTINATIONS as PASSPORT_MODULE } from '../../constants/smokecraftNavigationRegistry.js'
 
 const VARIETIES = [
   {
@@ -189,7 +191,7 @@ export default function Leaves() {
   function handleReady() {
     if (accepted || studied.size < VARIETIES.length) return
     setAccepted(true)
-    addXP(75)
+    addXP(75, 'leaves-observation')
     completeStep('leaves')
     setTimeout(() => navigate('/smokecraft/leaf-challenge'), 400)
   }
@@ -197,6 +199,7 @@ export default function Leaves() {
   const ready = studied.size === VARIETIES.length
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="leaf-education-page">
       <style>{`
         .leaf-education-page {
@@ -750,8 +753,8 @@ export default function Leaves() {
         </div>
 
         <div className="leaf-header__actions">
-          <button className="leaf-lounge" onClick={() => navigate('/grand-lounge-ranking')}>Grand Lounge</button>
-          <button className="leaf-avatar" onClick={() => navigate('/passport')} aria-label="Open passport">
+          <button className="leaf-lounge" onClick={() => navigate(EXT.GRAND_LOUNGE_RANKING)}>Grand Lounge</button>
+          <button className="leaf-avatar" onClick={() => navigate(PASSPORT_MODULE.HOME)} aria-label="Open passport">
             <img src="/assets/smokecraft/cropped/passport-cover.jpg" alt="" />
           </button>
         </div>
@@ -808,5 +811,6 @@ export default function Leaves() {
 
       <SmokeCraftBottomNav active="smokecraft" />
     </div>
+    </SmokeCraftScreenShell>
   )
 }

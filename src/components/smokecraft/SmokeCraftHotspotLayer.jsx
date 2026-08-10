@@ -1,21 +1,20 @@
 import { useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { hapticTap } from '../../utils/scTouch.js'
 
 /**
  * Renders percentage-based tap/click targets over a full-viewport asset screen.
  *
  * Each hotspot in `hotspots` accepts:
- *   x, y, width, height  — percentage of image (0–100)
+ *   x, y, width, height  — percentage of viewport (0–100)
  *   label                — aria-label and CTA pill text
  *   onClick              — optional callback (called first if provided)
  *   to                   — optional react-router navigate target
  *   disabled             — skip rendering this hotspot
  *
  * Interaction model (instant — no 300ms delay):
- *   pointerdown  → immediate pressed state + haptic vibration
- *   click        → fire onClick callback (non-blocking) then navigate
- *   pointerup/cancel/leave → release pressed state with spring animation
+ *   pointerdown  → immediate pressed state + haptic vibration + "Starting..." label
+ *   click        → navigate (debounced; pointerdown already gave feedback)
+ *   pointerup/cancel/leave → release pressed state
  *
  * Debug mode: sessionStorage `smokecraft_hotspot_debug=1`
  * Interaction debug: sessionStorage `smokecraftInteractionDebug=1`
@@ -32,6 +31,10 @@ function ensureAnimStyles() {
     @keyframes sc-pulse {
       0%,100% { box-shadow: 0 0 0 0 rgba(233,193,118,0.0), 0 0 8px 0 rgba(233,193,118,0.15); }
       50%      { box-shadow: 0 0 0 4px rgba(233,193,118,0.18), 0 0 18px 2px rgba(233,193,118,0.28); }
+    }
+    @keyframes sc-tap-flash {
+      0%   { background: rgba(233,193,118,0.28); border-color: #e9c176; }
+      100% { background: rgba(0,0,0,0.65);       border-color: rgba(233,193,118,0.65); }
     }
     @keyframes sc-ripple {
       0%   { transform: scale(0.92) translateY(2px); opacity: 1; }
@@ -63,10 +66,11 @@ function ensureAnimStyles() {
       animation: sc-pulse 2.4s ease-in-out infinite;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.1s ease;
+      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.1s ease, box-shadow 0.12s ease;
       will-change: transform;
     }
 
+    /* Hover / focus */
     .sc-hotspot-btn:hover .sc-cta-pill,
     .sc-hotspot-btn:focus-visible .sc-cta-pill {
       background: rgba(233,193,118,0.12);
@@ -76,12 +80,14 @@ function ensureAnimStyles() {
       box-shadow: 0 0 0 4px rgba(233,193,118,0.2), 0 0 20px 4px rgba(233,193,118,0.25);
     }
 
+    /* CSS :active fallback (desktop/mouse) */
     .sc-hotspot-btn:active .sc-cta-pill {
       transform: scale(0.965) translateY(2px);
       background: rgba(233,193,118,0.22);
       border-color: #e9c176;
       color: #e9c176;
       animation: none;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(233,193,118,0.3);
       transition: transform 0.06s ease, background 0.06s ease;
     }
 
@@ -96,15 +102,18 @@ function ensureAnimStyles() {
       transition: transform 0.06s ease, background 0.06s ease, color 0.06s ease;
     }
 
+    /* Release spring animation */
     .sc-hotspot-btn.sc-released .sc-cta-pill {
       animation: sc-ripple 0.22s cubic-bezier(0.34,1.56,0.64,1) forwards;
     }
 
+    /* Focus ring */
     .sc-hotspot-btn:focus-visible {
       outline: 2px solid rgba(233,193,118,0.6);
       outline-offset: 3px;
     }
 
+    /* Reduced motion: disable heavy animations, keep instant color feedback */
     @media (prefers-reduced-motion: reduce) {
       .sc-cta-pill {
         animation: none !important;
@@ -125,11 +134,11 @@ function ensureAnimStyles() {
   document.head.appendChild(el)
 }
 
-// Guest-facing CTA label from internal hotspot label
+// Guest-facing label from internal route label
 function shortLabel(label = '') {
   if (!label) return 'Continue'
   const lower = label.toLowerCase()
-  // Navigation labels — specific combos first
+  // Navigation labels (check specific combos first)
   if (lower.includes('start new') || lower.includes('new smokecraft') || lower.includes('new session')) return 'Start New Session →'
   if (lower.includes('continue previous') || lower.includes('previous session')) return 'Continue Session →'
   if (lower.includes('enter event') || lower.includes('event challenge')) return 'Enter Challenge →'
@@ -159,46 +168,51 @@ function shortLabel(label = '') {
   if (lower.includes('connection')) return 'View Connections'
   if (lower.includes('seed') || lower.includes('soil')) return 'Seed & Soil'
   if (lower.includes('cut') || lower.includes('toast')) return 'Cut · Toast · Light'
-  if (lower.includes('visit') && lower.includes('complete')) return 'Visit Complete →'
-  if (lower.includes('return') && lower.includes('next')) return 'Return Next Visit →'
-  // NARROW rule: only exact "golden box" or "gold box" phrase → "Open the Box"
-  // This prevents any label containing "box" or "golden" alone from matching.
-  if (lower.includes('golden box') || lower.includes('gold box')) return 'Open the Box'
-  if (lower.includes('select mentor') || lower.includes('choose mentor') || lower.includes('your mentor')) return 'Select Mentor →'
-  if (lower.includes('continue') || lower.includes('proceed')) return 'Continue →'
+  if (lower.includes('golden box') || lower.includes('gold box') || lower === 'golden-box' || lower === 'open the box') return 'Open the Box'
   return 'Continue →'
 }
 
+// "Starting..." label for in-flight state
 function loadingLabel(label = '') {
   const lower = label.toLowerCase()
-  if (lower.includes('start') || lower.includes('begin') || lower.includes('new session')) return 'Starting...'
-  if (lower.includes('continue') || lower.includes('mentor') || lower.includes('golden')) return 'Opening...'
+  if (lower.includes('start') || lower.includes('begin') || lower.includes('session')) return 'Starting...'
+  if (lower.includes('continue') || lower.includes('gold') || lower.includes('mentor')) return 'Opening...'
   if (lower.includes('accept') || lower.includes('challenge')) return 'Accepting...'
   return 'Loading...'
 }
 
-// hapticTap is imported from scTouch.js (wraps triggerHaptic from haptics.js)
+// Safe vibration — only from a direct user gesture, no throw
+function hapticTap(ms = 12) {
+  try { navigator.vibrate?.(ms) } catch (_) { /* unsupported */ }
+}
 
+// Per-button interaction hook
 function useHotspotInteraction(h, navigate, interactionDebug) {
-  const [phase, setPhase] = useState('idle')
+  const [phase, setPhase] = useState('idle') // idle | pressed | released | navigating
   const navigatedRef = useRef(false)
   const pointerDownTimeRef = useRef(0)
 
   const handlePointerDown = useCallback((e) => {
-    if (e.button !== undefined && e.button > 0) return
+    if (e.button !== undefined && e.button > 0) return // only primary button
     e.currentTarget.setPointerCapture?.(e.pointerId)
     navigatedRef.current = false
     pointerDownTimeRef.current = Date.now()
     setPhase('pressed')
-    hapticTap('light')
+    hapticTap(12)
 
     if (interactionDebug) {
-      console.log('[SC Interaction] pointerdown', { label: h.label, target: h.to, ts: pointerDownTimeRef.current }) // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.log('[SC Interaction] pointerdown', {
+        label: h.label,
+        target: h.to,
+        ts: pointerDownTimeRef.current,
+      })
     }
   }, [h.label, h.to, interactionDebug])
 
   const handlePointerUp = useCallback(() => {
     setPhase(prev => prev === 'pressed' ? 'released' : prev)
+    // Auto-clear released state after spring animation
     setTimeout(() => setPhase('idle'), 260)
   }, [])
 
@@ -208,13 +222,21 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
 
   const handleClick = useCallback((e) => {
     e.preventDefault()
-    if (navigatedRef.current) return
+    if (navigatedRef.current) return // double-tap guard
     navigatedRef.current = true
 
+    const elapsed = Date.now() - pointerDownTimeRef.current
+
     if (interactionDebug) {
-      console.log('[SC Interaction] click → navigate', { label: h.label, target: h.to, msSincePointerDown: Date.now() - pointerDownTimeRef.current }) // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.log('[SC Interaction] click → navigate', {
+        label: h.label,
+        target: h.to,
+        msSincePointerDown: elapsed,
+      })
     }
 
+    // Non-critical callbacks fire-and-forget — do NOT block navigation
     if (h.onClick) {
       try { h.onClick() } catch (_) { /* never block nav */ }
     }
@@ -230,7 +252,7 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       setPhase('pressed')
-      hapticTap('light')
+      hapticTap(10)
     }
   }, [])
 
@@ -244,6 +266,7 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
   return { phase, handlePointerDown, handlePointerUp, handlePointerCancel, handleClick, handleKeyDown, handleKeyUp }
 }
 
+// Single hotspot button — isolated so each has its own interaction state
 function HotspotButton({ h, navigate, debug, interactionDebug }) {
   const {
     phase,
@@ -301,12 +324,9 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
         userSelect: 'none',
       }}
     >
-      {/* Pills are only visible in debug mode — production buttons are transparent zones */}
-      {debug && (
-        <span className="sc-cta-pill">
-          {displayLabel}
-        </span>
-      )}
+      <span className="sc-cta-pill">
+        {displayLabel}
+      </span>
       {debug && (
         <span style={{
           position: 'absolute',
@@ -324,7 +344,7 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
   )
 }
 
-export default function SmokeCraftHotspotLayer({ hotspots = [], route = '', imageBounds = null }) {
+export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
   const navigate = useNavigate()
 
   if (typeof window !== 'undefined') ensureAnimStyles()
@@ -340,42 +360,37 @@ export default function SmokeCraftHotspotLayer({ hotspots = [], route = '', imag
   if (debug) {
     hotspots.forEach(h => {
       if (h.disabled) return
-      console.log('[SmokeCraft Hotspot]', { // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.log('[SmokeCraft Hotspot]', {
         route: route || window.location.pathname,
         label: h.label,
-        x: h.x + '%', y: h.y + '%',
-        width: h.width + '%', height: h.height + '%',
+        x: h.x + '%',
+        y: h.y + '%',
+        width: h.width + '%',
+        height: h.height + '%',
         target: h.to || '(callback only)',
       })
     })
   }
 
-  // When imageBounds is provided (from ResizeObserver in SmokeCraftAssetRoute),
-  // position the overlay exactly over the rendered image rect to keep hotspot
-  // % coordinates aligned after object-fit:contain letterboxing.
-  const overlayStyle = imageBounds
-    ? {
-        position: 'absolute',
-        left: imageBounds.left,
-        top: imageBounds.top,
-        width: imageBounds.width,
-        height: imageBounds.height,
-        pointerEvents: 'none',
-        zIndex: 10,
-      }
-    : {
+  return (
+    <div
+      aria-hidden={hotspots.every(h => h.disabled)}
+      style={{
+        /*
+         * IMPORTANT: position:absolute (not fixed) so this layer is sized and
+         * positioned relative to the parent image container inside
+         * SmokeCraftAssetScreen. Hotspot x/y/width/height percentages are then
+         * correctly image-relative, not viewport-relative. This fixes the
+         * misplaced pill bug on portrait images shown on landscape viewports.
+         */
         position: 'absolute',
         inset: 0,
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
         zIndex: 10,
-      }
-
-  return (
-    <div
-      aria-hidden={hotspots.every(h => h.disabled)}
-      style={overlayStyle}
+      }}
     >
       {hotspots.map((h, i) => {
         if (h.disabled) return null

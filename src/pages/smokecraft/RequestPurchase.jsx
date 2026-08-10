@@ -1,138 +1,328 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { injectScTouchStyles, hapticTap } from '../../utils/scTouch.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { createOrderIntent } from '../../services/smokecraft/pos360OrderBridgeApiClient.js'
+import {
+  GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
-const OPTIONS = [
-  { id: 'request', label: 'Request from Humidor', desc: 'Staff will retrieve your cigar selection from our curated humidor.', icon: '🏛' },
-  { id: 'have',    label: 'I Already Have My Cigar', desc: 'You brought your own — proceed to preparation.', icon: '🎋' },
+/**
+ * Request / Purchase — /smokecraft/request-purchase (supporting)
+ *
+ * TWO-GENERATION MIGRATION — replaces SmokeCraftScreenShell
+ * mode="image-shell" (2 ordering-path hotspots positioned over baked
+ * artwork, plus two real-DOM panels already floating on top of it) with
+ * the shared live-DOM card system. No decorative image is used, matching
+ * the Format/Thirds/Scorecard precedent.
+ *
+ * All logic preserved verbatim: togglePath/toggleAddon, the
+ * setRequestPurchase autosave effect, handleSaveDraft, handleContinue.
+ */
+
+const ORDERING_PATHS = [
+  { id: 'self',  label: 'Self-Order',              icon: '🧾', desc: "Order directly from tonight's cigar menu on your own." },
+  { id: 'staff', label: 'Request Staff Assistance', icon: '🙋', desc: 'A staff member will come help finalize your order.' },
 ]
 
-const ANIM = `
-  @keyframes sc-rp-glow{0%,100%{box-shadow:0 0 0 0 rgba(233,193,118,0)}50%{box-shadow:0 0 0 6px rgba(233,193,118,.2)}}
-  @keyframes sc-rp-check{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0deg)}}
-`
-
-function usePress() {
-  const [pressed, setPressed] = useState(null)
-  const onDown = useCallback((id) => { hapticTap('light'); setPressed(id) }, [])
-  const onUp   = useCallback(() => setPressed(null), [])
-  return { pressed, onDown, onUp }
-}
+const ADDON_OPTS = [
+  { id: 'second_cigar',      label: 'Add a Second Cigar' },
+  { id: 'alt_pairing',       label: 'Alternate Pairing Option' },
+  { id: 'chocolate_dessert', label: 'Chocolate / Dessert Pairing' },
+  { id: 'nuts_nonalc',       label: 'Nuts / Non-Alcoholic Option' },
+]
 
 export default function RequestPurchase() {
+  const { awardSessionRewards, session } = useGuestSession()
+  const { journey, setRequestPurchase } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
-  const [selected, setSelected] = useState(null)
-  const [proceeded, setProceeded] = useState(false)
-  const { pressed, onDown, onUp } = usePress()
-  const [continuePressing, setContinuePressing] = useState(false)
 
-  useEffect(() => { injectScTouchStyles() }, [])
+  const cigar   = journey.selectedCigar
+  const pairing = journey.pairing
 
-  const handleSelect = useCallback((id) => {
-    setSelected(prev => prev === id ? null : id)
-  }, [])
+  const [orderPath,  setOrderPath]  = useState(() => journey.requestPurchase?.orderPath || null)
+  const [addons,     setAddons]     = useState(() => journey.requestPurchase?.addons || [])
+  const [notes,      setNotes]      = useState(() => journey.requestPurchase?.notes || '')
+  const [saveStatus, setSaveStatus] = useState('idle')
+  const [awarded,    setAwarded]    = useState(false)
+  const [orderIntentStatus, setOrderIntentStatus] = useState(journey.requestPurchase?.orderIntent ? 'sent' : 'idle') // idle | sending | sent | error
 
-  const handleContinue = useCallback(() => {
-    if (!selected || proceeded) return
-    setProceeded(true)
-    hapticTap('medium')
-    completeStep('request-purchase')
-    addXP(50)
+  useEffect(() => {
+    setRequestPurchase({
+      orderPath,
+      addons,
+      notes,
+      selectedCigar: cigar,
+      selectedPairing: pairing,
+      savedAt: Date.now(),
+    })
+  }, [orderPath, addons, notes]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function togglePath(id) {
+    triggerHaptic('light')
+    setOrderPath(prev => prev === id ? null : id)
+  }
+
+  function toggleAddon(id) {
+    triggerHaptic('light')
+    setAddons(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  }
+
+  function handleSaveDraft() {
+    // useEffect already persists via setRequestPurchase; confirm immediately
+    setSaveStatus('saved')
+    triggerHaptic('light')
+    setTimeout(() => setSaveStatus('idle'), 2000)
+  }
+
+  async function handleContinue() {
+    if (awarded) return
+    setAwarded(true)
+    triggerHaptic('medium')
+
+    // Real POS360 handoff — Block 4A: creates a genuine order intent in
+    // the already-built pos360_smokecraft_order_intents table via the
+    // real, DB-backed bridge (server/services/pos360/pos360SmokeCraftOrderBridgeService.js).
+    // Only fires when the guest actually chose an ordering path — an
+    // empty/skipped Request-Purchase screen has nothing real to hand
+    // off. Idempotency key is stable per (session, screen) so a retried
+    // or double-clicked Continue can never create a second order intent
+    // — verified via the bridge's own ON CONFLICT DO NOTHING + fetch-
+    // existing-row fallback.
+    if (orderPath && session?.sessionId) {
+      setOrderIntentStatus('sending')
+      const idempotencyKey = `${session.sessionId}-request-purchase`
+      const result = await createOrderIntent({
+        venueId: journey.selectedVenue?.id || null,
+        guestId: session.guestId || session.sessionId,
+        smokecraftSessionId: session.sessionId,
+        cigarReference: cigar?.name || null,
+        quantity: 1,
+        orderSource: 'smokecraft',
+        orderType: 'cigar_request',
+        modifiers: addons,
+        orderPayload: {
+          orderPath,
+          addons,
+          notes,
+          pairingRecommendation: typeof pairing === 'object' ? (pairing?.pairingType || pairing?.label || null) : (pairing || null),
+        },
+        idempotencyKey,
+      }).catch(() => ({ ok: false, error: 'network_error' }))
+
+      if (result.ok && result.data?.ok) {
+        setOrderIntentStatus('sent')
+        setRequestPurchase({
+          orderPath, addons, notes,
+          selectedCigar: cigar, selectedPairing: pairing,
+          orderIntent: { orderIntentId: result.data.orderIntent?.order_intent_id, status: result.data.orderStatus, createdAt: result.data.orderIntent?.created_at },
+          savedAt: Date.now(),
+        })
+      } else {
+        // Real, surfaced failure — never silently claimed success. The
+        // guest's journey still advances (staff can still be flagged
+        // manually), but the screen's own state honestly reflects that
+        // the POS360 handoff did not complete. Hold on this screen briefly
+        // so the failure message is actually visible before advancing,
+        // instead of navigating away in the same tick.
+        setOrderIntentStatus('error')
+        awardSessionRewards('request-purchase')
+        setTimeout(() => navigate('/smokecraft/cut-toast-light'), 1400)
+        return
+      }
+    }
+
+    awardSessionRewards('request-purchase')
     navigate('/smokecraft/cut-toast-light')
-  }, [selected, proceeded, completeStep, addXP, navigate])
+  }
+
+  const whyThisMatch = cigar
+    ? (cigar.strength === 'Full' || cigar.strength === 'Medium-Full'
+        ? 'Bold strength calls for a rich complement — dark chocolate or aged spirit pairs clean and balances the pepper.'
+        : cigar.strength === 'Mild' || cigar.strength === 'Mild-Medium'
+        ? 'Lighter body allows delicate pairings to shine — cream, honey notes, or a smooth coffee enhance without overpowering.'
+        : 'A medium-strength profile pairs versatile — coffee, chocolate, or a smooth whiskey all make strong matches.')
+    : null
 
   return (
-    <SmokeCraftAssetScreen
-      src="/assets/smokecraft-reference/approved/smokecraft-request-purchase.png"
-      alt="Request Purchase"
-    >
-      <style>{ANIM}</style>
-
-      <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0, height: '60%',
-        background: 'linear-gradient(180deg,rgba(5,3,1,0) 0%,rgba(5,3,1,0.88) 18%,rgba(5,3,1,0.96) 100%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        gap: '1rem', padding: '0 5% 76px', pointerEvents: 'none',
-      }}>
-        <p style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.7)', margin: 0 }}>
-          How would you like to proceed?
-        </p>
-
-        <div style={{ display: 'flex', gap: '4%', width: '100%', justifyContent: 'center', pointerEvents: 'auto' }}>
-          {OPTIONS.map(opt => {
-            const isSel = selected === opt.id
-            const isPressed = pressed === opt.id
-            return (
-              <button
-                key={opt.id}
-                aria-label={opt.label}
-                aria-pressed={isSel}
-                onPointerDown={() => onDown(opt.id)}
-                onPointerUp={() => { onUp(); handleSelect(opt.id) }}
-                onPointerLeave={onUp}
-                onPointerCancel={onUp}
-                style={{
-                  flex: '1 1 0', maxWidth: '44%', padding: '5% 4%', minHeight: 88,
-                  background: isSel ? 'linear-gradient(135deg,rgba(233,193,118,.22),rgba(201,168,76,.12))' : 'rgba(0,0,0,0.55)',
-                  border: isSel ? '1.5px solid rgba(233,193,118,0.8)' : '1.5px solid rgba(233,193,118,0.2)',
-                  borderRadius: '14px', cursor: 'pointer', touchAction: 'manipulation',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-                  backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-                  animation: isSel ? 'sc-rp-glow 2.4s ease-in-out infinite' : 'none',
-                  outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
-                  transform: isPressed ? 'scale(0.93)' : 'scale(1)',
-                  boxShadow: isPressed ? '0 0 0 3px rgba(233,193,118,0.3)' : isSel ? '0 0 0 3px rgba(233,193,118,0.15)' : 'none',
-                  transition: isPressed ? 'transform 0.06s ease, box-shadow 0.06s ease' : 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease, background 0.15s, border-color 0.15s',
-                }}>
-                {/* Radio dot */}
-                <span style={{
-                  width: 18, height: 18, borderRadius: '50%', flexShrink: 0,
-                  alignSelf: 'flex-end',
-                  background: isSel ? 'rgba(233,193,118,0.9)' : 'transparent',
-                  border: isSel ? 'none' : '1.5px solid rgba(233,193,118,0.3)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'all 0.15s',
-                }}>
-                  {isSel && <span style={{ fontSize: 9, color: '#0a0603', fontWeight: 900, animation: 'sc-rp-check 0.15s ease forwards' }}>✓</span>}
-                </span>
-                <span style={{ fontSize: 'clamp(20px,3vw,28px)' }}>{opt.icon}</span>
-                <span style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.2vw,12px)', letterSpacing: '0.14em', textTransform: 'uppercase', color: isSel ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.55)', fontWeight: 600, textAlign: 'center', lineHeight: 1.3 }}>
-                  {opt.label}
-                </span>
-                {isSel && (
-                  <span style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)', color: 'rgba(233,193,118,0.65)', lineHeight: 1.5, textAlign: 'center' }}>{opt.desc}</span>
-                )}
-              </button>
-            )
-          })}
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="requestPurchaseHero" label="Cigars, whiskey, and lounge companions" bgPosition="center" bgSize="cover" />
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>🛎️</div>
+          <div>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Request / Purchase</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Choose Your Ordering Path</h1>
+            <p style={{ margin: 0, maxWidth: 760, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+              Ready to finalize your selection? Order it yourself or ask a staff member to help you place it.
+            </p>
+          </div>
         </div>
 
-        <button
-          aria-label="Continue to Cut Toast and Light"
-          disabled={!selected || proceeded}
-          onPointerDown={() => { if (selected && !proceeded) { setContinuePressing(true); hapticTap('medium') } }}
-          onPointerUp={() => { setContinuePressing(false); handleContinue() }}
-          onPointerLeave={() => setContinuePressing(false)}
-          onPointerCancel={() => setContinuePressing(false)}
-          style={{
-            width: '80%', padding: '3.5% 0', minHeight: 72,
-            background: selected ? 'linear-gradient(135deg,rgba(233,193,118,.28),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.4)',
-            border: selected ? '1.5px solid rgba(233,193,118,0.75)' : '1.5px solid rgba(233,193,118,0.18)',
-            borderRadius: '12px', cursor: selected ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
-            touchAction: 'manipulation', opacity: selected ? 1 : 0.45, backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)', transition: continuePressing ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), all 0.15s ease', outline: 'none',
-            WebkitTapHighlightColor: 'transparent', userSelect: 'none',
-            transform: continuePressing ? 'scale(0.95)' : 'scale(1)',
-            boxShadow: continuePressing ? '0 0 0 3px rgba(233,193,118,0.35)' : 'none',
-          }}>
-          <span style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)', letterSpacing: '0.2em', textTransform: 'uppercase', color: selected ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.35)', fontWeight: 600 }}>
-            {proceeded ? 'Continuing...' : selected ? 'Continue to Preparation →' : 'Select an Option to Continue'}
-          </span>
-        </button>
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Ordering Path</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14, marginTop: 12 }}>
+            {ORDERING_PATHS.map(zone => {
+              const active = orderPath === zone.id
+              return (
+                <button
+                  key={zone.id}
+                  type="button"
+                  aria-label={`${zone.label}${active ? ' (selected)' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => togglePath(zone.id)}
+                  style={{
+                    minHeight: 110, padding: 16, textAlign: 'left', borderRadius: 12,
+                    border: `1px solid ${active ? GOLD : BORDER}`,
+                    background: active ? 'rgba(233,193,118,.12)' : GLASS,
+                    color: CREAM, cursor: 'pointer', fontFamily: 'Georgia, serif',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 22 }} aria-hidden="true">{zone.icon}</span>
+                    {active && <span style={{ color: GOLD, fontWeight: 700 }}>✓</span>}
+                  </div>
+                  <div style={{ color: GOLD, fontWeight: 700, marginTop: 10, fontSize: 15 }}>{zone.label}</div>
+                  <p style={{ margin: '6px 0 0', color: 'rgba(229,226,225,.58)', fontSize: 12.5, lineHeight: 1.4 }}>{zone.desc}</p>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Your Selection</div>
+            {cigar ? (
+              <>
+                <div style={{ fontSize: 16, color: GOLD, fontWeight: 700, marginTop: 8 }}>{cigar.name}</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.65)', marginTop: 6 }}>Origin: {cigar.origin}</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.65)' }}>Wrapper: {cigar.wrapper}</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.65)' }}>Strength: {cigar.strength}</div>
+                {cigar.tastingProfile && (
+                  <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', fontStyle: 'italic', marginTop: 8 }}>{cigar.tastingProfile}</div>
+                )}
+              </>
+            ) : (
+              <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.35)', fontStyle: 'italic', marginTop: 8 }}>No cigar selected yet</div>
+            )}
+
+            {pairing && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Recommended Pairing</div>
+                <div style={{ fontSize: 13, color: GOLD }}>
+                  {typeof pairing === 'object' ? (pairing.pairingType || pairing.label || JSON.stringify(pairing)) : pairing}
+                </div>
+              </div>
+            )}
+
+            {cigar && whyThisMatch && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Why This Match Works</div>
+                <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.6)', lineHeight: 1.5 }}>{whyThisMatch}</div>
+              </div>
+            )}
+
+            {orderIntentStatus !== 'idle' && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Venue Handoff</div>
+                {orderIntentStatus === 'sending' && (
+                  <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.6)' }}>Sending your order to the venue…</div>
+                )}
+                {orderIntentStatus === 'sent' && (
+                  <div style={{ fontSize: 12.5, color: GOLD }}>✓ Sent to the venue — staff has your order.</div>
+                )}
+                {orderIntentStatus === 'error' && (
+                  <div style={{ fontSize: 12.5, color: '#e08a8a' }}>
+                    ⚠ Unable to send to the venue automatically. A staff member can still help — please flag your table.
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Add to Your Order</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
+              {ADDON_OPTS.map(opt => {
+                const active = addons.includes(opt.id)
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    aria-label={opt.label}
+                    aria-pressed={active}
+                    onClick={() => toggleAddon(opt.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, minHeight: 44,
+                      width: '100%', padding: '8px 12px', borderRadius: 8,
+                      border: `1px solid ${active ? GOLD : BORDER}`,
+                      background: active ? 'rgba(233,193,118,0.08)' : 'transparent',
+                      cursor: 'pointer', outline: 'none', textAlign: 'left',
+                    }}
+                  >
+                    <span style={{
+                      width: 18, height: 18, borderRadius: 4, flexShrink: 0,
+                      border: `1.5px solid ${active ? GOLD : BORDER}`,
+                      background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {active && <span style={{ fontSize: 11, color: GOLD, lineHeight: 1 }}>✓</span>}
+                    </span>
+                    <span style={{ fontSize: 13, color: active ? GOLD : CREAM, fontFamily: 'Georgia, serif' }}>{opt.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+              <div style={sectionLabelStyle}>Special Notes</div>
+              <textarea
+                value={notes}
+                onChange={e => setNotes(e.target.value)}
+                placeholder="Preferences, restrictions, or special requests…"
+                aria-label="Special notes for your order"
+                rows={3}
+                style={{
+                  width: '100%', boxSizing: 'border-box', marginTop: 8,
+                  background: '#0d1420', border: `1px solid ${BORDER}`,
+                  borderRadius: 8, padding: 10, color: CREAM,
+                  fontSize: 13, fontFamily: 'Georgia, serif', lineHeight: 1.5,
+                  resize: 'vertical', outline: 'none',
+                }}
+              />
+              <button
+                type="button"
+                aria-label="Save draft"
+                onClick={handleSaveDraft}
+                style={{
+                  marginTop: 10, minHeight: 36, padding: '6px 14px', borderRadius: 8,
+                  border: `1px solid ${saveStatus === 'saved' ? GOLD : BORDER}`,
+                  background: 'transparent',
+                  color: saveStatus === 'saved' ? GOLD : 'rgba(229,226,225,0.55)',
+                  fontSize: 12, fontFamily: 'Georgia, serif', cursor: 'pointer',
+                }}
+              >
+                {saveStatus === 'saved' ? '✓ Draft Saved' : 'Save Draft'}
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <div style={{ height: 90 }} aria-hidden="true" />
       </div>
-    </SmokeCraftAssetScreen>
+
+      <SmokeCraftNavBar
+        primary="Continue to Cut, Toast & Light →"
+        onPrimary={handleContinue}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
+      />
+    </SmokeCraftScreenShell>
   )
 }

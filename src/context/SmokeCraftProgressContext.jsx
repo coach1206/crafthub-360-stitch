@@ -48,18 +48,47 @@ export function SmokeCraftProgressProvider({ children }) {
 
   const isLocalPreviewMode = !isDemoMode
 
-  const currentAllowed = useMemo(
+  const baseCurrentAllowed = useMemo(
     () => getCurrentAllowedSession(effectiveCompleted),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [effectiveCompleted.join(','), isDemoMode]
   )
+
+  // Lighting Tutorial, Terroir, and Knowledge Drop each sit at an interstitial
+  // position between two VISIT_STRUCTURE sessions but aren't themselves a
+  // catalog session, so the standard "next incomplete session" resume logic
+  // can't see them. Each screen sets a dedicated sessionStorage flag while
+  // mounted (cleared on navigating away) — read that instead of the generic
+  // per-navigation lastVisitedRoute, which gets overwritten by every screen
+  // visit including a locked screen and so can't reliably signal "the guest
+  // was last actively here."
+  const ACTIVE_SCREEN_OVERRIDES = [
+    { route: '/smokecraft/lighting-tutorial', label: 'Lighting Tutorial', requires: 'cut-toast-light' },
+    { route: '/smokecraft/meet-your-cigar',   label: 'Meet Your Cigar',   requires: 'humidor-match' },
+    { route: '/smokecraft/terroir',           label: 'Terroir',           requires: 'meet-your-cigar' },
+    { route: '/smokecraft/mentor-commentary', label: 'Mentor Commentary', requires: 'second-third' },
+    { route: '/smokecraft/knowledge-drop',    label: 'Knowledge Drop',    requires: 'mentor-commentary' },
+  ]
+
+  const currentAllowed = useMemo(() => {
+    let activeScreen = null
+    try { activeScreen = sessionStorage.getItem('sc_active_screen') } catch {}
+    const override = ACTIVE_SCREEN_OVERRIDES.find(
+      o => o.route === activeScreen && completedSteps.includes(o.requires)
+    )
+    if (override) {
+      return { ...baseCurrentAllowed, route: override.route, label: override.label }
+    }
+    return baseCurrentAllowed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseCurrentAllowed, completedSteps.join(',')])
 
   const completedSessions = useMemo(
     () => {
       const nums = []
       for (const v of VISIT_STRUCTURE) {
         for (const s of v.sessions) {
-          if (s.id === 'entry' || effectiveCompleted.includes(s.id)) nums.push(s.session)
+          if (effectiveCompleted.includes(s.id)) nums.push(s.session)
         }
       }
       return nums
@@ -72,7 +101,7 @@ export function SmokeCraftProgressProvider({ children }) {
     () => {
       const nums = []
       for (const v of VISIT_STRUCTURE) {
-        if (v.sessions.every(s => s.id === 'entry' || effectiveCompleted.includes(s.id))) {
+        if (v.sessions.every(s => effectiveCompleted.includes(s.id))) {
           nums.push(v.visit)
         }
       }
@@ -86,7 +115,7 @@ export function SmokeCraftProgressProvider({ children }) {
     () => {
       const badges = []
       for (const v of VISIT_STRUCTURE) {
-        const allDone = v.sessions.every(s => s.id === 'entry' || effectiveCompleted.includes(s.id))
+        const allDone = v.sessions.every(s => effectiveCompleted.includes(s.id))
         if (allDone && v.badges) badges.push(...v.badges)
       }
       return badges
@@ -97,11 +126,14 @@ export function SmokeCraftProgressProvider({ children }) {
 
   const value = useMemo(() => ({
     // Current cursor
-    currentAllowed,
     currentVisit:    currentAllowed.visitNumber,
     currentSession:  currentAllowed.session,
     currentLabel:    currentAllowed.label,
     currentVisitTitle: currentAllowed.visitTitle,
+    // Full current-allowed session object (includes .route) — the canonical
+    // resume target. Consumers should read currentAllowed?.route rather than
+    // hardcoding a path when routing "Back to Current Session"/"Resume".
+    currentAllowed,
     // Completed sets
     completedSessions,
     completedVisits,

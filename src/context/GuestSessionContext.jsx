@@ -1,6 +1,13 @@
-import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
 import { registerSmokeEventLogSink } from '../services/smokecraft/smokeSharedStorageService.js'
 import { getRankFromXP } from '../constants/session.js'
+import { getSessionRewards } from '../constants/smokecraftRewards.js'
+import {
+  awardLoyaltyPoints    as _awardLoyaltyPoints,
+  awardPurchasePoints   as _awardPurchasePoints,
+  awardPassportStampPoints as _awardPassportStampPoints,
+  getUserSmokeCraftSummary as _getUserSmokeCraftSummary,
+} from '../utils/smokecraftLoyaltyEngine.js'
 import {
   awardPassportStamp,
   recordGoldenBoxProgress,
@@ -20,10 +27,20 @@ import {
   loadSession,
   saveSession,
   createNewSession,
+  BLANK_SMOKE_CRAFT_DEFAULTS,
+  BLANK_GOLDEN_BOX_DEFAULTS,
 } from '../services/sessionStorageService.js'
 import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
 import { GOLD_BOX_RULE_VERSION } from '../utils/smokecraftGoldBoxRules.js'
 import { saveEvent } from '../services/syncQueueService.js'
+import {
+  completeSessionOnServer, awardPassportStampOnServer, awardNamedXpOnServer,
+  awardBadgeOnServer, submitKnowledgeCheckOnServer, submitLeafChallengeOnServer,
+  submitBlendSelectionOnServer,
+  fetchTastingDraft, saveTastingDraftOnServer, submitTastingCompletionOnServer,
+  submitCultivatorEvidenceOnServer, submitTastingObservationOnServer,
+  submitScorecardOnServer, submitSelectionAttemptOnServer,
+} from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
 
@@ -31,6 +48,12 @@ const GuestSessionContext = createContext(null)
 
 export function GuestSessionProvider({ children }) {
   const [session, setSession] = useState(() => loadSession() || createNewSession())
+
+  // Holistic Fix 4 — always-current session snapshot for use inside
+  // useCallback closures without adding `session` to their dependency
+  // arrays (which would recreate every callback on every state change).
+  const sessionRef = useRef(session)
+  useEffect(() => { sessionRef.current = session }, [session])
 
   /** Atomic update: applies updater, saves to localStorage, returns next state. */
   const update = useCallback((updater) => {
@@ -76,27 +99,275 @@ export function GuestSessionProvider({ children }) {
   }, [update])
 
   // ── XP ────────────────────────────────────────────────────────────────────
-  const addXP = useCallback((amount) => {
+  /**
+   * Holistic Fix 5A-2: `namedSource`, when supplied, is a server-known key
+   * (sessionRewardTable.js's NAMED_XP_SOURCES) — the local `amount` here
+   * only drives the immediate UI (matches the existing
+   * awardSessionRewards/awardStamp "local optimistic + authoritative
+   * server grant" pattern); the actual, idempotent, server-decided XP
+   * amount is looked up and applied server-side, never trusted from this
+   * call. Callers that omit `namedSource` get local-only behavior (no
+   * server call) — used only for already-server-authoritative flows that
+   * grant XP through a different path (e.g. quiz/leaf-challenge submit).
+   */
+  const addXP = useCallback((amount, namedSource) => {
     update(prev => {
       const newXP = prev.xp + amount
       return { ...prev, xp: newXP, rank: getRankFromXP(newXP).name }
     })
+    if (namedSource) {
+      const guestId = sessionRef.current.guestId
+      awardNamedXpOnServer(guestId, namedSource, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {})
+    }
   }, [update])
 
   // ── Badges ────────────────────────────────────────────────────────────────
+  /**
+   * Holistic Fix 5A-2: mirrors the award to the existing server-
+   * authoritative, idempotency-key-enforced /awards/badge endpoint
+   * (already used for curriculum session badges since Holistic Fix 5A) —
+   * the local update below remains the fast UI cache.
+   */
   const addBadge = useCallback((badge) => {
+    const alreadyLocally = !!sessionRef.current.badges.find(b => b.id === badge.id)
     update(prev => ({
       ...prev,
       badges: prev.badges.find(b => b.id === badge.id)
         ? prev.badges
         : [...prev.badges, { ...badge, earnedAt: Date.now() }],
     }))
+    if (!alreadyLocally) {
+      const guestId = sessionRef.current.guestId
+      awardBadgeOnServer(guestId, badge.id, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {})
+    }
   }, [update])
+
+  /**
+   * Holistic Fix 5A-2: submits raw Knowledge Check responses to the
+   * server for authoritative scoring + XP grant. Fire-and-forget, like
+   * awardSessionRewards/awardStamp — this quiz's XP already has no local
+   * client-decided component (KnowledgeCheck.jsx no longer calls addXP).
+   */
+  const submitKnowledgeCheck = useCallback((moduleId, responses, completionStepId) => {
+    const guestId = sessionRef.current.guestId
+    submitKnowledgeCheckOnServer(guestId, moduleId, responses, completionStepId, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    }).catch(() => {})
+  }, [])
+
+  /**
+   * Holistic Fix 5A-2: submits the 5 raw leaf-id answers to the server
+   * for authoritative scoring + XP/badge/Passport-stamp grant.
+   */
+  const submitLeafChallenge = useCallback((answers) => {
+    const guestId = sessionRef.current.guestId
+    submitLeafChallengeOnServer(guestId, answers, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    }).catch(() => {})
+  }, [])
+
+  /**
+   * Holistic Fix 5A-3: submits the raw wrapper/binder/filler selection —
+   * the server verifies it is well-formed and is the sole authority for
+   * the master-blend Passport stamp (closes the previously-disclosed
+   * unverified-client-claim gap for this stamp).
+   */
+  const submitBlendSelection = useCallback((wrapperIndex, binderIndex, fillerIndices) => {
+    const guestId = sessionRef.current.guestId
+    submitBlendSelectionOnServer(guestId, wrapperIndex, binderIndex, fillerIndices, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    }).catch(() => {})
+  }, [])
+
+  // ── Holistic Fix 5A-3D: server-authoritative tasting draft/completion ──────
+  /** Loads a tasting draft from the server (real cross-device resume). */
+  const loadTastingDraft = useCallback((activityKey) => fetchTastingDraft(activityKey), [])
+
+  /** Saves a tasting draft (learner observations only — server owns completion/reward). */
+  const saveTastingDraft = useCallback((activityKey, draftData, expectedVersion) =>
+    saveTastingDraftOnServer(activityKey, draftData, expectedVersion), [])
+
+  /**
+   * Submits the raw selection as evidence — the server independently
+   * verifies selectedCigarId is real (from its own copy of the venue
+   * flight inventory) and is the sole authority for the XP grant.
+   */
+  const completeTasting = useCallback((activityKey, selectedCigarId, compareIds) => {
+    const guestId = sessionRef.current.guestId
+    return submitTastingCompletionOnServer(guestId, activityKey, selectedCigarId, compareIds, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Required-Interaction Closure Package A: submits real
+   * tasting-observation evidence (the notes/hotspots the player
+   * actually selected) for Sessions 8/12/16 — the server independently
+   * validates the ids against its own real vocabulary before recording
+   * evidence that completeSession() will require to complete these
+   * three sessions. Never awards XP itself — session XP remains solely
+   * owned by completeSession()/sessionRewardTable.js.
+   */
+  const submitTastingObservation = useCallback((sessionId, notesSelected, personalNotes) => {
+    const guestId = sessionRef.current.guestId
+    return submitTastingObservationOnServer(guestId, sessionId, notesSelected, personalNotes, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Required-Interaction Closure Package B: submits the real 6-category
+   * scorecard rating (Session 19) as evidence — the server independently
+   * validates all 6 categories are present and in range, and computes
+   * the weighted overall score itself, before recording evidence that
+   * completeSession() will require to complete the 'scorecard' session.
+   * Never awards XP itself — session XP remains solely owned by
+   * completeSession()/sessionRewardTable.js.
+   */
+  const submitScorecard = useCallback((categories, personalNotes, meta) => {
+    const guestId = sessionRef.current.guestId
+    return submitScorecardOnServer(guestId, categories, personalNotes, meta, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Required-Interaction Closure Package C: submits one real selection/
+   * sequencing/matching/hotspot attempt for Sessions 2/5/6/10 — the
+   * server independently evaluates correctness and only records
+   * evidence completeSession() will require when the attempt is
+   * actually correct. Never awards XP itself.
+   */
+  const submitSelectionAttempt = useCallback((sessionId, payload) => {
+    const guestId = sessionRef.current.guestId
+    return submitSelectionAttemptOnServer(guestId, sessionId, payload, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  /**
+   * Holistic Fix 5A-3E: submits the raw set of viewed cultivation-stage
+   * ids — the server verifies it covers all 7 real stages and is the
+   * sole authority for the cultivator Passport stamp + XP grant.
+   */
+  const submitCultivatorEvidence = useCallback((viewedStageIds) => {
+    const guestId = sessionRef.current.guestId
+    return submitCultivatorEvidenceOnServer(guestId, viewedStageIds, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    })
+  }, [])
+
+  // ── SmokeCraft: idempotent session reward award ───────────────────────────
+  /**
+   * Awards XP + badges for a SmokeCraft session in a single atomic update.
+   * Fully idempotent: if the session is already in completedSteps, this is
+   * a no-op — XP and badges will not be re-awarded.
+   *
+   * Usage:  awardSessionRewards('enroll')
+   * Replaces manual addXP(n) + addBadge({...}) pairs in session pages.
+   */
+  const awardSessionRewards = useCallback((sessionId) => {
+    const rewards = getSessionRewards(sessionId)
+    if (!rewards) return
+    // Holistic Fix 4: was already the sole source of truth for XP/badges,
+    // guarded only by this in-memory `if (prev.completedSteps.includes())`
+    // check — a real client-side-only duplicate guard, insufficient
+    // against a second tab, a second device, or a retried request (see
+    // SMOKECRAFT_STATE_OWNERSHIP_MAP.md). localStorage/this update() call
+    // remains the fast, offline-safe UI cache; the fire-and-forget server
+    // call below is now the authoritative, idempotent record — its
+    // (guest_reference, session_id) UNIQUE constraint is the real guard.
+    const alreadyCompletedLocally = sessionRef.current.completedSteps.includes(sessionId)
+    update(prev => {
+      // Guard: already completed — skip entirely
+      if (prev.completedSteps.includes(sessionId)) return prev
+
+      // Step
+      const completedSteps = [...prev.completedSteps, sessionId]
+
+      // XP
+      const newXP = prev.xp + rewards.xp
+      const rank  = getRankFromXP(newXP).name
+
+      // Badges — deduplicate against existing awards
+      const existingIds = new Set(prev.badges.map(b => b.id))
+      const newBadges = rewards.sessionBadges
+        .filter(b => !existingIds.has(b.id))
+        .map(b => ({ ...b, earnedAt: Date.now() }))
+
+      return {
+        ...prev,
+        completedSteps,
+        currentSmokecraftStep: sessionId,
+        xp: newXP,
+        rank,
+        badges: [...prev.badges, ...newBadges],
+      }
+    })
+    if (!alreadyCompletedLocally) {
+      const guestId = sessionRef.current.guestId
+      completeSessionOnServer(guestId, sessionId, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {}) // network/offline failure is honestly swallowed here — localStorage cache still reflects the award; a real sync-reconciliation pass is future work (see Known Gaps)
+    }
+  }, [update])
+
+  // ── Scoring + loyalty engine ─────────────────────────────────────────────
+
+  /**
+   * Award loyalty points for a non-purchase journey action (visit, event, referral…).
+   * opts.isDemoMode = true → no-op (demo mode never persists real points).
+   */
+  const awardLoyaltyPointsCb = useCallback((actionType, opts = {}) => {
+    update(prev => _awardLoyaltyPoints(prev, actionType, opts) ?? prev)
+  }, [update])
+
+  /**
+   * Award loyalty points for a POS purchase. Deduplicates by posTransactionId.
+   * opts: { posTransactionId, isDemoMode, isHouseItem, isRecommendedPairing, … }
+   */
+  const awardPurchasePointsCb = useCallback((purchaseType, opts = {}) => {
+    update(prev => _awardPurchasePoints(prev, purchaseType, opts) ?? prev)
+  }, [update])
+
+  /**
+   * Award Passport stamp loyalty points. Enforces lock rules:
+   * passport-stamp requires final-review, connections requires passport-stamp.
+   */
+  const awardPassportStampPointsCb = useCallback((sessionId, opts = {}) => {
+    update(prev => _awardPassportStampPoints(prev, sessionId, opts) ?? prev)
+  }, [update])
+
+  /**
+   * Return a complete SmokeCraft score summary for the current session.
+   * Pure read — does not modify state.
+   */
+  const getUserSmokeCraftSummaryCb = useCallback((opts = {}) => {
+    return _getUserSmokeCraftSummary(session, opts)
+  }, [session])
 
   // ── Passport stamps ───────────────────────────────────────────────────────
   /** Primary stamp award — validates against catalog, prevents duplicates, sets latestStampId. */
   const awardStamp = useCallback((stampId, source = 'unknown', extra = {}) => {
+    const alreadyStampedLocally = (sessionRef.current.smokecraftStamps || []).some(s => s.id === stampId)
     update(prev => awardPassportStamp(prev, stampId, source, extra))
+    // Holistic Fix 4: mirror the award to the server-authoritative,
+    // idempotency-key-enforced record (see awardSessionRewards above for
+    // the same rationale — this was previously client-only).
+    if (!alreadyStampedLocally) {
+      const guestId = sessionRef.current.guestId
+      awardPassportStampOnServer(guestId, stampId, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {})
+    }
   }, [update])
 
   /** @deprecated Use awardStamp(stampId, source). Kept for backward compat. */
@@ -833,6 +1104,38 @@ export function GuestSessionProvider({ children }) {
     setSession(fresh)
   }, [])
 
+  // Emergency Live Remediation: Clean Start / State Reset pass — resets every
+  // journey-specific field a "Start SmokeCraft Journey" action must never
+  // inherit (learner name, cigar, mentor, knowledge level, the entire
+  // smokeCraft tasting/scoring object, and Golden Box entry state), while
+  // explicitly preserving account-level, cross-journey state: xp, rank,
+  // badges, smokecraftStamps, passport (canonical Passport identity/earned
+  // stamps), guestId, venueId, deviceId, preferences. This is the
+  // GuestSessionContext half of the fix — SmokeCraftJourneyContext's own
+  // startNewJourney() already resets its own fields; the root cause of the
+  // reported "Greg Guy / Romeo y Julieta 1875 / Carlos Mendoza / 63%"
+  // live defect was that no Start action called this reset at all, only the
+  // separate startNewJourney() (SmokeCraftJourneyContext), leaving this
+  // context's fields (profile.firstName, selectedMentor, selectedCraft,
+  // smokeCraft.*, goldenBoxProgress, currentSmokecraftStep) untouched.
+  const resetJourneySpecificFields = useCallback(() => {
+    update(prev => ({
+      ...prev,
+      profile: { firstName: '', lastName: '', nickname: '', email: '', phone: '', city: '', state: '', zip: '', photo: null, ageConfirmed: false },
+      selectedCraft:         null,
+      selectedMentor:        null,
+      selectedMentorCountry: null,
+      selectedLevel:         null,
+      currentSmokecraftStep: null,
+      latestStampId:         null,
+      goldenBoxProgress:     null,
+      smokeCraft:            BLANK_SMOKE_CRAFT_DEFAULTS(),
+      goldenBox:             BLANK_GOLDEN_BOX_DEFAULTS(),
+      // Explicitly untouched: xp, rank, badges, smokecraftStamps, passport,
+      // guestId, venueId, deviceId, sessionId, preferences, loyalty fields.
+    }))
+  }, [update])
+
   /** @deprecated Use resetGuestSession. */
   const resetSession = resetGuestSession
 
@@ -846,6 +1149,22 @@ export function GuestSessionProvider({ children }) {
       completeStep,
       addXP,
       addBadge,
+      submitKnowledgeCheck,
+      submitLeafChallenge,
+      submitBlendSelection,
+      loadTastingDraft,
+      saveTastingDraft,
+      completeTasting,
+      submitTastingObservation,
+      submitScorecard,
+      submitSelectionAttempt,
+      submitCultivatorEvidence,
+      awardSessionRewards,
+      // Scoring + loyalty engine
+      awardLoyaltyPoints:       awardLoyaltyPointsCb,
+      awardPurchasePoints:      awardPurchasePointsCb,
+      awardPassportStampPoints: awardPassportStampPointsCb,
+      getUserSmokeCraftSummary: getUserSmokeCraftSummaryCb,
       // Stamps
       awardStamp,
       addSmokecraftStamp,
@@ -891,6 +1210,7 @@ export function GuestSessionProvider({ children }) {
       // Reset
       resetGuestSession,
       resetSession,
+      resetJourneySpecificFields,
     }}>
       {children}
     </GuestSessionContext.Provider>

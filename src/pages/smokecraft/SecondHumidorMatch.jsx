@@ -1,29 +1,83 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import {
+  GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
+/**
+ * Second Humidor Match — /smokecraft/second-humidor-match (supporting)
+ *
+ * TWO-GENERATION MIGRATION — replaces SmokeCraftAssetScreen
+ * classification="DECORATIVE_BACKGROUND" (a full-bleed baked image with
+ * no real content behind it beyond the NavBar) with real live DOM. No
+ * decorative image is used, matching the Mini Tasting Round precedent
+ * (same "no dedicated asset traces to this route" situation). Shows the
+ * player's currently selected cigar so the screen isn't empty, rather
+ * than inventing a second comparison cigar this build doesn't track.
+ */
 export default function SecondHumidorMatch() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
+  const { journey } = useSmokeCraftJourney()
   const [done, setDone] = useState(false)
+
+  const cigar = journey.selectedCigar
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('second-humidor-match')
-    addXP(75)
+    awardSessionRewards('second-humidor-match')
     navigate('/smokecraft/mini-tasting')
   }
 
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png"
-        alt="Second Humidor Match"
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="secondHumidorMatchHero" label="A curated humidor of premium cigars" bgPosition="center 30%" bgSize="cover" />
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
+          <div>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Supporting Module</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Your Next Cigar</h1>
+            <p style={{ margin: 0, maxWidth: 700, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+              A moment to revisit tonight's selection before moving into the tasting round.
+            </p>
+          </div>
+        </div>
+
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Selected Cigar</div>
+          {cigar ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+              <span style={{ fontSize: 'clamp(18px,2vw,22px)', color: CREAM, fontWeight: 700 }}>{cigar.name}</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {cigar.wrapper && <span style={{ fontSize: 12, color: '#E9C176', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '4px 12px' }}>{cigar.wrapper}</span>}
+                {cigar.strength && <span style={{ fontSize: 12, color: '#E9C176', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '4px 12px' }}>{cigar.strength}</span>}
+                {cigar.origin && <span style={{ fontSize: 12, color: '#E9C176', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '4px 12px' }}>{cigar.origin}</span>}
+              </div>
+            </div>
+          ) : (
+            <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic', marginTop: 8 }}>No cigar selected this journey.</div>
+          )}
+        </section>
+
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
+
+      <SmokeCraftNavBar
+        primary={done ? 'Continuing…' : 'Select Your Cigar →'}
+        onPrimary={handleContinue}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
       />
-    </div>
+    </SmokeCraftScreenShell>
   )
 }

@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { LEAF_CHALLENGE_ROUNDS, getLeafChallengeResultsData } from '../../data/leafChallengeRounds.js'
 
 // Same approved gradient/texture treatment used on the Leaf Education screen
 // (Leaves.jsx) — a composited CSS texture over an already-approved background
@@ -49,28 +51,17 @@ const LEAVES = {
 }
 
 // 5 rounds: correct leaf + 3 distractors (display order pre-shuffled so correct isn't always first)
-const ROUNDS = [
-  { correct: 'habano-colorado',   order: ['connecticut-shade', 'habano-colorado', 'sumatra-maduro',    'criollo-98']      },
-  { correct: 'criollo-98',        order: ['criollo-98',        'broadleaf-maduro', 'corojo-rosado',     'sumatra-maduro']  },
-  { correct: 'connecticut-shade', order: ['sumatra-maduro',    'criollo-98',       'connecticut-shade', 'corojo-rosado']   },
-  { correct: 'sumatra-maduro',    order: ['habano-colorado',   'sumatra-maduro',   'connecticut-shade', 'broadleaf-maduro']},
-  { correct: 'corojo-rosado',     order: ['criollo-98',        'connecticut-shade', 'broadleaf-maduro',  'corojo-rosado']  },
-]
-
-function getResultsData(score) {
-  if (score === 5) return { headline: 'Perfect Palate',     sub: 'You identified every leaf without hesitation. The mark of a true Connoisseur.',         xp: 125, perfect: true  }
-  if (score >= 3) return { headline: 'Sharp Eye',           sub: 'A strong result. Your botanical instincts are developing into genuine expertise.',        xp: 100, perfect: false }
-  if (score >= 1) return { headline: 'A Learning Journey',  sub: 'Every expert started here. Return to the study session anytime to sharpen your eye.',     xp: 75,  perfect: false }
-  return              { headline: 'Keep Studying',           sub: 'The leaves will reveal themselves with time. Review the Leaf Education and try again.',   xp: 75,  perfect: false }
-}
+const ROUNDS = LEAF_CHALLENGE_ROUNDS
+const getResultsData = getLeafChallengeResultsData
 
 export default function LeafChallenge() {
   const navigate = useNavigate()
-  const { addXP, addBadge, awardStamp, completeStep } = useGuestSession()
+  const { completeStep, submitLeafChallenge } = useGuestSession()
   const timerRef = useRef(null)
 
   const [round,           setRound]           = useState(0)
   const [score,           setScore]           = useState(0)
+  const [answers,         setAnswers]         = useState([])
   const [selectedId,      setSelectedId]      = useState(null)
   const [answered,        setAnswered]        = useState(false)
   const [cardMounted,     setCardMounted]     = useState(false)
@@ -100,6 +91,8 @@ export default function LeafChallenge() {
     setSelectedId(leafId)
     setAnswered(true)
     if (isCorrect) setScore(s => s + 1)
+    const finalAnswers = [...answers, leafId]
+    setAnswers(finalAnswers)
 
     timerRef.current = setTimeout(() => {
       if (round < 4) {
@@ -107,21 +100,26 @@ export default function LeafChallenge() {
         setAnswered(false)
         setRound(r => r + 1)
       } else {
-        // Final round — award session XP/badge/stamp then route to calculating screen
+        // Final round — the raw answer set (never a client-computed score
+        // or reward amount) is submitted to the server, which
+        // independently re-scores against the same real answer key
+        // (src/data/leafChallengeRounds.js) and is the sole authority for
+        // XP, the Botanist/Leaf Scholar badges, and the leaf-recognition
+        // Passport stamp. The locally computed score below drives only
+        // this screen's immediate result display, matching the same
+        // local-optimistic-UI + authoritative-server-grant pattern
+        // already used by awardSessionRewards/awardStamp elsewhere in
+        // this codebase.
         const finalScore = isCorrect ? score + 1 : score
-        const xpAmt      = finalScore === 5 ? 125 : finalScore >= 3 ? 100 : 75
+        const localResult = getResultsData(finalScore)
 
-        addXP(xpAmt)
-        addBadge({ id: 'botanist', name: 'Botanist Badge', icon: 'nature' })
-        if (finalScore === 5) addBadge({ id: 'leaf-scholar', name: 'Leaf Scholar', icon: 'eco' })
-        awardStamp('leaf-recognition', 'leaf-challenge')
+        submitLeafChallenge(finalAnswers)
         completeStep('leaf-challenge')
 
-        // Persist result for the result screen
         sessionStorage.setItem('leafChallengeResult', JSON.stringify({
           score:      finalScore,
           total:      ROUNDS.length,
-          xpEarned:   xpAmt,
+          xpEarned:   localResult.xp,
           badgeEarned: 'Botanist Badge',
           stampEarned: 'Leaf Recognition Stamp',
         }))
@@ -141,6 +139,7 @@ export default function LeafChallenge() {
   const correctId        = currentRound.correct
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div
       className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "linear-gradient(180deg, rgba(5,3,2,0.86), rgba(5,3,2,0.93)), url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }}
@@ -347,5 +346,6 @@ export default function LeafChallenge() {
         </div>
       </main>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

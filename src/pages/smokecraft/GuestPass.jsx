@@ -1,5 +1,6 @@
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const HOTSPOTS = [
   {
@@ -12,11 +13,13 @@ const HOTSPOTS = [
 
 export default function GuestPass() {
   return (
-    <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-guest-pass.png"
-      alt="SmokeCraft Guest Pass"
-      hotspots={HOTSPOTS}
-      route="/smokecraft/guest-pass"
-    />
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <SmokeCraftAssetRoute
+        src="/assets/smokecraft-reference/approved/smokecraft-guest-pass.png"
+        alt="SmokeCraft Guest Pass"
+        hotspots={HOTSPOTS}
+        route="/smokecraft/guest-pass"
+      />
+    </SmokeCraftScreenShell>
   )
 }

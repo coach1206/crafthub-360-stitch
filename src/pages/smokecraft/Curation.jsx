@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SmokeCraftBottomNav, SmokeCraftPremiumHeader } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { SMOKECRAFT_EXTERNAL_DESTINATIONS as EXT } from '../../constants/smokecraftNavigationRegistry.js'
 
 const FALLBACK_SELECTION = {
   seedLabel: 'Seed Path Pending',
@@ -27,6 +29,7 @@ export default function Curation() {
   const hasSelection = Boolean(selection.seedId && selection.soilId)
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="smokecraft-curation-page">
       <style>{`
         .smokecraft-curation-page {
@@ -163,7 +166,7 @@ export default function Curation() {
 
       <SmokeCraftPremiumHeader
         backTo="/smokecraft/origins"
-        onRightClick={() => navigate('/grand-lounge-ranking')}
+        onRightClick={() => navigate(EXT.GRAND_LOUNGE_RANKING)}
       />
 
       <main className="curation-shell">
@@ -207,5 +210,6 @@ export default function Curation() {
 
       <SmokeCraftBottomNav active="smokecraft" />
     </div>
+    </SmokeCraftScreenShell>
   )
 }

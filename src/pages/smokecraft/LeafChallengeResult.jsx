@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { SMOKECRAFT_PASSPORT_MODULE_DESTINATIONS as PASSPORT_MODULE } from '../../constants/smokecraftNavigationRegistry.js'
 
 const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
@@ -99,6 +101,7 @@ export default function LeafChallengeResult() {
   const dashOffset    = circumference * (1 - ringPct)
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{
       minHeight: '100dvh',
       background: '#080503',
@@ -482,7 +485,7 @@ export default function LeafChallengeResult() {
             </div>
             <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
               <button
-                onClick={() => navigate('/passport')}
+                onClick={() => navigate(PASSPORT_MODULE.HOME)}
                 style={{ flex: 1, height: 48, borderRadius: 10, border: 'none', background: GOLD, color: '#0A0705', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer' }}
               >View Passport</button>
               <button
@@ -513,5 +516,6 @@ export default function LeafChallengeResult() {
         }
       `}</style>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

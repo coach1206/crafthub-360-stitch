@@ -6,14 +6,9 @@
  * the visual-first design. Dark/gold aesthetic matches the kiosk-first look.
  *
  * Props:
- *   sessionNumber  — 1–18 session number for the page being viewed.
- *                    The header derives the visit title from this number so
- *                    the label always matches the actual screen, not the global
- *                    progress cursor. Falls back to context's currentSession
- *                    if not provided.
+ *   sessionNumber  — optional 1–27 override; defaults to context's currentSession
  */
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
-import { getSessionByNumber } from '../../constants/smokecraftJourney.js'
 
 export default function SmokeCraftProgressHeader({ sessionNumber }) {
   const {
@@ -23,15 +18,12 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
     totalVisits,
     totalSessions,
     isDemoMode,
+    isLocalPreviewMode,
+    modeLabel,
   } = useSmokeCraftProgress()
 
   const displaySession = sessionNumber || currentSession
-
-  // Derive title from the actual page being viewed (not the global cursor)
-  // so "Challenge / Second Cigar" cannot bleed onto unrelated screens.
-  const pageSession = sessionNumber ? getSessionByNumber(sessionNumber) : null
-  const displayVisit = pageSession ? pageSession.visitNumber : currentVisit
-  const displayTitle = pageSession ? pageSession.visitTitle : currentVisitTitle
+  const displayVisit   = currentVisit
 
   return (
     <div
@@ -63,7 +55,7 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
             fontWeight: 600,
           }}
         >
-          Visit {displayVisit}/{totalVisits}
+          Phase {displayVisit}/{totalVisits}
         </span>
         <span style={{ color: 'rgba(201,168,76,0.3)', fontSize: '10px' }}>·</span>
         <span
@@ -80,7 +72,7 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
         </span>
       </div>
 
-      {/* Center: Visit title for THIS page (not the global cursor) */}
+      {/* Center: Visit title (truncated) */}
       <div
         style={{
           fontFamily: 'Georgia, serif',
@@ -95,23 +87,23 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
           pointerEvents: 'none',
         }}
       >
-        {displayTitle}
+        {currentVisitTitle}
       </div>
 
-      {/* Right: Demo label only — Local Preview suppressed in production guest flow */}
-      {isDemoMode && (
+      {/* Right: Mode label */}
+      {(isDemoMode || isLocalPreviewMode) && (
         <div
           style={{
             fontFamily: 'Georgia, serif',
             fontSize: '8px',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: 'rgba(233,193,118,0.6)',
+            color: isDemoMode ? 'rgba(233,193,118,0.6)' : 'rgba(201,168,76,0.35)',
             whiteSpace: 'nowrap',
             pointerEvents: 'none',
           }}
         >
-          Demo Preview
+          {isDemoMode ? 'Demo Preview' : 'Local Preview'}
         </div>
       )}
     </div>

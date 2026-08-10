@@ -1,123 +1,46 @@
-import { useState, useEffect } from 'react'
-import { injectScResponsiveVars } from '../../utils/scResponsive.js'
-
 /**
- * SmokeCraftAssetScreen
+ * SmokeCraftAssetScreen — responsive background screen wrapper.
  *
- * Full-viewport image layer for SmokeCraft screens.
- * The image fills the area ABOVE the bottom navigation bar (height from
- * --sc-bottom-nav-h CSS variable, injected by injectScResponsiveVars).
- *
- * objectFit:contain preserves the full image without cropping, with a small
- * safe-pad inset. When used via SmokeCraftAssetRoute, a ResizeObserver tracks
- * the actual rendered image bounds so hotspot overlays align correctly.
- *
- * Props:
- *   src            — image path
- *   alt            — accessible label
- *   objectPosition — CSS object-position value (default: 'center center')
- *   imageRef       — optional ref forwarded to the <img> element
- *   containerRef   — optional ref forwarded to the <main> element
- *   children       — interactive overlays (hotspot layers, UI panels, etc.)
+ * classification controls background rendering:
+ *   DECORATIVE_BACKGROUND      — cover; no essential content in image
+ *   LIVE_REACT_PAGE_ARTWORK    — cover; all controls/text in React overlays
+ *   PORTRAIT_PRODUCTION_SHELL  — contain; preserve portrait composition
+ *   LANDSCAPE_HERO_TOP         — cover with center-top anchor
  */
+
+const FIT_STYLES = {
+  DECORATIVE_BACKGROUND:     { backgroundSize: 'cover',   backgroundPosition: 'center top' },
+  LIVE_REACT_PAGE_ARTWORK:   { backgroundSize: 'cover',   backgroundPosition: 'center top' },
+  PORTRAIT_PRODUCTION_SHELL: { backgroundSize: 'contain', backgroundPosition: 'center center' },
+  LANDSCAPE_HERO_TOP:        { backgroundSize: 'cover',   backgroundPosition: 'center top' },
+}
+
 export default function SmokeCraftAssetScreen({
   src,
   alt = 'SmokeCraft screen',
-  objectPosition = 'center center',
-  imageRef,
-  containerRef,
+  classification = 'LIVE_REACT_PAGE_ARTWORK',
   children,
 }) {
-  const [failed, setFailed] = useState(false)
-
-  useEffect(() => { injectScResponsiveVars() }, [])
-
-  const failedUI = (
-    <main
-      ref={containerRef}
-      style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0,
-        bottom: 'var(--sc-bottom-nav-h, 64px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#050505',
-        color: '#f5d28a',
-        padding: 24,
-        textAlign: 'center',
-      }}
-    >
-      <div
-        style={{
-          border: '1px solid rgba(212,175,55,0.6)',
-          borderRadius: 20,
-          padding: 28,
-          background: 'rgba(20,13,6,0.92)',
-        }}
-      >
-        Image failed to load:<br />{src}
-      </div>
-    </main>
-  )
-
-  if (failed) return failedUI
+  const fitStyle = FIT_STYLES[classification] ?? FIT_STYLES.LIVE_REACT_PAGE_ARTWORK
 
   return (
-    <main
-      ref={containerRef}
+    <div
       aria-label={alt}
       style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 'var(--sc-bottom-nav-h, 64px)',
-        margin: 0,
-        padding: 0,
+        inset: 0,
+        width: '100dvw',
+        height: '100dvh',
+        backgroundImage: src ? `url(${src})` : undefined,
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#050505',
+        display: 'flex',
+        flexDirection: 'column',
         overflow: 'hidden',
-        background: '#050505',
+        ...fitStyle,
       }}
     >
-      {/* Contain image — preserves full image, safe-pad inset prevents edge clipping */}
-      <img
-        ref={imageRef}
-        src={src}
-        alt={alt}
-        onError={() => setFailed(true)}
-        draggable={false}
-        style={{
-          position: 'absolute',
-          inset: 'var(--sc-safe-pad, 8px)',
-          width: 'calc(100% - 2 * var(--sc-safe-pad, 8px))',
-          height: 'calc(100% - 2 * var(--sc-safe-pad, 8px))',
-          objectFit: 'contain',
-          objectPosition,
-          display: 'block',
-          margin: 0,
-          padding: 0,
-          border: 0,
-          borderRadius: 0,
-          boxShadow: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          touchAction: 'manipulation',
-        }}
-      />
-      {/* Interactive overlay — children use position:absolute + % coords */}
-      {children && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-          }}
-        >
-          {children}
-        </div>
-      )}
-    </main>
+      {children}
+    </div>
   )
 }

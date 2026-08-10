@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { XP_AWARDS } from '../../constants/session.js'
 import {
   SmokeCraftAtmosphericBackground,
   SmokeCraftBottomNav,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // APPROVED SMOKECRAFT VISUAL RULE:
 // No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
@@ -77,7 +77,7 @@ const FILLERS = [
 
 export default function Blend() {
   const navigate = useNavigate()
-  const { addXP, completeStep, awardStamp } = useGuestSession()
+  const { completeStep, submitBlendSelection } = useGuestSession()
 
   const [selectedWrapper, setSelectedWrapper] = useState(0)
   const [selectedBinder, setSelectedBinder] = useState(0)
@@ -92,13 +92,18 @@ export default function Blend() {
   }
 
   function handleSubmit() {
-    addXP(XP_AWARDS.BLEND_CREATED)
+    // Holistic Fix 5A-3: submits the raw selection as evidence — the
+    // server independently verifies it is a complete, well-formed blend
+    // (valid wrapper, valid binder, exactly 3 distinct fillers) before
+    // granting XP or the master-blend Passport stamp; the client no
+    // longer claims either directly.
+    submitBlendSelection(selectedWrapper, selectedBinder, [...selectedFillers])
     completeStep('blend')
-    awardStamp('master-blend', 'blend')
     navigate('/smokecraft/flavor-dna')
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="smokecraft-premium-page relative text-on-background font-body-md overflow-x-hidden selection:bg-primary/30">
       <SmokeCraftAtmosphericBackground variant="education" />
       {/* Atmospheric Background */}
@@ -447,5 +452,6 @@ export default function Blend() {
       </footer>
       <SmokeCraftBottomNav active="smokecraft" />
     </div>
+    </SmokeCraftScreenShell>
   )
 }

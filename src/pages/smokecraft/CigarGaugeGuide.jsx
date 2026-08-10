@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getVisitProgress } from '../../constants/session.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // Ring gauge = diameter in 64ths of an inch. This page is a sub-step of
 // Session 5 (Shape, Size & Burn Time) — it does NOT call completeStep() and
@@ -24,9 +26,10 @@ export default function CigarGaugeGuide() {
   const stepProgress = getVisitProgress(session.completedSteps)
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 z-0 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/smokecraft/cigars/robusto.jpg')", opacity: 0.35 }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${SC_ASSETS.ringGaugeGuide}')`, opacity: 0.35 }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(19,19,20,0.82) 0%,rgba(19,19,20,0.62) 45%,rgba(19,19,20,0.88) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
@@ -35,7 +38,7 @@ export default function CigarGaugeGuide() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">
-          Round {stepProgress.round} of 3 &middot; Visit {stepProgress.visit} of {stepProgress.totalVisits} &middot; Session {stepProgress.session} of {stepProgress.totalSessions} &middot; Cigar Gauge Guide
+          Round {stepProgress.round} of 3 &middot; Phase {stepProgress.visit} of {stepProgress.totalVisits} &middot; Session {stepProgress.session} of {stepProgress.totalSessions} &middot; Cigar Gauge Guide
         </p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Cigar Gauge Guide</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth: 560 }}>
@@ -80,5 +83,6 @@ export default function CigarGaugeGuide() {
         </div>
       </main>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

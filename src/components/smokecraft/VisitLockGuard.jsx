@@ -1,7 +1,9 @@
+import { useEffect, useRef } from 'react'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useDemoMode } from '../../context/DemoModeContext.jsx'
 import { getVisitForStepId, isVisitUnlocked, VISIT_STRUCTURE } from '../../constants/session.js'
 import LockedVisit from '../../pages/smokecraft/LockedVisit.jsx'
+import { getReturnVisitProgressWithBackend } from '../../services/passportService.js'
 
 function isSessionComplete(completedSteps, sessionId) {
   return sessionId === 'entry' ? true : completedSteps.includes(sessionId)
@@ -36,6 +38,15 @@ export default function VisitLockGuard({ stepId, children }) {
   const { session } = useGuestSession()
   const { isDemoMode } = useDemoMode()
   const completedSteps = session?.completedSteps || []
+  const hasFetchedRef = useRef(false)
+
+  // Fire-and-forget: read return visit progress from backend when available.
+  // Lock decision uses local state only — backend is for audit/sync, not gating.
+  useEffect(() => {
+    if (hasFetchedRef.current) return
+    hasFetchedRef.current = true
+    getReturnVisitProgressWithBackend().catch(() => {})
+  }, [])
 
   const visitInfo = getVisitForStepId(stepId)
   const unlocked = visitInfo

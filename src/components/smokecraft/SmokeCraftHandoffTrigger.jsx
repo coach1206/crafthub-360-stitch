@@ -1,0 +1,158 @@
+/**
+ * SmokeCraftHandoffTrigger — discreet staff handoff button for SmokeCraft screens.
+ *
+ * Sits as a small fixed dot (hidden from guests). When tapped, shows choices:
+ *   Request E.A.T. Handoff | Request POS360 Handoff (both labeled PILOT PREVIEW)
+ * Then saves guest resume state and navigates to /staff/pin?target=...
+ *
+ * Never exposes staff tools casually. Requires deliberate double-tap to reveal.
+ * Does NOT modify sealed SmokeCraft asset screens.
+ */
+import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
+import { saveGuestResumeState, saveHandoffMeta } from '../../services/staffHandoffResumeService.js'
+import { startHandoff, createPOS360HandoffRequest, writePOS360AuditEvent } from '../../services/smokecraftHandoffService.js'
+import { triggerHaptic } from '../../utils/haptics.js'
+
+export default function SmokeCraftHandoffTrigger({ allowEAT = true, allowPOS360 = true }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { session } = useGuestSession()
+  const { currentVisit, currentSession } = useSmokeCraftProgress()
+
+  const [revealed, setRevealed] = useState(false)
+
+  async function triggerHandoff(target) {
+    triggerHaptic('medium')
+    setRevealed(false)
+
+    // Save full guest resume state
+    const resumeState = saveGuestResumeState(session, {
+      currentRoute:      location.pathname,
+      currentVisit,
+      currentSession,
+      venueId:           'novee-grand-lounge',
+      handoffTarget:     target,
+    })
+
+    // Save handoff meta for PIN screen
+    saveHandoffMeta({ target, startRoute: location.pathname })
+
+    // Persist handoff event to backend (non-blocking, best-effort)
+    startHandoff({
+      guestSessionId: session?.sessionId || 'guest',
+      venueId:        'novee-grand-lounge',
+      target:         target === 'pos360' ? 'pos360' : 'eat',
+      startRoute:     location.pathname,
+      returnRoute:    location.pathname,
+      currentVisit,
+      currentSession,
+    }).catch(() => {})
+
+    if (target === 'pos360') {
+      ;(async () => {
+        try {
+          const result = await createPOS360HandoffRequest({
+            venueId:            'novee-grand-lounge',
+            guestId:            session?.sessionId || null,
+            smokecraftSessionId: currentSession?.sessionId || null,
+            source:             'smokecraft',
+            targetSystem:       'pos360',
+            handoffPayload:     { startRoute: location.pathname, currentVisit, currentSession },
+            staffActionRequired: true,
+          })
+          if (result?.backendConnected) {
+            await writePOS360AuditEvent({
+              venueId:            'novee-grand-lounge',
+              guestId:            session?.sessionId || null,
+              handoffId:          result?.handoff?.handoff_id || null,
+              smokecraftSessionId: currentSession?.sessionId || null,
+              eventType:          'pos360_handoff_triggered',
+              syncStatus:         'ok',
+              backendConnected:   true,
+              summary:            'Guest triggered POS360 handoff from SmokeCraft',
+            })
+          }
+        } catch {
+          // backend failure must never surface to guest
+        }
+      })()
+    }
+
+    navigate(`/staff/pin?target=${target}`)
+  }
+
+  if (!revealed) {
+    return (
+      <button
+        onClick={() => setRevealed(true)}
+        aria-label="Staff handoff"
+        style={styles.dot}
+      >
+        ●
+      </button>
+    )
+  }
+
+  return (
+    <div style={styles.panel}>
+      <div style={styles.panelTitle}>Staff Handoff</div>
+      {/* Handoff is initiated/requested locally — not confirmed as live-delivered */}
+      <div style={styles.pilotLabel}>PILOT PREVIEW — Internal Only</div>
+      {allowEAT && (
+        <button onClick={() => triggerHandoff('eat')} style={styles.choice}>
+          Request E.A.T. Handoff
+        </button>
+      )}
+      {allowPOS360 && (
+        <button onClick={() => triggerHandoff('pos360')} style={styles.choice}>
+          Request POS360 Handoff
+        </button>
+      )}
+      <button onClick={() => setRevealed(false)} style={styles.cancel}>Cancel</button>
+    </div>
+  )
+}
+
+const G = '#E9C176'
+const styles = {
+  dot: {
+    position: 'fixed', bottom: 160, left: 14, zIndex: 150,
+    width: 44, height: 44, borderRadius: '50%',
+    background: 'rgba(10,6,3,0.5)', border: '1px solid rgba(233,193,118,0.15)',
+    color: 'rgba(233,193,118,0.3)', fontSize: 9, cursor: 'pointer',
+    fontFamily: '"JetBrains Mono", monospace',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  },
+  panel: {
+    position: 'fixed', bottom: 160, left: 14, zIndex: 150,
+    background: 'rgba(14,10,6,0.97)', border: `1px solid rgba(233,193,118,0.25)`,
+    borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8,
+    boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+    minWidth: 180,
+  },
+  panelTitle: {
+    fontFamily: '"JetBrains Mono", monospace', fontSize: 9,
+    letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.45)',
+    marginBottom: 4,
+  },
+  choice: {
+    padding: '10px 14px', background: 'rgba(233,193,118,0.08)',
+    border: `1px solid rgba(233,193,118,0.25)`, borderRadius: 8,
+    color: G, fontFamily: '"Georgia", serif', fontSize: 13,
+    cursor: 'pointer', textAlign: 'left',
+  },
+  pilotLabel: {
+    fontFamily: '"JetBrains Mono", monospace', fontSize: 8,
+    letterSpacing: '0.12em', textTransform: 'uppercase',
+    color: 'rgba(192,57,43,0.7)', padding: '4px 0',
+  },
+  cancel: {
+    padding: '8px 14px', background: 'none',
+    border: '1px solid rgba(233,193,118,0.1)', borderRadius: 8,
+    color: 'rgba(233,193,118,0.4)', fontFamily: '"JetBrains Mono", monospace',
+    fontSize: 10, letterSpacing: '0.08em', cursor: 'pointer',
+  },
+}

@@ -6,6 +6,7 @@
 import { loadSession, saveSession } from './sessionStorageService.js'
 import { syncPassportToBackend } from './syncService.js'
 import { saveEvent } from './syncQueueService.js'
+import { awardStampToBackend, awardXPToBackend, getReturnVisitProgress, writeSyncAuditEvent } from './passportAdapter.js'
 
 function genPassportId() {
   return `PP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
@@ -63,10 +64,34 @@ export function awardStamp(stampData) {
     latestStampId: stamp.stampId,
   }
   saveSession(updatedSession)
-  // Fire-and-forget passport sync after local save
+  // Fire-and-forget backend persistence — local stamp is already saved above.
+  // backendConnected is set only if the API confirms real database storage.
+  const passportId = updatedSession.passport?.passportId
+  awardStampToBackend({
+    guestId: passportId,
+    stampId: stamp.stampId,
+    moduleKey: stamp.sourceModule || 'smokecraft-360',
+    xpAwarded: stamp.points || 0,
+  }).then(result => {
+    if (result?.backendConnected) {
+      awardXPToBackend({
+        guestId: passportId,
+        moduleKey: stamp.sourceModule || 'smokecraft-360',
+        xpAmount: stamp.points || 0,
+        lastSessionKey: stamp.sourceModule,
+      }).catch(() => {})
+      writeSyncAuditEvent({
+        guestId: passportId,
+        eventType: 'stamp_awarded',
+        syncStatus: 'ok',
+        backendConnected: true,
+        summary: `Stamp ${stamp.stampId} awarded and synced to backend`,
+        metadata: { stampId: stamp.stampId },
+      }).catch(() => {})
+    }
+  }).catch(() => {})
   syncPassportToBackend(updatedSession).catch(() => {})
   // Durable outbox entry — separate from the existing fire-and-forget sync above.
-  const passportId = updatedSession.passport?.passportId
   if (passportId) {
     saveEvent({
       sourceSystem: 'PASSPORT',
@@ -76,6 +101,39 @@ export function awardStamp(stampData) {
     }).catch(() => {})
   }
   return stamp
+}
+
+/**
+ * Fetches earned stamps from backend when available, falls back to local.
+ * Returns { stamps, backendConnected, persistenceMode }.
+ *
+ * Passport remediation (identity unification): this previously called
+ * the local, client-generated session.passport.passportId against the
+ * insecure Phase F.5 API (now disabled). It now calls the real,
+ * canonical /api/passport-360/sync/stamps endpoint directly — identity
+ * is resolved server-side from the same verified SmokeCraft guest
+ * cookie every other completed pass uses, not from any local ID. This
+ * is the fix for the previously-disclosed "SmokeCraft's verified
+ * identity and the general NOVEE OS local Passport identity remain
+ * fragmented" defect: this real caller (PassportStamps.jsx) now
+ * resolves to the exact same canonical Passport ID as every SmokeCraft
+ * screen, because it queries the same endpoint.
+ */
+export async function getEarnedStampsWithBackend() {
+  try {
+    const res = await fetch('/api/passport-360/sync/stamps', { credentials: 'include' })
+    if (res.ok) {
+      const json = await res.json()
+      if (json?.success && Array.isArray(json.stamps)) {
+        return {
+          stamps: json.stamps.map(s => ({ stampId: s.stamp_id, title: s.stamp_id, craft: 'SmokeCraft 360', earnedAt: s.earned_at, points: 0 })),
+          backendConnected: true,
+          persistenceMode: 'database',
+        }
+      }
+    }
+  } catch { /* offline or backend unavailable */ }
+  return { stamps: getEarnedStamps(), backendConnected: false, persistenceMode: 'local_fallback' }
 }
 
 /** Returns all earned stamps from the passport (new model) + legacy smokecraftStamps. */
@@ -112,6 +170,38 @@ export function markCeremonySeen() {
     ...session,
     passport: { ...session.passport, ceremonySeen: true },
   })
+}
+
+/**
+ * Returns return visit progress from backend when available.
+ * Falls back to local session count (smokeCraft.completedSessions).
+ * Returns { returnVisitCount, lastSessionKey, backendConnected, persistenceMode }.
+ */
+export async function getReturnVisitProgressWithBackend() {
+  const session = loadSession()
+  const passportId = session?.passport?.passportId
+  const localCount = (session?.smokeCraft?.completedSessions || []).length
+
+  if (passportId) {
+    const result = await getReturnVisitProgress({ guestId: passportId }).catch(() => null)
+    if (result?.backendConnected) {
+      return {
+        returnVisitCount: result.returnVisitCount ?? localCount,
+        lastSessionKey: result.lastSessionKey || null,
+        backendConnected: true,
+        persistenceMode: 'database',
+        safeClaim: 'return_visit_progress_from_backend',
+      }
+    }
+  }
+
+  return {
+    returnVisitCount: localCount,
+    lastSessionKey: null,
+    backendConnected: false,
+    persistenceMode: 'local_fallback',
+    safeClaim: 'return_visit_count_from_local_session_only',
+  }
 }
 
 /**

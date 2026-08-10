@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 function playStampSound() {
   try {
@@ -44,6 +45,7 @@ export default function LeafChallengeCalculating() {
   }, [navigate])
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{
       minHeight: '100dvh',
       background: '#080503',
@@ -229,5 +231,6 @@ export default function LeafChallengeCalculating() {
         }
       `}</style>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

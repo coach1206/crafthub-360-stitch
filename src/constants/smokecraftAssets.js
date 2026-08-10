@@ -1,170 +1,329 @@
 /**
- * SmokeCraft Approved Asset Manifest
+ * SmokeCraft 360 — Centralized Asset Registry
  *
- * Single source of truth for every image used across the SmokeCraft 18-step journey
- * and all supporting screens. All paths are relative to public/ (served as /...).
+ * All SmokeCraft background image paths resolved here.
+ * Rules (verified against Vite dev server and Vercel CDN):
+ *   - Spaces must be encoded as %20
+ *   - Commas ( , ) must remain literal — do NOT encode as %2C
+ *   - Ampersands ( & ) must remain literal — do NOT encode as %26
+ *   - Never use template strings with unencoded spaces
  *
- * IMPORTANT: Page JSX files have hardcoded src paths — they do NOT import from here.
- * This manifest documents what each route renders. To change a displayed image, update
- * the JSX page file directly AND update the constant here to keep them in sync.
- *
- * Naming convention for approved assets:
- *   /assets/smokecraft-reference/approved/smokecraft-<screen>.png
- *   /assets/smokecraft-reference/approved/batch-22/<filename>   (Batch 22 upgrades)
- *
- * Known issues (do not silently hide):
- *   FIRST_THIRD — no unique approved image exists; approved/smokecraft-first-third.png
- *   is MD5-identical to smokecraft-final-third.png (repo naming error). The React overlay
- *   provides the correct "First Third" labeling. Batch 22 contains no distinct first-third
- *   image. When a distinct first-third visual is approved, update FIRST_THIRD here only.
- *
- *   SESSION_COMPLETE — smokecraft-session-complete.png has stale "SESSION 23 OF 24" baked
- *   in. Session Complete uses a CSS gradient background intentionally (no image).
- *
- *   LANDING — SmokeCraft.jsx hardcodes /PROFILE DISCOVER 11.png (root public/). Hotspot
- *   coordinates were calibrated to that specific image. Do not change without recalibrating
- *   all hotspot x/y/width/height values in SmokeCraft.jsx.
- *
- * Stale-header screens (baked text in image top bar):
- *   SECOND_THIRD — approved image has "ROUND 3 OF 3 · VISIT 7 OF 8 · SESSION 17 OF 24"
- *   baked into the top 40px ticker bar. SecondThird.jsx renders a React cover strip over
- *   this area. Do not remove that strip.
- *
- * Batch 22 active upgrade (2026-07-11):
- *   PAIRING_LAB — updated to batch-22/pairing lab hotspot.png (landscape, better viewport fit).
- *   All other journey routes continue to use approved/ originals which are dedicated, clean
- *   step-specific screens with no stale text. Batch 22 alternates are preserved on disk for
- *   future consideration. Locked-state images retained as new exports.
+ * Priority rule (2026-07-11): RAW full-composition uploads take precedence
+ * over CROPPED atmosphere backgrounds when they exist and match the route.
  */
+import { versionedAssetUrl } from './assetVersion.js'
 
-const BASE    = '/assets/smokecraft-reference/approved'
-const BATCH22 = '/assets/smokecraft-reference/approved/batch-22'
+// ── Cropped clean photography backgrounds ──────────────────────────────────
+const CROPPED = '/assets/smokecraft/cropped'
 
-// ── Landing ────────────────────────────────────────────────────────────────────
-// SmokeCraft.jsx hardcodes /PROFILE DISCOVER 11.png — DO NOT CHANGE without
-// recalibrating all hotspot coordinates in SmokeCraft.jsx.
-export const LANDING = '/PROFILE DISCOVER 11.png'
+// ── Approved reference full compositions ──────────────────────────────────
+const REF = '/assets/smokecraft-reference/approved'
 
-// ── Core 18-step journey ───────────────────────────────────────────────────────
-// Identity.jsx uses smokecraft-profile-capture.png (entry gate form visual).
-// smokecraft-entry-gate.png is used by the Enroll (/smokecraft/enroll) route.
-export const IDENTITY         = `${BASE}/smokecraft-profile-capture.png`
-export const ENROLL           = `${BASE}/smokecraft-entry-gate.png`
-export const GOLDEN_BOX       = `${BASE}/smokecraft-gold-box-rules.png`
-export const MENTOR_SELECTION = `${BASE}/smokecraft-mentor-selection.png`
-export const SEED_SOIL        = `${BASE}/smokecraft-seed-soil.png`
-// Batch 22: pairing lab hotspot.png — landscape, full pairing form; better landscape viewport fit
-// than the portrait approved/ original. JSX updated 2026-07-11.
-export const PAIRING_LAB      = `${BATCH22}/pairing lab hotspot.png`
-export const HUMIDOR_MATCH    = `${BASE}/smokecraft-humidor-match.png`
-export const REQUEST_PURCHASE = `${BASE}/smokecraft-request-purchase.png`
-export const CUT_TOAST_LIGHT  = `${BASE}/smokecraft-cut-toast-light.png`
+// ── Raw approved uploads (2026-07-11 — newest, highest priority) ───────────
+const RAW = '/assets/smokecraft'
 
-// First Third: uses final-third background (same image, no distinct first-third exists).
-// Batch 22 has no distinct first-third image. React overlay relabels correctly.
-// Replace with dedicated asset when approved.
-export const FIRST_THIRD      = `${BASE}/smokecraft-final-third.png`
+// ── Pre-cropped clean hero photography (Block 6A visual consistency pass) ──
+// These already-approved files live in public/assets/smokecraft/cropped/ —
+// genuinely clean, dedicated crops (no baked UI/text/buttons), distinct from
+// the RAW full-composition mockups above. Used as decorative hero bands via
+// SmokeCraftHeroCrop with bgSize="cover" (no zoom-crop guessing needed —
+// these are already framed).
 
-export const SECOND_THIRD     = `${BASE}/smokecraft-second-third.png`
-export const FLAVOR_MEMORY    = `${BASE}/smokecraft-flavor-memory.png`
-export const FINAL_THIRD      = `${BASE}/smokecraft-final-third.png`
-export const SCORECARD        = `${BASE}/smokecraft-scorecard-ranking.png`
-export const FINAL_REVIEW     = `${BASE}/smokecraft-final-review.png`
-export const PASSPORT_STAMP   = `${BASE}/smokecraft-passport-stamp.png`
-export const CONNECTIONS      = `${BASE}/smokecraft-passport-connection.png`
-export const MANAGEMENT_SYNC  = `${BASE}/smokecraft-venue-management-sync.png`
-// Session Complete: intentionally no image (CSS gradient). Image has stale
-// "SESSION 23 OF 24" text baked in. Set to null as a sentinel.
-export const SESSION_COMPLETE = null
+export const SC_ASSETS = {
+  // Production Closure — approved local avatar replacing the external
+  // googleusercontent.com URLs formerly in src/lib/craftImages.js's
+  // `portraits` map (see that file for full detail). Registered here so
+  // the asset registry/R2 sync tooling covers it like every other
+  // approved SmokeCraft image.
+  memberAvatar:        '/assets/smokecraft/avatars/member-silhouette.svg',
 
-// ── Support / supplementary screens ───────────────────────────────────────────
-export const HOW_IT_WORKS         = `${BASE}/smokecraft-how-it-works.png`
-export const GUEST_PASS           = `${BASE}/smokecraft-guest-pass.png`
-export const EVENT_CHALLENGE      = `${BASE}/smokecraft-event-challenge.png`
-export const GOLDEN_BOX_STATUS    = `${BASE}/smokecraft-golden-box-status.png`
-export const LEADERBOARD          = `${BASE}/smokecraft-leaderboard.png`
-export const ORIGINS              = `${BASE}/smokecraft-origins.png`
-export const TERROIR              = `${BASE}/smokecraft-terroir.png`
-export const PAIRING_MASTERY      = `${BASE}/smokecraft-pairing-mastery.png`
-export const PAIRING              = `${BASE}/smokecraft-pairing.png`
-export const SECOND_HUMIDOR_MATCH = `${BASE}/smokecraft-second-humidor-match.png`
-export const FLAVOR_DNA           = `${BASE}/smokecraft-flavor-dna.png`
-export const SCAN                 = `${BASE}/smokecraft-scan.png`
-export const ART                  = `${BASE}/smokecraft-art.png`
-export const VITOLA               = `${BASE}/smokecraft-vitola.png`
-export const MINI_TASTING_ROUND   = `${BASE}/smokecraft-mini-tasting-round.png`
-export const CHALLENGE            = `${BASE}/smokecraft-challenge.png`
-export const PROFILE_CAPTURE      = `${BASE}/smokecraft-profile-capture.png`
+  // S1 — Landing
+  landing:             `${REF}/smokecraft-landing.png`,
 
-// ── Locked-state screens (Batch 22) ───────────────────────────────────────────
-// These show locked/future content. Stale session counts baked in header — use as
-// background only; React overlay provides live state indicators.
-export const FUTURE_VISIT_LOCKED      = `${BATCH22}/smokecraft-future-visit-locked.png`
-export const PASSPORT_STAMP_LOCKED    = `${BATCH22}/smokecraft-passport-stamp-locked.png`
-export const MANAGEMENT_SYNC_LOCKED   = `${BATCH22}/smokecraft-management-sync-locked.png`
+  // S2 — Enroll / Identity
+  // Enroll uses the approved full "Guest Pass" composition (Sign In / Guest
+  // Mode) rather than a plain background crop — see ENROLL DECISION.
+  enroll:              `${REF}/smokecraft-guest-pass.png`,
+  identity:            `${RAW}/IDENTY.png`,
 
-// ── Batch 22 alternates (on disk, not currently active in any route) ──────────
-// These are available if a route needs to swap to a batch-22 visual. Update the
-// route's JSX src path AND the matching constant above when activating.
-export const BATCH22_ALTERNATES = {
-  GOLDEN_BOX:       `${BATCH22}/smokraft goldenbox rules.png`,
-  REQUEST_PURCHASE: `${BATCH22}/request-purchase11.png`,
-  FINAL_THIRD_COCO: `${BATCH22}/fianal third coco & coffee.png`,
-  SCORECARD:        `${BATCH22}/smokecraft-scorecard.11png.png`,
-  FINAL_REVIEW:     `${BATCH22}/Final Review hotspot.png`,
-  PASSPORT_STAMP:   `${BATCH22}/passport-certified-final.png`,
-  CONNECTIONS:      `${BATCH22}/passport-connection-1.png`,
-  MINI_TASTING:     `${BATCH22}/mini tasting .png`,
-  GUEST_PASS:       `${BATCH22}/smokecraft-guest-pass.png`,
-  EVENT_CHALLENGE:  `${BATCH22}/smokecraft-event-challenge.png`,
-  ORIGINS:          `${BATCH22}/smokecraft-origins.png`,
-  PAIRING_MASTERY:  `${BATCH22}/smokecraft-pairing-mastery.png`,
-  CHALLENGE:        `${BATCH22}/smokecraft-challenge-bg.jpg`,
-  LANDING:          `${BATCH22}/discover-your-profile-111.png`,
+  // Entry layer — Resume/Start New Journey. Dedicated approved asset
+  // (repo owner upload, main branch) — replaces the prior decorative-only
+  // Golden Box photo placeholder now that a real Resume Journey visual
+  // exists.
+  resume:              `${RAW}/Resume%20Your%20Journey.png`,
+
+  // Welcome / Session 1 — dedicated approved asset (repo owner upload,
+  // main branch). WelcomeExperience.jsx previously had no image of its own.
+  session1:            `${RAW}/session%201.png`,
+
+  // S3 — Golden Box
+  goldenBox:           `${RAW}/GOLDEN%20BOX%20RULES.png`,
+
+  // S4 — Mentor Selection
+  mentorSelection:     `${RAW}/MENTOR%20SELECTION1.png`,
+
+  // Meet Your Cigar — SC-D080 fix: the prior mapping (`DISOVER YOUR CIGAR
+  // PROFILE.png`) is the Launch/CraftHub dashboard screenshot, not Meet
+  // Your Cigar photography — confirmed by rendering it live (owner visual
+  // audit #014/#015, WRONG_IMAGE). No dedicated Meet Your Cigar asset
+  // exists in the repository (checked public/assets/smokecraft/ and its
+  // cigars/ subfolder) — reverting to the last known-honest placeholder
+  // (Humidor Match's approved photography, openly reused, not invented)
+  // until real dedicated Meet Your Cigar photography is produced.
+  // NEEDS_OWNER_DECISION: commission or approve dedicated Meet Your Cigar
+  // photography (Padron 1964 Series-appropriate cigar/lounge imagery).
+  meetYourCigar:       `${RAW}/Humidor%20Match%201.png`,
+
+  // Mentor Commentary — approved production asset (production image audit).
+  mentorCommentary:    `${RAW}/MENTOR%20:COMMENTARY.png`,
+
+  // S5 — Format / Vitola
+  format:              `${REF}/smokecraft-vitola.png`,
+
+  // S6 — Wrapper Strength (redirect-only, no visual needed)
+  wrapperStrength:     null,
+
+  // S7 — Seed & Soil
+  seedSoil:            `${RAW}/SEED%20&%20SOIL.png`,
+
+  // S8 — Pairing Lab — raw full composition takes precedence
+  pairingLab:          `${RAW}/PAIRING%20LAB1.png`,
+
+  // S9 — Humidor Match — raw full composition takes precedence. Kept here
+  // for resolver/registry completeness only — Canonical Journey Recovery
+  // pass rebuilt HumidorMatch.jsx as real live DOM and no longer renders
+  // this baked mockup at all (it contained fake baked "Active" state; see
+  // SC-D076). Do not reintroduce it as this screen's UI.
+  humidorMatch:        `${RAW}/Humidor%20Match%201.png`,
+  // Supporting decorative header photography only (approved, cropped, no
+  // baked UI/text/buttons) — used as a real <img> banner above the live
+  // controls, never as a surface controls are drawn on top of.
+  humidorMatchHero:    `${CROPPED}/humidor-match-hero.jpg`,
+  secondHumidorMatchHero: `${CROPPED}/humidor-match-hero.jpg`,
+  identityHero:        `${CROPPED}/discover-profile-hero.jpg`,
+  formatHero:          `${CROPPED}/format-master-tip-v2.jpg`,
+  cutToastLightHero:   `${CROPPED}/cut-toast-light-hero.jpg`,
+  finalThirdHero:      `${CROPPED}/final-third-bg.jpg`,
+  scorecardHero:       `${CROPPED}/scorecard-hero.jpg`,
+  requestPurchaseHero: `${CROPPED}/request-purchase-hero.jpg`,
+  pairingRecommendationsHero: `${CROPPED}/pairing-lab-hero.jpg`,
+  passportStampHero:   `${CROPPED}/passport-stamp-hero.jpg`,
+  rewardsHero:         `${CROPPED}/golden-box-hero-v2.jpg`,
+
+  // S10 — Request Purchase — raw full composition takes precedence
+  requestPurchase:     `${RAW}/REQUEST%20PURCHASE.png`,
+
+  // S11 — Cut, Toast & Light — raw full composition takes precedence
+  // Filename: "CUT  TOAST, & LIGHT.png" (double space between CUT and TOAST)
+  cutToastLight:       `${RAW}/CUT%20%20TOAST,%20&%20LIGHT.png`,
+
+  // S12 — First Third — raw full composition takes precedence
+  // Filename: "FIRST  THIRD1.png" (double space)
+  firstThird:          `${RAW}/FIRST%20%20THIRD1.png`,
+
+  // S13 — Second Third — raw full composition takes precedence
+  secondThird:         `${RAW}/SECOND%20THIRD.png`,
+
+  // S14 — Flavor Memory — raw full composition takes precedence
+  flavorMemory:        `${RAW}/FLAVOR%20MEMORY.png`,
+
+  // S15 — Final Third — raw full composition takes precedence
+  finalThird:          `${RAW}/FINAL%20THIRD.png`,
+
+  // S16 — Scorecard — raw full composition takes precedence
+  scorecard:           `${RAW}/Scorecard.png`,
+
+  // S17 — SmokeCraft Challenge — raw full composition takes precedence (production image audit)
+  smokecraftChallenge: `${RAW}/SMOKECRAFT%20CHALLENG.png`,
+
+  // S18 — Second Humidor Match — use approved reference
+  secondHumidorMatch:  `${REF}/smokecraft-second-humidor-match.png`,
+
+  // S19 — Mini Tasting Round — raw full composition takes precedence (production image audit)
+  miniTasting:         `${RAW}/Mini%20Tasting%2011.png`,
+
+  // S20 — Final Review — raw full composition takes precedence
+  finalReview:         `${RAW}/FINAL%20REVIEW.png`,
+
+  // S21 — Passport Stamp — raw full composition takes precedence
+  passportStamp:       `${RAW}/PASSPORT%20STAMP.png`,
+
+  // S22 — Connections — keep cropped (no raw full-composition equivalent)
+  connections:         `${CROPPED}/connections-hero.jpg`,
+
+  // S23 — Management Sync — raw full composition
+  managementSync:      `${RAW}/MANAGEMENT%20SYNC.png`,
+
+  // S24 — Session Complete — raw full composition
+  sessionComplete:     `${RAW}/SESSION%20COMPLETE.png`,
+
+  // S27 — Recommended Next Journey (Package S) — approved production asset.
+  recommendedNextJourney: `${RAW}/Recommend%20next%20journey.png`,
+
+  // Terroir (Country/Region/Soil/Climate/Growing Conditions/Why It Matters)
+  terroir:             `${REF}/smokecraft-terroir.png`,
+  terroirSoil:         `${REF}/smokecraft-seed-soil.png`,
+
+  // Knowledge Drop (Tobacco/Fermentation/Aging/Factory Story) — reuses the
+  // orphaned Origins/Vitola/PairingMastery/FlavorDNA approved reference images
+  // per the locked rebuild plan's merge guidance, rather than commissioning new art.
+  knowledgeDropTobacco:      `${REF}/smokecraft-origins.png`,
+  knowledgeDropFermentation: `${REF}/smokecraft-vitola.png`,
+  knowledgeDropAging:        `${REF}/smokecraft-pairing-mastery.png`,
+  knowledgeDropFactory:      `${REF}/smokecraft-flavor-dna.png`,
+
+  // Supplemental / unguarded
+  // Leaderboard 111.png is the newest raw upload (production image audit) and
+  // now takes precedence; NEW DEMO LOUNG RANKING.png is preserved on disk as
+  // a reference-only alternate (not deleted), no longer the active reference.
+  leaderboard:         `${RAW}/LEADERBOARD%20111.png`,
+  eventChallenge:      `${RAW}/EVENT%20CHALLENGE%20111.png`,
+  // Approved-Asset Control Plane pass: the former `howItWorks` key pointed at
+  // ${REF}/smokecraft-how-it-works.png, which is an INTERNAL DESIGN STORYBOARD
+  // ("SMOKECRAFT 360 | STORYBOARD S1 -> S4", covered in S1.1/S2.1/"S1 GOAL"
+  // planning labels), not a user-facing screen. It had no consumer left and is
+  // removed so it cannot be wired into a production route again. The file stays
+  // on disk as internal reference material.
+  //
+  // The approved USER-FACING How It Works visual is this one. HowItWorks.jsx
+  // renders it as its shell and occludes its baked placeholder stats with real
+  // saved values (see that file's header for the full rationale).
+  howItWorksUser:      `${RAW}/session-visuals/HOW%20IT%20WORKS.png`,
+  visitComplete:       '/smokecraft-visit-complete.png',
+
+  // Landing "Passport" destination — approved 360 Passport hub visual. The
+  // landing Passport control previously pointed at the session-23-guarded
+  // passport-stamp curriculum screen, which bounced guests to enroll.
+  passportHub:         `${RAW}/360%20PASSPORT%20%202.png`,
+
+  // Landing "CraftHub" destination — approved CraftHub 360 venue table visual.
+  // The landing CraftHub tile previously pointed at the scorecard-guarded
+  // smokecraft-challenge screen, which never showed a CraftHub visual at all.
+  craftHubVenueTable:  `${RAW}/CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png`,
+
+  // Rewards / Achievements (shared S25/S26 screen) — approved production assets.
+  // `REWARDS 222.png` is fully-baked mock data with no blank overlay zones
+  // (confirmed across two prior passes — fake "Guest"/2,750 XP/12 badges and
+  // a "9 of 11" progress rail contradicting the 27-session spine) and was
+  // never usable as a live shell. `session 25 rewards.png` (repo owner
+  // upload, main branch) is a genuine blank-value template for this exact
+  // screen — replaces it as the S25 shell.
+  rewards:             `${RAW}/session%2025%20rewards.png`,
+  // Landing "Rewards" destination card — approved Reward Center visual the
+  // repo owner uploaded directly to GitHub (commit 4881d21b). Spaces encoded
+  // per this file's rules. This is the shell for the landing-accessible
+  // Rewards Center destination (RewardsCenter.jsx), distinct from the in-
+  // journey S25 rewards screen above.
+  rewardCenter:        `${RAW}/rewards/Reward%20Center.png`,
+  achievements:        `${RAW}/ACHIEVMENTS.png`,
+
+  // AI Summary (S21) — approved production asset
+  aiSummary:           `${RAW}/AI%20SUMMARY.png`,
+
+  // Pairing Recommendations (S22) — approved production asset
+  pairingRecommendations: `${RAW}/personlized%20pairing%20222.png`,
+
+  // Venue Selection (Entry layer) — approved production asset
+  venueSelect:         `${RAW}/Venue%20Selection%2011.png`,
+
+  // Lighting Tutorial (S8 area) — approved production asset
+  lightingTutorial:    `${RAW}/LIGHTING%20TUTORIAL%201.png`,
+
+  // Knowledge Drop — unified approved production asset, used as a decorative
+  // header alongside the existing per-topic images above (preserved as-is).
+  knowledgeDrop:       `${RAW}/KNOWLEDGE%20DROP.png`,
+
+  // Knowledge Check — reusable supporting-module component, approved asset
+  // registered for future header use; component currently has no fixed
+  // per-screen header (embedded inline after educational modules).
+  knowledgeCheck:      `${RAW}/KNOWLEDGE%20CHECK.png`,
+
+  // SmokeCraft badge library artwork — approved production asset
+  badgeLibrary:        `${RAW}/smokecraft%20badges.png`,
+
+  // Legacy aliases — kept for backward compat
+  managementSyncRaw:   `${RAW}/MANAGEMENT%20SYNC.png`,
+  sessionCompleteRaw:  `${RAW}/SESSION%20COMPLETE.png`,
+
+  // ── Package 7A image-integration pass — Golden Box production folder ──
+  // (2026-07-20 batch upload, normalized into public/assets/smokecraft/golden-box/)
+  // Visual Sequence Closure pass — resolved deterministically (not a
+  // guess): "real golen box challenge.png" was uploaded 89 seconds after
+  // "Golden Box challenge.png" in the same upload session (BATCH888 vs.
+  // BATCH 777, source-commit-timestamp-verified) and its filename
+  // explicitly self-identifies as the corrected version ("real ___
+  // challenge") — the standard signal for a same-session re-upload
+  // superseding an earlier draft. See
+  // docs/audits/smokecraft-final-completion/visual-sequence-closure/03-HUMAN-VISUAL-DECISION-BOARD.md.
+  // The superseded file remains on disk, unregistered, not deleted.
+  goldenBoxChallenge:              `${RAW}/golden-box/golden-box-challenge-alt.png`,
+  goldenBoxJudgingCriteria:        `${RAW}/golden-box/golden-box-judging-criteria.png`,
+  goldenBoxPairingDefense:         `${RAW}/golden-box/golden-box-pairing-defense.png`,
+  goldenBoxBlendRevisionRound:     `${RAW}/golden-box/golden-box-blend-revision-round.png`,
+  goldenBoxPresentationRevision:   `${RAW}/golden-box/golden-box-presentation-revision-round.png`,
+  goldenBoxMasterBlendingEducation:`${RAW}/golden-box/golden-box-master-blending-education.png`,
+  goldenBoxFinalJudgingRubric:     `${RAW}/golden-box/golden-box-final-judging-rubric.png`,
+  goldenBoxScoringRounds:          `${RAW}/golden-box/golden-box-scoring-rounds.png`,
+
+  // ── Phase 2 image integration — rolling-process step thumbnails ──
+  // (public/assets/smokecraft/leaf-construction/), wired into
+  // WrapperStrength.jsx's existing RollingProcess step list, keyed by the
+  // same real backend step_key values already used there.
+  rollingStepPrepareLeaves:      `${RAW}/leaf-construction/leaf-comparison.png`,
+  rollingStepArrangeFiller:      `${RAW}/leaf-construction/arrange-filler.png`,
+  rollingStepSelectBunching:     `${RAW}/leaf-construction/select-bunching-method.png`,
+  rollingStepApplyBinder:        `${RAW}/leaf-construction/apply-binder.png`,
+  rollingStepMoldOrPress:        `${RAW}/leaf-construction/mold-or-press.png`,
+  rollingStepApplyWrapper:       `${RAW}/leaf-construction/apply-wrapper.png`,
+  rollingStepConstructCap:       `${RAW}/leaf-construction/construct-cap.png`,
+  rollingStepFinishFoot:         `${RAW}/leaf-construction/finish-foot.png`,
+  rollingStepInspectAndDrawTest: `${RAW}/leaf-construction/inspect-and-draw-test.png`,
+  rollingStepRestAndBoxAge:      `${RAW}/leaf-construction/rest-and-box-age.png`,
+
+  // ── Phase 2 — Ring Gauge / Vitola dedicated screen art ──
+  ringGaugeGuide:                `${RAW}/session-visuals/RING%20GAUGE%20GUIDE.png`,
+
+  // ── Visual Sequence Closure pass — processing-section topic thumbnails ──
+  // (four distinct real sub-topics merged into WrapperStrength.jsx's single
+  // "Curing, Fermentation, Aging & Grading" section — not a duplicate
+  // choice, each image names its own distinct sub-topic).
+  processingCuring:      `${RAW}/leaf-construction/curing-process.png`,
+  processingFermentation:`${RAW}/leaf-construction/fermentation-process.png`,
+  processingAging:       `${RAW}/leaf-construction/final-resting-aging.png`,
+  processingGrading:     `${RAW}/leaf-construction/sorting-and-grading.png`,
+
+  // ── Approved batch upload (commit a518a134) — registered, not yet wired ──
+  // to a screen. No /smokecraft/skill-tree, /smokecraft/collections, or
+  // Challenge Hub route exists yet (confirmed via grep of App.jsx) — these
+  // three keys are registered now per instruction (a missing route does not
+  // block registering approved art) so a future pass can wire them the
+  // moment each route is built, without a second image-discovery step.
+  skillTreeBackground:         `${RAW}/session-visuals/skill%20tree%201.png`,
+  collectionsCenterBackground: `${RAW}/session-visuals/collection%20center.png`,
+  challengeHubBackground:      `${RAW}/session-visuals/Daily%20and%20weekly%20Challenge%20Hub.png`,
+
+  // ── Approved batch (commit a518a134), resolved by visual inspection ──
+  // "missing challenge Screen1/2/3" are the 3 real steps of one challenge —
+  // confirmed by reading each image: Screen 1 = "Identify the Issue",
+  // Screen 2 = "Choose the Best Solution", Screen 3 = "Prevent and Improve"
+  // — a real Blend Fault Identification challenge, not a guess.
+  blendFaultChallengeStep1: `${RAW}/session-visuals/missing%20challenge%20Screen1.png`,
+  blendFaultChallengeStep2: `${RAW}/session-visuals/Mising%20Challenge%20Screen2.png`,
+  blendFaultChallengeStep3: `${RAW}/session-visuals/Missing%20Challenge%20Screen3.png`,
+
+  // "filler arrangement.png" — confirmed by visual inspection to be a full
+  // standalone 6-step lesson screen (Select/Align/Balance/Shape/Check/
+  // Prepare), not a duplicate of the small rollingStepArrangeFiller
+  // thumbnail already wired into WrapperStrength.jsx's step list. Both are
+  // kept — different slots, different content.
+  fillerArrangementLesson: `${RAW}/session-visuals/filler%20arrangement.png`,
 }
 
-// ── Manifest table (for admin / diagnostic screens) ──────────────────────────
-export const SMOKECRAFT_ASSET_MANIFEST = [
-  // Route                            | Asset constant          | Type                   | Stale text? | Live overlay?
-  { route: '/smokecraft',             asset: LANDING,            type: 'landing',          stale: false, overlay: 'hotspots',    note: 'hardcoded /PROFILE DISCOVER 11.png; hotspot-calibrated — do not swap without recalibration' },
-  { route: '/smokecraft/identity',    asset: IDENTITY,           type: 'journey',          stale: false, overlay: 'live-form' },
-  { route: '/smokecraft/golden-box',  asset: GOLDEN_BOX,         type: 'journey',          stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/mentor-selection', asset: MENTOR_SELECTION, type: 'journey',       stale: false, overlay: 'live-panel' },
-  { route: '/smokecraft/seed-soil',   asset: SEED_SOIL,          type: 'journey',          stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/pairing-lab', asset: PAIRING_LAB,        type: 'journey',          stale: false, overlay: 'hotspots',    note: 'batch-22: pairing lab hotspot.png — landscape, better viewport fit than portrait original' },
-  { route: '/smokecraft/humidor-match', asset: HUMIDOR_MATCH,    type: 'journey',          stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/request-purchase', asset: REQUEST_PURCHASE, type: 'journey',       stale: false, overlay: 'live-panel' },
-  { route: '/smokecraft/cut-toast-light', asset: CUT_TOAST_LIGHT, type: 'journey',         stale: false, overlay: 'live-panel' },
-  { route: '/smokecraft/first-third', asset: FIRST_THIRD,        type: 'journey',          stale: false, overlay: 'live-panel',  note: 'shares visual with final-third; no distinct approved image yet' },
-  { route: '/smokecraft/second-third', asset: SECOND_THIRD,      type: 'journey',          stale: true,  overlay: 'live-panel',  note: 'stale ROUND/VISIT/SESSION header baked in top bar; React cover strip applied' },
-  { route: '/smokecraft/flavor-memory', asset: FLAVOR_MEMORY,    type: 'journey',          stale: false, overlay: 'live-panel' },
-  { route: '/smokecraft/final-third', asset: FINAL_THIRD,        type: 'journey',          stale: false, overlay: 'live-panel' },
-  { route: '/smokecraft/scorecard',   asset: SCORECARD,          type: 'journey',          stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/final-review', asset: FINAL_REVIEW,      type: 'journey',          stale: false, overlay: 'live-panel' },
-  { route: '/smokecraft/passport-stamp', asset: PASSPORT_STAMP,  type: 'journey',          stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/connections', asset: CONNECTIONS,         type: 'journey',          stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/management-sync', asset: MANAGEMENT_SYNC, type: 'journey',         stale: false, overlay: 'live-panel' },
-  // Support screens
-  { route: '/smokecraft/how-it-works',     asset: HOW_IT_WORKS,         type: 'support',   stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/guest-pass',       asset: GUEST_PASS,           type: 'support',   stale: false, overlay: 'hotspots' },
-  { route: '/smokecraft/event-challenge',  asset: EVENT_CHALLENGE,      type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/golden-box-status', asset: GOLDEN_BOX_STATUS,   type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/leaderboard',      asset: LEADERBOARD,          type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/origins',          asset: ORIGINS,              type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/terroir',          asset: TERROIR,              type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/pairing-mastery',  asset: PAIRING_MASTERY,      type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/second-humidor-match', asset: SECOND_HUMIDOR_MATCH, type: 'support', stale: false, overlay: 'none' },
-  { route: '/smokecraft/mini-tasting-round', asset: MINI_TASTING_ROUND, type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/scan',             asset: SCAN,                 type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/flavor-dna',       asset: FLAVOR_DNA,           type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/enroll',           asset: ENROLL,               type: 'support',   stale: false, overlay: 'hotspots',   note: 'entry gate form screen' },
-  { route: '/smokecraft/art',              asset: ART,                  type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/vitola',           asset: VITOLA,               type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/pairing',          asset: PAIRING,              type: 'support',   stale: false, overlay: 'none' },
-  { route: '/smokecraft/challenge',        asset: CHALLENGE,            type: 'support',   stale: false, overlay: 'none' },
-  // Session complete: CSS gradient — stale PNG rejected
-  // smokecraft-session-complete.png has "SESSION 23 OF 24" baked in; null = intentional
-  { route: '/smokecraft/session-complete', asset: SESSION_COMPLETE,     type: 'journey',   stale: true,  overlay: 'css-gradient', note: 'live React screen; no image' },
-]
-
-export default SMOKECRAFT_ASSET_MANIFEST
+// Production Build Identity pass — every SC_ASSETS value is versioned in
+// place here, once, so every existing consumer across the app (30+ screens)
+// automatically gets a cache-busted URL with zero per-component changes.
+// null values (e.g. wrapperStrength, a redirect-only entry with no visual)
+// are left untouched — versioning a non-existent asset path is meaningless.
+for (const key of Object.keys(SC_ASSETS)) {
+  if (typeof SC_ASSETS[key] === 'string') SC_ASSETS[key] = versionedAssetUrl(SC_ASSETS[key])
+}

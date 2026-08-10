@@ -1,173 +1,296 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { injectScTouchStyles, hapticTap } from '../../utils/scTouch.js'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { MENTORS, MAX_MENTOR_SELECTIONS } from '../../modules/smokecraft/smokeCraftMentors.js'
+import { useSmokeCraftMentorVoice } from '../../hooks/useSmokeCraftMentorVoice.js'
 
-const MENTORS = [
-  {
-    id: 'left',
-    label: 'El Maestro',
-    country: 'Dominican Republic',
-    bio: 'Legendary torcedor with 40 years of artistry. Specializes in medium-bodied Coronas with cedar and dried-fruit complexity.',
-    style: 'Medium · Cedar · Dried Fruit',
-    x: 2, y: 10, width: 30, height: 58,
-  },
-  {
-    id: 'center',
-    label: 'La Directora',
-    country: 'Nicaragua',
-    bio: 'Master blender renowned for bold, full-bodied selections. Pepper, earth, and dark cocoa define her powerful profile.',
-    style: 'Full · Pepper · Dark Cocoa',
-    x: 35, y: 10, width: 30, height: 58,
-  },
-  {
-    id: 'right',
-    label: 'The Cultivator',
-    country: 'Honduras',
-    bio: 'Farm-to-leaf pioneer. Her cigars express pure terroir — Connecticut shade wrappers with cream, almond, and light spice.',
-    style: 'Light-Med · Cream · Almond',
-    x: 68, y: 10, width: 30, height: 58,
-  },
-]
+const GOLD      = '#E9C176'
+const NAVY      = '#0b0f18'
+const NAVY_DEEP = '#060810'
+const WOOD_DIM  = 'rgba(122,79,49,0.28)'
+const BORDER    = 'rgba(233,193,118,0.22)'
+const GLASS     = 'rgba(8,10,16,0.86)'
+const CREAM     = '#e5e2e1'
+const DIM       = 'rgba(229,226,225,0.65)'
 
-const ANIM = `
-  @keyframes sc-mentor-pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,193,118,0)}50%{box-shadow:0 0 0 6px rgba(233,193,118,.22)}}
-  @keyframes sc-mentor-in  {from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
-`
+// Holistic Fix 5B-2B-1 — Preview Voice control. Additive to the
+// existing card footer (below the tag chips); no existing layout,
+// spacing, or artwork changed. Always uses the shared, server-
+// authoritative mentor-voice service — never fabricates audio, never
+// sends arbitrary text, never exposes a provider key.
+function VoicePreviewControl({ mentor }) {
+  const voice = useSmokeCraftMentorVoice()
 
-export default function Mentor() {
-  const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
-  const [selected, setSelected] = useState(null)
-  const [proceeded, setProceeded] = useState(false)
-  const [pressedId, setPressedId] = useState(null)
-  const [ctaPressed, setCtaPressed] = useState(false)
+  function stop(e) { e.stopPropagation() }
 
-  useEffect(() => { injectScTouchStyles() }, [])
-
-  const handleSelect = useCallback((id) => {
-    setSelected(prev => prev === id ? null : id)
-  }, [])
-
-  const handleProceed = useCallback(() => {
-    if (!selected || proceeded) return
-    setProceeded(true)
-    hapticTap('medium')
-    completeStep('mentor')
-    addXP(75)
-    navigate('/smokecraft/seed-soil')
-  }, [selected, proceeded, completeStep, addXP, navigate])
-
-  const selectedMentor = MENTORS.find(m => m.id === selected)
+  function handlePreview(e) {
+    stop(e)
+    triggerHaptic('light')
+    voice.requestPreview(mentor.id, voice.preferences?.playbackSpeed ?? 1.0)
+  }
 
   return (
-    <SmokeCraftAssetScreen
-      src="/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png"
-      alt="Mentor Selection"
+    <div
+      onClick={stop}
+      onKeyDown={e => e.stopPropagation()}
+      style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${BORDER}` }}
     >
-      <style>{ANIM}</style>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <button
+          type="button"
+          onClick={handlePreview}
+          aria-label={`Preview ${mentor.name}'s voice`}
+          style={{
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
+            color: GOLD, background: 'rgba(233,193,118,0.08)', border: `1px solid ${BORDER}`,
+            borderRadius: 999, padding: '6px 12px', cursor: 'pointer',
+          }}
+        >
+          {voice.status === 'loading' ? 'Loading…' : 'Preview Voice'}
+        </button>
 
-      {/* Tap zones over mentor card positions */}
-      {MENTORS.map(m => {
-        const isSel = selected === m.id
-        const isPressed = pressedId === m.id
-        return (
-          <button
-            key={m.id}
-            aria-label={`Select mentor: ${m.label}`}
-            aria-pressed={isSel}
-            onPointerDown={() => { hapticTap('light'); setPressedId(m.id) }}
-            onPointerUp={() => { setPressedId(null); handleSelect(m.id) }}
-            onPointerLeave={() => setPressedId(null)}
-            onPointerCancel={() => setPressedId(null)}
-            style={{
-              position: 'absolute',
-              left: `${m.x}%`, top: `${m.y}%`,
-              width: `${m.width}%`, height: `${m.height}%`,
-              background: isPressed
-                ? 'rgba(233,193,118,0.18)'
-                : isSel
-                  ? 'rgba(233,193,118,0.12)'
-                  : 'transparent',
-              border: isSel ? '2px solid rgba(233,193,118,0.8)' : '2px solid transparent',
-              borderRadius: '12px', cursor: 'pointer', pointerEvents: 'auto',
-              touchAction: 'manipulation',
-              boxShadow: isPressed
-                ? '0 0 0 4px rgba(233,193,118,0.35), inset 0 0 24px rgba(233,193,118,0.1)'
-                : isSel
-                  ? '0 0 0 3px rgba(233,193,118,0.14), inset 0 0 20px rgba(233,193,118,0.06)'
-                  : 'none',
-              outline: 'none', WebkitTapHighlightColor: 'transparent',
-              display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '6px',
-              animation: isSel && !isPressed ? 'sc-mentor-pulse 2.4s ease-in-out infinite' : 'none',
-              transform: isPressed ? 'scale(0.97)' : 'scale(1)',
-              transition: isPressed ? 'transform 0.06s ease, background 0.06s ease' : 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.18s, border-color 0.18s, box-shadow 0.18s',
-            }}>
-            {isSel && (
-              <span style={{
-                fontFamily: 'Georgia,serif', fontSize: '8px', letterSpacing: '0.18em', textTransform: 'uppercase',
-                color: 'rgba(233,193,118,0.9)', background: 'rgba(0,0,0,0.72)',
-                padding: '3px 10px', borderRadius: '20px', border: '1px solid rgba(233,193,118,0.4)',
-                pointerEvents: 'none', userSelect: 'none',
-                animation: 'sc-mentor-in 0.18s ease forwards',
-              }}>
-                ✓ Selected
-              </span>
-            )}
-          </button>
-        )
-      })}
-
-      {/* Bio panel */}
-      <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0,
-        height: selectedMentor ? '44%' : '22%',
-        background: 'linear-gradient(180deg,rgba(5,3,1,0) 0%,rgba(5,3,1,0.88) 16%,rgba(5,3,1,0.97) 100%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
-        gap: '0.6rem', padding: '0 5% calc(1.5% + 68px)',
-        transition: 'height 0.28s ease',
-        pointerEvents: 'none',
-      }}>
-        {selectedMentor && (
-          <div style={{ textAlign: 'center', pointerEvents: 'none', animation: 'sc-mentor-in 0.2s ease forwards' }}>
-            <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(11px,1.6vw,15px)', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.95)', fontWeight: 700 }}>
-              {selectedMentor.label}
-            </div>
-            <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.5)', marginTop: 2 }}>
-              {selectedMentor.country} · {selectedMentor.style}
-            </div>
-            <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.1vw,11px)', color: 'rgba(240,230,204,0.7)', lineHeight: 1.55, marginTop: '0.5rem', maxWidth: '480px', fontStyle: 'italic' }}>
-              {selectedMentor.bio}
-            </div>
-          </div>
+        {voice.status === 'ready' && (
+          <>
+            <button
+              type="button"
+              aria-label={voice.isPlaying ? `Pause ${mentor.name}'s voice preview` : `Play ${mentor.name}'s voice preview`}
+              onClick={e => { stop(e); voice.isPlaying ? voice.pause() : voice.play() }}
+              style={iconBtnStyle}
+            >
+              {voice.isPlaying ? '⏸' : '▶'}
+            </button>
+            <button
+              type="button"
+              aria-label={`Replay ${mentor.name}'s voice preview`}
+              onClick={e => { stop(e); voice.replay() }}
+              style={iconBtnStyle}
+            >
+              ⟲
+            </button>
+          </>
         )}
 
         <button
-          aria-label={selected ? `Proceed with ${selectedMentor?.label}` : 'Select a Mentor to Continue'}
-          disabled={!selected || proceeded}
-          onPointerDown={() => { if (selected && !proceeded) { setCtaPressed(true); hapticTap('medium') } }}
-          onPointerUp={() => { setCtaPressed(false); handleProceed() }}
-          onPointerLeave={() => setCtaPressed(false)}
-          onPointerCancel={() => setCtaPressed(false)}
-          style={{
-            width: '80%', padding: '3.5% 0',
-            background: selected ? 'linear-gradient(135deg,rgba(233,193,118,.28),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.45)',
-            border: selected ? '1.5px solid rgba(233,193,118,0.75)' : '1.5px solid rgba(233,193,118,0.2)',
-            borderRadius: '14px', cursor: selected ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
-            touchAction: 'manipulation', opacity: selected ? 1 : 0.5,
-            backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
-            outline: 'none', WebkitTapHighlightColor: 'transparent',
-            animation: selected && !ctaPressed ? 'sc-mentor-pulse 2.4s ease-in-out infinite' : 'none',
-            transform: ctaPressed ? 'scale(0.95)' : 'scale(1)',
-            boxShadow: ctaPressed ? '0 0 0 3px rgba(233,193,118,0.4)' : 'none',
-            transition: ctaPressed ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), all 0.18s ease',
-          }}>
-          <span style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)', letterSpacing: '0.2em', textTransform: 'uppercase', color: selected ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.4)', fontWeight: 600, pointerEvents: 'none' }}>
-            {proceeded ? 'Continuing...' : selected ? `Proceed with ${selectedMentor?.label} →` : 'Select a Mentor to Continue'}
-          </span>
+          type="button"
+          aria-label={voice.isMuted ? 'Unmute mentor voice' : 'Mute mentor voice'}
+          onClick={e => { stop(e); voice.toggleMute() }}
+          style={iconBtnStyle}
+        >
+          {voice.isMuted ? '🔇' : '🔊'}
         </button>
+
+        {voice.status === 'unavailable' && (
+          <span style={{ fontSize: 10, color: DIM }}>Voice unavailable for this mentor</span>
+        )}
+        {voice.status === 'provider-error' && (
+          <>
+            <span style={{ fontSize: 10, color: DIM }}>Voice preview failed</span>
+            <button type="button" onClick={e => { stop(e); voice.retry() }} style={{ ...iconBtnStyle, width: 'auto', padding: '0 8px', fontSize: 10 }}>
+              Retry
+            </button>
+          </>
+        )}
+        {voice.status === 'session-expired' && (
+          <span style={{ fontSize: 10, color: DIM }}>Session expired — refresh to preview voice</span>
+        )}
       </div>
-    </SmokeCraftAssetScreen>
+
+      {voice.transcript && voice.preferences?.captionsEnabled !== false && voice.status !== 'idle' && (
+        <p style={{ fontSize: 10, color: DIM, lineHeight: 1.5, marginTop: 8, marginBottom: 0 }} aria-live="polite">
+          {voice.transcript}
+        </p>
+      )}
+    </div>
+  )
+}
+
+const iconBtnStyle = {
+  width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+  color: GOLD, background: 'rgba(233,193,118,0.08)', border: `1px solid ${BORDER}`, cursor: 'pointer', fontSize: 12, padding: 0,
+}
+
+function MentorCard({ mentor, active, maxed, onToggle }) {
+  const [hover, setHover] = useState(false)
+  function handleKeyDown(e) {
+    if (maxed) return
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() }
+  }
+  return (
+    <div
+      role="button"
+      tabIndex={maxed ? -1 : 0}
+      aria-label={`${mentor.name} — ${mentor.country} — ${mentor.bio}${active ? ' (selected)' : ''}`}
+      aria-pressed={active}
+      aria-disabled={maxed}
+      onClick={maxed ? undefined : onToggle}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocus={() => setHover(true)}
+      onBlur={() => setHover(false)}
+      style={{
+        position: 'relative', textAlign: 'left', background: GLASS,
+        border: `1.5px solid ${active ? GOLD : (hover ? 'rgba(233,193,118,0.5)' : BORDER)}`,
+        borderRadius: 14, padding: 0, overflow: 'hidden', cursor: maxed ? 'not-allowed' : 'pointer',
+        opacity: maxed ? 0.5 : 1, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+        boxShadow: active ? '0 0 0 3px rgba(233,193,118,0.18)' : 'none',
+        transition: 'border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease',
+      }}
+    >
+      <div style={{ position: 'relative', aspectRatio: '4 / 3', background: '#000' }}>
+        <img
+          src={mentor.image}
+          alt=""
+          draggable={false}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+        <div style={{
+          position: 'absolute', left: 8, top: 8, fontSize: 10, fontWeight: 700,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: GOLD,
+          background: 'rgba(6,8,16,0.75)', padding: '3px 8px', borderRadius: 999,
+        }}>
+          {mentor.country}
+        </div>
+        <div style={{
+          position: 'absolute', right: 8, top: 8, width: 26, height: 26, borderRadius: '50%',
+          background: active ? GOLD : 'rgba(6,8,16,0.75)', color: active ? '#0a0603' : GOLD,
+          border: `1px solid ${GOLD}`, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 14, fontWeight: 700,
+        }} aria-hidden="true">
+          {active ? '✓' : '+'}
+        </div>
+      </div>
+      <div style={{ padding: '12px 14px 14px' }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: CREAM, marginBottom: 4 }}>{mentor.name}</div>
+        <div style={{ fontSize: 12, color: DIM, lineHeight: 1.5, marginBottom: 8, minHeight: 36 }}>{mentor.bio}</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {mentor.tags.map(tag => (
+            <span key={tag} style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
+              color: 'rgba(233,193,118,0.85)', border: `1px solid ${BORDER}`, borderRadius: 999,
+              padding: '3px 8px',
+            }}>{tag}</span>
+          ))}
+        </div>
+        <VoicePreviewControl mentor={mentor} />
+      </div>
+    </div>
+  )
+}
+
+export default function Mentor() {
+  const { awardSessionRewards, setSelectedMentor } = useGuestSession()
+  const { journey, setMentor } = useSmokeCraftJourney()
+  const navigate = useNavigate()
+
+  const [selected, setSelected] = useState(() => {
+    const saved = journey.mentor
+    if (!saved) return []
+    if (Array.isArray(saved)) return saved.map(m => m.id)
+    return [saved.id]
+  })
+
+  // Holistic Fix 5A: closes the disclosed mentor dual-ownership defect
+  // (SMOKECRAFT_STATE_OWNERSHIP_MAP.md) — journey.mentor (server-synced
+  // via the Holistic Fix 4B journey-snapshot mechanism) is now the SOLE
+  // write target for the user's selection. session.selectedMentor still
+  // exists as a field (many cross-module consumers outside /smokecraft —
+  // NCIE, POS3, staff handoff, EAT analytics, leaderboard — read it and
+  // live entirely outside SmokeCraftJourneyProvider's subtree, so it
+  // cannot be removed or made to read journey.mentor directly), but it
+  // is no longer independently settable from user action: it is now a
+  // pure reactive mirror of journey.mentor, updated in the SAME
+  // render pass a moment after journey.mentor changes, so the two can
+  // never diverge — there is exactly one write path (setMentor) and one
+  // derived mirror (setSelectedMentor), not two independent owners.
+  useEffect(() => {
+    const mentors = MENTORS.filter(m => selected.includes(m.id))
+    setMentor(mentors.length ? mentors : null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
+
+  useEffect(() => {
+    const first = Array.isArray(journey.mentor) ? journey.mentor[0] : null
+    if (first) setSelectedMentor(first.id, first.country)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [journey.mentor])
+
+  function toggle(id) {
+    triggerHaptic('light')
+    setSelected(prev =>
+      prev.includes(id)
+        ? prev.filter(x => x !== id)
+        : prev.length < MAX_MENTOR_SELECTIONS ? [...prev, id] : prev
+    )
+  }
+
+  function handleContinue() {
+    if (selected.length === 0) return
+    triggerHaptic('medium')
+    awardSessionRewards('mentor')
+    navigate('/smokecraft/seed-soil')
+  }
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      background: `
+        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
+        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
+        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
+      `,
+      fontFamily: 'Georgia, serif',
+    }}>
+      <header style={{ padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0', flexShrink: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>
+          SmokeCraft Journey
+        </div>
+        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, fontFamily: 'Georgia, serif' }}>
+          Mentor Selection
+        </h1>
+        <p style={{ margin: '6px 0 0', fontSize: 13, color: DIM, maxWidth: 560 }}>
+          Select up to {MAX_MENTOR_SELECTIONS} master mentors from the world's great tobacco traditions. Each brings a legacy, growing philosophy, and sensory perspective that will shape your SmokeCraft tasting map.
+        </p>
+        <div style={{ fontSize: 12, color: selected.length > 0 ? GOLD : DIM, marginTop: 8 }}>
+          {selected.length} of {MAX_MENTOR_SELECTIONS} selected
+        </div>
+      </header>
+
+      <main style={{
+        flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+        padding: '16px clamp(16px,4vw,40px) clamp(150px,20vh,190px)',
+      }}>
+        <div style={{
+          maxWidth: 1100, margin: '0 auto', display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14,
+        }}>
+          {MENTORS.map(mentor => {
+            const active = selected.includes(mentor.id)
+            const maxed = selected.length >= MAX_MENTOR_SELECTIONS && !active
+            return (
+              <MentorCard
+                key={mentor.id}
+                mentor={mentor}
+                active={active}
+                maxed={maxed}
+                onToggle={() => toggle(mentor.id)}
+              />
+            )
+          })}
+        </div>
+      </main>
+
+      <SmokeCraftNavBar
+        primary="Continue to Seed & Soil →"
+        onPrimary={handleContinue}
+        primaryDisabled={selected.length === 0}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
+      />
+    </div>
   )
 }

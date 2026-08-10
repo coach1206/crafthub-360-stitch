@@ -1,184 +1,133 @@
-/**
- * LockedSmokeCraftScreen
- *
- * Full-screen lock screen shown by SmokeCraftSessionGuard when the requested
- * session hasn't been unlocked yet. Dark/gold/premium aesthetic — no generic
- * dashboard styling.
- *
- * Props:
- *   sessionNumber  — 1–24 locked session number
- */
 import { useNavigate } from 'react-router-dom'
 import {
-  getSessionByNumber,
   getVisitBySession,
   getLockedReason,
-  getCurrentAllowedSession,
   TOTAL_VISITS,
 } from '../../constants/smokecraftJourney.js'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 
+const GOLD = '#c9a84c'
+const GOLD_BRIGHT = '#e9c176'
+const CREAM = '#e5e2e1'
+const BG = '#050810'
+const GLASS = 'rgba(8,10,16,0.86)'
+const BORDER = 'rgba(201,168,76,0.25)'
+
+/**
+ * LockedSmokeCraftScreen — LIVE state panel for a not-yet-unlocked numbered
+ * session (Passport Stamp, Connections, Management Sync, and every other
+ * future spine session).
+ *
+ * Root-cause fix (Live Landing & Destinations pass): this screen previously
+ * rendered a static, baked lock IMAGE (/smokecraft-future-visit-locked.png,
+ * /smokecraft-passport-stamp-locked.png, etc.) with black-box overlays glued
+ * on top to hide stale baked "VISIT 5 OF 8 / SESSION 18 OF 24" text. That old
+ * artwork is exactly the reported "FUTURE VISIT LOCKED / MANAGEMENT SYNC
+ * LOCKED" defect. Per the mandate, a future screen may be locked only through
+ * a LIVE state panel — real prerequisite, real current progress, and the
+ * correct return route — never a static old lock image. All references to the
+ * old lock PNGs are removed here; the panel is composed live from the
+ * authoritative 6-phase / 27-session progress data.
+ */
 export default function LockedSmokeCraftScreen({ sessionNumber }) {
   const navigate = useNavigate()
-  const { isDemoMode, isLocalPreviewMode, modeLabel, isSessionUnlocked: checkUnlocked } = useSmokeCraftProgress()
+  const {
+    isDemoMode, isLocalPreviewMode, modeLabel, currentAllowed,
+  } = useSmokeCraftProgress()
+  const resumeRoute = currentAllowed?.route || '/smokecraft'
 
-  const session = getSessionByNumber(sessionNumber)
-  const visit   = getVisitBySession(sessionNumber)
+  const visit = getVisitBySession(sessionNumber)
   const visitNumber = visit?.visit || 1
-  const visitTitle  = visit?.title || 'Next Visit'
-
-  // Derive the "current allowed" to navigate back to
-  // We use getCurrentAllowedSession directly with no-progress signal so we
-  // always send them somewhere useful, even if context isn't available.
-  const allowedRoute = (() => {
-    try {
-      const allowed = getCurrentAllowedSession([])
-      return allowed?.route || '/smokecraft'
-    } catch (_) {
-      return '/smokecraft'
-    }
-  })()
-
+  const visitTitle = visit?.title || 'Next Visit'
   const lockedReason = getLockedReason(sessionNumber, [])
 
+  const currentLabel = currentAllowed?.label
+  const currentSession = currentAllowed?.session
+
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(160deg,#0a0603 0%,#0f0a06 60%,#0a0603 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: 'Georgia, serif',
-        padding: '2rem 1.5rem',
-        textAlign: 'center',
-      }}
-    >
-      {/* Lock icon */}
-      <div
-        style={{
-          width: 88,
-          height: 88,
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '2rem',
-          background: 'linear-gradient(135deg, rgba(201,168,76,0.14), rgba(201,168,76,0.04))',
-          border: '1px solid rgba(201,168,76,0.28)',
-        }}
-      >
-        <span
-          className="material-symbols-outlined"
-          style={{ fontSize: 40, color: 'rgba(201,168,76,0.75)' }}
-        >
-          lock
-        </span>
-      </div>
+    <section style={{
+      position: 'fixed', inset: 0, overflow: 'hidden',
+      background: `
+        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
+        radial-gradient(ellipse at 100% 120%, rgba(122,79,49,0.22), transparent 60%),
+        linear-gradient(180deg, #0b0f18 0%, ${BG} 100%)
+      `,
+      fontFamily: 'Georgia, serif',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 'clamp(20px,5vw,48px)',
+    }}>
+      <div style={{
+        maxWidth: 480, width: '100%', background: GLASS,
+        border: `1px solid ${BORDER}`, borderRadius: 16,
+        padding: 'clamp(24px,4vw,40px)', textAlign: 'center',
+        boxShadow: '0 16px 60px rgba(0,0,0,0.55)',
+      }}>
+        {/* Phase marker (live, from the authoritative registry) */}
+        <div style={{
+          fontSize: 11, fontWeight: 700, color: GOLD_BRIGHT, letterSpacing: '0.2em',
+          textTransform: 'uppercase', marginBottom: 14,
+        }}>
+          Phase {visitNumber} of {TOTAL_VISITS} — {visitTitle}
+        </div>
 
-      {/* Visit label */}
-      <p
-        style={{
-          fontSize: '10px',
-          letterSpacing: '0.28em',
-          textTransform: 'uppercase',
-          color: 'rgba(201,168,76,0.7)',
-          fontWeight: 600,
-          marginBottom: '0.75rem',
-        }}
-      >
-        Visit {visitNumber} of {TOTAL_VISITS}
-      </p>
+        {/* Lock crest — CSS/emoji, no baked artwork */}
+        <div aria-hidden="true" style={{
+          width: 64, height: 64, margin: '0 auto 18px', borderRadius: '50%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          border: `2px solid ${GOLD}`, background: 'rgba(201,168,76,0.10)',
+          fontSize: 28,
+        }}>🔒</div>
 
-      {/* Title */}
-      <h1
-        style={{
-          fontSize: 'clamp(22px, 4vw, 36px)',
-          color: '#f0e6cc',
-          fontWeight: 700,
-          lineHeight: 1.2,
-          marginBottom: '1rem',
-          maxWidth: 440,
-        }}
-      >
-        Locked Until a Future Visit
-      </h1>
+        <h1 style={{ margin: '0 0 8px', fontSize: 'clamp(20px,3vw,28px)', color: CREAM }}>
+          Not Unlocked Yet
+        </h1>
 
-      {/* Main message */}
-      <p
-        style={{
-          fontSize: 'clamp(14px, 2vw, 17px)',
-          color: 'rgba(240,230,204,0.65)',
-          lineHeight: 1.6,
-          marginBottom: '0.75rem',
-          maxWidth: 460,
-        }}
-      >
-        This SmokeCraft session is part of{' '}
-        <span style={{ color: 'rgba(201,168,76,0.85)' }}>Visit {visitNumber} of {TOTAL_VISITS}</span>.
-        Return on your next venue visit to unlock{' '}
-        <span style={{ color: 'rgba(201,168,76,0.85)' }}>{visitTitle}</span>.
-      </p>
+        {/* Real prerequisite */}
+        {lockedReason && (
+          <p style={{ margin: '0 0 16px', fontSize: 14, lineHeight: 1.6, color: 'rgba(229,226,225,0.7)' }}>
+            {lockedReason}
+          </p>
+        )}
 
-      {/* Detailed reason */}
-      {lockedReason && (
-        <p
+        {/* Live current-progress panel */}
+        <div style={{
+          background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`,
+          borderRadius: 10, padding: '14px 16px', margin: '0 0 20px', textAlign: 'left',
+        }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Your Current Progress
+          </div>
+          <div style={{ fontSize: 13, color: CREAM }}>
+            {currentLabel
+              ? <>Next up: <span style={{ color: GOLD_BRIGHT }}>{currentLabel}</span>{currentSession ? ` (Session ${currentSession})` : ''}</>
+              : 'Continue your SmokeCraft journey from where you left off.'}
+          </div>
+        </div>
+
+        <button
+          onClick={() => navigate(resumeRoute)}
           style={{
-            fontSize: '12px',
-            letterSpacing: '0.04em',
-            color: 'rgba(201,168,76,0.45)',
-            marginBottom: '2.5rem',
-            maxWidth: 400,
+            height: 52, paddingInline: 32, borderRadius: 12, border: 'none', cursor: 'pointer',
+            background: 'linear-gradient(135deg, #e9c176, #c5a059)', color: '#131314',
+            fontFamily: 'Georgia, serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em',
+            textTransform: 'uppercase', boxShadow: '0 4px 20px rgba(201,168,76,0.35)',
+            outline: 'none', width: '100%', maxWidth: 320,
           }}
+          onMouseEnter={e => { e.currentTarget.style.opacity = '0.9' }}
+          onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
         >
-          {lockedReason}
-        </p>
-      )}
+          Back to Current Session
+        </button>
 
-      {/* Back button */}
-      <button
-        onClick={() => navigate('/smokecraft')}
-        style={{
-          height: 56,
-          paddingInline: 36,
-          borderRadius: '12px',
-          border: 'none',
-          cursor: 'pointer',
-          background: 'linear-gradient(135deg, #e9c176, #c5a059)',
-          color: '#131314',
-          fontFamily: 'Georgia, serif',
-          fontSize: '12px',
-          fontWeight: 700,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          boxShadow: '0 4px 20px rgba(201,168,76,0.28)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          transition: 'opacity 0.2s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.opacity = '0.85' }}
-        onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
-      >
-        Back to Current Session
-        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_forward</span>
-      </button>
-
-      {/* Mode notice */}
-      {(isDemoMode || isLocalPreviewMode) && (
-        <p
-          style={{
-            marginTop: '2rem',
-            fontSize: '10px',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
+        {(isDemoMode || isLocalPreviewMode) && (
+          <p style={{
+            marginTop: 14, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
             color: isDemoMode ? 'rgba(233,193,118,0.5)' : 'rgba(201,168,76,0.3)',
-          }}
-        >
-          {modeLabel}
-        </p>
-      )}
-    </div>
+          }}>
+            {modeLabel}
+          </p>
+        )}
+      </div>
+    </section>
   )
 }

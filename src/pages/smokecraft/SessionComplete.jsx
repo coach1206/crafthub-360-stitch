@@ -1,348 +1,482 @@
-/**
- * SessionComplete — Live Overlay (no baked image with stale progress text)
- *
- * Shows real-time data from context:
- *   - visit X / Y, session Z / W
- *   - XP earned this session
- *   - three optional action cards (Submit, Share, Follow-up) — multi-select
- *   - Complete Session CTA → /smokecraft
- *
- * This screen uses a dark obsidian gradient background rather than the
- * baked PNG which contained outdated progress text from the old 8-visit/24-session structure.
- */
-
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
-import { XP_AWARDS } from '../../constants/session.js'
-import { injectScTouchStyles, useScPress, hapticTap } from '../../utils/scTouch.js'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useDemoMode } from '../../context/DemoModeContext.jsx'
+import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
+import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
+import * as smokecraftManagementSyncService from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
+import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import TicketTapperSpecialsStrip from '../../components/smokecraft/TicketTapperSpecialsStrip.jsx'
+import { fetchTicketTapperSpecials } from '../../services/smokeCraftTicketTapperSpecialsApi.js'
+import { getActiveTicketTapperSpecials } from '../../utils/smokeCraftSpecialsEngine.js'
+import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftImageSurface from '../../components/smokecraft/SmokeCraftImageSurface.jsx'
+import { TOTAL_SESSIONS } from '../../constants/session.js'
+import {
+  calculateRecommendations,
+  getTotalConfiguredXP,
+  getSuggestedEvents,
+  getSuggestedQuiz,
+  getRelatedChallenges,
+} from '../../services/smokecraft/recommendedJourneyService.js'
 
-const ACTION_CARDS = [
-  {
-    id: 'submit',
-    icon: '📋',
-    title: 'Submit Session to Venue Log',
-    desc: 'Your tasting notes and score will be logged to the staff system.',
-  },
-  {
-    id: 'share',
-    icon: '✉️',
-    title: 'Share Tasting Note with Staff',
-    desc: 'A summary of your flavor profile will be forwarded to your host.',
-  },
-  {
-    id: 'followup',
-    icon: '🎩',
-    title: 'Request Follow-up from Manager',
-    desc: 'Request a personalised follow-up on your next visit.',
-  },
-]
+const GOLD      = '#E9C176'
+const GOLD_DIM  = 'rgba(233,193,118,0.55)'
+const NAVY      = '#0b0f18'
+const NAVY_DEEP = '#060810'
+const CREAM     = '#e5e2e1'
+const BORDER    = 'rgba(233,193,118,0.22)'
+const GLASS     = 'rgba(8,10,16,0.86)'
 
-const ANIM = `
-  @keyframes sc-sc-fadeup { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:none } }
-  @keyframes sc-sc-glow   { 0%,100%{box-shadow:0 0 0 0 rgba(233,193,118,0)} 50%{box-shadow:0 0 0 5px rgba(233,193,118,0.22)} }
-  @keyframes sc-sc-check  { from{transform:scale(0) rotate(-30deg)} to{transform:scale(1) rotate(0deg)} }
-`
-
-function ActionCard({ card, selected, onToggle }) {
-  const { pressProps, pressed } = useScPress({
-    onTap: onToggle,
-    haptic: 'light',
-    sound: false,
-  })
-
-  return (
-    <button
-      {...pressProps}
-      aria-pressed={selected}
-      aria-label={card.title}
-      style={{
-        display: 'flex', alignItems: 'flex-start', gap: '12px',
-        width: '100%', padding: '14px 16px',
-        background: selected
-          ? 'linear-gradient(135deg,rgba(233,193,118,0.18),rgba(201,168,76,0.1))'
-          : 'rgba(0,0,0,0.52)',
-        border: selected ? '1.5px solid rgba(233,193,118,0.75)' : '1.5px solid rgba(233,193,118,0.18)',
-        borderRadius: '12px', cursor: 'pointer', textAlign: 'left',
-        backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-        transition: 'border-color 0.15s, background 0.15s',
-        animation: selected ? 'sc-sc-glow 2.8s ease-in-out infinite' : 'none',
-        transform: pressed ? 'scale(0.97)' : 'scale(1)',
-        WebkitTapHighlightColor: 'transparent', outline: 'none', touchAction: 'manipulation',
-      }}
-    >
-      {/* Radio circle */}
-      <span style={{
-        flexShrink: 0, marginTop: 2, width: 20, height: 20, borderRadius: '50%',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: selected ? 'rgba(233,193,118,0.9)' : 'transparent',
-        border: selected ? 'none' : '1.5px solid rgba(233,193,118,0.35)',
-        transition: 'all 0.15s',
-      }}>
-        {selected && (
-          <span style={{ fontSize: 11, color: '#0a0603', fontWeight: 900, animation: 'sc-sc-check 0.15s ease forwards', display: 'block' }}>✓</span>
-        )}
-      </span>
-
-      <div style={{ flex: 1 }}>
-        <div style={{
-          fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.2vw,12px)',
-          letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600,
-          color: selected ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.55)',
-          lineHeight: 1.3, marginBottom: 4,
-        }}>
-          {card.icon} {card.title}
-        </div>
-        {selected && (
-          <div style={{
-            fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)',
-            color: 'rgba(233,193,118,0.5)', lineHeight: 1.5,
-          }}>
-            {card.desc}
-          </div>
-        )}
-      </div>
-    </button>
-  )
-}
-
-function CompleteButton({ onPress, done }) {
-  const { pressProps } = useScPress({ onTap: onPress, disabled: done, haptic: 'success', sound: false })
-
-  return (
-    <button
-      {...pressProps}
-      disabled={done}
-      aria-label="Complete Session and return to SmokeCraft Hub"
-      style={{
-        width: '100%', padding: '16px 0',
-        background: done
-          ? 'rgba(0,0,0,0.3)'
-          : 'linear-gradient(135deg,rgba(233,193,118,0.3),rgba(201,168,76,0.18))',
-        border: done
-          ? '1.5px solid rgba(233,193,118,0.15)'
-          : '1.5px solid rgba(233,193,118,0.8)',
-        borderRadius: '14px', cursor: done ? 'default' : 'pointer',
-        backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-        transition: 'all 0.18s',
-        WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', outline: 'none',
-      }}
-    >
-      <span style={{
-        fontFamily: 'Georgia,serif', fontSize: 'clamp(10px,1.4vw,13px)',
-        letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
-        color: done ? 'rgba(233,193,118,0.3)' : 'rgba(233,193,118,0.95)',
-      }}>
-        {done ? 'Returning to Hub...' : 'Complete Session →'}
-      </span>
-    </button>
-  )
-}
-
-export default function SessionComplete() {
+// Canonical Runtime pass — routed through SmokeCraftScreenRenderer as
+// screenId="session-27". This is the terminal screen: it has no
+// "continue to next session" action (there is no next session), and its
+// S27 completion is an idempotent on-mount award (journey-complete), the
+// established, correct mechanism. There is therefore no forward
+// award+navigate step to defer to onComplete; onBack is accepted for the
+// back button.
+export default function SessionComplete({ onBack, onComplete } = {}) {
+  const { session, update, awardSessionRewards, awardStamp } = useGuestSession()
+  const { journey, setSessionCompletion } = useSmokeCraftJourney()
+  const { isDemoMode } = useDemoMode()
+  const { managementSync, saveSnapshot, completeOnServer } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
-  const { session, addXP, completeStep, awardStamp, completeSmokeCraftSession, syncPos3Activity, syncEATActivity } = useGuestSession()
-  const { currentVisit, currentSession, totalVisits, totalSessions } = useSmokeCraftProgress()
 
-  const [selectedCards, setSelectedCards] = useState(new Set())
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState('loading') // loading | error | ready
+  const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
+
+  // Compact Ticket Tapper — real specials for the journey's selected venue.
+  // A click-through "Add" here does not award XP/rewards or auto-redeem;
+  // it only tracks a tap/add event, same as the commerce screen.
+  const [tapperSpecials, setTapperSpecials] = useState([])
+  const [tapperLocalPreview, setTapperLocalPreview] = useState(false)
+  const [tapperUnavailable, setTapperUnavailable] = useState(false)
+  const activeVenueId = (journey.selectedVenue && !journey.selectedVenue.skipped) ? journey.selectedVenue.id : null
 
   useEffect(() => {
-    injectScTouchStyles()
-    const alreadyDone = session.completedSteps.includes('session-complete')
-    if (!alreadyDone) {
-      completeStep('session-complete')
-      addXP(XP_AWARDS.SESSION_1_COMPLETE || 150)
-      awardStamp('journey-complete', 'session-complete')
-      hapticTap('success')
+    if (!activeVenueId) {
+      setTapperSpecials([])
+      setTapperLocalPreview(false)
+      setTapperUnavailable(false)
+      return
     }
-    completeSmokeCraftSession({ tasteProfile: [] })
-    syncPos3Activity()
-    syncEATActivity()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const toggleCard = useCallback((id) => {
-    setSelectedCards(prev => {
-      const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
-      return next
+    let cancelled = false
+    fetchTicketTapperSpecials(activeVenueId).then(res => {
+      if (cancelled || !res.ok) return
+      if (!res.localPreview) {
+        setTapperSpecials(res.specials || [])
+        setTapperLocalPreview(false)
+        setTapperUnavailable(false)
+      } else if (isDemoMode) {
+        setTapperSpecials(res.specials || smokeCraftTicketTapperSpecialsSeed.specials)
+        setTapperLocalPreview(true)
+        setTapperUnavailable(false)
+      } else {
+        setTapperSpecials([])
+        setTapperLocalPreview(false)
+        setTapperUnavailable(true)
+      }
     })
+    return () => { cancelled = true }
+  }, [activeVenueId, isDemoMode])
+
+  const tapperActiveSpecials = useMemo(
+    () => getActiveTicketTapperSpecials({ specials: tapperSpecials, inventoryItems: [] }),
+    [tapperSpecials]
+  )
+
+  useEffect(() => {
+    const on = () => setIsOffline(false)
+    const off = () => setIsOffline(true)
+    window.addEventListener('online', on)
+    window.addEventListener('offline', off)
+    return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
   }, [])
 
-  const handleComplete = useCallback(() => {
-    if (done) return
-    setDone(true)
-    hapticTap('success')
-    setTimeout(() => navigate('/smokecraft'), 400)
-  }, [done, navigate])
+  useEffect(() => {
+    try {
+      const t = setTimeout(() => setPhase('ready'), 200)
+      return () => clearTimeout(t)
+    } catch {
+      setPhase('error')
+    }
+  }, [])
 
-  const xpEarned = session?.xp ?? 0
-  const visitLabel = `${currentVisit ?? totalVisits}/${totalVisits}`
-  const sessionLabel = `${currentSession ?? totalSessions}/${totalSessions}`
+  // S27 completion — idempotent, unchanged mechanism from before this
+  // package (awardSessionRewards already no-ops if 'session-complete' is
+  // already in completedSteps). No XP is awarded merely for opening this
+  // page beyond this one, already-idempotent completion signal.
+  useEffect(() => {
+    if (!session.completedSteps.includes('session-complete')) {
+      awardSessionRewards('session-complete')
+      awardStamp('journey-complete', 'session-complete')
+      triggerHaptic('success')
+    }
+    if (!journey.sessionCompletion?.completedAt) {
+      setSessionCompletion({ ...(journey.sessionCompletion || {}), completedAt: Date.now() })
+    }
+    // Final completion checkpoint: only if a server journey already
+    // exists (established at START/RESUME) and only once, guarded the
+    // same way the existing local reward/stamp award above is guarded —
+    // never creates a journey here, never blocks navigation or the
+    // existing local completion UX.
+    if (managementSync.serverJourneyId && !session.completedSteps.includes('session-complete')) {
+      saveSnapshot({ ...mapJourneyToSnapshotPayload(journey), completionState: 'completed' })
+        .then(() => completeOnServer())
+        .catch(() => {})
+    }
+
+    // E.A.T. live sync (SC-D069 fix) — restores the canonical calls into
+    // the existing, already-functional eatSmokeCraftLiveSyncService via
+    // the smokecraftManagementSyncService client. Fire-and-forget async
+    // IIFE: never awaited by the render path, never blocks the guest
+    // screen, and any failure is caught silently and degrades to
+    // local_fallback inside the service itself. SmokeCraft session
+    // completion (XP/stamps above) is already committed locally before
+    // this runs and is never rolled back if E.A.T. sync fails.
+    if (!session.completedSteps.includes('session-complete')) {
+      const selectedCigar = journey?.selectedCigar || null
+      const venueId = (journey.selectedVenue && !journey.selectedVenue.skipped) ? journey.selectedVenue.id : null
+      const guestId = session?.guestId || session?.id || null
+      const completedSteps = session?.completedSteps || []
+      const xpSummary = { xp: session?.xp || 0 }
+      const stampSummary = session?.stamps || []
+      const tasteProfile = { tasteTags: journey?.flavorMemory?.selectedFlavors || [] }
+
+      ;(async () => {
+        try {
+          const syncResult = await smokecraftManagementSyncService.syncManagement({
+            venueId,
+            guestId,
+            smokecraftSessionId: managementSync.serverJourneyId || null,
+            sessionStatus:       'completed',
+            completedRoute:      'session-complete',
+            completedSteps,
+            xpSummary,
+            stampSummary,
+            tasteProfile,
+          })
+
+          await smokecraftManagementSyncService.recordGuestActivity({
+            venueId,
+            guestId,
+            managerVisibility: true,
+          })
+
+          await smokecraftManagementSyncService.createManagerAlertSync({
+            venueId,
+            alertType: 'session_completed',
+          })
+
+          if (selectedCigar) {
+            await smokecraftManagementSyncService.createInventorySignalSync({
+              venueId,
+              cigarReference: selectedCigar.id || selectedCigar.name || null,
+            })
+          }
+
+          await smokecraftManagementSyncService.writeEATSyncAuditEvent({
+            venueId,
+            guestId,
+            eventType: 'session_complete_sync',
+            backendConnected: !!syncResult?.backendConnected,
+          })
+        } catch {
+          // Honest degraded state, never surfaced as a false success to
+          // the guest, never rolls back gameplay completion above.
+        }
+      })()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Pure, deterministic recommendation — same session/journey input always
+  // yields the same output. Recomputed on every render so it updates the
+  // instant underlying data changes, and stays identical across refresh
+  // when nothing has changed.
+  const recommendations = useMemo(() => calculateRecommendations(session, journey), [session, journey])
+  const totalConfiguredXP = useMemo(() => getTotalConfiguredXP(), [])
+  const suggestedEvents = useMemo(() => getSuggestedEvents(), [])
+  const suggestedQuiz = useMemo(() => getSuggestedQuiz(session), [session])
+  const relatedChallenges = useMemo(
+    () => recommendations.primary ? getRelatedChallenges(session, recommendations.primary.id) : [],
+    [session, recommendations.primary]
+  )
+
+  // Persist the recommendation viewed state + selection into the canonical
+  // sc_journey_v1 sessionCompletion field — no new storage key.
+  useEffect(() => {
+    if (phase !== 'ready') return
+    const cur = journey.sessionCompletion || {}
+    const primaryId = recommendations.primary?.id || null
+    const alternateIds = recommendations.alternates.map(a => a.id)
+    if (cur.primaryRecommendationId === primaryId && JSON.stringify(cur.alternateRecommendationIds || []) === JSON.stringify(alternateIds) && cur.viewedAt) return
+    setSessionCompletion({
+      ...cur,
+      primaryRecommendationId: primaryId,
+      alternateRecommendationIds: alternateIds,
+      viewedAt: cur.viewedAt || Date.now(),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, recommendations.primary, recommendations.alternates])
+
+  const guestName = journey?.identity?.preferredName || journey?.identity?.fullName || null
+  const cigarName = journey?.selectedCigar?.name || null
+  const mentorName = Array.isArray(journey?.mentor) && journey.mentor.length > 0
+    ? journey.mentor[0]?.name || null : null
+  const pairingRec = journey?.pairing?.recommendation || null
+  const flavorNotes = journey?.flavorMemory?.selectedFlavors || []
+  const formatLabel = journey?.format?.label || null
+  const completedCount = session?.completedSteps?.length || 0
+  const progressPct = Math.round((completedCount / TOTAL_SESSIONS) * 100)
+  const achievementsEarned = journey?.achievements?.earned ? Object.keys(journey.achievements.earned).length : 0
+  const badgesEarned = session?.badges?.length || 0
+
+  function handleRetry() {
+    setPhase('loading')
+    setTimeout(() => setPhase('ready'), 200)
+  }
+
+  function handleSelectJourney(cat) {
+    triggerHaptic('light')
+    setSessionCompletion({ ...(journey.sessionCompletion || {}), selectedNextJourneyId: cat.id })
+  }
+
+  function handleStartJourney(cat) {
+    if (!cat?.route) return
+    triggerHaptic('medium')
+    setSessionCompletion({ ...(journey.sessionCompletion || {}), selectedNextJourneyId: cat.id })
+    navigate(cat.route)
+  }
+
+  function handleExploreAll() {
+    triggerHaptic('light')
+    navigate('/smokecraft/resume')
+  }
+
+  function handleViewProgress() {
+    triggerHaptic('light')
+    navigate('/smokecraft/rewards')
+  }
+
+  const selectedNextJourneyId = journey.sessionCompletion?.selectedNextJourneyId || null
 
   return (
     <div style={{
       position: 'fixed', inset: 0, overflow: 'hidden',
-      background: '#090603',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
-      fontFamily: 'Georgia,serif',
-      overflowY: 'auto',
-      paddingBottom: 80, // room for bottom nav
+      background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`,
+      fontFamily: 'Georgia, serif',
     }}>
-      {/* Approved SmokeCraft Complete background image */}
-      <img
-        src="/assets/smokecraft-reference/approved/batch-22/smokecraft comple 1.png"
-        alt=""
-        aria-hidden="true"
-        draggable={false}
-        style={{
-          position: 'fixed', inset: 0, width: '100%', height: '100%',
-          objectFit: 'cover', objectPosition: 'center top',
-          opacity: 0.22, pointerEvents: 'none', userSelect: 'none',
-          zIndex: 0,
-        }}
+      {/* Approved production visual (Recommend next journey.png). Any sample
+          names, XP, progress, or badge values baked into this artwork are
+          layout reference only — every value shown below is live React
+          content, never read from the image. */}
+      <SmokeCraftImageSurface
+        surface="cinematic-background"
+        src={SC_ASSETS.recommendedNextJourney}
+        alt="SmokeCraft 360 — Recommended Next Journey"
+        decorative
+        objectPosition="50% 30%"
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}
       />
-      <style>{ANIM}</style>
 
-      {/* Content layer sits above background image */}
-      <div style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-      {/* Header glow band */}
-      <div style={{
-        position: 'sticky', top: 0, zIndex: 10, width: '100%',
-        background: 'linear-gradient(180deg,rgba(5,3,1,0.98) 0%,rgba(5,3,1,0.85) 100%)',
-        borderBottom: '1px solid rgba(201,168,76,0.18)',
-        padding: '20px 5% 14px',
-        textAlign: 'center',
-      }}>
-        <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(201,168,76,0.6)', margin: '0 0 4px', fontWeight: 600 }}>
-          SmokeCraft 360
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px' }}>
-          <span style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.5)' }}>
-            VISIT {visitLabel}
-          </span>
-          <span style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.5)' }}>
-            SESSION {sessionLabel}
-          </span>
+      <header style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0', zIndex: 3 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>
+          SmokeCraft 360 — Session 27 of {TOTAL_SESSIONS}
         </div>
-      </div>
+        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, letterSpacing: '0.01em', lineHeight: 1.15 }}>
+          Recommended Next Journey
+        </h1>
+        {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
+      </header>
 
-      {/* Trophy */}
-      <div style={{
-        marginTop: 36, marginBottom: 20,
-        width: 88, height: 88, borderRadius: '50%',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'linear-gradient(135deg,rgba(201,168,76,0.2),rgba(201,168,76,0.06))',
-        border: '1.5px solid rgba(201,168,76,0.4)',
-        boxShadow: '0 0 40px rgba(201,168,76,0.15)',
-        animation: 'sc-sc-fadeup 0.6s ease forwards',
-        flexShrink: 0,
-      }}>
-        <span className="material-symbols-outlined" style={{ fontSize: 40, color: 'rgba(233,193,118,0.9)' }}>workspace_premium</span>
-      </div>
+      <main
+        tabIndex={-1}
+        style={{
+          position: 'absolute', top: 'clamp(150px,20vh,190px)', bottom: 'clamp(120px,16vh,160px)',
+          left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain',
+          padding: '0 clamp(16px,4vw,40px)', zIndex: 2,
+        }}
+      >
+        <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16, paddingBottom: 24 }}>
 
-      <p style={{
-        fontSize: 9, letterSpacing: '0.28em', textTransform: 'uppercase',
-        color: 'rgba(201,168,76,0.65)', fontWeight: 600, margin: '0 0 10px',
-        animation: 'sc-sc-fadeup 0.65s 0.1s ease both',
-      }}>
-        Passport Completion
-      </p>
+          {phase === 'loading' && (
+            <div role="status" aria-live="polite" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>
+              <div aria-hidden="true" style={{ width: 28, height: 28, margin: '0 auto 14px', borderRadius: '50%', border: `3px solid ${BORDER}`, borderTopColor: GOLD, animation: 'rnj-spin 0.9s linear infinite' }} />
+              <p style={{ margin: 0, fontSize: 14, color: 'rgba(229,226,225,0.7)' }}>Preparing your journey summary…</p>
+              <style>{'@keyframes rnj-spin { to { transform: rotate(360deg); } }'}</style>
+            </div>
+          )}
 
-      <h1 style={{
-        fontSize: 'clamp(22px,4vw,38px)', color: '#f0e6cc', fontWeight: 700,
-        lineHeight: 1.15, margin: '0 5% 8px', textAlign: 'center',
-        animation: 'sc-sc-fadeup 0.65s 0.15s ease both',
-      }}>
-        SmokeCraft Complete
-      </h1>
+          {phase === 'error' && (
+            <div style={{ background: GLASS, border: '1px solid rgba(229,170,100,0.4)', borderRadius: 12, padding: 'clamp(24px,4vw,40px)', textAlign: 'center' }}>
+              <p style={{ margin: '0 0 14px', fontSize: 14, color: 'rgba(229,170,100,0.9)' }}>Something went wrong loading your recommendations.</p>
+              <button type="button" onClick={handleRetry} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>
+                Retry
+              </button>
+            </div>
+          )}
 
-      <p style={{
-        fontSize: 'clamp(13px,1.8vw,16px)', color: 'rgba(240,230,204,0.55)',
-        lineHeight: 1.65, margin: '0 8% 8px', textAlign: 'center', maxWidth: 440,
-        animation: 'sc-sc-fadeup 0.65s 0.2s ease both',
-      }}>
-        Your SmokeCraft 360 Passport has been stamped. Your journey is now part of the archive.
-      </p>
+          {phase === 'ready' && (
+            <>
+              {/* Journey summary — real, saved data only */}
+              <section aria-label="Your completed journey" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,3vw,24px)' }}>
+                <h2 style={{ margin: '0 0 10px', fontSize: 16, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Journey Complete</h2>
+                <div style={{ fontSize: 13, color: CREAM, marginBottom: 4 }}>
+                  {guestName ? `${guestName} — ` : ''}{cigarName || 'Your SmokeCraft 360 experience'}
+                </div>
+                {(mentorName || pairingRec || flavorNotes.length > 0 || formatLabel) && (
+                  <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', lineHeight: 1.7, marginTop: 6 }}>
+                    {mentorName && <div>Mentor: {mentorName}</div>}
+                    {formatLabel && <div>Format: {formatLabel}</div>}
+                    {pairingRec && <div>Pairing recommendation: {pairingRec}</div>}
+                    {flavorNotes.length > 0 && <div>Flavor notes: {flavorNotes.join(', ')}</div>}
+                  </div>
+                )}
+                <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginTop: 10 }}>
+                  <div>
+                    <div style={{ fontSize: 10, color: GOLD_DIM, textTransform: 'uppercase' }}>Progress</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: CREAM }}>{completedCount} / {TOTAL_SESSIONS} ({progressPct}%)</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 10, color: GOLD_DIM, textTransform: 'uppercase' }}>XP Earned</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: GOLD }}>{session?.xp || 0} XP</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 10, color: GOLD_DIM, textTransform: 'uppercase' }}>Achievements</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: CREAM }}>{achievementsEarned}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 10, color: GOLD_DIM, textTransform: 'uppercase' }}>Badges</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: CREAM }}>{badgesEarned}</div>
+                  </div>
+                </div>
+              </section>
 
-      {/* XP + badge row */}
-      <div style={{
-        display: 'flex', gap: '16px', margin: '12px 0 24px',
-        animation: 'sc-sc-fadeup 0.65s 0.25s ease both',
-        flexWrap: 'wrap', justifyContent: 'center',
-      }}>
-        <div style={{
-          padding: '8px 20px', borderRadius: '40px',
-          background: 'rgba(233,193,118,0.08)',
-          border: '1px solid rgba(233,193,118,0.28)',
-          display: 'flex', alignItems: 'center', gap: '8px',
-        }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'rgba(233,193,118,0.8)' }}>bolt</span>
-          <span style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.8)', fontWeight: 600 }}>
-            {xpEarned.toLocaleString()} XP Earned
-          </span>
+              {/* Primary recommendation */}
+              <section aria-label="Primary recommended journey" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,3vw,24px)' }}>
+                <h2 style={{ margin: '0 0 10px', fontSize: 16, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Recommended Next Journey</h2>
+                {!recommendations.hasSignal ? (
+                  <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.55)' }}>
+                    Not enough saved activity yet to personalize a recommendation. Complete more of your SmokeCraft journey to unlock one.
+                  </p>
+                ) : (
+                  <>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: CREAM, marginBottom: 6 }}>{recommendations.primary.title}</div>
+                    <div style={{ fontSize: 12, color: GOLD_DIM, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Why It Fits</div>
+                    <ul style={{ margin: '0 0 12px', paddingLeft: 18, fontSize: 12, color: 'rgba(229,226,225,0.7)', lineHeight: 1.7 }}>
+                      {recommendations.primary.reasons.map((r, i) => <li key={i}>{r}</li>)}
+                    </ul>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      <button type="button" onClick={() => handleStartJourney(recommendations.primary)}
+                        style={{ padding: '8px 18px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, fontSize: 13, fontFamily: 'Georgia, serif', cursor: 'pointer', minHeight: 44 }}>
+                        Start Journey
+                      </button>
+                      <button type="button" onClick={() => handleSelectJourney(recommendations.primary)} aria-pressed={selectedNextJourneyId === recommendations.primary.id}
+                        style={{ padding: '8px 18px', borderRadius: 20, border: `1.5px solid ${BORDER}`, background: selectedNextJourneyId === recommendations.primary.id ? 'rgba(233,193,118,0.12)' : 'transparent', color: 'rgba(229,226,225,0.75)', fontSize: 13, fontFamily: 'Georgia, serif', cursor: 'pointer', minHeight: 44 }}>
+                        {selectedNextJourneyId === recommendations.primary.id ? 'Selected' : 'Select'}
+                      </button>
+                    </div>
+
+                    {/* Related challenges / modules */}
+                    <div style={{ marginTop: 14, fontSize: 11, color: 'rgba(229,226,225,0.5)' }}>
+                      <div>Related educational modules: {recommendations.primary.relatedModules.length > 0 ? recommendations.primary.relatedModules.join(', ') : 'Not available'}</div>
+                      <div>Related challenges: {relatedChallenges.length > 0 ? relatedChallenges.map(c => c.title).join(', ') : 'Not available'}</div>
+                      <div>Estimated journey depth: Not available — no verified depth-estimation rule is configured yet.</div>
+                      <div>Available XP for a new journey: {totalConfiguredXP > 0 ? `${totalConfiguredXP} XP` : 'Not available'}</div>
+                    </div>
+                  </>
+                )}
+              </section>
+
+              {/* Alternate recommendations */}
+              {recommendations.alternates.length > 0 && (
+                <section aria-label="Alternate recommended journeys" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,3vw,24px)' }}>
+                  <h2 style={{ margin: '0 0 12px', fontSize: 16, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Alternate Journeys</h2>
+                  <div role="list" aria-label="Alternate journeys" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {recommendations.alternates.map(cat => (
+                      <div key={cat.id} role="listitem" style={{ border: `1.5px solid ${selectedNextJourneyId === cat.id ? GOLD : BORDER}`, borderRadius: 10, padding: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: CREAM }}>{cat.title}</div>
+                          <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.5)' }}>{cat.reasons[0] || 'Not available'}</div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <button type="button" onClick={() => handleSelectJourney(cat)} aria-pressed={selectedNextJourneyId === cat.id}
+                            style={{ padding: '5px 12px', borderRadius: 12, border: `1.5px solid ${BORDER}`, background: 'transparent', color: 'rgba(229,226,225,0.75)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', minHeight: 36 }}>
+                            {selectedNextJourneyId === cat.id ? 'Selected' : 'Select'}
+                          </button>
+                          <button type="button" onClick={() => handleStartJourney(cat)}
+                            style={{ padding: '5px 12px', borderRadius: 12, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', minHeight: 36 }}>
+                            Start
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Suggested events — real data only */}
+              <section aria-label="Suggested events" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,3vw,24px)' }}>
+                <h2 style={{ margin: '0 0 10px', fontSize: 14, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Suggested Events</h2>
+                {suggestedEvents.length === 0 ? (
+                  <p style={{ margin: 0, fontSize: 12, color: 'rgba(229,226,225,0.5)' }}>No upcoming events available.</p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {suggestedEvents.map(ev => (
+                      <div key={ev.id} style={{ fontSize: 12, color: 'rgba(229,226,225,0.7)' }}>{ev.title} — {ev.venue}, {ev.city}</div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              {/* Suggested quiz — real Knowledge Check data only */}
+              <section aria-label="Suggested quiz" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,3vw,24px)' }}>
+                <h2 style={{ margin: '0 0 10px', fontSize: 14, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Suggested Quiz</h2>
+                {suggestedQuiz ? (
+                  <p style={{ margin: 0, fontSize: 12, color: 'rgba(229,226,225,0.7)' }}>Try the {suggestedQuiz.moduleId} Knowledge Check next.</p>
+                ) : (
+                  <p style={{ margin: 0, fontSize: 12, color: 'rgba(229,226,225,0.5)' }}>Not available — you've completed every configured Knowledge Check.</p>
+                )}
+              </section>
+
+              {/* Next reward — real, unearned winner categories only */}
+              <section aria-label="Next reward" style={{ background: 'rgba(233,193,118,0.06)', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '10px 14px', fontSize: 12, color: 'rgba(229,226,225,0.55)' }}>
+                Next reward: Not available — no further configured reward rule exists beyond your current earned rewards.
+              </section>
+
+              {/* Controls */}
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button type="button" onClick={handleExploreAll}
+                  style={{ padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${BORDER}`, background: 'transparent', color: 'rgba(229,226,225,0.75)', fontSize: 13, fontFamily: 'Georgia, serif', cursor: 'pointer', minHeight: 44 }}>
+                  Explore All Journeys
+                </button>
+                <button type="button" onClick={handleViewProgress}
+                  style={{ padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${BORDER}`, background: 'transparent', color: 'rgba(229,226,225,0.75)', fontSize: 13, fontFamily: 'Georgia, serif', cursor: 'pointer', minHeight: 44 }}>
+                  View Progress
+                </button>
+              </div>
+
+              <TicketTapperSpecialsStrip
+                compact
+                specials={tapperActiveSpecials}
+                venueId={activeVenueId}
+                localPreview={tapperLocalPreview}
+                noVenue={!activeVenueId}
+                unavailable={tapperUnavailable}
+              />
+            </>
+          )}
         </div>
-        <div style={{
-          padding: '8px 20px', borderRadius: '40px',
-          background: 'rgba(233,193,118,0.08)',
-          border: '1px solid rgba(233,193,118,0.28)',
-          display: 'flex', alignItems: 'center', gap: '8px',
-        }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'rgba(233,193,118,0.8)' }}>stars</span>
-          <span style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.8)', fontWeight: 600 }}>
-            Badge Awarded
-          </span>
-        </div>
-      </div>
+      </main>
 
-      {/* Divider */}
-      <div style={{
-        width: '80%', maxWidth: 420, height: 1,
-        background: 'linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent)',
-        marginBottom: 20, animation: 'sc-sc-fadeup 0.65s 0.3s ease both',
-      }} />
-
-      {/* Action cards */}
-      <div style={{
-        width: '90%', maxWidth: 480,
-        display: 'flex', flexDirection: 'column', gap: '10px',
-        animation: 'sc-sc-fadeup 0.65s 0.35s ease both', marginBottom: 20,
-      }}>
-        <p style={{
-          fontFamily: 'Georgia,serif', fontSize: 9, letterSpacing: '0.24em',
-          textTransform: 'uppercase', color: 'rgba(201,168,76,0.5)',
-          margin: '0 0 6px', textAlign: 'center',
-        }}>
-          Optional — Select Actions
-        </p>
-        {ACTION_CARDS.map(card => (
-          <ActionCard
-            key={card.id}
-            card={card}
-            selected={selectedCards.has(card.id)}
-            onToggle={() => toggleCard(card.id)}
-          />
-        ))}
-      </div>
-
-      {/* CTA */}
-      <div style={{
-        width: '90%', maxWidth: 480, marginBottom: 16,
-        animation: 'sc-sc-fadeup 0.65s 0.45s ease both',
-      }}>
-        <CompleteButton onPress={handleComplete} done={done} />
-      </div>
-
-      <p style={{
-        fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
-        color: 'rgba(201,168,76,0.3)', textAlign: 'center', margin: '0 0 8px',
-      }}>
-        SmokeCraft 360 · Passport Logged
-      </p>
-      </div>{/* end content layer */}
+      <SmokeCraftNavBar
+        secondary="← Back"
+        onSecondary={onBack || (() => navigate('/smokecraft/rewards'))}
+      />
     </div>
   )
 }
