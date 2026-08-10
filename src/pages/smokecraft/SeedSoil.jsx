@@ -318,7 +318,14 @@ export default function SeedSoil() {
             )}
           </section>
 
-          <div style={{ height: 90 }} aria-hidden="true" />
+          {/* SC bottom safe-area spacer bumped from 90->130: at smaller
+              supported tablet heights (e.g. 1024x768) the fixed NavBar
+              could still overlap the last row of "Learn More" buttons —
+              confirmed via a real DOM hit-test during the two-generation
+              migration visual proof pass, not a fullPage-screenshot
+              artifact. 130px reliably clears the NavBar's rendered
+              height plus safe-area inset across supported viewports. */}
+          <div style={{ height: 190 }} aria-hidden="true" />
         </div>
 
         <SmokeCraftNavBar

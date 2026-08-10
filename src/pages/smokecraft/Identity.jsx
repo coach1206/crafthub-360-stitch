@@ -284,31 +284,15 @@ export default function Identity() {
               {selectField('focusArea', 'What excites you most?', 'Select focus area', FOCUS_AREAS)}
             </div>
 
+            {/* The page's own "Begin My Journey" button was removed here —
+                it duplicated the shared NavBar's primary action below and,
+                at smaller tablet viewports, the two fixed/in-flow controls
+                visually collided (the NavBar sits at position:fixed bottom:0
+                and could partially cover this button once the form grew
+                past the viewport height). One real control, not two. */}
             <div role={firstError ? 'alert' : 'status'} aria-live="polite" data-testid="identity-status" style={{ minHeight: 20, marginTop: 16, fontSize: 12.5, color: firstError ? '#e77878' : GOLD }}>
               {firstError || (saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? '✓ Saved' : '')}
             </div>
-
-            <button
-              type="button"
-              data-testid="identity-begin"
-              onClick={handleBegin}
-              disabled={submitting}
-              style={{
-                minHeight: 52,
-                marginTop: 8,
-                padding: '0 22px',
-                borderRadius: 10,
-                border: `1px solid ${GOLD}`,
-                background: submitting ? 'rgba(233,193,118,0.12)' : 'rgba(233,193,118,0.18)',
-                color: CREAM,
-                fontFamily: 'Georgia, serif',
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: submitting ? 'default' : 'pointer',
-              }}
-            >
-              {submitting ? 'Opening Journey…' : 'Begin My Journey →'}
-            </button>
           </section>
 
           <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

@@ -1,143 +1,592 @@
 {
-  "generatedAt": "2026-08-10T00:14:29.811Z",
-  "commitHash": "e74928de",
-  "viewport": {
-    "width": 1440,
-    "height": 900
-  },
-  "total": 14,
-  "captured": 14,
-  "stayedOnExpectedRoute": 0,
-  "redirected": 14,
-  "failed": 0,
-  "ownerAcceptanceReady": false,
-  "indexPath": "docs/visual-proof/migration/SMOKECRAFT_ONE_SYSTEM_FINAL_INDEX.png",
-  "results": [
+  "generatedAt": "2026-08-10T09:30:57.835Z",
+  "commitHash": "4518b830",
+  "fullCommitHash": "4518b830a2054aa59c691d598b26b60f0ef32f56",
+  "viewportsRun": [
+    "tablet-primary (1180x820)",
+    "tablet-secondary (1024x768)"
+  ],
+  "totalTargetScreens": 14,
+  "method": "real player journey (enroll -> identity -> venue -> welcome -> golden box -> mentor -> ... ), no direct-URL bypass of any prerequisite guard",
+  "screens": [
     {
       "n": 1,
       "name": "identity",
-      "route": "/smokecraft/identity",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/01-identity.png"
+      "expectedRoute": "/smokecraft/identity",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/identity",
+          "routeStayed": true,
+          "screenshotFile": "01-identity-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/identity",
+          "routeStayed": true,
+          "screenshotFile": "01-identity-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 2,
       "name": "seed-soil",
-      "route": "/smokecraft/seed-soil",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/02-seed-soil.png"
+      "expectedRoute": "/smokecraft/seed-soil",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/seed-soil",
+          "routeStayed": true,
+          "screenshotFile": "02-seed-soil-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/seed-soil",
+          "routeStayed": true,
+          "screenshotFile": "02-seed-soil-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 3,
       "name": "format",
-      "route": "/smokecraft/format",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/03-format.png"
+      "expectedRoute": "/smokecraft/format",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/format",
+          "routeStayed": true,
+          "screenshotFile": "03-format-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/format",
+          "routeStayed": true,
+          "screenshotFile": "03-format-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 4,
       "name": "cut-toast-light",
-      "route": "/smokecraft/cut-toast-light",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/04-cut-toast-light.png"
+      "expectedRoute": "/smokecraft/cut-toast-light",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/cut-toast-light",
+          "routeStayed": true,
+          "screenshotFile": "04-cut-toast-light-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/cut-toast-light",
+          "routeStayed": true,
+          "screenshotFile": "04-cut-toast-light-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 5,
       "name": "first-third",
-      "route": "/smokecraft/first-third",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/05-first-third.png"
+      "expectedRoute": "/smokecraft/first-third",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/first-third",
+          "routeStayed": true,
+          "screenshotFile": "05-first-third-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/first-third",
+          "routeStayed": true,
+          "screenshotFile": "05-first-third-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 6,
       "name": "second-third",
-      "route": "/smokecraft/second-third",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/06-second-third.png"
+      "expectedRoute": "/smokecraft/second-third",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/second-third",
+          "routeStayed": true,
+          "screenshotFile": "06-second-third-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/second-third",
+          "routeStayed": true,
+          "screenshotFile": "06-second-third-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 7,
       "name": "final-third",
-      "route": "/smokecraft/final-third",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/07-final-third.png"
+      "expectedRoute": "/smokecraft/final-third",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/final-third",
+          "routeStayed": true,
+          "screenshotFile": "07-final-third-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/final-third",
+          "routeStayed": true,
+          "screenshotFile": "07-final-third-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 8,
       "name": "scorecard",
-      "route": "/smokecraft/scorecard",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/08-scorecard.png"
+      "expectedRoute": "/smokecraft/scorecard",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/scorecard",
+          "routeStayed": true,
+          "screenshotFile": "08-scorecard-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/scorecard",
+          "routeStayed": true,
+          "screenshotFile": "08-scorecard-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 9,
       "name": "request-purchase",
-      "route": "/smokecraft/request-purchase",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/09-request-purchase.png"
+      "expectedRoute": "/smokecraft/request-purchase",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/request-purchase",
+          "routeStayed": true,
+          "screenshotFile": "09-request-purchase-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/request-purchase",
+          "routeStayed": true,
+          "screenshotFile": "09-request-purchase-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 10,
       "name": "pairing-recommendations",
-      "route": "/smokecraft/pairing-recommendations",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/10-pairing-recommendations.png"
+      "expectedRoute": "/smokecraft/pairing-recommendations",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/pairing-recommendations",
+          "routeStayed": true,
+          "screenshotFile": "10-pairing-recommendations-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/pairing-recommendations",
+          "routeStayed": true,
+          "screenshotFile": "10-pairing-recommendations-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 11,
       "name": "passport-stamp",
-      "route": "/smokecraft/passport-stamp",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/11-passport-stamp.png"
+      "expectedRoute": "/smokecraft/passport-stamp",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/passport-stamp",
+          "routeStayed": true,
+          "screenshotFile": "11-passport-stamp-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/passport-stamp",
+          "routeStayed": true,
+          "screenshotFile": "11-passport-stamp-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 12,
       "name": "connections",
-      "route": "/smokecraft/connections",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/12-connections.png"
+      "expectedRoute": "/smokecraft/connections",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/connections",
+          "routeStayed": true,
+          "screenshotFile": "12-connections-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/connections",
+          "routeStayed": true,
+          "screenshotFile": "12-connections-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 13,
       "name": "rewards",
-      "route": "/smokecraft/rewards",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/13-rewards.png"
+      "expectedRoute": "/smokecraft/rewards",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/rewards",
+          "routeStayed": true,
+          "screenshotFile": "13-rewards-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/rewards",
+          "routeStayed": true,
+          "screenshotFile": "13-rewards-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     },
     {
       "n": 14,
       "name": "second-humidor-match",
-      "route": "/smokecraft/second-humidor-match",
-      "ok": true,
-      "routeStayed": false,
-      "actualUrl": "http://localhost:4173/smokecraft/enroll",
-      "screenshotPath": "docs/visual-proof/migration/14-second-humidor-match.png"
+      "expectedRoute": "/smokecraft/second-humidor-match",
+      "perViewport": [
+        {
+          "viewport": "tablet-primary",
+          "dims": "1180x820",
+          "captured": true,
+          "actualUrl": "/smokecraft/second-humidor-match",
+          "routeStayed": true,
+          "screenshotFile": "14-second-humidor-match-tablet-primary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        },
+        {
+          "viewport": "tablet-secondary",
+          "dims": "1024x768",
+          "captured": true,
+          "actualUrl": "/smokecraft/second-humidor-match",
+          "routeStayed": true,
+          "screenshotFile": "14-second-humidor-match-tablet-secondary.png",
+          "overlapCheck": {
+            "navFound": true,
+            "controlsHiddenBehindNav": 0,
+            "hiddenLabels": []
+          }
+        }
+      ],
+      "redirectStatus": "NONE",
+      "status": "PASS"
     }
-  ]
+  ],
+  "interactionVerification": [
+    {
+      "viewport": "tablet-primary",
+      "checks": {
+        "finalThirdFlavorChip": {
+          "found": true,
+          "beforePressed": "false",
+          "afterPressed": null,
+          "flipped": true
+        },
+        "scorecardAllSixRated": {
+          "Appearance": {
+            "found": true,
+            "pressed": true
+          },
+          "Construction": {
+            "found": true,
+            "pressed": true
+          },
+          "Draw": {
+            "found": true,
+            "pressed": true
+          },
+          "Burn": {
+            "found": true,
+            "pressed": true
+          },
+          "Flavor": {
+            "found": true,
+            "pressed": true
+          },
+          "Pairing Match": {
+            "found": true,
+            "pressed": true
+          }
+        },
+        "backContinueWork": {
+          "backWorked": true,
+          "continueWorked": true
+        },
+        "noHotspotButtons": 0,
+        "scorecardContinueGateUnlocked": true
+      }
+    },
+    {
+      "viewport": "tablet-secondary",
+      "checks": {
+        "finalThirdFlavorChip": {
+          "found": true,
+          "beforePressed": "false",
+          "afterPressed": null,
+          "flipped": true
+        },
+        "scorecardAllSixRated": {
+          "Appearance": {
+            "found": true,
+            "pressed": true
+          },
+          "Construction": {
+            "found": true,
+            "pressed": true
+          },
+          "Draw": {
+            "found": true,
+            "pressed": true
+          },
+          "Burn": {
+            "found": true,
+            "pressed": true
+          },
+          "Flavor": {
+            "found": true,
+            "pressed": true
+          },
+          "Pairing Match": {
+            "found": true,
+            "pressed": true
+          }
+        },
+        "backContinueWork": {
+          "backWorked": true,
+          "continueWorked": true
+        },
+        "noHotspotButtons": 0,
+        "scorecardContinueGateUnlocked": true
+      }
+    }
+  ],
+  "allScreensPass": true
 }
