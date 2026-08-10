@@ -67,8 +67,9 @@ export async function createSpecial(req, res) {
   const initialStatus = getInitialStatus(staff.role)
   const now = new Date().toISOString()
   const specialId = `sp-${Date.now()}`
+  const approvalRequired = !canApprove(staff.role)
   const approvalBlock = {
-    required: !canApprove(staff.role),
+    required: approvalRequired,
     status: initialStatus,
     submittedBy: { staffId: staff.staffId, name: staff.name, role: staff.role },
     submittedAt: now,
@@ -84,34 +85,44 @@ export async function createSpecial(req, res) {
 
   if (isDbAvailable()) {
     try {
+      // Column set matches the REAL ticket_tapper_specials schema
+      // (migration 017/071) — the *_json blob columns this used to
+      // reference (inventory_json/pricing_json/media_json/cta_json/
+      // created_by_json/approval_json) and the `source` column do not
+      // exist on this table; every field below maps to a real column.
       const { rows } = await query(
         `INSERT INTO ticket_tapper_specials
-           (venue_id, title, subtitle, description, special_type, source, promoted_by_role,
-            status, priority, starts_at, ends_at, inventory_json, pricing_json, items_json,
-            media_json, money_bridge_json, cta_json, created_by_json, approval_json)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
+           (venue_id, title, subtitle, description, special_type, source_type, source_screen,
+            badge_label, image_url, call_to_action_label, staff_role, staff_id, staff_name,
+            status, priority, promoted_by_role, approval_required, approval_status,
+            approval_submitted_by_id, approval_submitted_by_name, approval_submitted_by_role,
+            approval_reviewed_by_id, approval_reviewed_by_name, approval_reviewed_by_role,
+            approval_reviewed_at, approval_note, retail_price, special_price, quantity_limit,
+            money_bridge_active, money_bridge_json, items_json, starts_at, ends_at, created_by)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)
          RETURNING *`,
         [
-          venueId, special.title, special.subtitle, special.description,
-          special.specialType, special.source, special.promotedByRole,
-          initialStatus,
-          special.priority || 99,
-          special.startsAt || now,
-          special.endsAt || null,
-          JSON.stringify(special.inventory || {}),
-          JSON.stringify(special.pricing || {}),
+          venueId, special.title, special.subtitle || null, special.description || null,
+          special.specialType, special.source || 'venue', special.sourceScreen || 'staff_specials_control_panel',
+          special.badgeLabel || null, special.imageUrl || special.media?.imageUrl || null,
+          special.callToActionLabel || special.callToAction?.label || null,
+          staff.role, staff.staffId, staff.name,
+          initialStatus, special.priority || 99, special.promotedByRole || staff.role,
+          approvalRequired, initialStatus,
+          approvalBlock.submittedBy.staffId, approvalBlock.submittedBy.name, approvalBlock.submittedBy.role,
+          approvalBlock.reviewedBy?.staffId || null, approvalBlock.reviewedBy?.name || null, approvalBlock.reviewedBy?.role || null,
+          approvalBlock.reviewedAt, approvalBlock.approvalNote,
+          special.pricing?.retailPrice ?? null, special.pricing?.specialPrice ?? null, special.inventory?.quantityLimit ?? null,
+          Boolean(special.moneyBridge?.active), JSON.stringify(special.moneyBridge || {}),
           JSON.stringify(special.items || []),
-          JSON.stringify(special.media || {}),
-          JSON.stringify(special.moneyBridge || {}),
-          JSON.stringify(special.callToAction || {}),
-          JSON.stringify({ staffId: staff.staffId, name: staff.name, role: staff.role }),
-          JSON.stringify(approvalBlock),
+          special.startsAt || now, special.endsAt || null,
+          staff.staffId,
         ]
       )
       await query(
-        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [trackEvent.id, venueId, rows[0].special_id, trackAction, staff.staffId, staff.role, initialStatus, 'staff_specials_control_panel', now]
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen, metadata_json)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [trackEvent.id, venueId, rows[0].special_id, trackAction, staff.staffId, staff.role, 'staff_specials_control_panel', JSON.stringify({ approvalStatus: initialStatus })]
       )
       return res.status(201).json({ ok: true, special: rows[0], status: initialStatus, approvalRequired: approvalBlock.required, trackEvent, storageMode: 'postgres' })
     } catch (err) {
@@ -128,14 +139,20 @@ export async function updateSpecial(req, res) {
 
   if (isDbAvailable()) {
     try {
+      // Real columns only — inventory_json/pricing_json do not exist on
+      // this table; inventory maps to quantity_limit/active_quantity,
+      // pricing maps to retail_price/special_price.
       const setClauses = []
       const params = []
       let i = 1
       if (status) { setClauses.push(`status = $${i++}`); params.push(status) }
-      if (inventory) { setClauses.push(`inventory_json = $${i++}`); params.push(JSON.stringify(inventory)) }
-      if (pricing) { setClauses.push(`pricing_json = $${i++}`); params.push(JSON.stringify(pricing)) }
+      if (inventory?.quantityLimit !== undefined) { setClauses.push(`quantity_limit = $${i++}`); params.push(inventory.quantityLimit) }
+      if (inventory?.activeQuantity !== undefined) { setClauses.push(`active_quantity = $${i++}`); params.push(inventory.activeQuantity) }
+      if (pricing?.retailPrice !== undefined) { setClauses.push(`retail_price = $${i++}`); params.push(pricing.retailPrice) }
+      if (pricing?.specialPrice !== undefined) { setClauses.push(`special_price = $${i++}`); params.push(pricing.specialPrice) }
       if (action === 'end') { setClauses.push(`ends_at = $${i++}`); params.push(new Date().toISOString()) }
       setClauses.push(`updated_at = NOW()`)
+      if (staff?.staffId) { setClauses.push(`updated_by = $${i++}`); params.push(staff.staffId) }
       params.push(specialId)
       const { rows } = await query(
         `UPDATE ticket_tapper_specials SET ${setClauses.join(', ')} WHERE special_id = $${i} RETURNING *`,
@@ -143,9 +160,9 @@ export async function updateSpecial(req, res) {
       )
       if (staff) {
         await query(
-          `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, source_screen, event_timestamp)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-          [`evt-${Date.now()}`, rows[0]?.venue_id, specialId, action || 'update', staff.staffId, staff.role, 'staff_specials_control_panel', new Date().toISOString()]
+          `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen)
+           VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+          [`evt-${Date.now()}`, rows[0]?.venue_id, specialId, action || 'update', staff.staffId, staff.role, 'staff_specials_control_panel']
         )
       }
       return res.json({ ok: true, special: rows[0], storageMode: 'postgres' })
@@ -163,10 +180,13 @@ export async function trackTap(req, res) {
 
   if (isDbAvailable()) {
     try {
+      // Real events table has no table_label column — folded into
+      // metadata_json instead; guest identity column is
+      // customer_session_id, not guest_session_id.
       await query(
-        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, table_label, guest_session_id, event_timestamp)
-         VALUES ($1,$2,$3,'special_tap',$4,$5,$6)`,
-        [`evt-${Date.now()}`, venueId, specialId, tableLabel, guestSessionId || null, new Date().toISOString()]
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, customer_session_id, metadata_json)
+         VALUES ($1,$2,$3,'special_tap',$4,$5)`,
+        [`evt-${Date.now()}`, venueId, specialId, guestSessionId || null, JSON.stringify({ tableLabel: tableLabel || null })]
       )
       return res.json({ ok: true, tracked: true, action: 'special_tap', storageMode: 'postgres' })
     } catch (err) {
@@ -186,16 +206,20 @@ export async function trackAdd(req, res) {
 
   if (isDbAvailable()) {
     try {
+      // Real events table has no table_label column — folded into
+      // metadata_json; guest identity column is customer_session_id.
       await query(
-        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, table_label, guest_session_id, money_bridge_json, event_timestamp)
-         VALUES ($1,$2,$3,'special_added',$4,$5,$6,$7)`,
-        [`evt-${Date.now()}`, venueId, specialId, tableLabel, guestSessionId || null, JSON.stringify(bridge), new Date().toISOString()]
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, customer_session_id, money_bridge_json, metadata_json)
+         VALUES ($1,$2,$3,'special_added',$4,$5,$6)`,
+        [`evt-${Date.now()}`, venueId, specialId, guestSessionId || null, JSON.stringify(bridge), JSON.stringify({ tableLabel: tableLabel || null })]
       )
-      // Decrement inventory
+      // Decrement inventory — available_quantity is a GENERATED column
+      // (total_quantity - reserved_quantity - sold_quantity), so it can
+      // never be written directly; increment sold_quantity instead.
       if (specialData?.inventory?.inventoryItemIds?.length) {
         for (const itemId of specialData.inventory.inventoryItemIds) {
           await query(
-            `UPDATE ticket_tapper_inventory SET quantity_available = GREATEST(0, quantity_available - 1), quantity_sold = quantity_sold + 1 WHERE item_id = $1 AND venue_id = $2`,
+            `UPDATE ticket_tapper_inventory SET sold_quantity = sold_quantity + 1 WHERE item_id = $1 AND venue_id = $2`,
             [itemId, venueId]
           ).catch(() => {})
         }
@@ -221,9 +245,9 @@ export async function endSpecial(req, res) {
       )
       if (staff) {
         await query(
-          `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, source_screen, event_timestamp)
-           VALUES ($1,$2,$3,'end',$4,$5,$6,$7)`,
-          [`evt-${Date.now()}`, venueId, specialId, staff.staffId, staff.role, 'staff_specials_control_panel', new Date().toISOString()]
+          `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen)
+           VALUES ($1,$2,$3,'end',$4,$5,$6)`,
+          [`evt-${Date.now()}`, venueId, specialId, staff.staffId, staff.role, 'staff_specials_control_panel']
         )
       }
       return res.json({ ok: true, specialId, status: 'ended', storageMode: 'postgres' })
@@ -262,7 +286,11 @@ export async function updateInventory(req, res) {
       const setClauses = []
       const params = []
       let i = 1
-      if (quantityAvailable !== undefined) { setClauses.push(`quantity_available = $${i++}`); params.push(quantityAvailable) }
+      // available_quantity is a GENERATED column (total_quantity -
+      // reserved_quantity - sold_quantity) — it can never be written
+      // directly. A staff-supplied "quantity available" edit is applied
+      // to total_quantity instead, the real writable column that drives it.
+      if (quantityAvailable !== undefined) { setClauses.push(`total_quantity = $${i++}`); params.push(quantityAvailable) }
       if (status) { setClauses.push(`status = $${i++}`); params.push(status) }
       setClauses.push('updated_at = NOW()')
       params.push(itemId)
@@ -285,7 +313,7 @@ export async function getSpecialsReport(req, res) {
   if (isDbAvailable()) {
     try {
       const { rows: events } = await query(
-        `SELECT action, special_id, staff_role, money_bridge_json FROM ticket_tapper_special_events WHERE venue_id = $1`,
+        `SELECT event_type, special_id, staff_role, money_bridge_json FROM ticket_tapper_special_events WHERE venue_id = $1`,
         [venueId]
       )
 
@@ -294,11 +322,12 @@ export async function getSpecialsReport(req, res) {
       const roleMap = { manager: { specialsCreated: 0, taps: 0, revenue: 0 }, bartender: { specialsCreated: 0, taps: 0, revenue: 0 }, cook: { specialsCreated: 0, taps: 0, revenue: 0 }, server: { specialsCreated: 0, taps: 0, revenue: 0 } }
 
       for (const evt of events) {
-        if (counts[evt.action] !== undefined) counts[evt.action]++
+        const action = evt.event_type
+        if (counts[action] !== undefined) counts[action]++
         if (!specialMap[evt.special_id]) specialMap[evt.special_id] = { specialId: evt.special_id, views: 0, taps: 0, adds: 0, checkouts: 0, revenue: 0, smokeCraftCommission: 0, venueReferralCommission: 0 }
-        if (evt.action === 'special_view') specialMap[evt.special_id].views++
-        if (evt.action === 'special_tap') specialMap[evt.special_id].taps++
-        if (evt.action === 'special_added') {
+        if (action === 'special_view') specialMap[evt.special_id].views++
+        if (action === 'special_tap') specialMap[evt.special_id].taps++
+        if (action === 'special_added') {
           specialMap[evt.special_id].adds++
           const mb = evt.money_bridge_json ? (typeof evt.money_bridge_json === 'string' ? JSON.parse(evt.money_bridge_json) : evt.money_bridge_json) : null
           if (mb) {
@@ -307,13 +336,13 @@ export async function getSpecialsReport(req, res) {
             specialMap[evt.special_id].venueReferralCommission += mb.venueReferral || 0
           }
         }
-        if (evt.action === 'special_checkout') specialMap[evt.special_id].checkouts++
-        if (evt.action === 'create' && evt.staff_role && roleMap[evt.staff_role]) roleMap[evt.staff_role].specialsCreated++
-        if (evt.action === 'special_tap' && evt.staff_role && roleMap[evt.staff_role]) roleMap[evt.staff_role].taps++
+        if (action === 'special_checkout') specialMap[evt.special_id].checkouts++
+        if (action === 'create' && evt.staff_role && roleMap[evt.staff_role]) roleMap[evt.staff_role].specialsCreated++
+        if (action === 'special_tap' && evt.staff_role && roleMap[evt.staff_role]) roleMap[evt.staff_role].taps++
       }
 
       const { rows: inventoryRows } = await query(
-        `SELECT * FROM ticket_tapper_inventory WHERE venue_id = $1 AND (quantity_available <= low_inventory_threshold OR status = 'sold_out')`,
+        `SELECT * FROM ticket_tapper_inventory WHERE venue_id = $1 AND (available_quantity <= low_stock_threshold OR status = 'sold_out')`,
         [venueId]
       ).catch(() => ({ rows: [] }))
 
@@ -334,9 +363,9 @@ export async function getSpecialsReport(req, res) {
           inventoryAlerts: inventoryRows.map(i => ({
             itemId: i.item_id,
             name: i.item_name,
-            quantityAvailable: i.quantity_available,
+            quantityAvailable: i.available_quantity,
             status: i.status,
-            message: i.quantity_available <= 0 ? 'Sold out' : `Only ${i.quantity_available} remaining`,
+            message: i.available_quantity <= 0 ? 'Sold out' : `Only ${i.available_quantity} remaining`,
           })),
         },
       })
@@ -387,9 +416,17 @@ export async function submitForApproval(req, res) {
 
   if (isDbAvailable()) {
     try {
-      await query(`UPDATE ticket_tapper_specials SET status = 'pending_approval', approval_json = $1 WHERE special_id = $2`, [JSON.stringify(approvalBlock), specialId])
-      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [trackEvent.id, venueId, specialId, 'special_submitted_for_approval', submittedBy.staffId, submittedBy.role, 'pending_approval', 'staff_specials_control_panel', now])
+      await query(
+        `UPDATE ticket_tapper_specials SET status = 'pending_approval', approval_required = true, approval_status = 'pending_approval',
+           approval_submitted_by_id = $1, approval_submitted_by_name = $2, approval_submitted_by_role = $3, updated_at = NOW()
+         WHERE special_id = $4`,
+        [submittedBy.staffId, submittedBy.name, submittedBy.role, specialId]
+      )
+      await query(
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen, metadata_json)
+         VALUES ($1,$2,$3,'special_submitted_for_approval',$4,$5,$6,$7)`,
+        [trackEvent.id, venueId, specialId, submittedBy.staffId, submittedBy.role, 'staff_specials_control_panel', JSON.stringify({ approvalStatus: 'pending_approval' })]
+      )
       return res.json({ ok: true, specialId, status: 'pending_approval', approval: approvalBlock, trackEvent, storageMode: 'postgres' })
     } catch (err) { console.error('[ticketTapperSpecials] submitForApproval DB error:', err.message) }
   }
@@ -412,9 +449,18 @@ export async function approveSpecial(req, res) {
 
   if (isDbAvailable()) {
     try {
-      await query(`UPDATE ticket_tapper_specials SET status = 'approved', approval_json = jsonb_set(COALESCE(approval_json,'{}'), '{status}', '"approved"') WHERE special_id = $1`, [specialId])
-      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [trackEvent.id, venueId, specialId, 'special_approved', reviewedBy.staffId, reviewedBy.role, 'approved', 'staff_specials_control_panel', now])
+      await query(
+        `UPDATE ticket_tapper_specials SET status = 'approved', approval_status = 'approved',
+           approval_reviewed_by_id = $1, approval_reviewed_by_name = $2, approval_reviewed_by_role = $3,
+           approval_reviewed_at = NOW(), approval_note = $4, updated_at = NOW()
+         WHERE special_id = $5`,
+        [reviewedBy.staffId, reviewedBy.name, reviewedBy.role, approvalBlock.approvalNote, specialId]
+      )
+      await query(
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen, metadata_json)
+         VALUES ($1,$2,$3,'special_approved',$4,$5,$6,$7)`,
+        [trackEvent.id, venueId, specialId, reviewedBy.staffId, reviewedBy.role, 'staff_specials_control_panel', JSON.stringify({ approvalStatus: 'approved' })]
+      )
       return res.json({ ok: true, specialId, status: 'approved', approval: approvalBlock, trackEvent, storageMode: 'postgres' })
     } catch (err) { console.error('[ticketTapperSpecials] approveSpecial DB error:', err.message) }
   }
@@ -437,9 +483,18 @@ export async function rejectSpecial(req, res) {
 
   if (isDbAvailable()) {
     try {
-      await query(`UPDATE ticket_tapper_specials SET status = 'rejected', approval_json = jsonb_set(COALESCE(approval_json,'{}'), '{status}', '"rejected"') WHERE special_id = $1`, [specialId])
-      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [trackEvent.id, venueId, specialId, 'special_rejected', reviewedBy.staffId, reviewedBy.role, 'rejected', 'staff_specials_control_panel', now])
+      await query(
+        `UPDATE ticket_tapper_specials SET status = 'rejected', approval_status = 'rejected',
+           approval_reviewed_by_id = $1, approval_reviewed_by_name = $2, approval_reviewed_by_role = $3,
+           approval_reviewed_at = NOW(), rejection_reason = $4, updated_at = NOW()
+         WHERE special_id = $5`,
+        [reviewedBy.staffId, reviewedBy.name, reviewedBy.role, rejectionReason, specialId]
+      )
+      await query(
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen, metadata_json)
+         VALUES ($1,$2,$3,'special_rejected',$4,$5,$6,$7)`,
+        [trackEvent.id, venueId, specialId, reviewedBy.staffId, reviewedBy.role, 'staff_specials_control_panel', JSON.stringify({ approvalStatus: 'rejected' })]
+      )
       return res.json({ ok: true, specialId, status: 'rejected', rejectionReason, trackEvent, storageMode: 'postgres' })
     } catch (err) { console.error('[ticketTapperSpecials] rejectSpecial DB error:', err.message) }
   }
@@ -462,16 +517,22 @@ export async function publishSpecial(req, res) {
   if (isDbAvailable()) {
     try {
       // Verify the special is approved before allowing publish
-      const { rows } = await query(`SELECT status, approval_json FROM ticket_tapper_specials WHERE special_id = $1`, [specialId])
+      const { rows } = await query(`SELECT status, approval_status FROM ticket_tapper_specials WHERE special_id = $1`, [specialId])
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'Special not found' })
       const currentStatus = rows[0].status
-      const approval = typeof rows[0].approval_json === 'string' ? JSON.parse(rows[0].approval_json) : rows[0].approval_json
-      if (currentStatus !== 'approved' && approval?.status !== 'approved' && !canApprove(publishedBy.role)) {
+      const approvalStatus = rows[0].approval_status
+      if (currentStatus !== 'approved' && approvalStatus !== 'approved' && !canApprove(publishedBy.role)) {
         return res.status(409).json({ ok: false, error: 'SPECIAL_NOT_APPROVED', message: 'This special must be approved by management before it can go live.' })
       }
-      await query(`UPDATE ticket_tapper_specials SET status = 'active', approval_json = jsonb_set(COALESCE(approval_json,'{}'), '{status}', '"approved"') WHERE special_id = $1`, [specialId])
-      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [trackEvent.id, venueId, specialId, 'special_published_live', publishedBy.staffId, publishedBy.role, 'approved', 'staff_specials_control_panel', now])
+      await query(
+        `UPDATE ticket_tapper_specials SET status = 'active', approval_status = 'approved', updated_at = NOW() WHERE special_id = $1`,
+        [specialId]
+      )
+      await query(
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, event_type, staff_id, staff_role, source_screen, metadata_json)
+         VALUES ($1,$2,$3,'special_published_live',$4,$5,$6,$7)`,
+        [trackEvent.id, venueId, specialId, publishedBy.staffId, publishedBy.role, 'staff_specials_control_panel', JSON.stringify({ approvalStatus: 'approved' })]
+      )
       return res.json({ ok: true, specialId, status: 'active', publishedAt: now, trackEvent, storageMode: 'postgres' })
     } catch (err) { console.error('[ticketTapperSpecials] publishSpecial DB error:', err.message) }
   }

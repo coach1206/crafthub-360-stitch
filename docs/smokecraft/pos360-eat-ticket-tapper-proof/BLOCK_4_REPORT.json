@@ -1,0 +1,64 @@
+{
+  "generatedAt": "2026-08-10T16:30:00Z",
+  "method": "Direct real DB/API integration tests (connectionStateService.getIntegrationStatuses against live Postgres; real curl calls against running server for Management Sync and Ticket Tapper lifecycles; psql verification of resulting rows). Not a static/import-only check.",
+  "integrationConnectionStates": {
+    "source": "server/services/managementSync/connectionStateService.js:getIntegrationStatuses('1') called directly against the live database",
+    "internal_management_sync": "CONNECTED",
+    "ticket_tapper": "CONNECTED (health check only — see defect found below; write path was broken until this pass)",
+    "passport_360": "INTERNAL_ONLY — real persistence exists but not mapped to SmokeCraft guest_reference, no write path built",
+    "staff_handoff": "NOT_CONFIGURED — no destination exists",
+    "inventory": "NOT_CONFIGURED — no cigar-humidor inventory table/API exists",
+    "pos360": "COMING_SOON — real POS360 module exists in the codebase for its own purpose; no Management Sync bridge has been built or verified",
+    "eat_360": "COMING_SOON — confirmed, self-documented non-functional preview stub",
+    "novee_os": "COMING_SOON — no SmokeCraft Management Sync feed into NOVEE OS exists"
+  },
+  "managementSyncE2ETest": {
+    "steps": [
+      "POST /api/smokecraft/management-sync/guest-session -> real guest identity issued",
+      "POST /api/smokecraft/management-sync/venues/{realVenueId}/journeys -> real journey created (journeyId returned)",
+      "POST /api/smokecraft/management-sync/journeys/{journeyId}/snapshots -> real snapshot persisted (snapshotVersion 1, duplicate:false)",
+      "POST /api/smokecraft/management-sync/journeys/{journeyId}/complete -> status transitioned to completed, alreadyCompleted:false",
+      "POST /api/smokecraft/management-sync/journeys/{journeyId}/sync -> real sync event created, status:completed",
+      "GET /api/smokecraft/management-sync/journeys/{journeyId} -> read-back matches (journeyId, venueId, sessionNumber, status all consistent)",
+      "GET /api/smokecraft/management-sync/journeys/{journeyId}/sync/status -> 1 event listed (destination venue_insights, status completed)"
+    ],
+    "idempotencyTest": {
+      "duplicateCompleteCall": "returned alreadyCompleted:true, no error, no state change",
+      "duplicateSnapshotCall": "returned duplicate:true, same snapshotId/snapshotVersion, no new row created"
+    },
+    "result": "PASS — full real lifecycle verified end-to-end against live Postgres, idempotency confirmed on both complete and snapshot endpoints."
+  },
+  "ticketTapperDefectFound": {
+    "summary": "server/controllers/smokecraftTicketTapperSpecialsController.js's entire write path (createSpecial, updateSpecial, trackTap, trackAdd, endSpecial, submitForApproval, approveSpecial, rejectSpecial, publishSpecial) referenced columns that do not exist anywhere in the real ticket_tapper_specials / ticket_tapper_special_events / ticket_tapper_inventory schema (migrations 017/071) — e.g. inventory_json, pricing_json, media_json, cta_json, created_by_json, approval_json, `source`, `action`, `table_label`, `guest_session_id`, `event_timestamp`, `quantity_available` on a column that is actually a GENERATED column.",
+    "howDiscovered": "The connection-state health check only runs a read-only SELECT 1 ... LIMIT 1 (correctly reports CONNECTED — the table is reachable), which never exercises any write path. A real POST to /api/smokecraft/ticket-tapper/specials returned ok:true with localPreview:true and message 'Special created locally (approved) — backend unavailable', which is indistinguishable from success to any caller — the actual INSERT was throwing and being silently swallowed by a try/catch that falls through to a fake-success response.",
+    "severity": "High — every real staff action in this module (create/update/approve/reject/publish a special, track a tap/add) was completely non-functional against the real database while reporting success.",
+    "fix": "Rewrote every broken query in the controller to use the real column names, verified via \\d against the live schema for all three tables. Verified fix with real end-to-end calls: create (storageMode:postgres) -> publish (status:active) -> tap -> add -> confirmed exactly 4 real rows in ticket_tapper_special_events via psql -> specials-report correctly aggregates (1 tap, 1 add) from the real rows.",
+    "verificationEvidence": {
+      "createResponse_storageMode": "postgres",
+      "publishResponse_status": "active",
+      "eventsWrittenToDb": 4,
+      "reportAggregation": "totalSpecialTaps:1, totalSpecialAdds:1 — matches the 2 tracked interactions exactly"
+    }
+  },
+  "loyaltyPointsLifecycle": {
+    "sourceOfTruth": "Client-side pure-function engine: src/utils/smokecraftLoyaltyEngine.js (explicit source comment: 'loyaltyPoints -> purchases, venue engagement, Passport stamps... never mixed with journeyXP'). Persisted client-side on session.loyaltyPoints (src/services/sessionStorageService.js), a real server-side ledger (server/services/loyaltyLedgerService.js, server/services/pos360/pos360CustomerLoyaltyService.js) exists for POS/venue-commerce purposes.",
+    "triggerScreen": "src/pages/smokecraft/RewardsCenter.jsx — the ONLY screen in the entire src/pages/smokecraft tree that calls awardPurchasePoints/awardLoyaltyPoints (confirmed via grep across all *.jsx files).",
+    "canonicalJourneyExposure": "None. RewardsCenter.jsx is not part of the 27-session canonical spine (Block 1's locked manifest) and is never reached during a normal SmokeCraft playthrough — confirmed by cross-referencing against docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json.",
+    "conclusion": "A separate loyalty-points system genuinely exists, is never invoked by the canonical journey, and is architecturally kept separate from XP by explicit source-level design intent — matches and reconfirms Block 3's finding. Full external commerce-side lifecycle (real POS purchase accrual, venue mapping, POS360 sync) could not be exercised in this environment because it depends on RewardsCenter.jsx / POS purchase flows outside the SmokeCraft canonical journey and, per the integration registry above, POS360 has no real Management Sync bridge to test against — this is the genuine external/architectural boundary, not a fabricated pass."
+  },
+  "crossSystemIdentifierCheckpoint": {
+    "checkpoint": "Management Sync journey (the one real, fully-wired cross-system handoff)",
+    "sessionId_guestSession": "issued by guest-session identity, consistent across all subsequent calls (same cookie jar, all requests succeeded under the same identity)",
+    "journeyId": "61f91e4a-16da-4e1a-ad2b-e422a0866ace — identical across create/snapshot/complete/sync/read-back calls",
+    "venueId": "hf5c2a-test-venue-1785369416088 — identical across create/read-back",
+    "completionStatus": "completed — consistent between the complete-call response and the subsequent GET read-back",
+    "result": "PASS — no mismatched identifiers, no duplicate journey created on retry, no stale state observed.",
+    "posAndEatNote": "POS360 and E.A.T. have no real bridge to cross-check identifiers against (see integrationConnectionStates above) — there is no real handoff payload for either to compare, so no PASS/FAIL is claimed for those two beyond 'not wired'."
+  },
+  "failureTests": {
+    "duplicateSubmit": "PASS — Management Sync complete/snapshot both correctly idempotent on retry (see managementSyncE2ETest.idempotencyTest above)",
+    "backendRejection": "PASS (observed for real) — POST journeys/{invalidVenueSlug} correctly returned venue_not_found; POST journeys without required tenantId correctly returned validation_failed with details",
+    "silentFailureFound": "YES — this is exactly the Ticket Tapper defect above: real DB errors were silently caught and converted to fake ok:true responses. Fixed.",
+    "networkTimeoutRetry": "Not exercised this pass (would require simulating a network partition to the DB mid-request) — noted as an untested scenario, not claimed PASS."
+  }
+}
