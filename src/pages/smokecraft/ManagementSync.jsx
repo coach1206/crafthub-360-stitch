@@ -81,6 +81,11 @@ export default function ManagementSync() {
       const synced = await requestSync('venue_insights', serverJourneyId)
       setSyncActionState(synced.ok ? 'done' : 'error')
 
+      // Idempotency key is stable per (server journey, sync target) — a
+      // retried/duplicated sync call for the same completed journey can
+      // never create a second eat_smokecraft_session_sync row (verified
+      // against the bridge's own ON CONFLICT DO NOTHING + fetch-existing
+      // fallback, Block 4A).
       smokecraftManagementSyncService.syncManagement({
         venueId:             journey.selectedVenue.id,
         guestId:             session?.guestId || session?.id || null,
@@ -91,6 +96,7 @@ export default function ManagementSync() {
         xpSummary:           { xp: session?.xp || 0 },
         stampSummary:        session?.stamps || [],
         tasteProfile:        { tasteTags: flavors },
+        idempotencyKey:      `${serverJourneyId}-eat-sync`,
       }).then(res => setEatStatus(res)).catch(() => {})
       smokecraftManagementSyncService.recordGuestActivity({
         venueId:          journey.selectedVenue.id,

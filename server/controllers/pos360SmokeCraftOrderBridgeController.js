@@ -43,11 +43,11 @@ export function createOrderIntent(req, res) {
     const {
       venueId, guestId, smokecraftSessionId, passportSessionId,
       cigarReference, menuItemReference, quantity, modifiers, orderPayload,
-      orderSource, orderType,
+      orderSource, orderType, idempotencyKey,
     } = req.body || {}
     const data = await createSmokeCraftOrderIntent({
       tenantId: tenantId(req), venueId, guestId, smokecraftSessionId, passportSessionId,
-      cigarReference, menuItemReference, quantity, modifiers, orderPayload, orderSource, orderType,
+      cigarReference, menuItemReference, quantity, modifiers, orderPayload, orderSource, orderType, idempotencyKey,
     })
     return wrap(res, data)
   })

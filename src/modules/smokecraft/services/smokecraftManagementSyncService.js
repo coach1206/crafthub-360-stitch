@@ -61,6 +61,7 @@ export async function syncManagement(payload = {}) {
         xpSummary:           payload.xpSummary || {},
         stampSummary:        payload.stampSummary || [],
         tasteProfile:        payload.tasteProfile || {},
+        idempotencyKey:      payload.idempotencyKey || null,
       },
     })
     if (!json?.success || !json?.backendConnected) return localFallback('syncManagement')

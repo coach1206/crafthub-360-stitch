@@ -75,19 +75,38 @@ export async function getEATSmokeCraftSyncHealth() {
 export async function syncSmokeCraftSessionToEAT({
   tenantId, venueId, guestId, smokecraftSessionId, passportSessionId,
   sessionStatus, completedRoute, completedSteps, xpSummary, stampSummary,
-  tasteProfile,
+  tasteProfile, idempotencyKey,
 }) {
   if (!await isDbAvailable()) return localFallback('syncSmokeCraftSessionToEAT')
+  const resolvedTenant = tenantId || 'novee-default'
   try {
+    // Real idempotency, same pattern as the POS360 bridge: a retried
+    // sync call with the same key returns the original row rather than
+    // appending a duplicate sync event.
+    if (idempotencyKey) {
+      const existing = await dbQuery(
+        `SELECT sync_id, session_status, sync_status, created_at FROM eat_smokecraft_session_sync
+         WHERE tenant_id = $1 AND idempotency_key = $2`,
+        [resolvedTenant, idempotencyKey]
+      )
+      if (existing.rows[0]) {
+        return {
+          ok: true, backendConnected: true, syncStatus: existing.rows[0].sync_status,
+          persistenceMode: 'database', safeClaim: SAFE_CLAIM,
+          sync: existing.rows[0], duplicate: true,
+        }
+      }
+    }
     const result = await dbQuery(
       `INSERT INTO eat_smokecraft_session_sync
          (tenant_id, venue_id, guest_id, smokecraft_session_id, passport_session_id,
           session_status, completed_route, completed_steps_json, xp_summary_json,
-          stamp_summary_json, taste_profile_json, sync_status, backend_connected)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'ok',true)
+          stamp_summary_json, taste_profile_json, sync_status, backend_connected, idempotency_key)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'ok',true,$12)
+       ON CONFLICT (tenant_id, idempotency_key) WHERE idempotency_key IS NOT NULL DO NOTHING
        RETURNING sync_id, session_status, sync_status, created_at`,
       [
-        tenantId || 'novee-default',
+        resolvedTenant,
         venueId  || 'novee-grand-lounge',
         guestId  || null,
         smokecraftSessionId || null,
@@ -98,12 +117,25 @@ export async function syncSmokeCraftSessionToEAT({
         JSON.stringify(xpSummary     || {}),
         JSON.stringify(stampSummary  || []),
         JSON.stringify(tasteProfile  || {}),
+        idempotencyKey || null,
       ]
     )
+    if (!result.rows[0] && idempotencyKey) {
+      const raced = await dbQuery(
+        `SELECT sync_id, session_status, sync_status, created_at FROM eat_smokecraft_session_sync
+         WHERE tenant_id = $1 AND idempotency_key = $2`,
+        [resolvedTenant, idempotencyKey]
+      )
+      return {
+        ok: true, backendConnected: true, syncStatus: raced.rows[0]?.sync_status,
+        persistenceMode: 'database', safeClaim: SAFE_CLAIM,
+        sync: raced.rows[0], duplicate: true,
+      }
+    }
     return {
       ok: true, backendConnected: true, syncStatus: 'ok',
       persistenceMode: 'database', safeClaim: SAFE_CLAIM,
-      sync: result.rows[0],
+      sync: result.rows[0], duplicate: false,
     }
   } catch (err) {
     return { ok: false, backendConnected: false, syncStatus: 'failed', persistenceMode: 'local_fallback', error: err.message, safeClaim: SAFE_CLAIM, area: 'syncSmokeCraftSessionToEAT' }

@@ -1,0 +1,82 @@
+{
+  "block": "4A",
+  "title": "Build the missing POS360 + E.A.T. bridges",
+  "branch": "recovery/smokecraft-codex-final",
+  "summary": "POS360 and E.A.T. backends already existed as real, DB-backed, mounted Express modules (pos360SmokeCraftOrderBridge*, eatSmokeCraftLiveSync*) — they were simply never called from a SmokeCraft screen, and neither had idempotency protection. No parallel/fake systems were created. Work done: added idempotency to both existing bridges (migration 120 + service/controller changes), wired RequestPurchase.jsx to the real POS360 order-intent bridge with a visible send/sent/error indicator, added idempotencyKey to the pre-existing (previously un-keyed) E.A.T. sync call already present in ManagementSync.jsx, and added a real loyalty-points accrual hook fired only from a staff 'order_fulfilled' action on a POS360 order intent, using the existing pos360CustomerLoyaltyService ledger tables (auto-provisioning a pos360_customers/pos360_loyalty_profiles row keyed by the SmokeCraft guestId).",
+
+  "pos360_bridge": {
+    "status": "PASS",
+    "evidence": [
+      "RequestPurchase.jsx handleContinue() calls createOrderIntent() with venueId, guestId, smokecraftSessionId, cigarReference, quantity, modifiers/addons, orderPayload (orderPath/notes/pairing), and a stable idempotencyKey.",
+      "curl proof: identical idempotencyKey submitted twice returns the same order_intent_id with duplicate:false then duplicate:true; psql confirms exactly 1 row.",
+      "Backend rejection test (invalid order_type) returns success:false with a real Postgres constraint-violation error message — no fake success, no lost transaction (order intent for the same key was never created).",
+      "Failure is surfaced in the UI via a Venue Handoff status block (sending / sent / error) that holds visible for 1.4s before advancing on error, instead of silently swallowing it."
+    ]
+  },
+
+  "eat_bridge": {
+    "status": "PASS",
+    "evidence": [
+      "Already wired from ManagementSync.jsx's handleSyncToVenue() via smokecraftManagementSyncService.syncManagement() -> POST /api/eat-360/smokecraft/session/sync; this session added the missing idempotencyKey (derived from the real server journeyId) end-to-end (client -> module service -> controller -> service -> DB).",
+      "curl proof: identical idempotencyKey submitted twice returns the same sync_id with duplicate:false then duplicate:true; psql confirms exactly 1 row.",
+      "Cross-player isolation proven: two distinct guest/session pairs synced to the same venue produced two distinct sync_id rows, each readable only via its own /session/:sessionId/status, with correct per-guest tasteProfile — no cross-contamination, no stale prior-session bleed."
+    ]
+  },
+
+  "loyalty_purchase_lifecycle": {
+    "status": "PARTIAL",
+    "evidence": [
+      "New real, DB-backed accrual hook added: recordSmokeCraftStaffAction(actionType='order_fulfilled') now (a) sets the order intent's order_status to 'fulfilled', (b) auto-provisions a pos360_customers/pos360_loyalty_profiles row keyed by the SmokeCraft guestId, and (c) calls the pre-existing real loyalty ledger (pos360_loyalty_points_ledger) — this is the correct, and only, commerce event that awards points (never on request creation, never tied to XP).",
+      "Fixed a real bug found during testing: points_balance is bigint and the pg driver returns it as a string, so newBalance was silently string-concatenating ('0'+10 -> '010') instead of adding; fixed with parseInt before arithmetic. Verified server balance (10) now matches ledger balance_after (10) exactly.",
+      "Duplicate 'order_fulfilled' action on the same order intent returns duplicate:true, awards 0 additional points, balance unchanged — proven via 2x curl + psql readback.",
+      "Points are stored entirely in pos360_loyalty_points_ledger / pos360_loyalty_profiles — structurally separate tables from SmokeCraft's XP (session.xp), never touched by this code path."
+    ],
+    "blocker": "pos360_customers/pos360_loyalty_profiles/pos360_loyalty_points_ledger use uuid-typed venue_id/tenant_id columns, but every SmokeCraft-side identifier (venue id, tenant id, guest id, session id) is plain text (e.g. venue slugs like 'hf5c2a-test-venue-...'). When a real SmokeCraft venue id is passed through, Postgres rejects it with 'invalid input syntax for type uuid'. The ledger mechanism itself is proven correct end-to-end when a real uuid venue/tenant id is used (10 points earned, then correctly deduped on retry) — the remaining gap is an id-space mismatch between the SmokeCraft bridge tables (text ids) and the pre-existing POS360 customer/loyalty tables (uuid ids), which is a schema-level decision (either a mapping table or a uuid migration) outside the scope of a bridge-wiring fix and was not present before this session either."
+  },
+
+  "management_sync_regression": {
+    "status": "PASS",
+    "evidence": [
+      "Re-ran full real lifecycle: guest-session -> create journey -> snapshot -> complete -> complete again (alreadyCompleted:true, no state change) -> sync -> sync again (created:false, same eventId) -> status read-back. All idempotency behavior proven in Block 4 is intact after this session's changes."
+    ]
+  },
+
+  "ticket_tapper_regression": {
+    "status": "PASS",
+    "evidence": [
+      "Re-ran full real lifecycle: create (storageMode:postgres) -> publish (status:active) -> tap -> add -> report; psql confirms the special row and both tracked events persisted with correct venue_id/customer_session_id. No regression from POS360/E.A.T. changes."
+    ]
+  },
+
+  "cross_system_id_integrity": {
+    "status": "PASS",
+    "evidence": [
+      "One real checkpoint (venue/guest/session ids shared by construction): identical venue_id, guest_id and smokecraft_session_id submitted to POS360 order-intent, E.A.T. session-sync, and Ticket Tapper tap all land byte-identical in pos360_smokecraft_order_intents, eat_smokecraft_session_sync, and ticket_tapper_special_events (verified via psql on all three tables).",
+      "Structurally guaranteed in the client, not just in this one test: RequestPurchase.jsx and ManagementSync.jsx both source guestId/sessionId from the same useGuestSession() session object and venueId from the same journey.selectedVenue.id, so every real screen submission shares identifiers by construction."
+    ]
+  },
+
+  "idempotency_retry": {
+    "status": "PASS",
+    "evidence": [
+      "POS360 order-intent: added migration 120 (idempotency_key column + partial unique index), service-layer check-then-insert-with-ON-CONFLICT-then-race-refetch. Proven via 2x identical curl -> 1 DB row, duplicate:false then duplicate:true.",
+      "E.A.T. session-sync: identical pattern, identical proof.",
+      "Loyalty accrual: idempotencyKey = order_intent_id; duplicate 'order_fulfilled' proven to award 0 additional points.",
+      "Management Sync journey completion/sync: pre-existing idempotency (alreadyCompleted / created:false) reconfirmed intact.",
+      "Backend rejection (invalid order_type): clear success:false + real error message, no partial/duplicate write.",
+      "Timeout/offline: the new frontend API clients (pos360OrderBridgeApiClient.js, eatLiveSyncApiClient.js) wrap every call in an 8s AbortController and return {ok:false, error:'timeout'|'offline'} instead of throwing, so a network failure never blocks gameplay navigation and never silently claims success."
+    ]
+  },
+
+  "defects_fixed_this_block": [
+    "Neither POS360 nor E.A.T. bridge table had idempotency protection — a retried/double-clicked request could create a duplicate row. Fixed with migration 120 + service/controller changes on both bridges.",
+    "RequestPurchase.jsx never called the real POS360 bridge at all (no client existed) — the guest's ordering-path selection was gameplay-only and never reached the venue. Fixed by wiring handleContinue() to createOrderIntent() with a visible status indicator.",
+    "ManagementSync.jsx's existing E.A.T. sync call had no idempotencyKey, so a retried sync could double-insert. Fixed by threading idempotencyKey through the module service and the screen's call site.",
+    "No commerce event anywhere in the codebase triggered real loyalty-points accrual — earnPoints() existed but was only reachable via a manual staff-facing API route, never from an actual purchase. Fixed by adding a real order_fulfilled staff-action hook with correct idempotency and XP/points separation.",
+    "Found and fixed a real string-concatenation bug in the new loyalty accrual code during its own verification pass (bigint points_balance returned as a string by the pg driver, corrupting newBalance): parseInt added before arithmetic."
+  ],
+
+  "exact_blockers": [
+    "Loyalty accrual cannot be exercised against a real, in-use SmokeCraft venue id today because pos360_customers/pos360_loyalty_profiles/pos360_loyalty_points_ledger require uuid venue_id/tenant_id while every SmokeCraft-side id is plain text. The accrual code path is correct and fully proven with real uuid ids; connecting it to real venue slugs requires a schema-level id-mapping decision (out of scope for a bridge-wiring fix)."
+  ]
+}

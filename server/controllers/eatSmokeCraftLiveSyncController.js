@@ -43,11 +43,11 @@ export function syncSession(req, res) {
   return ok500(res, async () => {
     const {
       venueId, guestId, smokecraftSessionId, passportSessionId,
-      sessionStatus, completedRoute, completedSteps, xpSummary, stampSummary, tasteProfile,
+      sessionStatus, completedRoute, completedSteps, xpSummary, stampSummary, tasteProfile, idempotencyKey,
     } = req.body || {}
     const data = await syncSmokeCraftSessionToEAT({
       tenantId: tenantId(req), venueId, guestId, smokecraftSessionId, passportSessionId,
-      sessionStatus, completedRoute, completedSteps, xpSummary, stampSummary, tasteProfile,
+      sessionStatus, completedRoute, completedSteps, xpSummary, stampSummary, tasteProfile, idempotencyKey,
     })
     return wrap(res, data)
   })

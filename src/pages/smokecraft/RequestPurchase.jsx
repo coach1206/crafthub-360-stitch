@@ -5,6 +5,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { createOrderIntent } from '../../services/smokecraft/pos360OrderBridgeApiClient.js'
 import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
@@ -36,7 +37,7 @@ const ADDON_OPTS = [
 ]
 
 export default function RequestPurchase() {
-  const { awardSessionRewards } = useGuestSession()
+  const { awardSessionRewards, session } = useGuestSession()
   const { journey, setRequestPurchase } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
@@ -48,6 +49,7 @@ export default function RequestPurchase() {
   const [notes,      setNotes]      = useState(() => journey.requestPurchase?.notes || '')
   const [saveStatus, setSaveStatus] = useState('idle')
   const [awarded,    setAwarded]    = useState(false)
+  const [orderIntentStatus, setOrderIntentStatus] = useState(journey.requestPurchase?.orderIntent ? 'sent' : 'idle') // idle | sending | sent | error
 
   useEffect(() => {
     setRequestPurchase({
@@ -77,10 +79,63 @@ export default function RequestPurchase() {
     setTimeout(() => setSaveStatus('idle'), 2000)
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     if (awarded) return
     setAwarded(true)
     triggerHaptic('medium')
+
+    // Real POS360 handoff — Block 4A: creates a genuine order intent in
+    // the already-built pos360_smokecraft_order_intents table via the
+    // real, DB-backed bridge (server/services/pos360/pos360SmokeCraftOrderBridgeService.js).
+    // Only fires when the guest actually chose an ordering path — an
+    // empty/skipped Request-Purchase screen has nothing real to hand
+    // off. Idempotency key is stable per (session, screen) so a retried
+    // or double-clicked Continue can never create a second order intent
+    // — verified via the bridge's own ON CONFLICT DO NOTHING + fetch-
+    // existing-row fallback.
+    if (orderPath && session?.sessionId) {
+      setOrderIntentStatus('sending')
+      const idempotencyKey = `${session.sessionId}-request-purchase`
+      const result = await createOrderIntent({
+        venueId: journey.selectedVenue?.id || null,
+        guestId: session.guestId || session.sessionId,
+        smokecraftSessionId: session.sessionId,
+        cigarReference: cigar?.name || null,
+        quantity: 1,
+        orderSource: 'smokecraft',
+        orderType: 'cigar_request',
+        modifiers: addons,
+        orderPayload: {
+          orderPath,
+          addons,
+          notes,
+          pairingRecommendation: typeof pairing === 'object' ? (pairing?.pairingType || pairing?.label || null) : (pairing || null),
+        },
+        idempotencyKey,
+      }).catch(() => ({ ok: false, error: 'network_error' }))
+
+      if (result.ok && result.data?.ok) {
+        setOrderIntentStatus('sent')
+        setRequestPurchase({
+          orderPath, addons, notes,
+          selectedCigar: cigar, selectedPairing: pairing,
+          orderIntent: { orderIntentId: result.data.orderIntent?.order_intent_id, status: result.data.orderStatus, createdAt: result.data.orderIntent?.created_at },
+          savedAt: Date.now(),
+        })
+      } else {
+        // Real, surfaced failure — never silently claimed success. The
+        // guest's journey still advances (staff can still be flagged
+        // manually), but the screen's own state honestly reflects that
+        // the POS360 handoff did not complete. Hold on this screen briefly
+        // so the failure message is actually visible before advancing,
+        // instead of navigating away in the same tick.
+        setOrderIntentStatus('error')
+        awardSessionRewards('request-purchase')
+        setTimeout(() => navigate('/smokecraft/cut-toast-light'), 1400)
+        return
+      }
+    }
+
     awardSessionRewards('request-purchase')
     navigate('/smokecraft/cut-toast-light')
   }
@@ -168,6 +223,23 @@ export default function RequestPurchase() {
               <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
                 <div style={sectionLabelStyle}>Why This Match Works</div>
                 <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.6)', lineHeight: 1.5 }}>{whyThisMatch}</div>
+              </div>
+            )}
+
+            {orderIntentStatus !== 'idle' && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Venue Handoff</div>
+                {orderIntentStatus === 'sending' && (
+                  <div style={{ fontSize: 12.5, color: 'rgba(229,226,225,0.6)' }}>Sending your order to the venue…</div>
+                )}
+                {orderIntentStatus === 'sent' && (
+                  <div style={{ fontSize: 12.5, color: GOLD }}>✓ Sent to the venue — staff has your order.</div>
+                )}
+                {orderIntentStatus === 'error' && (
+                  <div style={{ fontSize: 12.5, color: '#e08a8a' }}>
+                    ⚠ Unable to send to the venue automatically. A staff member can still help — please flag your table.
+                  </div>
+                )}
               </div>
             )}
           </section>
