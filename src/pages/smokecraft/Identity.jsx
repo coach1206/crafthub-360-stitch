@@ -7,6 +7,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { VISIT_STRUCTURE } from '../../constants/session.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 import {
   GOLD,
   GOLD_DIM,
@@ -247,6 +248,7 @@ export default function Identity() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="identity" label="A guest enjoying a cigar in a lounge setting" bgPosition="56% 10%" bgSize="270%" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{
             width: 58,

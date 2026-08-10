@@ -9,6 +9,7 @@ import EducationalDetailPanel from '../../components/smokecraft/goldenBox/Educat
 import { fromCatalogRow, notYetConfigured } from '../../components/smokecraft/goldenBox/educationalContentContract.js'
 import { ensureIdentity } from '../../hooks/useGoldenBox.js'
 import * as ssApi from '../../services/smokecraft/seedSoilApiClient.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 import {
   GOLD,
   GOLD_DIM,
@@ -184,6 +185,7 @@ export default function SeedSoil() {
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="seedSoil" label="Tobacco seed pods, seedlings, and soil layers" bgPosition="78% 0%" bgSize="260%" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40, lineHeight: 1 }}>🌱</div>
             <div>

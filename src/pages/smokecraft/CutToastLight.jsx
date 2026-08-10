@@ -8,6 +8,7 @@ import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 import {
   GOLD,
   GOLD_DIM,
@@ -181,6 +182,7 @@ export default function CutToastLight({ onBack, onComplete } = {}) {
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="cutToastLight" label="Cutting, toasting, and lighting a cigar" bgPosition="72% 0%" bgSize="250%" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>✂️</div>
             <div>

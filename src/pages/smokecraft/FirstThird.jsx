@@ -12,6 +12,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
 /**
  * First Third — /smokecraft/first-third (Session 8/9)
@@ -239,6 +240,7 @@ export default function FirstThird({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="firstThird" label="The first third of a lit cigar" bgPosition="72% 0%" bgSize="250%" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
           <div>

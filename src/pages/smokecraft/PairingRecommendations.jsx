@@ -211,6 +211,12 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
+          {/* Block 6, Part C: SC_ASSETS.pairingRecommendations is a heavily-baked UI
+              mockup — every large region tested still bled baked text/
+              panel chrome into the crop window across multiple attempts.
+              Per the mandate's own instruction — "if clean extraction is
+              not practical, keep the asset out rather than reintroducing
+              fake UI" — this screen intentionally has no hero image. */}
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🥂</div>
           <div>

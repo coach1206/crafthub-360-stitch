@@ -10,6 +10,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
+import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
 
 /**
  * Request / Purchase — /smokecraft/request-purchase (supporting)
@@ -151,6 +152,7 @@ export default function RequestPurchase() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
+        <SmokeCraftHeroCrop assetKey="requestPurchase" label="Cigars, whiskey, and lounge companions" bgPosition="78% 0%" bgSize="260%" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🛎️</div>
           <div>
