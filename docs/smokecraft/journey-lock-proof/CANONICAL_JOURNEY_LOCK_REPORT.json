@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T21:40:27.798Z",
-  "sha": "41cbd42c748abc165994b66898a776ec37de2e71",
+  "generatedAt": "2026-08-10T21:43:09.189Z",
+  "sha": "19c70fb72a5252a306829aeccc6c51b8784562b0",
   "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
   "expectedOrderFromManifest": [
     "/smokecraft",
@@ -175,7 +175,7 @@
       "matched": true
     }
   ],
-  "orderMatches": false,
+  "orderMatches": true,
   "defects": [],
   "notes": [
     "Bypass check PASS: direct nav to /smokecraft/scorecard with zero progress redirected to /smokecraft/identity.",
@@ -185,5 +185,5 @@
     "Scorecard gate check PASS: Continue did not advance with zero ratings.",
     "Dead-end check PASS: Session Complete exposes 9 visible controls."
   ],
-  "canonicalJourneyPass": false
+  "canonicalJourneyPass": true
 }
