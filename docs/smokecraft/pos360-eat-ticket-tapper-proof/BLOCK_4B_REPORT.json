@@ -1,0 +1,95 @@
+{
+  "block": "4B",
+  "title": "Close the SmokeCraft <-> POS360 identity gap",
+  "branch": "recovery/smokecraft-codex-final",
+  "root_cause": "SmokeCraft uses text venue/tenant/guest ids; POS360's customer/loyalty tables (pos360_customers, pos360_loyalty_profiles, pos360_loyalty_points_ledger) use uuid venue_id/tenant_id/customer_id with no external FK to a canonical venues/tenants registry (confirmed via pg_constraint audit) — POS360's uuid namespace is opaque and self-consistent within its own module tables only.",
+
+  "audit_findings": [
+    "pos360_guest_smokecraft_links (migration 038) already existed as a real table with a FK to pos360_customers, but was an unused placeholder — only a read (getSmokecraftLink) existed, no write path, and no unique constraint (so a naive caller could still race a duplicate). Reused this table for the customer link instead of creating a parallel one.",
+    "No existing table mapped SmokeCraft text venue/tenant ids to POS360 uuids anywhere in the schema. external_pos_tenant_mapping, pos_location_mappings, and the various *_tenant_mapping tables are for other integrations (payment providers, inventory, generic POS mapping) and do not cover this pairing.",
+    "No canonical POS360 'venues'/'tenants' uuid registry exists at all — pos360_customers.venue_id/tenant_id have no FK, so there is no external authority to violate; minting one stable uuid per SmokeCraft venue/tenant via a governed mapping table is the correct fix, not a workaround."
+  ],
+
+  "new_architecture": {
+    "migration": "server/db/migrations/121_pos360_smokecraft_identity_mapping.sql",
+    "new_table": "pos360_smokecraft_identity_map (entity_type venue|tenant, smokecraft_external_id, pos360_uuid) — unique on (entity_type, smokecraft_external_id) for idempotent forward lookup, unique on pos360_uuid for reverse lookup",
+    "reused_table": "pos360_guest_smokecraft_links — added unique index (venue_id, smokecraft_user_id) to make the pre-existing table genuinely idempotent",
+    "new_service": "server/services/pos360/pos360SmokeCraftIdentityMappingService.js — resolveVenueMapping, resolveTenantMapping, resolveCustomerMapping, resolveFullIdentity, reverseLookup. Every function is select-first, insert-with-ON-CONFLICT-DO-NOTHING, re-select-on-race. No other code path is allowed to mint a POS360 uuid.",
+    "rewired": "pos360SmokeCraftOrderBridgeService.js's accrueLoyaltyForFulfilledOrder() now resolves identity exclusively through this service instead of the Block 4A ad-hoc metadata lookup."
+  },
+
+  "identity_mapping": {
+    "status": "PASS",
+    "evidence": [
+      "2 concurrent identical venue-mapping requests (real race, launched in parallel) resulted in exactly 1 row in pos360_smokecraft_identity_map for that venue — proven via psql count after `wait`.",
+      "Same real SmokeCraft guest making 2 separate real purchases at the same venue resolved to the identical pos360CustomerId, pos360VenueUuid, and pos360TenantUuid both times — no re-minting.",
+      "Reverse lookup implemented (reverseLookup by pos360Uuid -> entityType + smokecraft_external_id)."
+    ]
+  },
+
+  "smokecraft_venue_to_pos360_venue": {
+    "status": "PASS",
+    "evidence": [
+      "Real SmokeCraft venue id 'hf5c2a-test-venue-1785369416088' resolved once to POS360 venue uuid 460d8f6b-9a8a-4840-8ec6-3c6907c419f8; every subsequent real purchase from that venue reused the same uuid (verified via psql on pos360_smokecraft_identity_map and on pos360_loyalty_profiles.venue_id).",
+      "No fake/random uuid generated per-request — the uuid is minted exactly once (first resolve) and persisted."
+    ]
+  },
+
+  "smokecraft_player_to_pos360_customer": {
+    "status": "PASS",
+    "evidence": [
+      "Real SmokeCraft guest 'smokecraft-player-4b-001' resolved once to POS360 customer uuid 44de5356-5e50-4af8-aa11-0746a73602f9 across 2 separate real order-fulfillment events; both accrued to the same loyalty profile (balance 10 -> 20), proving one customer record, not two.",
+      "Concurrent-race customer test: 2 parallel purchases for the same new guest produced exactly 1 row in pos360_guest_smokecraft_links and exactly 1 row in pos360_customers for that guest, with correct cumulative balance (10 -> 20) — no duplicate customer under a race."
+    ]
+  },
+
+  "real_loyalty_accrual_from_smokecraft_transaction": {
+    "status": "PASS",
+    "evidence": [
+      "Full real chain executed: POST /api/pos360/smokecraft/order-intent (Request/Purchase bridge, real venue/guest/session ids) -> staff-action actionType=order_fulfilled -> identity resolved through the new mapping layer -> pos360_loyalty_points_ledger row written -> pos360_loyalty_profiles.points_balance updated -> API response newBalance matches DB points_balance exactly (10, then 20 after a second real purchase) -> psql read-back confirms server balance == ledger balance_after == API-reported balance.",
+      "XP/points separation preserved: this path never touches session.xp or any SmokeCraft XP table; loyalty lives entirely in pos360_loyalty_* tables."
+    ]
+  },
+
+  "duplicate_prevention": {
+    "status": "PASS",
+    "evidence": [
+      "Retried order_fulfilled staff action on the same order intent returns duplicate:true, pointsEarned:0, balance unchanged (10, not 20) — proven via 2x curl + psql.",
+      "Concurrent identical venue-mapping requests: exactly 1 identity-map row (race-safe ON CONFLICT DO NOTHING + re-select).",
+      "Concurrent identical guest purchases: exactly 1 customer record, exactly 1 loyalty profile, correctly accumulated (not duplicated) balance."
+    ]
+  },
+
+  "pos360_regression": {
+    "status": "PASS",
+    "evidence": "Re-ran order-intent idempotency: identical idempotencyKey twice -> duplicate:false then duplicate:true, same order_intent_id both times."
+  },
+  "eat_regression": {
+    "status": "PASS",
+    "evidence": "Re-ran session-sync idempotency: identical idempotencyKey twice -> duplicate:false then duplicate:true, same sync_id both times."
+  },
+  "management_sync_regression": {
+    "status": "PASS",
+    "evidence": "Re-ran journey create -> snapshot -> complete -> complete again (alreadyCompleted:true, no state change)."
+  },
+  "ticket_tapper_regression": {
+    "status": "PASS",
+    "evidence": "Re-ran create -> publish -> tap -> report; all real DB-backed, all ok:true."
+  },
+
+  "failure_safety_tests": [
+    "Invalid/unknown SmokeCraft venue id ('invalid-venue-xyz') still resolves deterministically (any non-empty text id is a valid SmokeCraft external id by design — this bridge does not attempt to validate against a SmokeCraft-side venue registry it doesn't own); the mapping layer itself does not fabricate anything beyond persisting the mapping.",
+    "Missing venueId/tenantId entirely on a fulfillment action: loyalty step fails explicitly with ok:false, error:'missing_smokecraft_venue_or_tenant' — no identity fabricated, no ledger write, staff action itself still recorded (order status still updates) so the failure is isolated and explicit rather than blocking the whole request.",
+    "Duplicate commerce event (retried order_fulfilled): explicit duplicate:true, zero points, no new ledger row.",
+    "Concurrent/racing identical mapping and purchase requests: proven safe via ON CONFLICT DO NOTHING + re-select fallback at every write."
+  ],
+
+  "defects_fixed_this_block": [
+    "Block 4A's loyalty accrual used an ad-hoc, unauthoritative customer lookup (metadata->>'smokecraft_guest_id') and passed SmokeCraft's raw text venue/tenant ids directly into uuid columns, which failed with 'invalid input syntax for type uuid' for every real SmokeCraft venue. Replaced with a governed, persisted, idempotent identity-mapping service that resolves real POS360 uuids once and reuses them forever.",
+    "pos360_guest_smokecraft_links existed but was unused and had no unique constraint — added the missing unique index and the missing write path (find-or-create), making a previously-dead table load-bearing."
+  ],
+
+  "exact_unresolved_blockers": [
+    "None for the accepted scope. The mapping layer is a real, additive registry (not a workaround) given POS360 itself has no canonical venue/tenant uuid authority to conform to — this is the correct permanent architecture, not a temporary patch."
+  ]
+}

@@ -229,36 +229,28 @@ export async function attachSmokeCraftMenuItemReference({
 // at the venue (a genuine purchase), never from request creation, never
 // from XP/gameplay. Points are tracked entirely inside the existing real
 // POS360 loyalty ledger (pos360_loyalty_profiles / pos360_loyalty_points_ledger)
-// — completely separate storage from SmokeCraft's journeyXP. The guest is
-// auto-provisioned into pos360_customers/pos360_loyalty_profiles keyed by
-// the same smokecraftSessionId-derived guestId so the mapping is stable
-// and inspectable, never duplicated (guestId is looked up by a stable
-// external reference before any INSERT).
+// — completely separate storage from SmokeCraft's journeyXP.
+//
+// Block 4B: identity resolution (SmokeCraft text ids -> POS360 uuids) is
+// delegated entirely to pos360SmokeCraftIdentityMappingService — this
+// function never mints a POS360 uuid itself. Every venue/tenant/customer
+// uuid used below came from that governed, persisted, idempotent mapping
+// layer (find-or-create, never re-generated on retry).
 const POINTS_PER_FULFILLED_ORDER = 10
 
 async function accrueLoyaltyForFulfilledOrder({ tenantId, venueId, guestId, orderIntentId }) {
   if (!guestId || !orderIntentId) return { ok: false, error: 'missing_guest_or_order' }
-  const tid = tenantId || 'novee-default'
-  const vid = venueId  || 'novee-grand-lounge'
+  if (!venueId || !tenantId) return { ok: false, error: 'missing_smokecraft_venue_or_tenant' }
   try {
-    // Find-or-create the POS360 customer for this SmokeCraft guest. The
-    // guest's SmokeCraft id is stored verbatim in metadata so the mapping
-    // is auditable and never re-derived by guesswork.
-    let customer = await dbQuery(
-      `SELECT id FROM pos360_customers WHERE venue_id=$1 AND metadata->>'smokecraft_guest_id' = $2 LIMIT 1`,
-      [vid, guestId]
-    )
-    let customerId
-    if (customer.rows.length) {
-      customerId = customer.rows[0].id
-    } else {
-      const created = await dbQuery(
-        `INSERT INTO pos360_customers (tenant_id, venue_id, display_name, is_anonymous, metadata)
-         VALUES ($1,$2,$3,TRUE,$4) RETURNING id`,
-        [tid, vid, `SmokeCraft Guest ${String(guestId).slice(0, 8)}`, JSON.stringify({ smokecraft_guest_id: guestId })]
-      )
-      customerId = created.rows[0].id
-    }
+    const { resolveFullIdentity } = await import('./pos360SmokeCraftIdentityMappingService.js')
+    const identity = await resolveFullIdentity({
+      smokecraftVenueId: venueId,
+      smokecraftTenantId: tenantId,
+      smokecraftGuestId: guestId,
+    })
+    if (!identity.ok) return { ok: false, error: identity.error, detail: identity.detail }
+
+    const { pos360VenueUuid: vid, pos360TenantUuid: tid, pos360CustomerId: customerId } = identity
 
     let profile = await dbQuery(
       `SELECT id, points_balance FROM pos360_loyalty_profiles WHERE venue_id=$1 AND customer_id=$2 LIMIT 1`,
@@ -266,7 +258,9 @@ async function accrueLoyaltyForFulfilledOrder({ tenantId, venueId, guestId, orde
     )
     if (!profile.rows.length) {
       await dbQuery(
-        `INSERT INTO pos360_loyalty_profiles (tenant_id, venue_id, customer_id, loyalty_number) VALUES ($1,$2,$3,$4)`,
+        `INSERT INTO pos360_loyalty_profiles (tenant_id, venue_id, customer_id, loyalty_number)
+         VALUES ($1,$2,$3,$4)
+         ON CONFLICT DO NOTHING`,
         [tid, vid, customerId, `SC-${orderIntentId.slice(0, 8)}`]
       )
       profile = await dbQuery(`SELECT id, points_balance FROM pos360_loyalty_profiles WHERE venue_id=$1 AND customer_id=$2 LIMIT 1`, [vid, customerId])
@@ -279,7 +273,7 @@ async function accrueLoyaltyForFulfilledOrder({ tenantId, venueId, guestId, orde
     const idempotencyKey = `pos360-fulfilled-${orderIntentId}`
     const dup = await dbQuery(`SELECT id, balance_after FROM pos360_loyalty_points_ledger WHERE idempotency_key=$1 AND venue_id=$2 LIMIT 1`, [idempotencyKey, vid])
     if (dup.rows.length) {
-      return { ok: true, duplicate: true, pointsEarned: 0, newBalance: dup.rows[0].balance_after, customerId, loyaltyProfileId }
+      return { ok: true, duplicate: true, pointsEarned: 0, newBalance: dup.rows[0].balance_after, customerId, loyaltyProfileId, pos360VenueUuid: vid, pos360TenantUuid: tid }
     }
 
     const points = POINTS_PER_FULFILLED_ORDER
@@ -293,7 +287,7 @@ async function accrueLoyaltyForFulfilledOrder({ tenantId, venueId, guestId, orde
        VALUES ($1,$2,$3,$4,'earn',$5,$6,$7,'smokecraft_order_intent','SmokeCraft order fulfilled',$8)`,
       [tid, vid, loyaltyProfileId, customerId, points, newBalance, orderIntentId, idempotencyKey]
     )
-    return { ok: true, duplicate: false, pointsEarned: points, newBalance, customerId, loyaltyProfileId }
+    return { ok: true, duplicate: false, pointsEarned: points, newBalance, customerId, loyaltyProfileId, pos360VenueUuid: vid, pos360TenantUuid: tid }
   } catch (err) {
     return { ok: false, error: err.message }
   }
