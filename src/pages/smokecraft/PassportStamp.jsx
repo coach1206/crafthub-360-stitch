@@ -178,7 +178,7 @@ export default function PassportStamp({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="passportStampHero" label="A SmokeCraft 360 passport and earned stamps" bgPosition="center 20%" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="passportStampHero" label="A SmokeCraft 360 passport and earned stamps" bgPosition="center 32%" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 44 }}>🛂</div>
           <div>
