@@ -29,6 +29,15 @@ export default function SecondHumidorMatch() {
   const [done, setDone] = useState(false)
 
   const cigar = journey.selectedCigar
+  const pairing = journey.pairing
+
+  const whyItHolds = cigar
+    ? (cigar.strength === 'Full' || cigar.strength === 'Medium-Full'
+        ? 'A full-bodied profile like this one holds its character through a second visit — the wrapper oils and aging only deepen with a little more rest.'
+        : cigar.strength === 'Mild' || cigar.strength === 'Mild-Medium'
+        ? "A lighter profile stays approachable for a return visit, and it's an easy recommendation if you're introducing a guest to the humidor."
+        : 'A balanced medium profile is a safe, repeatable choice — consistent from one visit to the next.')
+    : null
 
   function handleContinue() {
     if (done) return
@@ -68,6 +77,21 @@ export default function SecondHumidorMatch() {
             <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic', marginTop: 8 }}>No cigar selected this journey.</div>
           )}
         </section>
+
+        {cigar && (
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Why This Holds Up for Next Time</div>
+            <p style={{ margin: '8px 0 0', color: 'rgba(229,226,225,.68)', fontSize: 13, lineHeight: 1.6 }}>{whyItHolds}</p>
+            {pairing && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Paired Well With</div>
+                <div style={{ fontSize: 13, color: '#E9C176', marginTop: 6 }}>
+                  {typeof pairing === 'object' ? (pairing.pairingType || pairing.label || null) : pairing}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
 
         <div style={{ height: 90 }} aria-hidden="true" />
       </div>

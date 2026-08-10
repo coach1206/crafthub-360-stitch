@@ -53,6 +53,7 @@ import pos360SmokeCraftOrderBridgeRoutes from './routes/pos360SmokeCraftOrderBri
 import eatSmokeCraftLiveSyncRoutes       from './routes/eatSmokeCraftLiveSyncRoutes.js'
 import managementSyncRoutes              from './routes/managementSyncRoutes.js'
 import smokecraftTicketTapperSpecialsRoutes from './routes/smokecraftTicketTapperSpecialsRoutes.js'
+import smokecraftVenueCommerceRoutes        from './routes/smokecraftVenueCommerceRoutes.js'
 import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
@@ -132,6 +133,7 @@ app.use('/api/pos360/smokecraft',       pos360SmokeCraftOrderBridgeRoutes)
 app.use('/api/eat-360/smokecraft',      eatSmokeCraftLiveSyncRoutes)
 app.use('/api/smokecraft/management-sync', managementSyncRoutes)
 app.use('/api/smokecraft/ticket-tapper',   smokecraftTicketTapperSpecialsRoutes)
+app.use('/api/smokecraft/venue-commerce',  smokecraftVenueCommerceRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

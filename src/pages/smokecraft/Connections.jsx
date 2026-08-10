@@ -97,6 +97,24 @@ export default function Connections() {
           </div>
         </section>
 
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Privacy &amp; Sharing</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18, marginTop: 12 }}>
+            <div>
+              <div style={{ color: GOLD, fontWeight: 700, fontSize: 13.5, marginBottom: 6 }}>🔒 Nothing is shared automatically</div>
+              <p style={{ margin: 0, color: 'rgba(229,226,225,.62)', fontSize: 12.5, lineHeight: 1.55 }}>
+                Selecting a platform above only marks your preference for this visit — no post, message, or contact is sent without a separate, explicit action from you.
+              </p>
+            </div>
+            <div>
+              <div style={{ color: GOLD, fontWeight: 700, fontSize: 13.5, marginBottom: 6 }}>🥃 Why connect at all</div>
+              <p style={{ margin: 0, color: 'rgba(229,226,225,.62)', fontSize: 12.5, lineHeight: 1.55 }}>
+                Staying in touch lets the venue notify you about new cigar drops, tasting events, and your NoveePassport rewards — entirely optional, never required to continue your journey.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <div style={{ height: 90 }} aria-hidden="true" />
       </div>
 
