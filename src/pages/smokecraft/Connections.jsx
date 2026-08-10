@@ -3,30 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import {
+  GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
+  heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
+} from '../../constants/smokecraftLiveScreenTokens.js'
 
-// Holistic Fix 3: SC_ASSETS.connections (cropped/connections-hero.jpg) is a
-// 492x781 portrait crop, not the 1672x941 landscape dimensions previously
-// declared here — that mismatch fed the wrong aspect ratio into
-// SmokeCraftImageBoundsOverlay's scale math, causing the image to render
-// visibly stretched/distorted on every viewport (confirmed via
-// verify-smokecraft-hf3-responsive-inventory.mjs + direct PIL read of the
-// actual file). Corrected to the asset's real natural dimensions.
-const NAT_W = 492
-const NAT_H = 781
-
-const GOLD = '#E9C176'
+/**
+ * Connections — /smokecraft/connections (supporting)
+ *
+ * TWO-GENERATION MIGRATION — replaces SmokeCraftImageBoundsOverlay (7
+ * share-platform hotspots over a decorative portrait crop) with the
+ * shared live-DOM card system. No decorative image is used, matching
+ * the other supporting-screen conversions this pass. All logic
+ * preserved verbatim: toggle/setConnections persistence, handleContinue.
+ */
 
 const CONNECTION_OPTIONS = [
-  { id: 'instagram', label: 'Instagram',   x:  3.0, y: 65.0, w: 12.5, h: 14.0 },
-  { id: 'facebook',  label: 'Facebook',    x: 16.5, y: 65.0, w: 12.5, h: 14.0 },
-  { id: 'twitter',   label: 'Twitter',     x: 30.0, y: 65.0, w: 12.5, h: 14.0 },
-  { id: 'whatsapp',  label: 'WhatsApp',    x: 43.5, y: 65.0, w: 12.5, h: 14.0 },
-  { id: 'email',     label: 'Email',       x: 57.0, y: 65.0, w: 12.5, h: 14.0 },
-  { id: 'sms',       label: 'SMS',         x: 70.5, y: 65.0, w: 12.5, h: 14.0 },
-  { id: 'passport',  label: 'NoveePassport', x: 84.0, y: 65.0, w: 12.5, h: 14.0 },
+  { id: 'instagram', label: 'Instagram',    icon: '📷' },
+  { id: 'facebook',  label: 'Facebook',     icon: '📘' },
+  { id: 'twitter',   label: 'Twitter',      icon: '🐦' },
+  { id: 'whatsapp',  label: 'WhatsApp',     icon: '💬' },
+  { id: 'email',     label: 'Email',        icon: '✉️' },
+  { id: 'sms',       label: 'SMS',          icon: '📱' },
+  { id: 'passport',  label: 'NoveePassport', icon: '🛂' },
 ]
 
 export default function Connections() {
@@ -53,58 +54,49 @@ export default function Connections() {
   }
 
   return (
-    <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.connections}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Connections — Share & Connect"
-      >
-        {CONNECTION_OPTIONS.map(opt => {
-          const active = selected.has(opt.id)
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              aria-label={`${opt.label}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => toggle(opt.id)}
-              style={{
-                position: 'absolute',
-                left: `${opt.x}%`, top: `${opt.y}%`,
-                width: `${opt.w}%`, height: `${opt.h}%`,
-                pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'rgba(5,5,5,0.55)',
-                border: `2px solid ${active ? GOLD : 'rgba(233,193,118,0.35)'}`,
-                borderRadius: 8,
-                cursor: 'pointer',
-                boxSizing: 'border-box',
-                padding: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-            >
-              {/* The approved asset for this route (connections-hero.jpg) is a
-                  decorative crop with no baked platform labels — a real,
-                  visible label is required here so these zones are not
-                  invisible hotspots. */}
-              <span style={{
-                fontFamily: 'Georgia, serif', fontSize: 'clamp(9px,1.0vw,13px)',
-                fontWeight: 700, color: active ? GOLD : 'rgba(229,226,225,0.85)',
-                letterSpacing: '0.02em', pointerEvents: 'none', textAlign: 'center',
-              }}>
-                {opt.label}
-              </span>
-              {active && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 5,
-                  fontSize: 'clamp(9px,1.0vw,12px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
-              )}
-            </button>
-          )
-        })}
-      </SmokeCraftImageBoundsOverlay>
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div style={pageShellStyle}>
+        <div style={heroBannerStyle}>
+          <div aria-hidden="true" style={{ fontSize: 40 }}>🔗</div>
+          <div>
+            <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Share &amp; Connect</div>
+            <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Stay Connected</h1>
+            <p style={{ margin: 0, maxWidth: 700, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+              Choose how you'd like to share your journey or stay in touch. Nothing here is required.
+            </p>
+          </div>
+        </div>
+
+        <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+          <div style={sectionLabelStyle}>Select a way to connect</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12, marginTop: 12 }}>
+            {CONNECTION_OPTIONS.map(opt => {
+              const active = selected.has(opt.id)
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  aria-label={`${opt.label}${active ? ' (selected)' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => toggle(opt.id)}
+                  style={{
+                    minHeight: 96, padding: 14, borderRadius: 12,
+                    border: `1px solid ${active ? GOLD : BORDER}`,
+                    background: active ? 'rgba(233,193,118,.12)' : GLASS,
+                    color: active ? GOLD : CREAM, cursor: 'pointer', fontFamily: 'Georgia, serif',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  }}
+                >
+                  <span style={{ fontSize: 26 }} aria-hidden="true">{opt.icon}</span>
+                  <span style={{ fontSize: 13, fontWeight: 700 }}>{active ? '✓ ' : ''}{opt.label}</span>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+
+        <div style={{ height: 90 }} aria-hidden="true" />
+      </div>
 
       <SmokeCraftNavBar
         primary="Continue to Management Sync →"
@@ -112,6 +104,6 @@ export default function Connections() {
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }

@@ -12,6 +12,7 @@ import { getSessionRewards, getSmokeCraftXP, getEarnedBadges, SMOKECRAFT_BADGES 
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 import { fetchPlayerState } from '../../services/smokecraft/playerStateApiClient.js'
+import { heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle } from '../../constants/smokecraftLiveScreenTokens.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -386,175 +387,164 @@ export default function Rewards({ onBack, onComplete } = {}) {
 
   const achievementsUnlocked = isDemoMode || session.completedSteps.includes('rewards')
 
-  // S25 (Rewards) mode renders through the approved "session 25 rewards.png"
-  // blank-value template as its full visual foundation. S26 (Achievements)
-  // has no matching approved template and keeps its existing, working
-  // decorative-band layout unchanged — a disclosed, deliberate scope split,
-  // not an oversight.
+  // TWO-GENERATION MIGRATION: S25 (Rewards) previously rendered through the
+  // approved "session 25 rewards.png" image-shell as its full visual
+  // foundation, with real content occluding its blank-value zones. Now
+  // real live DOM using the shared smokecraftLiveScreenTokens system — no
+  // decorative image, matching the pattern already established for
+  // Mini Tasting Round / Final Review / Management Sync and this pass's
+  // other conversions. S26 (Achievements) below already used real live
+  // DOM (its SC_ASSETS.achievements header band is genuinely decorative —
+  // no baked UI — so it is left as-is).
   if (mode === 'rewards') {
     return (
-      <SmokeCraftScreenShell
-        mode="image-shell"
-        status="ready"
-        imageProps={{ src: SC_ASSETS.rewards, naturalW: 1448, naturalH: 1086, alt: 'SmokeCraft 360 — Session 25 Rewards' }}
-      >
-        <h1 style={{
-          position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
-          overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
-        }}>SmokeCraft 360 — Session 25 Rewards</h1>
-
-        {/* Package F: exposes which XP source is currently backing the
-            display — 'server' (canonical smokecraft_player_state) or
-            'local-fallback' (offline/unreachable). Visually hidden;
-            consumed by tests and support tooling only. */}
-        <span data-testid="s25-xp-source" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>
-          {usingServerXp ? 'server' : 'local-fallback'}
-        </span>
-
-        {/* Four blank point circles, filled honestly — same disclosed pattern
-            as the Rewards Center: only Available and Earned This Session are
-            real, distinct numbers; Lifetime/Redeemed are not separately
-            tracked by this build's loyalty model. */}
-        {[
-          { label: 'available', left: '19.3%', value: totalXP },
-          { label: 'earned', left: '34.2%', value: completedSessionXP },
-          { label: 'lifetime', left: '48.3%', value: totalXP },
-          { label: 'redeemed', left: '62.2%', value: '—' },
-        ].map(box => (
-          <div key={box.label} data-testid={`s25-${box.label}`} style={{
-            position: 'absolute', left: box.left, top: '26.2%', width: '10.7%', height: '5.2%',
-            background: NAVY_DEEP, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 'clamp(11px,1.3vw,18px)', color: GOLD,
-          }}>
-            {box.value}
-          </div>
-        ))}
-
-        {/* Loyalty tier panel — real rank + progress to next tier, sized to
-            the approved image's own TIER NAME + progress-bar zone. */}
-        <div style={{
-          position: 'absolute', left: '73.6%', top: '35%', width: '24.9%', height: '19.1%',
-          background: NAVY_DEEP, borderRadius: 8, padding: '4% 6%',
-          display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 4,
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{ fontSize: 'clamp(10px,1.1vw,15px)', color: GOLD, fontWeight: 700 }}>{currentRank.name}</span>
-          </div>
-          <div>
-            <div style={{ height: 6, background: 'rgba(233,193,118,0.15)', borderRadius: 3 }}>
-              <div style={{ height: '100%', width: `${nextTier ? Math.round((totalXP / nextTier.minXP) * 100) : 100}%`, background: GOLD, borderRadius: 3 }} />
-            </div>
-            <div style={{ fontSize: 'clamp(7px,0.75vw,10px)', color: 'rgba(229,226,225,0.55)', marginTop: 4, textAlign: 'center' }}>
-              {nextTier ? `${nextTier.minXP - totalXP} XP to ${nextTier.name}` : 'Highest rank reached'}
+      <SmokeCraftScreenShell mode="live" status="ready">
+        <div style={pageShellStyle}>
+          <div style={heroBannerStyle}>
+            <div aria-hidden="true" style={{ fontSize: 40 }}>🏆</div>
+            <div>
+              <div style={{ fontSize: 11, color: GOLD_DIM, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>SmokeCraft 360 — Session 25</div>
+              <h1 style={{ margin: '4px 0 6px', color: CREAM, fontSize: 'clamp(26px,3.4vw,36px)' }}>Rewards</h1>
+              <p style={{ margin: 0, maxWidth: 700, color: 'rgba(229,226,225,.68)', lineHeight: 1.55, fontSize: 'clamp(13px,1.4vw,16px)' }}>
+                Your real XP, rank progress, and earned badges from this journey.
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* SC-D089 fix: the Loyalty Tier panel above only covered y:35%-
-            54.1% of the right column — the approved image's "Today At Your
-            Venue" and "Recent Redemptions" zones below it (y:54%-93%) had
-            no overlay at all, leaving their baked empty dashed boxes
-            visible with zero real content. Both concepts (venue-specific
-            offers, redemption history) genuinely require a venue reward
-            catalog that does not exist in this build — same honest
-            limitation already disclosed in the panel below — so this
-            covers that remaining region with one clearly-labeled,
-            honest "coming soon" panel instead of leaving it looking dead. */}
-        <div style={{
-          position: 'absolute', left: '73.6%', top: '55%', width: '24.9%', height: '38%',
-          background: NAVY_DEEP, borderRadius: 8, padding: 'clamp(10px,1.4vw,16px)',
-          display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto',
-        }}>
-          <div>
-            <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Today At Your Venue</div>
-            <div style={{ fontSize: 10.5, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic', lineHeight: 1.4 }}>
-              Venue-specific offers require a connected reward catalog — not available in this build yet.
+          {/* Package F: exposes which XP source is currently backing the
+              display — 'server' (canonical smokecraft_player_state) or
+              'local-fallback' (offline/unreachable). Visually hidden;
+              consumed by tests and support tooling only. */}
+          <span data-testid="s25-xp-source" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>
+            {usingServerXp ? 'server' : 'local-fallback'}
+          </span>
+
+          {/* Four point summary boxes, filled honestly — same disclosed
+              pattern as the Rewards Center: only Available and Earned This
+              Session are real, distinct numbers; Lifetime/Redeemed are not
+              separately tracked by this build's loyalty model. */}
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={sectionLabelStyle}>Points</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12, marginTop: 10 }}>
+              {[
+                { label: 'available', title: 'Available', value: totalXP },
+                { label: 'earned', title: 'Earned This Session', value: completedSessionXP },
+                { label: 'lifetime', title: 'Lifetime', value: totalXP },
+                { label: 'redeemed', title: 'Redeemed', value: '—' },
+              ].map(box => (
+                <div key={box.label} data-testid={`s25-${box.label}`} style={{
+                  background: NAVY_DEEP, borderRadius: 10, padding: '14px 10px',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                }}>
+                  <span style={{ fontSize: 10.5, color: GOLD_DIM, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{box.title}</span>
+                  <span style={{ fontWeight: 700, fontSize: 'clamp(18px,2vw,24px)', color: GOLD }}>{box.value}</span>
+                </div>
+              ))}
             </div>
-          </div>
-          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', paddingTop: 10 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Recent Redemptions</div>
-            <div style={{ fontSize: 10.5, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic', lineHeight: 1.4 }}>
-              Redemption history requires a connected reward catalog — not available in this build yet.
-            </div>
-          </div>
-        </div>
+          </section>
 
-        {/* Real content panel — the reward-category cards zone is covered
-            by one honest panel (no real venue reward catalog exists to
-            populate it), hosting the actual real XP breakdown / rank-
-            milestone claims / earned-badges functionality that already
-            existed on this screen — preserved exactly, only repositioned. */}
-        <div style={{
-          position: 'absolute', left: '16.4%', top: '35%', width: '58%', height: '58%',
-          overflowY: 'auto', WebkitOverflowScrolling: 'touch',
-          background: NAVY_DEEP, borderRadius: 10, padding: 'clamp(10px,1.4vw,20px)',
-          fontFamily: 'Georgia, serif', display: 'flex', flexDirection: 'column', gap: 12,
-        }}>
-          <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>
-            No venue reward catalog is connected to this build yet, so featured/cigar/experience/accessory/merch offers cannot be listed. Your real XP and earned rewards are shown below.
-          </div>
-
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>XP Breakdown</div>
-            {[
-              ['Completed-Session XP', completedSessionXP],
-              ['Passport XP', xpTotals.passport],
-              ['Pairing XP', xpTotals.pairing],
-              ['Mentor XP', xpTotals.mentor],
-            ].map(([label, val]) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontSize: 12.5, color: CREAM }}>
-                <span>{label}</span><span style={{ color: GOLD_DIM }}>{val} XP</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+            <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+              <div style={sectionLabelStyle}>Loyalty Tier</div>
+              <div style={{ textAlign: 'center', marginTop: 10 }}>
+                <span style={{ fontSize: 18, color: GOLD, fontWeight: 700 }}>{currentRank.name}</span>
               </div>
-            ))}
+              <div style={{ marginTop: 12 }}>
+                <div style={{ height: 6, background: 'rgba(233,193,118,0.15)', borderRadius: 3 }}>
+                  <div style={{ height: '100%', width: `${nextTier ? Math.round((totalXP / nextTier.minXP) * 100) : 100}%`, background: GOLD, borderRadius: 3 }} />
+                </div>
+                <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.55)', marginTop: 6, textAlign: 'center' }}>
+                  {nextTier ? `${nextTier.minXP - totalXP} XP to ${nextTier.name}` : 'Highest rank reached'}
+                </div>
+              </div>
+            </section>
+
+            {/* SC-D089: venue-specific offers/redemption history genuinely
+                require a venue reward catalog that does not exist in this
+                build — an honest "coming soon" panel, not invented data. */}
+            <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+              <div style={sectionLabelStyle}>Today At Your Venue</div>
+              <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic', lineHeight: 1.5, marginTop: 8 }}>
+                Venue-specific offers require a connected reward catalog — not available in this build yet.
+              </div>
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${BORDER}` }}>
+                <div style={sectionLabelStyle}>Recent Redemptions</div>
+                <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic', lineHeight: 1.5, marginTop: 8 }}>
+                  Redemption history requires a connected reward catalog — not available in this build yet.
+                </div>
+              </div>
+            </section>
           </div>
 
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Rank Milestone Rewards</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {RANKS.map(rank => {
-                const claimed = claimedTiers.includes(rank.name)
-                const available = totalXP >= rank.minXP && !claimed
-                const locked = totalXP < rank.minXP
-                return (
-                  <div key={rank.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 8px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
-                    <BadgeCrest label={rank.name} earned={!locked} size={34} />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 12.5, fontWeight: 700, color: CREAM }}>{rank.name}</div>
-                      <div style={{ fontSize: 10, color: 'rgba(229,226,225,0.5)' }}>Requires {rank.minXP}+ XP</div>
+          <section style={{ ...cardStyle, padding: 'clamp(18px,2.4vw,26px)' }}>
+            <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic', marginBottom: 14 }}>
+              No venue reward catalog is connected to this build yet, so featured/cigar/experience/accessory/merch offers cannot be listed. Your real XP and earned rewards are shown below.
+            </div>
+
+            <div>
+              <div style={sectionLabelStyle}>XP Breakdown</div>
+              {[
+                ['Completed-Session XP', completedSessionXP],
+                ['Passport XP', xpTotals.passport],
+                ['Pairing XP', xpTotals.pairing],
+                ['Mentor XP', xpTotals.mentor],
+              ].map(([label, val]) => (
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', fontSize: 13, color: CREAM }}>
+                  <span>{label}</span><span style={{ color: GOLD_DIM }}>{val} XP</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
+              <div style={sectionLabelStyle}>Rank Milestone Rewards</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+                {RANKS.map(rank => {
+                  const claimed = claimedTiers.includes(rank.name)
+                  const available = totalXP >= rank.minXP && !claimed
+                  const locked = totalXP < rank.minXP
+                  return (
+                    <div key={rank.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
+                      <BadgeCrest label={rank.name} earned={!locked} size={34} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: CREAM }}>{rank.name}</div>
+                        <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.5)' }}>Requires {rank.minXP}+ XP</div>
+                      </div>
+                      {claimed && <span style={{ fontSize: 11.5, color: GOLD }}>✓ Claimed</span>}
+                      {available && (
+                        <button
+                          type="button" aria-label={`Claim ${rank.name} reward`}
+                          onClick={() => handleClaimTier(rank)}
+                          style={{ minHeight: 36, background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 16, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 12, padding: '6px 14px', cursor: 'pointer', outline: 'none' }}
+                        >
+                          Claim
+                        </button>
+                      )}
+                      {locked && <span style={{ fontSize: 11.5, color: 'rgba(229,226,225,0.35)' }}>Locked</span>}
                     </div>
-                    {claimed && <span style={{ fontSize: 11, color: GOLD }}>✓ Claimed</span>}
-                    {available && (
-                      <button
-                        type="button" aria-label={`Claim ${rank.name} reward`}
-                        onClick={() => handleClaimTier(rank)}
-                        style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 14, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 11, padding: '5px 12px', cursor: 'pointer', outline: 'none', minHeight: 32 }}
-                      >
-                        Claim
-                      </button>
-                    )}
-                    {locked && <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.35)' }}>Locked</span>}
-                  </div>
-                )
-              })}
-            </div>
-            {claimStatus === 'saved' && <div style={{ marginTop: 6, fontSize: 11, color: GOLD }}>✓ Saved</div>}
-          </div>
-
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Earned Session Badges</div>
-            {earnedSessionBadges.length ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {earnedSessionBadges.map(b => (
-                  <div key={b.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: 66 }}>
-                    <BadgeCrest label={b.label} earned size={40} />
-                    <span style={{ fontSize: 9, color: CREAM, textAlign: 'center' }}>{b.label}</span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
-            ) : (
-              <p style={{ margin: 0, fontSize: 12, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>No badges earned yet.</p>
-            )}
-          </div>
+              {claimStatus === 'saved' && <div style={{ marginTop: 8, fontSize: 11.5, color: GOLD }}>✓ Saved</div>}
+            </div>
+
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
+              <div style={sectionLabelStyle}>Earned Session Badges</div>
+              {earnedSessionBadges.length ? (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 8 }}>
+                  {earnedSessionBadges.map(b => (
+                    <div key={b.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: 66 }}>
+                      <BadgeCrest label={b.label} earned size={40} />
+                      <span style={{ fontSize: 9.5, color: CREAM, textAlign: 'center' }}>{b.label}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p style={{ margin: '8px 0 0', fontSize: 12.5, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>No badges earned yet.</p>
+              )}
+            </div>
+          </section>
+
+          <div style={{ height: 90 }} aria-hidden="true" />
         </div>
 
         <SmokeCraftNavBar

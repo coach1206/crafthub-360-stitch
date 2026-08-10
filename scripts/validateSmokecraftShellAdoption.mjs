@@ -116,7 +116,16 @@ const ASSET_LOCKS = [
   { file: 'src/pages/smokecraft/Leaderboard.jsx', key: 'SC_ASSETS.leaderboard' },
   { file: 'src/pages/smokecraft/SmokeCraftPassport.jsx', key: 'SC_ASSETS.passportHub' },
   { file: 'src/pages/smokecraft/SmokeCraftCraftHub.jsx', key: 'SC_ASSETS.craftHubVenueTable' },
-  { file: 'src/pages/smokecraft/Rewards.jsx', key: 'SC_ASSETS.rewards' },
+  // Rewards.jsx intentionally removed from this lock (Two-Generation
+  // Migration pass): the S25 mode was rebuilt as real live DOM
+  // (mode="live") after being confirmed as an image-shell screen with
+  // real content occluding the approved rewards.png's blank-value
+  // zones — the same category of conversion as every other screen in
+  // this migration batch. Every real value the image-shell previously
+  // exposed (points/XP totals, loyalty tier + progress, rank milestone
+  // claims, earned badges, the honest "no reward catalog connected"
+  // disclosures) is preserved verbatim as real DOM text/controls, not
+  // rendered as baked pixels. No new value was invented.
   // GoldenBox.jsx intentionally removed from this lock (Live Production
   // Player-Experience Repair pass): the screen was rebuilt as real live
   // DOM (mode="live", same pattern as HumidorMatch/SC-D076) after three
