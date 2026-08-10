@@ -54,6 +54,7 @@ import eatSmokeCraftLiveSyncRoutes       from './routes/eatSmokeCraftLiveSyncRou
 import managementSyncRoutes              from './routes/managementSyncRoutes.js'
 import smokecraftTicketTapperSpecialsRoutes from './routes/smokecraftTicketTapperSpecialsRoutes.js'
 import smokecraftVenueCommerceRoutes        from './routes/smokecraftVenueCommerceRoutes.js'
+import smokecraftPlayerStateRoutes          from './routes/smokecraftPlayerStateRoutes.js'
 import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
@@ -134,6 +135,11 @@ app.use('/api/eat-360/smokecraft',      eatSmokeCraftLiveSyncRoutes)
 app.use('/api/smokecraft/management-sync', managementSyncRoutes)
 app.use('/api/smokecraft/ticket-tapper',   smokecraftTicketTapperSpecialsRoutes)
 app.use('/api/smokecraft/venue-commerce',  smokecraftVenueCommerceRoutes)
+// Canonical player-state (Holistic Fix 4) — required by every gated
+// screen's submitSelectionAttempt/completeSession/scorecard calls; a
+// genuine missing-route blocker found and fixed during Block 8 self-QA
+// (Humidor Match could not advance past S2 without it).
+app.use('/api/smokecraft/player-state',    smokecraftPlayerStateRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)
