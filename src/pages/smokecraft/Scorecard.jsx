@@ -249,6 +249,14 @@ export default function Scorecard({ onBack, onComplete } = {}) {
     const snap = { ...sc, savedAt: Date.now(), overall: calcOverall(sc.categories) }
     setScorecard(snap)
 
+    // Force a final, synchronous draft save before submitting evidence —
+    // the debounced autosave (1200ms) may not have fired yet if Continue
+    // is clicked quickly after the last rating, which silently left the
+    // server-side draft stale/incomplete even though real evidence was
+    // submitted below, making the ratings appear "lost" on revisit.
+    // Best-effort — never blocks the real evidence submission.
+    saveTastingDraft(ACTIVITY_KEY, { categories: sc.categories, personalNotes: sc.personalNotes, meta: sc.meta }, draftVersion).catch(() => {})
+
     // Required-Interaction Closure Package B: real, complete scorecard
     // evidence is submitted server-side BEFORE either completion path
     // below runs — completeSession() independently re-verifies this

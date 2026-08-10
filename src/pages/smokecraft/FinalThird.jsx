@@ -220,6 +220,16 @@ export default function FinalThird({ onBack, onComplete } = {}) {
     setFinalThirdTasting(payload)
     setFinalThird(payload)
 
+    // Force a final, synchronous draft save before submitting evidence —
+    // the debounced autosave (1200ms) may not have fired yet if Continue
+    // is clicked quickly after a selection, which silently left the
+    // server-side draft stale/empty even though real evidence was
+    // submitted below. Revisiting the screen then loaded that stale
+    // draft and appeared to have "lost" the selection. This save is
+    // best-effort (never blocks submission) — a failure here still lets
+    // the real evidence submission proceed.
+    saveTastingDraft(ACTIVITY_KEY, { notesSelected: combinedNotesForSave, personalNotes }, draftVersion).catch(() => {})
+
     const result = await submitTastingObservation('final-third', combinedNotes, personalNotes)
     if (!result.ok) {
       setDone(false)

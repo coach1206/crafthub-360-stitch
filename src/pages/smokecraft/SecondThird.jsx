@@ -166,6 +166,14 @@ export default function SecondThird({ onBack, onComplete } = {}) {
     setSecondThirdTasting(payload)
     setSecondThird(payload)
 
+    // Force a final, synchronous draft save before submitting evidence —
+    // the debounced autosave (1200ms) may not have fired yet if Continue
+    // is clicked quickly after a selection, which silently left the
+    // server-side draft stale/empty even though real evidence was
+    // submitted below, making the selection appear "lost" on revisit.
+    // Best-effort — never blocks the real evidence submission.
+    saveTastingDraft(ACTIVITY_KEY, { notesSelected: checked, personalNotes: notes }, draftVersion).catch(() => {})
+
     const result = await submitTastingObservation('second-third', checked, notes)
     if (!result.ok) {
       setDone(false)
