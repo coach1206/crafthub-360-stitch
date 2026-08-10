@@ -282,8 +282,10 @@ async function main() {
   await browser.close()
 
   // ── Order comparison against the manifest ──────────────────────────────
-  const actualLinearOrder = visited.map(v => v.actualRoute)
-  const expectedLinearOrder = visited.map(v => v.expectedRoute)
+  // Same trailing-slash normalization as assertRoute — a trailing-slash
+  // artifact of the initial page load is not a real order mismatch.
+  const actualLinearOrder = visited.map(v => normalizePath(v.actualRoute))
+  const expectedLinearOrder = visited.map(v => normalizePath(v.expectedRoute))
   const orderMatches = JSON.stringify(actualLinearOrder) === JSON.stringify(expectedLinearOrder)
 
   const report = {

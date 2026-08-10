@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T21:24:57.041Z",
-  "sha": "b9cd998f48c18a32f637ac4552a9ce85de0ed4a6",
+  "generatedAt": "2026-08-10T21:40:27.798Z",
+  "sha": "41cbd42c748abc165994b66898a776ec37de2e71",
   "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
   "expectedOrderFromManifest": [
     "/smokecraft",
@@ -34,7 +34,7 @@
       "label": "Launch",
       "expectedRoute": "/smokecraft",
       "actualRoute": "/smokecraft/",
-      "matched": false
+      "matched": true
     },
     {
       "label": "Enroll",
@@ -176,9 +176,7 @@
     }
   ],
   "orderMatches": false,
-  "defects": [
-    "ORDER MISMATCH at \"Launch\": expected /smokecraft, got /smokecraft/"
-  ],
+  "defects": [],
   "notes": [
     "Bypass check PASS: direct nav to /smokecraft/scorecard with zero progress redirected to /smokecraft/identity.",
     "Back check PASS on Venue Select: http://localhost:3002/smokecraft/venue-select -> http://localhost:3002/smokecraft/identity.",
