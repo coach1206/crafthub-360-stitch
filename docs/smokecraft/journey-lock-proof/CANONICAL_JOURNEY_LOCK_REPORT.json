@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T21:17:10.889Z",
-  "sha": "1f6dce425ee11053f60f906524ba27e0b6b5b976",
+  "generatedAt": "2026-08-10T21:24:57.041Z",
+  "sha": "b9cd998f48c18a32f637ac4552a9ce85de0ed4a6",
   "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
   "expectedOrderFromManifest": [
     "/smokecraft",
@@ -153,35 +153,31 @@
     {
       "label": "Passport Stamp (S23)",
       "expectedRoute": "/smokecraft/passport-stamp",
-      "actualRoute": "/smokecraft/pairing-recommendations",
-      "matched": false
+      "actualRoute": "/smokecraft/passport-stamp",
+      "matched": true
     },
     {
       "label": "Final Review (S24)",
       "expectedRoute": "/smokecraft/final-review",
-      "actualRoute": "/smokecraft/pairing-recommendations",
-      "matched": false
+      "actualRoute": "/smokecraft/final-review",
+      "matched": true
     },
     {
       "label": "Rewards (S25)",
       "expectedRoute": "/smokecraft/rewards",
-      "actualRoute": "/smokecraft/pairing-recommendations",
-      "matched": false
+      "actualRoute": "/smokecraft/rewards",
+      "matched": true
     },
     {
       "label": "Session Complete (S27)",
       "expectedRoute": "/smokecraft/session-complete",
-      "actualRoute": "/smokecraft/pairing-recommendations",
-      "matched": false
+      "actualRoute": "/smokecraft/session-complete",
+      "matched": true
     }
   ],
   "orderMatches": false,
   "defects": [
-    "ORDER MISMATCH at \"Launch\": expected /smokecraft, got /smokecraft/",
-    "ORDER MISMATCH at \"Passport Stamp (S23)\": expected /smokecraft/passport-stamp, got /smokecraft/pairing-recommendations",
-    "ORDER MISMATCH at \"Final Review (S24)\": expected /smokecraft/final-review, got /smokecraft/pairing-recommendations",
-    "ORDER MISMATCH at \"Rewards (S25)\": expected /smokecraft/rewards, got /smokecraft/pairing-recommendations",
-    "ORDER MISMATCH at \"Session Complete (S27)\": expected /smokecraft/session-complete, got /smokecraft/pairing-recommendations"
+    "ORDER MISMATCH at \"Launch\": expected /smokecraft, got /smokecraft/"
   ],
   "notes": [
     "Bypass check PASS: direct nav to /smokecraft/scorecard with zero progress redirected to /smokecraft/identity.",
@@ -189,7 +185,7 @@
     "Resume/persistence check PASS: reload on Welcome kept the same route.",
     "Final Third gate check PASS: Continue did not advance with zero selection.",
     "Scorecard gate check PASS: Continue did not advance with zero ratings.",
-    "Dead-end check PASS: Session Complete exposes 5 visible controls."
+    "Dead-end check PASS: Session Complete exposes 9 visible controls."
   ],
   "canonicalJourneyPass": false
 }
