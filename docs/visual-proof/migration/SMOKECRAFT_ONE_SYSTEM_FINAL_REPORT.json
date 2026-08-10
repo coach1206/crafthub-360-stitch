@@ -1,0 +1,143 @@
+{
+  "generatedAt": "2026-08-10T00:14:29.811Z",
+  "commitHash": "e74928de",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "total": 14,
+  "captured": 14,
+  "stayedOnExpectedRoute": 0,
+  "redirected": 14,
+  "failed": 0,
+  "ownerAcceptanceReady": false,
+  "indexPath": "docs/visual-proof/migration/SMOKECRAFT_ONE_SYSTEM_FINAL_INDEX.png",
+  "results": [
+    {
+      "n": 1,
+      "name": "identity",
+      "route": "/smokecraft/identity",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/01-identity.png"
+    },
+    {
+      "n": 2,
+      "name": "seed-soil",
+      "route": "/smokecraft/seed-soil",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/02-seed-soil.png"
+    },
+    {
+      "n": 3,
+      "name": "format",
+      "route": "/smokecraft/format",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/03-format.png"
+    },
+    {
+      "n": 4,
+      "name": "cut-toast-light",
+      "route": "/smokecraft/cut-toast-light",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/04-cut-toast-light.png"
+    },
+    {
+      "n": 5,
+      "name": "first-third",
+      "route": "/smokecraft/first-third",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/05-first-third.png"
+    },
+    {
+      "n": 6,
+      "name": "second-third",
+      "route": "/smokecraft/second-third",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/06-second-third.png"
+    },
+    {
+      "n": 7,
+      "name": "final-third",
+      "route": "/smokecraft/final-third",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/07-final-third.png"
+    },
+    {
+      "n": 8,
+      "name": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/08-scorecard.png"
+    },
+    {
+      "n": 9,
+      "name": "request-purchase",
+      "route": "/smokecraft/request-purchase",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/09-request-purchase.png"
+    },
+    {
+      "n": 10,
+      "name": "pairing-recommendations",
+      "route": "/smokecraft/pairing-recommendations",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/10-pairing-recommendations.png"
+    },
+    {
+      "n": 11,
+      "name": "passport-stamp",
+      "route": "/smokecraft/passport-stamp",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/11-passport-stamp.png"
+    },
+    {
+      "n": 12,
+      "name": "connections",
+      "route": "/smokecraft/connections",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/12-connections.png"
+    },
+    {
+      "n": 13,
+      "name": "rewards",
+      "route": "/smokecraft/rewards",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/13-rewards.png"
+    },
+    {
+      "n": 14,
+      "name": "second-humidor-match",
+      "route": "/smokecraft/second-humidor-match",
+      "ok": true,
+      "routeStayed": false,
+      "actualUrl": "http://localhost:4173/smokecraft/enroll",
+      "screenshotPath": "docs/visual-proof/migration/14-second-humidor-match.png"
+    }
+  ]
+}
