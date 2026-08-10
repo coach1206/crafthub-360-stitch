@@ -69,7 +69,13 @@ async function runJourney(browser, vp) {
   await page.waitForURL('**/smokecraft/venue-select', { timeout: 10000 })
   await page.waitForLoadState('networkidle')
   results.push(await capture(page, vp, 4, 'Venue Select'))
-  await page.click('text=Alpha Lounge (Seed)')
+  // Same real-DB fallback proven in the canonical journey lock script —
+  // 'Alpha Lounge (Seed)' is a recovery-era seed name not present on the
+  // integration candidate's own disposable database.
+  const alphaLounge = page.locator('text=Alpha Lounge (Seed)')
+  if (await alphaLounge.count().catch(() => 0)) { await alphaLounge.click() }
+  else { await page.click('text=Continue without venue') }
+  await page.waitForTimeout(300)
   await page.click('text=Continue to Welcome')
   await page.waitForURL('**/smokecraft/welcome', { timeout: 10000 })
   results.push(await capture(page, vp, 6, 'Welcome'))
