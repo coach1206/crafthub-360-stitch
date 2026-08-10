@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T15:22:06.520Z",
-  "sha": "b8a1dfc506c700e43ed71de677233b60f1b37446",
+  "generatedAt": "2026-08-10T18:15:18.174Z",
+  "sha": "68d90e1ddff2d263dba79259cd9c26b2e23efa87",
   "manifestPath": "docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json",
   "expectedOrderFromManifest": [
     "/smokecraft",
@@ -183,7 +183,7 @@
     "Resume/persistence check PASS: reload on Welcome kept the same route.",
     "Final Third gate check PASS: Continue did not advance with zero selection.",
     "Scorecard gate check PASS: Continue did not advance with zero ratings.",
-    "Dead-end check PASS: Session Complete exposes 9 visible controls."
+    "Dead-end check PASS: Session Complete exposes 7 visible controls."
   ],
   "canonicalJourneyPass": true
 }
