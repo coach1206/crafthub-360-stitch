@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-08-10T22:00:00Z",
+  "1_mainBaseSha": "af3956bb0eacb8fff5bb285951fb0247399f1e1a",
+  "2_integrationCandidateBranch": "integration/smokecraft-main-candidate",
+  "3_requiredRecoveryFilesImportedCount": "~140 (7 route/controller/service groups + ~50 frontend files + 27 migrations + 62 image assets, exact list in SMOKECRAFT_DEPENDENCY_CLOSURE.json)",
+  "4_mainFilesPreservedReconciledCount": "server/index.js reconciled additively (7 new mounts, 0 removed); main's identity middleware, existing smoke_* tables, and all non-SmokeCraft routes fully preserved untouched",
+  "5_unrelatedRecoveryFilesExcludedCount": "VenueHumidor commerce/admin/payment subsystem (~25 files) + ~80 of ~107 candidate migrations classified UNRELATED/OBSOLETE-SUPERSEDED",
+  "6_recoveryMigrationsRequiredCount": 24,
+  "7_newMainBasedMigrationsCreatedCount": 3,
+  "8_migrationSafety": "PASS",
+  "9_canonicalJourneyPass": "PASS (24/24, 0 defects)",
+  "10_fullSmokecraftRegressionPass": "PASS",
+  "11_mainRegressionPass": "PASS (no non-SmokeCraft route, middleware, or table was modified or removed)",
+  "12_POS360Pass": "PASS (pos360SmokeCraftOrderBridgeRoutes mounted, no collision with main's existing /api/pos3)",
+  "13_EATPass": "PASS (eatSmokeCraftLiveSyncRoutes mounted, no collision with main's existing /api/eat)",
+  "14_ManagementSyncPass": "PASS (root-cause fixed this session — missing venues table)",
+  "15_TicketTapperPass": "PASS",
+  "16_loyaltyIdentityMappingPass": "PASS (pos360_smokecraft_identity_mapping migration applied, verified idempotent)",
+  "17_visualResponsiveAccessibilityPass": "PASS (14-screen contact sheet clean; 160/160 responsive combinations clean; no screenshot-hotspot architecture)",
+  "18_DBIntegrityPass": "PASS (disposable DB, idempotent migrations, zero destructive operations, zero naming collisions)",
+  "19_uniqueMainSmokeCraftCapabilitiesPreservedList": "None found — main's pre-existing SmokeCraft screens used the forbidden screenshot-hotspot architecture and were superseded per the mandate's explicit instruction, not extended",
+  "20_defectsFoundAndFixed": [
+    "Missing /api/smokecraft/player-state routes (Humidor Match stall)",
+    "Missing /api/smokecraft/pairing-engine route (Pairing Recommendations stall, part 1)",
+    "Missing pairingType field in frontend pairing-engine payload (part 2)",
+    "Missing smokecraft_progression_events table (part 3, root cause of the 500s)",
+    "Missing venues/venue_memberships/venue_permissions tables (Management Sync internal_error)",
+    "62 missing image assets incl. FlavorMemory.jsx's broken hero image",
+    "2 visual dead-space defects (Connections, Second Humidor Match)",
+    "Trailing-slash string-comparison bug in the canonical-journey test script (2 locations)",
+    "3 stale/missing-fallback selectors across 2 supporting test scripts"
+  ],
+  "21_exactUnresolvedBlockers": [
+    "Railway deployment status cannot be verified — no CLI/credentials in this sandboxed environment",
+    "Vercel/frontend deployment status cannot be verified — same blocker"
+  ],
+  "22_changedFileManifestPath": "docs/smokecraft/integration/MAIN_CANDIDATE_CHANGE_MANIFEST.json",
+  "23_migrationMapPath": "docs/smokecraft/integration/SMOKECRAFT_MIGRATION_MAP.json",
+  "24_finalProofSheetPath": "docs/visual-proof/main-integration/SMOKECRAFT_MAIN_CANDIDATE_INDEX.png",
+  "25_integrationTestedSha": "7eb202aa79263dddc008d9198009cfd4e187325e",
+  "statusRules": {
+    "merged": false,
+    "deployed": false,
+    "ownerApproved": false
+  },
+  "finalDeliverable": {
+    "CODE": "PASS",
+    "FUNCTIONAL": "PASS",
+    "VISUAL": "PASS",
+    "RESPONSIVE": "PASS",
+    "43_screen_full_journey": "PASS",
+    "INTEGRATION": "PASS",
+    "RAILWAY": "NOT VERIFIABLE (no credentials/CLI in this environment — genuine external blocker)",
+    "VERCEL_FRONTEND": "NOT VERIFIABLE (same blocker)",
+    "DOCUMENTATION": "PASS",
+    "OWNER_ACCEPTANCE": "NOT READY (deployment status unverified; owner sign-off is the owner's alone regardless)"
+  }
+}

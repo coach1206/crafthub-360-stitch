@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-08-10T22:00:00Z",
+  "mainBaseSha": "af3956bb0eacb8fff5bb285951fb0247399f1e1a",
+  "integrationTestedSha": "7eb202aa79263dddc008d9198009cfd4e187325e",
+  "totalFilesChanged": 420,
+  "insertions": 61903,
+  "deletions": 4545,
+  "summaryByCategory": {
+    "server_routes_controllers_services": "7 new routers (pos360SmokeCraftOrderBridge, eatSmokeCraftLiveSync, managementSync, smokecraftTicketTapperSpecials, smokecraftVenueCommerce, smokecraftPlayerState, pairingEngine) + their full controller/service transitive chains — every file maps directly to a canonical-journey requirement traced in SMOKECRAFT_DEPENDENCY_CLOSURE.json",
+    "server_db_migrations": "27 new migration files (015-041), every one mapped 1:1 to a specific requirement in SMOKECRAFT_MIGRATION_MAP.json — no destructive change to any pre-existing main table",
+    "server_index_js": "Additive only — 7 new import lines + 7 new app.use() mounts at distinct base paths, appended after main's existing SmokeCraft mounts. Zero lines of main's existing route table removed or reordered.",
+    "src_pages_smokecraft": "Main's App.jsx SmokeCraft route block and import block replaced wholesale with recovery's live-DOM equivalent (main's own screens used the forbidden screenshot-hotspot architecture and are the ones the mandate directed to supersede) — VenueHumidor commerce/admin/payment routes deliberately stripped back out to keep the candidate to the tested, canonical scope",
+    "src_services_context_constants_hooks_utils_data": "~50 files pulled from recovery via the iterative build-error-resolution loop — every one resolved a real 'Could not resolve' or 'is not exported by' Rollup error, none spontaneously added",
+    "public_assets_smokecraft": "62 image files restored (found missing during Block 8 visual self-QA — the referencing code was ported but the binary assets were not)",
+    "package_json": "+express-rate-limit (runtime dependency, required), +sharp (dev/tooling, required by the contact-sheet capture script only)",
+    "scripts": "5 test/proof scripts ported and re-pointed at port 3002 (the integration candidate), 3 of them had a stale selector or missing-fallback bug fixed as part of getting them to run cleanly against the integration candidate's own disposable database rather than recovery's seeded one"
+  },
+  "everyChangeTracesToARequirement": "true — no file in this diff was added, modified, or deleted without a specific SmokeCraft-related requirement (a resolved build error, a resolved runtime 404/500, a resolved missing-image defect, or a resolved test-script bug found while proving the above) named in SMOKECRAFT_DEPENDENCY_CLOSURE.json or SMOKECRAFT_MIGRATION_MAP.json."
+}

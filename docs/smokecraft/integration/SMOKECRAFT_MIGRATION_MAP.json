@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-08-10T22:00:00Z",
+  "mainTailBeforeIntegration": "014_sync_audit_lifecycle.sql",
+  "note": "Recovery's own migrations 015-121 could not be copied by number — main's own 015+ numbering space was unrelated/nonexistent, and recovery/main share zero git history. Every migration below is either a byte-identical copy of a specific recovery migration (renumbered in filename only) or a newly authored minimal extraction limited to exactly the table(s) a real, reproduced runtime error named.",
+  "migrations": [
+    { "file": "015_ticket_tapper_specials.sql",                     "source": "byte-identical copy of recovery's own file of the same name", "reason": "required by smokecraftTicketTapperSpecialsRoutes.js" },
+    { "file": "016_pos360_customer_loyalty.sql",                     "source": "recovery migration 038 (pos360_customer_loyalty, confirmed self-contained)", "reason": "required by pos360SmokeCraftOrderBridgeRoutes.js" },
+    { "file": "017_passport_360_smokecraft_live_persistence.sql",    "source": "recovery migration (byte-identical, renumbered)", "reason": "required by passport360SyncService.js" },
+    { "file": "018_eat_smokecraft_live_sync.sql",                    "source": "recovery migration (byte-identical, renumbered)", "reason": "required by eatSmokeCraftLiveSyncRoutes.js" },
+    { "file": "019_pos360_smokecraft_live_order_bridge.sql",         "source": "recovery migration (byte-identical, renumbered)", "reason": "required by pos360SmokeCraftOrderBridgeRoutes.js" },
+    { "file": "020_smokecraft_management_sync.sql",                 "source": "recovery migration (byte-identical, renumbered)", "reason": "required by managementSyncRoutes.js" },
+    { "file": "021_smokecraft_educational_content.sql",             "source": "recovery migration (byte-identical, renumbered)", "reason": "required by getEducationalEnrichment()" },
+    { "file": "022_smokecraft_canonical_player_state.sql",          "source": "recovery migration (byte-identical, renumbered)", "reason": "required by playerStateService.js" },
+    { "file": "023_smokecraft_player_state_idempotency_key_guest_scope.sql", "source": "recovery migration (byte-identical, renumbered)", "reason": "required by playerStateService.js idempotency" },
+    { "file": "024_smokecraft_guest_conversion_and_journey_snapshot.sql", "source": "recovery migration (byte-identical, renumbered)", "reason": "required by convertGuestToAccount/journey-snapshot" },
+    { "file": "025_smokecraft_gameplay_rank_and_rules.sql",         "source": "recovery migration (byte-identical, renumbered)", "reason": "required by rank/leaderboard flows" },
+    { "file": "026_smokecraft_activity_ledger_and_rules.sql",       "source": "recovery migration (byte-identical, renumbered)", "reason": "required by selectionClassificationService.js" },
+    { "file": "027_smokecraft_tasting_drafts.sql",                  "source": "recovery migration (byte-identical, renumbered)", "reason": "required by getTastingDraft/saveTastingDraft" },
+    { "file": "028_smokecraft_pairing_engine.sql",                  "source": "recovery migration (byte-identical, renumbered)", "reason": "required by pairingEngineService.js's smokecraft_pairing_rules/saves tables" },
+    { "file": "029_smokecraft_mentor_voice.sql",                    "source": "recovery migration (byte-identical, renumbered)", "reason": "required by useSmokeCraftMentorVoice.js" },
+    { "file": "030_smokecraft_mentor_voice_narration.sql",          "source": "recovery migration (byte-identical, renumbered)", "reason": "required by mentor narration flow" },
+    { "file": "031_smokecraft_challenge_hub_scoring_authority.sql", "source": "recovery migration (byte-identical, renumbered)", "reason": "required by challenge hub scoring" },
+    { "file": "032_smokecraft_golden_box_submission_authority.sql", "source": "recovery migration (byte-identical, renumbered)", "reason": "required by Golden Box submission" },
+    { "file": "033_smokecraft_golden_box_judging_authority.sql",    "source": "recovery migration (byte-identical, renumbered)", "reason": "required by Golden Box judging" },
+    { "file": "034_smokecraft_golden_box_results_authority.sql",    "source": "recovery migration (byte-identical, renumbered)", "reason": "required by Golden Box results" },
+    { "file": "035_smokecraft_golden_box_awards_authority.sql",     "source": "recovery migration (byte-identical, renumbered)", "reason": "required by Golden Box awards" },
+    { "file": "036_smokecraft_golden_box_completion_key_eligibility.sql", "source": "recovery migration (byte-identical, renumbered)", "reason": "required by Golden Box completion-key gate" },
+    { "file": "037_smokecraft_pos360_eat_bridge_idempotency.sql",   "source": "recovery migration (byte-identical, renumbered)", "reason": "required by pos360/eat bridge idempotency" },
+    { "file": "038_pos360_smokecraft_identity_mapping.sql",         "source": "recovery migration (byte-identical, renumbered)", "reason": "required by pos360 identity mapping" },
+    { "file": "039_smokecraft_venue_registry.sql",                  "source": "NEWLY AUTHORED — minimal extraction of venues/venue_memberships/venue_permissions from recovery's 010_new_roles_and_tables.sql (not portable whole because main's own 010 is a different, unrelated file due to zero shared history)", "reason": "root-cause fix for Management Sync's requireValidVenue middleware failing with internal_error — genuine missing-table blocker found and fixed during Block 8" },
+    { "file": "040_smokecraft_pairing_flavor_memory.sql",           "source": "NEWLY AUTHORED — minimal extraction of smokecraft_pairing_profiles/smokecraft_flavor_memory (only tables FlavorMemory.jsx's fetch calls and the pairing service touch) from recovery's much larger 029_smokecraft_persistence_hardening.sql", "reason": "required by FlavorMemory.jsx save calls and PairingRecommendations engine context" },
+    { "file": "041_smokecraft_progression_events.sql",              "source": "NEWLY AUTHORED — minimal extraction of smokecraft_progression_events from recovery's 085_filler_arrangement_and_progression_events.sql", "reason": "root-cause fix for pairing-engine's recordEvent() 500'ing with Postgres 42P01 (undefined_table) — the second of two genuine blockers found stalling the canonical journey at Pairing Recommendations during Block 8 self-QA" }
+  ],
+  "migrationsExcludedAsUnrequired": "Roughly 80 of recovery's ~107 candidate migrations were classified UNRELATED or OBSOLETE-SUPERSEDED and excluded — VenueHumidor commerce/checkout/admin schema, most golden-box sub-detail tables not touched by the tested flow, and duplicate/renamed variants of tables main already has under a different name. Full trace method: grep every candidate migration's CREATE TABLE/ALTER TABLE targets against every fetch()/db.query() call actually reachable from a canonical-journey screen.",
+  "databaseSafety": {
+    "database": "crafthub_integration_candidate (disposable, representing main's current schema)",
+    "applicationMethod": "Direct psql -f loop, since main has no automated migration runner (unlike recovery's boot-time auto-apply)",
+    "idempotency": "Every migration uses CREATE TABLE IF NOT EXISTS / CREATE INDEX IF NOT EXISTS — confirmed safe to reapply, verified during this session when the loop was run twice after a transient gap",
+    "collisionCheck": "Verified via \\dt before and after: recovery's pos360_*/eat_smokecraft_*/smokecraft_management_sync_*/ticket_tapper_* naming convention does not collide with main's own smoke_*-prefixed tables",
+    "destructiveOperations": "None — every migration is additive (CREATE, never DROP or ALTER...DROP COLUMN)"
+  }
+}

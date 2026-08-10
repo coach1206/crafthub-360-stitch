@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-08-10T22:00:00Z",
+  "mainBaseSha": "af3956bb0eacb8fff5bb285951fb0247399f1e1a",
+  "recoverySourceSha": "84f96015dcf7784982b6418546558baae1a1bb51",
+  "integrationBranch": "integration/smokecraft-main-candidate",
+  "method": "Iterative build-error resolution + real-browser-journey root-cause tracing: every file/table/route pulled onto the integration branch was pulled because a genuine, reproduced runtime failure (module-resolution error, 404, 500, or a stalled canonical-journey checkpoint) named it, never speculatively.",
+  "classification": {
+    "REQUIRED_FRONTEND": [
+      "All src/pages/smokecraft/*.jsx screens on the canonical 27-session spine plus their supporting-module siblings (Connections, SecondHumidorMatch, MiniTasting, SmokeCraftChallenge)",
+      "src/context/SmokeCraftJourneyContext.jsx, SmokeCraftOrderContext.jsx",
+      "src/constants/smokecraft*.js (loyalty, landing actions/cta, navigation registry, live-screen tokens, journey status, screen manifest, component registry, interaction manifest, entry readiness, educational enrichment, assetVersion)",
+      "src/hooks/useStartNewSmokeCraftJourney.js, useSmokeCraftMentorVoice.js, useSmokeCraftMentorGuidance.js, useSmokeCraftPairingEngine.js",
+      "src/data/*.js referenced by the tested screens (leafChallengeRounds, knowledgeCheckQuestions, cultivationStages, venueInventoryData, loyaltyPointRulesClient, smokeCraftVenueCommerce, smokeCraftInventorySeed, smokeCraftTicketTapperSpecials)",
+      "src/services/smokecraft/*.js API clients actually called by a tested screen (assetResolver, pairingEngineApiClient, playerStateApiClient, and siblings)",
+      "src/services/{sessionStorageService,passportService,passportAdapter}.js — swapped for recovery's versions because main's own lacked exports GuestSessionContext/VisitLockGuard require",
+      "src/utils/{pairingEngine,smokeCraftMoneyBridge,smokeCraftTaxConfig,smokeCraftSpecialsEngine,smokecraftLoyaltyEngine,smokecraftQuizScoring}.js",
+      "src/lib/stripeClient.js (transitively required by an import chain; only reads an env var, never imports @stripe/stripe-js)",
+      "public/assets/smokecraft/** — 62 image files restored after Block-8 self-QA found FlavorMemory.jsx rendering a broken image (raw alt text visible)"
+    ],
+    "SHARED_REQUIRED_BACKEND": [
+      "server/routes/{pos360SmokeCraftOrderBridgeRoutes,eatSmokeCraftLiveSyncRoutes,managementSyncRoutes,smokecraftTicketTapperSpecialsRoutes,smokecraftVenueCommerceRoutes,smokecraftPlayerStateRoutes,pairingEngineRoutes}.js — mounted at distinct base paths alongside main's existing /api/smokecraft and /api/eat/smokecraft mounts, no collision",
+      "server/controllers + server/services/smokecraft/* transitive chain for the above (playerStateService, selectionClassificationService, tastingObservationService, scorecardEvaluationService, pairingEngineService, progressionEventService, skillTreeService, sessionRewardTable, passport360SyncService, passport360SmokeCraftPersistenceService)",
+      "server/db/migrations/015-041 (24 migrations renumbered from recovery's 017/038/068-070/074/079/092-105/119-121 to sit after main's real tail at 014, plus two newly authored: 039_smokecraft_venue_registry.sql and 041_smokecraft_progression_events.sql, and one extraction: 040_smokecraft_pairing_flavor_memory.sql)"
+    ],
+    "ALREADY_ON_MAIN": [
+      "server/middleware/{smokecraftGuestIdentity,roleMiddleware,authMiddleware}.js — main's own real, JWT-cookie-based identity system, reused verbatim, no second identity scheme invented",
+      "Main's own smoke_*-prefixed and smokecraft_activity_attempts/player_state/session_completions/tasting_drafts tables (verified via psql \\dt before pulling any migration that referenced them — confirmed non-colliding naming convention vs recovery's pos360_*/eat_smokecraft_*/smokecraft_management_sync_* tables)"
+    ],
+    "MAIN_UNIQUE_TO_PRESERVE": [
+      "None found that could be integrated without weakening Blocks 1-7 or introducing a second architecture. Main's pre-existing SmokeCraft screens (Identity.jsx, PassportStamp.jsx, parts of Format.jsx) used the forbidden screenshot-hotspot architecture (SmokeCraftAssetRoute + invisible % positioned hotspots over a baked PNG) and were superseded wholesale by recovery's live-DOM equivalents per the mandate's explicit instruction not to reintroduce that pattern."
+    ],
+    "UNRELATED_EXCLUDED": [
+      "The full VenueHumidor commerce/admin/payment subsystem (src/pages/smokecraft/venueHumidor/**, checkout, admin dashboard) — deliberately excluded from App.jsx's route tree because it would have required adding an untested @stripe/stripe-js dependency and sits outside the tested canonical journey. Files remain present but unrouted (harmless dead code, not deleted, so a future integration pass can wire them in deliberately).",
+      "helmet, sharp (initially), @aws-sdk/client-s3, @dnd-kit/core, @dnd-kit/utilities, stripe — none actually imported by any required runtime code path"
+    ],
+    "OBSOLETE_SUPERSEDED": [
+      "Main's original /api/smokecraft and /api/eat/smokecraft route handlers backing the old screenshot-hotspot screens remain mounted (harmless, unreferenced by the live-DOM screens) rather than deleted, per the additive-integration mandate — not removed, just no longer the active code path for any migrated screen."
+    ]
+  },
+  "newDependenciesAdded": {
+    "express-rate-limit": "^8.5.2 — required by managementSyncRoutes.js's real rate limiter",
+    "sharp": "installed during Phase 2 — required by scripts/captureSmokecraftMigrationRealJourney.mjs to composite the 14-screen contact sheet PNG; not a runtime app dependency, dev/tooling only"
+  }
+}
