@@ -8,9 +8,10 @@
  *    dashboard. The founder can log in from any static deployment without a
  *    live backend. See src/config/founderOverride.js for the security notes.
  *
- * 2. Dev-only hardcoded registry:
- *    Only active when import.meta.env.DEV is true. Never ships in production
- *    bundles — Vite dead-code-eliminates the branch.
+ * 2. Preview/demo registry:
+ *    PIN 9999 is available for owner preview handoff on local/demo/Vercel
+ *    preview hosts. This unlocks only the client-side route guard; backend
+ *    middleware remains the API authority.
  *
  * 3. Demo mode (VITE_STAFF_DEMO_MODE=true):
  *    Unlocks the Staff Handoff modal with no credentials required. Shows a
@@ -23,12 +24,18 @@
 
 import { isFounderOverrideConfigured, verifyFounderOverride } from '../config/founderOverride.js'
 
-const DEMO_STAFF = import.meta.env.DEV
-  ? [
-      { email: 'staff@crafthub360.com',   pin: '2501', role: 'staff',   displayName: 'Staff' },
-      { email: 'manager@crafthub360.com', pin: '3600', role: 'manager', displayName: 'Manager' },
-    ]
-  : []
+const DEMO_STAFF = [
+  { email: 'staff@crafthub360.com',   pin: '9999', role: 'staff',   displayName: 'Staff' },
+  { email: 'manager@crafthub360.com', pin: '9999', role: 'manager', displayName: 'Manager' },
+]
+
+function previewStaffPinEnabled() {
+  if (import.meta.env.DEV || import.meta.env.VITE_STAFF_DEMO_MODE === 'true') return true
+  try {
+    const host = window.location.hostname
+    return host === 'localhost' || host === '127.0.0.1' || host.endsWith('.vercel.app')
+  } catch { return false }
+}
 
 const FOUNDER_CREDENTIAL = import.meta.env.DEV
   ? {
@@ -46,7 +53,7 @@ const FOUNDER_CREDENTIAL = import.meta.env.DEV
  *   - VITE_STAFF_DEMO_MODE=true (demo/kiosk bypass)
  */
 export const STAFF_HANDOFF_AUTH_AVAILABLE =
-  import.meta.env.DEV ||
+  previewStaffPinEnabled() ||
   isFounderOverrideConfigured() ||
   import.meta.env.VITE_STAFF_DEMO_MODE === 'true'
 
@@ -115,6 +122,8 @@ export function verifyFounderCredentials(email, pin) {
 export function verifyStaffHandoffCredentials(email, pin) {
   const normalizedEmail = normalizeEmail(email)
   const normalizedPin   = normalizePin(pin)
+
+  if (!previewStaffPinEnabled()) return { ok: false }
 
   const match = DEMO_STAFF.find(
     s => s.email === normalizedEmail && s.pin === normalizedPin

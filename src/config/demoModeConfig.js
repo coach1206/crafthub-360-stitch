@@ -42,7 +42,7 @@ export const PILOT_STATUSES = [
 export const DEMO_MODULES = [
   { key: 'smokecraft',   label: 'SmokeCraft 360',          route: '/smokecraft',    color: '#C9A84C' },
   { key: 'passport',     label: '360 Passport Connection', route: '/passport',      color: '#a3e635' },
-  { key: 'pos3',         label: 'POS 3',                   route: '/pos',           color: '#60a5fa' },
+  { key: 'pos3',         label: 'POS 3',                   route: '/pos3',          color: '#60a5fa' },
   { key: 'eat',          label: 'E.A.T. Command',          route: '/eat',           color: '#c084fc' },
   { key: 'kiosk',        label: 'Kiosk Mode',              route: '/kiosk-setup',   color: '#fb923c' },
   { key: 'venue_test',   label: 'Venue Testing',           route: '/venue-test',    color: '#f87171' },

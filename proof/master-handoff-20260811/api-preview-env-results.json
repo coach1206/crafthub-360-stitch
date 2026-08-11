@@ -1,0 +1,17 @@
+{
+  "simulatedEnv": "VERCEL_ENV=preview",
+  "functionTrace": {
+    "files": 672,
+    "bytes": 3007622,
+    "mb": 2.87
+  },
+  "apiRoutes": {
+    "health": "200 ok",
+    "venueCommerceVenues": "200 ok; source=existing_venue_registry; venues include Grand Lounge and The Bottle House",
+    "smokecraftStatus": "200 ok; backend_connected; memory_fallback without DB",
+    "pos360SmokeCraftHealth": "200 ok; local_fallback when DB is not attached",
+    "eat360SmokeCraftHealth": "200 ok; local_fallback when DB is not attached",
+    "eatSources": "200 ok; operational source data",
+    "pos3Providers": "403 expected without authenticated admin JWT"
+  }
+}

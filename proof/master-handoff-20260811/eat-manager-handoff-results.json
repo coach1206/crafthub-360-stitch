@@ -1,0 +1,11 @@
+{
+  "base": "http://127.0.0.1:26255",
+  "viewport": "1180x820",
+  "steps": [
+    {
+      "name": "crafthub-manager-handoff-eat",
+      "url": "http://127.0.0.1:26255/eat",
+      "ok": true
+    }
+  ]
+}

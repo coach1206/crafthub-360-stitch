@@ -2,11 +2,12 @@
  * Staff Login — PIN keypad for POS 3 staff access.
  * T016: Staff ID field added above PIN pad for targeted lookup.
  * Large touchscreen-friendly buttons. No keyboard input required.
- * Prototype credentials: PIN 1234
+ * Preview/demo credentials: PIN 9999
  */
 
 import { useState, useRef } from 'react'
 import { useAuth }  from '../context/AuthContext.jsx'
+import { PREVIEW_STAFF_UNLOCK_KEY } from '../context/SecurityContext.jsx'
 
 const GOLD  = '#C9A84C'
 const DARK  = '#060402'
@@ -15,6 +16,37 @@ const CARD  = 'rgba(14,9,3,0.98)'
 const BORDER = 'rgba(201,168,76,0.18)'
 
 const MAX_DIGITS = 6
+const PREVIEW_STAFF_PIN = '9999'
+
+function previewStaffPinEnabled() {
+  if (import.meta.env.DEV || import.meta.env.VITE_STAFF_DEMO_MODE === 'true') return true
+  try {
+    const host = window.location.hostname
+    return host === 'localhost' || host === '127.0.0.1' || host.endsWith('.vercel.app')
+  } catch { return false }
+}
+
+function redirectTarget() {
+  const requested = new URLSearchParams(window.location.search).get('redirect')
+  if (!requested || requested === '/pos') return '/pos3'
+  return requested
+}
+
+function startPreviewStaffSession(staffId) {
+  const session = {
+    role: 'staff',
+    userId: staffId || 'preview-staff',
+    email: 'preview-staff@crafthub360.com',
+    displayName: staffId ? `Staff ${staffId}` : 'Preview Staff',
+    grantedAt: Date.now(),
+    mode: 'preview-pin',
+  }
+  try {
+    sessionStorage.setItem(PREVIEW_STAFF_UNLOCK_KEY, '1')
+    localStorage.setItem('novee_admin_session', JSON.stringify(session))
+  } catch {}
+  window.location.href = redirectTarget()
+}
 
 export default function StaffLogin() {
   const { loginStaff } = useAuth()
@@ -39,9 +71,13 @@ export default function StaffLogin() {
     if (pin.length < 4) { setError('PIN must be at least 4 digits'); return }
     setLoading(true)
     setError('')
+    if (pin === PREVIEW_STAFF_PIN && previewStaffPinEnabled()) {
+      startPreviewStaffSession(staffId.trim())
+      return
+    }
     const result = await loginStaff(pin, staffId.trim() || null)
     if (result.success) {
-      window.location.href = '/pos'
+      window.location.href = redirectTarget()
     } else {
       setError(result.error || 'Invalid credentials. Please try again.')
       setPin('')
@@ -279,7 +315,7 @@ export default function StaffLogin() {
           letterSpacing: '0.1em',
           textAlign:     'center',
         }}>
-          DEV: PIN 1234 · Staff ID optional
+          DEV: PIN 9999 · Staff ID optional
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@
  *
  * Identity resolution (first match wins):
  *   1. Real JWT session from AuthContext (backend-verified)
- *   2. localStorage prototype session (DEV ONLY — never read or written in production)
+ *   2. localStorage prototype session (DEV, or PIN-unlocked preview demo tab)
  *   3. Guest default
  *
  * IMPORTANT: This context is for UI rendering decisions only.
@@ -16,12 +16,19 @@ import { ROLE_MAP, ROLE_LEVELS, ROLE_LABELS, roleHasPermission, meetsMinRole } f
 import { AuthContext } from './AuthContext.jsx'
 
 const ADMIN_SESSION_KEY = 'novee_admin_session'
+export const PREVIEW_STAFF_UNLOCK_KEY = 'novee_preview_staff_unlocked'
+
+function canUsePrototypeSession() {
+  if (import.meta.env.DEV) return true
+  try {
+    return sessionStorage.getItem(PREVIEW_STAFF_UNLOCK_KEY) === '1'
+  } catch { return false }
+}
 
 function readStoredSession() {
-  // The localStorage prototype role is a dev-only convenience (DevRoleSwitcher).
-  // It must never be consulted in production builds — Vite/Rollup statically
-  // eliminates this branch in prod, so the key is never even read.
-  if (!import.meta.env.DEV) return null
+  // The prototype role is normally dev-only. Preview/demo staff PIN flow can
+  // unlock it for the current browser tab without exposing raw PIN storage.
+  if (!canUsePrototypeSession()) return null
   try {
     const raw = localStorage.getItem(ADMIN_SESSION_KEY)
     if (!raw) return null
@@ -69,13 +76,12 @@ export function SecurityProvider({ children }) {
   const isAdmin   = () => meetsMinRole(user.role, 'admin')
   const isFounder = () => user.role === 'founder_level_0'
 
-  // ── Prototype role setter (localStorage, dev only) ────────
-  // Used by DevRoleSwitcher when no real JWT session exists.
-  // Disabled outright in production — this is a UI-prototyping aid only,
-  // never a path to grant a real role in a shipped build.
+  // ── Prototype role setter (localStorage, dev / PIN-unlocked preview tab) ─
+  // Used by DevRoleSwitcher and the preview staff handoff when no real JWT
+  // session exists. Backend middleware remains the authority for protected API.
   const setRole = useCallback((role, meta = {}) => {
-    if (!import.meta.env.DEV) {
-      console.warn('[SecurityContext] setRole is disabled in production. Use real login.')
+    if (!canUsePrototypeSession()) {
+      console.warn('[SecurityContext] setRole requires dev mode or staff PIN preview unlock.')
       return
     }
     if (!ROLE_MAP[role]) { console.warn('[SecurityContext] Unknown role:', role); return }
@@ -98,6 +104,7 @@ export function SecurityProvider({ children }) {
 
   const clearAdminSession = useCallback(() => {
     try { localStorage.removeItem(ADMIN_SESSION_KEY) } catch {}
+    try { sessionStorage.removeItem(PREVIEW_STAFF_UNLOCK_KEY) } catch {}
     setLocalUser({ role: 'guest', userId: null, email: null, displayName: 'Guest' })
   }, [])
 

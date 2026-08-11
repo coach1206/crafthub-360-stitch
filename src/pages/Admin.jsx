@@ -474,7 +474,7 @@ export default function Admin() {
           marginBottom:        '1.5rem',
         }}>
           <PermissionGate permission="access_pos3_manager">
-            <NavTile icon="point_of_sale" label="POS 3" href="/pos" color="#4ECDC4" />
+            <NavTile icon="point_of_sale" label="POS 3" href="/pos3" color="#4ECDC4" />
           </PermissionGate>
           <PermissionGate permission="access_eat_command">
             <NavTile icon="restaurant" label="E.A.T. Command" href="/eat" color="#45B7D1" />

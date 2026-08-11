@@ -8,7 +8,7 @@ const CARDS = [
   { title: 'WineCraft 360',             desc: 'Wine flights, cellar signals, tasting notes.',                          status: 'Active', to: '/winecraft' },
   { title: 'BeerCraft 360',             desc: 'Beer flights, taproom specials, style matching.',                       status: 'Active', to: '/beercraft' },
   { title: '360 Passport Connections',  desc: 'Guest identity, stamps, networking, experience history.',               status: 'Active', to: '/passport/connections' },
-  { title: 'POS 3',                     desc: 'Staff point-of-sale and fulfillment terminal.',                         status: 'Staff Access', to: '/pos' },
+  { title: 'POS 3',                     desc: 'Staff point-of-sale and fulfillment terminal.',                         status: 'Staff Access', to: '/pos3' },
   { title: 'E.A.T. Management Hub',     desc: 'Venue intelligence, inventory, staff performance command center.',      status: 'Staff Access', to: '/eat' },
   { title: 'DayOne360 Travel',          desc: 'Travel placement, venue offers, destination experiences.',              status: 'External', to: 'https://dayone360.com', external: true },
   { title: 'Leaderboard',               desc: 'Grand Lounge rankings across every craft module.',                     status: 'Active', to: '/leaderboard' },

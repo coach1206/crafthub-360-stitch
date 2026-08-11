@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSecurity } from '../../context/SecurityContext.jsx'
+import { PREVIEW_STAFF_UNLOCK_KEY } from '../../context/SecurityContext.jsx'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import StaffHandoffLoginModal from './StaffHandoffLoginModal.jsx'
 import RippleDissolve from './RippleDissolve.jsx'
@@ -84,6 +85,7 @@ export default function StaffHandoffButton({ tableId = null, allowedDestinations
   }
 
   function handleUnlock({ role: staffRole, displayName, email }) {
+    try { sessionStorage.setItem(PREVIEW_STAFF_UNLOCK_KEY, '1') } catch {}
     setRole(staffRole, { displayName, email })
     startHandoff({ email, role: staffRole, staffName: displayName })
   }

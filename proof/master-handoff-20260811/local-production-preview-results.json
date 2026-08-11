@@ -1,0 +1,90 @@
+{
+  "base": "http://127.0.0.1:26255",
+  "viewport": "1180x820",
+  "results": [
+    {
+      "name": "01-root-crafthub.png",
+      "url": "http://127.0.0.1:26255/crafthub",
+      "ok": true,
+      "detail": "pathname=/crafthub"
+    },
+    {
+      "name": "02-crafthub.png",
+      "url": "http://127.0.0.1:26255/crafthub",
+      "ok": true,
+      "detail": "CraftHub body rendered"
+    },
+    {
+      "name": "03-smokecraft-entry.png",
+      "url": "http://127.0.0.1:26255/smokecraft",
+      "ok": true,
+      "detail": "pathname=/smokecraft"
+    },
+    {
+      "name": "04-venue-select.png",
+      "url": "http://127.0.0.1:26255/smokecraft/enroll",
+      "ok": true,
+      "detail": "buttons=3; hasError=false"
+    },
+    {
+      "name": "05-staff-login-pos3.png",
+      "url": "http://127.0.0.1:26255/pos3",
+      "ok": true,
+      "detail": "pathname=/pos3"
+    },
+    {
+      "name": "06-pos3-tables.png",
+      "url": "http://127.0.0.1:26255/pos3/tables",
+      "ok": true,
+      "detail": "pathname=/pos3/tables"
+    },
+    {
+      "name": "07-pos3-checkout.png",
+      "url": "http://127.0.0.1:26255/pos3/checkout",
+      "ok": true,
+      "detail": "pathname=/pos3/checkout"
+    },
+    {
+      "name": "08-eat.png",
+      "url": "http://127.0.0.1:26255/eat",
+      "ok": true,
+      "detail": "Expected staff-only access restriction; manager handoff proof captured separately."
+    }
+  ],
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "notes": [
+    "The /staff-login PIN 9999 flow grants staff role and opens /pos3.",
+    "E.A.T. is manager-gated; authorized E.A.T. proof is in eat-manager-handoff-results.json and 08-eat-manager-handoff.png.",
+    "Frontend-only vite preview logs API 500s because Express /api is not mounted there; api-preview-env-results.json covers the Vercel preview API path separately."
+  ]
+}

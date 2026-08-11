@@ -29,10 +29,10 @@ export const KIOSK_ALLOWED_ROUTES = {
     '/smokecraft', '/passport', '/leaderboard',
   ],
   staff_terminal: [
-    '/staff-login', '/pos', '/device-status',
+    '/staff-login', '/pos3', '/device-status',
   ],
   manager_terminal: [
-    '/admin-login', '/eat', '/pos', '/device-status',
+    '/admin-login', '/eat', '/pos3', '/device-status',
   ],
   founder_terminal: [
     '/founder-login', '/founder', '/admin', '/device-status',

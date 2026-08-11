@@ -251,8 +251,8 @@ export default function App() {
         <ErrorBoundary>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
-            {/* ── Boot — public NOVEE OS boot screen at root and /boot ── */}
-            <Route path="/" element={<Boot />} />
+            {/* ── Root enters the active CraftHub layer; /boot remains available ── */}
+            <Route path="/" element={<Navigate to="/crafthub" replace />} />
             <Route path="boot" element={<Boot />} />
             <Route path="boot/console" element={<BootConsole />} />
 

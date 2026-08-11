@@ -6,7 +6,7 @@
  * NEVER prints PINs or founder challenge to logs after initial seed.
  *
  * Dev credentials (printed once on first seed):
- *   staff    — PIN: 1234
+ *   staff    — PIN: 9999
  *   manager  — PIN: 5678
  *   admin    — admin@novee.dev / PIN: 9999
  *   founder  — jccollins1206@yahoo.com / PIN: 2501 / challenge: FOUNDER_CHALLENGE_SECRET env var
@@ -24,7 +24,7 @@ const DEMO_USERS = [
     role:         'staff',
     status:       'active',
     email:        'staff@novee.dev',
-    pin:          '1234',
+    pin:          '9999',
     type:         'pin',
   },
   {
