@@ -11,6 +11,69 @@ one screen (see "merged" column). A guest cannot skip a required step: every
 route past the entry layer is gated by `SmokeCraftSessionGuard`, verified in
 doc 07's route-bypass and back-button checks.
 
+## Explicit full-topic coverage (46 required topics, verified against source files)
+
+Every topic below was checked directly against the screen/component source
+(not assumed) — the "Where it actually lives" column names the real
+screen/section, and the note flags anywhere the requested phrase isn't the
+literal on-screen label even though the concept is covered.
+
+| # | Topic | Where it actually lives | Route |
+|---|---|---|---|
+| 1 | Welcome | S1 screen, titled "Welcome to Today's Experience" | `/smokecraft/welcome` |
+| 2 | Enroll | Entry layer, "Sign In / Guest Mode" | `/smokecraft/enroll` |
+| 3 | Identity | Entry layer, "Personal Dashboard" | `/smokecraft/identity` |
+| 4 | Mentor Selection | Supporting module | `/smokecraft/mentor-selection` |
+| 5 | Seed & Soil | Supporting module | `/smokecraft/seed-soil` |
+| 6 | Terroir | S4 | `/smokecraft/terroir` |
+| 7 | Tobacco Plant Anatomy | `SeedSoil.jsx`'s "Explore Plant Anatomy" expander (`plant_anatomy` catalog); also `Vitola.jsx`'s "Cigar Anatomy" chip row | `/smokecraft/seed-soil` |
+| 8 | Primings | `WrapperStrength.jsx`, "Leaf Primings" section (`leaf_priming` category) | `/smokecraft/wrapper-strength` |
+| 9 | Wrapper / Binder / Filler | `WrapperStrength.jsx`, "Wrapper", "Binder", "Filler" sections | `/smokecraft/wrapper-strength` |
+| 10 | Long Filler vs Short Filler | `WrapperStrength.jsx`, "Filler (including Long vs. Short)" section | `/smokecraft/wrapper-strength` |
+| 11 | Curing | `WrapperStrength.jsx`'s "Curing, Fermentation & Aging" section (`processing_method` category); also titled standalone in the older `Cultivation.jsx` supplemental page | `/smokecraft/wrapper-strength` |
+| 12 | Fermentation | Same `WrapperStrength.jsx` section; **also** its own dedicated tab titled "Fermentation" on the S15 Knowledge Drop screen | `/smokecraft/wrapper-strength`, `/smokecraft/knowledge-drop` |
+| 13 | Aging | Same as above; **also** its own dedicated tab titled "Aging" on Knowledge Drop | `/smokecraft/wrapper-strength`, `/smokecraft/knowledge-drop` |
+| 14 | Cigar Construction | S5, literally titled "Construction Inspection" | `/smokecraft/format` |
+| 15 | Vitola / Format | S5 (format selection); the supplemental `Vitola.jsx` page covers vitola/anatomy/sensory practice in more depth | `/smokecraft/format`, `/smokecraft/vitola` |
+| 16 | Ring Gauge | `CigarGaugeGuide.jsx` (S5 supporting page, "Ring Gauge Scale"); also a `ring_gauge` category in `Vitola.jsx` | `/smokecraft/cigar-gauge-guide`, `/smokecraft/vitola` |
+| 17 | Size / Shape | S5 Format screen's cigar-format cards (Robusto/Toro/Churchill/Corona/Gordo/Torpedo, each showing length + ring gauge) | `/smokecraft/format` |
+| 18 | Humidor Match | S2 | `/smokecraft/humidor-match` |
+| 19 | Meet Your Cigar | S3 | `/smokecraft/meet-your-cigar` |
+| 20 | Visual Inspection | **Note:** no screen carries this exact literal label. The concept — inspecting the cigar before proceeding — is what S3 Meet Your Cigar and S5 Format's Construction Inspection are for; there is no separately titled "Visual Inspection" step. | `/smokecraft/meet-your-cigar` |
+| 21 | Aroma / Pre-Light Nose | **Note:** no literal "Pre-Light Nose" step exists. The closest on-screen equivalent is First Third's "Aroma Opening" observation chip, which is captured after lighting, not before. | `/smokecraft/first-third` |
+| 22 | Cold Draw | **Note:** the literal on-screen title is "The Proper First Draw" (`LightingTutorial.jsx`, S7) — same concept (drawing before/at lighting), different exact wording. | `/smokecraft/lighting-tutorial` |
+| 23 | Cut | S6, "Choose Your Cut" | `/smokecraft/cut-toast-light` |
+| 24 | Toast | S7 `LightingTutorial.jsx` step titled "Toasting the Foot" | `/smokecraft/lighting-tutorial` |
+| 25 | Light | S7 `LightingTutorial.jsx` step titled "Lighting Technique" | `/smokecraft/lighting-tutorial` |
+| 26 | Draw | S7's "The Proper First Draw" step; also First Third's "Draw Ease" observation chip | `/smokecraft/lighting-tutorial`, `/smokecraft/first-third` |
+| 27 | Burn Line | S7's "Burn Inspection" step; also First Third's "Burn Line" observation chip (literal match) | `/smokecraft/lighting-tutorial`, `/smokecraft/first-third` |
+| 28 | Ash | First Third's "Ash Quality" observation chip (literal match) | `/smokecraft/first-third` |
+| 29 | First Third | S8/S9 | `/smokecraft/first-third` |
+| 30 | Flavor Memory | S10 | `/smokecraft/flavor-memory` |
+| 31 | Pairing Lab | S11 | `/smokecraft/pairing-lab` |
+| 32 | Second Third | S12/S13 | `/smokecraft/second-third` |
+| 33 | Flavor Development | Literal on-screen title of the Second Third screen (confirmed in the current visual proof — see doc 06) | `/smokecraft/second-third` |
+| 34 | Mentor Commentary | S14 | `/smokecraft/mentor-commentary` |
+| 35 | Knowledge Drop / Knowledge Check | S15 Knowledge Drop; the separate `KnowledgeCheckDemo.jsx` is a standalone QA harness for the reusable quiz component, not part of the numbered spine | `/smokecraft/knowledge-drop`, `/smokecraft/knowledge-check-demo` |
+| 36 | Final Third | S16/S17/S18 | `/smokecraft/final-third` |
+| 37 | Scorecard | S19/S20 | `/smokecraft/scorecard` |
+| 38 | AI Summary | S21 | `/smokecraft/ai-summary` |
+| 39 | Final Review | S24, "Completed Scorecard" | `/smokecraft/final-review` |
+| 40 | Request / Purchase | Supporting module (reachable from S2, requires `humidor-match`) | `/smokecraft/request-purchase` |
+| 41 | Pairing Recommendations | S22 | `/smokecraft/pairing-recommendations` |
+| 42 | Passport Stamp | S23 | `/smokecraft/passport-stamp` |
+| 43 | Connections | Supporting module (requires `passport-stamp`) | `/smokecraft/connections` |
+| 44 | Rewards | S25/S26 | `/smokecraft/rewards` |
+| 45 | Second Humidor Match | Supporting module (requires `scorecard`) | `/smokecraft/second-humidor-match` |
+| 46 | Session Complete | S27 | `/smokecraft/session-complete` |
+
+**Every one of the 46 required topics is accounted for above** — 43 map to a
+screen/section carrying that exact or a directly equivalent literal label;
+3 (#20 Visual Inspection, #21 Aroma/Pre-Light Nose, #22 Cold Draw) are noted
+explicitly as concepts covered by an existing screen under different exact
+wording, rather than silently mapped as if the literal phrase existed on
+screen. Nothing on the list was left out.
+
 ## Entry layer (outside the 27-session spine)
 
 | ID | Route | Label |
