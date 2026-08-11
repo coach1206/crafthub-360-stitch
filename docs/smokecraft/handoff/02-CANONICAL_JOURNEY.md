@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Canonical Journey (Doc 2 of 8)
+# SmokeCraft 360 — Canonical Journey (Doc 2 of 10)
 
 Source of truth: `docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json`
 (generated directly from `src/constants/session.js`) and

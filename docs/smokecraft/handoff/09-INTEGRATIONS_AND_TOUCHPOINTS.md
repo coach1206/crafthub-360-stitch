@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Integrations & Touchpoints (Doc 9 of 9)
+# SmokeCraft 360 — Integrations & Touchpoints (Doc 9 of 10)
 
 Every claim below was checked against the actual route/service/component
 source on `integration/smokecraft-main-candidate` — not assumed from a

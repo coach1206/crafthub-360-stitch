@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Handoff Checklist (Doc 8 of 8)
+# SmokeCraft 360 — Handoff Checklist (Doc 8 of 10)
 
 For whoever picks this branch up next — designer, engineer, or owner review.
 

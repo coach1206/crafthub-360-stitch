@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Screen-to-Stage Map (Doc 4 of 8)
+# SmokeCraft 360 — Screen-to-Stage Map (Doc 4 of 10)
 
 Source of truth: `src/constants/smokecraftComponentRegistry.js` (spine screens,
 rendered through `SmokeCraftScreenRenderer`) and the direct component imports

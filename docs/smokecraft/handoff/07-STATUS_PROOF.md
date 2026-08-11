@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Status / Proof (Doc 7 of 8)
+# SmokeCraft 360 — Status / Proof (Doc 7 of 10)
 
 **Status: NOT MERGED into `main`. NOT DEPLOYED. NOT OWNER-APPROVED.**
 This is consolidated from existing, already-verified reports on this branch —

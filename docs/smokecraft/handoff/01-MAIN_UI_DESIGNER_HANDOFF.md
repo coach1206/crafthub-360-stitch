@@ -1,7 +1,9 @@
 # SmokeCraft 360 — UI Designer Handoff (Main)
 
 **Branch handed off:** `integration/smokecraft-main-candidate`
-**HEAD at handoff:** `bdf8ae5e1fd8ee6cf0b6416a75334633841f07f3`
+**HEAD at handoff:** `429ed53626700be9b058d85fd25ddb2ba4afbb16` (verified via
+`git rev-parse HEAD` on the checked-out branch; superseded any earlier SHA
+cited in this package's own commit history)
 **Status: NOT MERGED into `main`. NOT DEPLOYED. NOT OWNER-APPROVED.**
 
 This is the entry document for the SmokeCraft 360 UI designer handoff package. It

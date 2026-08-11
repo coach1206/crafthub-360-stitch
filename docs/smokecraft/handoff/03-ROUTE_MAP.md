@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Route Map (Doc 3 of 8)
+# SmokeCraft 360 — Route Map (Doc 3 of 10)
 
 Source of truth: `src/App.jsx`, the `<Route path="smokecraft" ...>` subtree
 (lines ~283–576 at handoff time). This is every route actually registered

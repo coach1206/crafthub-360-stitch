@@ -1,4 +1,4 @@
-# SmokeCraft 360 — Integration Map (Doc 5 of 8)
+# SmokeCraft 360 — Integration Map (Doc 5 of 10)
 
 Source of truth: `docs/smokecraft/integration/SMOKECRAFT_DEPENDENCY_CLOSURE.json`,
 `docs/smokecraft/integration/SMOKECRAFT_MIGRATION_MAP.json`, and
