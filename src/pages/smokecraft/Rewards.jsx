@@ -401,7 +401,7 @@ export default function Rewards({ onBack, onComplete } = {}) {
     return (
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
-          <SmokeCraftHeroCrop assetKey="rewardsHero" label="A golden box of premium cigars" bgPosition="center" bgSize="cover" />
+          <SmokeCraftHeroCrop assetKey="ownerRewardsHero" label="A golden box of premium cigars" bgPosition="center" bgSize="cover" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>🏆</div>
             <div>

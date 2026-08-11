@@ -182,7 +182,7 @@ export default function CutToastLight({ onBack, onComplete } = {}) {
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="cutToastLightHero" label="Cutting, toasting, and lighting a cigar" bgPosition="center" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="ownerCutToastLightHero" label="Cutting, toasting, and lighting a cigar" bgPosition="center" bgSize="cover" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>✂️</div>
             <div>

@@ -50,7 +50,7 @@ export default function SecondHumidorMatch() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="secondHumidorMatchHero" label="A curated humidor of premium cigars" bgPosition="center 30%" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="ownerSecondHumidorMatchHero" label="A curated humidor of premium cigars" bgPosition="center top" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
           <div>

@@ -22,6 +22,14 @@ const REF = '/assets/smokecraft-reference/approved'
 // ── Raw approved uploads (2026-07-11 — newest, highest priority) ───────────
 const RAW = '/assets/smokecraft'
 
+// ── Owner-rebuilt hero imagery (owner-rebuild pass) ─────────────────────────
+// 14 new hero images the owner created to replace the prior temporary/
+// placeholder decorative imagery on the 14 migrated live-DOM SmokeCraft
+// screens. These are now the AUTHORITATIVE hero assets for these screens —
+// the prior CROPPED/RAW values below are kept, unrenamed, purely as
+// rollback/reference (no longer read by any live screen).
+const OWNER = '/assets/smokecraft/owner-rebuild'
+
 // ── Pre-cropped clean hero photography (Block 6A visual consistency pass) ──
 // These already-approved files live in public/assets/smokecraft/cropped/ —
 // genuinely clean, dedicated crops (no baked UI/text/buttons), distinct from
@@ -109,6 +117,35 @@ export const SC_ASSETS = {
   pairingRecommendationsHero: `${CROPPED}/pairing-lab-hero.jpg`,
   passportStampHero:   `${CROPPED}/passport-stamp-hero.jpg`,
   rewardsHero:         `${CROPPED}/golden-box-hero-v2.jpg`,
+
+  // ── Owner-rebuild hero imagery — authoritative for the 14 migrated
+  // screens as of the owner-rebuilt-visuals pass. The prior CROPPED/RAW
+  // values above are untouched and remain available for rollback; no
+  // live screen reads them anymore. Two of these 14 (identity, seedSoil)
+  // are full baked-composition mockups from the owner, same "Category B"
+  // situation SmokeCraftHeroCrop's own crop-window technique already
+  // exists to handle — wired via a tighter height/bgPosition/bgSize crop
+  // showing only a clean photographic band, never the baked buttons/nav.
+  // Self-QA fix: the raw owner files for these two are full baked
+  // compositions (their own sidebar/form/buttons) — even the crop-window
+  // technique's bgSize/bgPosition alone couldn't isolate a clean
+  // photographic region because it sits too close to the baked UI, so
+  // these point at derived crops (sharp-extracted, same source pixels,
+  // no filters/edits) containing only the clean photography.
+  ownerIdentityHero:              `${OWNER}/01-identity-hero-crop.jpg`,
+  ownerSeedSoilHero:               `${OWNER}/02-seed-soil-hero-crop.jpg`,
+  ownerFormatHero:                 `${OWNER}/03-format-hero.jpg`,
+  ownerCutToastLightHero:          `${OWNER}/04-cut-toast-light-hero.jpg`,
+  ownerFirstThirdHero:             `${OWNER}/05-first-third-hero.jpg`,
+  ownerSecondThirdHero:            `${OWNER}/06-second-third-hero.jpg`,
+  ownerFinalThirdHero:             `${OWNER}/07-final-third-hero.jpg`,
+  ownerScorecardHero:              `${OWNER}/08.%20Scorecard.png`,
+  ownerRequestPurchaseHero:        `${OWNER}/09-request-purchase-hero.jpg`,
+  ownerPairingRecommendationsHero: `${OWNER}/10-pairing-recommendations-hero.jpg`,
+  ownerPassportStampHero:          `${OWNER}/11-passport-stamp-hero.jpg`,
+  ownerConnectionsHero:            `${OWNER}/12-connections-hero.jpg`,
+  ownerRewardsHero:                `${OWNER}/13-rewards-hero.jpg`,
+  ownerSecondHumidorMatchHero:     `${OWNER}/14-second-humidor-match-hero.jpg`,
 
   // S10 — Request Purchase — raw full composition takes precedence
   requestPurchase:     `${RAW}/REQUEST%20PURCHASE.png`,

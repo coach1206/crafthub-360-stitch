@@ -311,7 +311,7 @@ export default function Scorecard({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="scorecardHero" label="A cigar resting on a tasting table" bgPosition="center" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="ownerScorecardHero" label="A cigar resting on a tasting table" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>📋</div>
           <div style={{ flex: 1 }}>

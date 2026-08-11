@@ -266,7 +266,7 @@ export default function FinalThird({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="finalThirdHero" label="A cigar resting in an ashtray beside chocolate and coffee" bgPosition="center 30%" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="ownerFinalThirdHero" label="A cigar resting in an ashtray beside chocolate and coffee" bgPosition="center 30%" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🏁</div>
           <div>

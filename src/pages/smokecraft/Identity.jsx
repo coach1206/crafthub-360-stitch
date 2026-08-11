@@ -250,7 +250,11 @@ export default function Identity() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="identityHero" label="A curated humidor with cigars and a whiskey pour" bgPosition="center 45%" bgSize="cover" />
+        {/* Owner's identity hero is a full baked-composition mockup (its own
+            sidebar/form/buttons) — cropped to show only the clean man-with-
+            cigar photographic region in the upper-right, same "Category B"
+            crop-window technique this component already exists for. */}
+        <SmokeCraftHeroCrop assetKey="ownerIdentityHero" label="A man enjoying a cigar in a premium lounge" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{
             width: 58,

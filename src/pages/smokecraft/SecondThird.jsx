@@ -210,7 +210,7 @@ export default function SecondThird({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="secondThird" label="The second third of a lit cigar" bgPosition="72% 0%" bgSize="250%" />
+        <SmokeCraftHeroCrop assetKey="ownerSecondThirdHero" label="The second third of a lit cigar" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
           <div>

@@ -173,7 +173,7 @@ export default function Format({ onBack, onComplete } = {}) {
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="formatHero" label="A cigar and lighter, ready to smoke" bgPosition="center" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="ownerFormatHero" label="A cigar and lighter, ready to smoke" bgPosition="center" bgSize="cover" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>📏</div>
             <div>

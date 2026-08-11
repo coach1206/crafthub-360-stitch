@@ -218,7 +218,7 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="pairingRecommendationsHero" label="A cigar paired with a glass of whiskey" bgPosition="center" bgSize="cover" />
+        <SmokeCraftHeroCrop assetKey="ownerPairingRecommendationsHero" label="A cigar paired with a glass of whiskey" bgPosition="center top" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🥂</div>
           <div>

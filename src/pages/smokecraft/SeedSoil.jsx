@@ -185,7 +185,12 @@ export default function SeedSoil() {
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
         <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="seedSoil" label="Tobacco seed pods, seedlings, and soil layers" bgPosition="78% 0%" bgSize="260%" />
+        {/* Owner's seed-soil hero is a full baked-composition mockup (its
+            own sidebar/cards/buttons) — cropped to show only the clean
+            seed-pod/seedling/soil photographic band across the top, same
+            "Category B" crop-window technique this component already
+            exists for. */}
+        <SmokeCraftHeroCrop assetKey="ownerSeedSoilHero" label="Tobacco seed pods, seedlings, and soil layers" bgPosition="center" bgSize="cover" />
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40, lineHeight: 1 }}>🌱</div>
             <div>

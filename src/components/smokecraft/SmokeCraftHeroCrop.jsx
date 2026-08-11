@@ -29,7 +29,13 @@ export default function SmokeCraftHeroCrop({
   label,
   bgPosition = '78% 0%',
   bgSize = '260%',
-  height = 'clamp(84px, 13vw, 150px)',
+  // Owner-rebuild pass: enlarged from clamp(84px, 13vw, 150px) — the
+  // owner's new hero photography is meant to matter visually, not sit as
+  // a thin decorative strip. Still leaves ample room for the live-DOM
+  // instruction/interaction content below on every one of the 14 screens
+  // this component is used on (confirmed via grep — no other screen
+  // renders it).
+  height = 'clamp(170px, 24vw, 300px)',
 }) {
   const [errored, setErrored] = useState(false)
   const resolved = resolveSmokeCraftAsset(assetKey)

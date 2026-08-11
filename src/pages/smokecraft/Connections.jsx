@@ -57,7 +57,7 @@ export default function Connections() {
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="connections" label="Fellow cigar enthusiasts connecting in a lounge" bgPosition="50% 40%" bgSize="130%" />
+        <SmokeCraftHeroCrop assetKey="ownerConnectionsHero" label="Fellow cigar enthusiasts connecting in a lounge" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🔗</div>
           <div>
