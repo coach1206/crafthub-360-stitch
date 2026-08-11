@@ -9,7 +9,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 /**
  * Connections — /smokecraft/connections (supporting)
@@ -56,8 +56,8 @@ export default function Connections() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="ownerConnectionsHero" label="Fellow cigar enthusiasts connecting in a lounge" bgPosition="center" bgSize="cover" />
+      <SmokeCraftOwnerHeroBackground assetKey="ownerConnectionsHero" label="Fellow cigar enthusiasts connecting in a lounge" bgPosition="center" bgSize="cover" />
+      <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🔗</div>
           <div>

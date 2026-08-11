@@ -9,7 +9,7 @@ import {
   GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 /**
  * Second Humidor Match — /smokecraft/second-humidor-match (supporting)
@@ -49,8 +49,8 @@ export default function SecondHumidorMatch() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="ownerSecondHumidorMatchHero" label="A curated humidor of premium cigars" bgPosition="center top" bgSize="cover" />
+      <SmokeCraftOwnerHeroBackground assetKey="ownerSecondHumidorMatchHero" label="A curated humidor of premium cigars" bgPosition="center top" bgSize="cover" />
+      <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🚬</div>
           <div>

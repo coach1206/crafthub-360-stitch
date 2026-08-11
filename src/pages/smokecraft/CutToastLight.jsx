@@ -8,7 +8,7 @@ import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
 import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
 import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 import {
   GOLD,
   GOLD_DIM,
@@ -181,8 +181,8 @@ export default function CutToastLight({ onBack, onComplete } = {}) {
   return (
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
-        <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="ownerCutToastLightHero" label="Cutting, toasting, and lighting a cigar" bgPosition="center" bgSize="cover" />
+        <SmokeCraftOwnerHeroBackground assetKey="ownerCutToastLightHero" label="Cutting, toasting, and lighting a cigar" bgPosition="center" bgSize="cover" />
+        <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>✂️</div>
             <div>

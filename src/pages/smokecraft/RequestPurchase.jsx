@@ -10,7 +10,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 /**
  * Request / Purchase — /smokecraft/request-purchase (supporting)
@@ -151,10 +151,10 @@ export default function RequestPurchase() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={pageShellStyle}>
+      <SmokeCraftOwnerHeroBackground assetKey="ownerRequestPurchaseHero" label="Cigars, whiskey, and lounge companions" bgPosition="center top" bgSize="cover" />
+      <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
         {/* Self-QA fix: "center" clipped the top of the "YOUR CIGAR" title —
             shifted to top-anchored so the full title is visible. */}
-        <SmokeCraftHeroCrop assetKey="ownerRequestPurchaseHero" label="Cigars, whiskey, and lounge companions" bgPosition="center top" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🛎️</div>
           <div>

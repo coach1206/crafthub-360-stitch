@@ -7,7 +7,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { VISIT_STRUCTURE } from '../../constants/session.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 import {
   GOLD,
   GOLD_DIM,
@@ -249,12 +249,12 @@ export default function Identity() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={pageShellStyle}>
+      <SmokeCraftOwnerHeroBackground assetKey="ownerIdentityHero" label="A man enjoying a cigar in a premium lounge" bgPosition="center" bgSize="cover" />
+      <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
         {/* Owner's identity hero is a full baked-composition mockup (its own
             sidebar/form/buttons) — cropped to show only the clean man-with-
             cigar photographic region in the upper-right, same "Category B"
             crop-window technique this component already exists for. */}
-        <SmokeCraftHeroCrop assetKey="ownerIdentityHero" label="A man enjoying a cigar in a premium lounge" bgPosition="center" bgSize="cover" />
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{
             width: 58,

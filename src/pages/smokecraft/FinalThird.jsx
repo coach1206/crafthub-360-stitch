@@ -12,7 +12,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 /**
  * Final Third — /smokecraft/final-third (Session 16/17/18)
@@ -265,8 +265,8 @@ export default function FinalThird({ onBack, onComplete } = {}) {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="ownerFinalThirdHero" label="A cigar resting in an ashtray beside chocolate and coffee" bgPosition="center 30%" bgSize="cover" />
+      <SmokeCraftOwnerHeroBackground assetKey="ownerFinalThirdHero" label="A cigar resting in an ashtray beside chocolate and coffee" bgPosition="center 30%" bgSize="cover" />
+      <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 40 }}>🏁</div>
           <div>

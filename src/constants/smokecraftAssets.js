@@ -132,20 +132,28 @@ export const SC_ASSETS = {
   // photographic region because it sits too close to the baked UI, so
   // these point at derived crops (sharp-extracted, same source pixels,
   // no filters/edits) containing only the clean photography.
+  // Second self-QA pass (full-viewport background pass): under the new
+  // full-height treatment, 10 more of the 14 source photos turned out to
+  // have a large decorative title baked directly into the image itself
+  // (e.g. "FINAL THIRD", "SCOREBOARD", "PAIRING RECOMMENDATIONS") — a
+  // strip-crop hid this by accident, but full-bleed exposed it, and it
+  // duplicated the real on-screen title (rule-9 violation). Same fix as
+  // Identity/Seed & Soil above: derived sharp crops, same source pixels,
+  // windowed to the clean photographic region only, no baked text.
   ownerIdentityHero:              `${OWNER}/01-identity-hero-crop.jpg`,
   ownerSeedSoilHero:               `${OWNER}/02-seed-soil-hero-crop.jpg`,
   ownerFormatHero:                 `${OWNER}/03-format-hero.jpg`,
   ownerCutToastLightHero:          `${OWNER}/04-cut-toast-light-hero.jpg`,
-  ownerFirstThirdHero:             `${OWNER}/05-first-third-hero.jpg`,
-  ownerSecondThirdHero:            `${OWNER}/06-second-third-hero.jpg`,
-  ownerFinalThirdHero:             `${OWNER}/07-final-third-hero.jpg`,
-  ownerScorecardHero:              `${OWNER}/08.%20Scorecard.png`,
-  ownerRequestPurchaseHero:        `${OWNER}/09-request-purchase-hero.jpg`,
-  ownerPairingRecommendationsHero: `${OWNER}/10-pairing-recommendations-hero.jpg`,
-  ownerPassportStampHero:          `${OWNER}/11-passport-stamp-hero.jpg`,
-  ownerConnectionsHero:            `${OWNER}/12-connections-hero.jpg`,
-  ownerRewardsHero:                `${OWNER}/13-rewards-hero.jpg`,
-  ownerSecondHumidorMatchHero:     `${OWNER}/14-second-humidor-match-hero.jpg`,
+  ownerFirstThirdHero:             `${OWNER}/05-first-third-hero-crop.jpg`,
+  ownerSecondThirdHero:            `${OWNER}/06-second-third-hero-crop.jpg`,
+  ownerFinalThirdHero:             `${OWNER}/07-final-third-hero-crop.jpg`,
+  ownerScorecardHero:              `${OWNER}/08-scorecard-hero-crop.jpg`,
+  ownerRequestPurchaseHero:        `${OWNER}/09-request-purchase-hero-crop.jpg`,
+  ownerPairingRecommendationsHero: `${OWNER}/10-pairing-recommendations-hero-crop.jpg`,
+  ownerPassportStampHero:          `${OWNER}/11-passport-stamp-hero-crop.jpg`,
+  ownerConnectionsHero:            `${OWNER}/12-connections-hero-crop.jpg`,
+  ownerRewardsHero:                `${OWNER}/13-rewards-hero-crop.jpg`,
+  ownerSecondHumidorMatchHero:     `${OWNER}/14-second-humidor-match-hero-crop.jpg`,
 
   // S10 — Request Purchase — raw full composition takes precedence
   requestPurchase:     `${RAW}/REQUEST%20PURCHASE.png`,

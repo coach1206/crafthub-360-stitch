@@ -19,7 +19,7 @@ import {
   cardStyle,
   sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 const ENRICHMENT_5 = getEducationalEnrichment(5)
 
@@ -172,8 +172,8 @@ export default function Format({ onBack, onComplete } = {}) {
   return (
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
-        <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="ownerFormatHero" label="A cigar and lighter, ready to smoke" bgPosition="center" bgSize="cover" />
+        <SmokeCraftOwnerHeroBackground assetKey="ownerFormatHero" label="A cigar and lighter, ready to smoke" bgPosition="center" bgSize="cover" />
+        <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>📏</div>
             <div>

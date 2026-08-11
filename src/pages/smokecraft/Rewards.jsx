@@ -13,7 +13,7 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 import { fetchPlayerState } from '../../services/smokecraft/playerStateApiClient.js'
 import { heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -400,8 +400,8 @@ export default function Rewards({ onBack, onComplete } = {}) {
   if (mode === 'rewards') {
     return (
       <SmokeCraftScreenShell mode="live" status="ready">
-        <div style={pageShellStyle}>
-          <SmokeCraftHeroCrop assetKey="ownerRewardsHero" label="A golden box of premium cigars" bgPosition="center" bgSize="cover" />
+        <SmokeCraftOwnerHeroBackground assetKey="ownerRewardsHero" label="A golden box of premium cigars" bgPosition="center" bgSize="cover" />
+        <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40 }}>🏆</div>
             <div>

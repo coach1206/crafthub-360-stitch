@@ -13,7 +13,7 @@ import {
   GOLD, GOLD_DIM, CREAM, BORDER, GLASS,
   heroBannerStyle, pageShellStyle, cardStyle, sectionLabelStyle,
 } from '../../constants/smokecraftLiveScreenTokens.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 
 const ENRICHMENT_23 = getEducationalEnrichment(23)
 
@@ -177,8 +177,8 @@ export default function PassportStamp({ onBack, onComplete } = {}) {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-      <div style={pageShellStyle}>
-        <SmokeCraftHeroCrop assetKey="ownerPassportStampHero" label="A SmokeCraft 360 passport and earned stamps" bgPosition="center top" bgSize="cover" />
+      <SmokeCraftOwnerHeroBackground assetKey="ownerPassportStampHero" label="A SmokeCraft 360 passport and earned stamps" bgPosition="center top" bgSize="cover" />
+      <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
         <div style={heroBannerStyle}>
           <div aria-hidden="true" style={{ fontSize: 44 }}>🛂</div>
           <div>

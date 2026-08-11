@@ -9,7 +9,7 @@ import EducationalDetailPanel from '../../components/smokecraft/goldenBox/Educat
 import { fromCatalogRow, notYetConfigured } from '../../components/smokecraft/goldenBox/educationalContentContract.js'
 import { ensureIdentity } from '../../hooks/useGoldenBox.js'
 import * as ssApi from '../../services/smokecraft/seedSoilApiClient.js'
-import SmokeCraftHeroCrop from '../../components/smokecraft/SmokeCraftHeroCrop.jsx'
+import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
 import {
   GOLD,
   GOLD_DIM,
@@ -184,13 +184,8 @@ export default function SeedSoil() {
   return (
     <>
       <SmokeCraftScreenShell mode="live" status="ready">
-        <div style={pageShellStyle}>
-        {/* Owner's seed-soil hero is a full baked-composition mockup (its
-            own sidebar/cards/buttons) — cropped to show only the clean
-            seed-pod/seedling/soil photographic band across the top, same
-            "Category B" crop-window technique this component already
-            exists for. */}
-        <SmokeCraftHeroCrop assetKey="ownerSeedSoilHero" label="Tobacco seed pods, seedlings, and soil layers" bgPosition="center" bgSize="cover" />
+        <SmokeCraftOwnerHeroBackground assetKey="ownerSeedSoilHero" label="Tobacco seed pods, seedlings, and soil layers" bgPosition="center" bgSize="cover" />
+        <div style={{ ...pageShellStyle, position: 'relative', zIndex: 2 }}>
           <div style={heroBannerStyle}>
             <div aria-hidden="true" style={{ fontSize: 40, lineHeight: 1 }}>🌱</div>
             <div>
