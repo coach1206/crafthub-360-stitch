@@ -23,18 +23,19 @@ further layer of supplemental/peripheral pages (venue commerce/cart/checkout,
 compliance, leaderboard, account, and others) — see doc 03 for the full
 inventory.
 
-## This package's 8 documents
+## This package's 9 documents
 
 | # | File | What it's for |
 |---|---|---|
 | 1 | `01-MAIN_UI_DESIGNER_HANDOFF.md` (this file) | Orientation and index |
-| 2 | `02-CANONICAL_JOURNEY.md` | The locked 27-session / 6-phase spine a guest actually walks, in order |
+| 2 | `02-CANONICAL_JOURNEY.md` | The locked 27-session / 6-phase spine a guest actually walks, in order, plus explicit coverage of all 46 required curriculum topics |
 | 3 | `03-ROUTE_MAP.md` | Every `/smokecraft/*` route registered in `src/App.jsx`, grouped by subsystem |
 | 4 | `04-SCREEN_TO_STAGE_MAP.md` | Which screen file implements which spine session / supporting module / phase |
 | 5 | `05-INTEGRATION_MAP.md` | What was pulled onto this branch from where, and why (frontend, backend, DB) |
 | 6 | `06-VISUAL_BASELINE.md` | Where the current visual proof lives and what it shows |
 | 7 | `07-STATUS_PROOF.md` | Consolidated pass/fail state of every verification run against this branch |
 | 8 | `08-HANDOFF_CHECKLIST.md` | Checklist for the next person picking this up |
+| 9 | `09-INTEGRATIONS_AND_TOUCHPOINTS.md` | POS360, E.A.T., Passport/Rewards/Collections/Challenges, and guest-to-staff handoff — every real touchpoint and every honest gap |
 
 ## How to read this package
 
