@@ -23,7 +23,7 @@ further layer of supplemental/peripheral pages (venue commerce/cart/checkout,
 compliance, leaderboard, account, and others) — see doc 03 for the full
 inventory.
 
-## This package's 9 documents
+## This package's 10 documents
 
 | # | File | What it's for |
 |---|---|---|
@@ -36,6 +36,7 @@ inventory.
 | 7 | `07-STATUS_PROOF.md` | Consolidated pass/fail state of every verification run against this branch |
 | 8 | `08-HANDOFF_CHECKLIST.md` | Checklist for the next person picking this up |
 | 9 | `09-INTEGRATIONS_AND_TOUCHPOINTS.md` | POS360, E.A.T., Passport/Rewards/Collections/Challenges, and guest-to-staff handoff — every real touchpoint and every honest gap |
+| 10 | `10-DESIGNER_CHANGE_BOUNDARIES.md` | What a UI designer may and must not change on this branch, with concrete file/pattern anchors |
 
 ## How to read this package
 
