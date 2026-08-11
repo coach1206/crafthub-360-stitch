@@ -9,6 +9,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getSmokePOSHandoff, markSmokePurchaseVerified, markSmokePurchaseRejected, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { loadSmokePurchaseIntents, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
 import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
+import ReturnToGuestButton from '../../components/staffhandoff/ReturnToGuestButton.jsx'
 
 const TABLE_PHOTO_BY_INDEX = [
   '/assets/pos3/reference-crops/table-05.png',
@@ -122,11 +123,14 @@ export default function POS3Home() {
             <div style={{ fontSize: 21, fontWeight: 800, color: L_NAVY, letterSpacing: '-0.01em' }}>POS360 <span style={{ fontWeight: 600 }}>System</span></div>
             <div style={{ fontSize: 11, fontWeight: 700, color: L_GOLD, marginTop: 1 }}>Powered by NOVEE OS</div>
           </div>
-          <div style={{ position: 'relative', width: 38, height: 38, borderRadius: '50%', background: '#f1efe9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 18, color: L_NAVY }}>notifications</span>
-            {incoming.length > 0 && (
-              <span style={{ position: 'absolute', top: -4, right: -4, background: '#c43c3c', color: '#fff', borderRadius: 999, fontSize: 10, fontWeight: 700, padding: '1px 5px', minWidth: 16, textAlign: 'center' }}>{incoming.length}</span>
-            )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ReturnToGuestButton variant="light" />
+            <div style={{ position: 'relative', width: 38, height: 38, borderRadius: '50%', background: '#f1efe9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 18, color: L_NAVY }}>notifications</span>
+              {incoming.length > 0 && (
+                <span style={{ position: 'absolute', top: -4, right: -4, background: '#c43c3c', color: '#fff', borderRadius: 999, fontSize: 10, fontWeight: 700, padding: '1px 5px', minWidth: 16, textAlign: 'center' }}>{incoming.length}</span>
+              )}
+            </div>
           </div>
         </div>
         <div style={{ marginTop: 10, fontSize: 14, fontWeight: 700, color: L_NAVY }}>Good Evening, Alex! 👋</div>

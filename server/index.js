@@ -74,7 +74,8 @@ validateEnv()
 
 const app    = express()
 const PORT   = parseInt(process.env.PORT || '3001', 10)
-const IS_PROD = process.env.NODE_ENV === 'production'
+const IS_PROD = process.env.NODE_ENV === 'production' && process.env.VERCEL_ENV !== 'preview'
+const IS_VERCEL = process.env.VERCEL === '1'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST = path.resolve(__dirname, '../dist')
 
@@ -259,27 +260,29 @@ app.use((_req, res) => {
 app.use(errorHandler)
 
 // ── Start ─────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', async () => {
-  console.log(`\n🥃 NOVEE OS Backend — port ${PORT}`)
-  console.log(`   Health:      http://localhost:${PORT}/api/health`)
-  console.log(`   Auth:        http://localhost:${PORT}/api/auth/me`)
-  console.log(`   Admin:       http://localhost:${PORT}/api/admin/my-permissions`)
-  console.log(`   Mentor:      http://localhost:${PORT}/api/mentor/profile`)
-  console.log(`   Developer:   http://localhost:${PORT}/api/developer/health`)
-  console.log(`   POS3 Sync:   http://localhost:${PORT}/api/pos3/sync/status`)
-  console.log(`   Mode:        ${process.env.NODE_ENV || 'development'}\n`)
+if (!IS_VERCEL) {
+  app.listen(PORT, '0.0.0.0', async () => {
+    console.log(`\n🥃 NOVEE OS Backend — port ${PORT}`)
+    console.log(`   Health:      http://localhost:${PORT}/api/health`)
+    console.log(`   Auth:        http://localhost:${PORT}/api/auth/me`)
+    console.log(`   Admin:       http://localhost:${PORT}/api/admin/my-permissions`)
+    console.log(`   Mentor:      http://localhost:${PORT}/api/mentor/profile`)
+    console.log(`   Developer:   http://localhost:${PORT}/api/developer/health`)
+    console.log(`   POS3 Sync:   http://localhost:${PORT}/api/pos3/sync/status`)
+    console.log(`   Mode:        ${process.env.NODE_ENV || 'development'}\n`)
 
-  // Auto-seed prototype users in development only
-  if (!IS_PROD) {
-    await seedPrototypeUsers()
-    await seedMentorUsers()
-  }
+    // Auto-seed prototype users in development only
+    if (!IS_PROD) {
+      await seedPrototypeUsers()
+      await seedMentorUsers()
+    }
 
-  // POS 3 Auto-Sync — starts after DB seed is ready (non-blocking)
-  startPOS3AutoSync('prototype')
+    // POS 3 Auto-Sync — starts after DB seed is ready (non-blocking)
+    startPOS3AutoSync('prototype')
 
-  // Auto-Reset Scheduler — loads persisted schedule and arms the cron job
-  initScheduler()
-})
+    // Auto-Reset Scheduler — loads persisted schedule and arms the cron job
+    initScheduler()
+  })
+}
 
 export default app

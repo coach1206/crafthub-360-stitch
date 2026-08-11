@@ -1,0 +1,57 @@
+{
+  "eat": {
+    "screenCount": 16,
+    "routes": [
+      "/eat",
+      "/eat/command-hub",
+      "/eat/pos-control",
+      "/eat/operations",
+      "/eat/inventory",
+      "/eat/reorders",
+      "/eat/staff",
+      "/eat/sections",
+      "/eat/kitchen",
+      "/eat/bar",
+      "/eat/humidor",
+      "/eat/data",
+      "/eat/reports",
+      "/eat/device-mode",
+      "/eat/media",
+      "/eat/settings"
+    ],
+    "status": "PARTIAL_LOCAL_DATA"
+  },
+  "pos360": {
+    "screenCount": 14,
+    "routes": [
+      "/pos3",
+      "/pos3/handheld",
+      "/pos3/tables",
+      "/pos3/venue-tables",
+      "/pos3/venue-systems",
+      "/pos3/orders",
+      "/pos3/checkout",
+      "/pos3/kitchen",
+      "/pos3/bar",
+      "/pos3/humidor",
+      "/pos3/inventory",
+      "/pos3/integrations",
+      "/pos3/settings",
+      "/pos"
+    ],
+    "status": "PARTIAL_LOCAL_DATA_WITH_LEGACY_PROVIDER_SYNC"
+  },
+  "integrations": {
+    "clover": "PARTIAL",
+    "toast": "PARTIAL",
+    "square": "PARTIAL",
+    "lightspeed": "NOT_CONNECTED",
+    "shopify": "NOT_CONNECTED",
+    "stripe": "NOT_CONNECTED",
+    "other": "Manual/provider-neutral mode is SIMULATED; KDS and inventory are local."
+  },
+  "deadRoutes": {
+    "fixed": ["/staff/pin"],
+    "remainingKnown": []
+  }
+}

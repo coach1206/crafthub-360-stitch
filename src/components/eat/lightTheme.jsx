@@ -5,6 +5,7 @@
  * other POS3/E.A.T. screen and is not modified by this file.
  */
 import { useNavigate, NavLink } from 'react-router-dom'
+import ReturnToGuestButton from '../staffhandoff/ReturnToGuestButton.jsx'
 
 export const L_NAVY = '#13294b'
 export const L_GOLD = '#c9952c'
@@ -220,6 +221,7 @@ export function EatTopBar({ title, subtitle }) {
         <LightPill tone="green">System Online</LightPill>
         <LightPill tone="gold">Backend Pending — Local Data</LightPill>
         <span style={{ fontSize: 12, color: '#6b7385' }}>Jordan Smith · Floor Supervisor</span>
+        <ReturnToGuestButton variant="light" />
       </div>
     </div>
   )

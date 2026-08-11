@@ -1,0 +1,67 @@
+{
+  "auditDate": "2026-08-11",
+  "baseUrl": "http://127.0.0.1:26301",
+  "viewport": {
+    "width": 1180,
+    "height": 820
+  },
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "eat-command",
+      "route": "/eat",
+      "status": "PASS",
+      "expectedText": "E.A.T. SYSTEM",
+      "url": "http://127.0.0.1:26301/eat",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/eat-command.png"
+    },
+    {
+      "id": "eat-operations",
+      "route": "/eat/operations",
+      "status": "PASS",
+      "expectedText": "E.A.T. Operations",
+      "url": "http://127.0.0.1:26301/eat/operations",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/eat-operations.png"
+    },
+    {
+      "id": "pos3-home",
+      "route": "/pos3",
+      "status": "PASS",
+      "expectedText": "POS360",
+      "url": "http://127.0.0.1:26301/pos3",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/pos3-home.png"
+    },
+    {
+      "id": "pos3-tables",
+      "route": "/pos3/tables",
+      "status": "PASS",
+      "expectedText": "Tables",
+      "url": "http://127.0.0.1:26301/pos3/tables",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/pos3-tables.png"
+    },
+    {
+      "id": "pos3-checkout",
+      "route": "/pos3/checkout",
+      "status": "PASS",
+      "expectedText": "Checkout",
+      "url": "http://127.0.0.1:26301/pos3/checkout",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/pos3-checkout.png"
+    },
+    {
+      "id": "staff-pin-bridge",
+      "route": "/staff/pin?target=pos360",
+      "status": "PASS",
+      "expectedText": "Staff Handoff or Open in POS 3",
+      "url": "http://127.0.0.1:26301/staff/pin?target=pos360",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/staff-pin-bridge.png"
+    },
+    {
+      "id": "return-to-guest",
+      "route": "/pos3",
+      "status": "PASS",
+      "expectedText": "/smokecraft/visit-complete",
+      "url": "http://127.0.0.1:26301/smokecraft/visit-complete",
+      "screenshot": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/eat-pos360-handoff/browser-proof/return-to-guest.png"
+    }
+  ]
+}

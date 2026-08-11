@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSecurity } from '../../context/SecurityContext.jsx'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import StaffHandoffLoginModal from './StaffHandoffLoginModal.jsx'
 import RippleDissolve from './RippleDissolve.jsx'
 import { buildHandoffPayload, saveHandoff, saveStaffSession } from '../../services/staffHandoffService.js'
+import { saveGuestResumeState, saveHandoffMeta } from '../../services/staffHandoffResumeService.js'
 
 const STAFF_ROLES = new Set(['staff', 'manager', 'admin', 'founder_level_0'])
 
@@ -29,8 +30,9 @@ const STAFF_ROLES = new Set(['staff', 'manager', 'admin', 'founder_level_0'])
  * startOpen + onClose: lets a caller (e.g. CraftHub) drive this component
  * as a controlled modal instead of rendering its own floating dot.
  */
-export default function StaffHandoffButton({ tableId = null, allowedDestinations = ['pos'], startOpen = false, onClose }) {
+export default function StaffHandoffButton({ tableId = null, allowedDestinations = ['pos'], startOpen = false, onClose, resumeRouteOverride = null }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const { role, setRole } = useSecurity()
   const { session } = useGuestSession()
 
@@ -52,8 +54,23 @@ export default function StaffHandoffButton({ tableId = null, allowedDestinations
 
   function commitHandoff(dest) {
     setDestination(dest)
+    const resumeRoute = resumeRouteOverride || location.pathname
     const payload = buildHandoffPayload(session, { tableId, destination: dest })
     saveHandoff(payload)
+    saveGuestResumeState(session, {
+      currentRoute: resumeRoute,
+      currentSessionId: session?.sessionId || session?.guestId || null,
+      venueId: session?.venueId || session?.smokeCraft?.venueId || 'novee-grand-lounge',
+      tabletId: session?.deviceId || null,
+      tableId,
+      orderId: session?.smokeCraft?.purchaseRequest?.id || null,
+      handoffTarget: dest === 'eat' ? 'eat' : 'pos360',
+    })
+    saveHandoffMeta({
+      target: dest === 'eat' ? 'eat' : 'pos360',
+      handoffId: payload.sessionId || null,
+      startRoute: resumeRoute,
+    })
     setMode('transition')
   }
 
@@ -188,7 +205,10 @@ export default function StaffHandoffButton({ tableId = null, allowedDestinations
     <button
       onClick={() => (alreadyStaff ? startHandoff(null) : setMode('login'))}
       style={{
-        position: 'fixed', bottom: 14, right: 14, zIndex: 60,
+        position: startOpen ? 'static' : 'fixed',
+        bottom: startOpen ? undefined : 14,
+        right: startOpen ? undefined : 14,
+        zIndex: 60,
         display: 'flex', alignItems: 'center', gap: 8,
         height: 44, padding: '0 18px', borderRadius: 22,
         background: 'rgba(233,193,118,0.12)', border: '1px solid rgba(233,193,118,0.4)',
@@ -197,7 +217,7 @@ export default function StaffHandoffButton({ tableId = null, allowedDestinations
         boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
       }}
     >
-      {alreadyStaff ? 'Open in POS 3' : 'Accept Staff Handoff'}
+      {alreadyStaff ? `Open in ${allowedDestinations[0] === 'eat' ? 'E.A.T.' : 'POS 3'}` : 'Accept Staff Handoff'}
     </button>
   )
 }

@@ -3,8 +3,33 @@
  * Handles venue profile, menu, orders, partner attribution, Money Bridge, revenue reports.
  */
 import { isDbAvailable, query } from '../db/connection.js'
+import { VENUES as EXISTING_VENUE_REGISTRY } from '../../src/data/venues.js'
 
 const TAX_RATE = 0.085
+const IS_VERCEL_PREVIEW = process.env.VERCEL_ENV === 'preview'
+
+function normalizeVenue(v) {
+  return {
+    id: v.venue_id || v.venueId || v.id,
+    name: v.name || v.venueName,
+    type: v.venue_type || v.type || v.tier || 'cigar_lounge',
+    city: v.city || null,
+    state: v.state || null,
+    address: v.address || null,
+    capacity: v.capacity || null,
+  }
+}
+
+function sendExistingVenueRegistry(res, { storageMode, reason }) {
+  return res.json({
+    ok: true,
+    localPreview: storageMode !== 'postgres',
+    storageMode,
+    source: 'existing_venue_registry',
+    reason,
+    venues: EXISTING_VENUE_REGISTRY.map(normalizeVenue).filter(v => v.id && v.name),
+  })
+}
 
 function roundMoney(n) { return Math.round((n + Number.EPSILON) * 100) / 100 }
 
@@ -58,8 +83,9 @@ function calculateMoneyBridge(items) {
 // Real, guest-facing venue directory for SmokeCraft's Venue Selection screen
 // (Venue Data Source pass). Lists active venues from the real `venues` table
 // (server/db/migrations/010_new_roles_and_tables.sql) — never sample/mock
-// data. No DB configured -> localPreview:true with an empty list (an honest
-// "no venues connected" state), never fabricated venue records.
+// data. Vercel preview can run without the production Postgres attachment,
+// but it must still expose the repo's existing venue registry so the owner
+// acceptance journey is navigable and never receives the SPA HTML fallback.
 export async function listVenues(req, res) {
   if (isDbAvailable()) {
     try {
@@ -72,20 +98,24 @@ export async function listVenues(req, res) {
       return res.json({
         ok: true,
         storageMode: 'postgres',
-        venues: rows.map(r => ({
-          id: r.venue_id,
-          name: r.name,
-          type: r.venue_type,
-          city: r.city,
-          state: r.state,
-          address: r.address,
-          capacity: r.capacity,
-        })),
+        venues: rows.map(normalizeVenue),
       })
     } catch (err) {
       console.error('[smokecraftVenueCommerce] listVenues DB error:', err.message)
+      if (IS_VERCEL_PREVIEW) {
+        return sendExistingVenueRegistry(res, {
+          storageMode: 'vercel_preview_registry',
+          reason: 'postgres_query_failed_in_preview',
+        })
+      }
       return res.status(500).json({ ok: false, error: 'venue_query_failed' })
     }
+  }
+  if (IS_VERCEL_PREVIEW) {
+    return sendExistingVenueRegistry(res, {
+      storageMode: 'vercel_preview_registry',
+      reason: 'database_not_attached_to_preview',
+    })
   }
   res.json({ ok: true, localPreview: true, storageMode: 'memory_fallback', venues: [] })
 }

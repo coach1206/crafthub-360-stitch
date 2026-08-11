@@ -4,7 +4,8 @@
  * issues in production. Never exposes secret values in log output.
  */
 
-const isDev  = process.env.NODE_ENV !== 'production'
+const isPreview = process.env.VERCEL_ENV === 'preview'
+const isDev  = process.env.NODE_ENV !== 'production' || isPreview
 const isProd = !isDev
 
 export function validateEnv() {

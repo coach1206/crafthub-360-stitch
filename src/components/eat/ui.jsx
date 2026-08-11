@@ -5,6 +5,7 @@
  * E.A.T. back-office surface.
  */
 import { NavLink, useNavigate } from 'react-router-dom'
+import ReturnToGuestButton from '../staffhandoff/ReturnToGuestButton.jsx'
 
 export const GOLD = '#d4a843'
 export const NAVY = '#0f1419'
@@ -150,6 +151,7 @@ export function TopBar({ system = 'EAT', title, subtitle }) {
         <Pill label="Backend Pending — Local Data" tone="pending" />
         <span style={{ fontSize: 12, color: '#aab3bf' }}>Jordan Smith · Floor Supervisor</span>
         <EatBadge />
+        <ReturnToGuestButton />
         <button
           onClick={() => navigate('/crafthub')}
           style={{

@@ -1,0 +1,43 @@
+{
+  "auditDate": "2026-08-11",
+  "branch": "integration/smokecraft-main-candidate",
+  "status": "FAIL",
+  "reason": "Route and handoff gaps were repaired, but real payment, deployed preview, and full backend wiring acceptance criteria are not met.",
+  "routeChecks": {
+    "eatRoutesDocumented": 16,
+    "posRoutesDocumented": 14,
+    "legacyStaffPinRoute": "FIXED_BY_src/pages/StaffPinHandoff.jsx",
+    "returnToGuest": "PARTIAL_SESSIONSTORAGE_RESTORE_ROUTE_AVAILABLE"
+  },
+  "functionalChecks": {
+    "eatManagement": "PARTIAL_LOCAL_DATA",
+    "pos360Transaction": "PARTIAL_LOCAL_DATA",
+    "pos3Legacy": "PARTIAL_PROVIDER_SYNC_UI_EXISTS_ON_LEGACY_SURFACE",
+    "payment": "NOT_CONNECTED_FOR_REAL_CARD_PROVIDER",
+    "inventory": "PARTIAL_LOCAL_SIGNALS_GENERIC_BACKEND_TABLES_UNWIRED",
+    "kds": "SIMULATED_LOCAL_QUEUES",
+    "staff": "PARTIAL_AUTH_AND_UI_GATES_EXIST_LOCAL_HANDOFF",
+    "managementSync": "PARTIAL_FALLBACK_AWARE",
+    "returnToGuest": "PARTIAL_ROUTE_AND_PROGRESS_SNAPSHOT_SAVED"
+  },
+  "browserProof": {
+    "localBrowserRun": "PASS_TARGETED_ROUTES_1180x820",
+    "deployedPreviewRun": "BLOCKED_NO_PREVIEW_URL_OR_VERCEL_ACCESS_IN_WORKSPACE"
+  },
+  "proofPaths": {
+    "visual": [
+      "docs/visual-proof/eat-command-center-rendered.png",
+      "docs/visual-proof/eat-operations-rendered.png",
+      "docs/visual-proof/eat-sections-rendered.png",
+      "docs/visual-proof/pos3-handheld-rendered.png",
+      "docs/visual-proof/pos3-tables-rendered.png",
+      "docs/visual-proof/pos3-checkout-rendered.png",
+      "public/proof/smokecraft-responsive-verification/003-primary-1180x820.png"
+    ],
+    "functional": [
+      "docs/eat-pos360-handoff/functional-proof.json",
+      "docs/eat-pos360-handoff/route-integration-matrix.json",
+      "docs/eat-pos360-handoff/browser-proof/browser-proof-results.json"
+    ]
+  }
+}

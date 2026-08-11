@@ -139,6 +139,7 @@ import Demo             from './pages/smokecraft/Demo.jsx'
 import Scan             from './pages/smokecraft/Scan.jsx'
 import FeatureFlagAdmin from './pages/smokecraft/FeatureFlagAdmin.jsx'
 import SignIn           from './pages/SignIn.jsx'
+import StaffPinHandoff from './pages/StaffPinHandoff.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
 import PassportHome        from './pages/passport/PassportHome.jsx'
@@ -257,6 +258,7 @@ export default function App() {
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
+            <Route path="staff/pin"      element={<StaffPinHandoff />} />
             <Route path="admin-login"   element={<AdminLogin />} />
             <Route path="founder-login" element={<FounderLogin />} />
             <Route path="mentor-login"  element={<MentorLogin />} />
