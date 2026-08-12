@@ -1,162 +1,104 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDemoMode } from "../context/DemoModeContext.jsx";
 import StaffHandoffButton from "../components/staffhandoff/StaffHandoffButton.jsx";
 
-// ROW 1 — public guest-facing craft modules + Passport Connections.
-// POS 3 and E.A.T. System are intentionally excluded: they are staff/manager
-// systems reached only through the Staff Handoff PIN flow (see ROW 2).
-const ROW1_MODULES = [
-  { id: "smokecraft", title: "SmokeCraft 360", desc: "Cigar pairing, mentor-guided tasting, flavor notes, score flow.", icon: "chair", action: "route", route: "/smokecraft", image: "/smokecraft.jpg", status: "active" },
-  { id: "pourcraft", title: "PourCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "liquor", action: "route", route: "/pourcraft", image: "/pourcraft.jpg", status: "coming-soon" },
-  { id: "winecraft", title: "WineCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "wine_bar", action: "route", route: "/winecraft", image: "/winecraft.jpg", status: "coming-soon" },
-  { id: "beercraft", title: "BeerCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "sports_bar", action: "route", route: "/beercraft", image: "/beercraft.jpg", status: "coming-soon" },
-  { id: "passport-connections", title: "360 Passport Connections", desc: "Guest identity, stamps, networking, experience history.", icon: "menu_book", action: "route", route: "/passport/connections", image: "/passport.jpg", status: "active" },
+const GOLD = "#d8b35f";
+const CREAM = "#f6efe1";
+
+const APPROVED_ASSETS = {
+  landing: "/assets/pos360-reference/candidates/candidate-09-crafthub-explained.png",
+  explained: "/assets/pos360-reference/candidates/candidate-09-crafthub-explained.png",
+  storyboard: "/assets/pos360-reference/candidates/candidate-11-crafthub-storyboard.png",
+  pos: "/assets/pos3/cropped/POS 3.11.png",
+  eat: "/assets/eat/cropped/EAT system  UPDATE.png",
+  smoke: "/assets/smokecraft-reference/approved/smokecraft-guest-pass.png",
+  passport: "/assets/smokecraft-reference/approved/smokecraft-passport-connection.png",
+};
+
+const SYSTEM_SPINE = [
+  { label: "NOVEE OS", copy: "Intelligence layer", icon: "hub" },
+  { label: "CraftHub 360", copy: "Venue table experience", icon: "chair" },
+  { label: "SmokeCraft 360", copy: "Active MVP2 craft journey", icon: "local_fire_department" },
+  { label: "Passport / Connections", copy: "Identity, stamps, relationships", icon: "language" },
 ];
 
-// ROW 2 — Staff Handoff is the only bridge to POS 3 / E.A.T. System, and
-// DayOne360 Travel opens the external site directly.
-const ROW2_MODULES = [
-  { id: "staff-handoff", title: "Staff Handoff", desc: "Staff PIN access into POS 3 or E.A.T. System.", icon: "badge", action: "staff-handoff", image: null },
-  { id: "dayone360", title: "DayOne360 Travel", desc: "Travel placement, venue offers, destination experiences.", icon: "flight_takeoff", action: "external", route: "https://dayone360.com", image: "/crafthub-gold.jpg" },
-];
-
-const SIGNALS = [
-  { label: "Active Tables", value: "12" },
-  { label: "Staff Handoffs", value: "3" },
-  { label: "POS / Inventory", value: "Nominal" },
-  { label: "E.A.T. Alerts", value: "1" },
-  { label: "Kitchen", value: "On Track" },
-  { label: "Bar", value: "Stocked" },
-  { label: "Humidor", value: "62°F / 70%" },
-  { label: "Events", value: "2 Tonight" },
+const STAFF_SPINE = [
+  { label: "Staff Handoff", copy: "PIN-gated bridge", icon: "badge" },
+  { label: "POS3 / POS360", copy: "Tables, orders, checkout", icon: "point_of_sale" },
+  { label: "E.A.T.", copy: "Operations and management sync", icon: "dashboard" },
 ];
 
 export default function CraftHub() {
   const navigate = useNavigate();
-  const cardRefs = useRef([]);
   const { enterDemoMode } = useDemoMode();
   const [staffHandoffOpen, setStaffHandoffOpen] = useState(false);
 
-  useEffect(() => {
-    const onMove = (e) => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const rx = (e.clientX - cx) / cx;
-      const ry = (e.clientY - cy) / cy;
-      cardRefs.current.forEach((card) => {
-        if (!card) return;
-        const img = card.querySelector(".parallax-bg");
-        if (img) img.style.transform = `scale(1.1) translate(${rx * 10}px, ${ry * 10}px)`;
-      });
-    };
-    document.addEventListener("mousemove", onMove);
-    return () => document.removeEventListener("mousemove", onMove);
-  }, []);
+  function startSmokeCraft() {
+    navigate("/smokecraft");
+  }
 
   function handleDemoMode() {
     enterDemoMode();
     navigate("/smokecraft");
   }
 
-  function handleTileClick(mod) {
-    if (mod.action === "staff-handoff") { setStaffHandoffOpen(true); return; }
-    if (mod.action === "external") { window.open(mod.route, "_blank", "noopener,noreferrer"); return; }
-    navigate(mod.route);
-  }
-
-  function renderTile(mod, idx) {
-    return (
-      <div
-        key={mod.id}
-        ref={(el) => (cardRefs.current[idx] = el)}
-        onClick={() => handleTileClick(mod)}
-        className="group relative h-[300px] cursor-pointer overflow-hidden rounded-2xl border border-[#d4af37]/15 shadow-2xl transition-all duration-500 hover:border-[#d4af37]/50"
-      >
-        <div className="absolute inset-0 z-0">
-          {mod.image ? (
-            <img
-              src={mod.image}
-              alt={mod.title}
-              className={`parallax-bg h-full w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-125 ${mod.status === "coming-soon" ? "grayscale-[0.5] brightness-[0.55]" : ""}`}
-            />
-          ) : (
-            <div className="h-full w-full bg-gradient-to-br from-[#1a1410] via-[#0a0805] to-black" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-        </div>
-
-        {mod.status === "coming-soon" && (
-          <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full border border-[#d4af37]/40 bg-black/70 px-3 py-1 backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]">Coming Soon</span>
-          </div>
-        )}
-
-        <div className="absolute bottom-0 left-0 z-10 flex w-full items-end justify-between gap-4 p-6">
-          <div>
-            <h3 className="text-xl font-bold text-[#d4af37]">{mod.title}</h3>
-            <p className="mt-1 max-w-xs text-sm text-[#cbb98f]">{mod.desc}</p>
-          </div>
-          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border border-[#d4af37]/30 bg-black/40 transition-colors group-hover:bg-[#d4af37] group-hover:text-black">
-            <span className="material-symbols-outlined text-[#d4af37] group-hover:text-black">{mod.icon}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-[#0a0805] text-[#f1e6c8]">
-      {/* ── Header ──────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 w-full border-b border-[#d4af37]/20 bg-[#0a0805]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/")}
-              className="rounded-full border border-[#5b8fc9]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#9cc2e8] transition hover:bg-[#5b8fc9]/10"
-            >
+    <main style={{
+      minHeight: "100vh",
+      background: `linear-gradient(180deg, ${CREAM} 0%, #efe2ca 48%, #070504 48%, #070504 100%)`,
+      color: "#201610",
+      fontFamily: "Georgia, serif",
+    }}>
+      <header style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        minHeight: 76,
+        borderBottom: "1px solid rgba(166,116,43,0.25)",
+        background: "rgba(246,239,225,0.9)",
+        backdropFilter: "blur(18px)",
+      }}>
+        <div style={{
+          maxWidth: 1320,
+          margin: "0 auto",
+          padding: "16px 22px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+          flexWrap: "wrap",
+        }}>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <button type="button" onClick={() => navigate("/boot")} style={navButton("blue")}>
               Back to NOVEE OS
             </button>
-            <button
-              onClick={() => navigate("/home")}
-              className="rounded-full border border-[#5b8fc9]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#9cc2e8] transition hover:bg-[#5b8fc9]/10"
-            >
+            <button type="button" onClick={() => navigate("/home")} style={navButton("blue")}>
               Home
             </button>
           </div>
-          <h1 className="text-2xl font-bold uppercase tracking-[0.25em] text-[#d4af37]">CraftHub 360</h1>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => window.open("https://dayone360.com", "_blank", "noopener,noreferrer")}
-              className="hidden rounded-full border border-[#d4af37]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#d4af37] transition hover:bg-[#d4af37]/10 sm:inline-block"
-            >
+          <div style={{
+            color: "#8d5d1f",
+            fontSize: 26,
+            letterSpacing: "0.32em",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+          }}>
+            CraftHub 360
+          </div>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+            <button type="button" onClick={() => window.open("https://dayone360.com", "_blank", "noopener,noreferrer")} style={navButton()}>
               DayOne360 Travel
             </button>
-            <button
-              onClick={handleDemoMode}
-              className="rounded-full border border-[#d4af37]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#d4af37] transition hover:bg-[#d4af37]/10"
-            >
+            <button type="button" onClick={handleDemoMode} style={navButton()}>
               Demo Mode
             </button>
-            <button
-              onClick={() => navigate("/passport/connections")}
-              className="rounded-full border border-[#d4af37]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#d4af37] transition hover:bg-[#d4af37]/10"
-            >
+            <button type="button" onClick={() => navigate("/passport/connections")} style={navButton()}>
               360 Passport Connections
             </button>
           </div>
         </div>
       </header>
-
-      {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-12 text-center">
-        <h2 className="text-4xl font-bold uppercase tracking-wide text-[#f1e6c8] sm:text-5xl">CraftHub 360</h2>
-        <p className="mt-2 text-sm uppercase tracking-[0.3em] text-[#d4af37]">Venue Table Experience</p>
-        <p className="mx-auto mt-6 max-w-2xl text-base text-[#cbb98f]">
-          Guest craft experiences, Passport networking, staff handoff, and venue service flow.
-        </p>
-      </section>
 
       {staffHandoffOpen && (
         <StaffHandoffButton
@@ -166,74 +108,261 @@ export default function CraftHub() {
         />
       )}
 
-      {/* ── Module cards ───────────────────────────────────── */}
-      <main className="mx-auto max-w-7xl px-6 pb-20">
-        {/* ROW 1 — guest-facing craft modules + Passport Connections */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
-          {ROW1_MODULES.map(renderTile)}
-        </div>
-
-        {/* ROW 2 — Staff Handoff bridge + DayOne360 Travel */}
-        <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-8 sm:grid-cols-2">
-          {ROW2_MODULES.map((mod, idx) => renderTile(mod, ROW1_MODULES.length + idx))}
-        </div>
-
-        {/* ── Operational signals ────────────────────────────── */}
-        <div className="mt-16">
-          <h3 className="mb-6 text-center text-sm font-semibold uppercase tracking-[0.3em] text-[#d4af37]">
-            Venue Signals
-          </h3>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {SIGNALS.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-xl border border-[#d4af37]/15 bg-[#120f0a] p-4 text-center"
-              >
-                <p className="text-xs uppercase tracking-widest text-[#cbb98f]">{s.label}</p>
-                <p className="mt-2 text-lg font-bold text-[#d4af37]">{s.value}</p>
-              </div>
-            ))}
+      <section style={{
+        maxWidth: 1320,
+        margin: "0 auto",
+        padding: "34px 22px 42px",
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1.04fr) minmax(360px, 0.96fr)",
+        gap: 26,
+        alignItems: "stretch",
+      }} className="crafthub-live-hero">
+        <div style={{
+          border: "1px solid rgba(166,116,43,0.22)",
+          borderRadius: 24,
+          minHeight: 610,
+          overflow: "hidden",
+          position: "relative",
+          boxShadow: "0 24px 80px rgba(88,54,18,0.20)",
+          background: "#120b06",
+        }}>
+          <img
+            src={APPROVED_ASSETS.landing}
+            alt="Approved CraftHub 360 system hierarchy visual"
+            style={{ width: "100%", height: "100%", minHeight: 610, objectFit: "cover", display: "block" }}
+          />
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(90deg, rgba(0,0,0,0.62), rgba(0,0,0,0.12) 48%, rgba(246,239,225,0.05))",
+            pointerEvents: "none",
+          }} />
+          <div style={{ position: "absolute", left: 28, bottom: 28, maxWidth: 540 }}>
+            <div style={eyebrowStyle}>Current Handoff Baseline</div>
+            <h1 style={{ margin: "8px 0 10px", color: "#fff7dc", fontSize: 52, lineHeight: 1.02, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+              CraftHub 360
+            </h1>
+            <p style={{ margin: "0 0 20px", color: "rgba(255,247,220,0.82)", fontSize: 17, lineHeight: 1.6 }}>
+              The live venue table layer that sends guests into SmokeCraft, then hands the session to POS360 and E.A.T. through staff access.
+            </p>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <button type="button" onClick={startSmokeCraft} style={primaryButton}>
+                Start SmokeCraft
+              </button>
+              <button type="button" onClick={() => setStaffHandoffOpen(true)} style={secondaryButton}>
+                Staff Handoff
+              </button>
+            </div>
           </div>
         </div>
-      </main>
 
-      {/* ── Bottom action nav ──────────────────────────────── */}
-      {/* Labels/routes match their actual destination — Staff Handoff opens
-          the PIN-gated handoff picker, never the Passport route, and vice versa. */}
-      <nav className="fixed bottom-0 z-50 w-full border-t border-[#d4af37]/20 bg-[#0a0805]/95 backdrop-blur-2xl">
-        <div className="mx-auto flex h-[88px] max-w-4xl items-center justify-around px-4">
-          <button
-            onClick={() => navigate("/crafthub")}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">chair</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Enter CraftHub</span>
-          </button>
-          <button
-            onClick={() => setStaffHandoffOpen(true)}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">badge</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Staff Handoff</span>
-          </button>
-          <button
-            onClick={() => navigate("/passport/connections")}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">menu_book</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">360 Passport Connections</span>
-          </button>
-          <button
-            onClick={() => window.open("https://dayone360.com", "_blank", "noopener,noreferrer")}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">flight_takeoff</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">DayOne360 Travel</span>
-          </button>
+        <div style={{
+          display: "grid",
+          gridTemplateRows: "auto auto 1fr",
+          gap: 14,
+          minWidth: 0,
+        }}>
+          <section style={panelLight}>
+            <div style={eyebrowDark}>System Hierarchy</div>
+            <FlowRail items={SYSTEM_SPINE} />
+          </section>
+          <section style={panelDark}>
+            <div style={eyebrowStyle}>Staff Operations Path</div>
+            <FlowRail items={STAFF_SPINE} dark />
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 18 }}>
+              <button type="button" onClick={() => setStaffHandoffOpen(true)} style={primaryButton}>Open POS3 / E.A.T.</button>
+              <button type="button" onClick={() => navigate("/staff/pin")} style={secondaryButton}>Direct PIN Route</button>
+            </div>
+          </section>
+          <section style={panelDark}>
+            <div style={eyebrowStyle}>Approved Visual System</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 14 }}>
+              <ImageRouteCard title="SmokeCraft 360" image={APPROVED_ASSETS.smoke} onClick={startSmokeCraft} />
+              <ImageRouteCard title="Passport Connections" image={APPROVED_ASSETS.passport} onClick={() => navigate("/passport/connections")} />
+              <ImageRouteCard title="POS360" image={APPROVED_ASSETS.pos} onClick={() => setStaffHandoffOpen(true)} />
+              <ImageRouteCard title="E.A.T." image={APPROVED_ASSETS.eat} onClick={() => setStaffHandoffOpen(true)} />
+            </div>
+          </section>
         </div>
-      </nav>
+      </section>
 
-      <div className="h-[88px]" />
+      <section style={{
+        background: "#070504",
+        color: "#f7ead0",
+        padding: "34px 22px 90px",
+      }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }} className="crafthub-proof-grid">
+          <VisualReference
+            title="NOVEE OS -> CraftHub -> SmokeCraft"
+            copy="The hierarchy and craft journey storyboard are visible as reference imagery, while the buttons above remain live DOM controls."
+            image={APPROVED_ASSETS.storyboard}
+          />
+          <VisualReference
+            title="CraftHub System Explanation"
+            copy="Current ecosystem positioning: NOVEE OS intelligence, CraftHub experience layer, POS360 transaction layer, and E.A.T. management layer."
+            image={APPROVED_ASSETS.explained}
+          />
+        </div>
+      </section>
+
+      <style>{`
+        @media (max-width: 980px) {
+          .crafthub-live-hero { grid-template-columns: 1fr !important; }
+          .crafthub-proof-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 620px) {
+          .crafthub-live-hero { padding-left: 14px !important; padding-right: 14px !important; }
+          .crafthub-live-hero h1 { font-size: 36px !important; }
+          .crafthub-live-hero [data-flow-row] { grid-template-columns: 34px 1fr !important; }
+        }
+      `}</style>
+    </main>
+  );
+}
+
+function FlowRail({ items, dark = false }) {
+  return (
+    <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+      {items.map((item, index) => (
+        <div key={item.label} data-flow-row style={{ display: "grid", gridTemplateColumns: "42px 1fr 24px", gap: 10, alignItems: "center" }}>
+          <div style={{
+            width: 42,
+            height: 42,
+            borderRadius: "50%",
+            border: `1px solid ${dark ? "rgba(216,179,95,0.5)" : "rgba(141,93,31,0.35)"}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: dark ? GOLD : "#8d5d1f",
+            background: dark ? "rgba(216,179,95,0.08)" : "rgba(255,255,255,0.55)",
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 20 }}>{item.icon}</span>
+          </div>
+          <div>
+            <div style={{ fontWeight: 800, color: dark ? "#fff7dc" : "#26170c", fontSize: 15 }}>{item.label}</div>
+            <div style={{ color: dark ? "rgba(255,247,220,0.62)" : "rgba(38,23,12,0.62)", fontSize: 12, marginTop: 2 }}>{item.copy}</div>
+          </div>
+          {index < items.length - 1 && (
+            <span className="material-symbols-outlined" style={{ color: dark ? GOLD : "#8d5d1f", fontSize: 20 }}>arrow_forward</span>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
+
+function ImageRouteCard({ title, image, onClick }) {
+  return (
+    <button type="button" onClick={onClick} style={{
+      padding: 0,
+      border: "1px solid rgba(216,179,95,0.25)",
+      borderRadius: 14,
+      minHeight: 142,
+      overflow: "hidden",
+      background: "#100b06",
+      color: "#fff7dc",
+      cursor: "pointer",
+      position: "relative",
+      textAlign: "left",
+    }}>
+      <img src={image} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.68 }} />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.82))" }} />
+      <div style={{ position: "absolute", left: 12, right: 12, bottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        <span style={{ fontSize: 14, fontWeight: 800 }}>{title}</span>
+        <span className="material-symbols-outlined" style={{ color: GOLD, fontSize: 20 }}>arrow_forward</span>
+      </div>
+    </button>
+  );
+}
+
+function VisualReference({ title, copy, image }) {
+  return (
+    <section style={{
+      border: "1px solid rgba(216,179,95,0.24)",
+      borderRadius: 22,
+      background: "rgba(255,255,255,0.04)",
+      overflow: "hidden",
+      boxShadow: "0 20px 70px rgba(0,0,0,0.45)",
+    }}>
+      <img src={image} alt={title} style={{ width: "100%", aspectRatio: "16 / 10", objectFit: "cover", objectPosition: "top", display: "block" }} />
+      <div style={{ padding: 18 }}>
+        <div style={{ color: GOLD, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", fontWeight: 800 }}>{title}</div>
+        <p style={{ margin: "8px 0 0", color: "rgba(247,234,208,0.72)", lineHeight: 1.6, fontSize: 14 }}>{copy}</p>
+      </div>
+    </section>
+  );
+}
+
+function navButton(tone = "gold") {
+  return {
+    border: `1px solid ${tone === "blue" ? "rgba(73,115,166,0.38)" : "rgba(141,93,31,0.32)"}`,
+    background: "rgba(255,255,255,0.42)",
+    color: tone === "blue" ? "#355f8f" : "#7a4f18",
+    borderRadius: 999,
+    padding: "10px 16px",
+    textTransform: "uppercase",
+    letterSpacing: "0.12em",
+    fontSize: 11,
+    fontWeight: 800,
+    cursor: "pointer",
+  };
+}
+
+const eyebrowStyle = {
+  color: GOLD,
+  fontSize: 12,
+  letterSpacing: "0.22em",
+  textTransform: "uppercase",
+  fontWeight: 800,
+};
+
+const eyebrowDark = {
+  color: "#8d5d1f",
+  fontSize: 12,
+  letterSpacing: "0.22em",
+  textTransform: "uppercase",
+  fontWeight: 800,
+};
+
+const primaryButton = {
+  border: "none",
+  background: GOLD,
+  color: "#130d06",
+  borderRadius: 12,
+  padding: "13px 18px",
+  fontWeight: 900,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  fontSize: 12,
+  cursor: "pointer",
+};
+
+const secondaryButton = {
+  border: "1px solid rgba(216,179,95,0.46)",
+  background: "rgba(0,0,0,0.22)",
+  color: "#fff1c8",
+  borderRadius: 12,
+  padding: "12px 17px",
+  fontWeight: 800,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  fontSize: 12,
+  cursor: "pointer",
+};
+
+const panelLight = {
+  border: "1px solid rgba(141,93,31,0.26)",
+  borderRadius: 20,
+  padding: 20,
+  background: "rgba(255,255,255,0.64)",
+  boxShadow: "0 18px 42px rgba(88,54,18,0.10)",
+};
+
+const panelDark = {
+  border: "1px solid rgba(216,179,95,0.22)",
+  borderRadius: 20,
+  padding: 20,
+  background: "linear-gradient(145deg, rgba(13,8,5,0.96), rgba(31,20,10,0.92))",
+  color: "#fff7dc",
+  boxShadow: "0 18px 42px rgba(0,0,0,0.25)",
+};
