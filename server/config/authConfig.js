@@ -9,7 +9,8 @@
  * regardless of what the .env file says.
  */
 
-const isProd = process.env.NODE_ENV === 'production'
+const isPreview = process.env.VERCEL_ENV === 'preview'
+const isProd = process.env.NODE_ENV === 'production' && !isPreview
 const isDev  = !isProd
 
 if (!process.env.JWT_SECRET) {
