@@ -24,10 +24,11 @@ export const smokecraftModuleManifest = {
   moduleType: 'experience_module',
   moduleCategory: 'venue_experience',
   moduleDescription:
-    'SmokeCraft guided cigar experience — 8-visit / 24-session gamified progression. ' +
-    'Covers entry gate, identity, golden box, mentor selection, seed & soil, humidor match, ' +
-    'request/purchase, cut/toast/light, first/second/final thirds, flavor memory, scorecard, ' +
-    'passport stamp, connections, management sync, and session complete.',
+    'SmokeCraft guided cigar experience — 6-phase / 27-session gamified progression. ' +
+    'Covers launch, enrollment, identity, venue selection, welcome, golden box, mentor selection, seed & soil, ' +
+    'humidor match, meet your cigar, terroir, format, request/purchase, cut/toast/light, lighting tutorial, ' +
+    'first/second/final thirds, flavor memory, pairing lab, scorecard, AI summary, pairing recommendations, ' +
+    'passport stamp, final review, rewards, connections, management sync, second humidor match, and session complete.',
   moduleVersion: SMOKECRAFT_MODULE_VERSION,
   moduleStatus: 'active_development',
   coreOrAddon: 'core',
@@ -78,21 +79,36 @@ export const smokecraftModuleManifest = {
   ],
   requiredRoutes: [
     '/smokecraft',
+    '/smokecraft/enroll',
     '/smokecraft/identity',
+    '/smokecraft/venue-select',
+    '/smokecraft/welcome',
     '/smokecraft/golden-box',
     '/smokecraft/mentor-selection',
     '/smokecraft/seed-soil',
     '/smokecraft/humidor-match',
+    '/smokecraft/meet-your-cigar',
+    '/smokecraft/terroir',
+    '/smokecraft/format',
     '/smokecraft/request-purchase',
     '/smokecraft/cut-toast-light',
+    '/smokecraft/lighting-tutorial',
     '/smokecraft/first-third',
-    '/smokecraft/second-third',
     '/smokecraft/flavor-memory',
+    '/smokecraft/pairing-lab',
+    '/smokecraft/second-third',
+    '/smokecraft/mentor-commentary',
+    '/smokecraft/knowledge-drop',
     '/smokecraft/final-third',
     '/smokecraft/scorecard',
+    '/smokecraft/ai-summary',
+    '/smokecraft/pairing-recommendations',
     '/smokecraft/passport-stamp',
+    '/smokecraft/final-review',
+    '/smokecraft/rewards',
     '/smokecraft/connections',
     '/smokecraft/management-sync',
+    '/smokecraft/second-humidor-match',
     '/smokecraft/session-complete',
   ],
   requiredHooks: [

@@ -5,39 +5,63 @@
 // Sourced directly from src/App.jsx, src/constants/session.js, and
 // docs/phase-1-crafthub-smokecraft-audit.md.
 
-import { SMOKECRAFT_FLOW } from '../../constants/session.js'
+import { ENTRY_LAYER_SCREENS, SUPPORTING_MODULES, TOTAL_PHASES, TOTAL_SESSIONS, VISIT_STRUCTURE } from '../../constants/session.js'
+
+const canonicalEntryFlow = ENTRY_LAYER_SCREENS
+  .filter(step => step.id !== 'resume')
+  .map(step => ({ id: step.id, route: step.route, label: step.label, kind: 'entry-layer' }))
+
+const canonicalSpineFlow = VISIT_STRUCTURE.flatMap(phase =>
+  phase.sessions
+    .filter(session => !session.mergedInto)
+    .map(session => ({
+      id: session.id,
+      route: session.route,
+      label: session.label,
+      phase: phase.visit,
+      session: session.session,
+      kind: 'spine-session',
+    }))
+)
+
+const canonicalSupportingFlow = SUPPORTING_MODULES.map(module => ({
+  id: module.id,
+  route: module.route,
+  label: module.label,
+  requires: module.requires,
+  kind: 'supporting-module',
+}))
 
 export const smokeCraftModuleConfig = {
   id: 'smokecraft',
   name: 'SmokeCraft 360',
   version: '1.0.0',
 
-  // Guest-facing entry route. Full flow routes are listed in SMOKECRAFT_FLOW
-  // (src/constants/session.js) and are NOT duplicated here — this config
-  // references that flow rather than re-declaring it.
+  // Guest-facing entry route. The public module registry derives from the
+  // locked 27-session/6-phase source of truth in session.js so CraftHub and
+  // NOVEE OS never surface the deprecated pre-rebuild SMOKECRAFT_FLOW order.
   routes: {
     entry: '/smokecraft',
-    flow: SMOKECRAFT_FLOW.map(step => ({ id: step.id, route: step.route, label: step.label })),
+    flow: [...canonicalEntryFlow, ...canonicalSpineFlow],
+    supportingModules: canonicalSupportingFlow,
   },
 
-  // Phases 0-13 as currently implemented in the guest flow.
-  // Phase 0 = enrollment; phases 1-13 follow SMOKECRAFT_FLOW ordering.
-  phases: [
-    { phase: 0,  id: 'enroll',           label: 'Profile Enrollment' },
-    { phase: 1,  id: 'format',           label: 'Shape, Size & Burn Time' },
-    { phase: 2,  id: 'seed-soil',        label: 'Seed & Soil Pairing' },
-    { phase: 3,  id: 'mentor',           label: 'Select Master Mentor' },
-    { phase: 4,  id: 'golden-box',       label: 'Gold Box Rules' },
-    { phase: 5,  id: 'humidor-match',    label: 'Humidor Match' },
-    { phase: 6,  id: 'request-purchase', label: 'Request or Purchase Cigar' },
-    { phase: 7,  id: 'cut-toast-light',  label: 'Cut, Toast & Light' },
-    { phase: 8,  id: 'first-third',      label: 'First Third Tasting' },
-    { phase: 9,  id: 'second-third',     label: 'Second Third Tasting' },
-    { phase: 10, id: 'final-third',      label: 'Final Third Tasting' },
-    { phase: 11, id: 'scorecard',        label: 'Scorecard' },
-    { phase: 12, id: 'passport-stamp',   label: 'Passport Stamp' },
-    { phase: 13, id: 'connections',      label: '360 Passport Connections' },
-  ],
+  phases: VISIT_STRUCTURE.map(phase => ({
+    phase: phase.visit,
+    label: phase.title,
+    sessions: phase.sessions.map(session => ({
+      session: session.session,
+      id: session.id,
+      route: session.route,
+      label: session.label,
+      mergedInto: session.mergedInto || null,
+      sharedComponent: session.sharedComponent || null,
+    })),
+  })),
+  totals: {
+    phases: TOTAL_PHASES,
+    sessions: TOTAL_SESSIONS,
+  },
 
   // SmokeCraft is fully guest-accessible today — no permission is required
   // to use it. This field documents that fact rather than inventing a gate.

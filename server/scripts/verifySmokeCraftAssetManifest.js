@@ -1,20 +1,15 @@
 /**
- * Verification: SmokeCraft Approved Asset Manifest
+ * Verification: SmokeCraft canonical sequence + owner-rebuild assets.
  *
- * Checks:
- * - Every official journey route has a manifest entry
- * - Every manifest asset path exists on disk (or is null/intentional)
- * - No official route references known stale images (session-complete.png, first-third != final-third)
- * - Session Complete does NOT render the stale PNG
- * - Second Third has a cover strip for its stale header
- * - First Third is correctly marked as sharing visual with Final Third
- * - Route files import from or match the manifest paths
+ * This verifier intentionally follows the current handoff source of truth:
+ * docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json and the live
+ * React route/component registry. It replaces older checks that expected
+ * pre-owner-rebuild static screenshot constants.
  */
 
 import { readFileSync, existsSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { createHash } from 'crypto'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '../../')
@@ -24,189 +19,189 @@ let failed = 0
 
 function check(label, ok, detail = '') {
   if (ok) {
-    console.log(`  ✅ ${label}`)
+    console.log(`  PASS ${label}`)
     passed++
   } else {
-    console.log(`  ❌ ${label}${detail ? ' — ' + detail : ''}`)
+    console.log(`  FAIL ${label}${detail ? ' - ' + detail : ''}`)
     failed++
   }
 }
 
 function read(relPath) {
-  const p = resolve(ROOT, relPath)
-  if (!existsSync(p)) return null
-  return readFileSync(p, 'utf8')
-}
-
-function md5(filePath) {
-  const full = resolve(ROOT, filePath)
+  const full = resolve(ROOT, relPath)
   if (!existsSync(full)) return null
-  return createHash('md5').update(readFileSync(full)).digest('hex')
+  return readFileSync(full, 'utf8')
 }
 
-const APPROVED = 'public/assets/smokecraft-reference/approved'
-const OFFICIAL_JOURNEY_ROUTES = [
+function readJson(relPath) {
+  const src = read(relPath)
+  return src ? JSON.parse(src) : null
+}
+
+const SOURCE_FILES = [
+  'docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json',
+  'docs/smokecraft/handoff/02-CANONICAL_JOURNEY.md',
+  'docs/smokecraft/handoff/03-ROUTE_MAP.md',
+  'docs/smokecraft/handoff/04-SCREEN_TO_STAGE_MAP.md',
+  'src/App.jsx',
+  'src/constants/session.js',
+  'src/constants/smokecraftAssets.js',
+  'src/constants/smokecraftScreenManifest.js',
+  'src/constants/smokecraftComponentRegistry.js',
+  'src/services/smokecraft/smokecraftCompletionService.js',
+  'src/components/smokecraft/SmokeCraftOwnerHeroBackground.jsx',
+]
+
+const EXPECTED_ENTRY_ORDER = [
   '/smokecraft',
+  '/smokecraft/enroll',
   '/smokecraft/identity',
-  '/smokecraft/golden-box',
-  '/smokecraft/mentor-selection',
-  '/smokecraft/seed-soil',
-  '/smokecraft/pairing-lab',
+  '/smokecraft/venue-select',
+  '/smokecraft/resume',
+]
+
+const EXPECTED_CANONICAL_ROUTE_ORDER = [
+  '/smokecraft',
+  '/smokecraft/enroll',
+  '/smokecraft/identity',
+  '/smokecraft/venue-select',
+  '/smokecraft/welcome',
   '/smokecraft/humidor-match',
-  '/smokecraft/request-purchase',
+  '/smokecraft/meet-your-cigar',
+  '/smokecraft/terroir',
+  '/smokecraft/format',
   '/smokecraft/cut-toast-light',
+  '/smokecraft/lighting-tutorial',
   '/smokecraft/first-third',
-  '/smokecraft/second-third',
   '/smokecraft/flavor-memory',
+  '/smokecraft/pairing-lab',
+  '/smokecraft/second-third',
+  '/smokecraft/mentor-commentary',
+  '/smokecraft/knowledge-drop',
   '/smokecraft/final-third',
   '/smokecraft/scorecard',
-  '/smokecraft/final-review',
+  '/smokecraft/ai-summary',
+  '/smokecraft/pairing-recommendations',
   '/smokecraft/passport-stamp',
-  '/smokecraft/connections',
-  '/smokecraft/management-sync',
+  '/smokecraft/final-review',
+  '/smokecraft/rewards',
   '/smokecraft/session-complete',
 ]
 
-console.log('\nSmokeCraft Approved Asset Manifest Verification\n')
-
-// ── Gate 1: Manifest file exists ─────────────────────────────────────────────
-console.log('Gate 1 — Manifest file exists')
-const manifestSrc = read('src/constants/smokecraftAssets.js')
-check('src/constants/smokecraftAssets.js exists', manifestSrc !== null)
-
-// ── Gate 2: All official journey routes have manifest entries ─────────────────
-console.log('\nGate 2 — All official journey routes have manifest entries')
-if (manifestSrc) {
-  for (const route of OFFICIAL_JOURNEY_ROUTES) {
-    check(`Manifest has entry for ${route}`, manifestSrc.includes(`'${route}'`))
-  }
-}
-
-// ── Gate 3: Session Complete does NOT use the stale PNG ───────────────────────
-console.log('\nGate 3 — Session Complete: stale PNG excluded')
-const sessionComplete = read('src/pages/smokecraft/SessionComplete.jsx')
-check('SessionComplete.jsx exists', sessionComplete !== null)
-if (sessionComplete) {
-  check('SessionComplete does NOT reference smokecraft-session-complete.png',
-    !sessionComplete.includes('smokecraft-session-complete.png'))
-  check('SessionComplete uses CSS gradient or live React (no img background)',
-    !sessionComplete.match(/src=["'][^"']*smokecraft-session-complete/))
-}
-if (manifestSrc) {
-  check('Manifest SESSION_COMPLETE exported as null (sentinel)',
-    manifestSrc.includes('SESSION_COMPLETE = null'))
-  check('Manifest notes stale baked text for session-complete',
-    manifestSrc.includes('SESSION 23') || manifestSrc.includes('stale') && manifestSrc.includes('session-complete'))
-}
-
-// ── Gate 4: First Third — correctly marked as sharing visual with Final Third ─
-console.log('\nGate 4 — First Third: no distinct asset; sharing marked in manifest')
-const firstThirdMd5   = md5(`${APPROVED}/smokecraft-first-third.png`)
-const finalThirdMd5   = md5(`${APPROVED}/smokecraft-final-third.png`)
-check('smokecraft-first-third.png exists on disk', firstThirdMd5 !== null)
-check('smokecraft-final-third.png exists on disk', finalThirdMd5 !== null)
-if (firstThirdMd5 && finalThirdMd5) {
-  check('first-third and final-third are MD5-identical (no distinct first-third asset)',
-    firstThirdMd5 === finalThirdMd5, `first=${firstThirdMd5.slice(0,8)} final=${finalThirdMd5.slice(0,8)}`)
-}
-if (manifestSrc) {
-  check('Manifest notes first-third shares visual with final-third',
-    manifestSrc.includes('shares visual') || manifestSrc.includes('no distinct'))
-  check('FIRST_THIRD constant points to smokecraft-final-third.png',
-    manifestSrc.includes("FIRST_THIRD") && manifestSrc.includes('smokecraft-final-third.png'))
-}
-
-// ── Gate 5: Second Third — stale header covered ───────────────────────────────
-console.log('\nGate 5 — Second Third: stale header cover strip present')
-const secondThird = read('src/pages/smokecraft/SecondThird.jsx')
-check('SecondThird.jsx exists', secondThird !== null)
-if (secondThird) {
-  check('SecondThird has React cover strip (position absolute, top:0)',
-    secondThird.includes('position:') || secondThird.includes("position: 'absolute'"))
-  check('Cover strip height covers stale header (height: 44 or similar)',
-    secondThird.match(/height:\s*4[0-9]/) !== null)
-  check('Cover strip uses opaque dark background',
-    secondThird.includes('rgba(5,3,1') || secondThird.includes('#050') || secondThird.includes('rgba(0,0,0'))
-  check('SecondThird still uses approved smokecraft-second-third.png',
-    secondThird.includes('smokecraft-second-third.png'))
-}
-if (manifestSrc) {
-  check('Manifest marks second-third as stale: true with cover strip note',
-    manifestSrc.includes("stale: true") && manifestSrc.includes('second-third'))
-}
-
-// ── Gate 6: Approved asset files exist on disk ────────────────────────────────
-console.log('\nGate 6 — Approved asset files exist on disk')
-const REQUIRED_ASSETS = [
-  'smokecraft-entry-gate.png',
-  'smokecraft-gold-box-rules.png',
-  'smokecraft-mentor-selection.png',
-  'smokecraft-seed-soil.png',
-  'smokecraft-pairing-lab.png',
-  'smokecraft-humidor-match.png',
-  'smokecraft-request-purchase.png',
-  'smokecraft-cut-toast-light.png',
-  'smokecraft-first-third.png',
-  'smokecraft-second-third.png',
-  'smokecraft-flavor-memory.png',
-  'smokecraft-final-third.png',
-  'smokecraft-scorecard-ranking.png',
-  'smokecraft-final-review.png',
-  'smokecraft-passport-stamp.png',
-  'smokecraft-passport-connection.png',
-  'smokecraft-venue-management-sync.png',
-  'smokecraft-profile-capture.png',
-  'smokecraft-how-it-works.png',
-  'smokecraft-leaderboard.png',
+const OWNER_IMAGE_SCREENS = [
+  { n: 1, name: 'Identity', route: '/smokecraft/identity', component: 'Identity.jsx', assetKey: 'ownerIdentityHero', assetPath: 'public/assets/smokecraft/owner-rebuild/01-identity-hero-crop.jpg' },
+  { n: 2, name: 'Seed & Soil', route: '/smokecraft/seed-soil', component: 'SeedSoil.jsx', assetKey: 'ownerSeedSoilHero', assetPath: 'public/assets/smokecraft/owner-rebuild/02-seed-soil-hero-crop.jpg' },
+  { n: 3, name: 'Format', route: '/smokecraft/format', component: 'Format.jsx', assetKey: 'ownerFormatHero', assetPath: 'public/assets/smokecraft/owner-rebuild/03-format-hero.jpg' },
+  { n: 4, name: 'Cut / Toast / Light', route: '/smokecraft/cut-toast-light', component: 'CutToastLight.jsx', assetKey: 'ownerCutToastLightHero', assetPath: 'public/assets/smokecraft/owner-rebuild/04-cut-toast-light-hero.jpg' },
+  { n: 5, name: 'First Third', route: '/smokecraft/first-third', component: 'FirstThird.jsx', assetKey: 'ownerFirstThirdHero', assetPath: 'public/assets/smokecraft/owner-rebuild/05-first-third-hero-crop.jpg' },
+  { n: 6, name: 'Second Third', route: '/smokecraft/second-third', component: 'SecondThird.jsx', assetKey: 'ownerSecondThirdHero', assetPath: 'public/assets/smokecraft/owner-rebuild/06-second-third-hero-crop.jpg' },
+  { n: 7, name: 'Final Third', route: '/smokecraft/final-third', component: 'FinalThird.jsx', assetKey: 'ownerFinalThirdHero', assetPath: 'public/assets/smokecraft/owner-rebuild/07-final-third-hero-crop.jpg' },
+  { n: 8, name: 'Scorecard', route: '/smokecraft/scorecard', component: 'Scorecard.jsx', assetKey: 'ownerScorecardHero', assetPath: 'public/assets/smokecraft/owner-rebuild/08-scorecard-hero-crop.jpg' },
+  { n: 9, name: 'Request / Purchase', route: '/smokecraft/request-purchase', component: 'RequestPurchase.jsx', assetKey: 'ownerRequestPurchaseHero', assetPath: 'public/assets/smokecraft/owner-rebuild/09-request-purchase-hero-crop.jpg' },
+  { n: 10, name: 'Pairing Recommendations', route: '/smokecraft/pairing-recommendations', component: 'PairingRecommendations.jsx', assetKey: 'ownerPairingRecommendationsHero', assetPath: 'public/assets/smokecraft/owner-rebuild/10-pairing-recommendations-hero-crop.jpg' },
+  { n: 11, name: 'Passport Stamp', route: '/smokecraft/passport-stamp', component: 'PassportStamp.jsx', assetKey: 'ownerPassportStampHero', assetPath: 'public/assets/smokecraft/owner-rebuild/11-passport-stamp-hero-crop.jpg' },
+  { n: 12, name: 'Connections', route: '/smokecraft/connections', component: 'Connections.jsx', assetKey: 'ownerConnectionsHero', assetPath: 'public/assets/smokecraft/owner-rebuild/12-connections-hero-crop.jpg' },
+  { n: 13, name: 'Rewards', route: '/smokecraft/rewards', component: 'Rewards.jsx', assetKey: 'ownerRewardsHero', assetPath: 'public/assets/smokecraft/owner-rebuild/13-rewards-hero-crop.jpg' },
+  { n: 14, name: 'Second Humidor Match', route: '/smokecraft/second-humidor-match', component: 'SecondHumidorMatch.jsx', assetKey: 'ownerSecondHumidorMatchHero', assetPath: 'public/assets/smokecraft/owner-rebuild/14-second-humidor-match-hero-crop.jpg' },
 ]
-for (const asset of REQUIRED_ASSETS) {
-  const diskPath = resolve(ROOT, 'public', 'assets', 'smokecraft-reference', 'approved', asset)
-  check(`${asset} exists`, existsSync(diskPath), diskPath)
+
+console.log('\nSmokeCraft Canonical Asset + Sequence Verification\n')
+
+console.log('Gate 1 - source files exist')
+for (const file of SOURCE_FILES) {
+  check(`${file} exists`, existsSync(resolve(ROOT, file)))
 }
 
-// ── Gate 7: No route file references the stale session-complete image ─────────
-console.log('\nGate 7 — No production route references stale smokecraft-session-complete.png')
-const { readdirSync } = await import('fs')
-const smokecraftPages = resolve(ROOT, 'src/pages/smokecraft')
-let staleRef = false
-for (const file of readdirSync(smokecraftPages)) {
-  if (!file.endsWith('.jsx')) continue
-  const content = readFileSync(resolve(smokecraftPages, file), 'utf8')
-  if (content.includes('smokecraft-session-complete.png')) {
-    console.log(`  ❌ ${file} references stale smokecraft-session-complete.png`)
-    failed++
-    staleRef = true
+const docsManifest = readJson('docs/smokecraft/SMOKECRAFT_CANONICAL_JOURNEY_MANIFEST.json')
+const sessionSrc = read('src/constants/session.js')
+const screenManifestSrc = read('src/constants/smokecraftScreenManifest.js')
+const registrySrc = read('src/constants/smokecraftComponentRegistry.js')
+const assetsSrc = read('src/constants/smokecraftAssets.js')
+const appSrc = read('src/App.jsx')
+const completionSrc = read('src/services/smokecraft/smokecraftCompletionService.js')
+const moduleConfigSrc = read('src/modules/smokecraft/smokeCraftModule.config.js')
+const moduleManifestSrc = read('src/modules/smokecraft/module.manifest.js')
+
+console.log('\nGate 2 - entry layer order matches canonical handoff')
+const docsEntryRoutes = docsManifest?.entryLayer?.map(entry => entry.route) || []
+EXPECTED_ENTRY_ORDER.forEach((route, index) => {
+  check(`docs entry ${index + 1} is ${route}`, docsEntryRoutes[index] === route, `actual=${docsEntryRoutes[index]}`)
+})
+if (sessionSrc) {
+  const found = [...sessionSrc.matchAll(/route:\s*'([^']+)'/g)].map(match => match[1])
+  const start = found.indexOf('/smokecraft')
+  const sessionEntryRoutes = start >= 0 ? found.slice(start, start + EXPECTED_ENTRY_ORDER.length) : []
+  EXPECTED_ENTRY_ORDER.forEach((route, index) => {
+    check(`session.js entry ${index + 1} is ${route}`, sessionEntryRoutes[index] === route, `actual=${sessionEntryRoutes[index]}`)
+  })
+}
+
+console.log('\nGate 3 - canonical route order matches manifest')
+const docsCanonicalRoutes = docsManifest?.canonicalRouteOrder || []
+check('canonical route count is stable', docsCanonicalRoutes.length === EXPECTED_CANONICAL_ROUTE_ORDER.length, `actual=${docsCanonicalRoutes.length}`)
+EXPECTED_CANONICAL_ROUTE_ORDER.forEach((route, index) => {
+  check(`canonical route ${index + 1} is ${route}`, docsCanonicalRoutes[index] === route, `actual=${docsCanonicalRoutes[index]}`)
+})
+if (screenManifestSrc) {
+  check('screen manifest overrides Welcome to Golden Box', screenManifestSrc.includes("s.session === 1 ? '/smokecraft/golden-box'"))
+  check('screen manifest overrides Format to Request/Purchase', screenManifestSrc.includes("s.session === 5 ? '/smokecraft/request-purchase'"))
+}
+if (completionSrc) {
+  check('completion service honors nextRouteOverride before linear routing', completionSrc.includes('entry.nextRouteOverride') && completionSrc.indexOf('entry.nextRouteOverride') < completionSrc.indexOf('let nextEntry'))
+}
+
+console.log('\nGate 4 - owner-rebuild image files exist')
+for (const screen of OWNER_IMAGE_SCREENS) {
+  check(`${screen.n}. ${screen.name} approved asset exists`, existsSync(resolve(ROOT, screen.assetPath)), screen.assetPath)
+}
+
+console.log('\nGate 5 - asset registry maps owner keys to approved files')
+for (const screen of OWNER_IMAGE_SCREENS) {
+  const expectedFile = screen.assetPath.split('/').pop()
+  check(`${screen.assetKey} registry key exists`, assetsSrc?.includes(screen.assetKey))
+  check(`${screen.assetKey} registry path ends with ${expectedFile}`, assetsSrc?.includes(`${screen.assetKey}:`) && assetsSrc.includes(expectedFile), expectedFile)
+}
+
+console.log('\nGate 6 - active components render the expected owner hero key')
+for (const screen of OWNER_IMAGE_SCREENS) {
+  const componentPath = `src/pages/smokecraft/${screen.component}`
+  const componentSrc = read(componentPath)
+  check(`${screen.component} exists`, componentSrc !== null)
+  if (componentSrc) {
+    check(`${screen.component} uses SmokeCraftOwnerHeroBackground`, componentSrc.includes('SmokeCraftOwnerHeroBackground'))
+    check(`${screen.component} uses ${screen.assetKey}`, componentSrc.includes(`assetKey="${screen.assetKey}"`))
+    check(`${screen.component} does not use image-hotspot shell`, !componentSrc.includes('SmokeCraftHotspotLayer'))
   }
 }
-if (!staleRef) {
-  console.log('  ✅ No route file references stale smokecraft-session-complete.png')
-  passed++
+
+console.log('\nGate 7 - App route tree contains the live routes')
+for (const route of EXPECTED_CANONICAL_ROUTE_ORDER) {
+  const subpath = route === '/smokecraft' ? 'index element' : `path="${route.replace('/smokecraft/', '')}"`
+  check(`App.jsx registers ${route}`, appSrc?.includes(subpath), subpath)
+}
+for (const screen of OWNER_IMAGE_SCREENS) {
+  const subpath = screen.route.replace('/smokecraft/', '')
+  check(`App.jsx registers owner screen ${screen.route}`, appSrc?.includes(`path="${subpath}"`), subpath)
 }
 
-// ── Gate 8: IDENTITY in manifest matches Identity.jsx asset path ──────────────
-console.log('\nGate 8 — IDENTITY manifest constant matches Identity.jsx in-use asset')
-const identity = read('src/pages/smokecraft/Identity.jsx')
-if (identity && manifestSrc) {
-  const identityAsset = identity.match(/src=["']([^"']+)["']/)
-  // Manifest uses template literal: `${BASE}/smokecraft-profile-capture.png`
-  // Resolve BASE = '/assets/smokecraft-reference/approved'
-  const BASE = '/assets/smokecraft-reference/approved'
-  const manifestIdentity = manifestSrc.match(/export const IDENTITY\s*=\s*`([^`]+)`/)
-  if (identityAsset && manifestIdentity) {
-    const manifestPath = manifestIdentity[1].replace('${BASE}', BASE)
-    check('IDENTITY manifest constant matches Identity.jsx src',
-      identityAsset[1] === manifestPath,
-      `Identity.jsx: ${identityAsset[1]} | Manifest resolved: ${manifestPath}`)
+console.log('\nGate 8 - CraftHub/module metadata no longer uses deprecated route order')
+if (moduleConfigSrc) {
+  check('module config imports VISIT_STRUCTURE', moduleConfigSrc.includes('VISIT_STRUCTURE'))
+  check('module config does not import SMOKECRAFT_FLOW', !moduleConfigSrc.includes('import { SMOKECRAFT_FLOW'))
+  check('module config exposes supportingModules metadata', moduleConfigSrc.includes('supportingModules'))
+}
+if (moduleManifestSrc) {
+  for (const route of EXPECTED_CANONICAL_ROUTE_ORDER) {
+    check(`module manifest includes ${route}`, moduleManifestSrc.includes(`'${route}'`))
   }
 }
 
-// ── Summary ───────────────────────────────────────────────────────────────────
-console.log(`\n─────────────────────────────────────────────────`)
+console.log('\n─────────────────────────────────────────────────')
 console.log(`SmokeCraft Asset Manifest: ${passed + failed} checks, ${passed} passed, ${failed} failed`)
 if (failed === 0) {
-  console.log('\n✅ Asset manifest verified. All routes mapped. Stale images excluded.')
+  console.log('\nPASS Asset manifest verified against canonical sequence and owner-rebuild image mapping.')
   process.exit(0)
-} else {
-  console.log('\n❌ Asset manifest issues found.')
-  process.exit(1)
 }
+
+console.log('\nFAIL Asset manifest issues found.')
+process.exit(1)

@@ -217,8 +217,8 @@ export const SUPPORTING_MODULES = [
 export const ENTRY_LAYER_SCREENS = [
   { id: 'launch',            route: '/smokecraft',              label: 'Launch',                        implemented: true },
   { id: 'sign-in',           route: '/smokecraft/enroll',       label: 'Sign In / Guest Mode',           implemented: true },
-  { id: 'venue-select',      route: '/smokecraft/venue-select', label: 'Venue Selection',                implemented: true },
   { id: 'personal-dashboard',route: '/smokecraft/identity',     label: 'Personal Dashboard',             implemented: true },
+  { id: 'venue-select',      route: '/smokecraft/venue-select', label: 'Venue Selection',                implemented: true },
   { id: 'resume',            route: '/smokecraft/resume',       label: 'Resume or Start New Journey',    implemented: true },
 ]
 

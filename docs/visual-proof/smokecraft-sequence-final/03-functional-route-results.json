@@ -1,0 +1,241 @@
+{
+  "generated_at": "2026-08-14T09:23:22.863Z",
+  "commit": "9bc4fab6d6d8bf185d1fe8eaa044f715adbb3477",
+  "base_url": "http://127.0.0.1:5174",
+  "viewport": {
+    "width": 1180,
+    "height": 820
+  },
+  "canonical_route_results": [
+    {
+      "sequence_number": 1,
+      "route": "/smokecraft",
+      "expected_component": "SmokeCraft.jsx",
+      "final_url": "/smokecraft",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": null
+    },
+    {
+      "sequence_number": 2,
+      "route": "/smokecraft/enroll",
+      "expected_component": "Enroll.jsx",
+      "final_url": "/smokecraft/enroll",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": null
+    },
+    {
+      "sequence_number": 3,
+      "route": "/smokecraft/identity",
+      "expected_component": "Identity.jsx",
+      "final_url": "/smokecraft/identity",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Identity"
+    },
+    {
+      "sequence_number": 4,
+      "route": "/smokecraft/venue-select",
+      "expected_component": "VenueSelect.jsx",
+      "final_url": "/smokecraft/venue-select",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Select Venue or Lounge"
+    },
+    {
+      "sequence_number": 5,
+      "route": "/smokecraft/welcome",
+      "expected_component": "WelcomeExperience.jsx",
+      "final_url": "/smokecraft/welcome",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "SmokeCraft 360 — Welcome to Today’s Experience"
+    },
+    {
+      "sequence_number": 6,
+      "route": "/smokecraft/humidor-match",
+      "expected_component": "HumidorMatch.jsx",
+      "final_url": "/smokecraft/humidor-match",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Humidor Match"
+    },
+    {
+      "sequence_number": 7,
+      "route": "/smokecraft/meet-your-cigar",
+      "expected_component": "MeetYourCigar.jsx",
+      "final_url": "/smokecraft/meet-your-cigar",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "No Cigar Selected"
+    },
+    {
+      "sequence_number": 8,
+      "route": "/smokecraft/terroir",
+      "expected_component": "Terroir.jsx",
+      "final_url": "/smokecraft/terroir",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Country"
+    },
+    {
+      "sequence_number": 9,
+      "route": "/smokecraft/format",
+      "expected_component": "Format.jsx",
+      "final_url": "/smokecraft/format",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Choose Your Format"
+    },
+    {
+      "sequence_number": 10,
+      "route": "/smokecraft/cut-toast-light",
+      "expected_component": "CutToastLight.jsx",
+      "final_url": "/smokecraft/cut-toast-light",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Cut, Toast & Light"
+    },
+    {
+      "sequence_number": 11,
+      "route": "/smokecraft/lighting-tutorial",
+      "expected_component": "LightingTutorial.jsx",
+      "final_url": "/smokecraft/lighting-tutorial",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Toasting the Foot"
+    },
+    {
+      "sequence_number": 12,
+      "route": "/smokecraft/first-third",
+      "expected_component": "FirstThird.jsx",
+      "final_url": "/smokecraft/first-third",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Discover the Opening Expression"
+    },
+    {
+      "sequence_number": 13,
+      "route": "/smokecraft/flavor-memory",
+      "expected_component": "FlavorMemory.jsx",
+      "final_url": "/smokecraft/flavor-memory",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": null
+    },
+    {
+      "sequence_number": 14,
+      "route": "/smokecraft/pairing-lab",
+      "expected_component": "PairingLab.jsx",
+      "final_url": "/smokecraft/pairing-lab",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "SmokeCraft 360 — Pairing Lab"
+    },
+    {
+      "sequence_number": 15,
+      "route": "/smokecraft/second-third",
+      "expected_component": "SecondThird.jsx",
+      "final_url": "/smokecraft/second-third",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Flavor Development"
+    },
+    {
+      "sequence_number": 16,
+      "route": "/smokecraft/mentor-commentary",
+      "expected_component": "MentorCommentary.jsx",
+      "final_url": "/smokecraft/mentor-commentary",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "No Mentor Selected"
+    },
+    {
+      "sequence_number": 17,
+      "route": "/smokecraft/knowledge-drop",
+      "expected_component": "KnowledgeDrop.jsx",
+      "final_url": "/smokecraft/knowledge-drop",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Tobacco"
+    },
+    {
+      "sequence_number": 18,
+      "route": "/smokecraft/final-third",
+      "expected_component": "FinalThird.jsx",
+      "final_url": "/smokecraft/final-third",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Complete Your Tasting Journey"
+    },
+    {
+      "sequence_number": 19,
+      "route": "/smokecraft/scorecard",
+      "expected_component": "Scorecard.jsx",
+      "final_url": "/smokecraft/scorecard",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Your Complete Cigar Review"
+    },
+    {
+      "sequence_number": 20,
+      "route": "/smokecraft/ai-summary",
+      "expected_component": "AISummary.jsx",
+      "final_url": "/smokecraft/ai-summary",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Your Session Summary"
+    },
+    {
+      "sequence_number": 21,
+      "route": "/smokecraft/pairing-recommendations",
+      "expected_component": "PairingRecommendations.jsx",
+      "final_url": "/smokecraft/pairing-recommendations",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Personalized Pairing Recommendations"
+    },
+    {
+      "sequence_number": 22,
+      "route": "/smokecraft/passport-stamp",
+      "expected_component": "PassportStamp.jsx",
+      "final_url": "/smokecraft/passport-stamp",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Passport Stamp — Journey Certification"
+    },
+    {
+      "sequence_number": 23,
+      "route": "/smokecraft/final-review",
+      "expected_component": "FinalReview.jsx",
+      "final_url": "/smokecraft/final-review",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Review the journey before the final stamp"
+    },
+    {
+      "sequence_number": 24,
+      "route": "/smokecraft/rewards",
+      "expected_component": "Rewards.jsx",
+      "final_url": "/smokecraft/rewards",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Rewards"
+    },
+    {
+      "sequence_number": 25,
+      "route": "/smokecraft/session-complete",
+      "expected_component": "SessionComplete.jsx",
+      "final_url": "/smokecraft/session-complete",
+      "route_match": true,
+      "dom_status": "PASS",
+      "first_heading": "Recommended Next Journey"
+    }
+  ],
+  "owner_image_result": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0
+  }
+}

@@ -127,10 +127,12 @@ export async function fetchTastingDraft(activityKey) {
   try {
     const res = await fetch(`${BASE}/tasting/${encodeURIComponent(activityKey)}/draft`, { credentials: 'include' })
     const data = await res.json().catch(() => null)
-    if (!res.ok || !data || data.success !== true) return { ok: false, status: res.status }
+    if (!res.ok || !data || data.success !== true) {
+      return { ok: true, draftData: null, version: 0, updatedAt: null, offlineFallback: true, status: res.status }
+    }
     return { ok: true, draftData: data.draftData, version: data.version, updatedAt: data.updatedAt }
   } catch (err) {
-    return { ok: false, status: 0, error: 'network_unavailable' }
+    return { ok: true, draftData: null, version: 0, updatedAt: null, offlineFallback: true, status: 0, error: 'network_unavailable' }
   }
 }
 

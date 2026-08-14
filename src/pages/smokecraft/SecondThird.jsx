@@ -309,7 +309,7 @@ export default function SecondThird({ onBack, onComplete } = {}) {
       />
 
       <SmokeCraftNavBar
-        primary={done ? 'Saving…' : 'Continue to Flavor Memory →'}
+        primary={done ? 'Saving…' : 'Continue to Mentor Commentary →'}
         onPrimary={handleContinue}
         primaryDisabled={done}
         secondary="← Back"
