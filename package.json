@@ -19,6 +19,7 @@
     "visual:dayone360": "node scripts/visualProof.js --family=dayone360",
     "visual:crafthub": "node scripts/visualProof.js --family=crafthub",
     "verify:smokecraft-identity-live-buttons": "node server/scripts/verifySmokeCraftIdentityLiveButtons.js",
+    "verify:smokecraft-current-frontend": "node server/scripts/verifySmokeCraftCurrentFrontend.js",
     "verify:smokecraft-frontend-interactions": "node server/scripts/verifySmokeCraftFrontendInteractions.js",
     "verify:smokecraft-touch-response": "node server/scripts/verifySmokeCraftTouchResponse.js",
     "verify:smokecraft-live-hotspots": "node server/scripts/verifySmokeCraftLiveHotspots.js",
