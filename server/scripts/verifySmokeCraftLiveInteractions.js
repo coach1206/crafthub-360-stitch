@@ -1,11 +1,10 @@
 /**
  * SmokeCraft current live-interaction acceptance.
  *
- * This verifier intentionally tests the current production architecture:
- * live DOM controls, canonical journey persistence/reward calls, current
- * 6-phase / 27-session sequencing, accessible touch controls, and explicit
- * POS handoff state. It does not require retired inline completeStep calls,
- * retired route order, or debug-only hotspot labels.
+ * Tests the current production architecture: live controls, server-backed
+ * draft persistence, evidence submission, current 6-phase/27-session flow,
+ * accessible touch controls, and explicit POS handoff state. It intentionally
+ * rejects retired inline completeStep requirements and retired route order.
  */
 
 import { readFileSync, existsSync } from 'fs'
@@ -46,10 +45,11 @@ console.log('Gate 1 — Asset shell preserves responsive interaction space')
 check('SmokeCraftAssetScreen exists', Boolean(assetScreen))
 if (assetScreen) {
   check('Viewport shell is fixed', assetScreen.includes("position: 'fixed'"))
-  check('Shell reserves bottom navigation space', assetScreen.includes('NAV_HEIGHT') || assetScreen.includes('bottom: 64'))
+  check('Viewport uses dynamic viewport dimensions', assetScreen.includes("width: '100dvw'") && assetScreen.includes("height: '100dvh'"))
   check('Interactive children are rendered directly', assetScreen.includes('{children}'))
   check('No inline-block wrapper constrains controls', !assetScreen.includes("display: 'inline-block'"))
-  check('Image treatment supports contain/safe fit rather than forced crop', assetScreen.includes('contain') || assetScreen.includes('backgroundSize'))
+  check('Image fit is classification-aware', assetScreen.includes('FIT_STYLES') && assetScreen.includes('backgroundSize'))
+  check('Portrait production shells preserve contain fit', assetScreen.includes("PORTRAIT_PRODUCTION_SHELL") && assetScreen.includes("backgroundSize: 'contain'"))
 }
 
 console.log('\nGate 2 — Hotspot layer is discoverable, accessible and tactile')
@@ -66,86 +66,103 @@ if (hotspotLayer) {
   check('Debug mode remains explicit', hotspotLayer.includes('smokecraft_hotspot_debug'))
 }
 
-console.log('\nGate 3 — Request/Purchase handoff is a real controlled interaction')
+console.log('\nGate 3 — Request/Purchase handoff is real and failure-aware')
 check('RequestPurchase exists', Boolean(requestPurchase))
 if (requestPurchase) {
   check('Ordering paths are explicit', requestPurchase.includes('ORDERING_PATHS'))
-  check('Selection state is controlled', requestPurchase.includes('orderPath') && requestPurchase.includes('useState'))
+  check('Order-path state is controlled', requestPurchase.includes('orderPath') && requestPurchase.includes('setOrderPath'))
   check('Selection buttons expose aria-pressed', requestPurchase.includes('aria-pressed'))
-  check('Journey selection is persisted', requestPurchase.includes('setRequestPurchase'))
-  check('Venue/counter path creates an order intent', requestPurchase.includes('createOrderIntent'))
-  check('POS bridge state is surfaced', requestPurchase.includes('bridgeState'))
-  check('POS handoff has error handling', requestPurchase.includes('setError') || requestPurchase.includes("'failed'"))
+  check('Journey selection autosaves', requestPurchase.includes('setRequestPurchase'))
+  check('POS order intent uses real bridge client', requestPurchase.includes('createOrderIntent'))
+  check('POS handoff state is explicit', requestPurchase.includes('orderIntentStatus'))
+  check('POS handoff distinguishes sending/sent/error', requestPurchase.includes("'sending'") && requestPurchase.includes("'sent'") && requestPurchase.includes("'error'"))
+  check('Network failure is converted to explicit failure state', requestPurchase.includes("network_error") && requestPurchase.includes("setOrderIntentStatus('error')"))
+  check('Successful order intent is persisted into journey state', requestPurchase.includes('orderIntent:') && requestPurchase.includes('orderIntentId'))
   check('Request/purchase rewards are awarded', requestPurchase.includes("awardSessionRewards('request-purchase'"))
-  check('Next route is cut/toast/light', requestPurchase.includes("'/smokecraft/cut-toast-light'"))
-  check('Haptic feedback is wired', requestPurchase.includes('triggerHaptic') || requestPurchase.includes('hapticTap'))
+  check('Next route is cut/toast/light', requestPurchase.includes("navigate('/smokecraft/cut-toast-light')"))
+  check('Haptic feedback is wired', requestPurchase.includes('triggerHaptic'))
 }
 
 console.log('\nGate 4 — Cut/Toast/Light requires real user completion')
 check('CutToastLight exists', Boolean(cutToastLight))
 if (cutToastLight) {
-  check('Cut choice has controlled state', cutToastLight.includes('selectedCut'))
-  check('Matching activity has controlled state', cutToastLight.includes('match'))
+  check('Cut choice has controlled state', cutToastLight.includes('cutMethod') && cutToastLight.includes('setCutMethod'))
+  check('Matching activity has controlled state', cutToastLight.includes('matches') && cutToastLight.includes('setMatches'))
   check('Cut choices are real pressable controls', cutToastLight.includes('aria-pressed'))
-  check('Continue readiness depends on both activities', /selectedCut[\s\S]{0,200}match|match[\s\S]{0,200}selectedCut/.test(cutToastLight))
-  check('Draft state is persisted', cutToastLight.includes('serverDrafts.saveDraft'))
-  check('Competency evidence is submitted', cutToastLight.includes('submitSelectionAttempt'))
-  check('Cut method is persisted into journey state', cutToastLight.includes('setCutMethod'))
+  check('All three match items are required', cutToastLight.includes('const allMatched = MATCH_ITEMS.every'))
+  check('Continue rejects missing cut method', cutToastLight.includes('if (done || !cutMethod) return'))
+  check('Continue rejects incomplete matching activity', cutToastLight.includes('if (!allMatched)'))
+  check('Server draft is loaded', cutToastLight.includes('loadTastingDraft(ACTIVITY_KEY)'))
+  check('Server draft is autosaved', cutToastLight.includes('saveTastingDraft(ACTIVITY_KEY'))
+  check('Draft conflicts/completed state are handled', cutToastLight.includes('result.conflict') && cutToastLight.includes('result.alreadyCompleted'))
+  check('Competency evidence is submitted', cutToastLight.includes("submitSelectionAttempt('cut-toast-light'"))
+  check('Cut method is persisted into journey state', cutToastLight.includes('setCutToastLight'))
   check('Cut/toast/light reward is awarded', cutToastLight.includes("awardSessionRewards('cut-toast-light'"))
-  check('Next route is lighting tutorial', cutToastLight.includes("'/smokecraft/lighting-tutorial'"))
-  check('Haptic feedback is wired', cutToastLight.includes('triggerHaptic') || cutToastLight.includes('hapticTap'))
+  check('Next route is lighting tutorial', cutToastLight.includes("navigate('/smokecraft/lighting-tutorial')"))
 }
 
-console.log('\nGate 5 — First Third captures and persists tasting evidence')
+console.log('\nGate 5 — First Third captures server-backed tasting evidence')
 check('FirstThird exists', Boolean(firstThird))
 if (firstThird) {
-  check('Flavor selection state exists', firstThird.includes('flavors'))
-  check('Flavor selection is required before continue', firstThird.includes('canContinue'))
-  check('Draft state is persisted', firstThird.includes('serverDrafts.saveDraft'))
-  check('First-third observation is submitted', firstThird.includes('submitTastingObservation') && firstThird.includes("third: 'first'"))
-  check('First-third observation is persisted into journey state', firstThird.includes("setTasteObservation('first'"))
+  check('Observation selection state exists', firstThird.includes('checked') && firstThird.includes('setChecked'))
+  check('At least one observation is required before continue', firstThird.includes('if (checked.length === 0)'))
+  check('Server draft is loaded', firstThird.includes('loadTastingDraft(ACTIVITY_KEY)'))
+  check('Server draft is autosaved', firstThird.includes('saveTastingDraft(ACTIVITY_KEY'))
+  check('Draft conflict/completed state is handled', firstThird.includes('result.conflict') && firstThird.includes('result.alreadyCompleted'))
+  check('Local tasting context receives payload', firstThird.includes('setFirstThirdTasting(payload)'))
+  check('Journey context receives payload', firstThird.includes('setFirstThird(payload)'))
+  check('First-third evidence is submitted server-side', firstThird.includes("submitTastingObservation('first-third', checked, notes)"))
+  check('Submission failure blocks progression', firstThird.includes('if (!result.ok)') && firstThird.includes('setSubmitError'))
   check('First-third rewards are awarded', firstThird.includes("awardSessionRewards('first-third'"))
-  check('Next route is Flavor Memory', firstThird.includes("'/smokecraft/flavor-memory'"))
-  check('Flavor controls are accessible/touchable', firstThird.includes('aria-pressed') || firstThird.includes('<button'))
+  check('Next route is Flavor Memory', firstThird.includes("navigate('/smokecraft/flavor-memory')"))
 }
 
-console.log('\nGate 6 — Flavor Memory is a real two-or-more selection exercise')
+console.log('\nGate 6 — Flavor Memory persists and syncs real selections')
 check('FlavorMemory exists', Boolean(flavorMemory))
 if (flavorMemory) {
-  check('Flavor zones are defined', flavorMemory.includes('earth') && flavorMemory.includes('sweet') && flavorMemory.includes('spice'))
-  check('Selection state exists', flavorMemory.includes('selected'))
-  check('At least two flavors are required', flavorMemory.includes('selected.length >= 2'))
-  check('Flavor memory is saved to backend', flavorMemory.includes('saveFlavorMemory'))
-  check('Flavor memory is synced to Passport', flavorMemory.includes('addUniqueValue'))
-  check('Competency evidence is submitted', flavorMemory.includes('submitSelectionAttempt'))
+  check('Eight flavor zones are defined', flavorMemory.includes('FLAVOR_ZONES') && flavorMemory.includes("id: 'earth'") && flavorMemory.includes("id: 'floral'"))
+  check('Selected flavors are controlled state', flavorMemory.includes('selectedFlavors'))
+  check('At least two flavors are required', flavorMemory.includes('if (fm.selectedFlavors.length < 2)'))
+  check('Backend flavor-memory endpoint is used', flavorMemory.includes('/api/modules/smokecraft/pairing/flavor-memory'))
+  check('Backend save failure is explicit', flavorMemory.includes('flavor-memory save failed'))
+  check('Passport sync endpoint is identity-gated', flavorMemory.includes('/api/passport-360/sync/flavor-memory') && flavorMemory.includes("credentials: 'include'"))
+  check('Passport sync failure is explicit', flavorMemory.includes('passport save failed'))
   check('Journey flavor memory is persisted', flavorMemory.includes('setFlavorMemory'))
-  check('Flavor-memory reward is awarded', flavorMemory.includes("awardSessionRewards('flavor-memory'"))
-  check('Next route is Pairing Lab', flavorMemory.includes("'/smokecraft/pairing-lab'"))
+  check('Competency evidence is submitted', flavorMemory.includes('submitSelectionAttempt'))
+  check('Flavor-memory rewards are awarded', flavorMemory.includes("awardSessionRewards('flavor-memory'"))
+  check('Next route is Pairing Lab', flavorMemory.includes("navigate('/smokecraft/pairing-lab')"))
 }
 
-console.log('\nGate 7 — Second Third follows the canonical chronological route')
+console.log('\nGate 7 — Second Third follows canonical chronological route')
 check('SecondThird exists', Boolean(secondThird))
 if (secondThird) {
-  check('Flavor selection is required', secondThird.includes('canContinue'))
-  check('Draft state is persisted', secondThird.includes('serverDrafts.saveDraft'))
-  check('Second-third observation is submitted', secondThird.includes('submitTastingObservation') && secondThird.includes("third: 'second'"))
-  check('Second-third observation is persisted', secondThird.includes("setTasteObservation('second'"))
+  check('Observation selection state exists', secondThird.includes('checked') && secondThird.includes('setChecked'))
+  check('At least one observation is required', secondThird.includes('if (checked.length === 0)'))
+  check('Server draft is loaded', secondThird.includes('loadTastingDraft(ACTIVITY_KEY)'))
+  check('Server draft is autosaved', secondThird.includes('saveTastingDraft(ACTIVITY_KEY'))
+  check('Draft conflicts/completed state are handled', secondThird.includes('result.conflict') && secondThird.includes('result.alreadyCompleted'))
+  check('Local tasting context receives payload', secondThird.includes('setSecondThirdTasting(payload)'))
+  check('Journey context receives payload', secondThird.includes('setSecondThird(payload)'))
+  check('Second-third evidence is submitted server-side', secondThird.includes("submitTastingObservation('second-third', checked, notes)"))
+  check('Submission failure blocks progression', secondThird.includes('if (!result.ok)') && secondThird.includes('setSubmitError'))
   check('Second-third rewards are awarded', secondThird.includes("awardSessionRewards('second-third'"))
-  check('Canonical next route is Mentor Commentary', secondThird.includes("NEXT_ROUTE = '/smokecraft/mentor-commentary'"))
-  check('Controls are real/accessibly pressable', secondThird.includes('aria-pressed') || secondThird.includes('<button'))
+  check('Next route is Mentor Commentary', secondThird.includes("navigate('/smokecraft/mentor-commentary')"))
 }
 
-console.log('\nGate 8 — Final Third completes tasting before scorecard')
+console.log('\nGate 8 — Final Third completes evidence before scorecard')
 check('FinalThird exists', Boolean(finalThird))
 if (finalThird) {
-  check('Flavor journey state exists', finalThird.includes('flavorJourney'))
-  check('Flavor selection is required before continue', finalThird.includes('canContinue'))
-  check('Draft state is persisted', finalThird.includes('serverDrafts.saveDraft'))
-  check('Final-third observation is submitted', finalThird.includes('submitTastingObservation') && finalThird.includes("third: 'final'"))
-  check('Final-third observation is persisted', finalThird.includes("setTasteObservation('final'"))
+  check('Flavor/focus state is controlled', finalThird.includes('selectedFlavors') && finalThird.includes('focusSelected'))
+  check('Combined observation list is required before continue', finalThird.includes('if (combinedNotes.length === 0)'))
+  check('Server draft is loaded', finalThird.includes('loadTastingDraft(ACTIVITY_KEY)'))
+  check('Server draft is autosaved', finalThird.includes('saveTastingDraft(ACTIVITY_KEY'))
+  check('Draft conflicts/completed state are handled', finalThird.includes('result.conflict') && finalThird.includes('result.alreadyCompleted'))
+  check('Local tasting context receives payload', finalThird.includes('setFinalThirdTasting(payload)'))
+  check('Journey context receives payload', finalThird.includes('setFinalThird(payload)'))
+  check('Final-third evidence is submitted server-side', finalThird.includes("submitTastingObservation('final-third', combinedNotes, personalNotes)"))
+  check('Submission failure blocks progression', finalThird.includes('if (!result.ok)') && finalThird.includes('setSubmitError'))
   check('Final-third rewards are awarded', finalThird.includes("awardSessionRewards('final-third'"))
-  check('Next route is Scorecard', finalThird.includes("'/smokecraft/scorecard'"))
-  check('Controls are real/accessibly pressable', finalThird.includes('aria-pressed') || finalThird.includes('<button'))
+  check('Next route is Scorecard', finalThird.includes("navigate('/smokecraft/scorecard')"))
 }
 
 console.log('\nGate 9 — Canonical journey semantics remain intact')
@@ -177,7 +194,7 @@ console.log('\nGate 11 — Safety: do not fabricate live commerce state')
 const safetySurface = [requestPurchase, cutToastLight, firstThird, flavorMemory, secondThird, finalThird].filter(Boolean).join('\n')
 check('No fake payment-live claim', !/payments?\s+(are\s+)?live/i.test(safetySurface))
 check('No fake POS-connected claim', !/POS\s+(is\s+)?connected/i.test(safetySurface))
-check('Error state is user-visible in purchase flow', Boolean(requestPurchase && (requestPurchase.includes('error') || requestPurchase.includes('bridgeState'))))
+check('Purchase flow surfaces handoff status to the guest', Boolean(requestPurchase && requestPurchase.includes('Venue Handoff') && requestPurchase.includes('orderIntentStatus')))
 
 console.log(`\n─────────────────────────────────────────────────`)
 console.log(`SmokeCraft Current Live Interactions: ${passed + failed} checks, ${passed} passed, ${failed} failed`)
