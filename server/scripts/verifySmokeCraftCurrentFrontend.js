@@ -32,6 +32,7 @@ const assetScreen = read('src/components/smokecraft/SmokeCraftAssetScreen.jsx')
 const hotspot = read('src/components/smokecraft/SmokeCraftHotspotLayer.jsx')
 const visitComplete = read('src/pages/smokecraft/VisitComplete.jsx')
 const app = read('src/App.jsx')
+const assetRegistry = read('src/constants/smokecraftAssets.js')
 
 console.log('\nSmokeCraft Current Frontend Acceptance\n')
 
@@ -97,11 +98,16 @@ if (app) {
 }
 
 console.log('\nGate 6 — Approved asset hygiene')
-const approvedDir = resolve(ROOT, 'public/assets/smokecraft/approved')
+const approvedDir = resolve(ROOT, 'public/assets/smokecraft-reference/approved')
+check('Central SmokeCraft asset registry exists', Boolean(assetRegistry))
+if (assetRegistry) {
+  check('Asset registry points approved references at smokecraft-reference/approved', assetRegistry.includes("const REF = '/assets/smokecraft-reference/approved'"))
+  check('Asset registry separates raw and owner-rebuild sources', assetRegistry.includes("const RAW = '/assets/smokecraft'") && assetRegistry.includes("const OWNER = '/assets/smokecraft/owner-rebuild'"))
+}
 if (!existsSync(approvedDir)) {
-  check('Approved asset directory exists', false)
+  check('Canonical approved reference asset directory exists', false)
 } else {
-  check('Approved asset directory exists', true)
+  check('Canonical approved reference asset directory exists', true)
   const allowedImageExt = new Set(['.png','.jpg','.jpeg','.webp','.avif'])
   const badFiles = []
   const walk = dir => {
@@ -112,7 +118,7 @@ if (!existsSync(approvedDir)) {
     }
   }
   walk(approvedDir)
-  check('Approved directory contains images only (subdirectories allowed)', badFiles.length === 0)
+  check('Approved reference directory contains images only (subdirectories allowed)', badFiles.length === 0)
 }
 
 console.log('\nGate 7 — Safety')
