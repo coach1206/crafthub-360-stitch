@@ -23,4 +23,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: npm run acceptance:crafthub:structural
+      - name: Structural acceptance
+        run: npm run acceptance:crafthub:structural
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
