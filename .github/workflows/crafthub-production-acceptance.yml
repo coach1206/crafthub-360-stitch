@@ -88,3 +88,13 @@ jobs:
         env:
           CRAFTHUB_ACCEPTANCE_BASE_URL: ${{ steps.deployment.outputs.url }}
         run: npm run acceptance:crafthub:production
+      - name: Install Chromium for deployed browser proof
+        run: npx playwright install --with-deps chromium
+      - name: Chronological route and owner-image browser proof
+        env:
+          BASE_URL: ${{ steps.deployment.outputs.url }}
+        run: node scripts/smokecraftSequenceOwnerProof.mjs
+      - name: Full real-click chronological journey to Session 27
+        env:
+          BASE_URL: ${{ steps.deployment.outputs.url }}
+        run: node scripts/proveSmokecraftDeployedFullJourney.mjs
