@@ -7,8 +7,8 @@ const baseUrl = process.env.CRAFTHUB_ACCEPTANCE_BASE_URL?.replace(/\/$/, '');
 
 const checks = [
   ['Build production bundle', ['npm', ['run', 'build']]],
-  ['SmokeCraft identity/live buttons', ['npm', ['run', 'verify:smokecraft-identity-live-buttons']]],
-  ['SmokeCraft frontend interactions', ['npm', ['run', 'verify:smokecraft-frontend-interactions']]],
+  ['SmokeCraft identity live DOM', ['npm', ['run', 'verify:smokecraft-identity-live-buttons']]],
+  ['SmokeCraft current frontend architecture', ['npm', ['run', 'verify:smokecraft-current-frontend']]],
   ['SmokeCraft touch response', ['npm', ['run', 'verify:smokecraft-touch-response']]],
   ['SmokeCraft live hotspots', ['npm', ['run', 'verify:smokecraft-live-hotspots']]],
   ['SmokeCraft landing interactions', ['npm', ['run', 'verify:smokecraft-landing-interactions']]],
