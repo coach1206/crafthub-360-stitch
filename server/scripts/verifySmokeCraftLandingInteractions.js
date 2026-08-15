@@ -104,7 +104,13 @@ if (journey && session) {
   check('Current journey has 6 phases', session.includes('TOTAL_VISITS = 6'))
   check('Current journey has 27 sessions', session.includes('TOTAL_SESSIONS = 27'))
   check('Session 1 is real entry session', session.includes("session: 1, id: 'entry'"))
-  check('Session 1 is not auto-completed anymore', journey.includes("S1 (id 'entry') is now a real, implemented session") && !journey.includes("sessionId === 'entry' ? true"))
+  const isStepCompleteBody = journey.match(/function isStepComplete\([\s\S]*?\n\}/)?.[0] || ''
+  check(
+    'Session 1 is not auto-completed anymore',
+    isStepCompleteBody.includes('session.implemented === false') &&
+      !isStepCompleteBody.includes("session.id === 'entry'") &&
+      !isStepCompleteBody.includes("sessionId === 'entry'"),
+  )
   check('Phase 1 is always unlocked', journey.includes('if (visitNumber <= 1) return true'))
   check('Unimplemented sessions are explicitly skipped for unlock, not fabricated', journey.includes('if (session.implemented === false) return true'))
   check('Current allowed session is derived from first incomplete session', journey.includes('getCurrentAllowedSession'))
