@@ -108,17 +108,23 @@ if (!existsSync(approvedDir)) {
   check('Canonical approved reference asset directory exists', false)
 } else {
   check('Canonical approved reference asset directory exists', true)
-  const allowedImageExt = new Set(['.png','.jpg','.jpeg','.webp','.avif'])
+  const allowedAssetExt = new Set(['.png','.jpg','.jpeg','.webp','.avif','.md'])
   const badFiles = []
+  const documentationFiles = []
   const walk = dir => {
     for (const name of readdirSync(dir)) {
       const p = resolve(dir, name)
       if (statSync(p).isDirectory()) walk(p)
-      else if (!allowedImageExt.has(extname(name).toLowerCase())) badFiles.push(p)
+      else {
+        const ext = extname(name).toLowerCase()
+        if (ext === '.md') documentationFiles.push(p)
+        if (!allowedAssetExt.has(ext)) badFiles.push(p)
+      }
     }
   }
   walk(approvedDir)
-  check('Approved reference directory contains images only (subdirectories allowed)', badFiles.length === 0)
+  check('Approved reference tree contains only images and provenance documentation', badFiles.length === 0)
+  check('Approved batch provenance documentation is retained', documentationFiles.some(p => p.endsWith('README.md')))
 }
 
 console.log('\nGate 7 — Safety')
