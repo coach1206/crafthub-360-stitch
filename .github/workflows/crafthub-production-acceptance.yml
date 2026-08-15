@@ -93,7 +93,7 @@ jobs:
       - name: Chronological route and owner-image browser proof
         env:
           BASE_URL: ${{ steps.deployment.outputs.url }}
-        run: node scripts/smokecraftSequenceOwnerProof.mjs
+        run: node scripts/proveSmokecraftDeployedRouteMatrix.mjs
       - name: Full real-click chronological journey to Session 27
         env:
           BASE_URL: ${{ steps.deployment.outputs.url }}
