@@ -1,0 +1,26 @@
+name: CraftHub Production Acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'server/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/crafthub-production-acceptance.yml'
+  push:
+    branches:
+      - 'codex/crafthub-production-acceptance-gate'
+
+jobs:
+  structural-acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run acceptance:crafthub:structural
