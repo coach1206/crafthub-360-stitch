@@ -496,7 +496,7 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
         onPrimary={handleContinue}
         primaryDisabled={done}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => (onBack ? onBack() : navigate('/smokecraft/mentor-selection'))}
       />
     </>
   )

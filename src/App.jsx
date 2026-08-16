@@ -285,21 +285,20 @@ export default function App() {
               <Route path="smokecraft" element={<SmokeCraftJourneyProvider><SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider></SmokeCraftJourneyProvider>}>
                 {/* Entry-layer Launch — always unlocked (SmokeCraft landing, distinct from S1 Welcome below).
                     enforceEntryReadiness=false: this is the intentionally-public
-                    informational landing page a guest sees BEFORE enrollment —
+                    informational landing page a guest sees before onboarding —
                     it must remain reachable to show the Start CTA, unlike
-                    Welcome below which is the real first protected session. */}
+                    Welcome below, which is the first onboarding screen. */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false}><SmokeCraft /></SmokeCraftSessionGuard>} />
 
                 {/* S1 — welcome (Welcome to Today's Experience) — Package N */}
-                <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraftScreenRenderer screenId="session-1" /></SmokeCraftSessionGuard>} />
+                <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false} hideHeader><SmokeCraftScreenRenderer screenId="session-1" /></SmokeCraftSessionGuard>} />
 
                 {/* E2 — Sign In / Guest Mode (entry-layer, outside the 27-session spine) */}
-                <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />
+                <Route path="enroll"           element={<Enroll />} />
 
-                {/* E4 — Select Venue or Lounge (entry-layer, outside the 27-session spine).
-                    Canonical order: Enroll -> Identity -> Venue -> Welcome, so this now
-                    requires "identity" (not "enroll") — Identity is a real, required
-                    entry step between Guest Pass and Venue Selection. */}
+                {/* E3 — Select Venue or Lounge (entry-layer, outside the 27-session spine).
+                    Canonical order: Welcome -> Identity -> Venue, so this
+                    requires Identity before the guest can select a lounge. */}
                 <Route path="venue-select"     element={<SmokeCraftSessionGuard requires="identity"><VenueSelect /></SmokeCraftSessionGuard>} />
                 <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
@@ -311,9 +310,9 @@ export default function App() {
                 <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
                 <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
 
-                {/* Golden Box — supporting module (outside the 27-session spine), reachable from S1 */}
+                {/* Golden Box — onboarding rules step before Mentor Selection and Session 1. */}
                 <Route path="golden-box">
-                  <Route index             element={<SmokeCraftSessionGuard requires="entry"><GoldenBox /></SmokeCraftSessionGuard>} />
+                  <Route index             element={<SmokeCraftSessionGuard requires="venue"><GoldenBox /></SmokeCraftSessionGuard>} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
                   {/* Package 2 — live Golden Box competition flow (Package 1's
                       real backend). No route-level session guard: the server
@@ -380,7 +379,7 @@ export default function App() {
                     locked plan's longer-term note — that consolidation is a screen
                     redesign, explicitly out of scope for Package J. */}
                 <Route path="art"            element={<Art />} />
-                <Route path="mentor-selection" element={<SmokeCraftSessionGuard requires="entry"><Mentor /></SmokeCraftSessionGuard>} />
+                <Route path="mentor-selection" element={<SmokeCraftSessionGuard requires="golden-box"><Mentor /></SmokeCraftSessionGuard>} />
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
 
                 {/* S2 — humidor-match (Choose Your Cigar) */}
@@ -527,12 +526,9 @@ export default function App() {
                 <Route path="assistant"      element={<Assistant />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
-                {/* E4 — Personal Dashboard (entry-layer, outside the 27-session spine).
-                    Identity's own useEffect gate already requires 'enroll' complete
-                    (Package B); requires="entry" here is a permissive outer guard. */}
-                {/* E3 — Personal Identity (entry-layer, outside the 27-session spine).
-                    Canonical order: Enroll -> Identity -> Venue -> Welcome. */}
-                <Route path="identity"       element={<SmokeCraftSessionGuard requires="enroll"><Identity /></SmokeCraftSessionGuard>} />
+                {/* E2 — Personal Identity (entry-layer, outside the 27-session spine).
+                    Canonical order: Welcome -> Identity -> Venue. */}
+                <Route path="identity"       element={<SmokeCraftSessionGuard requires="entry"><Identity /></SmokeCraftSessionGuard>} />
 
                 {/* E5 — Resume or Start New Journey (entry-layer, outside the 27-session spine) */}
                 <Route path="resume"         element={<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>} />

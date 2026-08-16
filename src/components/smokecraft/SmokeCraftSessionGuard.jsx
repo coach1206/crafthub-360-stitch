@@ -27,16 +27,40 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { getSmokeCraftEntryReadiness } from '../../constants/smokecraftEntryReadiness.js'
 
+function requirementComplete(requirement, session, entryReadiness) {
+  switch (requirement) {
+    case 'entry':
+    case 'welcome':
+      return entryReadiness.welcomeComplete
+    case 'identity':
+      return entryReadiness.welcomeComplete && entryReadiness.identityComplete
+    case 'venue':
+    case 'venue-select':
+      return entryReadiness.welcomeComplete && entryReadiness.identityComplete && entryReadiness.venueComplete
+    case 'golden-box':
+      return entryReadiness.welcomeComplete && entryReadiness.identityComplete && entryReadiness.venueComplete && entryReadiness.goldenBoxComplete
+    case 'mentor':
+    case 'mentor-selection':
+      return entryReadiness.readyForSession1
+    case 'session-1':
+    case 'onboarding':
+      return entryReadiness.readyForSession1
+    default:
+      return session.completedSteps.includes(requirement)
+  }
+}
+
 export default function SmokeCraftSessionGuard({ sessionNumber, requires, children, hideHeader = false, enforceEntryReadiness = true }) {
   const { isSessionUnlocked, isDemoMode, currentAllowed } = useSmokeCraftProgress()
   const { session } = useGuestSession()
   const { journey } = useSmokeCraftJourney()
   const navigate = useNavigate()
+  const entryReadiness = getSmokeCraftEntryReadiness(session, journey)
 
   const requiresUnlocked = requires
-    ? (isDemoMode || requires === 'entry' || session.completedSteps.includes(requires))
+    ? (isDemoMode || requirementComplete(requires, session, entryReadiness))
     : true
-  const resumeRoute = currentAllowed?.route || '/smokecraft'
+  const resumeRoute = entryReadiness.redirectRoute || currentAllowed?.route || '/smokecraft/welcome'
 
   // Emergency Remediation Continuation: Entry-Prerequisite Guard pass — the
   // canonical numbered spine's own guard (sessionNumber, below) enforces
@@ -51,8 +75,7 @@ export default function SmokeCraftSessionGuard({ sessionNumber, requires, childr
   // src/constants/smokecraftEntryReadiness.js for the full contract and
   // docs/audits/smokecraft-final-completion/entry-prerequisite-remediation/
   // for the disclosed scope decisions.
-  const entryReadiness = getSmokeCraftEntryReadiness(session, journey)
-  const entryBlocked = !!sessionNumber && enforceEntryReadiness && !isDemoMode && !entryReadiness.readyForWelcome
+  const entryBlocked = !!sessionNumber && enforceEntryReadiness && !isDemoMode && !entryReadiness.readyForSession1
 
   // Production-readiness pass — navigate() was previously called directly
   // during render (inside the `if (requires)` branch below), which is the

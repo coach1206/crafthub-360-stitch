@@ -54,18 +54,22 @@ const SOURCE_FILES = [
 
 const EXPECTED_ENTRY_ORDER = [
   '/smokecraft',
-  '/smokecraft/enroll',
+  '/smokecraft/welcome',
   '/smokecraft/identity',
   '/smokecraft/venue-select',
+  '/smokecraft/golden-box',
+  '/smokecraft/mentor-selection',
+  '/smokecraft/enroll',
   '/smokecraft/resume',
 ]
 
 const EXPECTED_CANONICAL_ROUTE_ORDER = [
   '/smokecraft',
-  '/smokecraft/enroll',
+  '/smokecraft/welcome',
   '/smokecraft/identity',
   '/smokecraft/venue-select',
-  '/smokecraft/welcome',
+  '/smokecraft/golden-box',
+  '/smokecraft/mentor-selection',
   '/smokecraft/humidor-match',
   '/smokecraft/meet-your-cigar',
   '/smokecraft/terroir',
@@ -143,7 +147,7 @@ EXPECTED_CANONICAL_ROUTE_ORDER.forEach((route, index) => {
   check(`canonical route ${index + 1} is ${route}`, docsCanonicalRoutes[index] === route, `actual=${docsCanonicalRoutes[index]}`)
 })
 if (screenManifestSrc) {
-  check('screen manifest overrides Welcome to Golden Box', screenManifestSrc.includes("s.session === 1 ? '/smokecraft/golden-box'"))
+  check('screen manifest overrides Welcome to Identity', screenManifestSrc.includes("s.session === 1 ? '/smokecraft/identity'"))
   check('screen manifest overrides Format to Request/Purchase', screenManifestSrc.includes("s.session === 5 ? '/smokecraft/request-purchase'"))
 }
 if (completionSrc) {

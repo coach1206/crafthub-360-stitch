@@ -34,6 +34,8 @@ const ENTRY_SCREENS = [
   { screenId: 'entry-enroll',     type: 'entry', route: '/smokecraft/enroll',       title: 'Enrollment',   assetKey: 'enroll',          directAccessAllowed: false },
   { screenId: 'entry-identity',   type: 'entry', route: '/smokecraft/identity',     title: 'Identity',     assetKey: 'identity',        directAccessAllowed: false },
   { screenId: 'entry-venue',      type: 'entry', route: '/smokecraft/venue-select', title: 'Venue Selection', assetKey: 'venueSelect',  directAccessAllowed: false },
+  { screenId: 'entry-golden-box', type: 'entry', route: '/smokecraft/golden-box',   title: 'Golden Box Rules', assetKey: null,          directAccessAllowed: false },
+  { screenId: 'entry-mentor',     type: 'entry', route: '/smokecraft/mentor-selection', title: 'Mentor Selection', assetKey: null,     directAccessAllowed: false },
 ]
 
 const all = []
@@ -72,9 +74,11 @@ export const SMOKECRAFT_SCREEN_MANIFEST = [
       componentKey: `session-${s.session}`,
       assetKey,
       assetStatus: assetKey ? (SC_ASSETS[assetKey] ? 'ok' : 'missing-on-disk') : 'missing-approved-asset',
-      previousScreenId: i > 0 ? `session-${all[i - 1].session}` : 'entry-venue',
+      previousScreenId: s.session === 2 ? 'entry-mentor'
+        : i > 0 ? `session-${all[i - 1].session}`
+        : 'entry-landing',
       nextScreenId: i < all.length - 1 ? `session-${all[i + 1].session}` : 'supporting-recommended-next-journey',
-      prerequisites: i > 0 ? [`session-${all[i - 1].session}`] : ['entry-enroll', 'entry-venue'],
+      prerequisites: i > 0 ? [`session-${all[i - 1].session}`] : [],
       guardType: 'sessionNumber',
       dataSelectorKey: `session-${s.session}`,
       completionKey: s.id,
@@ -91,23 +95,11 @@ export const SMOKECRAFT_SCREEN_MANIFEST = [
       // linear nextScreenId chain used for guard/back-nav purposes)
       // preserves that approved navigation exactly.
       //
-      // Canonical Journey Recovery (SC-D077): Welcome (S1) approved flow
-      // forwards into Golden Box Rules -> Mentor Selection -> Seed & Soil
-      // (SUPPORTING_MODULES, session.js — a real, already-built, already-
-      // wired chain that already forwards on to Humidor Match itself) —
-      // not straight to S2. This manifest's auto-derived `nextScreenId`
-      // (session-1 -> session-2) is correct for guard/back-nav purposes
-      // (it still reflects the true spine order) but was, until this fix,
-      // ALSO the route `completeSmokeCraftScreen()` used to send a real
-      // player after Welcome's "Begin Experience" button — silently
-      // overriding WelcomeExperience.jsx's own `navigate(NAV.GOLDEN_BOX)`
-      // call via the `onComplete` prop SmokeCraftScreenRenderer passes it.
-      // This was the actual root cause of "Golden Box/Mentor/Seed & Soil
-      // are being skipped" — a second, independent next-route authority
-      // that the in-component navigate() call could never reach, because
-      // `onComplete` (when present) always short-circuits before it.
+      // Welcome is the first required onboarding screen. Its completion
+      // forwards to Identity Setup, then Venue Selection, Golden Box Rules,
+      // Mentor Selection, and only then Session 1 / Session Preparation.
       nextRouteOverride: s.session === 5 ? '/smokecraft/request-purchase'
-        : s.session === 1 ? '/smokecraft/golden-box'
+        : s.session === 1 ? '/smokecraft/identity'
         : null,
       directAccessAllowed: false,
       reviewAllowed: true,

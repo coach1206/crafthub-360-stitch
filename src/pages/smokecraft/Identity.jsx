@@ -146,12 +146,6 @@ export default function Identity() {
   const initialized = useRef(false)
 
   useEffect(() => {
-    if (!isDemoMode && !session.completedSteps.includes('enroll')) {
-      navigate('/smokecraft/enroll', { replace: true })
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
     if (!initialized.current) {
       initialized.current = true
       return
@@ -364,7 +358,7 @@ export default function Identity() {
         primary={submitting ? 'Opening Journey…' : 'Continue to Venue Selection →'}
         onPrimary={handleBegin}
         secondary="← Back"
-        onSecondary={() => { triggerHaptic('light'); navigate('/smokecraft/enroll') }}
+        onSecondary={() => { triggerHaptic('light'); navigate('/smokecraft/welcome') }}
       />
     </SmokeCraftScreenShell>
   )

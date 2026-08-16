@@ -193,8 +193,8 @@ export const VISIT_STRUCTURE = [
 // TOTAL_SESSIONS and do not gate any spine session's unlock — they are
 // side-quests reachable from the session that opened them, returning to it.
 export const SUPPORTING_MODULES = [
-  { id: 'golden-box',            route: '/smokecraft/golden-box',            label: 'Gold Box Rules',            requires: 'entry' },
-  { id: 'mentor',                route: '/smokecraft/mentor-selection',      label: 'Mentor Selection',          requires: 'entry' },
+  { id: 'golden-box',            route: '/smokecraft/golden-box',            label: 'Gold Box Rules',            requires: 'venue' },
+  { id: 'mentor',                route: '/smokecraft/mentor-selection',      label: 'Mentor Selection',          requires: 'golden-box' },
   // Authoritative journey graph correction: Seed & Soil is the real next
   // step after Mentor Selection (not immediately after Format). Registered
   // here so KNOWN_ROUTES (Resume's self-heal validator) recognizes it.
@@ -216,9 +216,12 @@ export const SUPPORTING_MODULES = [
 // Journey; the other three were already live).
 export const ENTRY_LAYER_SCREENS = [
   { id: 'launch',            route: '/smokecraft',              label: 'Launch',                        implemented: true },
-  { id: 'sign-in',           route: '/smokecraft/enroll',       label: 'Sign In / Guest Mode',           implemented: true },
-  { id: 'personal-dashboard',route: '/smokecraft/identity',     label: 'Personal Dashboard',             implemented: true },
+  { id: 'welcome',           route: '/smokecraft/welcome',      label: 'Welcome / Journey Introduction', implemented: true },
+  { id: 'identity',          route: '/smokecraft/identity',     label: 'Identity Setup',                 implemented: true },
   { id: 'venue-select',      route: '/smokecraft/venue-select', label: 'Venue Selection',                implemented: true },
+  { id: 'golden-box',        route: '/smokecraft/golden-box',   label: 'Golden Box Rules',               implemented: true },
+  { id: 'mentor-selection',  route: '/smokecraft/mentor-selection', label: 'Mentor Selection',           implemented: true },
+  { id: 'sign-in',           route: '/smokecraft/enroll',       label: 'Sign In / Guest Mode',           implemented: true },
   { id: 'resume',            route: '/smokecraft/resume',       label: 'Resume or Start New Journey',    implemented: true },
 ]
 

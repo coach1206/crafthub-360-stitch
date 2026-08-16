@@ -3,9 +3,9 @@
 // numbered SmokeCraft spine (currently: the Welcome route, S1) must call this
 // function rather than re-implementing its own prerequisite check.
 //
-// Canonical entry-layer order (per explicit product requirement):
-//   Launch -> Guest Pass/Enrollment (enroll) -> Identity -> Venue Selection
-//   -> Welcome / Session 1.
+// Canonical onboarding order (per explicit product requirement):
+//   Welcome / Journey Introduction -> Identity Setup -> Venue Selection
+//   -> Golden Box Rules -> Mentor Selection -> Session 1 / Session Preparation.
 //
 // Root-cause correction (Navigation Authority pass): Identity was previously
 // treated as an optional dashboard with no completion flag of its own
@@ -19,47 +19,55 @@
 // selection, so there is exactly one authority for this order and no page
 // can silently disagree with it.
 //
-// "Mentor Selection" (/smokecraft/mentor-selection) is a real, existing
-// SUPPORTING_MODULES entry, but in the current, already-approved architecture
-// it is gated `requires: 'entry'` — i.e. it comes AFTER Welcome/S1, not
-// before it (confirmed: Mentor.jsx's own Continue button navigates to
-// /smokecraft/seed-soil, a further post-Welcome supporting module, never back
-// into the Welcome/S1 spine). mentorComplete is reported for contract
-// completeness but does NOT gate readyForWelcome — disclosed, not silent.
+// Guest Pass/Enrollment remains a legacy/optional route for returning
+// compatibility, but it is no longer the first required onboarding screen.
 export function getSmokeCraftEntryReadiness(session, journey) {
   const completedSteps = session?.completedSteps || []
   const enrollmentComplete = completedSteps.includes('enroll')
   const identityComplete = completedSteps.includes('identity')
   const venueComplete = !!(journey?.selectedVenue || journey?.venueSelectionCompleted)
-  // Reported for API completeness; NOT a pre-Welcome gate — see disclosure above.
-  const mentorComplete = !!journey?.mentor
+  const goldenBoxComplete = completedSteps.includes('golden-box') || !!journey?.goldenBox?.acknowledged
+  const mentorComplete = completedSteps.includes('mentor') || !!journey?.mentor
+  const welcomeComplete = completedSteps.includes('entry') || identityComplete || venueComplete || goldenBoxComplete || mentorComplete
 
   const validationIssues = []
-  if (!enrollmentComplete) validationIssues.push('enrollment_required')
-  if (enrollmentComplete && !identityComplete) validationIssues.push('identity_required')
-  if (enrollmentComplete && identityComplete && !venueComplete) validationIssues.push('venue_required')
+  if (!welcomeComplete) validationIssues.push('welcome_required')
+  if (welcomeComplete && !identityComplete) validationIssues.push('identity_required')
+  if (welcomeComplete && identityComplete && !venueComplete) validationIssues.push('venue_required')
+  if (welcomeComplete && identityComplete && venueComplete && !goldenBoxComplete) validationIssues.push('golden_box_required')
+  if (welcomeComplete && identityComplete && venueComplete && goldenBoxComplete && !mentorComplete) validationIssues.push('mentor_required')
 
   let firstIncompleteRequirement = null
   let redirectRoute = null
-  if (!enrollmentComplete) {
-    firstIncompleteRequirement = 'enrollment'
-    redirectRoute = '/smokecraft/enroll'
+  if (!welcomeComplete) {
+    firstIncompleteRequirement = 'welcome'
+    redirectRoute = '/smokecraft/welcome'
   } else if (!identityComplete) {
     firstIncompleteRequirement = 'identity'
     redirectRoute = '/smokecraft/identity'
   } else if (!venueComplete) {
     firstIncompleteRequirement = 'venue'
     redirectRoute = '/smokecraft/venue-select'
+  } else if (!goldenBoxComplete) {
+    firstIncompleteRequirement = 'golden-box'
+    redirectRoute = '/smokecraft/golden-box'
+  } else if (!mentorComplete) {
+    firstIncompleteRequirement = 'mentor'
+    redirectRoute = '/smokecraft/mentor-selection'
   }
 
-  const readyForWelcome = enrollmentComplete && identityComplete && venueComplete
+  const readyForWelcome = true
+  const readyForSession1 = welcomeComplete && identityComplete && venueComplete && goldenBoxComplete && mentorComplete
 
   return {
+    welcomeComplete,
     enrollmentComplete,
     identityComplete,
     venueComplete,
+    goldenBoxComplete,
     mentorComplete,
     readyForWelcome,
+    readyForSession1,
     firstIncompleteRequirement,
     redirectRoute,
     validationIssues,

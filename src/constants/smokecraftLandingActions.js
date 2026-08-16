@@ -68,7 +68,7 @@ export const SMOKECRAFT_LANDING_DESTINATIONS = Object.freeze({
 })
 
 // The clean entry step a new or restarted journey always begins at.
-export const SMOKECRAFT_ENROLLMENT_ROUTE = '/smokecraft/enroll'
+export const SMOKECRAFT_ENROLLMENT_ROUTE = '/smokecraft/welcome'
 
 /**
  * Read the current journey state once, from the existing canonical helpers.
@@ -90,7 +90,7 @@ export function getSmokeCraftLandingJourneyState() {
   // completed Guest Pass but no session at all still has a real, resumable
   // journey — treating them as a brand-new user is exactly what caused the
   // Start-always-reopens-Guest-Pass defect this pass fixes.
-  const hasActiveJourney = Boolean(status.hasStarted) || readiness.enrollmentComplete
+  const hasActiveJourney = Boolean(status.hasStarted) || readiness.welcomeComplete
   const isReturning = hasActiveJourney && !status.isComplete
   return {
     entryRoute,
@@ -251,20 +251,9 @@ export function resolveSmokeCraftLandingAction(actionId, journeyState = getSmoke
     // Confirmation is required because this is the only destructive control on
     // the Landing screen.
     case A.START_NEW:
-      // The canonical reset (useStartNewSmokeCraftJourney) preserves ONLY the
-      // account-level 'enroll' step (PRESERVED_COMPLETED_STEP_IDS) and clears
-      // every other journey-specific field/step, including 'identity' and the
-      // venue. So the first genuinely incomplete entry requirement AFTER the
-      // reset is Identity (not Venue Selection) for an already-enrolled
-      // account, and Guest Pass/Enrollment only for one that never enrolled.
-      // Sending an enrolled user back through Guest Pass — or skipping
-      // straight past Identity to Venue — here would be the same
-      // "wrong-entry-step" defect in a second place.
       return {
         actionId,
-        route: journeyState?.readiness?.enrollmentComplete
-          ? '/smokecraft/identity'
-          : SMOKECRAFT_ENROLLMENT_ROUTE,
+        route: SMOKECRAFT_ENROLLMENT_ROUTE,
         label: 'Start New Journey',
         startsNewJourney: true,
         requiresConfirmation: true,

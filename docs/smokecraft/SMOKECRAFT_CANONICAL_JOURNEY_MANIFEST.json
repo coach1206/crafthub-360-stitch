@@ -12,16 +12,16 @@
       "kind": "entry-layer"
     },
     {
-      "id": "sign-in",
-      "route": "/smokecraft/enroll",
-      "label": "Sign In / Guest Mode",
+      "id": "welcome",
+      "route": "/smokecraft/welcome",
+      "label": "Welcome / Journey Introduction",
       "implemented": true,
       "kind": "entry-layer"
     },
     {
-      "id": "personal-dashboard",
+      "id": "identity",
       "route": "/smokecraft/identity",
-      "label": "Personal Dashboard",
+      "label": "Identity Setup",
       "implemented": true,
       "kind": "entry-layer"
     },
@@ -29,6 +29,27 @@
       "id": "venue-select",
       "route": "/smokecraft/venue-select",
       "label": "Venue Selection",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "label": "Golden Box Rules",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "mentor-selection",
+      "route": "/smokecraft/mentor-selection",
+      "label": "Mentor Selection",
+      "implemented": true,
+      "kind": "entry-layer"
+    },
+    {
+      "id": "sign-in",
+      "route": "/smokecraft/enroll",
+      "label": "Sign In / Guest Mode",
       "implemented": true,
       "kind": "entry-layer"
     },
@@ -319,14 +340,14 @@
       "id": "golden-box",
       "route": "/smokecraft/golden-box",
       "label": "Gold Box Rules",
-      "requires": "entry",
+      "requires": "venue",
       "kind": "supporting-module"
     },
     {
       "id": "mentor",
       "route": "/smokecraft/mentor-selection",
       "label": "Mentor Selection",
-      "requires": "entry",
+      "requires": "golden-box",
       "kind": "supporting-module"
     },
     {
@@ -388,10 +409,11 @@
   ],
   "canonicalRouteOrder": [
     "/smokecraft",
-    "/smokecraft/enroll",
+    "/smokecraft/welcome",
     "/smokecraft/identity",
     "/smokecraft/venue-select",
-    "/smokecraft/welcome",
+    "/smokecraft/golden-box",
+    "/smokecraft/mentor-selection",
     "/smokecraft/humidor-match",
     "/smokecraft/meet-your-cigar",
     "/smokecraft/terroir",

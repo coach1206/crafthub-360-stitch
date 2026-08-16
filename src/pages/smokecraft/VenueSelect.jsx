@@ -193,7 +193,7 @@ export default function VenueSelect() {
 
   function handleContinue() {
     if (!selectedId && !skipped) return
-    navigate('/smokecraft/welcome')
+    navigate('/smokecraft/golden-box')
   }
 
   const canContinue = !!selectedId || skipped
@@ -394,7 +394,7 @@ export default function VenueSelect() {
       </main>
 
       <SmokeCraftNavBar
-        primary="Continue to Welcome →"
+        primary="Continue to Golden Box Rules →"
         onPrimary={handleContinue}
         primaryDisabled={!canContinue}
         secondary="← Back"

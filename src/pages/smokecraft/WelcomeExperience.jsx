@@ -214,22 +214,10 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
       return
     }
     if (!completed) awardSessionRewards('entry')
-    // Canonical Journey Recovery: this was a hardcoded jump straight to
-    // Humidor Match (S2), which silently skipped three real, fully-built,
-    // fully-wired screens — Golden Box Rules -> Mentor Selection -> Seed &
-    // Soil — that already exist, already connect to each other
-    // (GoldenBox.jsx -> NAV.MENTOR, Mentor.jsx -> /smokecraft/seed-soil,
-    // SeedSoil.jsx -> /smokecraft/humidor-match, all confirmed live and
-    // guard-satisfied once 'entry' is complete, per
-    // docs/SMOKECRAFT_AUTHORITATIVE_ROUTE_GRAPH.md) and were only ever
-    // reachable via optional side-nav, never from the primary "Begin
-    // Experience" path a real player actually takes. This is the exact
-    // "designed screens now being skipped" defect the owner reported.
-    // TOTAL_SESSIONS/VISIT_STRUCTURE numbering is unchanged — these remain
-    // supporting modules, not renumbered spine sessions — only the primary
-    // forward path now actually enters the chain that was already built
-    // for it, instead of bypassing it.
-    navigate(NAV.GOLDEN_BOX)
+    // The primary path starts with Identity; later onboarding guards keep
+    // Venue Selection, Golden Box Rules, and Mentor Selection in order
+    // before Session 1 can begin.
+    navigate('/smokecraft/identity')
   }
 
   const identityName = journey.identity?.preferredName || journey.identity?.fullName || null
@@ -365,7 +353,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
                     <div>Status: <span style={{ color: GOLD_DIM }}>{journeyStatus}</span></div>
                   </div>
                 }
-                detail="Your journey status reflects real progress saved to this device — 27 sessions across 6 phases. It matters because Resume always picks up exactly where you left off, and your Golden Box eligibility depends on completing the curriculum sessions honestly, not just visiting screens. Next: continue reviewing this Welcome screen, then Begin Experience to enter Session 1."
+                detail="Your journey status reflects real progress saved to this device — 27 sessions across 6 phases. It matters because Resume always picks up exactly where you left off, and Golden Box eligibility depends on completing required actions honestly, not just visiting screens. Next: continue reviewing this Welcome screen, then continue to Identity Setup."
               />
 
               {/* Cigar preview — now a real interactive control, only real data */}
@@ -411,7 +399,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
                 openPanel={openPanel}
                 onToggle={togglePanel}
                 summary={<div style={{ fontSize: 13, color: CREAM }}>Choose Your Cigar — <span style={{ color: GOLD_DIM }}>Humidor Match</span></div>}
-                detail="Session 1 (Choose Your Cigar / Humidor Match) is the real start of your 27-session curriculum. You'll browse the humidor and select the cigar that carries through the rest of today's experience — your choice here is what the Cigar Preview above will reflect once made. Next: tap Begin Experience below to enter Session 1."
+                detail="Session 1 (Choose Your Cigar / Humidor Match) begins after Identity Setup, Venue Selection, Golden Box Rules, and Mentor Selection are complete. You'll browse the humidor and select the cigar that carries through the rest of today's experience."
               />
 
               {/* Golden Box objective preview — new this pass, real data only */}
@@ -421,7 +409,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
                 openPanel={openPanel}
                 onToggle={togglePanel}
                 summary={<div style={{ fontSize: 13, color: CREAM }}>Design, submit, and defend your own blend concept.</div>}
-                detail="The Golden Box Challenge is a supporting module reachable once you've completed enrollment — it lets you design a blend concept, build packaging in the Packaging Studio, and submit it for mentor and judge review. It is not one of the 27 numbered curriculum sessions, but everything you learn in those sessions (terroir, construction, flavor, pairing) directly informs a stronger Golden Box submission. Next: Golden Box is reachable from the main SmokeCraft menu at any point after enrollment."
+                detail="Golden Box Rules come after Venue Selection and before Mentor Selection. Accepting them is required before Session 1 can begin."
               />
 
               {/* View Journey Overview control */}
@@ -486,7 +474,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
       {phase === 'ready' && (
         <button
           type="button"
-          aria-label="Start Session 1 — Begin Experience"
+          aria-label="Continue to Identity Setup"
           onClick={handleBegin}
           style={{
             position: 'absolute', left: '73.2%', top: '84.3%', width: '22.8%', height: '4.6%',
@@ -495,11 +483,11 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
       )}
 
       <SmokeCraftNavBar
-        primary="Begin Experience →"
+        primary="Continue to Identity Setup →"
         onPrimary={handleBegin}
         primaryDisabled={phase !== 'ready'}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/resume')}
+        onSecondary={() => navigate('/smokecraft')}
       />
     </SmokeCraftScreenShell>
   )

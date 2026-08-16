@@ -231,7 +231,7 @@ export default function Mentor() {
     if (selected.length === 0) return
     triggerHaptic('medium')
     awardSessionRewards('mentor')
-    navigate('/smokecraft/seed-soil')
+    navigate('/smokecraft/humidor-match')
   }
 
   return (
@@ -285,11 +285,11 @@ export default function Mentor() {
       </main>
 
       <SmokeCraftNavBar
-        primary="Continue to Seed & Soil →"
+        primary="Continue to Session 1 →"
         onPrimary={handleContinue}
         primaryDisabled={selected.length === 0}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/golden-box')}
       />
     </div>
   )

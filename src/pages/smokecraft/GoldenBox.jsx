@@ -236,7 +236,7 @@ export default function GoldenBox() {
       }}>
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/smokecraft/venue-select')}
           style={{
             background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 999,
             color: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14,

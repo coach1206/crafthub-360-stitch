@@ -2,12 +2,12 @@
  * Verification: SmokeCraft canonical flow order.
  *
  * Confirms the active app follows the current handoff:
- * - 5 entry-layer screens, with Resume marked non-linear
+ * - onboarding screens in the required fresh-user order, with Resume marked non-linear
  * - 27 numbered sessions across 6 phases
  * - 25 distinct canonical routes in the documented route order
  * - supporting modules remain gated side paths, not numbered sessions
  * - runtime completion overrides preserve approved detours without changing
- *   the numbered spine: Welcome -> Golden Box and Format -> Request/Purchase
+ *   the numbered spine: Welcome -> Identity and Format -> Request/Purchase
  */
 
 import { readFileSync, existsSync } from 'fs'
@@ -43,18 +43,22 @@ function readJson(relPath) {
 
 const EXPECTED_ENTRY_ROUTES = [
   '/smokecraft',
-  '/smokecraft/enroll',
+  '/smokecraft/welcome',
   '/smokecraft/identity',
   '/smokecraft/venue-select',
+  '/smokecraft/golden-box',
+  '/smokecraft/mentor-selection',
+  '/smokecraft/enroll',
   '/smokecraft/resume',
 ]
 
 const EXPECTED_ROUTE_ORDER = [
   '/smokecraft',
-  '/smokecraft/enroll',
+  '/smokecraft/welcome',
   '/smokecraft/identity',
   '/smokecraft/venue-select',
-  '/smokecraft/welcome',
+  '/smokecraft/golden-box',
+  '/smokecraft/mentor-selection',
   '/smokecraft/humidor-match',
   '/smokecraft/meet-your-cigar',
   '/smokecraft/terroir',
@@ -78,8 +82,8 @@ const EXPECTED_ROUTE_ORDER = [
 ]
 
 const EXPECTED_SUPPORTING = [
-  { id: 'golden-box', route: '/smokecraft/golden-box', requires: 'entry' },
-  { id: 'mentor', route: '/smokecraft/mentor-selection', requires: 'entry' },
+  { id: 'golden-box', route: '/smokecraft/golden-box', requires: 'venue' },
+  { id: 'mentor', route: '/smokecraft/mentor-selection', requires: 'golden-box' },
   { id: 'seed-soil', route: '/smokecraft/seed-soil', requires: 'mentor' },
   { id: 'wrapper-strength', route: '/smokecraft/wrapper-strength', requires: 'format' },
   { id: 'request-purchase', route: '/smokecraft/request-purchase', requires: 'humidor-match' },
@@ -104,10 +108,10 @@ check('canonical manifest exists', canonical !== null)
 if (canonical) {
   check('total phases is 6', canonical.totalPhases === 6, `actual=${canonical.totalPhases}`)
   check('total sessions is 27', canonical.totalSessions === 27, `actual=${canonical.totalSessions}`)
-  check('entry layer has 5 screens', canonical.entryLayer?.length === 5, `actual=${canonical.entryLayer?.length}`)
+  check('entry layer has required onboarding screens', canonical.entryLayer?.length === EXPECTED_ENTRY_ROUTES.length, `actual=${canonical.entryLayer?.length}`)
   check('spine has 27 sessions', canonical.spine?.length === 27, `actual=${canonical.spine?.length}`)
   check('supporting module count is 10', canonical.supportingModules?.length === 10, `actual=${canonical.supportingModules?.length}`)
-  check('canonical route count is 25 distinct routes', canonical.canonicalRouteOrder?.length === 25, `actual=${canonical.canonicalRouteOrder?.length}`)
+  check('canonical route count matches required flow', canonical.canonicalRouteOrder?.length === EXPECTED_ROUTE_ORDER.length, `actual=${canonical.canonicalRouteOrder?.length}`)
 }
 
 console.log('\nGate 2 - entry layer order')
@@ -163,10 +167,12 @@ check('App.jsx exists', appJsx !== null)
 if (appJsx) {
   const requiredAppSnippets = [
     ['landing is public entry', '<Route index element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false}>'],
-    ['welcome is session 1', 'path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}>'],
-    ['enroll requires entry', 'path="enroll"           element={<SmokeCraftSessionGuard requires="entry">'],
-    ['identity requires enroll', 'path="identity"       element={<SmokeCraftSessionGuard requires="enroll">'],
+    ['welcome is first onboarding screen', 'path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false} hideHeader>'],
+    ['enroll remains legacy-accessible', 'path="enroll"           element={<Enroll />}'],
+    ['identity requires welcome', 'path="identity"       element={<SmokeCraftSessionGuard requires="entry">'],
     ['venue-select requires identity', 'path="venue-select"     element={<SmokeCraftSessionGuard requires="identity">'],
+    ['golden-box requires venue', 'element={<SmokeCraftSessionGuard requires="venue"><GoldenBox /></SmokeCraftSessionGuard>}'],
+    ['mentor-selection requires golden-box', 'path="mentor-selection" element={<SmokeCraftSessionGuard requires="golden-box"><Mentor /></SmokeCraftSessionGuard>}'],
     ['humidor-match is session 2', 'path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={2}>'],
     ['format is session 5', 'path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}>'],
     ['scorecard is session 19', 'path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={19}>'],
@@ -189,7 +195,7 @@ check('smokecraftComponentRegistry exists', registry !== null)
 check('smokecraftCompletionService exists', completionService !== null)
 if (screenManifest) {
   check('screen manifest derives from VISIT_STRUCTURE', screenManifest.includes('VISIT_STRUCTURE'))
-  check('Welcome completion detours to Golden Box', screenManifest.includes("s.session === 1 ? '/smokecraft/golden-box'"))
+  check('Welcome completion continues to Identity', screenManifest.includes("s.session === 1 ? '/smokecraft/identity'"))
   check('Format completion detours to Request/Purchase', screenManifest.includes("s.session === 5 ? '/smokecraft/request-purchase'"))
 }
 if (registry) {
@@ -204,9 +210,9 @@ if (completionService) {
 
 console.log('\nGate 8 - known direct navigation hops')
 const routeChecks = [
-  ['WelcomeExperience.jsx', 'NAV.GOLDEN_BOX'],
+  ['WelcomeExperience.jsx', "/smokecraft/identity"],
   ['GoldenBox.jsx', 'NAV.MENTOR'],
-  ['Mentor.jsx', '/smokecraft/seed-soil'],
+  ['Mentor.jsx', '/smokecraft/humidor-match'],
   ['SeedSoil.jsx', '/smokecraft/humidor-match'],
   ['Format.jsx', '/smokecraft/request-purchase'],
   ['RequestPurchase.jsx', '/smokecraft/cut-toast-light'],
