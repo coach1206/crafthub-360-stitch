@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { VISIT_STRUCTURE } from '../../constants/session.js'
 import SmokeCraftOwnerHeroBackground from '../../components/smokecraft/SmokeCraftOwnerHeroBackground.jsx'
+import { getSmokeCraftEntryReadiness } from '../../constants/smokecraftEntryReadiness.js'
 import {
   GOLD,
   GOLD_DIM,
@@ -75,29 +74,11 @@ const EMPTY = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const REGISTERED_ROUTES = new Set(
-  VISIT_STRUCTURE.flatMap(v => v.sessions.map(s => s.route)).filter(Boolean)
-)
-
-const SESSION_BY_ROUTE = (() => {
-  const map = new Map()
-  for (const visit of VISIT_STRUCTURE) {
-    for (const session of visit.sessions) {
-      if (session.route && !map.has(session.route)) map.set(session.route, session)
-    }
-  }
-  return map
-})()
-
-const JOURNEY_LINKS = [
+const ONBOARDING_LINKS = [
   { route: '/smokecraft/identity', label: 'Identity' },
+  { route: '/smokecraft/venue-select', label: 'Venue Selection' },
   { route: '/smokecraft/golden-box', label: 'Golden Box' },
-  { route: '/smokecraft/mentor-selection', label: 'Mentor' },
-  { route: '/smokecraft/pairing-lab', label: 'Pairing Lab' },
-  { route: '/smokecraft/humidor-match', label: 'Humidor Match' },
-  { route: '/smokecraft/request-purchase', label: 'Request / Purchase' },
-  { route: '/smokecraft/cut-toast-light', label: 'Cut, Toast & Light' },
-  { route: '/smokecraft/first-third', label: 'First Third' },
+  { route: '/smokecraft/mentor-selection', label: 'Mentor Selection' },
 ]
 
 const inputStyle = {
@@ -115,15 +96,43 @@ const inputStyle = {
   colorScheme: 'dark',
 }
 
+function formatBirthDateDisplay(value) {
+  if (!value) return ''
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+  if (iso) return `${iso[2]}/${iso[3]}/${iso[1]}`
+  return value
+}
+
+function normalizeBirthDateInput(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 8)
+  if (digits.length <= 2) return digits
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`
+}
+
+function parseBirthDate(value) {
+  if (!value) return null
+  const trimmed = value.trim()
+  const slash = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(trimmed)
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(trimmed)
+  const month = slash ? Number(slash[1]) : iso ? Number(iso[2]) : NaN
+  const day = slash ? Number(slash[2]) : iso ? Number(iso[3]) : NaN
+  const year = slash ? Number(slash[3]) : iso ? Number(iso[1]) : NaN
+  if (!Number.isInteger(month) || !Number.isInteger(day) || !Number.isInteger(year)) return null
+  const date = new Date(year, month - 1, day)
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null
+  return date
+}
+
 function validateForm(form) {
   const errors = {}
   if (!form.fullName.trim()) errors.fullName = 'Full name is required'
   if (!form.experienceLevel) errors.experienceLevel = 'Please select your experience level'
   if (form.email.trim() && !EMAIL_RE.test(form.email.trim())) errors.email = 'Enter a valid email address'
   if (form.birthDate) {
-    const date = new Date(form.birthDate)
+    const date = parseBirthDate(form.birthDate)
     const now = new Date()
-    if (Number.isNaN(date.getTime()) || date > now) {
+    if (!date || date > now) {
       errors.birthDate = 'Enter a valid birth date'
     } else {
       const age = (now - date) / (1000 * 60 * 60 * 24 * 365.25)
@@ -136,7 +145,6 @@ function validateForm(form) {
 export default function Identity() {
   const navigate = useNavigate()
   const { awardSessionRewards, session } = useGuestSession()
-  const { currentAllowed, isDemoMode, completedSessions } = useSmokeCraftProgress()
   const { journey, setIdentity } = useSmokeCraftJourney()
 
   const [form, setForm] = useState(() => journey.identity ? { ...EMPTY, ...journey.identity } : { ...EMPTY })
@@ -157,6 +165,7 @@ export default function Identity() {
   }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const errors = useMemo(() => validateForm(form), [form])
+  const entryReadiness = useMemo(() => getSmokeCraftEntryReadiness(session, journey), [session, journey])
 
   function set(field, value) {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -241,6 +250,61 @@ export default function Identity() {
     )
   }
 
+  function birthDateField() {
+    const invalid = Boolean(touched.birthDate && errors.birthDate)
+    return (
+      <label style={{ display: 'block' }}>
+        {fieldLabel('Birth Date')}
+        <input
+          data-testid="identity-birthDate"
+          type="text"
+          inputMode="numeric"
+          autoComplete="bday"
+          placeholder="MM / DD / YYYY"
+          aria-label="Birth Date, MM DD YYYY"
+          aria-invalid={invalid}
+          value={formatBirthDateDisplay(form.birthDate)}
+          maxLength={10}
+          onChange={event => set('birthDate', normalizeBirthDateInput(event.target.value))}
+          onBlur={() => setTouched(prev => ({ ...prev, birthDate: true }))}
+          style={{ ...inputStyle, borderColor: invalid ? '#e05a5a' : BORDER }}
+          onFocus={event => { event.currentTarget.style.borderColor = GOLD }}
+        />
+        <span style={{ display: 'block', marginTop: 6, color: 'rgba(229,226,225,0.5)', fontSize: 11 }}>
+          Type the month, day, and four-digit year directly.
+        </span>
+        {invalid && <span role="alert" style={{ display: 'block', marginTop: 6, color: '#e77878', fontSize: 12 }}>{errors.birthDate}</span>}
+      </label>
+    )
+  }
+
+  function onboardingStatus(route) {
+    if (route === '/smokecraft/identity') {
+      return session.completedSteps?.includes('identity') ? 'Complete' : 'Current'
+    }
+    if (route === '/smokecraft/venue-select') {
+      if (entryReadiness.venueComplete) return 'Complete'
+      return session.completedSteps?.includes('identity') ? 'Next' : 'Up next'
+    }
+    if (route === '/smokecraft/golden-box') {
+      if (entryReadiness.goldenBoxComplete) return 'Complete'
+      return entryReadiness.venueComplete ? 'Next' : 'Locked'
+    }
+    if (route === '/smokecraft/mentor-selection') {
+      if (entryReadiness.mentorComplete) return 'Complete'
+      return entryReadiness.goldenBoxComplete ? 'Next' : 'Locked'
+    }
+    return 'Locked'
+  }
+
+  function canOpenOnboardingRoute(route) {
+    if (route === '/smokecraft/identity') return true
+    if (route === '/smokecraft/venue-select') return session.completedSteps?.includes('identity') || entryReadiness.venueComplete
+    if (route === '/smokecraft/golden-box') return entryReadiness.venueComplete
+    if (route === '/smokecraft/mentor-selection') return entryReadiness.goldenBoxComplete
+    return false
+  }
+
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
       <SmokeCraftOwnerHeroBackground assetKey="ownerIdentityHero" label="A man enjoying a cigar in a premium lounge" bgPosition="center" bgSize="cover" />
@@ -280,7 +344,7 @@ export default function Identity() {
               {textField('fullName', 'text', 'Full Name', true)}
               {textField('email', 'email', 'Email Address')}
               {textField('preferredName', 'text', 'Preferred Name')}
-              {textField('birthDate', 'date', 'Birth Date')}
+              {birthDateField()}
               {selectField('country', 'Country', 'Select country', COUNTRIES)}
               {selectField('experienceLevel', 'Cigar Experience Level', 'Select experience level', EXPERIENCE_LEVELS, true)}
               {selectField('focusArea', 'What excites you most?', 'Select focus area', FOCUS_AREAS)}
@@ -317,11 +381,11 @@ export default function Identity() {
             <section style={{ ...cardStyle, padding: 18 }}>
               <div style={sectionLabelStyle}>Journey</div>
               <nav aria-label="SmokeCraft journey shortcuts" style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
-                {JOURNEY_LINKS.filter(item => item.route === '/smokecraft/identity' || REGISTERED_ROUTES.has(item.route)).map(item => {
-                  const sessionMeta = SESSION_BY_ROUTE.get(item.route)
-                  const done = sessionMeta ? completedSessions?.includes(sessionMeta.session) : false
-                  const isCurrent = currentAllowed?.route === item.route
-                  const unlocked = item.route === '/smokecraft/identity' || isDemoMode || done || isCurrent
+                {ONBOARDING_LINKS.map(item => {
+                  const status = onboardingStatus(item.route)
+                  const unlocked = canOpenOnboardingRoute(item.route)
+                  const isCurrent = item.route === '/smokecraft/identity'
+                  const done = status === 'Complete'
                   return (
                     <button
                       key={item.route}
@@ -342,7 +406,12 @@ export default function Identity() {
                         cursor: unlocked ? 'pointer' : 'not-allowed',
                       }}
                     >
-                      {item.label}{done ? '  ✓' : ''}
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                        <span>{item.label}{done ? '  ✓' : ''}</span>
+                        <span style={{ fontSize: 10, color: status === 'Locked' ? 'rgba(229,226,225,.35)' : GOLD_DIM, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                          {status}
+                        </span>
+                      </span>
                     </button>
                   )
                 })}

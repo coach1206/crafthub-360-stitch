@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "baseUrl": "http://127.0.0.1:5174",
+  "launchPath": "/smokecraft/welcome",
+  "dobType": "text",
+  "dobValue": "01/01/1990",
+  "goldenBoxScrolled": true,
+  "finalPath": "/smokecraft/mentor-selection",
+  "screenshots": {
+    "launch": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/visual-proof/smokecraft-launch-ux/01-launch-first-screen.png",
+    "identity": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/visual-proof/smokecraft-launch-ux/02-identity.png",
+    "dob": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/visual-proof/smokecraft-launch-ux/03-date-of-birth-control.png",
+    "identitySidebar": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/visual-proof/smokecraft-launch-ux/04-identity-sidebar.png",
+    "goldenBox": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/visual-proof/smokecraft-launch-ux/05-golden-box.png",
+    "mentorTransition": "/Users/a323822/Documents/crafthub-smokecraft-codex/docs/visual-proof/smokecraft-launch-ux/06-mentor-transition.png"
+  }
+}

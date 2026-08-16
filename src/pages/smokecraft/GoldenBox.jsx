@@ -5,6 +5,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 
 // Live Production Player-Experience Repair pass.
 //
@@ -35,7 +36,6 @@ const GOLD_DIM  = 'rgba(233,193,118,0.55)'
 const CREAM     = '#e5e2e1'
 const BORDER    = 'rgba(233,193,118,0.22)'
 const GLASS     = 'rgba(233,193,118,0.06)'
-const NAVY_DEEP = '#060810'
 
 // Approved copy — from the same GOLDEN BOX RULES.png composite this
 // screen was always built against.
@@ -92,7 +92,7 @@ export default function GoldenBox() {
 
   return (
     <SmokeCraftScreenShell mode="live" status="ready">
-    <div style={{ maxWidth: 1080, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', paddingBottom: 110 }}>
+    <div style={{ maxWidth: 1080, margin: '0 auto', padding: 'clamp(16px,3vw,32px)', paddingBottom: 132 }}>
 
       {/* ── Header ── */}
       <div style={{
@@ -220,49 +220,20 @@ export default function GoldenBox() {
 
       {/* ── Golden Tip ── */}
       <div role="note" style={{
-        display: 'flex', alignItems: 'center', gap: 8, marginBottom: 90,
+        display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24,
         fontSize: 12.5, color: 'rgba(229,226,225,0.7)',
       }}>
         <span style={{ color: GOLD, fontWeight: 700 }} aria-hidden="true">ⓘ GOLDEN TIP:</span>
         The more you respect the ritual, the richer your experience becomes.
       </div>
-
-      {/* ── Nav bar (kept local, not the shared SmokeCraftNavBar, to preserve
-           the exact real Back/Continue labels this screen has always used) ── */}
-      <div style={{
-        position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 5,
-        background: `linear-gradient(180deg, transparent, ${NAVY_DEEP} 30%)`,
-        padding: '18px clamp(16px,3vw,32px) 16px', display: 'flex', gap: 12, justifyContent: 'space-between',
-      }}>
-        <button
-          type="button"
-          onClick={() => navigate('/smokecraft/venue-select')}
-          style={{
-            background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 999,
-            color: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14,
-            padding: '10px 22px', cursor: 'pointer', minHeight: 44, touchAction: 'manipulation',
-          }}
-        >
-          ← Back
-        </button>
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={!acknowledged}
-          aria-label="Continue to Mentor Selection"
-          style={{
-            background: acknowledged ? `linear-gradient(180deg, #F3D48E, ${GOLD})` : 'rgba(233,193,118,0.08)',
-            color: acknowledged ? '#241605' : 'rgba(233,193,118,0.45)',
-            border: `1.5px solid ${acknowledged ? 'transparent' : BORDER}`, borderRadius: 999,
-            fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14, letterSpacing: '0.02em',
-            padding: '10px 26px', cursor: acknowledged ? 'pointer' : 'not-allowed',
-            minHeight: 44, touchAction: 'manipulation',
-          }}
-        >
-          Next: Mentor Selection →
-        </button>
-      </div>
     </div>
+    <SmokeCraftNavBar
+      primary="Continue to Mentor Selection →"
+      onPrimary={handleContinue}
+      primaryDisabled={!acknowledged}
+      secondary="← Back"
+      onSecondary={() => navigate('/smokecraft/venue-select')}
+    />
     </SmokeCraftScreenShell>
   )
 }

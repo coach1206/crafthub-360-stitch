@@ -251,8 +251,8 @@ export default function App() {
         <ErrorBoundary>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
-            {/* ── Root enters the active CraftHub layer; /boot remains available ── */}
-            <Route path="/" element={<Navigate to="/crafthub" replace />} />
+            {/* ── Root enters the active SmokeCraft onboarding flow; /crafthub remains the separate platform hub. ── */}
+            <Route path="/" element={<Navigate to="/smokecraft/welcome" replace />} />
             <Route path="boot" element={<Boot />} />
             <Route path="boot/console" element={<BootConsole />} />
 

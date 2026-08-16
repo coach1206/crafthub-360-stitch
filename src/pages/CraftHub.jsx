@@ -35,12 +35,12 @@ export default function CraftHub() {
   const [staffHandoffOpen, setStaffHandoffOpen] = useState(false);
 
   function startSmokeCraft() {
-    navigate("/smokecraft");
+    navigate("/smokecraft/welcome");
   }
 
   function handleDemoMode() {
     enterDemoMode();
-    navigate("/smokecraft");
+    navigate("/smokecraft/welcome");
   }
 
   return (
