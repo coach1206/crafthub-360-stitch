@@ -1,6 +1,6 @@
 {
   "status": "PASS",
-  "baseUrl": "http://127.0.0.1:5174",
+  "baseUrl": "http://127.0.0.1:5000",
   "launchPath": "/smokecraft/welcome",
   "dobType": "text",
   "dobValue": "01/01/1990",
