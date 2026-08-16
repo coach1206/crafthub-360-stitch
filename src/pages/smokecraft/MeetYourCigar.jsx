@@ -1,256 +1,81 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
-import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
-import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
-import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 
-const ENRICHMENT_3 = getEducationalEnrichment(3)
-const GOLD = '#E9C176'
-const GOLD_DIM = 'rgba(233,193,118,0.55)'
-const NAVY = '#0b0f18'
-const NAVY_DEEP = '#060810'
-const WOOD_DIM = 'rgba(122,79,49,0.28)'
-const CREAM = '#e5e2e1'
-const BORDER = 'rgba(233,193,118,0.22)'
-const GLASS = 'rgba(8,10,16,0.86)'
-const FALLBACK = 'Not available for this cigar'
+const GOLD='#E9C176', CREAM='#f5efe5', BG='#070b12', PANEL='rgba(10,14,22,.94)', BORDER='rgba(233,193,118,.28)'
 
-const BRAND_BLEND_MAP = {
-  'Oliva Serie V': { brand: 'Oliva', blend: 'Serie V' },
-  'Arturo Fuente Opus X': { brand: 'Arturo Fuente', blend: 'Opus X' },
-  'Padron 1964 Series': { brand: 'Padrón', blend: '1964 Series' },
-  'Macanudo Café': { brand: 'Macanudo', blend: 'Café' },
-  'CAO Flathead': { brand: 'CAO', blend: 'Flathead' },
-  'Romeo y Julieta 1875': { brand: 'Romeo y Julieta', blend: '1875' },
-  'My Father Le Bijou': { brand: 'My Father', blend: 'Le Bijou' },
-  'Cohiba Siglo VI': { brand: 'Cohiba', blend: 'Siglo VI' },
+const DETAILS={
+ 'Oliva Serie V':{brand:'Oliva',blend:'Serie V',wrapper:'Habano Maduro',binder:'Nicaraguan',filler:'Nicaraguan ligero-rich blend',factory:'Nicaragua',masterBlender:'House blending team'},
+ 'Arturo Fuente Opus X':{brand:'Arturo Fuente',blend:'Opus X',wrapper:'Dominican',binder:'Dominican',filler:'Dominican',factory:'Dominican Republic',masterBlender:'Fuente family blending tradition'},
+ 'Padron 1964 Series':{brand:'Padrón',blend:'1964 Series',wrapper:'Natural Maduro',binder:'Nicaraguan',filler:'Nicaraguan aged tobaccos',factory:'Nicaragua',masterBlender:'Padrón family blending tradition'},
+ 'Macanudo Café':{brand:'Macanudo',blend:'Café',wrapper:'Connecticut Shade',binder:'Mexican San Andrés',filler:'Dominican / Mexican blend',factory:'Dominican Republic',masterBlender:'Macanudo blending team'},
+ 'CAO Flathead':{brand:'CAO',blend:'Flathead',wrapper:'Cameroon',binder:'Nicaraguan',filler:'Nicaraguan',factory:'Nicaragua',masterBlender:'CAO blending team'},
+ 'Romeo y Julieta 1875':{brand:'Romeo y Julieta',blend:'1875',wrapper:'Connecticut',binder:'Dominican',filler:'Dominican blend',factory:'Dominican Republic',masterBlender:'House blending team'},
+ 'My Father Le Bijou':{brand:'My Father',blend:'Le Bijou 1922',wrapper:'San Andrés',binder:'Nicaraguan',filler:'Nicaraguan',factory:'Nicaragua',masterBlender:'García family blending tradition'},
+ 'Cohiba Siglo VI':{brand:'Cohiba',blend:'Siglo VI',wrapper:'Ecuador Natural',binder:'Dominican',filler:'Dominican blend',factory:'Dominican Republic',masterBlender:'House blending team'},
 }
 
-function buildSections(cigar) {
-  const known = cigar ? BRAND_BLEND_MAP[cigar.name] : null
-  return [
-    { id: 'brand', title: 'Brand', value: known?.brand || cigar?.name || null },
-    { id: 'blend', title: 'Blend', value: known?.blend || null },
-    { id: 'wrapper', title: 'Wrapper', value: cigar?.wrapper || null },
-    { id: 'binder', title: 'Binder', value: null },
-    { id: 'filler', title: 'Filler', value: null },
-    { id: 'factory', title: 'Factory', value: null },
-    { id: 'masterBlender', title: 'Master Blender', value: null },
-  ]
+const lessons={
+ brand:['Brand','The brand identifies the cigar family and the maker behind the style. It gives you a starting point, but it does not tell the whole flavor story.'],
+ blend:['Blend','The blend is the recipe: wrapper, binder, and filler working together. This is where strength, body, aroma, and balance are designed.'],
+ wrapper:['Wrapper','The wrapper is the outer leaf. It contributes aroma, appearance, burn behavior, and a meaningful share of the cigar’s first flavor impression.'],
+ binder:['Binder','The binder holds the filler bunch together and helps regulate combustion. It is structural, but it also contributes flavor and burn character.'],
+ filler:['Filler','The filler is the engine of the cigar. Different leaves and primings are combined to shape strength, complexity, combustion, and progression.'],
+ factory:['Factory','Factory and production environment matter because bunching, rolling, fermentation, aging, and quality control all affect consistency.'],
+ masterBlender:['Master Blender','The blender balances all components into one intended experience. Think of this role as the cigar’s musical director.'],
 }
 
-const ACTIVITY_KEY = 'meet-your-cigar'
-const REQUIRED_CHECKPOINTS = ['brand', 'blend', 'wrapper']
+export default function MeetYourCigar(){
+ const navigate=useNavigate(); const {session,awardSessionRewards}=useGuestSession(); const {isDemoMode}=useSmokeCraftProgress(); const {journey,setMeetYourCigar}=useSmokeCraftJourney()
+ const cigar=journey.selectedCigar; const info=DETAILS[cigar?.name]||{}
+ const keys=Object.keys(lessons); const [active,setActive]=useState('brand'); const [viewed,setViewed]=useState(()=>new Set(journey.meetYourCigar?.viewedSections||[])); const [choice,setChoice]=useState(null); const [feedback,setFeedback]=useState(null)
+ useEffect(()=>{if(!isDemoMode&&(!session.completedSteps.includes('humidor-match')||!cigar?.name))navigate('/smokecraft/humidor-match',{replace:true})},[isDemoMode,session.completedSteps,cigar?.name,navigate])
+ useEffect(()=>{setViewed(v=>new Set(v).add(active))},[active])
+ useEffect(()=>{if(viewed.size)setMeetYourCigar({...(journey.meetYourCigar||{}),viewedSections:[...viewed]})},[viewed.size])
+ const lesson=lessons[active], value=info[active]||cigar?.[active]||'Not listed for this training profile'
+ const required=['brand','blend','wrapper'].every(k=>viewed.has(k)); const ready=required&&choice
+ function continueNext(){
+  if(!required){setFeedback('Mentor hint: review Brand, Blend, and Wrapper first. Those three give you the minimum vocabulary for understanding the cigar.');return}
+  if(!choice){setFeedback('Mentor hint: choose which detail most influences your first impression before moving on.');return}
+  setMeetYourCigar({viewedSections:[...viewed],completedAt:journey.meetYourCigar?.completedAt||Date.now()}); awardSessionRewards('meet-your-cigar'); navigate('/smokecraft/terroir')
+ }
+ if(!cigar?.name&&!isDemoMode)return null
+ return <div style={{minHeight:'100vh',background:'radial-gradient(circle at 75% 15%,rgba(122,79,49,.22),transparent 38%),'+BG,color:CREAM,fontFamily:'Georgia,serif',padding:'28px 28px 120px'}}>
+  <div style={{maxWidth:1180,margin:'0 auto'}}>
+   <div style={{letterSpacing:'.22em',textTransform:'uppercase',fontSize:12,color:GOLD}}>SmokeCraft 360 • Guided Lesson</div>
+   <h1 style={{fontSize:'clamp(34px,5vw,58px)',margin:'8px 0 6px'}}>Meet Your Cigar</h1>
+   <p style={{fontSize:18,lineHeight:1.6,maxWidth:900,color:'#ded6ca'}}>Before you smoke it, learn how to read it. Your mentor will walk you through the parts that shape construction, flavor, strength, and consistency.</p>
 
-export default function MeetYourCigar({ onBack, onComplete } = {}) {
-  const { awardSessionRewards, session, loadTastingDraft, saveTastingDraft, submitSelectionAttempt } = useGuestSession()
-  const { isDemoMode } = useSmokeCraftProgress()
-  const { journey, setMeetYourCigar } = useSmokeCraftJourney()
-  const navigate = useNavigate()
-  const cigar = journey.selectedCigar || null
-  const sections = buildSections(cigar)
-
-  useEffect(() => {
-    if (!isDemoMode && (!session.completedSteps.includes('humidor-match') || !journey.selectedCigar?.name)) {
-      navigate('/smokecraft/humidor-match', { replace: true })
-    }
-  }, [isDemoMode, session.completedSteps, journey.selectedCigar, navigate])
-
-  useEffect(() => {
-    try { sessionStorage.setItem('sc_active_screen', '/smokecraft/meet-your-cigar') } catch {}
-    return () => {
-      try {
-        if (sessionStorage.getItem('sc_active_screen') === '/smokecraft/meet-your-cigar') sessionStorage.removeItem('sc_active_screen')
-      } catch {}
-    }
-  }, [])
-
-  const savedViewed = journey.meetYourCigar?.viewedSections || []
-  const [sectionId, setSectionId] = useState('brand')
-  const [viewedSections, setViewedSections] = useState(() => new Set(savedViewed))
-  const [phase, setPhase] = useState('loading')
-  const [synthesis, setSynthesis] = useState(null)
-  const [draftVersion, setDraftVersion] = useState(0)
-  const [draftLocked, setDraftLocked] = useState(false)
-  const [done, setDone] = useState(false)
-  const [feedback, setFeedback] = useState(null)
-
-  const section = sections.find(s => s.id === sectionId) || sections[0]
-  const requiredViewed = REQUIRED_CHECKPOINTS.every(id => viewedSections.has(id))
-  const allViewed = viewedSections.size === sections.length
-
-  useEffect(() => {
-    let cancelled = false
-    loadTastingDraft(ACTIVITY_KEY).then(result => {
-      if (cancelled) return
-      if (!result.ok) { setPhase('error'); return }
-      const d = result.draftData || {}
-      if (d.checkpoints) {
-        setViewedSections(prev => {
-          const next = new Set(prev)
-          for (const id of REQUIRED_CHECKPOINTS) if (d.checkpoints[id]) next.add(id)
-          return next
-        })
-      }
-      if (d.synthesis) setSynthesis(d.synthesis)
-      setDraftVersion(result.version || 0)
-      setPhase('ready')
-    })
-    return () => { cancelled = true }
-  }, [loadTastingDraft])
-
-  function handleRetryLoad() {
-    setPhase('loading')
-    loadTastingDraft(ACTIVITY_KEY).then(result => {
-      if (!result.ok) { setPhase('error'); return }
-      setDraftVersion(result.version || 0)
-      setPhase('ready')
-    })
-  }
-
-  useEffect(() => {
-    if (viewedSections.size > 0) setMeetYourCigar({ ...(journey.meetYourCigar || {}), viewedSections: Array.from(viewedSections) })
-  }, [viewedSections.size])
-
-  useEffect(() => {
-    if (phase !== 'ready' || done || draftLocked) return
-    const t = setTimeout(() => {
-      const checkpoints = {}
-      for (const id of REQUIRED_CHECKPOINTS) if (viewedSections.has(id)) checkpoints[id] = true
-      saveTastingDraft(ACTIVITY_KEY, { checkpoints, synthesis }, draftVersion).then(result => {
-        if (result.alreadyCompleted) { setDraftLocked(true); return }
-        if (result.conflict) { setDraftVersion(result.current.version); return }
-        if (result.ok) setDraftVersion(result.current.version)
-      })
-    }, 900)
-    return () => clearTimeout(t)
-  }, [phase, viewedSections, synthesis, done, draftVersion, draftLocked, saveTastingDraft])
-
-  function selectSection(id) {
-    triggerHaptic('light')
-    setSectionId(id)
-    setFeedback(null)
-    setViewedSections(prev => {
-      if (prev.has(id)) return prev
-      const next = new Set(prev)
-      next.add(id)
-      return next
-    })
-  }
-
-  async function handleContinue() {
-    if (done) return
-    if (!cigar?.name) {
-      navigate('/smokecraft/humidor-match', { replace: true })
-      return
-    }
-    if (!requiredViewed) {
-      setFeedback({ message: 'Review Brand, Blend, and Wrapper before continuing.' })
-      return
-    }
-    if (!synthesis) {
-      setFeedback({ message: 'Select which detail most influenced your impression of this cigar.' })
-      return
-    }
-
-    setDone(true)
-    setMeetYourCigar({ viewedSections: Array.from(viewedSections), completedAt: journey.meetYourCigar?.completedAt || Date.now() })
-    const checkpoints = {}
-    for (const id of REQUIRED_CHECKPOINTS) checkpoints[id] = true
-    const result = await submitSelectionAttempt(ACTIVITY_KEY, { checkpoints, synthesis })
-    if (!result.ok) {
-      setDone(false)
-      setFeedback({ message: 'Unable to submit right now. Please try again.' })
-      return
-    }
-    if (!result.data.correct) {
-      setDone(false)
-      setFeedback({ message: 'Your response was incomplete. Please review and try again.' })
-      return
-    }
-    if (onComplete) { onComplete(); return }
-    awardSessionRewards('meet-your-cigar')
-    navigate('/smokecraft/terroir')
-  }
-
-  if (!isDemoMode && !cigar?.name) return null
-
-  if (phase === 'loading') {
-    return <div role="status" aria-live="polite" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: NAVY_DEEP, color: 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 14 }}>Loading…</div>
-  }
-
-  if (phase === 'error') {
-    return (
-      <div role="alert" style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, background: NAVY_DEEP, color: 'rgba(233,193,118,0.85)', fontFamily: 'Georgia, serif', fontSize: 14 }}>
-        <p style={{ margin: 0 }}>Something went wrong loading this session.</p>
-        <button type="button" onClick={handleRetryLoad} style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40 }}>Retry</button>
-      </div>
-    )
-  }
-
-  return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: `radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%), radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%), linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`, fontFamily: 'Georgia, serif' }}>
-      <header style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0', zIndex: 3 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>SmokeCraft 360 — Meet Your Cigar</div>
-        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, letterSpacing: '0.01em', lineHeight: 1.15 }}>{cigar.name}</h1>
-
-        <div role="tablist" aria-label="Meet Your Cigar sections" style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
-          {sections.map(s => {
-            const active = sectionId === s.id
-            const viewed = viewedSections.has(s.id)
-            return (
-              <button key={s.id} type="button" role="tab" aria-selected={active} aria-label={`${s.title}${viewed ? ' (viewed)' : ''}`} onClick={() => selectSection(s.id)} style={{ minWidth: 44, minHeight: 40, padding: '8px 14px', borderRadius: 20, border: `1.5px solid ${active ? GOLD : viewed ? 'rgba(233,193,118,0.4)' : 'rgba(229,226,225,0.2)'}`, background: active ? 'rgba(233,193,118,0.12)' : 'transparent', color: active ? GOLD : viewed ? 'rgba(233,193,118,0.75)' : 'rgba(229,226,225,0.7)', fontFamily: 'Georgia, serif', fontSize: 'clamp(11px,1.2vw,13px)', cursor: 'pointer', outline: 'none' }}>{viewed ? '✓ ' : ''}{s.title}</button>
-            )
-          })}
-        </div>
-        <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 6 }}>{viewedSections.size} of {sections.length} sections viewed</div>
-      </header>
-
-      <main style={{ position: 'absolute', top: 'clamp(180px,24vh,240px)', bottom: 'clamp(120px,16vh,160px)', left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch', padding: '0 clamp(16px,4vw,40px)', zIndex: 2 }}>
-        <div style={{ maxWidth: 720, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, background: 'linear-gradient(135deg, rgba(233,193,118,0.09), rgba(11,15,24,0.85))', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '18px 22px' }}>
-            <div style={{ flex: '1 1 260px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <span style={{ fontSize: 10.5, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase' }}>This Session's Cigar</span>
-              <span style={{ fontSize: 'clamp(18px,2vw,24px)', color: CREAM, fontWeight: 700 }}>{cigar.name}</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
-                {cigar.wrapper && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '3px 10px' }}>{cigar.wrapper}</span>}
-                {cigar.strength && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '3px 10px' }}>{cigar.strength}</span>}
-                {cigar.origin && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '3px 10px' }}>{cigar.origin}</span>}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 8 }}>{section.title}</div>
-            <p style={{ margin: 0, fontSize: 'clamp(15px,1.7vw,18px)', lineHeight: 1.65, color: section.value ? CREAM : 'rgba(229,226,225,0.5)', fontStyle: section.value ? 'normal' : 'italic' }}>{section.value || FALLBACK}</p>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: allViewed ? GOLD : 'rgba(229,226,225,0.4)' }}><span aria-hidden="true">{allViewed ? '✓' : '○'}</span><span>{allViewed ? 'All cigar sections reviewed' : `${sections.length - viewedSections.size} section${sections.length - viewedSections.size === 1 ? '' : 's'} remaining`}</span></div>
-
-          {requiredViewed && (
-            <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 10 }}>Required: Which detail most influenced your impression of this cigar?</div>
-              <div role="radiogroup" aria-label="Most influential detail" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {REQUIRED_CHECKPOINTS.map(id => {
-                  const label = sections.find(s => s.id === id)?.title || id
-                  const active = synthesis === id
-                  return <button key={id} type="button" role="radio" aria-checked={active} aria-label={label} onClick={() => { triggerHaptic('light'); setFeedback(null); setSynthesis(id) }} style={{ minHeight: 44, padding: '8px 16px', borderRadius: 20, border: `1.5px solid ${active ? GOLD : 'rgba(229,226,225,0.25)'}`, background: active ? 'rgba(233,193,118,0.14)' : 'transparent', color: active ? GOLD : 'rgba(229,226,225,0.75)', fontFamily: 'Georgia, serif', fontSize: 13, cursor: 'pointer', outline: 'none' }}>{label}</button>
-                })}
-              </div>
-            </div>
-          )}
-
-          {feedback && <div role="alert" style={{ background: 'rgba(120,20,20,0.9)', border: '1px solid rgba(255,150,150,0.5)', borderRadius: 8, padding: '8px 14px', color: '#ffdada', fontSize: 13, fontFamily: 'Georgia, serif' }}>{feedback.message}</div>}
-        </div>
-      </main>
-
-      <SmokeCraftLessonInfoButton sessionNumber={3} totalSessions={TOTAL_SESSIONS} phase={1} totalPhases={TOTAL_VISITS} title="Meet Your Cigar" whyItMatters={ENRICHMENT_3?.whyItMatters} goldenBox={ENRICHMENT_3?.goldenBox} />
-      <SmokeCraftNavBar primary={done ? 'Checking…' : 'Continue →'} onPrimary={handleContinue} primaryDisabled={done} secondary="← Back" onSecondary={onBack || (() => navigate('/smokecraft/humidor-match'))} />
+   <section style={{display:'grid',gridTemplateColumns:'minmax(0,1.15fr) minmax(320px,.85fr)',gap:20,marginTop:24}}>
+    <div style={{background:PANEL,border:`1px solid ${BORDER}`,borderRadius:18,padding:22}}>
+     <div style={{fontSize:14,color:GOLD,letterSpacing:'.16em',textTransform:'uppercase'}}>This Session’s Cigar</div>
+     <h2 style={{fontSize:34,margin:'8px 0'}}>{cigar?.name||'Training cigar'}</h2>
+     <div style={{display:'flex',gap:10,flexWrap:'wrap',marginBottom:18}}>{[cigar?.origin,cigar?.wrapper,cigar?.strength].filter(Boolean).map(x=><span key={x} style={{padding:'7px 11px',border:`1px solid ${BORDER}`,borderRadius:999,color:GOLD}}>{x}</span>)}</div>
+     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(145px,1fr))',gap:10}}>{keys.map(k=><button key={k} onClick={()=>{setActive(k);setFeedback(null)}} style={{minHeight:54,borderRadius:12,border:`1px solid ${active===k?GOLD:BORDER}`,background:active===k?'rgba(233,193,118,.14)':'#0b111b',color:active===k?GOLD:CREAM,fontWeight:700,cursor:'pointer'}}>{viewed.has(k)?'✓ ':''}{lessons[k][0]}</button>)}</div>
     </div>
-  )
+    <aside style={{background:'linear-gradient(160deg,rgba(57,38,25,.96),rgba(8,12,18,.98))',border:`1px solid ${BORDER}`,borderRadius:18,padding:22}}>
+     <div style={{fontSize:13,color:GOLD,letterSpacing:'.14em',textTransform:'uppercase'}}>Mentor Guidance</div>
+     <h3 style={{fontSize:25,margin:'10px 0 8px'}}>Read the cigar before you judge it.</h3>
+     <p style={{lineHeight:1.65,color:'#e7dfd4'}}>“I’m going to help you separate the name on the band from the tobacco and construction underneath it. Tap each section. I’ll tell you what it means, why it matters, and what to notice.”</p>
+     <div style={{marginTop:16,padding:14,borderRadius:12,background:'rgba(233,193,118,.08)',border:`1px solid ${BORDER}`}}><strong style={{color:GOLD}}>Goal:</strong> Review at least Brand, Blend, and Wrapper, then make one judgment about what shapes your first impression.</div>
+    </aside>
+   </section>
+
+   <section style={{marginTop:20,background:PANEL,border:`1px solid ${BORDER}`,borderRadius:18,padding:24}}>
+    <div style={{fontSize:13,color:GOLD,letterSpacing:'.14em',textTransform:'uppercase'}}>{lesson[0]}</div>
+    <div style={{fontSize:30,fontWeight:700,margin:'10px 0'}}>{value}</div>
+    <p style={{fontSize:18,lineHeight:1.65,maxWidth:920,color:'#e6ded2'}}>{lesson[1]}</p>
+    <div style={{marginTop:14,padding:14,borderLeft:`4px solid ${GOLD}`,background:'rgba(233,193,118,.07)'}}><strong>Mentor note:</strong> Do not memorize labels. Ask what this component changes in flavor, combustion, construction, or consistency.</div>
+   </section>
+
+   <section style={{marginTop:20,background:PANEL,border:`1px solid ${BORDER}`,borderRadius:18,padding:24}}>
+    <h3 style={{fontSize:24,margin:'0 0 8px'}}>Quick Check</h3><p style={{marginTop:0,color:'#ddd3c7'}}>Which detail most strongly shapes your first sensory impression before the cigar develops through the session?</p>
+    <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>{['wrapper','blend','brand'].map(k=><button key={k} onClick={()=>{setChoice(k);setFeedback(k==='wrapper'?'Correct. The wrapper heavily influences aroma, appearance, and the opening impression.':'Good thinking. That matters, but the wrapper is usually the strongest immediate sensory cue.')}} style={{padding:'12px 18px',borderRadius:999,border:`1px solid ${choice===k?GOLD:BORDER}`,background:choice===k?'rgba(233,193,118,.16)':'#0b111b',color:CREAM,textTransform:'capitalize'}}>{k}</button>)}</div>
+    {feedback&&<div role="alert" style={{marginTop:14,padding:14,borderRadius:12,background:'rgba(233,193,118,.08)',border:`1px solid ${BORDER}`,lineHeight:1.5}}>{feedback}</div>}
+   </section>
+  </div>
+  <div style={{position:'fixed',left:0,right:0,bottom:0,padding:16,background:'rgba(4,7,11,.94)',borderTop:`1px solid ${BORDER}`,display:'flex',justifyContent:'center',gap:12,zIndex:9}}><button onClick={()=>navigate('/smokecraft/humidor-match')} style={{minWidth:150,padding:'14px 22px',borderRadius:999,border:`1px solid ${GOLD}`,background:'transparent',color:GOLD}}>← Back</button><button onClick={continueNext} style={{minWidth:310,padding:'14px 22px',borderRadius:999,border:`1px solid ${GOLD}`,background:ready?GOLD:'rgba(233,193,118,.35)',color:ready?'#120d08':CREAM,fontWeight:800}}>Continue to Terroir →</button></div>
+ </div>
 }
