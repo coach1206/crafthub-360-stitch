@@ -111,7 +111,8 @@ import noveeOSTenantGovernanceRoutes    from './routes/noveeOSTenantGovernanceRo
 import noveeOSBillingGovernanceRoutes  from './routes/noveeOSBillingGovernanceRoutes.js'
 import noveeOSSecurityGovernanceRoutes from './routes/noveeOSSecurityGovernanceRoutes.js'
 import craftHubDashboardRoutes         from './routes/craftHubDashboardRoutes.js'
-import craftHubOnboardingRoutes        from './routes/craftHubOnboardingRoutes.js'\nimport craftHubGameRoutes              from './routes/craftHubGameRoutes.js'
+import craftHubOnboardingRoutes        from './routes/craftHubOnboardingRoutes.js'
+import craftHubGameRoutes              from './routes/craftHubGameRoutes.js'
 import noveeOSFinalReadinessRoutes     from './routes/noveeOSFinalReadinessRoutes.js'
 import noveeOS360PlatformRegistryRoutes from './routes/noveeOS360PlatformRegistryRoutes.js'
 import phaseDProviderActivationRoutes  from './routes/phaseDProviderActivationRoutes.js'
@@ -388,7 +389,8 @@ app.use('/api/novee-os/tenants',          noveeOSTenantGovernanceRoutes)
 app.use('/api/novee-os/billing',          noveeOSBillingGovernanceRoutes)
 app.use('/api/novee-os/security',         noveeOSSecurityGovernanceRoutes)
 app.use('/api/crafthub/dashboard',        craftHubDashboardRoutes)
-app.use('/api/crafthub/onboarding',       craftHubOnboardingRoutes)\napp.use('/api/crafthub/game',             craftHubGameRoutes)
+app.use('/api/crafthub/onboarding',       craftHubOnboardingRoutes)
+app.use('/api/crafthub/game',             craftHubGameRoutes)
 app.use('/api/novee-os/final-readiness',  noveeOSFinalReadinessRoutes)
 app.use('/api/novee-os/360-platforms',    noveeOS360PlatformRegistryRoutes)
 app.use('/api/phase-d/provider-activation', phaseDProviderActivationRoutes)
