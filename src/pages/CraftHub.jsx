@@ -91,13 +91,13 @@ export default function CraftHub() {
         <Hotspot label="Enter SmokeCraft 360" onClick={() => navigate('/smokecraft')}
           style={{ left: '7.5%', top: '33.0%', width: '16.2%', height: '37.5%' }} />
         {/* Module card: PourCraft 360 (coming soon) */}
-        <Hotspot label="PourCraft 360 — Coming Soon" onClick={() => navigate('/pourcraft')}
+        <Hotspot label="Enter PourCraft 360" onClick={() => navigate('/pourcraft')}
           style={{ left: '24.3%', top: '33.0%', width: '16.1%', height: '37.5%' }} />
         {/* Module card: WineCraft 360 (coming soon) */}
-        <Hotspot label="WineCraft 360 — Coming Soon" onClick={() => navigate('/winecraft')}
+        <Hotspot label="Enter WineCraft 360" onClick={() => navigate('/winecraft')}
           style={{ left: '41.1%', top: '33.0%', width: '16.2%', height: '37.5%' }} />
         {/* Module card: BeerCraft 360 (coming soon) */}
-        <Hotspot label="BeerCraft 360 — Coming Soon" onClick={() => navigate('/beercraft')}
+        <Hotspot label="Enter BeerCraft 360" onClick={() => navigate('/beercraft')}
           style={{ left: '58.6%', top: '33.0%', width: '16.2%', height: '37.5%' }} />
         {/* Module card: 360 Passport Connections (active) */}
         <Hotspot label="360 Passport Connections" onClick={() => navigate('/passport/connections')}

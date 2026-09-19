@@ -75,7 +75,7 @@ function buildLocalModuleCards() {
     { key: 'novee_os_security_governance', name: 'Security & Permissions Governance', category: 'platform_core', status: 'local_preview', phase: 'C4', route: '/novee-os/security' },
     { key: 'pos360_platform', name: 'POS360 Platform', category: 'pos_ordering', status: 'local_preview', phase: 'B', route: '/pos3' },
     { key: 'smokecraft_experience', name: 'SmokeCraft Experience', category: 'experience', status: 'local_preview', phase: 'A', route: '/smokecraft' },
-    { key: 'pourcraft_beverage', name: 'PourCraft Beverage', category: 'hospitality', status: 'placeholder', phase: null, route: null },
+    { key: 'pourcraft_beverage', name: 'PourCraft 360', category: 'hospitality', status: 'local_preview', phase: 'CraftHub', route: '/pourcraft' },\n    { key: 'beercraft_beverage', name: 'BeerCraft 360', category: 'hospitality', status: 'local_preview', phase: 'CraftHub', route: '/beercraft' },\n    { key: 'winecraft_beverage', name: 'WineCraft 360', category: 'hospitality', status: 'local_preview', phase: 'CraftHub', route: '/winecraft' },
     { key: 'eat_ai_system', name: 'E.A.T. AI System', category: 'hospitality', status: 'placeholder', phase: null, route: null },
     { key: 'passport_connections', name: 'Passport & Connections', category: 'loyalty', status: 'local_preview', phase: 'A', route: '/passport' },
     { key: 'loyalty_rewards', name: 'Loyalty & Rewards', category: 'loyalty', status: 'placeholder', phase: null, route: null },
