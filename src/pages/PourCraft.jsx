@@ -1,12 +1,5 @@
-import CraftHubComingSoon from '../components/crafthub/CraftHubComingSoon.jsx'
+import CraftAcademyExperience from '../components/crafthub/CraftAcademyExperience.jsx'
 
 export default function PourCraft() {
-  return (
-    <CraftHubComingSoon
-      title="PourCraft 360"
-      tagline="Cocktail discovery, bar specials, pairing moments, and guest preference capture — coming after SmokeCraft proves the pattern."
-      icon="liquor"
-      heroImage="/pourcraft.jpg"
-    />
-  )
+  return <CraftAcademyExperience academyKey="pourcraft" title="PourCraft 360" subtitle="Cocktail craft, pairing, service, and responsible pour training." />
 }
