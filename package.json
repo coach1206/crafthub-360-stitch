@@ -125,7 +125,8 @@
     "verify:smokecraft-landing-interactions": "node server/scripts/verifySmokeCraftLandingInteractions.js",
     "verify:smokecraft-touch-response": "node server/scripts/verifySmokeCraftTouchResponse.js",
     "verify:smokecraft-frontend-interactions": "node server/scripts/verifySmokeCraftFrontendInteractions.js",
-    "verify:smokecraft-identity-live-buttons": "node server/scripts/verifySmokeCraftIdentityLiveButtons.js"
+    "verify:smokecraft-identity-live-buttons": "node server/scripts/verifySmokeCraftIdentityLiveButtons.js",
+    "verify:crafthub-unified-gamification": "node scripts/verify-crafthub-unified-gamification.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1101.0",
