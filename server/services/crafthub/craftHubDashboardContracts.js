@@ -9,6 +9,8 @@ export const CRAFTHUB_MODULE_KEYS = [
   'pos360_platform',
   'smokecraft_experience',
   'pourcraft_beverage',
+  'beercraft_beverage',
+  'winecraft_beverage',
   'eat_ai_system',
   'passport_connections',
   'loyalty_rewards',
