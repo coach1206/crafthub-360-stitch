@@ -145,7 +145,13 @@ export async function submitQuiz({ participantRef, academyKey, lessonKey, answer
     return { ok: true, alreadySubmitted: false, attempt: inserted.rows[0] }
   } catch (e) {
     await client.query('ROLLBACK').catch(() => {})
-    if (e.code === '23505') return submitQuiz({ participantRef, academyKey, lessonKey, answers, idempotencyKey: `${idempotencyKey}:retry` })
+    if (e.code === '23505') {
+      const existing = await db.query(
+        'SELECT * FROM crafthub_game_quiz_attempts WHERE participant_ref=$1 AND academy_key=$2 AND lesson_key=$3',
+        [participantRef, academyKey, lessonKey]
+      )
+      if (existing.rows[0]) return { ok: true, alreadySubmitted: true, attempt: existing.rows[0] }
+    }
     throw e
   } finally { client.release() }
 }
