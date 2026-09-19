@@ -20,3 +20,9 @@ for (const table of ['crafthub_game_player_state','crafthub_game_quiz_attempts',
   if (!migration.includes(table)) throw new Error(`Missing schema dependency: ${table}`)
 }
 console.log('PASS crafthub unified gamification dependency closure')
+
+const serverIndex = fs.readFileSync('server/index.js','utf8')
+if (serverIndex.includes("\\nimport craftHubGameRoutes") || serverIndex.includes(")\\napp.use('/api/crafthub/game'")) {
+  throw new Error('CraftHub router wiring contains a literal escaped newline and will not parse')
+}
+console.log('PASS CraftHub runtime syntax guard')
