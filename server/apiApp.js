@@ -47,6 +47,7 @@ import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
 import travelRoutes          from './routes/travelRoutes.js'
+import eatPos360AgentRoutes  from './routes/eatPos360AgentRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { validateEnv }        from './config/envValidator.js'
 
@@ -121,6 +122,7 @@ function mountApiRoutes(app) {
   app.use('/api/badges',            badgeRoutes)
   app.use('/api/ticker',            tickerRoutes)
   app.use('/api/travel',            travelRoutes)
+  app.use('/api/intelligence',      eatPos360AgentRoutes)
   app.use('/api/mentor',            mentorRoutes)
   app.use('/api/developer',         developerRoutes)
   app.use('/api/access-requests',   accessRequestsRoutes)
